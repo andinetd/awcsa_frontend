@@ -1,11 +1,11 @@
 import React from "react";
 
-const Edir = () => {
+const EdirDashboard = () => {
   return (
     <div className="flex justify-center items-center h-screen text-3xl">
-      Edir
+      Edir dashboard
     </div>
   );
 };
 
-export default Edir;
+export default EdirDashboard;

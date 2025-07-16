@@ -1,11 +1,11 @@
 import React from "react";
 
-const SocialAffairsModule = () => {
+const ElderlyAndDisabled = () => {
   return (
     <div className="flex justify-center items-center h-screen text-3xl">
-      SocialAffairsModule
+      Elserly and disabled dashboard
     </div>
   );
 };
 
-export default SocialAffairsModule;
+export default ElderlyAndDisabled;
