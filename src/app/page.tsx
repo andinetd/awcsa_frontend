@@ -9,7 +9,7 @@ export default function Home() {
       <Link href={"/bureau-head"}>Bureau Head</Link>
       <Link href={"/adoption/dashboard"}>Adoption module</Link>
       <Link href={"/social-affairs/socials/dashboard"}>Socials module</Link>
-      <Link href={"/womens"}>women module</Link>
+      <Link href={"/womens/dashboard"}>women module</Link>
       <Link href={"/social-affairs/edir/"}>Edir </Link>
       <Link href={"/super-admin"}>Super admin</Link>
 
