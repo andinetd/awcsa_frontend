@@ -8,6 +8,8 @@ import {
   Shield,
   HandHeart,
   FileText,
+  User,
+  HouseIcon,
 } from "lucide-react";
 import type { UserRole } from "@/hooks/useCurrentRole";
 
@@ -22,6 +24,7 @@ export interface NavigationSection {
   items: NavigationItem[];
 }
 
+//!! sections to each sidebar can be added
 export const navigationConfig: Record<UserRole, NavigationSection[]> = {
   "super-admin": [
     {
@@ -44,18 +47,28 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       title: "Management",
       items: [
         { title: "Dashboard", url: "/bureau-head", icon: Home },
-        { title: "Reports", url: "/bureau-head/reports", icon: FileText },
+
+        { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
+        {
+          title: "Adoption Module",
+          url: "/adoption/dashboard",
+          icon: FileText,
+        },
+        {
+          title: "Social Module",
+          url: "/social-affairs/socials/dashboard",
+          icon: FileText,
+        },
+        { title: "Women", url: "/womens/dashboard", icon: User },
+        { title: "Super Admin", url: "/super-admin", icon: FileText },
       ],
     },
   ],
   adoption: [
     {
-      title: "Dashboard",
-      items: [{ title: "Overview", url: "/adoption/dashboard", icon: Home }],
-    },
-    {
-      title: "Services",
+      title: "Adoption Moduel Services",
       items: [
+        { title: "Dashboard", url: "/adoption/dashboard", icon: Home },
         { title: "Children", url: "/adoption/children", icon: Baby },
         {
           title: "Care Centers",
@@ -63,23 +76,24 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
           icon: Building,
         },
         { title: "Benefits", url: "/adoption/benefits", icon: Heart },
+        {
+          title: "Assisted homes",
+          url: "/adoption/assisted-homes",
+          icon: Home,
+        },
+        { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
       ],
     },
   ],
   "social-affairs": [
     {
-      title: "Dashboard",
+      title: "Social Affairs Services",
       items: [
         {
-          title: "Overview",
+          title: "Dashboard",
           url: "/social-affairs/socials/dashboard",
           icon: Home,
         },
-      ],
-    },
-    {
-      title: "Services",
-      items: [
         { title: "Edir", url: "/social-affairs/edir/dashboard", icon: Users },
         {
           title: "Elderly & Disabled",
@@ -91,12 +105,9 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
   ],
   womens: [
     {
-      title: "Dashboard",
-      items: [{ title: "Overview", url: "/womens/dashboard", icon: Home }],
-    },
-    {
-      title: "Services",
+      title: "Women Module Services",
       items: [
+        { title: "Dashboard", url: "/womens/dashboard", icon: Home },
         { title: "Women List", url: "/womens/women-list", icon: Users },
         {
           title: "Associations",

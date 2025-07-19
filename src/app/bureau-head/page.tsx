@@ -4,7 +4,7 @@ import React from "react";
 
 const BureauHead = () => {
   return (
-    <SidebarLayout>
+    <SidebarLayout title="Bureau head">
       <div>
         BureauHead- Head of the offices
         <div className="flex flex-col">

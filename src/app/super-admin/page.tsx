@@ -2,18 +2,16 @@
 
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { ProtectedRoute } from "@/components/shared/protected-route";
-import { useAuthStore } from "@/stores/auth-store";
 
 export default function SuperAdminPage() {
-  const { user } = useAuthStore();
-
   return (
     <SidebarLayout title="Super Admin Dashboard">
       <div className="space-y-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Welcome, {user?.name}!</h2>
+          {/* <h2 className="text-xl font-semibold mb-4">Welcome, {user?.name}!</h2>
           <p className="text-gray-600">Department: {user?.department}</p>
-          <p className="text-gray-600">Role: {user?.role}</p>
+          <p className="text-gray-600">Role: {user?.role}</p> */}
+          <p className="text-gray-600">Role: Super admin page</p>
         </div>
 
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">

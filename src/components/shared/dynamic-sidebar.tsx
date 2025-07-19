@@ -13,8 +13,8 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Building, LogOut, User } from "lucide-react";
-import { useAuthStore } from "@/stores/auth-store";
 import { navigationConfig } from "@/utils/navigation";
+import { useCurrentRole } from "@/hooks/useCurrentRole";
 
 export function DynamicSidebar() {
   // const { user, logout, loading } = useAuthStore();
@@ -43,7 +43,9 @@ export function DynamicSidebar() {
   // }
 
   // const navigation = navigationConfig[user.role] || [];
-  const mockNavigation = navigationConfig["adoption"];
+  // const mockNavigation = navigationConfig["bureau-head"];
+  const role = useCurrentRole();
+  const sections = role ? navigationConfig[role] : [];
 
   return (
     <Sidebar>
@@ -56,7 +58,7 @@ export function DynamicSidebar() {
                 <span className="font-semibold">WCSA System</span>
                 <span className="text-xs capitalize">
                   {/* {user.role.replace("-", " ")} */}
-                  adoption
+                  {role}
                 </span>
               </div>
             </SidebarMenuButton>
@@ -65,7 +67,7 @@ export function DynamicSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {mockNavigation.map((section) => (
+        {sections.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>

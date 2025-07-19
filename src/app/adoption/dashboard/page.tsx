@@ -17,6 +17,12 @@ export default function AdoptionDashboard() {
       <div className="min-h-[200px] flex-1 rounded-xl bg-muted/50 flex items-center justify-center">
         <span>Adoption Services Content</span>
       </div>
+      <div className="min-h-[200px] flex-1 rounded-xl bg-muted/50 flex items-center justify-center">
+        <span>Adoption Services Content</span>
+      </div>
+      <div className="min-h-[200px] flex-1 rounded-xl bg-muted/50 flex items-center justify-center">
+        <span>Adoption Services Content</span>
+      </div>
     </SidebarLayout>
   );
 }

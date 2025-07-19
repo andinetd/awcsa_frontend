@@ -3,7 +3,7 @@ import React from "react";
 
 const Children = () => {
   return (
-    <SidebarLayout>
+    <SidebarLayout title="Children">
       <div className="flex items-center justify-center h-full text-3xl">
         Children
       </div>

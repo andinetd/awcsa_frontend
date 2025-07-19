@@ -36,6 +36,7 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
+    router.push("/bureau-head");
   }
 
   return (
