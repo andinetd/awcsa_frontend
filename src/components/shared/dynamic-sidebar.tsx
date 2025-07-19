@@ -10,14 +10,39 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Building } from "lucide-react";
-import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { Building, LogOut, User } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
 import { navigationConfig } from "@/utils/navigation";
 
 export function DynamicSidebar() {
-  const currentRole = useCurrentRole();
-  const navigation = navigationConfig[currentRole] || [];
+  const { user, logout, loading } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  if (!user) {
+    return (
+      <Sidebar>
+        <SidebarContent>
+          <div className="flex items-center justify-center h-full">
+            <p className="text-sm text-muted-foreground">
+              {loading ? "Loading..." : "Please log in"}
+            </p>
+          </div>
+        </SidebarContent>
+      </Sidebar>
+    );
+  }
+
+  const navigation = navigationConfig[user.role] || [];
 
   return (
     <Sidebar>
@@ -29,7 +54,7 @@ export function DynamicSidebar() {
               <div className="flex flex-col text-left">
                 <span className="font-semibold">WCSA System</span>
                 <span className="text-xs capitalize">
-                  {currentRole.replace("-", " ")}
+                  {user.role.replace("-", " ")}
                 </span>
               </div>
             </SidebarMenuButton>
@@ -58,6 +83,31 @@ export function DynamicSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg">
+              <User className="size-4" />
+              <div className="flex flex-col text-left flex-1">
+                <span className="font-semibold truncate">{user.name}</span>
+                <span className="text-xs truncate">{user.email}</span>
+                {user.department && (
+                  <span className="text-xs text-muted-foreground truncate">
+                    {user.department}
+                  </span>
+                )}
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} disabled={loading}>
+              <LogOut className="size-4" />
+              <span>{loading ? "Logging out..." : "Logout"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
