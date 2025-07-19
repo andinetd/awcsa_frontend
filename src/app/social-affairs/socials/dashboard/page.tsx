@@ -4,13 +4,11 @@ import React from "react";
 
 const SocialsDashboard = () => {
   return (
-    <ProtectedRoute>
-      <SidebarLayout>
-        <div className="flex items-center justify-center h-full text-3xl">
-          Socials Dashboard
-        </div>
-      </SidebarLayout>
-    </ProtectedRoute>
+    <SidebarLayout>
+      <div className="flex items-center justify-center h-full text-3xl">
+        Socials Dashboard
+      </div>
+    </SidebarLayout>
   );
 };
 

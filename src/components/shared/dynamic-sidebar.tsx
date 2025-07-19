@@ -17,32 +17,33 @@ import { useAuthStore } from "@/stores/auth-store";
 import { navigationConfig } from "@/utils/navigation";
 
 export function DynamicSidebar() {
-  const { user, logout, loading } = useAuthStore();
+  // const { user, logout, loading } = useAuthStore();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await logout();
+  //     window.location.href = "/login";
+  //   } catch (error) {
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
 
-  if (!user) {
-    return (
-      <Sidebar>
-        <SidebarContent>
-          <div className="flex items-center justify-center h-full">
-            <p className="text-sm text-muted-foreground">
-              {loading ? "Loading..." : "Please log in"}
-            </p>
-          </div>
-        </SidebarContent>
-      </Sidebar>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <Sidebar>
+  //       <SidebarContent>
+  //         <div className="flex items-center justify-center h-full">
+  //           <p className="text-sm text-muted-foreground">
+  //             {loading ? "Loading..." : "Please log in"}
+  //           </p>
+  //         </div>
+  //       </SidebarContent>
+  //     </Sidebar>
+  //   );
+  // }
 
-  const navigation = navigationConfig[user.role] || [];
+  // const navigation = navigationConfig[user.role] || [];
+  const mockNavigation = navigationConfig["adoption"];
 
   return (
     <Sidebar>
@@ -54,7 +55,8 @@ export function DynamicSidebar() {
               <div className="flex flex-col text-left">
                 <span className="font-semibold">WCSA System</span>
                 <span className="text-xs capitalize">
-                  {user.role.replace("-", " ")}
+                  {/* {user.role.replace("-", " ")} */}
+                  adoption
                 </span>
               </div>
             </SidebarMenuButton>
@@ -63,7 +65,7 @@ export function DynamicSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {navigation.map((section) => (
+        {mockNavigation.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -84,7 +86,7 @@ export function DynamicSidebar() {
         ))}
       </SidebarContent>
 
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
@@ -107,7 +109,7 @@ export function DynamicSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> */}
     </Sidebar>
   );
 }
