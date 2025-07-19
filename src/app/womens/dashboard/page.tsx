@@ -1,6 +1,4 @@
-import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import React from "react";
 
 const WomenDashboard = () => {
   return (

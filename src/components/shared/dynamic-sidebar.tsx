@@ -53,7 +53,15 @@ export function DynamicSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
-              <Building className="size-4" />
+              {/* <Building className="size-4" /> */}
+              <div>
+                <img
+                  src="/assets/WCSA_logo.jpg"
+                  alt="Office logo"
+                  width={"50px"}
+                  height={"50px"}
+                />
+              </div>
               <div className="flex flex-col text-left">
                 <span className="font-semibold">WCSA System</span>
                 <span className="text-xs capitalize">

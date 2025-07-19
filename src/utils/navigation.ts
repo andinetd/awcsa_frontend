@@ -1,17 +1,19 @@
-import {
-  Home,
-  Users,
-  Baby,
-  Heart,
-  Building,
-  BarChart3,
-  Shield,
-  HandHeart,
-  FileText,
-  User,
-  HouseIcon,
-} from "lucide-react";
 import type { UserRole } from "@/hooks/useCurrentRole";
+import {
+  Baby,
+  BarChart3,
+  Briefcase,
+  Building,
+  FileText,
+  HandHeart,
+  Heart,
+  Home,
+  HouseIcon,
+  Settings,
+  Shield,
+  User,
+  Users,
+} from "lucide-react";
 
 export interface NavigationItem {
   title: string;
@@ -103,6 +105,56 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       ],
     },
   ],
+  edir: [
+    {
+      title: "Edir Services",
+      items: [
+        {
+          title: "Dashboard",
+          url: "/social-affairs/edir/dashboard",
+          icon: Home,
+        },
+        {
+          title: "Generic setup",
+          url: "/social-affairs/edir/generic-setup",
+          icon: Settings,
+        },
+        {
+          title: "Edir List",
+          url: "/social-affairs/edir/list",
+          icon: Heart,
+        },
+      ],
+    },
+  ],
+  "elderly-disabled": [
+    {
+      title: "Elderly and Disabled Services",
+      items: [
+        {
+          title: "Dashboard",
+          url: "/social-affairs/elderly-and-disabled/dashboard",
+          icon: Home,
+        },
+        {
+          title: "Beneficiaries",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries",
+          icon: Users,
+        },
+        {
+          title: "Benefit Tracking",
+          url: "/social-affairs/elderly-and-disabled/benefit-tracking",
+          icon: Heart,
+        },
+        {
+          title: "Jobs",
+          url: "/social-affairs/elderly-and-disabled/jobs",
+          icon: Briefcase,
+        },
+      ],
+    },
+  ],
+
   womens: [
     {
       title: "Women Module Services",

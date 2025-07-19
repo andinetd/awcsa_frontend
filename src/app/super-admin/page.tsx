@@ -1,7 +1,6 @@
 "use client";
 
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
-import { ProtectedRoute } from "@/components/shared/protected-route";
 
 export default function SuperAdminPage() {
   return (

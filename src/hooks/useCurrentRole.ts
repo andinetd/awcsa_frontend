@@ -7,11 +7,15 @@ export type UserRole =
   | "bureau-head"
   | "adoption"
   | "social-affairs"
-  | "womens";
+  | "womens"
+  | "edir"
+  | "elderly-disabled";
 
 export function useCurrentRole(): UserRole {
   const pathname = usePathname();
-
+  if (pathname.startsWith("/social-affairs/edir")) return "edir";
+  if (pathname.startsWith("/social-affairs/elderly-and-disabled"))
+    return "elderly-disabled";
   if (pathname.startsWith("/super-admin")) return "super-admin";
   if (pathname.startsWith("/bureau-head")) return "bureau-head";
   if (pathname.startsWith("/adoption")) return "adoption";

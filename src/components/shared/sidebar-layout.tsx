@@ -2,13 +2,13 @@
 
 import type React from "react";
 
-import { DynamicSidebar } from "./dynamic-sidebar";
 import {
-  SidebarProvider,
   SidebarInset,
+  SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { DynamicSidebar } from "./dynamic-sidebar";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;

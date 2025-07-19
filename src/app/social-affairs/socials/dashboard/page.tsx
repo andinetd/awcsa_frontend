@@ -1,6 +1,4 @@
-import { ProtectedRoute } from "@/components/shared/protected-route";
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
-import React from "react";
 
 const SocialsDashboard = () => {
   return (

@@ -1,14 +1,8 @@
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import Link from "next/link";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 const ElderlyAndDisabledLayout = ({ children }: { children: ReactNode }) => {
-  return (
-    <SidebarLayout title="Elderly and disable">
-      <div>{children}</div>
-    </SidebarLayout>
-  );
+  return <SidebarLayout title="Elderly and disable">{children}</SidebarLayout>;
 };
 
 export default ElderlyAndDisabledLayout;
