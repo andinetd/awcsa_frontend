@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const NewChildformSchema = z.object({
-  name_by_family: z.string().trim().min(1, "Name is required"),
-  name_by_care_center: z.string().trim().optional(),
+  name_by_family: z.string().trim().optional(),
+  name_by_care_center: z.string().trim().min(1, "Name is required"),
   father_name: z.string().trim().optional(),
   age: z
     .number()
@@ -13,10 +13,10 @@ export const NewChildformSchema = z.object({
     .optional(),
   gender: z.enum(["male", "female"]),
   admitance_reason: z.string().trim().optional(),
-  found_address: z.string().trim().min(1),
-  found_subcity: z.string().trim().min(1),
-  found_woreda: z.string().trim().min(1),
-  additional_information: z.string().trim(),
+  found_address: z.string().trim().optional(),
+  found_subcity: z.string().trim().optional(),
+  found_woreda: z.string().trim().optional(),
+  additional_information: z.string().trim().optional(),
 
   found_date: z.date(),
 
@@ -41,6 +41,7 @@ export const NewChildformSchema = z.object({
   care_center_worker_woreda: z.string().optional(),
   care_center_worker_phone: z.string().optional(),
   care_center_worker_id_no: z.string().optional(),
+  care_center_worker_name: z.string().optional(),
 });
 
 export const NewChildformSchemaSection1 = NewChildformSchema.pick({
@@ -78,6 +79,7 @@ export const NewChildformSchemaSection2 = NewChildformSchema.pick({
   care_center_worker_responsibility: true,
   care_center_worker_subcity: true,
   care_center_worker_woreda: true,
+  care_center_worker_name: true,
 });
 
 export type NewChildformSchemaType = z.infer<typeof NewChildformSchema>;

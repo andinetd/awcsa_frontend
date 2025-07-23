@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,99 +11,372 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  NewChildformSchemaSection2,
+  NewChildformTypeSection2,
+} from "@/schemas/new-child-form-schema";
 import { useNewChildFormStore } from "@/stores/new-child-registration-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
 
 export default function NewChildFormSectionTwo() {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
-  const name = useNewChildFormStore((state) => state.father_name);
+  const store = useNewChildFormStore();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  const form = useForm<NewChildformTypeSection2>({
+    resolver: zodResolver(NewChildformSchemaSection2),
+    defaultValues: {},
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: NewChildformTypeSection2) {
     //TODO: handle submission here
-    console.log("values submited: ", { values });
-    router.push("/bureau-head");
+    console.log("section 2 values submited : ", { values });
+    store.setData(values);
+    router.push("/adoption/children/child-registration/section3");
   }
 
+  useEffect(() => {
+    if (!useNewChildFormStore.persist.hasHydrated) return;
+
+    if (store.name_by_family !== undefined || store.gender !== undefined) {
+      router.push("/adoption/children/child-registration/section1");
+    }
+  }, [
+    useNewChildFormStore.persist.hasHydrated,
+    store.name_by_family,
+    store.gender,
+    router,
+  ]);
+
   return (
-    <div className="mx-auto w-full mt-5 max-w-md px-6">
+    <div className="mx-auto max-w-4xl w-full mt-10 px-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{name}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email2222222222222222"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Checkbox id="remember" />
-              <label
-                htmlFor="remember"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember me
-              </label>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+          {/* founder Section */}
+          <Card className="flex flex-col space-y-8 py-8 px-5">
+            <CardTitle className="text-lg font-semibold">
+              Child Founder Information
+            </CardTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="child_founder_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="child_founder_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone No</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <Link
-              href="/auth/reset-password"
-              className="text-sm text-foreground underline hover:opacity-80"
-            >
-              Forgot password?
-            </Link>
-          </div> */}
+            {/* Admitance Reason */}
+            <FormField
+              control={form.control}
+              name="child_founder_house_no"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>House No</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="resize-none"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const stringValue = e.target.value;
+                        const numberValue =
+                          stringValue === "" ? null : Number(stringValue);
+                        field.onChange(numberValue);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            {/* Location Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="child_founder_address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="child_founder_subcity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sub City</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="child_found_woreda"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Woreda</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </Card>
+
+          {/* officer detail */}
+          <Card className="flex flex-col space-y-8 py-8 px-5">
+            <CardTitle className="text-lg font-semibold">
+              Officer Information
+            </CardTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="officer_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="officer_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone No</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="officer_id_no"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ID No</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="officer_responsibility"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Responsibility</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Location Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="officer_address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="officer_subcity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sub City</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="officer_woreda"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Woreda</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </Card>
+
+          {/* worker information */}
+
+          <Card className="flex flex-col space-y-8 py-8 px-5">
+            <CardTitle className="text-lg font-semibold">
+              Recieving care center worker Information
+            </CardTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="care_center_worker_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="care_center_worker_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone No</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="care_center_worker_id_no"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ID No</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="care_center_worker_responsibility"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Responsibility</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Location Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="care_center_worker_address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="care_center_worker_subcity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sub City</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="care_center_worker_woreda"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Woreda</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </Card>
+
+          {/* Submit Button */}
           <Button
             type="submit"
             className="w-full"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Signing in..." : "Sign In"}
+            {/* {form.formState.isSubmitting ? "Submitting..." : "Submit Form"} */}
+            {"Next"}
           </Button>
         </form>
       </Form>
