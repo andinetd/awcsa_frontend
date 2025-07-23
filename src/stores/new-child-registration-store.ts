@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { NewChildformSchemaType } from "@/schema/new-child-form-schema";
+import { NewChildformSchemaType } from "@/schemas/new-child-form-schema";
 
 type NewChildformState = Partial<NewChildformSchemaType> & {
   setData: (data: Partial<NewChildformSchemaType>) => void;

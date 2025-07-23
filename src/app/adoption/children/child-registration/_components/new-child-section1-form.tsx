@@ -24,7 +24,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { NewChildformSchema } from "@/schema/new-child-form-schema";
+import {
+  NewChildformSchema,
+  NewChildformSchemaSection1,
+  NewChildformTypeSection1,
+} from "@/schemas/new-child-form-schema";
 import { useNewChildFormStore } from "@/stores/new-child-registration-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon } from "lucide-react";
@@ -33,35 +37,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = NewChildformSchema.pick({
-  name_by_family: true,
-  name_by_care_center: true,
-  father_name: true,
-  age: true,
-
-  gender: true,
-  admitance_reason: true,
-  found_address: true,
-  found_subcity: true,
-  found_woreda: true,
-  additional_information: true,
-  found_date: true,
-});
-
 export default function NewChildFormSectionOne() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
   const setData = useNewChildFormStore((state) => state.setData);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<NewChildformTypeSection1>({
+    resolver: zodResolver(NewChildformSchemaSection1),
     defaultValues: {
       age: 0,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: NewChildformTypeSection1) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
     setData(values);
