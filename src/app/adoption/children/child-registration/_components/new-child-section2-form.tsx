@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNewChildFormStore } from "@/stores/new-child-registration-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -22,6 +23,7 @@ const formSchema = z.object({
 
 export default function NewChildFormSectionTwo() {
   const router = useRouter();
+  const name = useNewChildFormStore((state) => state.father_name);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,11 +48,11 @@ export default function NewChildFormSectionTwo() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{name}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Enter your email2222222222222222"
                     {...field}
                   />
                 </FormControl>

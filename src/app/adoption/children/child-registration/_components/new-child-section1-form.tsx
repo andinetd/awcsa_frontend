@@ -24,38 +24,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { NewChildformSchema } from "@/schema/new-child-form-schema";
+import { useNewChildFormStore } from "@/stores/new-child-registration-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = z.object({
-  name_by_family: z.string(),
-  name_by_care_center: z.string().optional(),
-  father_name: z.string().optional(),
-  age: z
-    .number()
-    .int()
-    .min(0, "Age cannot be negative")
-    .max(100, "Age too high")
-    .optional()
-    .nullable(),
-  gender: z.enum(["male", "female"]),
-  admitance_reason: z.string(),
-  found_address: z.string(),
-  found_subcity: z.string(),
-  found_woreda: z.string(),
-  additional_information: z.string(),
-  found_date: z.date(),
+const formSchema = NewChildformSchema.pick({
+  name_by_family: true,
+  name_by_care_center: true,
+  father_name: true,
+  age: true,
+
+  gender: true,
+  admitance_reason: true,
+  found_address: true,
+  found_subcity: true,
+  found_woreda: true,
+  additional_information: true,
+  found_date: true,
 });
 
 export default function NewChildFormSectionOne() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
+  const setData = useNewChildFormStore((state) => state.setData);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,7 +64,8 @@ export default function NewChildFormSectionOne() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
-    router.push("/adoption/children");
+    setData(values);
+    router.push("/adoption/children/child-registration/section2");
   }
 
   return (
@@ -83,7 +81,7 @@ export default function NewChildFormSectionOne() {
                 <FormItem>
                   <FormLabel>Name (Given by Family)</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="e.g., Abel" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +94,7 @@ export default function NewChildFormSectionOne() {
                 <FormItem>
                   <FormLabel>Name (Given by Care Center)</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="e.g., Daniel" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,7 +112,7 @@ export default function NewChildFormSectionOne() {
                     </span>
                   </FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="e.g., Tesfaye" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -134,7 +132,6 @@ export default function NewChildFormSectionOne() {
                     <Select
                       name="gender"
                       value={field.value}
-                      defaultValue="male"
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger className="w-full">
@@ -159,7 +156,6 @@ export default function NewChildFormSectionOne() {
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="e.g., 10"
                       value={field.value ?? ""}
                       onChange={(e) => {
                         const stringValue = e.target.value;
@@ -204,11 +200,7 @@ export default function NewChildFormSectionOne() {
                 <FormItem>
                   <FormLabel>Place Found</FormLabel>
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="e.g., Near Piassa"
-                      {...field}
-                    />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -221,7 +213,7 @@ export default function NewChildFormSectionOne() {
                 <FormItem>
                   <FormLabel>Sub City</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="e.g., Kirkos" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,7 +226,7 @@ export default function NewChildFormSectionOne() {
                 <FormItem>
                   <FormLabel>Woreda</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="e.g., 08" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -306,7 +298,8 @@ export default function NewChildFormSectionOne() {
             className="w-full"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Submitting..." : "Submit Form"}
+            {/* {form.formState.isSubmitting ? "Submitting..." : "Submit Form"} */}
+            {"Next"}
           </Button>
         </form>
       </Form>
