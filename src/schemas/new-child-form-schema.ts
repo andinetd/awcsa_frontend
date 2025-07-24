@@ -23,7 +23,7 @@ export const NewChildformSchema = z.object({
   child_founder_name: z.string().optional(),
   child_founder_address: z.string().optional(),
   child_founder_subcity: z.string().optional(),
-  child_found_woreda: z.string(),
+  child_found_woreda: z.string().optional(),
   child_founder_house_no: z.number().int().min(0).optional(),
   child_founder_phone: z.string().optional(),
 
@@ -42,6 +42,9 @@ export const NewChildformSchema = z.object({
   care_center_worker_phone: z.string().optional(),
   care_center_worker_id_no: z.string().optional(),
   care_center_worker_name: z.string().optional(),
+
+  health_officer_1_name: z.string().optional(),
+  heallth_officer_2_name: z.string().optional(),
 });
 
 export const NewChildformSchemaSection1 = NewChildformSchema.pick({
@@ -80,6 +83,9 @@ export const NewChildformSchemaSection2 = NewChildformSchema.pick({
   care_center_worker_subcity: true,
   care_center_worker_woreda: true,
   care_center_worker_name: true,
+
+  health_officer_1_name: true,
+  heallth_officer_2_name: true,
 });
 
 export type NewChildformSchemaType = z.infer<typeof NewChildformSchema>;

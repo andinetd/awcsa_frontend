@@ -22,8 +22,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function NewChildFormSectionTwo() {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
   const store = useNewChildFormStore();
 
@@ -36,21 +34,22 @@ export default function NewChildFormSectionTwo() {
     //TODO: handle submission here
     console.log("section 2 values submited : ", { values });
     store.setData(values);
-    router.push("/adoption/children/child-registration/section3");
+    router.push("/adoption/children/");
   }
 
-  useEffect(() => {
-    if (!useNewChildFormStore.persist.hasHydrated) return;
+  //to check and block continuing if there are a must fields
+  // useEffect(() => {
+  //   if (!useNewChildFormStore.persist.hasHydrated) return;
 
-    if (store.name_by_family !== undefined || store.gender !== undefined) {
-      router.push("/adoption/children/child-registration/section1");
-    }
-  }, [
-    useNewChildFormStore.persist.hasHydrated,
-    store.name_by_family,
-    store.gender,
-    router,
-  ]);
+  //   if (store.name_by_family !== undefined || store.gender !== undefined) {
+  //     router.push("/adoption/children/child-registration/section1");
+  //   }
+  // }, [
+  //   useNewChildFormStore.persist.hasHydrated,
+  //   store.name_by_family,
+  //   store.gender,
+  //   router,
+  // ]);
 
   return (
     <div className="mx-auto max-w-4xl w-full mt-10 px-6">
@@ -359,6 +358,41 @@ export default function NewChildFormSectionTwo() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Woreda</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </Card>
+
+          {/* health officers */}
+          <Card className="flex flex-col space-y-8 py-8 px-5">
+            <CardTitle className="text-lg font-semibold">
+              On Duty health officers
+            </CardTitle>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <FormField
+                control={form.control}
+                name="health_officer_1_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Health officer 1 name</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="heallth_officer_2_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Health officer 2 name</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
