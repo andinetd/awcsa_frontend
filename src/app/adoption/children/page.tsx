@@ -4,6 +4,7 @@ import { DataTable } from "@/components/ui/data-table";
 import Link from "next/link";
 import React from "react";
 import { columns, Child } from "./_components/columns";
+import { sampleChildrenData } from "@/lib/mock-data";
 
 const Children = () => {
   const data: Child[] = [
@@ -27,7 +28,7 @@ const Children = () => {
             <Button>Add New Child</Button>
           </Link>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={sampleChildrenData} />
       </div>
     </SidebarLayout>
   );

@@ -88,6 +88,16 @@ export const NewChildformSchemaSection2 = NewChildformSchema.pick({
   heallth_officer_2_name: true,
 });
 
+export const ChildrenListTableSchema = NewChildformSchema.pick({
+  name_by_care_center: true,
+  name_by_family: true,
+  age: true,
+  gender: true,
+  found_date: true,
+});
+
+export type ChildDataType = z.infer<typeof ChildrenListTableSchema>;
+
 export type NewChildformSchemaType = z.infer<typeof NewChildformSchema>;
 export type NewChildformTypeSection1 = z.infer<
   typeof NewChildformSchemaSection1

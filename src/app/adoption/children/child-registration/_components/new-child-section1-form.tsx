@@ -59,7 +59,7 @@ export default function NewChildFormSectionOne() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl w-full mt-10 px-6">
+    <div className="mx-auto w-full mt-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="flex flex-col space-y-10 py-8 px-5">
