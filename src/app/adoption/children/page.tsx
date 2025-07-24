@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import Link from "next/link";
 import React from "react";
-import { columns, Payment } from "./_components/columns";
+import { columns, Child } from "./_components/columns";
 
 const Children = () => {
-  const data: Payment[] = [
+  const data: Child[] = [
     {
       id: "728ed52f",
       amount: 100,
@@ -18,12 +18,15 @@ const Children = () => {
   return (
     <SidebarLayout title="Children">
       <div className="container mx-auto py-10 flex flex-col gap-4">
-        <Link
-          href={"/adoption/children/child-registration/section1"}
-          className="self-end"
-        >
-          <Button>Add New Child</Button>
-        </Link>
+        <div className="flex flex-col md:flex-row justify-between ">
+          <h1 className="font-bold text-xl">List of Children</h1>
+          <Link
+            href={"/adoption/children/child-registration/section1"}
+            className="self-end"
+          >
+            <Button>Add New Child</Button>
+          </Link>
+        </div>
         <DataTable columns={columns} data={data} />
       </div>
     </SidebarLayout>
