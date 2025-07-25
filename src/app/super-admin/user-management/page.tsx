@@ -2,12 +2,7 @@
 
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import React, { useMemo, useState } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  createColumnHelper
-} from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getPaginationRowModel } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,18 +11,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AddUserDialog from "@/components/AddUserDialog";
+import UserTable from "./_components/UserTable";
+import { getUserColumns, UserData } from "./_components/UserColumns";
+import EditUserDialog from "./_components/EditUserDialog";
+import ChangePermissionDialog from "./_components/ChangePermissionDialog";
+import DeleteUserDialog from "./_components/DeleteUserDialog";
+import AddUserDialog from "@/app/super-admin/user-management/_components/AddUserDialog";
 
 import { KeyRound, Pencil, Trash, User } from "lucide-react";
-
-
-type UserData = {
-  name: string;
-  email: string;
-  access: string[];
-  lastActive: string;
-  dateAdded: string;
-};
 
 const initialData: UserData[] = [
   {
@@ -46,7 +37,7 @@ const initialData: UserData[] = [
   },
   {
     name: "Charlie",
-    email: "harlie@example.com",
+    email: "charlie@example.com",
     access: ["Admin"],
     lastActive: "2023-10-03",
     dateAdded: "2023-09-17",
@@ -60,109 +51,173 @@ const initialData: UserData[] = [
   },
   {
     name: "Eve",
-    email: "eve@exmaple.com",
+    email: "eve@example.com",
     access: ["Data Import"],
     lastActive: "2023-10-05",
     dateAdded: "2023-09-19",
-  }
+  },
+  {
+    name: "Frank",
+    email: "frank@example.com",
+    access: ["Admin", "Data Import"],
+    lastActive: "2023-10-06",
+    dateAdded: "2023-09-20",
+  },
+  {
+    name: "Grace",
+    email: "grace@example.com",
+    access: ["Data Export"],
+    lastActive: "2023-10-07",
+    dateAdded: "2023-09-21",
+  },
+  {
+    name: "Heidi",
+    email: "heidi@example.com",
+    access: ["Data Import", "Data Export"],
+    lastActive: "2023-10-08",
+    dateAdded: "2023-09-22",
+  },
+  {
+    name: "Ivan",
+    email: "ivan@example.com",
+    access: ["Admin"],
+    lastActive: "2023-10-09",
+    dateAdded: "2023-09-23",
+  },
+  {
+    name: "Judy",
+    email: "judy@example.com",
+    access: ["Data Export", "Data Import"],
+    lastActive: "2023-10-10",
+    dateAdded: "2023-09-24",
+  },
+  {
+    name: "Karl",
+    email: "karl@example.com",
+    access: ["Data Import"],
+    lastActive: "2023-10-11",
+    dateAdded: "2023-09-25",
+  },
+  {
+    name: "Laura",
+    email: "laura@example.com",
+    access: ["Admin", "Data Export"],
+    lastActive: "2023-10-12",
+    dateAdded: "2023-09-26",
+  },
+  {
+    name: "Mallory",
+    email: "mallory@example.com",
+    access: ["Data Import"],
+    lastActive: "2023-10-13",
+    dateAdded: "2023-09-27",
+  },
+  {
+    name: "Niaj",
+    email: "niaj@example.com",
+    access: ["Data Export"],
+    lastActive: "2023-10-14",
+    dateAdded: "2023-09-28",
+  },
+  {
+    name: "Olivia",
+    email: "olivia@example.com",
+    access: ["Admin", "Data Import"],
+    lastActive: "2023-10-15",
+    dateAdded: "2023-09-29",
+  },
+  {
+    name: "Peggy",
+    email: "peggy@example.com",
+    access: ["Data Export", "Data Import"],
+    lastActive: "2023-10-16",
+    dateAdded: "2023-09-30",
+  },
+  {
+    name: "Quentin",
+    email: "quentin@example.com",
+    access: ["Admin"],
+    lastActive: "2023-10-17",
+    dateAdded: "2023-10-01",
+  },
+  {
+    name: "Rupert",
+    email: "rupert@example.com",
+    access: ["Data Import"],
+    lastActive: "2023-10-18",
+    dateAdded: "2023-10-02",
+  },
+  {
+    name: "Sybil",
+    email: "sybil@example.com",
+    access: ["Data Export"],
+    lastActive: "2023-10-19",
+    dateAdded: "2023-10-03",
+  },
+  {
+    name: "Trent",
+    email: "trent@example.com",
+    access: ["Admin", "Data Export"],
+    lastActive: "2023-10-20",
+    dateAdded: "2023-10-04",
+  },
+  {
+    name: "Uma",
+    email: "uma@example.com",
+    access: ["Data Import"],
+    lastActive: "2023-10-21",
+    dateAdded: "2023-10-05",
+  },
+  {
+    name: "Victor",
+    email: "victor@example.com",
+    access: ["Data Export", "Data Import"],
+    lastActive: "2023-10-22",
+    dateAdded: "2023-10-06",
+  },
+  {
+    name: "Wendy",
+    email: "wendy@example.com",
+    access: ["Admin"],
+    lastActive: "2023-10-23",
+    dateAdded: "2023-10-07",
+  },
+  {
+    name: "Xavier",
+    email: "xavier@example.com",
+    access: ["Data Import"],
+    lastActive: "2023-10-24",
+    dateAdded: "2023-10-08",
+  },
+  {
+    name: "Yvonne",
+    email: "yvonne@example.com",
+    access: ["Data Export"],
+    lastActive: "2023-10-25",
+    dateAdded: "2023-10-09",
+  },
+  {
+    name: "Zack",
+    email: "zack@example.com",
+    access: ["Admin", "Data Import"],
+    lastActive: "2023-10-26",
+    dateAdded: "2023-10-10",
+  },
 ];
-
-const columnHelper = createColumnHelper<UserData>();
-
-const columns = [
-  columnHelper.accessor("name", {
-    header: "User name",
-    cell: ({ row }) => (
-      <div>
-        <div className="font-medium">{row.original.name}</div>
-        <div className="text-sm text-gray-500">{row.original.email}</div>
-      </div>
-    ),
-  }),
-  columnHelper.accessor("access", {
-    header: "Access",
-    meta: { hideOnMobile: true },
-    cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1">
-        {row.original.access.map((role) => (
-          <span
-            key={role}
-            className={`text-xs px-2 py-1 rounded-full ${
-              role === "Admin"
-                ? "bg-green-100 text-green-800"
-                : role === "Data Export"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-purple-100 text-purple-800"
-            }`}
-          >
-            {role}
-          </span>
-        ))}
-      </div>
-    ),
-  }),
-  columnHelper.accessor("lastActive", {
-    header: "Last active",
-    meta: { hideOnMobile: true },
-  }),
-  columnHelper.accessor("dateAdded", {
-    header: "Date added",
-    meta: { hideOnMobile: true },
-  }),
-  columnHelper.display({
-    id: "actions",
-    cell: () => (
-      <div className="relative">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <button className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
-              <svg
-                className="w-4 h-4 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v.01M12 12v.01M12 18v.01"
-                />
-              </svg>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              <User />
-              View Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Pencil />
-              Edit details
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <KeyRound />
-              Change permission
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Trash />
-              Delete user
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
-  }),
-]
-
-
 
 export default function UserManagement() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [data, setData] = useState<UserData[]>(initialData);
-  
+  // Dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [permissionDialogOpen, setPermissionDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editOriginalEmail, setEditOriginalEmail] = useState<string | null>(
+    null
+  );
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
   const allRoles = useMemo(
     () => Array.from(new Set(data.flatMap((user) => user.access))),
@@ -180,14 +235,92 @@ export default function UserManagement() {
     });
   }, [search, roleFilter, data]);
 
+  // Handlers for row actions
+
+  const handleEdit = (user: UserData) => {
+    setSelectedUser(user);
+    setEditOriginalEmail(user.email);
+    setEditDialogOpen(true);
+  };
+
+  const handleChangePermission = (user: UserData) => {
+    setSelectedUser(user);
+    setPermissionDialogOpen(true);
+  };
+  const handleDelete = (user: UserData) => {
+    setSelectedUser(user);
+    setDeleteDialogOpen(true);
+  };
+
+  const columns = useMemo(
+    () =>
+      getUserColumns({
+        onEdit: handleEdit,
+        onChangePermission: handleChangePermission,
+        onDelete: handleDelete,
+      }),
+    [data]
+  );
+
   const table = useReactTable({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    rowCount: filteredData.length,
   });
+
+  // Save handlers for dialogs
+
+  const handleEditSave = (user: UserData) => {
+    setData((prev) =>
+      prev.map((u) => (u.email === editOriginalEmail ? user : u))
+    );
+    setEditDialogOpen(false);
+    setSelectedUser(null);
+    setEditOriginalEmail(null);
+  };
+  const handlePermissionSave = (user: UserData) => {
+    setData((prev) => prev.map((u) => (u.email === user.email ? user : u)));
+    setPermissionDialogOpen(false);
+    setSelectedUser(null);
+  };
+  const handleDeleteConfirm = (user: UserData) => {
+    setData((prev) => prev.filter((u) => u.email !== user.email));
+    setDeleteDialogOpen(false);
+    setSelectedUser(null);
+  };
 
   return (
     <SidebarLayout title="User Management">
+      <EditUserDialog
+        open={editDialogOpen}
+        user={selectedUser}
+        onOpenChange={(open) => {
+          setEditDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}
+        onSave={handleEditSave}
+      />
+      <ChangePermissionDialog
+        open={permissionDialogOpen}
+        user={selectedUser}
+        allRoles={allRoles}
+        onOpenChange={(open) => {
+          setPermissionDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}
+        onSave={handlePermissionSave}
+      />
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        user={selectedUser}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}
+        onDelete={handleDeleteConfirm}
+      />
       <div className="flex space-x-2 justify-between items-center ">
         <AddUserDialog
           open={dialogOpen}
@@ -232,54 +365,15 @@ export default function UserManagement() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-900 hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
+          <Button
+            className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-900 hover:cursor-pointer"
+            onClick={() => setDialogOpen(true)}
+          >
             + Add user
           </Button>
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-separate border-spacing-y-2">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className={`text-left text-sm font-medium text-gray-600 px-4 py-2 bg-gray-50 ${
-                      header.column.columnDef.meta?.hideOnMobile
-                        ? "hidden md:table-cell"
-                        : ""
-                    }`}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="rounded-md shadow-sm">
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={`bg-white px-4 py-2 text-sm text-gray-800 ${
-                      cell.column.columnDef.meta?.hideOnMobile
-                        ? "hidden md:table-cell"
-                        : ""
-                    }`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <UserTable table={table} />
     </SidebarLayout>
   );
 }
