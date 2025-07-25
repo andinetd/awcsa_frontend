@@ -3,9 +3,9 @@
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import FormList from "@/app/super-admin/_components/form-fields/FormList";
-import FieldTable from "@/app/super-admin/_components/form-fields/FieldTable";
-import FieldDialog from "@/app/super-admin/_components/form-fields/FieldDialog";
+import FormList from "@/app/super-admin/form-fields/_components/FormList";
+import FieldTable from "@/app/super-admin/form-fields/_components/FieldTable";
+import FieldDialog from "@/app/super-admin/form-fields/_components/FieldDialog";
 
 type Form = {
   id: string;

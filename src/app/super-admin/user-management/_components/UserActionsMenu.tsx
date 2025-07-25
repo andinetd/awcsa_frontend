@@ -21,7 +21,7 @@ const UserActionsMenu: React.FC<UserActionsMenuProps> = ({
   <div className="relative">
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <button className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
+        <span className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
           <svg
             className="w-4 h-4 text-gray-600"
             fill="none"
@@ -35,7 +35,7 @@ const UserActionsMenu: React.FC<UserActionsMenuProps> = ({
               d="M12 6v.01M12 12v.01M12 18v.01"
             />
           </svg>
-        </button>
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={onEdit}>

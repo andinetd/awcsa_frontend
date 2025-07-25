@@ -72,8 +72,8 @@ export default function FieldTable({
             </td>
             <td className="bg-white px-4 py-2 text-sm text-gray-800">
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <button className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
+                <DropdownMenuTrigger asChild>
+                  <span className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
                     <svg
                       className="w-4 h-4 text-gray-600"
                       fill="none"
@@ -87,7 +87,7 @@ export default function FieldTable({
                         d="M12 6v.01M12 12v.01M12 18v.01"
                       />
                     </svg>
-                  </button>
+                  </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onClick={() => onEdit(field)}>
