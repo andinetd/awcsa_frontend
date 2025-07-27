@@ -1,10 +1,7 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -22,32 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { useRegisterAderaMutation } from "@/hooks/adoption/adera";
+import { NewAderaSchema, NewAderaSchemaType } from "@/schemas/adera-schema";
 
-const NewAderaSchema = z
-  .object({
-    cityIdNumber: z.string(),
-    educationLevel: z.string(),
-    occupation: z.string(),
-    monthlyIncome: z.number(),
-    partnerCityIdNumber: z.string().optional(),
-    facilitatorCityIdNumber: z.string(),
-    preferredChildGender: z.enum(["MALE", "FEMALE"]),
-    preferredChildMinAge: z
-      .number()
-      .int()
-      .min(0, "Minimum age must me at least 0"),
-    preferredChildMaxAge: z.number().int().min(0, "Max age must be atlest 0"),
-  })
-  .refine((data) => data.preferredChildMinAge <= data.preferredChildMaxAge, {
-    error: "Min age can not be larger than max age",
-    path: ["preferredChildMaxAge"],
-  });
-
-type NewAderaSchemaType = z.infer<typeof NewAderaSchema>;
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const NewAderaRegistrationForm = () => {
+  const { mutate, isPending, error } = useRegisterAderaMutation();
   const router = useRouter();
+
   const form = useForm<NewAderaSchemaType>({
     resolver: zodResolver(NewAderaSchema),
     defaultValues: {},
@@ -55,8 +36,11 @@ const NewAderaRegistrationForm = () => {
 
   async function onSubmit(values: NewAderaSchemaType) {
     //TODO: handle submission here
-    console.log("values submited: ", { values });
-    router.push("/adoption/adera");
+    console.log("submitting values: ", JSON.stringify(values));
+    mutate(values);
+    if (isPending) console.log("Pending....");
+    if (error) console.log(error.message);
+    // router.push("/adoption/adera");
   }
 
   return (
@@ -136,7 +120,16 @@ const NewAderaRegistrationForm = () => {
                 <FormItem>
                   <FormLabel> {"ወርሃዊ ገቢ (Monthly Income)"}</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const stringValue = e.target.value;
+                        const numberValue =
+                          stringValue === "" ? null : Number(stringValue);
+                        field.onChange(numberValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,7 +149,7 @@ const NewAderaRegistrationForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      name="gender"
+                      name="preferredChildGender"
                       value={field.value}
                       onValueChange={field.onChange}
                     >
@@ -164,8 +157,8 @@ const NewAderaRegistrationForm = () => {
                         <SelectValue placeholder="ፆታ (gender)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="MALE">Male</SelectItem>
+                        <SelectItem value="FEMALE">Female</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -186,7 +179,16 @@ const NewAderaRegistrationForm = () => {
                     {"ተመራጭ የልጅ ዝቅተኛ አድሜ (Minimum child age)"}
                   </FormLabel>
                   <FormControl>
-                    <Input type="text" {...field} />
+                    <Input
+                      type="number"
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const stringValue = e.target.value;
+                        const numberValue =
+                          stringValue === "" ? null : Number(stringValue);
+                        field.onChange(numberValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,6 +202,33 @@ const NewAderaRegistrationForm = () => {
                   <FormLabel>
                     {" "}
                     {"ተመራጭ የልጅ ከፍተኛ አድሜ (Maximumchild age)"}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const stringValue = e.target.value;
+                        const numberValue =
+                          stringValue === "" ? null : Number(stringValue);
+                        field.onChange(numberValue);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <FormField
+              control={form.control}
+              name="facilitatorCityIdNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {" "}
+                    {"የመዝጋቢ ባለሞያ መታወቂቂያ ቁትር (Expert officer id number)"}
                   </FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
