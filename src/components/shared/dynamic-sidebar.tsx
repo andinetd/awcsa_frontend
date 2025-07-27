@@ -15,6 +15,7 @@ import {
 import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig } from "@/utils/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import Link from "next/link";
 
 export function DynamicSidebar() {
   // const { user, logout, loading } = useAuthStore();
@@ -52,24 +53,26 @@ export function DynamicSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              {/* <Building className="size-4" /> */}
-              <div>
-                <img
-                  src="/assets/WCSA_logo.jpg"
-                  alt="Office logo"
-                  width={"50px"}
-                  height={"50px"}
-                />
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-semibold">WCSA System</span>
-                <span className="text-xs capitalize">
-                  {/* {user.role.replace("-", " ")} */}
-                  {role}
-                </span>
-              </div>
-            </SidebarMenuButton>
+            <Link href={"/"}>
+              <SidebarMenuButton size="lg">
+                {/* <Building className="size-4" /> */}
+                <div>
+                  <img
+                    src="/assets/WCSA_logo.jpg"
+                    alt="Office logo"
+                    width={"50px"}
+                    height={"50px"}
+                  />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold">WCSA System</span>
+                  <span className="text-xs capitalize">
+                    {/* {user.role.replace("-", " ")} */}
+                    {role}
+                  </span>
+                </div>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
