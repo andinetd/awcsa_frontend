@@ -1,4 +1,5 @@
 import { AderaTableType } from "@/schemas/adera-schema";
+import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { ChildDataType } from "@/schemas/new-child-form-schema";
 
 export const sampleChildrenData: ChildDataType[] = [
@@ -318,5 +319,34 @@ export const mockAderaData: AderaTableType[] = [
     preferredChildGender: "FEMALE",
     preferredChildMinAge: 4,
     preferredChildMaxAge: 9,
+  },
+];
+
+//CARE CENTER LIST MOCK
+
+export const mockCareCenters: NewCareCenterSchemaType[] = [
+  {
+    name: "Kibebe Tsehay",
+    location: "Addis Ababa",
+    minAge: 1,
+    maxAge: 12,
+  },
+  {
+    name: "Hope for Tomorrow",
+    location: "Addis Ababa",
+    minAge: 2,
+    maxAge: 10,
+  },
+  {
+    name: "Kids Center",
+    location: "Hawassa",
+    minAge: 3,
+    maxAge: 14,
+  },
+  {
+    name: "Selam Child Support",
+    location: "Gondar",
+    minAge: 1,
+    maxAge: 8,
   },
 ];

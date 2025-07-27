@@ -4,6 +4,8 @@ import { DataTable } from "@/components/ui/data-table";
 import Link from "next/link";
 import React from "react";
 import NewCareCenterForm from "./_components/new-care-center-form";
+import { careCenterColumns } from "./_components/column";
+import { mockCareCenters } from "@/lib/mock-data";
 
 const CareCenters = () => {
   return (
@@ -12,7 +14,7 @@ const CareCenters = () => {
         <div className="self-end">
           <NewCareCenterForm />
         </div>
-        <DataTable columns={[]} data={[]} />
+        <DataTable columns={careCenterColumns} data={mockCareCenters || []} />
       </div>
     </SidebarLayout>
   );

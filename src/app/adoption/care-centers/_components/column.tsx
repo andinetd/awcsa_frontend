@@ -1,56 +1,32 @@
 "use client";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { AderaTableType, NewAderaSchemaType } from "@/schemas/adera-schema";
+import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 
-export const columns: ColumnDef<AderaTableType>[] = [
+export const careCenterColumns: ColumnDef<NewCareCenterSchemaType>[] = [
   {
-    accessorKey: "cityIdNumber",
+    accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="City ID" />
+      <DataTableColumnHeader column={column} title="Care Center Name" />
     ),
   },
   {
-    accessorKey: "educationLevel",
+    accessorKey: "location",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Education Level" />
+      <DataTableColumnHeader column={column} title="Location" />
     ),
   },
   {
-    accessorKey: "occupation",
+    accessorKey: "minAge",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Occupation" />
+      <DataTableColumnHeader column={column} title="Minimum Age" />
     ),
   },
   {
-    accessorKey: "monthlyIncome",
+    accessorKey: "maxAge",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Monthly Income" />
-    ),
-  },
-  {
-    accessorKey: "partnerCityIdNumber",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Partner City ID" />
-    ),
-    cell: ({ row }) => row.original.partnerCityIdNumber ?? "N/A",
-  },
-  {
-    accessorKey: "preferredChildGender",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Preferred Gender" />
-    ),
-  },
-  {
-    accessorKey: "preferredChildMinAge",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Preferred Min Age" />
-    ),
-  },
-  {
-    accessorKey: "preferredChildMaxAge",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Preferred Max Age" />
+      <DataTableColumnHeader column={column} title="Maximum Age" />
     ),
   },
 ];
