@@ -21,3 +21,7 @@ export const NewAderaSchema = z
   });
 
 export type NewAderaSchemaType = z.infer<typeof NewAderaSchema>;
+export type AderaTableType = Omit<
+  NewAderaSchemaType,
+  "facilitatorCityIdNumber"
+>;
