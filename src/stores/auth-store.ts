@@ -1,47 +1,6 @@
-// // stores/useAuthStore.ts
-// import { UserRole } from "@/hooks/useCurrentRole";
-// import { create } from "zustand";
-
-// export interface AuthUser {
-//   id: number;
-//   email: string;
-//   accountType: "EMPLOYEE" | "CLIENT";
-//   role: string;
-//   permissions: string[];
-//   org: {
-//     unitId: number;
-//     unitType: string;
-//     deputyBureau: string;
-//   };
-// }
-
-export const roleMap: Record<string, UserRole> = {
-  SUPER_ADMIN: "super-admin",
-  BUREAU_MANAGER: "bureau-head",
-  ADOPTION_MANAGER: "adoption",
-  SOCIAL_AFFAIRS_OFFICER: "social-affairs",
-  WOMEN_AFFAIRS_OFFICER: "womens",
-  EDIR_ADMIN: "edir",
-  ELDERLY_DISABLED_MANAGER: "elderly-disabled",
-};
-
 import { UserRole } from "@/hooks/useCurrentRole";
 import { PermissionType } from "@/utils/permission";
-// interface AuthState {
-//   user: AuthUser | null;
-//   loading: boolean;
-//   login: (user: AuthUser) => void;
-//   logout: () => void;
-// }
 
-// export const useAuthStore = create<AuthState>((set) => ({
-//   user: null,
-//   loading: false,
-//   login: (user) => set({ user }),
-//   logout: () => set({ user: null }),
-// }));
-
-// stores/useAuthStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -60,6 +19,8 @@ interface AuthState {
   logout: () => void;
 }
 
+// mock user
+
 const mock: User = {
   id: "123",
   email: "Shigido.email.com",
@@ -76,13 +37,6 @@ const mock: User = {
   ],
   org: [],
 };
-
-// Organizational hierarchy
-//   "org": {
-//     "unitId": 5,
-//     "unitType": "BUREAU",
-//     "deputyBureau": "CHILDREN_AFFAIRS"
-//   }
 
 export const useAuthStore = create<AuthState>()(
   persist(
