@@ -19,10 +19,10 @@ const SubmitButton = ({
     <Button
       disabled={isSubmitting || disabled}
       {...props}
-      className={cn(props.className, "relative")}
+      className={cn(props.className, "relative min-w-16")}
     >
       {isSubmitting ? (
-        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ">
           <Loader2 className="h-4 w-4 animate-spin" />
         </span>
       ) : (

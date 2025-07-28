@@ -20,17 +20,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRegisterCareCenterMutation } from "@/hooks/adoption/care-center";
 import {
   NewCareCenterSchema,
   NewCareCenterSchemaType,
 } from "@/schemas/care-centers";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const NewCareCenterForm = () => {
-  const router = useRouter();
+  const { mutate } = useRegisterCareCenterMutation();
 
   const form = useForm<NewCareCenterSchemaType>({
     resolver: zodResolver(NewCareCenterSchema),
@@ -40,6 +40,7 @@ const NewCareCenterForm = () => {
   async function onSubmit(values: NewCareCenterSchemaType) {
     //TODO: handle submission here
     console.log("submitting values: ", JSON.stringify(values));
+    mutate(values);
   }
 
   return (

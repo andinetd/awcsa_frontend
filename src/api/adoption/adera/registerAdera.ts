@@ -6,6 +6,7 @@ export const registerAdera = async (data: NewAderaSchemaType) => {
   try {
     const req = await axios.post(`${BASE_URL}/adoption/adera/register`, data, {
       headers: {
+        Authorization: `Bearer ${""}`,
         "Content-Type": "application/json",
       },
     });
