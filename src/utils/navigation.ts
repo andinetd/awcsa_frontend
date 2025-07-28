@@ -14,11 +14,13 @@ import {
   User,
   Users,
 } from "lucide-react";
+import { PermissionType } from "./permission";
 
 export interface NavigationItem {
   title: string;
   url: string;
   icon: any;
+  permissions?: PermissionType[];
 }
 
 export interface NavigationSection {

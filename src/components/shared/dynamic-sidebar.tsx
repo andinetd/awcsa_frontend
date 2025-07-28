@@ -13,8 +13,9 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Building, LogOut, User } from "lucide-react";
-import { navigationConfig } from "@/utils/navigation";
+import { navigationConfig, NavigationItem } from "@/utils/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function DynamicSidebar() {
   // const { user, logout, loading } = useAuthStore();
@@ -44,8 +45,15 @@ export function DynamicSidebar() {
 
   // const navigation = navigationConfig[user.role] || [];
   // const mockNavigation = navigationConfig["bureau-head"];
+  const { user } = useAuthStore();
   const role = useCurrentRole();
-  const sections = role ? navigationConfig[role] : [];
+  const permissions = user?.permissions || [];
+  const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
+
+  function hasPermission(item: NavigationItem): boolean {
+    if (!item.permissions) return true;
+    return item.permissions.every((p) => permissions.includes(p));
+  }
 
   return (
     <Sidebar>
@@ -80,7 +88,7 @@ export function DynamicSidebar() {
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => (
+                {section.items.filter(hasPermission).map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <a href={item.url}>

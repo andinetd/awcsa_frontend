@@ -10,8 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/stores/auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,6 +24,7 @@ const formSchema = z.object({
 
 export default function SignInForm() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,7 +37,13 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
-    router.push("/bureau-head");
+    // router.push("/bureau-head");
+    try {
+      await login("test@example.com", "password123");
+      // redirect or show protected dashboard
+    } catch (err) {
+      console.error("Login failed", err);
+    }
   }
 
   return (
