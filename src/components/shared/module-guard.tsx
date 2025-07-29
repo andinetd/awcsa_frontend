@@ -17,16 +17,13 @@ export default function ModuleGuard({ allowed, children }: ModuleGuardProps) {
   const [checking, setChecking] = useState(true); // Loading state
 
   useEffect(() => {
-    if (!user) {
-      router.replace("/login");
-      return;
-    }
+    if (user) {
+      const bureau = user.org?.deputyBureau;
 
-    const bureau = user.org?.deputyBureau;
-
-    if (!allowed.includes(bureau)) {
-      router.replace("/unauthorized");
-      return;
+      if (!allowed.includes(bureau)) {
+        router.replace("/unauthorized");
+        return;
+      }
     }
 
     setChecking(false); // Passed checks
