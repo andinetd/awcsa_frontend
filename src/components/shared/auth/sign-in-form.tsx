@@ -24,7 +24,7 @@ const formSchema = z.object({
 
 export default function SignInForm() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
+  const { login, user } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,12 +37,16 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
-    // router.push("/bureau-head");
+    if (user) {
+      router.push(`/${user.role}/dashboard`);
+    }
     try {
-      await login("test@example.com", "password123");
+      // await login("test@example.com", "password123");
+      await login(values.email, values.password);
       // redirect or show protected dashboard
     } catch (err) {
       console.error("Login failed", err);
+      form.setError("email", { message: "Invalid credentials" });
     }
   }
 

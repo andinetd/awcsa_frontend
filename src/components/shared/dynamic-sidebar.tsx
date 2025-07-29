@@ -16,9 +16,11 @@ import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig, NavigationItem } from "@/utils/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { useAuthStore } from "@/stores/auth-store";
+import { useRouter } from "next/navigation";
 
 export function DynamicSidebar() {
-  // const { user, logout, loading } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const router = useRouter();
 
   // const handleLogout = async () => {
   //   try {
@@ -45,7 +47,6 @@ export function DynamicSidebar() {
 
   // const navigation = navigationConfig[user.role] || [];
   // const mockNavigation = navigationConfig["bureau-head"];
-  const { user } = useAuthStore();
   const role = useCurrentRole();
   const permissions = user?.permissions || [];
   const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
@@ -104,30 +105,35 @@ export function DynamicSidebar() {
         ))}
       </SidebarContent>
 
-      {/* <SidebarFooter>
+      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
               <User className="size-4" />
               <div className="flex flex-col text-left flex-1">
-                <span className="font-semibold truncate">{user.name}</span>
-                <span className="text-xs truncate">{user.email}</span>
-                {user.department && (
+                <span className="font-semibold truncate">{user?.email}</span>
+                <span className="text-xs truncate">{user?.email}</span>
+                {user?.role && (
                   <span className="text-xs text-muted-foreground truncate">
-                    {user.department}
+                    {user.role}
                   </span>
                 )}
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout} disabled={loading}>
+            <SidebarMenuButton
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+            >
               <LogOut className="size-4" />
-              <span>{loading ? "Logging out..." : "Logout"}</span>
+              <span>{false ? "Logging out..." : "Logout"}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter> */}
+      </SidebarFooter>
     </Sidebar>
   );
 }

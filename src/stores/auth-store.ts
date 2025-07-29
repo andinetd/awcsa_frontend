@@ -14,7 +14,7 @@ interface User {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
+  // token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -38,27 +38,92 @@ const mock: User = {
   org: [],
 };
 
+const mockUsers: User[] = [
+  {
+    id: "1",
+    email: "user1@gmail.com",
+    role: "bureau-head",
+    permissions: [
+      "view_clients",
+      "create_client",
+      "update_client",
+      "view_employees",
+    ],
+    org: [],
+  },
+  {
+    id: "2",
+    email: "user2@gmail.com",
+    role: "social-affairs",
+    permissions: ["view_clients"],
+    org: [],
+  },
+  {
+    id: "3",
+    email: "user3@gmail.com",
+    role: "adoption",
+    permissions: ["view_clients", "create_client"],
+    org: [],
+  },
+  {
+    id: "4",
+    email: "user4@gmail.com",
+    role: "edir",
+    permissions: [
+      "view_clients",
+      "view_employees",
+      "create_client",
+      "update_client",
+    ],
+    org: [],
+  },
+  {
+    id: "5",
+    email: "user5@gmail.com",
+    role: "elderly-disabled",
+    permissions: ["view_clients"],
+    org: [],
+  },
+  {
+    id: "6",
+    email: "user6@gmail.com",
+    role: "womens",
+    permissions: ["view_clients"],
+    org: [],
+  },
+  {
+    id: "7",
+    email: "user7@gmail.com",
+    role: "super-admin",
+    permissions: ["view_clients"],
+    org: [],
+  },
+];
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: mock,
-      token: null,
+      user: null,
+      // token: null,
 
       login: async (email, password) => {
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
+        if (!email || !password) throw new Error("Missing credentials");
 
-        if (!res.ok) throw new Error("Login failed");
+        const foundUser = mockUsers.find(
+          (user) => user.email === email && password === "password123"
+        );
 
-        const { token, user } = await res.json();
-        set({ token, user });
+        if (!foundUser) {
+          throw new Error("Invalid email or password");
+        }
+
+        console.log(`logged user: ${JSON.stringify(foundUser)}`);
+
+        set({ user: foundUser });
       },
 
       logout: () => {
-        set({ token: null, user: null });
+        set({ user: null });
       },
     }),
     { name: "auth-store" }
