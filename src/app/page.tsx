@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-3 justify-center items-center h-screen">
       <h1 className={"text-2xl font-lexend"}>
-        {"Women's, children and social affairs Dev Team."}
+        {"Women's, children and social affairs."}
       </h1>
       <div className="flex flex-col items-start justify-center gap-3">
         <Link href={"/bureau-head"}>Bureau Head</Link>

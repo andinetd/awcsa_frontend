@@ -140,7 +140,7 @@ export default function FormFieldsPage() {
             </div>
             <Button
               onClick={handleDialogOpen}
-              className="bg-black hover:bg-gray-900 hover:cursor-pointer"
+          
             >
               + Add Field
             </Button>

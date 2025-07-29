@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Pencil, Trash } from "lucide-react";
+import { EllipsisIcon, Pencil, Trash } from "lucide-react";
 
 type FieldType = "text" | "number" | "date" | "select" | "file";
 type Field = {
@@ -73,21 +73,11 @@ export default function FieldTable({
             <td className="bg-white px-4 py-2 text-sm text-gray-800">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <span className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
-                    <svg
-                      className="w-4 h-4 text-gray-600"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6v.01M12 12v.01M12 18v.01"
-                      />
-                    </svg>
-                  </span>
+                  <EllipsisIcon
+                    className="h-4 w-4  cursor-pointer"
+                    aria-label="Open user actions menu"
+                    style={{ transform: "rotate(90deg)" }}
+                  />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onClick={() => onEdit(field)}>

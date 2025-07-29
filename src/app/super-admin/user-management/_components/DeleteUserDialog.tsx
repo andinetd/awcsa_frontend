@@ -8,13 +8,13 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UserData } from "./UserColumns";
+import { RegisterEmployeeDto } from "@/types/employee";
 
 type DeleteUserDialogProps = {
   open: boolean;
-  user: UserData | null;
+  user: RegisterEmployeeDto | null;
   onOpenChange: (open: boolean) => void;
-  onDelete: (user: UserData) => void;
+  onDelete: (user: RegisterEmployeeDto) => void;
 };
 
 const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
@@ -28,11 +28,14 @@ const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete User</DialogTitle>
+          <DialogTitle>Delete Employee</DialogTitle>
         </DialogHeader>
         <div className="mb-4">
           Are you sure you want to delete{" "}
-          <span className="font-bold">{user.name}</span>?
+          <span className="font-bold">
+            {user.firstName} {user.lastName}
+          </span>
+          ?
         </div>
         <DialogFooter>
           <Button variant="destructive" onClick={() => onDelete(user)}>

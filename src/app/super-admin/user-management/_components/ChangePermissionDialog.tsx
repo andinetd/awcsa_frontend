@@ -8,15 +8,14 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { UserData } from "./UserColumns";
+import { RegisterEmployeeDto, EmployeeRole } from "@/types/employee";
 
 type ChangePermissionDialogProps = {
   open: boolean;
-  user: UserData | null;
+  user: RegisterEmployeeDto | null;
   allRoles: string[];
   onOpenChange: (open: boolean) => void;
-  onSave: (user: UserData) => void;
+  onSave: (user: RegisterEmployeeDto) => void;
 };
 
 const ChangePermissionDialog: React.FC<ChangePermissionDialogProps> = ({
@@ -26,41 +25,39 @@ const ChangePermissionDialog: React.FC<ChangePermissionDialogProps> = ({
   onOpenChange,
   onSave,
 }) => {
-  const [access, setAccess] = useState<string[]>([]);
+  const [role, setRole] = useState<EmployeeRole>(
+    user ? user.role : (allRoles[0] as EmployeeRole)
+  );
 
   useEffect(() => {
-    if (user) setAccess(user.access);
+    if (user) setRole(user.role);
   }, [user, open]);
 
   if (!user) return null;
-
-  const handleToggle = (role: string) => {
-    setAccess((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
-    );
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change Permissions</DialogTitle>
+          <DialogTitle>Change Role</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSave({ ...user, access });
+            if (role) onSave({ ...user, role });
           }}
           className="space-y-3"
         >
           <div className="flex flex-wrap gap-2">
-            {allRoles.map((role) => (
-              <label key={role} className="flex items-center gap-1">
-                <Checkbox
-                  checked={access.includes(role)}
-                  onCheckedChange={() => handleToggle(role)}
+            {allRoles.map((r) => (
+              <label key={r} className="flex items-center gap-1">
+                <input
+                  type="radio"
+                  checked={role === r}
+                  onChange={() => setRole(r as EmployeeRole)}
+                  name="role"
                 />
-                <span>{role}</span>
+                <span>{r}</span>
               </label>
             ))}
           </div>
@@ -78,4 +75,5 @@ const ChangePermissionDialog: React.FC<ChangePermissionDialogProps> = ({
   );
 };
 
+// This file is no longer needed. The change role functionality is now handled in the EditUserDialog.
 export default ChangePermissionDialog;

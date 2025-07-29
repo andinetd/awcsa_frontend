@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -9,17 +8,24 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RegisterEmployeeDto, EmployeeRole } from "@/types/employee";
+import { formatRole } from "@/lib/utils";
 
 type AddUserDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  allRoles: string[];
-  onUserAdded: (user: {
-    name: string;
-    email: string;
-    access: string[];
-  }) => void;
+  allRoles: EmployeeRole[];
+  onUserAdded: (user: RegisterEmployeeDto) => void;
 };
 
 const AddUserDialog: React.FC<AddUserDialogProps> = ({
@@ -28,29 +34,40 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
   allRoles,
   onUserAdded,
 }) => {
-  const [newUser, setNewUser] = useState({
-    name: "",
+  const [form, setForm] = useState<Partial<RegisterEmployeeDto>>({
+    firstName: "",
+    lastName: "",
     email: "",
-    access: [] as string[],
+    phoneNumber: "",
+    cityIdNumber: "",
+    role: allRoles[0] || "",
+    OrganizationUnitId: 1,
+    activeStatus: true,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
-  };
-
-  const handleRoleToggle = (role: string) => {
-    setNewUser((prev) => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
       ...prev,
-      access: prev.access.includes(role)
-        ? prev.access.filter((r) => r !== role)
-        : [...prev.access, role],
+      [name]: name === "OrganizationUnitId" ? Number(value) : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onUserAdded(newUser);
-    setNewUser({ name: "", email: "", access: [] });
+    onUserAdded(form as RegisterEmployeeDto);
+    setForm({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      cityIdNumber: "",
+      role: allRoles[0] || "",
+      OrganizationUnitId: 1,
+      activeStatus: true,
+    });
     onOpenChange(false);
   };
 
@@ -58,46 +75,109 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
+          <DialogTitle>Add New Employee</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-2">
-          <input
-            name="name"
-            placeholder="Name"
-            value={newUser.name}
-            onChange={handleInputChange}
-            className="border px-3 py-2 rounded"
-            required
-          />
-          <input
-            name="email"
-            placeholder="Email"
-            value={newUser.email}
-            onChange={handleInputChange}
-            className="border px-3 py-2 rounded"
-            required
-          />
-          <div>
-            <div className="font-medium mb-1">Roles</div>
-            <div className="flex gap-2 flex-wrap">
-              {allRoles.map((role) => (
-                <label key={role} className="flex items-center gap-1">
-                  <Checkbox
-                    checked={newUser.access.includes(role)}
-                    onCheckedChange={() => handleRoleToggle(role)}
-                  />
-                  <span>{role}</span>
-                </label>
-              ))}
-            </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              id="firstName"
+              name="firstName"
+              placeholder="First Name"
+              value={form.firstName || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            <Input
+              id="lastName"
+              name="lastName"
+              placeholder="Last Name"
+              value={form.lastName || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              placeholder="Email"
+              value={form.email || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Input
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={form.phoneNumber || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="cityIdNumber">City ID Number</Label>
+            <Input
+              id="cityIdNumber"
+              name="cityIdNumber"
+              placeholder="City ID Number"
+              value={form.cityIdNumber || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="role">Role</Label>
+            <Select
+              name="role"
+              value={form.role || ""}
+              onValueChange={(value) =>
+                setForm((prev) => ({ ...prev, role: value as EmployeeRole }))
+              }
+              required
+            >
+              <SelectTrigger id="role">
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent>
+                {allRoles.map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {formatRole(role)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="OrganizationUnitId">Organization Unit ID</Label>
+            <Input
+              id="OrganizationUnitId"
+              name="OrganizationUnitId"
+              placeholder="Organization Unit ID"
+              value={form.OrganizationUnitId?.toString() || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Checkbox
+              checked={form.activeStatus ?? true}
+              onCheckedChange={(checked) =>
+                setForm((f) => ({ ...f, activeStatus: !!checked }))
+              }
+              id="activeStatus"
+            />
+            <Label htmlFor="activeStatus">Active</Label>
           </div>
           <DialogFooter>
-            <Button
-              type="submit"
-              className="bg-black text-white hover:bg-gray-900"
-            >
-              Add User
-            </Button>
+            <Button type="submit">Add Employee</Button>
             <DialogClose asChild>
               <Button variant="outline" type="button">
                 Cancel
