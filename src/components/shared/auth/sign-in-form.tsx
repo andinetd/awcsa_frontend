@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -12,9 +11,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/auth-store";
+import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,13 +37,15 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
-    if (user) {
-      router.push(`/${user.role}/dashboard`);
-    }
+
     try {
       // await login("test@example.com", "password123");
       await login(values.email, values.password);
       // redirect or show protected dashboard
+      if (user) {
+        const route = moduleAndRouteMap(user?.org.deputyBureau);
+        router.push(route);
+      }
     } catch (err) {
       console.error("Login failed", err);
       form.setError("email", { message: "Invalid credentials" });

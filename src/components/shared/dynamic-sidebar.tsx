@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig, NavigationItem } from "@/utils/navigation";
-import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { useCurrentRole, useEmployeModule } from "@/hooks/useCurrentRole";
 import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
 
@@ -22,14 +22,14 @@ export function DynamicSidebar() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     window.location.href = "/login";
-  //   } catch (error) {
-  //     console.error("Logout failed:", error);
-  //   }
-  // };
+  const handleLogout = async () => {
+    try {
+      logout();
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   // if (!user) {
   //   return (
@@ -48,8 +48,11 @@ export function DynamicSidebar() {
   // const navigation = navigationConfig[user.role] || [];
   // const mockNavigation = navigationConfig["bureau-head"];
   const role = useCurrentRole();
+  const module = useEmployeModule();
   const permissions = user?.permissions || [];
-  const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
+  // const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
+  const sections =
+    module && navigationConfig[module] ? navigationConfig[module] : [];
 
   function hasPermission(item: NavigationItem): boolean {
     if (!item.permissions) return true;
@@ -122,12 +125,7 @@ export function DynamicSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={() => {
-                logout();
-                router.push("/login");
-              }}
-            >
+            <SidebarMenuButton onClick={handleLogout}>
               <LogOut className="size-4" />
               <span>{false ? "Logging out..." : "Logout"}</span>
             </SidebarMenuButton>

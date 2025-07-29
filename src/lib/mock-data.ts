@@ -1,4 +1,5 @@
 import { ChildDataType } from "@/schemas/new-child-form-schema";
+import { User } from "@/types";
 
 export const sampleChildrenData: ChildDataType[] = [
   {
@@ -140,5 +141,127 @@ export const sampleChildrenData: ChildDataType[] = [
     age: null,
     gender: "female",
     found_date: new Date("2024-04-29"),
+  },
+];
+
+//=========================//
+//  mock employee accounts //
+//========================//
+
+const mock: User = {
+  id: "123",
+  email: "Shigido.email.com",
+  accountType: "EMPLOYEE",
+  // EMPLOYEE or CLIENT
+
+  role: "bureau-head",
+  permissions: [
+    // these values are not what is in the DB; hasn't been inserted into the DB yet; but take the structure.
+    "view_clients",
+    "create_client",
+    "update_client",
+    "view_employees",
+  ],
+  org: {
+    unitId: "1",
+    unitType: "BUREAU",
+    deputyBureau: "BUREAU_HEAD",
+  },
+};
+
+export const mockUsers: User[] = [
+  {
+    id: "1",
+    email: "user1@gmail.com",
+    role: "bureau-head",
+    accountType: "EMPLOYEE",
+    permissions: [
+      "view_clients",
+      "create_client",
+      "update_client",
+      "view_employees",
+    ],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "BUREAU_HEAD",
+    },
+  },
+  {
+    id: "2",
+    email: "user2@gmail.com",
+    role: "social-affairs",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "3",
+    email: "user3@gmail.com",
+    role: "adoption",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients", "create_client"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "CHILDREN_AFFAIRS",
+    },
+  },
+  {
+    id: "4",
+    email: "user4@gmail.com",
+    role: "edir",
+    accountType: "EMPLOYEE",
+    permissions: [
+      "view_clients",
+      "view_employees",
+      "create_client",
+      "update_client",
+    ],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "5",
+    email: "user5@gmail.com",
+    role: "elderly-disabled",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "6",
+    email: "user6@gmail.com",
+    role: "womens",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "WOMEN_AFFAIRS",
+    },
+  },
+  {
+    id: "7",
+    email: "user7@gmail.com",
+    role: "super-admin",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SUPER_ADMIN",
+    },
   },
 ];
