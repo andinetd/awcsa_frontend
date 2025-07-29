@@ -4,6 +4,7 @@ import {
   BarChart3,
   Briefcase,
   Building,
+  FileDiff,
   FileText,
   HandHeart,
   Heart,
@@ -45,8 +46,8 @@ export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
     {
       title: "Management",
       items: [
-        { title: "Users", url: "/super-admin/users", icon: Users },
-        { title: "Roles", url: "/super-admin/roles", icon: Shield },
+        { title: "User Management", url: "/super-admin/user-management", icon: Users },
+        { title: "Form Field Settings", url: "/super-admin/form-fields", icon: FileDiff },
       ],
     },
   ],
