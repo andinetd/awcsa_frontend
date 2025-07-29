@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -51,7 +52,7 @@ export default function SignInForm() {
   }
 
   return (
-    <div className="mx-auto w-full mt-5 max-w-md px-6">
+    <div className="mx-auto w-full mt-5 max-w-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
