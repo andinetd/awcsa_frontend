@@ -16,7 +16,9 @@ import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig, NavigationItem } from "@/utils/navigation";
 import { useCurrentRole, useEmployeModule } from "@/hooks/useCurrentRole";
 import { useAuthStore } from "@/stores/auth-store";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function DynamicSidebar() {
   const { user, logout } = useAuthStore();
@@ -50,6 +52,7 @@ export function DynamicSidebar() {
   const role = useCurrentRole();
   const module = useEmployeModule();
   const permissions = user?.permissions || [];
+  const pathname = usePathname();
   // const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
   const sections =
     module && navigationConfig[module] ? navigationConfig[module] : [];
