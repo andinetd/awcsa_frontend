@@ -1,6 +1,7 @@
 import { AderaTableType } from "@/schemas/adera-schema";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { ChildDataType } from "@/schemas/new-child-form-schema";
+import { User } from "@/types";
 import { EmployeeRole, RegisterEmployeeDto } from "@/types/employee";
 
 export const sampleChildrenData: ChildDataType[] = [
@@ -143,6 +144,128 @@ export const sampleChildrenData: ChildDataType[] = [
     age: null,
     gender: "female",
     found_date: new Date("2024-04-29"),
+  },
+];
+
+//=========================//
+//  mock employee accounts //
+//========================//
+
+const mock: User = {
+  id: "123",
+  email: "Shigido.email.com",
+  accountType: "EMPLOYEE",
+  // EMPLOYEE or CLIENT
+
+  role: "bureau-head",
+  permissions: [
+    // these values are not what is in the DB; hasn't been inserted into the DB yet; but take the structure.
+    "view_clients",
+    "create_client",
+    "update_client",
+    "view_employees",
+  ],
+  org: {
+    unitId: "1",
+    unitType: "BUREAU",
+    deputyBureau: "BUREAU_HEAD",
+  },
+};
+
+export const mockUsers: User[] = [
+  {
+    id: "1",
+    email: "user1@gmail.com",
+    role: "bureau-head",
+    accountType: "EMPLOYEE",
+    permissions: [
+      "view_clients",
+      "create_client",
+      "update_client",
+      "view_employees",
+    ],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "BUREAU_HEAD",
+    },
+  },
+  {
+    id: "2",
+    email: "user2@gmail.com",
+    role: "social-affairs",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "3",
+    email: "user3@gmail.com",
+    role: "adoption",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients", "create_client"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "CHILDREN_AFFAIRS",
+    },
+  },
+  {
+    id: "4",
+    email: "user4@gmail.com",
+    role: "edir",
+    accountType: "EMPLOYEE",
+    permissions: [
+      "view_clients",
+      "view_employees",
+      "create_client",
+      "update_client",
+    ],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "5",
+    email: "user5@gmail.com",
+    role: "elderly-disabled",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SOCIAL_AFFAIRS",
+    },
+  },
+  {
+    id: "6",
+    email: "user6@gmail.com",
+    role: "womens",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "WOMEN_AFFAIRS",
+    },
+  },
+  {
+    id: "7",
+    email: "user7@gmail.com",
+    role: "super-admin",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "SUPER_ADMIN",
+    },
   },
 ];
 
@@ -314,6 +437,7 @@ export const mockEmployeeData: RegisterEmployeeDto[] = [
     email: "quentin@example.com",
     phoneNumber: "+251977777778",
     role: EmployeeRole.DIRECTOR,
+
     OrganizationUnitId: 1,
     activeStatus: true,
   },
@@ -546,209 +670,5 @@ export const mockEmployeeData: RegisterEmployeeDto[] = [
     role: EmployeeRole.FACILITATOR_OFFICER,
     OrganizationUnitId: 3,
     activeStatus: true,
-  },
-  ]
-
-export const mockAderaData: AderaTableType[] = [
-  {
-    cityIdNumber: "CIT001",
-    educationLevel: "Bachelor's",
-    occupation: "Teacher",
-    monthlyIncome: 8000,
-    partnerCityIdNumber: "CIT002",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 2,
-    preferredChildMaxAge: 5,
-  },
-  {
-    cityIdNumber: "CIT003",
-    educationLevel: "High School",
-    occupation: "Driver",
-    monthlyIncome: 5000,
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 3,
-    preferredChildMaxAge: 6,
-  },
-  {
-    cityIdNumber: "CIT004",
-    educationLevel: "Master's",
-    occupation: "Nurse",
-    monthlyIncome: 12000,
-    partnerCityIdNumber: "CIT005",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 1,
-    preferredChildMaxAge: 3,
-  },
-  {
-    cityIdNumber: "CIT006",
-    educationLevel: "Diploma",
-    occupation: "Electrician",
-    monthlyIncome: 7000,
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 4,
-    preferredChildMaxAge: 9,
-  },
-  {
-    cityIdNumber: "CIT007",
-    educationLevel: "Bachelor's",
-    occupation: "Engineer",
-    monthlyIncome: 15000,
-    partnerCityIdNumber: "CIT008",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 2,
-    preferredChildMaxAge: 8,
-  },
-  {
-    cityIdNumber: "CIT009",
-    educationLevel: "High School",
-    occupation: "Mechanic",
-    monthlyIncome: 6000,
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 5,
-    preferredChildMaxAge: 10,
-  },
-  {
-    cityIdNumber: "CIT010",
-    educationLevel: "Primary",
-    occupation: "Farmer",
-    monthlyIncome: 4000,
-    partnerCityIdNumber: "CIT011",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 3,
-    preferredChildMaxAge: 6,
-  },
-  {
-    cityIdNumber: "CIT012",
-    educationLevel: "Bachelor's",
-    occupation: "Doctor",
-    monthlyIncome: 20000,
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 2,
-    preferredChildMaxAge: 4,
-  },
-  {
-    cityIdNumber: "CIT013",
-    educationLevel: "Diploma",
-    occupation: "Plumber",
-    monthlyIncome: 6500,
-    partnerCityIdNumber: "CIT014",
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 1,
-    preferredChildMaxAge: 7,
-  },
-  {
-    cityIdNumber: "CIT015",
-    educationLevel: "Bachelor's",
-    occupation: "Accountant",
-    monthlyIncome: 11000,
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 4,
-    preferredChildMaxAge: 9,
-  },
-
-  {
-    cityIdNumber: "CIT004",
-    educationLevel: "Master's",
-    occupation: "Nurse",
-    monthlyIncome: 12000,
-    partnerCityIdNumber: "CIT005",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 1,
-    preferredChildMaxAge: 3,
-  },
-  {
-    cityIdNumber: "CIT006",
-    educationLevel: "Diploma",
-    occupation: "Electrician",
-    monthlyIncome: 7000,
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 4,
-    preferredChildMaxAge: 9,
-  },
-  {
-    cityIdNumber: "CIT007",
-    educationLevel: "Bachelor's",
-    occupation: "Engineer",
-    monthlyIncome: 15000,
-    partnerCityIdNumber: "CIT008",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 2,
-    preferredChildMaxAge: 8,
-  },
-  {
-    cityIdNumber: "CIT009",
-    educationLevel: "High School",
-    occupation: "Mechanic",
-    monthlyIncome: 6000,
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 5,
-    preferredChildMaxAge: 10,
-  },
-  {
-    cityIdNumber: "CIT010",
-    educationLevel: "Primary",
-    occupation: "Farmer",
-    monthlyIncome: 4000,
-    partnerCityIdNumber: "CIT011",
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 3,
-    preferredChildMaxAge: 6,
-  },
-  {
-    cityIdNumber: "CIT012",
-    educationLevel: "Bachelor's",
-    occupation: "Doctor",
-    monthlyIncome: 20000,
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 2,
-    preferredChildMaxAge: 4,
-  },
-  {
-    cityIdNumber: "CIT013",
-    educationLevel: "Diploma",
-    occupation: "Plumber",
-    monthlyIncome: 6500,
-    partnerCityIdNumber: "CIT014",
-    preferredChildGender: "MALE",
-    preferredChildMinAge: 1,
-    preferredChildMaxAge: 7,
-  },
-  {
-    cityIdNumber: "CIT015",
-    educationLevel: "Bachelor's",
-    occupation: "Accountant",
-    monthlyIncome: 11000,
-    preferredChildGender: "FEMALE",
-    preferredChildMinAge: 4,
-    preferredChildMaxAge: 9,
-  },
-];
-
-//CARE CENTER LIST MOCK
-
-export const mockCareCenters: NewCareCenterSchemaType[] = [
-  {
-    name: "Kibebe Tsehay",
-    location: "Addis Ababa",
-    minAge: 1,
-    maxAge: 12,
-  },
-  {
-    name: "Hope for Tomorrow",
-    location: "Addis Ababa",
-    minAge: 2,
-    maxAge: 10,
-  },
-  {
-    name: "Kids Center",
-    location: "Hawassa",
-    minAge: 3,
-    maxAge: 14,
-  },
-  {
-    name: "Selam Child Support",
-    location: "Gondar",
-    minAge: 1,
-    maxAge: 8,
   },
 ];

@@ -1,4 +1,4 @@
-import type { UserRole } from "@/hooks/useCurrentRole";
+import { DeputyBureau } from "@/types";
 import {
   Baby,
   BarChart3,
@@ -16,11 +16,13 @@ import {
   User,
   Users,
 } from "lucide-react";
+import { PermissionType } from "./permission";
 
 export interface NavigationItem {
   title: string;
   url: string;
   icon: any;
+  permissions?: PermissionType[];
 }
 
 export interface NavigationSection {
@@ -29,13 +31,17 @@ export interface NavigationSection {
 }
 
 //!! sections to each sidebar can be added
-export const navigationConfig: Record<UserRole, NavigationSection[]> = {
-  "super-admin": [
+export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
+  SUPER_ADMIN: [
     {
       title: "Overview",
       items: [
         { title: "Dashboard", url: "/super-admin", icon: Home },
-        { title: "Analytics", url: "/super-admin/analytics", icon: BarChart3 },
+        {
+          title: "Analytics",
+          url: "/super-admin/analytics",
+          icon: BarChart3,
+        },
       ],
     },
     {
@@ -59,7 +65,7 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       ],
     },
   ],
-  "bureau-head": [
+  BUREAU_HEAD: [
     {
       title: "Management",
       items: [
@@ -81,7 +87,7 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       ],
     },
   ],
-  adoption: [
+  CHILDREN_AFFAIRS: [
     {
       title: "Adoption Moduel Services",
       items: [
@@ -102,7 +108,7 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       ],
     },
   ],
-  "social-affairs": [
+  SOCIAL_AFFAIRS: [
     {
       title: "Social Affairs Services",
       items: [
@@ -117,35 +123,6 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
           url: "/social-affairs/elderly-and-disabled/dashboard",
           icon: Heart,
         },
-      ],
-    },
-  ],
-  edir: [
-    {
-      title: "Edir Services",
-      items: [
-        {
-          title: "Dashboard",
-          url: "/social-affairs/edir/dashboard",
-          icon: Home,
-        },
-        {
-          title: "Generic setup",
-          url: "/social-affairs/edir/generic-setup",
-          icon: Settings,
-        },
-        {
-          title: "Edir List",
-          url: "/social-affairs/edir/list",
-          icon: Heart,
-        },
-      ],
-    },
-  ],
-  "elderly-disabled": [
-    {
-      title: "Elderly and Disabled Services",
-      items: [
         {
           title: "Dashboard",
           url: "/social-affairs/elderly-and-disabled/dashboard",
@@ -169,8 +146,57 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
       ],
     },
   ],
+  EDIR: [
+    {
+      title: "Edir Services",
+      items: [
+        {
+          title: "Dashboard",
+          url: "/social-affairs/edir/dashboard",
+          icon: Home,
+        },
+        {
+          title: "Generic setup",
+          url: "/social-affairs/edir/generic-setup",
+          icon: Settings,
+        },
+        {
+          title: "Edir List",
+          url: "/social-affairs/edir/list",
+          icon: Heart,
+        },
+      ],
+    },
+  ],
+  // "SOCIAL_AFFAIRS": [
+  //   {
+  //     title: "Elderly and Disabled Services",
+  //     items: [
+  //       {
+  //         title: "Dashboard",
+  //         url: "/social-affairs/elderly-and-disabled/dashboard",
+  //         icon: Home,
+  //       },
+  //       {
+  //         title: "Beneficiaries",
+  //         url: "/social-affairs/elderly-and-disabled/beneficiaries",
+  //         icon: Users,
+  //       },
+  //       {
+  //         title: "Benefit Tracking",
+  //         url: "/social-affairs/elderly-and-disabled/benefit-tracking",
+  //         icon: Heart,
+  //       },
+  //       {
+  //         title: "Jobs",
+  //         url: "/social-affairs/elderly-and-disabled/jobs",
+  //         icon: Briefcase,
+  //       },
+  //     ],
+  //   },
+  // ],
 
-  womens: [
+  WOMEN_AFFAIRS: [
     {
       title: "Women Module Services",
       items: [
