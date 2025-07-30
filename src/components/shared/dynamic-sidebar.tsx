@@ -15,8 +15,12 @@ import {
 import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig } from "@/utils/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export function DynamicSidebar() {
+  const pathname = usePathname();
   // const { user, logout, loading } = useAuthStore();
 
   // const handleLogout = async () => {
@@ -52,24 +56,26 @@ export function DynamicSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              {/* <Building className="size-4" /> */}
-              <div>
-                <img
-                  src="/assets/WCSA_logo.jpg"
-                  alt="Office logo"
-                  width={"50px"}
-                  height={"50px"}
-                />
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-semibold">WCSA System</span>
-                <span className="text-xs capitalize">
-                  {/* {user.role.replace("-", " ")} */}
-                  {role}
-                </span>
-              </div>
-            </SidebarMenuButton>
+            <Link href={"/"}>
+              <SidebarMenuButton size="lg">
+                {/* <Building className="size-4" /> */}
+                <div>
+                  <img
+                    src="/assets/WCSA_logo.jpg"
+                    alt="Office logo"
+                    width={"50px"}
+                    height={"50px"}
+                  />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold">WCSA System</span>
+                  <span className="text-xs capitalize">
+                    {/* {user.role.replace("-", " ")} */}
+                    {role}
+                  </span>
+                </div>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -80,16 +86,26 @@ export function DynamicSidebar() {
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {section.items.map((item) => {
+                  const isActive = pathname === item.url;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={cn(
+                          isActive
+                            ? "bg-primary/10 text-primary font-semibold"
+                            : "text-muted-foreground"
+                        )}
+                      >
+                        <a href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
