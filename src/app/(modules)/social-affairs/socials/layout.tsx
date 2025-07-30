@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 const SocialAffairslayout = ({ children }: { children: ReactNode }) => {
   return (
-    <ModuleGuard allowed={["SOCIAL_AFFAIRS", "EDIR"]}>
+    <ModuleGuard allowed={["SOCIAL_AFFAIRS", "EDIR", "BUREAU_HEAD"]}>
       <SidebarProvider>{children}</SidebarProvider>;
     </ModuleGuard>
   );
