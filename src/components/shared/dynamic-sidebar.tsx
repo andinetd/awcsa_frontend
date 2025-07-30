@@ -16,8 +16,12 @@ import { Building, LogOut, User } from "lucide-react";
 import { navigationConfig } from "@/utils/navigation";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+
 
 export function DynamicSidebar() {
+  const pathname = usePathname();
   // const { user, logout, loading } = useAuthStore();
 
   // const handleLogout = async () => {
@@ -53,9 +57,9 @@ export function DynamicSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" >
-              {/* <Building className="size-4" /> */}
-              <Link href={"/"} className="flex items-center gap-2">
+            <Link href={"/"}>
+              <SidebarMenuButton size="lg" className="flex items-center gap-2">
+                {/* <Building className="size-4" /> */}
                 <div>
                   <img
                     src="/assets/WCSA_logo.jpg"
@@ -71,8 +75,8 @@ export function DynamicSidebar() {
                     {role}
                   </span>
                 </div>
-              </Link>
-            </SidebarMenuButton>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -83,16 +87,26 @@ export function DynamicSidebar() {
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {section.items.map((item) => {
+                  const isActive = pathname === item.url;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={cn(
+                          isActive
+                            ? "bg-primary/10 text-primary font-semibold"
+                            : "text-muted-foreground"
+                        )}
+                      >
+                        <a href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
