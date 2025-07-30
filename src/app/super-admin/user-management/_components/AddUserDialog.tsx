@@ -138,7 +138,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
             <Select
               name="role"
               value={form.role || ""}
-              onValueChange={(value) =>
+              onValueChange={(value: string) =>
                 setForm((prev) => ({ ...prev, role: value as EmployeeRole }))
               }
               required
@@ -169,7 +169,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
           <div className="flex items-center gap-2">
             <Checkbox
               checked={form.activeStatus ?? true}
-              onCheckedChange={(checked) =>
+              onCheckedChange={(checked: boolean) =>
                 setForm((f) => ({ ...f, activeStatus: !!checked }))
               }
               id="activeStatus"

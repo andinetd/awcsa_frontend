@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { RegisterEmployeeDto, EmployeeRole } from "@/types/employee";
 import { formatRole } from "@/lib/utils";
-import { format } from "path";
+
 
 type EditUserDialogProps = {
   open: boolean;
@@ -142,7 +142,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({
             <Select
               name="role"
               value={form.role || ""}
-              onValueChange={(value) =>
+              onValueChange={(value: string) =>
                 setForm((f) => ({ ...f, role: value as EmployeeRole }))
               }
               required
@@ -162,7 +162,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({
           <div className="flex items-center gap-2">
             <Checkbox
               checked={form.activeStatus ?? true}
-              onCheckedChange={(checked) =>
+              onCheckedChange={(checked: boolean) =>
                 setForm((f) => ({ ...f, activeStatus: !!checked }))
               }
               id="activeStatus"
