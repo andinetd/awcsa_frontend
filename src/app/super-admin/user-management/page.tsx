@@ -5,8 +5,7 @@ import React, { useMemo, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
-  flexRender,
-  createColumnHelper
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,156 +15,36 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AddUserDialog from "@/components/AddUserDialog";
+import UserTable from "./_components/UserTable";
+import type { RegisterEmployeeDto } from "@/types/employee";
+import { EmployeeRole } from "./types";
+import { mockEmployeeData } from "@/lib/mock-data";
+import { getUserColumns } from "./_components/UserColumns";
+import EditUserDialog from "./_components/EditUserDialog";
+import DeleteUserDialog from "./_components/DeleteUserDialog";
+import AddUserDialog from "@/app/super-admin/user-management/_components/AddUserDialog";
+import { formatRole } from "@/lib/utils";
 
-import { KeyRound, Pencil, Trash, User } from "lucide-react";
-
-
-type UserData = {
-  name: string;
-  email: string;
-  access: string[];
-  lastActive: string;
-  dateAdded: string;
-};
-
-const initialData: UserData[] = [
-  {
-    name: "Alice",
-    email: "alice@example.com",
-    access: ["Admin", "Data Export", "Data Import"],
-    lastActive: "2023-10-01",
-    dateAdded: "2023-09-15",
-  },
-  {
-    name: "Bob",
-    email: "bob@example.com",
-    access: ["Data Export", "Data Import"],
-    lastActive: "2023-10-02",
-    dateAdded: "2023-09-16",
-  },
-  {
-    name: "Charlie",
-    email: "harlie@example.com",
-    access: ["Admin"],
-    lastActive: "2023-10-03",
-    dateAdded: "2023-09-17",
-  },
-  {
-    name: "David",
-    email: "david@example.com",
-    access: ["Data Export"],
-    lastActive: "2023-10-04",
-    dateAdded: "2023-09-18",
-  },
-  {
-    name: "Eve",
-    email: "eve@exmaple.com",
-    access: ["Data Import"],
-    lastActive: "2023-10-05",
-    dateAdded: "2023-09-19",
-  }
-];
-
-const columnHelper = createColumnHelper<UserData>();
-
-const columns = [
-  columnHelper.accessor("name", {
-    header: "User name",
-    cell: ({ row }) => (
-      <div>
-        <div className="font-medium">{row.original.name}</div>
-        <div className="text-sm text-gray-500">{row.original.email}</div>
-      </div>
-    ),
-  }),
-  columnHelper.accessor("access", {
-    header: "Access",
-    meta: { hideOnMobile: true },
-    cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1">
-        {row.original.access.map((role) => (
-          <span
-            key={role}
-            className={`text-xs px-2 py-1 rounded-full ${
-              role === "Admin"
-                ? "bg-green-100 text-green-800"
-                : role === "Data Export"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-purple-100 text-purple-800"
-            }`}
-          >
-            {role}
-          </span>
-        ))}
-      </div>
-    ),
-  }),
-  columnHelper.accessor("lastActive", {
-    header: "Last active",
-    meta: { hideOnMobile: true },
-  }),
-  columnHelper.accessor("dateAdded", {
-    header: "Date added",
-    meta: { hideOnMobile: true },
-  }),
-  columnHelper.display({
-    id: "actions",
-    cell: () => (
-      <div className="relative">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <button className="p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer">
-              <svg
-                className="w-4 h-4 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v.01M12 12v.01M12 18v.01"
-                />
-              </svg>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              <User />
-              View Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Pencil />
-              Edit details
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <KeyRound />
-              Change permission
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Trash />
-              Delete user
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    ),
-  }),
-]
-
-
+const initialData: RegisterEmployeeDto[] = mockEmployeeData;
 
 export default function UserManagement() {
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<string | null>(null);
+  const [roleFilter, setRoleFilter] = useState<EmployeeRole | null>(null);
+  const [data, setData] = useState<RegisterEmployeeDto[]>(initialData);
+  // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [data, setData] = useState<UserData[]>(initialData);
-  
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [permissionDialogOpen, setPermissionDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editOriginalEmail, setEditOriginalEmail] = useState<string | null>(
+    null
+  );
+  const [selectedUser, setSelectedUser] = useState<RegisterEmployeeDto | null>(
+    null
+  );
 
-  const allRoles = useMemo(
-    () => Array.from(new Set(data.flatMap((user) => user.access))),
+  const allRoles: string[] = useMemo(
+    () => Array.from(new Set(data.map((user) => user.role))),
     [data]
   );
 
@@ -173,33 +52,98 @@ export default function UserManagement() {
   const filteredData = useMemo(() => {
     return data.filter((user) => {
       const matchesSearch =
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase());
-      const matchesRole = !roleFilter || user.access.includes(roleFilter);
+        user.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.cityIdNumber.toLowerCase().includes(search.toLowerCase()) ||
+        user.phoneNumber.toLowerCase().includes(search.toLowerCase());
+      const matchesRole = !roleFilter || user.role === roleFilter;
       return matchesSearch && matchesRole;
     });
   }, [search, roleFilter, data]);
+
+  // Handlers for row actions
+
+  const handleEdit = (user: RegisterEmployeeDto) => {
+    setSelectedUser(user);
+    setEditOriginalEmail(user.email);
+    setEditDialogOpen(true);
+  };
+
+  const handleChangePermission = (user: RegisterEmployeeDto) => {
+    setSelectedUser(user);
+    setPermissionDialogOpen(true);
+  };
+  const handleDelete = (user: RegisterEmployeeDto) => {
+    setSelectedUser(user);
+    setDeleteDialogOpen(true);
+  };
+
+  const columns = useMemo(
+    () =>
+      getUserColumns({
+        onEdit: handleEdit,
+        onDelete: handleDelete,
+      }),
+    [data]
+  );
 
   const table = useReactTable({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    rowCount: filteredData.length,
   });
+
+  // Save handlers for dialogs
+
+  const handleEditSave = (user: RegisterEmployeeDto) => {
+    setData((prev) =>
+      prev.map((u) => (u.email === editOriginalEmail ? user : u))
+    );
+    setEditDialogOpen(false);
+    setSelectedUser(null);
+    setEditOriginalEmail(null);
+  };
+
+  const handleDeleteConfirm = (user: RegisterEmployeeDto) => {
+    setData((prev) => prev.filter((u) => u.email !== user.email));
+    setDeleteDialogOpen(false);
+    setSelectedUser(null);
+  };
 
   return (
     <SidebarLayout title="User Management">
+      <EditUserDialog
+        open={editDialogOpen}
+        user={selectedUser}
+        onOpenChange={(open) => {
+          setEditDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}
+        onSave={handleEditSave}
+      />
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        user={selectedUser}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}
+        onDelete={handleDeleteConfirm}
+      />
       <div className="flex space-x-2 justify-between items-center ">
         <AddUserDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
-          allRoles={allRoles}
+          allRoles={allRoles as EmployeeRole[]}
           onUserAdded={(user) => {
             setData((prev) => [
               ...prev,
               {
                 ...user,
-                lastActive: new Date().toISOString().slice(0, 10),
-                dateAdded: new Date().toISOString().slice(0, 10),
+                activeStatus: true,
               },
             ]);
             setDialogOpen(false);
@@ -215,7 +159,9 @@ export default function UserManagement() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm hover:bg-gray-300 hover:cursor-pointer">
-                {roleFilter ? `Role: ${roleFilter}` : "Filter by Role"}
+                {roleFilter
+                  ? `Role: ${formatRole(roleFilter)}`
+                  : "Filter by Role"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -225,61 +171,22 @@ export default function UserManagement() {
               {allRoles.map((role) => (
                 <DropdownMenuItem
                   key={role}
-                  onClick={() => setRoleFilter(role)}
+                  onClick={() => setRoleFilter(role as EmployeeRole)}
                 >
-                  {role}
+                  {formatRole(role)}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-900 hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
+          <Button
+            className="px-4 py-2 rounded-md text-sm hover:cursor-pointer"
+            onClick={() => setDialogOpen(true)}
+          >
             + Add user
           </Button>
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-separate border-spacing-y-2">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className={`text-left text-sm font-medium text-gray-600 px-4 py-2 bg-gray-50 ${
-                      header.column.columnDef.meta?.hideOnMobile
-                        ? "hidden md:table-cell"
-                        : ""
-                    }`}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="rounded-md shadow-sm">
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={`bg-white px-4 py-2 text-sm text-gray-800 ${
-                      cell.column.columnDef.meta?.hideOnMobile
-                        ? "hidden md:table-cell"
-                        : ""
-                    }`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <UserTable table={table} />
     </SidebarLayout>
   );
 }

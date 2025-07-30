@@ -19,6 +19,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
+
 export function DynamicSidebar() {
   const pathname = usePathname();
   // const { user, logout, loading } = useAuthStore();
@@ -57,7 +58,7 @@ export function DynamicSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <Link href={"/"}>
-              <SidebarMenuButton size="lg">
+              <SidebarMenuButton size="lg" className="flex items-center gap-2">
                 {/* <Building className="size-4" /> */}
                 <div>
                   <img

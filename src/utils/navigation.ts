@@ -11,6 +11,7 @@ import {
   Home,
   HouseIcon,
   Settings,
+  Settings2,
   Shield,
   User,
   Users,
@@ -40,8 +41,21 @@ export const navigationConfig: Record<UserRole, NavigationSection[]> = {
     {
       title: "Management",
       items: [
-        { title: "User Management", url: "/super-admin/user-management", icon: Users },
-        { title: "Form Field Settings", url: "/super-admin/form-fields", icon: FileDiff },
+        {
+          title: "User Management",
+          url: "/super-admin/user-management",
+          icon: Users,
+        },
+        {
+          title: "Form Field Settings",
+          url: "/super-admin/form-fields",
+          icon: FileDiff,
+        },
+        {
+          title: "General Settings",
+          url: "/super-admin/general-settings",
+          icon: Settings2,
+        },
       ],
     },
   ],
