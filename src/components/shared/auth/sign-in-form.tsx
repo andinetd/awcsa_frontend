@@ -10,6 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/stores/auth-store";
+import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -22,6 +24,7 @@ const formSchema = z.object({
 
 export default function SignInForm() {
   const router = useRouter();
+  const { login, user } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,11 +37,23 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
-    router.push("/bureau-head");
+
+    try {
+      // await login("test@example.com", "password123");
+      await login(values.email, values.password);
+      // redirect or show protected dashboard
+      if (user) {
+        const route = moduleAndRouteMap(user?.org.deputyBureau);
+        router.push(route);
+      }
+    } catch (err) {
+      console.error("Login failed", err);
+      form.setError("email", { message: "Invalid credentials" });
+    }
   }
 
   return (
-    <div className="mx-auto w-full mt-5 max-w-md px-6">
+    <div className="mx-auto w-full mt-5 max-w-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

@@ -13,25 +13,25 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Building, LogOut, User } from "lucide-react";
-import { navigationConfig } from "@/utils/navigation";
-import { useCurrentRole } from "@/hooks/useCurrentRole";
+import { navigationConfig, NavigationItem } from "@/utils/navigation";
+import { useCurrentRole, useEmployeModule } from "@/hooks/useCurrentRole";
+import { useAuthStore } from "@/stores/auth-store";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-
 
 export function DynamicSidebar() {
-  const pathname = usePathname();
-  // const { user, logout, loading } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const router = useRouter();
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     window.location.href = "/login";
-  //   } catch (error) {
-  //     console.error("Logout failed:", error);
-  //   }
-  // };
+  const handleLogout = async () => {
+    try {
+      logout();
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   // if (!user) {
   //   return (
@@ -50,7 +50,17 @@ export function DynamicSidebar() {
   // const navigation = navigationConfig[user.role] || [];
   // const mockNavigation = navigationConfig["bureau-head"];
   const role = useCurrentRole();
-  const sections = role ? navigationConfig[role] : [];
+  const module = useEmployeModule();
+  const permissions = user?.permissions || [];
+  const pathname = usePathname();
+  // const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
+  const sections =
+    module && navigationConfig[module] ? navigationConfig[module] : [];
+
+  function hasPermission(item: NavigationItem): boolean {
+    if (!item.permissions) return true;
+    return item.permissions.every((p) => permissions.includes(p));
+  }
 
   return (
     <Sidebar>
@@ -87,7 +97,7 @@ export function DynamicSidebar() {
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => {
+                {section.items.filter(hasPermission).map((item) => {
                   const isActive = pathname === item.url;
                   return (
                     <SidebarMenuItem key={item.title}>
@@ -113,30 +123,30 @@ export function DynamicSidebar() {
         ))}
       </SidebarContent>
 
-      {/* <SidebarFooter>
+      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
               <User className="size-4" />
               <div className="flex flex-col text-left flex-1">
-                <span className="font-semibold truncate">{user.name}</span>
-                <span className="text-xs truncate">{user.email}</span>
-                {user.department && (
+                <span className="font-semibold truncate">{user?.email}</span>
+                <span className="text-xs truncate">{user?.email}</span>
+                {user?.role && (
                   <span className="text-xs text-muted-foreground truncate">
-                    {user.department}
+                    {user.role}
                   </span>
                 )}
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout} disabled={loading}>
+            <SidebarMenuButton onClick={handleLogout}>
               <LogOut className="size-4" />
-              <span>{loading ? "Logging out..." : "Logout"}</span>
+              <span>{false ? "Logging out..." : "Logout"}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter> */}
+      </SidebarFooter>
     </Sidebar>
   );
 }
