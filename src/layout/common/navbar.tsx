@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -6,24 +8,26 @@ import Link from "next/link";
 
 const Navbar = () => {
   const navItems = [
-    { name: "Adoption", href: "/adoption/dashboard" },
-    { name: "Social Affairs", href: "/social-affairs/socials/dashboard" },
-    { name: "Women Affairs", href: "/womens/dashboard" },
-    { name: "Super Admin", href: "/super-admin" },
+    { name: "Home", href: "/" },
+    { name: "Gallery", href: "#gallery" },
+    { name: "Services", href: "#services" },
+    { name: "Testimonials", href: "#testimonials" },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4">
       <div className="relative flex items-center justify-between max-w-7xl mx-auto border border-primary/30 backdrop-blur-lg bg-primary/5 rounded-2xl px-2 sm:px-3 md:px-4 py-1.5 sm:py-2">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/assets/WCSA_logo.jpg"
-            alt="Logo"
-            width={200}
-            height={50}
-            className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
-          />
+        <Link href="/" className="flex items-center group">
+          <div>
+            <Image
+              src="/assets/WCSA_logo.jpg"
+              alt="Logo"
+              width={200}
+              height={50}
+              className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
+            />
+          </div>
         </Link>
 
         {/* Desktop Navigation - Absolutely positioned and centered */}
