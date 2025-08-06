@@ -1,0 +1,130 @@
+"use client";
+
+import {
+  Briefcase,
+  ClipboardCheck,
+  BarChart,
+  Users,
+  TrendingUp,
+  Info,
+  Baby,
+} from "lucide-react";
+import { delay, motion } from "framer-motion";
+import Link from "next/link";
+
+const ServicesSection = () => {
+  const services = [
+    {
+      icon: Baby,
+      title: "Adoption Services",
+      description:
+        "We provide a comprehensive online platform to facilitate the adoption process, connecting children with loving families.",
+      link: "/adoption/adera/new",
+      linkText: "Start the Adoption Process",
+    },
+    {
+      icon: Users,
+      title: "Organizing and Training",
+      description:
+        "We empower women by organizing them into micro and small enterprises and providing training to enhance their skills.",
+    },
+    {
+      icon: Info,
+      title: "Information and Support",
+      description:
+        "We offer crucial information and support to help women succeed in their business ventures.",
+    },
+    {
+      icon: ClipboardCheck,
+      title: "Legal Certification",
+      description:
+        "We provide legal certification for women-owned businesses, ensuring they meet all necessary requirements.",
+    },
+    {
+      icon: BarChart,
+      title: "Market Linkage",
+      description:
+        "We connect women entrepreneurs with market opportunities to help them grow their businesses.",
+    },
+    {
+      icon: TrendingUp,
+      title: "Kaizen Implementation",
+      description:
+        "We support the implementation of Kaizen principles to improve productivity and quality in women-led enterprises.",
+    },
+  ];
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  return (
+    <section className="py-12 bg-gray-50 sm:py-16 lg:py-20" id="services">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl xl:text-5xl font-pj">
+            Our Services
+          </h2>
+          <p className="mt-4 text-base leading-7 text-gray-600 sm:mt-8 font-pj">
+            We are dedicated to empowering women and promoting social welfare
+            through a variety of programs and services.
+          </p>
+        </div>
+
+        <motion.div
+          className="grid grid-cols-1 gap-6 px-8 mt-12 sm:grid-cols-2 md:grid-cols-3 sm:px-0 xl:mt-20"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              className="transition-all duration-200 bg-white transform-gpu hover:-translate-y-2 hover:shadow-lg flex flex-col"
+              variants={itemVariants}
+            >
+              <div className="py-10 px-9 flex-grow">
+                <service.icon className="w-16 h-16 text-gray-900" />
+                <h3 className="mt-8 text-lg font-semibold text-black font-pj">
+                  {service.title}
+                </h3>
+                <p className="mt-4 text-base text-gray-600 font-pj">
+                  {service.description}
+                </p>
+              </div>
+              {service.link && (
+                <div className="px-9 pb-10">
+                  <Link href={service.link}>
+                    <span className="text-primary font-semibold hover:underline cursor-pointer">
+                      {service.linkText}
+                    </span>
+                  </Link>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default ServicesSection;
