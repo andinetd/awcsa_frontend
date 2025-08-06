@@ -3,21 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
+  const t = require("next-intl").useTranslations();
   const quickLinks = [
-    { name: "Home", href: "/" },
-    { name: "Services", href: "#services" },
-    { name: "Feedback", href: "#feedback" },
-    { name: "Products", href: "/products" },
-    { name: "Login", href: "/login" },
+    { name: t("footer.home"), href: "/" },
+    { name: t("footer.services"), href: "#services" },
+    { name: t("footer.feedback"), href: "#feedback" },
+    { name: t("footer.products"), href: "/products" },
+    { name: t("footer.login"), href: "/login" },
   ];
 
   const contactInfo = [
     {
       icon: MapPin,
-      text: "Arada Sub-city, Addis Ababa, Ethiopia",
+      text: t("footer.address"),
     },
-    { icon: Phone, text: "+251 912345678" },
-    { icon: Mail, text: "info@wcsa.com" },
+    { icon: Phone, text: t("footer.phone") },
+    { icon: Mail, text: t("footer.email") },
   ];
 
   const socialLinks = [
@@ -44,16 +45,14 @@ const Footer = () => {
                 className="h-10 w-auto rounded-md"
               />
             </Link>
-            <p className="text-gray-400 text-sm">
-              The Bureau of Women, Children & Social Affairs is dedicated to
-              empowering women and ensuring the well-being of children and
-              vulnerable groups in Addis Ababa.
-            </p>
+            <p className="text-gray-400 text-sm">{t("footer.about")}</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.quickLinks")}
+            </h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -70,7 +69,9 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.contactUs")}
+            </h3>
             <ul className="space-y-3">
               {contactInfo.map((item, index) => (
                 <li key={index} className="flex items-start">
@@ -83,9 +84,11 @@ const Footer = () => {
 
           {/* Stay Updated */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.stayUpdated")}
+            </h3>
             <p className="text-gray-400 mb-4 text-sm">
-              Follow us on social media to get the latest updates.
+              {t("footer.socialMedia")}
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
@@ -103,7 +106,7 @@ const Footer = () => {
 
         <div className="mt-12 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-gray-500 text-center sm:text-left">
-            © {new Date().getFullYear()} WCSA. All Rights Reserved.
+            © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
         </div>
       </div>

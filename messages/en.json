@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "Bureau of Women, Children & Social Affairs",
+    "description": "Addis Ababa City Administration",
+    "signIn": "Sign In"
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "description": "Hear from our community, partners, and beneficiaries about the impact of our work and programs."
+  },
+  "services": {
+    "sectionTitle": "Our Services",
+    "sectionDescription": "We are dedicated to empowering women and promoting social welfare through a variety of programs and services.",
+    "adoptionTitle": "Adoption Services",
+    "adoptionDescription": "We provide a comprehensive online platform to facilitate the adoption process, connecting children with loving families.",
+    "adoptionLinkText": "Start the Adoption Process",
+    "organizingTitle": "Organizing and Training",
+    "organizingDescription": "We empower women by organizing them into micro and small enterprises and providing training to enhance their skills.",
+    "infoTitle": "Information and Support",
+    "infoDescription": "We offer crucial information and support to help women succeed in their business ventures.",
+    "legalTitle": "Legal Certification",
+    "legalDescription": "We provide legal certification for women-owned businesses, ensuring they meet all necessary requirements.",
+    "marketTitle": "Market Linkage",
+    "marketDescription": "We connect women entrepreneurs with market opportunities to help them grow their businesses.",
+    "kaizenTitle": "Kaizen Implementation",
+    "kaizenDescription": "We support the implementation of Kaizen principles to improve productivity and quality in women-led enterprises."
+  },
+  "gallery": {
+    "title": "Our Gallery",
+    "description": "Here are some images from our events and activities.",
+    "imageAlt": "Gallery image {number}"
+  },
+  "footer": {
+    "home": "Home",
+    "services": "Services",
+    "feedback": "Feedback",
+    "products": "Products",
+    "login": "Login",
+    "address": "Arada Sub-city, Addis Ababa, Ethiopia",
+    "phone": "+251 912345678",
+    "email": "info@wcsa.com",
+    "about": "The Bureau of Women, Children & Social Affairs is dedicated to empowering women and ensuring the well-being of children and vulnerable groups in Addis Ababa.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "stayUpdated": "Stay Updated",
+    "socialMedia": "Follow us on social media to get the latest updates.",
+    "copyright": "WCSA. All Rights Reserved."
+  },
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "gallery": "Gallery",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "login": "Login",
+    "language": "Lang"
+  }
+}

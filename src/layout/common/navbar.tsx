@@ -5,13 +5,16 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import LanguageSwitcher from "@/components/shared/language-switcher";
+import { useTranslations } from "next-intl";
 
 const Navbar = () => {
+  const t = useTranslations();
   const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Gallery", href: "#gallery" },
-    { name: "Services", href: "#services" },
-    { name: "Testimonials", href: "#testimonials" },
+    { name: t("navbar.home"), href: "/" },
+    { name: t("navbar.gallery"), href: "#gallery" },
+    { name: t("navbar.services"), href: "#services" },
+    { name: t("navbar.testimonials"), href: "#testimonials" },
   ];
 
   return (
@@ -46,17 +49,21 @@ const Navbar = () => {
         {/* Desktop Action Buttons */}
         <div className="hidden lg:flex items-center gap-1 sm:gap-2">
           <Link href={"/login"}>
-            <Button className="text-xs sm:text-sm font-lexend">Sign In</Button>
+            <Button className="text-xs sm:text-sm font-lexend">
+              {t("navbar.login")}
+            </Button>
           </Link>
+          <LanguageSwitcher className="py-2 px-4" />
         </div>
 
         {/* Tablet/Mobile Action Buttons */}
         <div className="hidden sm:flex lg:hidden items-center gap-2">
           <Link href={"/login"}>
             <Button size="sm" className="text-xs font-lexend">
-              Sign In
+              {t("navbar.login")}
             </Button>
           </Link>
+          <LanguageSwitcher />
         </div>
 
         {/* Mobile Menu */}
@@ -112,9 +119,10 @@ const Navbar = () => {
                   <div className="space-y-2 sm:space-y-3">
                     <Link href={"/login"}>
                       <Button className="w-full justify-center py-2.5 sm:py-3 h-10 sm:h-12 bg-primary hover:bg-primary/90 text-white font-medium shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-lexend">
-                        Sign In
-                      </Button>{" "}
+                        {t("navbar.login")}
+                      </Button>
                     </Link>
+                    <LanguageSwitcher className="mt-2 w-full justify-center py-2.5 sm:py-3 h-10 sm:h-12 bg-primary hover:bg-primary/90 text-white font-medium shadow-lg hover:shadow-xl transition-all text-sm sm:text-base font-lexend" />
                   </div>
 
                   {/* Footer Text */}

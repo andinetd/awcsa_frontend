@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 const testimonials = [
   {
@@ -42,6 +43,7 @@ const testimonials = [
 ];
 
 export default function TestimonialCarousel() {
+  const t = useTranslations();
   return (
     <section
       className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800"
@@ -49,11 +51,10 @@ export default function TestimonialCarousel() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
-          Testimonials
+          {t("testimonials.title")}
         </h2>
         <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center mt-4">
-          Hear from our community, partners, and beneficiaries about the impact
-          of our work and programs.
+          {t("testimonials.description")}
         </p>
         <div className="mt-8">
           <Carousel
