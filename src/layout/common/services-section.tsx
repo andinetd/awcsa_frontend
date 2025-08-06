@@ -20,7 +20,7 @@ const ServicesSection = () => {
       icon: Baby,
       title: t("services.adoptionTitle"),
       description: t("services.adoptionDescription"),
-      link: "/adoption/adera/new",
+      link: "/adoption/register",
       linkText: t("services.adoptionLinkText"),
     },
     {
