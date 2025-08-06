@@ -22,7 +22,7 @@ import { mockEmployeeData } from "@/lib/mock-data";
 import { getUserColumns } from "./_components/UserColumns";
 import EditUserDialog from "./_components/EditUserDialog";
 import DeleteUserDialog from "./_components/DeleteUserDialog";
-import AddUserDialog from "@/app/[locale]/super-admin/user-management/_components/AddUserDialog";
+import AddUserDialog from "@/app/[locale]/(modules)/super-admin/user-management/_components/AddUserDialog";
 import { formatRole } from "@/lib/utils";
 
 const initialData: RegisterEmployeeDto[] = mockEmployeeData;
