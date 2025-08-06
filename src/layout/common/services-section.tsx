@@ -11,46 +11,42 @@ import {
 } from "lucide-react";
 import { delay, motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const ServicesSection = () => {
+  const t = useTranslations();
   const services = [
     {
       icon: Baby,
-      title: "Adoption Services",
-      description:
-        "We provide a comprehensive online platform to facilitate the adoption process, connecting children with loving families.",
+      title: t("services.adoptionTitle"),
+      description: t("services.adoptionDescription"),
       link: "/adoption/adera/new",
-      linkText: "Start the Adoption Process",
+      linkText: t("services.adoptionLinkText"),
     },
     {
       icon: Users,
-      title: "Organizing and Training",
-      description:
-        "We empower women by organizing them into micro and small enterprises and providing training to enhance their skills.",
+      title: t("services.organizingTitle"),
+      description: t("services.organizingDescription"),
     },
     {
       icon: Info,
-      title: "Information and Support",
-      description:
-        "We offer crucial information and support to help women succeed in their business ventures.",
+      title: t("services.infoTitle"),
+      description: t("services.infoDescription"),
     },
     {
       icon: ClipboardCheck,
-      title: "Legal Certification",
-      description:
-        "We provide legal certification for women-owned businesses, ensuring they meet all necessary requirements.",
+      title: t("services.legalTitle"),
+      description: t("services.legalDescription"),
     },
     {
       icon: BarChart,
-      title: "Market Linkage",
-      description:
-        "We connect women entrepreneurs with market opportunities to help them grow their businesses.",
+      title: t("services.marketTitle"),
+      description: t("services.marketDescription"),
     },
     {
       icon: TrendingUp,
-      title: "Kaizen Implementation",
-      description:
-        "We support the implementation of Kaizen principles to improve productivity and quality in women-led enterprises.",
+      title: t("services.kaizenTitle"),
+      description: t("services.kaizenDescription"),
     },
   ];
   const containerVariants = {
@@ -80,11 +76,10 @@ const ServicesSection = () => {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl xl:text-5xl font-pj">
-            Our Services
+            {t("services.sectionTitle")}
           </h2>
           <p className="mt-4 text-base leading-7 text-gray-600 sm:mt-8 font-pj">
-            We are dedicated to empowering women and promoting social welfare
-            through a variety of programs and services.
+            {t("services.sectionDescription")}
           </p>
         </div>
 

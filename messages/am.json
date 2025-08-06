@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "የሴቶች፣ ህጻናት እና ማህበራዊ ጉዳዮች ቢሮ",
+    "description": "የአዲስ አበባ ከተማ አስተዳደር",
+    "signIn": "ግባ"
+  },
+  "testimonials": {
+    "title": "ምስክሮች",
+    "description": "ከማህበረሰባችን፣ ከባለስልጣናት እና ከተጠቃሚዎቻችን የስራችንን ተፅዕኖ ያውቁ።"
+  },
+  "services": {
+    "sectionTitle": "አገልግሎቶቻችን",
+    "sectionDescription": "ሴቶችን ለማስቻል እና ማህበራዊ ደኅንነትን ለማስተዳደር በተለያዩ ፕሮግራሞች እና አገልግሎቶች እንሰራለን።",
+    "adoptionTitle": "የወላጅነት አገልግሎት",
+    "adoptionDescription": "የወላጅነት ሂደትን ለማሳካት ህጻናትን ከፍቅር ቤተሰቦች ጋር የሚያገናኝ የበለጠ የመስመር ላይ መድረክ እናቀርባለን።",
+    "adoptionLinkText": "የወላጅነት ሂደትን ይጀምሩ",
+    "organizingTitle": "የማደራጀት እና ስልጠና",
+    "organizingDescription": "ሴቶችን በትንሽ እና ትንሽ የንግድ ድርጅቶች ውስጥ በማደራጀት እና ስልጠና በማቅረብ እናበረታታለን።",
+    "infoTitle": "መረጃ እና ድጋፍ",
+    "infoDescription": "ሴቶች በንግድ ስራቸው ላይ ለማሳካት አስፈላጊ መረጃ እና ድጋፍ እናቀርባለን።",
+    "legalTitle": "የህግ ማረጋገጫ",
+    "legalDescription": "ሴቶች ባሉበት ንግድ ድርጅቶች ሁሉንም መስፈርቶች እንዲያሟሉ የህግ ማረጋገጫ እናቀርባለን።",
+    "marketTitle": "የገበያ ግንኙነት",
+    "marketDescription": "ሴቶች ንግድ ድርጅቶችን ከገበያ አገልግሎቶች ጋር በማገናኘት እንዲያድጉ እናገልግላለን።",
+    "kaizenTitle": "ካይዜን አፈጻጸም",
+    "kaizenDescription": "በሴቶች የተመራ ድርጅቶች ውስጥ ምርትን እና ጥራትን ለማሻሻል የካይዜን መርሃግብር እናገዛለን።"
+  },
+  "gallery": {
+    "title": "የእኛ ጎብኚዎች",
+    "description": "ከእኛ የተደረጉ ዝግጅቶች እና እንቅስቃሴዎች ውስጥ ያሉ ምስሎች እዚህ አሉ።",
+    "imageAlt": "የጎብኚዎች ምስል {number}"
+  },
+  "footer": {
+    "home": "መነሻ ገፅ",
+    "services": "አገልግሎቶች",
+    "feedback": "አስተያየት",
+    "products": "ምርቶች",
+    "login": "ግባ",
+    "address": "አራዳ ክፍለ ከተማ፣ አዲስ አበባ፣ ኢትዮጵያ",
+    "phone": "+251 912345678",
+    "email": "info@wcsa.com",
+    "about": "የሴቶች፣ ህጻናት እና ማህበራዊ ጉዳዮች ቢሮ በአዲስ አበባ ሴቶችን ለማስቻል እና ህጻናትን እና ተጋላጭ ቡድኖችን ለመደገፍ ተደራሽ ነው።",
+    "quickLinks": "ፈጣን አገናኞች",
+    "contactUs": "አግኙን",
+    "stayUpdated": "ዘመናዊ ይሁኑ",
+    "socialMedia": "በማህበራዊ ሚዲያ ላይ ይከታተሉን እና የቅርብ ጊዜ ዜናዎችን ያግኙ።",
+    "copyright": "WCSA። መብት የተጠበቀ ነው።"
+  },
+  "navbar": {
+    "home": "መነሻ ገፅ",
+    "services": "አገልግሎቶች",
+    "about": "ስለ እኛ",
+    "gallery": "ጎብኚዎች",
+    "testimonials": "ምስክሮች",
+    "contact": "አግኙን",
+    "login": "ግባ",
+    "language": "ቋንቋ"
+  }
+}

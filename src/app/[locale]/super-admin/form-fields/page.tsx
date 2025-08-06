@@ -3,9 +3,9 @@
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import FormList from "@/app/super-admin/form-fields/_components/FormList";
-import FieldTable from "@/app/super-admin/form-fields/_components/FieldTable";
-import FieldDialog from "@/app/super-admin/form-fields/_components/FieldDialog";
+import FormList from "@/app/[locale]/super-admin/form-fields/_components/FormList";
+import FieldTable from "@/app/[locale]/super-admin/form-fields/_components/FieldTable";
+import FieldDialog from "@/app/[locale]/super-admin/form-fields/_components/FieldDialog";
 
 type Form = {
   id: string;
@@ -138,12 +138,7 @@ export default function FormFieldsPage() {
             <div className="font-semibold text-lg">
               {selectedForm.name} Fields
             </div>
-            <Button
-              onClick={handleDialogOpen}
-          
-            >
-              + Add Field
-            </Button>
+            <Button onClick={handleDialogOpen}>+ Add Field</Button>
           </div>
           <FieldTable
             fields={fields[selectedForm.id] || []}

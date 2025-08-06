@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const images = [
   "/assets/WCSA_logo.jpg",
@@ -18,6 +19,7 @@ const images = [
 ];
 
 export default function ImageCarousel() {
+  const t = useTranslations();
   return (
     <section
       className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800"
@@ -25,10 +27,10 @@ export default function ImageCarousel() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
-          Our Gallery
+          {t("gallery.title")}
         </h2>
         <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center mt-4">
-          Here are some images from our events and activities.
+          {t("gallery.description")}
         </p>
         <div className="mt-8">
           <Carousel
@@ -46,7 +48,7 @@ export default function ImageCarousel() {
                       <CardContent className="flex items-center justify-center p-6">
                         <Image
                           src={src}
-                          alt={`Gallery image ${index + 1}`}
+                          alt={t("gallery.imageAlt", { number: index + 1 })}
                           width={400}
                           height={300}
                           className="rounded-lg object-cover"
