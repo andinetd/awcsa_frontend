@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface Application {
   id: string;
@@ -47,6 +48,7 @@ const getStatusColor = (status: string) => {
 
 export function ApplicationSummarySection() {
   const application = mockApplication; // This will be replaced with actual data fetching
+  const applicationMessages = useTranslations("applicationMessages");
 
   return (
     <Card>
@@ -100,7 +102,7 @@ export function ApplicationSummarySection() {
                 <Link
                   href={`/adoption/applicant-portal/application/${application.id}`}
                 >
-                  View Details
+                  {applicationMessages("appSummary.cta")}:
                 </Link>
               </Button>
             </div>
