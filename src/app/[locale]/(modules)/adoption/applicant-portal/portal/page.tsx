@@ -1,18 +1,22 @@
 import { UserInfoSection } from "@/app/[locale]/(modules)/adoption/applicant-portal/_components/user-info-section";
 import { ApplicationSummarySection } from "@/app/[locale]/(modules)/adoption/applicant-portal/_components/application-summary-section";
 import { InitiationSection } from "@/app/[locale]/(modules)/adoption/applicant-portal/_components/initiation-section";
+import { useMessages, useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export default function DashboardPage() {
+  const application = useTranslations("applicationMessages");
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Adoption Applicant Portal
-          </h1>
-          <p className="text-gray-600">
-            Welcome to your adoption application dashboard
-          </p>
+        <div className="flex justify-between items-center">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {application("header.title")}
+            </h1>
+            <p className="text-gray-600">{application("header.subtitle")}</p>
+          </div>
+          {/* <LanguageSwitcher className="py-2 px-4" /> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
