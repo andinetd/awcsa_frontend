@@ -21,13 +21,6 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 
-const cities = [
-  { id: 1, name: "Addis Ababa" },
-  { id: 2, name: "Adama" },
-  { id: 3, name: "Bahir Dar" },
-  // Add more cities as needed
-];
-
 type FormFields = {
   name: string;
   phone: string;
