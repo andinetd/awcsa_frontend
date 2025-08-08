@@ -27,7 +27,8 @@ const HeroBanner = () => {
         <p className="text-white font-medium font-lexend text-xs sm:text-sm md:text-base px-4">
           {t("hero.description")}
         </p>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-medium font-lexend leading-tight text-white">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold font-lexend leading-tight text-white tracking-tight">
+          <span className="text-white">{t("hero.title_first")}</span>
           <span className="text-primary">{t("hero.title")}</span>
         </h1>
         <Link href={"/login"}>

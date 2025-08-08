@@ -39,7 +39,7 @@ const Navbar = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="hover:text-primary transition-colors duration-200 font-medium whitespace-nowrap text-sm lg:text-base font-lexend"
+              className="hover:text-primary/80 text-primary transition-colors duration-200 font-medium whitespace-nowrap text-sm lg:text-[18px] font-lexend"
             >
               {item.name}
             </Link>

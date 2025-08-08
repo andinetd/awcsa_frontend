@@ -1,6 +1,7 @@
 {
   "hero": {
-    "title": "Bureau of Women, Children & Social Affairs",
+    "title_first": "Bureau of ",
+    "title": "Women, Children & Social Affairs",
     "description": "Addis Ababa City Administration",
     "signIn": "Sign In"
   },
