@@ -52,15 +52,16 @@ const mockApplicationDetail: ApplicationDetail = {
     address: "123 Main St, Anytown, ST 12345",
   },
   documents: [
-    { name: "Background Check", status: "approved", uploadDate: "2024-01-15" },
+    { name: "ID", status: "approved", uploadDate: "2025-10-18" },
     {
       name: "Income Verification",
       status: "approved",
       uploadDate: "2024-01-16",
     },
-    { name: "Medical Clearance", status: "pending", uploadDate: "2024-01-18" },
+    { name: "Medical Clearance", status: "pending", uploadDate: "2025-10-18" },
+    { name: "Criminal clearance", status: "pending", uploadDate: "2025-10-18" },
     {
-      name: "Character References",
+      name: "Marital status",
       status: "uploaded",
       uploadDate: "2024-01-20",
     },
@@ -68,22 +69,22 @@ const mockApplicationDetail: ApplicationDetail = {
   ],
   timeline: [
     {
-      date: "2024-01-15",
+      date: "2025-10-18",
       event: "Application Submitted",
       description: "Initial application form completed and submitted",
     },
     {
-      date: "2024-01-16",
+      date: "2025-10-18",
       event: "Documents Uploaded",
       description: "Background check and income verification uploaded",
     },
     {
-      date: "2024-01-18",
+      date: "2025-10-18",
       event: "Medical Clearance Uploaded",
       description: "Medical clearance document submitted for review",
     },
     {
-      date: "2024-01-20",
+      date: "2025-10-18",
       event: "References Submitted",
       description: "Character references uploaded and under review",
     },
@@ -93,15 +94,15 @@ const mockApplicationDetail: ApplicationDetail = {
 const getStatusIcon = (status: string) => {
   switch (status) {
     case "pending":
-      return <Clock className="h-4 w-4" />;
+      return <Clock className="h-3 w-3" />;
     case "approved":
-      return <CheckCircle className="h-4 w-4" />;
+      return <CheckCircle className="h-3 w-3" />;
     case "rejected":
-      return <XCircle className="h-4 w-4" />;
+      return <XCircle className="h-3 w-3" />;
     case "uploaded":
-      return <FileText className="h-4 w-4" />;
+      return <FileText className="h-3 w-3" />;
     default:
-      return <FileText className="h-4 w-4" />;
+      return <FileText className="h-3 w-3" />;
   }
 };
 
@@ -110,13 +111,13 @@ const getStatusColor = (status: string) => {
     case "pending":
       return "bg-yellow-100 text-yellow-800";
     case "approved":
-      return "bg-green-100 text-green-800";
+      return "bg-secondary/10 text-secondary";
     case "rejected":
       return "bg-red-100 text-red-800";
     case "uploaded":
-      return "bg-blue-100 text-blue-800";
+      return "bg-primary/10 text-primary";
     default:
-      return "bg-gray-100 text-gray-800";
+      return "bg-primary/10 text-gray-800";
   }
 };
 
@@ -285,7 +286,7 @@ export default function ApplicationDetailPage({
                         <div className="absolute left-2 top-8 w-0.5 h-8 bg-gray-200"></div>
                       )}
                       <div className="flex gap-3">
-                        <div className="w-4 h-4 bg-blue-600 rounded-full mt-1 flex-shrink-0"></div>
+                        <div className="w-4 h-4 bg-primary rounded-full mt-1 flex-shrink-0"></div>
                         <div>
                           <p className="font-medium text-gray-900">
                             {event.event}
