@@ -42,7 +42,7 @@ export default function AdoptionRegisterPage() {
   function onSubmit(data: FormFields) {
     // TODO: Store user info (API call or local storage)
     // For now, just redirect
-    router.push("/adoption/onboarding");
+    router.push("/adoption/applicant-portal/portal");
   }
 
   return (
