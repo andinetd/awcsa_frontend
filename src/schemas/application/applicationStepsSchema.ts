@@ -24,6 +24,21 @@ export const ApplicationStepTwoSchema = z.object({
   }),
 });
 
+export const ApplicationStepThreeSchema = z.object({
+  maritalStatus: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your id",
+  }),
+  docFromReliousOrEdir: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your birth certificate",
+  }),
+  photo: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your birth certificate",
+  }),
+});
+
 //type
 export type ApplicationStepOneType = z.infer<typeof ApplicationStepOneSchema>;
 export type ApplicationStepTwoType = z.infer<typeof ApplicationStepTwoSchema>;
+export type ApplicationStepThreeType = z.infer<
+  typeof ApplicationStepThreeSchema
+>;

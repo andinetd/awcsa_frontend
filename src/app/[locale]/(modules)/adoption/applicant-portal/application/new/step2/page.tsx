@@ -29,36 +29,17 @@ export default function Step2Page() {
   const router = useRouter();
   const application = useTranslations("applicationMessages");
 
-  const [formData, setFormData] = useState({
-    hasConvictions: "",
-    convictionDetails: "",
-    hasChildAbuse: "",
-    reference1Name: "",
-    reference1Phone: "",
-    reference1Relationship: "",
-    reference2Name: "",
-    reference2Phone: "",
-    reference2Relationship: "",
-    reference3Name: "",
-    reference3Phone: "",
-    reference3Relationship: "",
-    previousAdoption: "",
-    adoptionExperience: "",
-    medicalConditions: "",
-    medications: "",
-  });
-
   const form = useForm<ApplicationStepTwoType>({
     resolver: zodResolver(ApplicationStepTwoSchema),
     defaultValues: {},
   });
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    // setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleNext = () => {
-    localStorage.setItem("step2Data", JSON.stringify(formData));
+    // localStorage.setItem("step2Data", JSON.stringify(formData));
     router.push("/adoption/applicant-portal/application/new/step3");
   };
 

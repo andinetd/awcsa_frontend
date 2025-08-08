@@ -63,5 +63,19 @@
       "criminal": "Criminal Clearance",
       "spouseAgreement": "Spouse Agreement"
     }
+  },
+  "stepthree": {
+    "instructions": {
+      "title": "Additional Informations",
+      "one": "Marital Status document. ( If married, single or widow) ",
+      "two": "Evidence of their psychological well being",
+      "three": "3x4 passport size photo of yourself",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "marital": "Marital Document",
+      "wellBeing": "Psychological well being Doc",
+      "photo": "Photo"
+    }
   }
 }
