@@ -16,7 +16,10 @@ export default function DashboardPage() {
             </h1>
             <p className="text-gray-600">{application("header.subtitle")}</p>
           </div>
-          {/* <LanguageSwitcher className="py-2 px-4" /> */}
+          <LanguageSwitcher
+            className="py-2 px-4"
+            path={"/adoption/applicant-portal/portal"}
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

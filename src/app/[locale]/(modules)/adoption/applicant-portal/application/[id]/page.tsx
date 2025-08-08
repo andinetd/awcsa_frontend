@@ -83,11 +83,6 @@ const mockApplicationDetail: ApplicationDetail = {
       event: "Medical Clearance Uploaded",
       description: "Medical clearance document submitted for review",
     },
-    {
-      date: "2025-10-18",
-      event: "References Submitted",
-      description: "Character references uploaded and under review",
-    },
   ],
 };
 
@@ -258,10 +253,10 @@ export default function ApplicationDetailPage({
                           )}
                         </div>
                       </div>
-                      <Badge className={getStatusColor(doc.status)}>
+                      {/* <Badge className={getStatusColor(doc.status)}>
                         {doc.status.charAt(0).toUpperCase() +
                           doc.status.slice(1)}
-                      </Badge>
+                      </Badge> */}
                     </div>
                   ))}
                 </div>

@@ -15,9 +15,13 @@ import { useTranslations } from "next-intl";
 
 interface LanguageSwitcherProps {
   className?: string;
+  path?: string;
 }
 
-const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+  className,
+  path,
+}) => {
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
@@ -27,7 +31,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
 
   function handleSelect(newLocale: string) {
     if (newLocale !== locale) {
-      router.push(`/${newLocale}`);
+      router.push(`/${newLocale}/${path}`);
     }
   }
 
