@@ -16,7 +16,7 @@ import {
 import {
   ApplicationStepOneSchema,
   ApplicationStepOneType,
-} from "@/schemas/application/stepOneSchema";
+} from "@/schemas/application/applicationStepsSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -32,7 +32,6 @@ export default function Step1Page() {
   const handleNext = () => {
     // Save to localStorage or state management
     // localStorage.setItem("step1Data", JSON.stringify(formData));
-    router.push("/adoption/applicant-portal/application/new/step2");
   };
 
   const form = useForm<ApplicationStepOneType>({
@@ -43,8 +42,8 @@ export default function Step1Page() {
   async function onSubmit(values: ApplicationStepOneType) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
+    router.push("/adoption/applicant-portal/application/new/step2");
     // setData(values);
-    router.push("/adoption/children/child-registration/section2");
   }
 
   const instructions = (
@@ -87,7 +86,7 @@ export default function Step1Page() {
     >
       {" "}
       <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(handleNext)}>
+        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1  gap-4">
             <FormField
               control={form.control}
@@ -95,7 +94,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    Kebele or passport id *
+                    {application("stepone.form.id")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -130,7 +129,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    Birth certificate*
+                    {application("stepone.form.birthCertificate")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -152,7 +151,7 @@ export default function Step1Page() {
                         ]
                       }
                       maxSize={10 * 1024 * 1024} // 10MB
-                      error={form.formState.errors.id?.message}
+                      error={form.formState.errors.birthCertificate?.message}
                     />
                   </FormControl>
                 </FormItem>
@@ -167,7 +166,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    Income Statement*
+                    {application("stepone.form.income")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -189,7 +188,7 @@ export default function Step1Page() {
                         ]
                       }
                       maxSize={10 * 1024 * 1024} // 10MB
-                      error={form.formState.errors.id?.message}
+                      error={form.formState.errors.income?.message}
                     />
                   </FormControl>
                 </FormItem>

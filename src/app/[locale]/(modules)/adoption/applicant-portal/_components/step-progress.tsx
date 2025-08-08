@@ -76,9 +76,9 @@ export function StepProgress() {
             </div>
 
             {index < steps.length - 1 && (
-              <div className="flex-1 mx-4">
+              <div className="flex-1 mx-3.5">
                 <div
-                  className={`h-1 rounded-full ${
+                  className={`h-[3px] rounded-full ${
                     step.id < currentStepId ? "bg-secondary" : "bg-gray-200"
                   }`}
                 />

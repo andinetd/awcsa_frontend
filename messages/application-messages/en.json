@@ -43,6 +43,25 @@
       "two": "Your birth certificate",
       "three": "Monthly or Annual icome verification document",
       "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "id": "Kebel ID/ Passport",
+      "birthCertificate": "Birth Certificate",
+      "income": "Income statement"
+    }
+  },
+  "steptwo": {
+    "instructions": {
+      "title": "Additional Informations",
+      "one": "Medical clearance document ",
+      "two": "criminal clearance document",
+      "three": "Spouses written and signed aggreement of the adoption",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "medical": "Medical Document",
+      "criminal": "Criminal Clearance",
+      "spouseAgreement": "Spouse Agreement"
     }
   }
 }

@@ -12,5 +12,18 @@ export const ApplicationStepOneSchema = z.object({
   }),
 });
 
+export const ApplicationStepTwoSchema = z.object({
+  medical: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your id",
+  }),
+  criminalClearance: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your birth certificate",
+  }),
+  spouseAgreement: z.instanceof(File).refine((file) => file != null, {
+    message: "please select your birth certificate",
+  }),
+});
+
 //type
 export type ApplicationStepOneType = z.infer<typeof ApplicationStepOneSchema>;
+export type ApplicationStepTwoType = z.infer<typeof ApplicationStepTwoSchema>;
