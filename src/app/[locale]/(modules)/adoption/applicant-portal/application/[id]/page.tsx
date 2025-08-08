@@ -299,6 +299,15 @@ export default function ApplicationDetailPage({
                 </div>
               </CardContent>
             </Card>
+            <div className="w-full pt-2 md:col-span-1">
+              <Link
+                href={
+                  "/adoption/applicant-portal/application/APP-2024-001/edit/section"
+                }
+              >
+                <Button>Edit and Resubmit </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

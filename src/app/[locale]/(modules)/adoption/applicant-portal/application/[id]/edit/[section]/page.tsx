@@ -387,7 +387,7 @@ export default function EditSectionPage() {
         <div className="mb-6">
           <Button asChild variant="ghost" className="mb-4">
             <Link
-              href={`/applicant-portal/application/${id}`}
+              href={`/adoption/applicant-portal/application/${id}`}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />

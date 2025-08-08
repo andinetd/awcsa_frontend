@@ -31,7 +31,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 
   function handleSelect(newLocale: string) {
     if (newLocale !== locale) {
-      router.push(`/${newLocale}/${path}`);
+      router.push(`/${newLocale}/${path ? path : ""}`);
     }
   }
 

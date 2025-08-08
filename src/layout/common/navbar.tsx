@@ -63,7 +63,7 @@ const Navbar = () => {
               {t("navbar.login")}
             </Button>
           </Link>
-          <LanguageSwitcher />
+          <LanguageSwitcher path="" />
         </div>
 
         {/* Mobile Menu */}
