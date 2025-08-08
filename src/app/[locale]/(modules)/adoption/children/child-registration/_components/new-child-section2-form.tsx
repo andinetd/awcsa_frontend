@@ -52,7 +52,7 @@ export default function NewChildFormSectionTwo() {
   // ]);
 
   return (
-    <div className="mx-auto w-full mt-10 ">
+    <div className="mx-auto max-w-5xl mt-10 ">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
           {/* founder Section */}

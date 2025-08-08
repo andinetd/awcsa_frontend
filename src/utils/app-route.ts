@@ -13,7 +13,7 @@ export const moduleAndRouteMap = (deputyBureau: DeputyBureau): string => {
     case "EDIR":
       return "/social-affairs/edir/dashboard";
     case "SUPER_ADMIN":
-      return "/super-admin";
+      return "/super-admin/user-management";
     case "WOMEN_AFFAIRS":
       return "/womens/dashboard";
     default:
