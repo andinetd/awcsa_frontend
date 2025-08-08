@@ -105,6 +105,7 @@ export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
           icon: Home,
         },
         { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
+        { title: "Adoption Requests", url: "/adoption/adoption-requests", icon: FileText },
       ],
     },
   ],
