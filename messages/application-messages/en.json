@@ -1,0 +1,81 @@
+{
+  "header": {
+    "title": "Adoption Applicant Portal",
+    "subtitle": "welcome to your adoption application dashboard."
+  },
+  "initiation": {
+    "requirement": "Adoption Requirements",
+    "requirementSubtitle": "Before starting your application, please ensure you meet the following requirements:"
+  },
+  "requirements": {
+    "one": "Age not less than 25 and not more than 60 years,",
+    "two": "Able to present a residence ID or passport",
+    "three": "Able to provide birth certificate",
+    "four": "የThe adoptive family must provide proof from a government agency or organization where they live that their monthly or annual income is sufficient to support the child in their current living situation. Without prejudice to the above, a copy of the house plan, a copy of a renewed business license, a car license, a bank deposit certificate, etc. may be accepted as proof of income.",
+    "five": "They can provide evidence from the relevant authority that they are free from any incurable, chronic, and communicable disease (including Hepatitis B and HIV/AIDS), as well as mental illness;",
+    "six": "They can provide evidence from the relevant authority proving that they are free from any criminal activity",
+    "seven": "Applicants must be able to provide proof of the spouse's agreement to adopt a child/application signed by both parties, stating the date, month, and year",
+    "eight": "Proof of marriage, singleness, divorce, or death of spouse",
+    "nine": "Marriage certificate (for those who are single, divorced, or deceased) from the relevant government agency;",
+    "ten": "Applicants must provide evidence of their psychological and social well-being from relevant bodies, such as a religious institution, a religious organization, or the district office.",
+    "eleven": "The adoptive family must provide two passport-size (3×4) photographs."
+  },
+
+  "footer": {
+    "title": "Ready to Begin?",
+    "subtitle": "Our comprehensive application process will guide you through each step of your adoption journey.",
+    "cta": "Start Application"
+  },
+  "appSummary": {
+    "cta": "View Details"
+  },
+  "userInfo": {
+    "userInfo": "User Information",
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "id": "ID number"
+  },
+  "stepone": {
+    "instructions": {
+      "title": "Required Personal information",
+      "one": "upload a residence ID or passport with your image clearly being visible.",
+      "two": "Your birth certificate",
+      "three": "Monthly or Annual icome verification document",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "id": "Kebel ID/ Passport",
+      "birthCertificate": "Birth Certificate",
+      "income": "Income statement"
+    }
+  },
+  "steptwo": {
+    "instructions": {
+      "title": "Additional Informations",
+      "one": "Medical clearance document ",
+      "two": "criminal clearance document",
+      "three": "Spouses written and signed aggreement of the adoption",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "medical": "Medical Document",
+      "criminal": "Criminal Clearance",
+      "spouseAgreement": "Spouse Agreement"
+    }
+  },
+  "stepthree": {
+    "instructions": {
+      "title": "Additional Informations",
+      "one": "Marital Status document. ( If married, single or widow) ",
+      "two": "Evidence of their psychological well being",
+      "three": "3x4 passport size photo of yourself",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "form": {
+      "marital": "Marital Document",
+      "wellBeing": "Psychological well being Doc",
+      "photo": "Photo"
+    }
+  }
+}
