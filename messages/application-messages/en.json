@@ -35,5 +35,14 @@
     "email": "Email",
     "phone": "Phone Number",
     "id": "ID number"
+  },
+  "stepone": {
+    "instructions": {
+      "title": "Required Personal information",
+      "one": "upload a residence ID or passport with your image clearly being visible.",
+      "two": "Your birth certificate",
+      "three": "Monthly or Annual icome verification document",
+      "note": "All documents must be accurate and will be reviewed by the authorities."
+    }
   }
 }

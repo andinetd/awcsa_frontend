@@ -42,7 +42,7 @@ export function StepProgress() {
         <span className="text-sm font-medium text-gray-500">
           Step {currentStepId} of {steps.length}
         </span>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm font-lexend text-gray-500">
           {Math.round((currentStepId / steps.length) * 100)}% Complete
         </span>
       </div>
@@ -53,20 +53,20 @@ export function StepProgress() {
             <div className="flex items-center">
               <div className="flex items-center justify-center">
                 {step.id < currentStepId ? (
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                  <CheckCircle className="h-6 w-6 text-secondary" />
                 ) : step.id === currentStepId ? (
-                  <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-medium">
+                  <div className="h-6 w-6 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-medium font-lexend">
                       {step.id}
                     </span>
                   </div>
                 ) : (
-                  <Circle className="h-8 w-8 text-gray-300" />
+                  <Circle className="h-6 w-6 text-gray-300 font-lexend" />
                 )}
               </div>
               <div className="ml-3 hidden sm:block">
                 <p
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-medium font-lexend ${
                     step.id <= currentStepId ? "text-gray-900" : "text-gray-500"
                   }`}
                 >
@@ -79,7 +79,7 @@ export function StepProgress() {
               <div className="flex-1 mx-4">
                 <div
                   className={`h-1 rounded-full ${
-                    step.id < currentStepId ? "bg-green-600" : "bg-gray-200"
+                    step.id < currentStepId ? "bg-secondary" : "bg-gray-200"
                   }`}
                 />
               </div>

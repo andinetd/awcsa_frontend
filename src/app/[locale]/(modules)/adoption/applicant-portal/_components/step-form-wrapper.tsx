@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReactNode } from "react";
 
 interface StepFormWrapperProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   instructions: ReactNode;
   children: ReactNode;
 }
