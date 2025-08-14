@@ -10,23 +10,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useClientSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
+type LoginFormSchemaType = z.infer<typeof formSchema>;
+
 export default function SignInForm() {
   const router = useRouter();
+  const { mutate, data, isPending, isSuccess, error, isError } =
+    useClientSignInMutation();
   const { login, user } = useAuthStore();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<LoginFormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -34,23 +42,39 @@ export default function SignInForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: LoginFormSchemaType) {
     //TODO: handle submission here
     console.log("values submited: ", { values });
 
-    try {
-      // await login("test@example.com", "password123");
-      await login(values.email, values.password);
-      // redirect or show protected dashboard
-      if (user) {
-        const route = moduleAndRouteMap(user?.org.deputyBureau);
-        router.push(route);
-      }
-    } catch (err) {
-      console.error("Login failed", err);
-      form.setError("email", { message: "Invalid credentials" });
-    }
+    // await login("test@example.com", "password123");
+    // await login(values.email, values.password);
+    // redirect or show protected dashboard
+    // if (user) {
+    // const route = moduleAndRouteMap(user?.org.deputyBureau);
+    //   router.push(route);
+    // }
+
+    const newData = {
+      email: values.email,
+      password: values.password,
+    };
+    console.log(newData);
+    mutate(newData);
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      toast("Signin was successfull");
+      router.push("/adoption/applicant-portal/portal");
+    }
+    if (isError) {
+      console.log(error.message);
+      toast("SigIn Failed", {
+        description: error.message,
+      });
+    }
+  }, [isSuccess, isError, data, error, router]);
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
@@ -109,14 +133,15 @@ export default function SignInForm() {
               Forgot password?
             </Link>
           </div> */}
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? "Signing in..." : "Sign In"}
-          </Button>
+          {isPending ? (
+            <Button className="w-full" disabled>
+              <Loader2 className="animate-spin" />
+            </Button>
+          ) : (
+            <Button className="w-full" disabled={form.formState.isSubmitting}>
+              Sign up
+            </Button>
+          )}
         </form>
       </Form>
     </div>

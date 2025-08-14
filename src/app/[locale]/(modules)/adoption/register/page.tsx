@@ -20,13 +20,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-type FormFields = {
-  name: string;
-  phone: string;
-  cityId: string;
-  email: string;
-};
-
 const formSchema = z.object({
   firstName: z
     .string()

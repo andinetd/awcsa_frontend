@@ -6,3 +6,8 @@ type ClientSignup = {
   email: string;
   password: string;
 };
+
+type ClientSignIn = {
+  email: string;
+  password: string;
+};
