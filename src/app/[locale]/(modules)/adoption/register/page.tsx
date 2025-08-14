@@ -1,25 +1,24 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { useClientSignupMutation } from "@/hooks/client/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
 type FormFields = {
   name: string;
@@ -28,22 +27,61 @@ type FormFields = {
   email: string;
 };
 
+const formSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters long" }),
+  lastName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters long" }),
+  email: z.email("Invalid email address"),
+  phoneNumber: z
+    .string()
+    .min(7, { message: "Phone Number must be atleast 7 digits" }),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+  cityIdNumber: z
+    .string()
+    .min(2, { message: "City must be atleast 2 characters long" }),
+});
+
+type ClientSignUpSchemaType = z.infer<typeof formSchema>;
+
 export default function AdoptionRegisterPage() {
   const router = useRouter();
-  const form = useForm<FormFields>({
-    defaultValues: {
-      name: "",
-      phone: "",
-      cityId: "",
-      email: "",
-    },
+  const { mutate, data, isPending, isSuccess, error, isError } =
+    useClientSignupMutation();
+  const form = useForm<ClientSignUpSchemaType>({
+    resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(data: FormFields) {
+  function onSubmit(data: ClientSignUpSchemaType) {
     // TODO: Store user info (API call or local storage)
-    // For now, just redirect
-    router.push("/adoption/applicant-portal/portal");
+
+    const newData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      cityIdNumber: data.cityIdNumber,
+    };
+    console.log(newData);
+    mutate(newData);
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      toast("Signup was successfull");
+      router.push("/adoption/applicant-portal/portal");
+    }
+    if (isError) {
+      console.log(error.message);
+      toast("Sigup Failed", {
+        description: error.message,
+      });
+    }
+  }, [isSuccess, isError, data, error, router]);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center px-4 bg-gray-50">
@@ -60,17 +98,16 @@ export default function AdoptionRegisterPage() {
         {/* Right Side: Registration Form */}
         <Card className="w-full max-w-md flex flex-col px-10 py-10">
           <h1 className="text-xl font-semibold font-lexend mb-4">
-            Adoption Sign Up 
+            Adoption Sign Up
           </h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="name"
-                rules={{ required: "Name is required" }}
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your name" />
                     </FormControl>
@@ -80,8 +117,20 @@ export default function AdoptionRegisterPage() {
               />
               <FormField
                 control={form.control}
-                name="phone"
-                rules={{ required: "Phone number is required" }}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter your last name" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
@@ -94,8 +143,7 @@ export default function AdoptionRegisterPage() {
               />
               <FormField
                 control={form.control}
-                name="cityId"
-                rules={{ required: "City Id is required" }}
+                name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>City Id</FormLabel>
@@ -109,7 +157,6 @@ export default function AdoptionRegisterPage() {
               <FormField
                 control={form.control}
                 name="email"
-                rules={{ required: "Email is required" }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -120,9 +167,32 @@ export default function AdoptionRegisterPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Sign Up
-              </Button>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="Enter your password"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {isPending ? (
+                <Button className="w-full" disabled>
+                  <Loader2 className="animate-spin" />
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  Sign up
+                </Button>
+              )}
             </form>
           </Form>
         </Card>
