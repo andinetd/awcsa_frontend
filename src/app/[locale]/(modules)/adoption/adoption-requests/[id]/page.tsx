@@ -10,6 +10,7 @@ import { useState } from "react";
 
 import { mockApplications } from "../page";
 import type { AdoptionApplication, AdoptionApplicationField } from "../page";
+import { AttachmentDialog } from "../_components/attachment-dialog";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
@@ -104,6 +105,18 @@ export default function AdoptionRequestReviewPage() {
     }, 1000);
   }
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<{
+      fileName: string;
+      fileUrl: string;
+    } | null>(null);
+
+    function handleViewAttachment(fileName: string, fileUrl: string) {
+      setSelectedFile({ fileName, fileUrl });
+      setOpenDialog(true);
+    }
+
+
   if (!application) {
     return (
       <SidebarLayout title="Review Adoption Application">
@@ -116,6 +129,14 @@ export default function AdoptionRequestReviewPage() {
 
   return (
     <SidebarLayout title="Review Adoption Application">
+      {selectedFile && (
+        <AttachmentDialog
+          open={openDialog}
+          onOpenChange={setOpenDialog}
+          fileName={selectedFile.fileName}
+          fileUrl={selectedFile.fileUrl}
+        />
+      )}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-2 space-y-6">
@@ -126,10 +147,10 @@ export default function AdoptionRequestReviewPage() {
                 status={application.status}
                 onToggle={handleAttachmentToggle}
                 onComment={handleAttachmentComment}
+                onView={handleViewAttachment}
               />
             </div>
           </div>
-
           <div className="lg:col-span-2">
             <ApplicationFieldsSection
               fields={fields}
@@ -143,15 +164,21 @@ export default function AdoptionRequestReviewPage() {
                   variant="destructive"
                   onClick={() => handleAction("deny")}
                   disabled={submitting}
+                  className="cursor-pointer"
                 >
                   Deny
                 </Button>
-                <Button onClick={handleReturnToApplicant} disabled={submitting}>
+                <Button
+                  onClick={handleReturnToApplicant}
+                  disabled={submitting}
+                  className="cursor-pointer"
+                >
                   Return to Applicant
                 </Button>
                 <Button
                   onClick={() => handleAction("approve")}
                   disabled={submitting}
+                  className="cursor-pointer"
                 >
                   Approve
                 </Button>

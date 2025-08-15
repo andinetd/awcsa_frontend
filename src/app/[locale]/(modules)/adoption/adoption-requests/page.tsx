@@ -292,10 +292,9 @@ const AdoptionRequests = () => {
                         <Link
                           href={`/adoption/adoption-requests/${app.applicationId}`}
                           passHref
-                          legacyBehavior
                         >
                           <Button size="sm" asChild>
-                            <a>{t.value === "pending" ? "Review" : "View"}</a>
+                            <p>{t.value === "pending" ? "Review" : "View"}</p>
                           </Button>
                         </Link>
                       </div>
