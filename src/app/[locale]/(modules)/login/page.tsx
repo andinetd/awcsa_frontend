@@ -1,11 +1,9 @@
 import SignInForm from "@/components/shared/auth/sign-in-form";
-import ModuleGuard from "@/components/shared/module-guard";
-import { Card } from "@/components/ui/card";
+ import { Card } from "@/components/ui/card";
 
 export default function LoginPage() {
   return (
-    <ModuleGuard allowed={[]}>
-      <div className="min-h-screen w-full flex items-center justify-center  px-4 ">
+       <div className="min-h-screen w-full flex items-center justify-center  px-4 ">
         <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-5xl gap-10">
           {/* Left Side: Logo and Title */}
           <div className="flex flex-col items-center   text-center md:text-left">
@@ -34,6 +32,5 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </ModuleGuard>
-  );
+   );
 }

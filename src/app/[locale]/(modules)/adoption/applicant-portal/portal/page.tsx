@@ -3,12 +3,12 @@ import { ApplicationSummarySection } from "@/app/[locale]/(modules)/adoption/app
 import { InitiationSection } from "@/app/[locale]/(modules)/adoption/applicant-portal/_components/initiation-section";
 import { useMessages, useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
-import ModuleGuard from "@/components/shared/module-guard";
+import AuthProvider from "@/components/auth-provider";
 
 export default function DashboardPage() {
   const application = useTranslations("applicationMessages");
   return (
-    <ModuleGuard allowed={[]}>
+    // <AuthProvider allowedRoles={[""]}>
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="flex justify-between items-center">
@@ -36,6 +36,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </ModuleGuard>
+    // </>
   );
 }

@@ -1,12 +1,13 @@
-import ModuleGuard from "@/components/shared/module-guard";
+import AuthProvider from "@/components/auth-provider";
+ 
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import React, { ReactNode } from "react";
 
 const BureauHeadlayout = ({ children }: { children: ReactNode }) => {
   return (
-    <ModuleGuard allowed={["BUREAU_HEAD"]}>
+    <AuthProvider allowedRoles={["Bureau_Manager", "DEPUTY_MANAGER"]}>
       <SidebarLayout>{children}</SidebarLayout>;
-    </ModuleGuard>
+    </AuthProvider>
   );
 };
 

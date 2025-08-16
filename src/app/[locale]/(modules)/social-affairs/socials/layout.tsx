@@ -1,12 +1,12 @@
-import ModuleGuard from "@/components/shared/module-guard";
+import AuthProvider from "@/components/auth-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
 const SocialAffairslayout = ({ children }: { children: ReactNode }) => {
   return (
-    <ModuleGuard allowed={["SOCIAL_AFFAIRS", "EDIR", "BUREAU_HEAD"]}>
+    <AuthProvider allowedRoles={["Bureau_Manager"]}>
       <SidebarProvider>{children}</SidebarProvider>;
-    </ModuleGuard>
+    </AuthProvider >
   );
 };
 
