@@ -52,7 +52,7 @@ export function middleware (req: NextRequest) {
     if (
       decodedToken.user.accountType === "EMPLOYEE" &&
       guard.allowedRoles &&
-      !guard.allowedRoles.includes(decodedToken.entity.type)
+      !guard.allowedRoles.includes((decodedToken as any).entity.type)
     ) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }

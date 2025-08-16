@@ -3,6 +3,8 @@ import React from "react";
 
 const BureauHead = () => {
   return (
+    <SidebarLayout>
+
     <div>
       BureauHead- Head of the offices
       <div className="flex flex-col">
@@ -11,6 +13,7 @@ const BureauHead = () => {
         <p>all are side bar</p>
       </div>
     </div>
+    </SidebarLayout>
   );
 };
 
