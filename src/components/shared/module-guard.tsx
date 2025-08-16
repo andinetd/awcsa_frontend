@@ -3,36 +3,47 @@
 import { useAuthStore } from "@/stores/auth-store";
 import { DeputyBureau } from "@/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import CheckingAccess from "./access-check-ui";
 
 interface ModuleGuardProps {
   allowed: DeputyBureau[];
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function ModuleGuard({ allowed, children }: ModuleGuardProps) {
-  const user = useAuthStore((state) => state.user);
+  const { user, token, org, hydrated } = useAuthStore();
   const router = useRouter();
   const [checking, setChecking] = useState(true); // Loading state
 
   useEffect(() => {
-    if (user) {
-      const bureau = user.org?.deputyBureau;
+    if (!hydrated) return;
 
-      if (!allowed.includes(bureau)) {
-        router.replace("/unauthorized");
-        return;
-      }
+    if (!token || !user) {
+      router.replace("/login");
+      return;
     }
 
-    setChecking(false); // Passed checks
-  }, [user, allowed, router]);
+    if (user.accountType == "CLIENT") {
+      router.replace("/adoption/applicant-portal/portal");
+      return;
+    }
+    const bureau = org?.deputyBureau as DeputyBureau;
+    if (!allowed.includes(bureau)) {
+      router.replace("/unauthorized");
+      return;
+    }
+    console.log(`BUREAU from guard:  `);
+    console.log(bureau);
+    console.log(`USER IN GUARD: `);
+    console.log(user);
+    setChecking(false);
+  }, [user, allowed, router, org, hydrated, token]);
 
   // Optional loading state
-  if (checking) {
-    return <CheckingAccess />;
-  }
+  // if (!hydrated) {
+  //   return <CheckingAccess />;
+  // }
 
   return <>{children}</>;
 }

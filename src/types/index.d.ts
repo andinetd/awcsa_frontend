@@ -9,7 +9,8 @@ export type DeputyBureau =
   | "CHILDREN_AFFAIRS"
   | "SOCIAL_AFFAIRS"
   | "EDIR"
-  | "WOMEN_AFFAIRS";
+  | "WOMEN_AFFAIRS"
+  | "CLIENT";
 
 export type AppModules =
   | "super-admin"

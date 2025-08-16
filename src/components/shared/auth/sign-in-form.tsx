@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useClientSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
+import { DeputyBureau } from "@/types";
 import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -32,7 +33,7 @@ export default function SignInForm() {
   const router = useRouter();
   const { mutate, data, isPending, isSuccess, error, isError } =
     useClientSignInMutation();
-  const { login, user } = useAuthStore();
+  const { user, org } = useAuthStore();
 
   const form = useForm<LoginFormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -58,15 +59,28 @@ export default function SignInForm() {
       email: values.email,
       password: values.password,
     };
+
+    console.log(`NEW DATA ON SIGN IN: `);
     console.log(newData);
     mutate(newData);
   }
 
   useEffect(() => {
     if (isSuccess) {
+      console.log(`SIGN IN RESPONSE: `);
       console.log(data);
       toast("Signin was successfull");
-      router.push("/adoption/applicant-portal/portal");
+      // const route = moduleAndRouteMap(org?.deputyBureau as DeputyBureau);
+      // if (!route.includes(org?.deputyBureau as DeputyBureau)) {
+      //   router.replace("/adoption/applicant-portal/portal");
+      // }
+      // router.push(route);
+
+      useAuthStore.setState({
+        user: data.user,
+        token: data.access_token,
+        org: data.org,
+      });
     }
     if (isError) {
       console.log(error.message);
@@ -74,7 +88,7 @@ export default function SignInForm() {
         description: error.message,
       });
     }
-  }, [isSuccess, isError, data, error, router]);
+  }, [isSuccess, isError, data, error]);
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
