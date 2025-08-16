@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useClientSignInMutation } from "@/hooks/client/auth";
+import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { DeputyBureau } from "@/types";
 import { moduleAndRouteMap } from "@/utils/app-route";
@@ -32,7 +32,7 @@ type LoginFormSchemaType = z.infer<typeof formSchema>;
 export default function SignInForm() {
   const router = useRouter();
   const { mutate, data, isPending, isSuccess, error, isError } =
-    useClientSignInMutation();
+    useSignInMutation();
   const { user, org } = useAuthStore();
 
   const form = useForm<LoginFormSchemaType>({
