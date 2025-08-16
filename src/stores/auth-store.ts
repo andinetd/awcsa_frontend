@@ -1,23 +1,26 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
-import {  UserType, OrgType, JwtPayload, UserRole, PermissionOperation } from "@/types/api/auth";
+import Cookies from "js-cookie";
+import {  UserType, OrgType, JwtPayload, UserRole, PermissionOperation, JwtUserType, EmployeeJwtPayload, ClientJwtPayload } from "@/types/api/auth";
 
 
 
 interface AuthState {
-  user: UserType | null;
-  token: JwtPayload | null;
-  org?: OrgType;
+  user: JwtUserType | null;
+  token: string | null;
+  entity: EmployeeJwtPayload["entity"] | ClientJwtPayload['entity'] | null;
+  auth: { permissions: string[]} | null;
+  orgUnit: EmployeeJwtPayload['orgUnit'] | null;
   userRole: UserRole | null;
-  userPermissions: PermissionOperation[] | null;
+  userPermissions: string[] ;
   hydrated: boolean;
-  setUser: (user: UserType | null) => void;
-  setToken: (token: JwtPayload | null) => void;
-  setOrg: (org: OrgType | undefined) => void;
+  setUser: (user: JwtUserType | null) => void;
+  setToken: (token: string | null) => void;
+  loadTokenFromCookie: () => void;
   logout: () => void;
   hasRole: (role: UserRole) => boolean;
-  hasPermission: (permission: PermissionOperation) => boolean;
+  hasPermission: (permission: string) => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -25,38 +28,75 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       token: null,
-      org: undefined,
+      entity: null,
+      auth: null,
+      orgUnit: null,
       userRole: null,
       userPermissions: [],
-
       hydrated: false,
+
       setUser: (user) => set({ user }),
-      setOrg: (org) => set({ org }),
       setToken: (token) => {
         if (token) {
-          const decodedToken: JwtPayload = jwtDecode(token.toString());
-          set({
-            token,
-            user: decodedToken.user,
-            userRole: decodedToken.user.role,
-            userPermissions: decodedToken.user.permissions,
-            org: decodedToken.org
-              ? {
-                  unitId: decodedToken.org.unitId,
-                  unitType: decodedToken.org.unitType,
-                  deputyBureau: decodedToken.org.deputyBureau  
-                }
-              : undefined,
-          });
+          Cookies.set("wcasf_auth_token", token, {
+            secure: true,
+            sameSite: "strict",
+            expires: 7,
+          })
+          const decodedToken: JwtPayload = jwtDecode(token);
+          if(decodedToken.user.accountType === "EMPLOYEE"){
+
+            const employeeToken = decodedToken as EmployeeJwtPayload;
+            set({
+              token,
+              user: employeeToken.user,
+              entity: employeeToken.entity,
+              auth: employeeToken.auth,
+              orgUnit: employeeToken.orgUnit,
+              userRole: employeeToken.entity.role as UserRole,
+              userPermissions: employeeToken.auth.permissions,
+             
+            });
+          }
+
+          if(decodedToken.user.accountType === "CLIENT") {
+            const clientToken = decodedToken as ClientJwtPayload;
+            set({
+                token,
+              user: clientToken.user,
+              entity: clientToken.entity,
+              auth: clientToken.auth,
+              orgUnit: null,
+              userRole: null,
+              userPermissions: clientToken.auth.permissions,
+            })
+          }
         }
       },
 
-      logout: () => {
-        set({ user: null, token: null });
+      loadTokenFromCookie: () => {
+        const token = Cookies.get("wcasf_auth_token");
+        if(token) {
+          get().setToken(token);
+        }
+        set({hydrated: true});
       },
 
-      hasRole: (role) => get().user?.role === role,
-      hasPermission: (permission) => get().user?.permissions?.includes(permission) ?? false
+      logout: () => {
+        Cookies.remove("wcasf_auth_token");
+        set({
+          user: null,
+          token: null,
+          entity: null,
+          auth: null,
+          orgUnit: null,
+          userRole: null,
+          userPermissions: [],
+         });
+      },
+
+      hasRole: (role) => get().userRole === role,
+      hasPermission: (permission) => get().userPermissions?.includes(permission) ?? false
     }),
  
 );

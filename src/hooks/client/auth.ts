@@ -1,6 +1,6 @@
-import { clientSignIn, clientSignup } from "@/api/auth/client";
+import { signIn, clientSignup } from "@/api/auth/auth";
 import { useAuthStore } from "@/stores/auth-store";
-import { ClientSignIn, ClientSignInResponse } from "@/types/api/auth";
+import { ClientSignIn, ClientSignInResponse, JwtPayload } from "@/types/api/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export const useClientSignupMutation = () =>
@@ -10,13 +10,13 @@ export const useClientSignupMutation = () =>
   });
 
 export const useClientSignInMutation = () => {
-  const { setOrg, setUser, setToken } = useAuthStore();
+  const { setUser, setToken } = useAuthStore();
   return useMutation<ClientSignInResponse, Error, ClientSignIn>({
-    mutationFn: clientSignIn,
+    mutationFn: signIn,
     mutationKey: ["Client Sign In"],
     onSuccess: (data) => {
       setToken(data.access_token);
-      setOrg(data.org);
+      
     },
   });
 };
