@@ -21,7 +21,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export function DynamicSidebar() {
-  const { user, logout } = useAuthStore();
+  const {user, userRole, userPermissions, logout } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -51,7 +51,7 @@ export function DynamicSidebar() {
   // const mockNavigation = navigationConfig["bureau-head"];
   const role = useCurrentRole();
   const module = useEmployeModule();
-  const permissions = user?.permissions || [];
+  const permissions = userPermissions || [];
   const pathname = usePathname();
   // const sections = role && navigationConfig[role] ? navigationConfig[role] : [];
   const sections =
@@ -131,9 +131,9 @@ export function DynamicSidebar() {
               <div className="flex flex-col text-left flex-1">
                 <span className="font-semibold truncate">{user?.email}</span>
                 <span className="text-xs truncate">{user?.email}</span>
-                {user?.role && (
+                {user?.email && (
                   <span className="text-xs text-muted-foreground truncate">
-                    {user.role}
+                    {user.email}
                   </span>
                 )}
               </div>

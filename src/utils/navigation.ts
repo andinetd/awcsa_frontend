@@ -44,6 +44,7 @@ export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
         },
       ],
     },
+    
     {
       title: "Management",
       items: [
@@ -147,6 +148,7 @@ export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
       ],
     },
   ],
+  CLIENT: [],
   EDIR: [
     {
       title: "Edir Services",

@@ -1,8 +1,7 @@
-import { UserRole } from "@/types/api/auth";
 
 type RouteGuard = {
   allowedAccountTypes: ("EMPLOYEE" | "CLIENT")[];
-  allowedRoles?: UserRole[]; 
+  allowedRoles?: string[]; 
 };
 
 export const routePermissions: Record<string, RouteGuard> = {
@@ -10,8 +9,10 @@ export const routePermissions: Record<string, RouteGuard> = {
   "/adoption/applicant-portal": { allowedAccountTypes: ["CLIENT"]},
 
   "/bureau-head": { allowedAccountTypes: ["EMPLOYEE"], allowedRoles: ["Bureau_Manager", "DIRECTOR"] },
-  "/super-admin/general-settings": { allowedAccountTypes: ["EMPLOYEE"], allowedRoles: ["DIRECTOR"] },
+  "/super-admin/general-settings": { allowedAccountTypes: ["EMPLOYEE"], allowedRoles: ["EXPERT"] },
   "/super-admin/user-management": { allowedAccountTypes: ["EMPLOYEE"], allowedRoles: ["DIRECTOR", "Bureau_Manager"] },
 
   "/social-affairs/dashboard": { allowedAccountTypes: ["EMPLOYEE"] },
+  "/adoption/dashboard": { allowedAccountTypes: ["EMPLOYEE"]},
+  
 };

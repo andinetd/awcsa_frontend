@@ -2,7 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { JwtPayload } from "./types/api/auth";
+import { EmployeeJwtPayload, JwtPayload } from "./types/api/auth";
 import { routePermissions } from "./utils/routePermissions";
  
 const intlMiddleWare =  createMiddleware(routing);
@@ -35,31 +35,38 @@ export function middleware (req: NextRequest) {
 
   try {
     const decodedToken = jwtDecode<JwtPayload>(token as string);
+    
   
    const matchedRoute = Object.keys(routePermissions).find((route) =>
       pathname.startsWith(`/${locale}${route}`)
     );
+    console.log(`MATCHED ROUTE: ${matchedRoute}`)
 
     if (!matchedRoute) return intlMiddleWare(req);
 
- const guard = routePermissions[matchedRoute.replace(`/${locale}`, '')]; // Normalize key without locale
+ const guard = routePermissions[matchedRoute.replace(`/${locale}`, '')]; 
   
 
     if (!guard.allowedAccountTypes.includes(decodedToken.user.accountType )) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
 
-    if (
-      decodedToken.user.accountType === "EMPLOYEE" &&
-      guard.allowedRoles &&
-      !guard.allowedRoles.includes((decodedToken as any).entity.type)
+    
+    if(decodedToken.user.accountType == "EMPLOYEE") {
+            const employeeToken = decodedToken as EmployeeJwtPayload;
+
+if (
+       guard.allowedRoles &&
+      !guard.allowedRoles.includes(employeeToken.entity.role)
     ) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
+    }
+    
 
     return intlMiddleWare(req);
   } catch (error) {
-    console.error('Middleware error:', error); // Log for debugging in dev/prod
+    console.error('Middleware error:', error); 
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }
