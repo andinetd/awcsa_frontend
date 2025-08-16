@@ -1,6 +1,5 @@
 "use client";
 
-import ModuleGuard from "@/components/shared/module-guard";
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { useAuthStore } from "@/stores/auth-store";
 import { hasRequiredPermissions } from "@/utils/permission";
@@ -8,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 export default function AdoptionDashboard() {
   return (
-    <ModuleGuard allowed={["BUREAU_HEAD", "CHILDREN_AFFAIRS"]}>
       <SidebarLayout title="Adoption Dashboard">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="aspect-video rounded-xl bg-muted/50 flex items-center justify-center">
@@ -28,6 +26,5 @@ export default function AdoptionDashboard() {
           <span>Adoption Services Content</span>
         </div>
       </SidebarLayout>
-    </ModuleGuard>
   );
 }

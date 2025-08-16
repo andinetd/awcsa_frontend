@@ -14,27 +14,36 @@ type ClientSignIn = {
   password: string;
 };
 
-type LoginResponseUser = {
+type JwtPayload = {
+  sub: number;
+  iat: number;
+  exp: number;
+  user: UserType;
+  org?: OrgType;
+  auth?: { permissions: string[] };
+};
+
+type UserType = {
   id: number;
   email: string;
-  accountType: "CLIENT" | "ADMIN" | "CHILD_CARE_FACILITY" | string; // expand if needed
+  accountType: "CLIENT" | "ADMIN" | "CHILD_CARE_FACILITY" ; 
   entityId: number;
-  role?: EmployeeRole;
-  permissions?: PermissionOperation;
+  role?: UserRole;
+  permissions?: PermissionOperation[];
   entityType: string;
   failedLoginCount: number;
-  stauts: string; // maybe typo? probably "status"
+  stauts: string; 
 };
 
 type ClientSignInResponse = {
   access_token: string;
-  user: LoginResponseUser;
+  user: UserType;
   org?: OrgType;
 };
 
 type ClientSignInToken = {
   access_token: string;
-  user: LoginResponseUser;
+  user: UserType;
   org?: OrgType;
 };
 
@@ -44,7 +53,7 @@ type OrgType = {
   deputyBureau: string;
 };
 
-enum EmployeeRole {
+enum UserRole {
   BUREAU_MANAGER,
   DEPUTY_MANAGER,
   DIRECTOR,

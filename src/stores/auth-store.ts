@@ -1,96 +1,50 @@
-// import { mockUsers } from "@/lib/mock-data";
-// import { User } from "@/types";
-// import { create } from "zustand";
-// import { persist } from "zustand/middleware";
-
-// interface AuthState {
-//   user: User | null;
-//   token: string | null;
-//   setToken: () => void;
-//   setUser: (user: User) => void;
-//   // login: (email: string, password: string) => Promise<void>;
-//   logout: () => void;
-// }
-
-// export const useAuthStore = create<AuthState>()(
-//   persist(
-//     (set) => ({
-//       user: null,
-//       token: null,
-
-//       // login: async (email, password) => {
-//       //   if (!email || !password) throw new Error("Missing credentials");
-
-//       //   const foundUser = mockUsers.find(
-//       //     (user) => user.email === email && password === "password123"
-//       //   );
-
-//       //   if (!foundUser) {
-//       //     throw new Error("Invalid email or password");
-//       //   }
-
-//       //   console.log(`logged user: ${JSON.stringify(foundUser)}`);
-
-//       //   set({ user: foundUser });
-//       // },
-//       setUser(user) => set({ user }),
-
-//       setT
-
-//       logout: () => {
-//         set({ user: null });
-//       },
-//     }),
-//     { name: "auth-store" }
-//   )
-// );
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
-import { LoginResponseUser, OrgType } from "@/types/api/auth";
+import {  UserType, OrgType, JwtPayload, UserRole, PermissionOperation } from "@/types/api/auth";
 
-type JwtPayload = {
-  sub: number;
-  user: LoginResponseUser;
-  entity?: { type: string; id: number; deputyBureau?: string };
-  auth?: { permissions: string[] };
-  iat: number;
-  exp: number;
-};
+
 
 interface AuthState {
-  user: LoginResponseUser | null;
-  token: string | null;
+  user: UserType | null;
+  token: JwtPayload | null;
   org?: OrgType;
+  userRole: UserRole | null;
+  userPermissions: PermissionOperation[] | null;
   hydrated: boolean;
-  setUser: (user: LoginResponseUser | null) => void;
-  setToken: (token: string | null) => void;
+  setUser: (user: UserType | null) => void;
+  setToken: (token: JwtPayload | null) => void;
   setOrg: (org: OrgType | undefined) => void;
   logout: () => void;
+  hasRole: (role: UserRole) => boolean;
+  hasPermission: (permission: PermissionOperation) => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
+ 
+    (set, get) => ({
       user: null,
       token: null,
       org: undefined,
+      userRole: null,
+      userPermissions: [],
+
       hydrated: false,
       setUser: (user) => set({ user }),
       setOrg: (org) => set({ org }),
       setToken: (token) => {
         if (token) {
-          const decodedToken = jwtDecode<JwtPayload>(token);
+          const decodedToken: JwtPayload = jwtDecode(token.toString());
           set({
             token,
             user: decodedToken.user,
-
-            org: decodedToken.entity
+            userRole: decodedToken.user.role,
+            userPermissions: decodedToken.user.permissions,
+            org: decodedToken.org
               ? {
-                  unitId: decodedToken.entity.id,
-                  unitType: decodedToken.entity.type,
-                  deputyBureau: decodedToken.entity.deputyBureau ?? "",
+                  unitId: decodedToken.org.unitId,
+                  unitType: decodedToken.org.unitType,
+                  deputyBureau: decodedToken.org.deputyBureau  
                 }
               : undefined,
           });
@@ -100,9 +54,9 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ user: null, token: null });
       },
+
+      hasRole: (role) => get().user?.role === role,
+      hasPermission: (permission) => get().user?.permissions?.includes(permission) ?? false
     }),
-    {
-      name: "auth-store", // key in localStorage
-    }
-  )
+ 
 );
