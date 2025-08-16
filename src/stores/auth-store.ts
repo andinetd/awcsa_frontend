@@ -42,6 +42,7 @@ export const useAuthStore = create<AuthState>()(
             secure: true,
             sameSite: "strict",
             expires: 7,
+            path: "/"
           })
           const decodedToken: JwtPayload = jwtDecode(token);
           if(decodedToken.user.accountType === "EMPLOYEE"){

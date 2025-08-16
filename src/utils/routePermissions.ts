@@ -3,7 +3,7 @@ type RouteGuard = {
   allowedRoles?: string[]; // Optional role restriction for EMPLOYEE
 };
 
-const routePermissions: Record<string, RouteGuard> = {
+export const routePermissions: Record<string, RouteGuard> = {
   "/adoption/register": { allowedAccountTypes: ["CLIENT"] },
   "/adoption/applicant-portal": { allowedAccountTypes: ["CLIENT"]},
 

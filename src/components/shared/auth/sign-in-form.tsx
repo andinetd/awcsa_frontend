@@ -33,7 +33,7 @@ export default function SignInForm() {
   const router = useRouter();
   const { mutate, data, isPending, isSuccess, error, isError } =
     useSignInMutation();
-  const { user, org } = useAuthStore();
+  const { user } = useAuthStore();
 
   const form = useForm<LoginFormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -76,11 +76,11 @@ export default function SignInForm() {
       // }
       // router.push(route);
 
-      useAuthStore.setState({
-        user: data.user,
-        token: data.access_token,
-        org: data.org,
-      });
+      // useAuthStore.setState({
+      //   user: data.user,
+      //   token: data.access_token,
+      //   org: data.org,
+      // });
     }
     if (isError) {
       console.log(error.message);
@@ -153,7 +153,7 @@ export default function SignInForm() {
             </Button>
           ) : (
             <Button className="w-full" disabled={form.formState.isSubmitting}>
-              Sign up
+              Sign in
             </Button>
           )}
         </form>
