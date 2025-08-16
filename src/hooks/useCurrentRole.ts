@@ -13,6 +13,7 @@ export function useCurrentRole() {
 }
 
 export function useEmployeModule(): DeputyBureau | undefined {
+
   const { org } = useAuthStore();
   return org?.deputyBureau as DeputyBureau;
 }
