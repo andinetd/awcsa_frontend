@@ -6,7 +6,7 @@ import React, { ReactNode, useEffect } from "react";
 
 interface AuthProviderProps {
   children: ReactNode;
-  allowedRoles?: UserRole[]
+  allowedRoles?: UserRole[];
 }
 
 const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
@@ -14,19 +14,48 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    // if (!hydrated) {
-    //   router.push("/login");
-    // }
-    if(!hydrated) return;
-    
-    //redirect if role is not allowed
-    if(allowedRoles && (!userRole || !allowedRoles.includes(userRole))) {
+    if (!hydrated) {
+      useAuthStore.getState().loadTokenFromCookie();
+      return;
+    }
+
+    console.log(
+      "Hydrated:",
+      hydrated,
+      "Role:",
+      userRole,
+      "Allowed:",
+      allowedRoles
+    );
+
+    if (!userRole) {
+      router.replace("/login");
+      return;
+    }
+
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
       router.replace("/unauthorized");
     }
-  }, [hydrated, userRole, allowedRoles]);
+  }, [hydrated, userRole, allowedRoles, router]);
 
+  console.log(
+    "Hydrated:",
+    hydrated,
+    "Role:",
+    userRole,
+    "Allowed:",
+    allowedRoles
+  );
 
-  if(!hydrated || (allowedRoles && !userRole)) return null;
+  if (!hydrated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (allowedRoles && !userRole) return null;
 
   return <>{children}</>;
 };
