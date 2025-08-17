@@ -15,11 +15,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { EmployeeJwtPayload } from "@/types/api/auth";
-import { sidebarConfig, NavigationItem } from "@/utils/sidebar-config";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 export function DynamicSidebar() {
   const { user, logout, orgUnit } = useAuthStore();
@@ -35,9 +35,13 @@ export function DynamicSidebar() {
     }
   };
 
-  const sections = orgUnit
-    ? getSidebarItems({ orgUnit } as EmployeeJwtPayload, pathname)
-    : [];
+  // const sections = orgUnit
+  //   ? getSidebarItems({ orgUnit } as EmployeeJwtPayload, pathname)
+  //   : [];
+  const sections = useMemo(
+    () => (orgUnit ? getSidebarItems(orgUnit, pathname) : []),
+    [orgUnit, pathname]
+  );
 
   return (
     <Sidebar>

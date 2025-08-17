@@ -12,7 +12,17 @@ export interface NavigationSection {
   items: NavigationItem[];
 }
 
-export const sidebarConfig: Record<string, NavigationSection[]> = {
+export const sidebarConfig: Record<
+  | "GLOBAL"
+  | "ADOPTION"
+  | "SOCIAL_AFFAIRS"
+  | "WOMENS"
+  | "SUPER_ADMIN"
+  | "BUREAU_HEAD"
+  | "WOREDA"
+  | "SUBCITY",
+  NavigationSection[]
+> = {
   GLOBAL: [
     {
       title: "Global",

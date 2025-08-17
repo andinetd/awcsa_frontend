@@ -1,31 +1,31 @@
-import { PermissionType } from "@/utils/permission";
-import type { DeputyBureauModule } from "@/hooks/useCurrentRole";
+// import { PermissionType } from "@/utils/permission";
+// import type { DeputyBureauModule } from "@/hooks/useCurrentRole";
 
-export type AccountType = "CLIENT" | "EMPLOYEE";
+// export type AccountType = "CLIENT" | "EMPLOYEE";
 
-export type AppModules =
-  | "super-admin"
-  | "bureau-head"
-  | "adoption"
-  | "social-affairs"
-  | "womens"
-  | "edir"
-  | "elderly-disabled";
+// export type AppModules =
+//   | "super-admin"
+//   | "bureau-head"
+//   | "adoption"
+//   | "social-affairs"
+//   | "womens"
+//   | "edir"
+//   | "elderly-disabled";
 
-export type OrgType = {
-  unitId: string;
-  unitType: "BUREAU" | "SUB_CITY" | "WOREDA";
-  deputyBureau: DeputyBureau;
-};
+// export type OrgType = {
+//   unitId: string;
+//   unitType: "BUREAU" | "SUB_CITY" | "WOREDA";
+//   deputyBureau: DeputyBureau;
+// };
 
-export type User = {
-  id: String;
-  email: String;
-  accountType: AccountType;
+// export type User = {
+//   id: String;
+//   email: String;
+//   accountType: AccountType;
 
-  role: AppModules;
-  permissions: PermissionType[];
+//   role: AppModules;
+//   permissions: PermissionType[];
 
-  // Organizational hierarchy
-  org: OrgType;
-};
+//   // Organizational hierarchy
+//   org: OrgType;
+// };

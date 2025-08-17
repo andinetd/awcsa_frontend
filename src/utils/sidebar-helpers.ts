@@ -1,18 +1,23 @@
-import { EmployeeJwtPayload } from "@/types/api/auth";
+import { EmployeeJwtPayload, OrgType } from "@/types/api/auth";
 import { sidebarConfig } from "./sidebar-config";
 
-export function getSidebarItems(token: EmployeeJwtPayload, pathname: string) {
-  const { orgUnit } = token;
+export function getSidebarItems(orgUnit: OrgType, pathname: string) {
+  // const { orgUnit } = token;
+
+  const localePrefix = /^\/[a-z]{2}\//; // Matches "/en/", "/fr/", etc.
+  const cleanPathname = pathname.replace(localePrefix, "/");
 
   // ✅ Bureau Manager (deputyBureau === null)
   if (orgUnit.type === "BUREAU" && orgUnit.deputyBureau === null) {
     // Route-specific sidebars
-    if (pathname.startsWith("/adoption")) return sidebarConfig.ADOPTION;
-    if (pathname.startsWith("/social-affairs"))
+    if (cleanPathname.startsWith("/adoption")) return sidebarConfig.ADOPTION;
+    if (cleanPathname.startsWith("/social-affairs"))
       return sidebarConfig.SOCIAL_AFFAIRS;
-    if (pathname.startsWith("/womens")) return sidebarConfig.WOMENS;
-    if (pathname.startsWith("/super-admin")) return sidebarConfig.SUPER_ADMIN;
-    if (pathname.startsWith("/bureau-head")) return sidebarConfig.BUREAU_HEAD;
+    if (cleanPathname.startsWith("/womens")) return sidebarConfig.WOMENS;
+    if (cleanPathname.startsWith("/super-admin"))
+      return sidebarConfig.SUPER_ADMIN;
+    if (cleanPathname.startsWith("/bureau-head"))
+      return sidebarConfig.BUREAU_HEAD;
 
     // Default global view for Bureau Manager
     return sidebarConfig.GLOBAL;
