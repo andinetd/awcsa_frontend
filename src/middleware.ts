@@ -13,11 +13,15 @@ export function middleware(req: NextRequest) {
 
   const segments = pathname.split("/");
   const firstSegment = segments[1] as (typeof routing.locales)[number];
-  const pathNameWithoutLocale =
-    routing.locales.includes(firstSegment) &&
-    firstSegment !== routing.defaultLocale
-      ? "/" + segments.slice(2).join("/")
-      : pathname;
+  const pathNameWithoutLocale = routing.locales.includes(firstSegment)
+    ? "/" + segments.slice(2).join("/")
+    : pathname;
+
+  // ✅ remove trailing slash unless root
+  const normalizedPath =
+    pathNameWithoutLocale !== "/" && pathNameWithoutLocale.endsWith("/")
+      ? pathNameWithoutLocale.slice(0, -1)
+      : pathNameWithoutLocale;
 
   const publicRoutes = ["/", "/login", "/unauthorized", "/register", ""];
 
@@ -42,10 +46,12 @@ export function middleware(req: NextRequest) {
   try {
     const decodedToken = jwtDecode<JwtPayload>(token as string);
 
-    const matchedRoute = Object.keys(routePermissions).find((route) =>
-      pathNameWithoutLocale.startsWith(route)
+    const matchedRoute = Object.keys(routePermissions).find(
+      (route) =>
+        normalizedPath === route || normalizedPath.startsWith(route + "/")
     );
     console.log(`MATCHED ROUTE: ${matchedRoute}`);
+    console.log("PATH:", normalizedPath, "MATCHED:", matchedRoute);
 
     if (!matchedRoute) {
       return intlMiddleWare(req);
@@ -66,7 +72,9 @@ export function middleware(req: NextRequest) {
         guard.allowedRoles &&
         !guard.allowedRoles.includes(employeeToken.entity.role)
       ) {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
+        return NextResponse.redirect(
+          new URL(`/${locale}/unauthorized`, req.url)
+        );
       }
     }
 

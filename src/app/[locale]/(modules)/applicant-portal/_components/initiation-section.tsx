@@ -100,7 +100,7 @@ export function InitiationSection() {
             {applicationMessages("footer.subtitle")}
           </p>
           <Button asChild className="w-full">
-            <Link href="/adoption/applicant-portal/application/new/step1">
+            <Link href="/applicant-portal/application/new/step1">
               {applicationMessages("footer.cta")}
             </Link>
           </Button>
