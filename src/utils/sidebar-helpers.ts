@@ -2,43 +2,58 @@ import { EmployeeJwtPayload, OrgType } from "@/types/api/auth";
 import { sidebarConfig } from "./sidebar-config";
 
 export function getSidebarItems(orgUnit: OrgType, pathname: string) {
-  // const { orgUnit } = token;
+  console.log("getSidebarItems called with:", { orgUnit, pathname });
+  console.log("sidebarConfig.ADOPTION:", sidebarConfig.ADOPTION); // Verify ADOPTION exists
 
-  const localePrefix = /^\/[a-z]{2}\//; // Matches "/en/", "/fr/", etc.
+  const localePrefix = /^\/[a-z]{2}\//;
   const cleanPathname = pathname.replace(localePrefix, "/");
+  console.log("Path details:", { pathname, cleanPathname });
 
-  // ✅ Bureau Manager (deputyBureau === null)
   if (orgUnit.type === "BUREAU" && orgUnit.deputyBureau === null) {
-    // Route-specific sidebars
-    if (cleanPathname.startsWith("/adoption")) return sidebarConfig.ADOPTION;
-    if (cleanPathname.startsWith("/social-affairs"))
+    console.log("Entered Bureau Manager branch");
+    if (cleanPathname.startsWith("/adoption")) {
+      console.log(
+        "Matched /adoption, returning ADOPTION:",
+        sidebarConfig.ADOPTION
+      );
+      return sidebarConfig.ADOPTION || [];
+    }
+    if (cleanPathname.startsWith("/social-affairs")) {
+      console.log("Matched /social-affairs");
       return sidebarConfig.SOCIAL_AFFAIRS;
-    if (cleanPathname.startsWith("/womens")) return sidebarConfig.WOMENS;
-    if (cleanPathname.startsWith("/super-admin"))
+    }
+    if (cleanPathname.startsWith("/womens")) {
+      console.log("Matched /womens");
+      return sidebarConfig.WOMENS;
+    }
+    if (cleanPathname.startsWith("/super-admin")) {
+      console.log("Matched /super-admin");
       return sidebarConfig.SUPER_ADMIN;
-    if (cleanPathname.startsWith("/bureau-head"))
+    }
+    if (cleanPathname.startsWith("/bureau-head")) {
+      console.log("Matched /bureau-head");
       return sidebarConfig.BUREAU_HEAD;
-
-    // Default global view for Bureau Manager
+    }
+    console.log("No route matched, defaulting to GLOBAL");
     return sidebarConfig.GLOBAL;
   }
 
-  // ✅ Deputy Bureau (if you later add deputy-specific menus)
   if (orgUnit.type === "BUREAU" && orgUnit.deputyBureau) {
     const deputy = orgUnit.deputyBureau as keyof typeof sidebarConfig;
+    console.log(`Deputy Bureau matched: ${deputy}`);
     return sidebarConfig[deputy] || [];
   }
 
-  // ✅ Woreda level
   if (orgUnit.type === "WOREDA" && orgUnit.id === 3) {
+    console.log("WOREDA matched");
     return sidebarConfig.WOREDA || [];
   }
 
-  // ✅ Subcity level (placeholder for when you add it)
   if (orgUnit.type === "SUBCITY" && orgUnit.id === 2) {
+    console.log("SUBCITY matched");
     return sidebarConfig.SUBCITY || [];
   }
 
-  // Fallback → nothing
+  console.log("Returning empty fallback");
   return [];
 }

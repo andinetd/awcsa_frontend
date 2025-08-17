@@ -13,7 +13,7 @@ export const routePermissions: Record<string, RouteGuard> = {
   },
   "/super-admin/general-settings": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["EXPERT"],
+    allowedRoles: ["EXPERT", "Bureau_Manager"],
   },
   "/super-admin/user-management": {
     allowedAccountTypes: ["EMPLOYEE"],
