@@ -43,8 +43,8 @@ export const sidebarConfig: Record<string, NavigationSection[]> = {
           icon: Settings,
         },
         {
-          title: "Super Admin",
-          url: "/super-admin/general-settings",
+          title: "Super Admin management",
+          url: "/super-admin/user-management",
           icon: Settings,
         },
       ],
