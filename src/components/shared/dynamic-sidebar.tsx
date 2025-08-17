@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
-import { EmployeeJwtPayload } from "@/types/api/auth";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";
@@ -35,9 +34,6 @@ export function DynamicSidebar() {
     }
   };
 
-  // const sections = orgUnit
-  //   ? getSidebarItems({ orgUnit } as EmployeeJwtPayload, pathname)
-  //   : [];
   const sections = useMemo(
     () => (orgUnit ? getSidebarItems(orgUnit, pathname) : []),
     [orgUnit, pathname]
@@ -63,7 +59,7 @@ export function DynamicSidebar() {
                   <span className="font-semibold">WCSA System</span>
                   <span className="text-xs capitalize">
                     {/* {user.role.replace("-", " ")} */}
-                    {user?.email}
+                    {orgUnit?.type}
                   </span>
                 </div>
               </SidebarMenuButton>
@@ -111,12 +107,12 @@ export function DynamicSidebar() {
               <User className="size-4" />
               <div className="flex flex-col text-left flex-1">
                 <span className="font-semibold truncate">{user?.email}</span>
-                <span className="text-xs truncate">{user?.email}</span>
-                {user?.email && (
+                {/* <span className="text-xs truncate">{user?.email}</span> */}
+                {/* {user?.email && (
                   <span className="text-xs text-muted-foreground truncate">
                     {user.email}
                   </span>
-                )}
+                )} */}
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

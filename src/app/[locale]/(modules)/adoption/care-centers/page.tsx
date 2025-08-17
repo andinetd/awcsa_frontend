@@ -9,14 +9,12 @@ import { mockCareCenters } from "@/lib/mock-data";
 
 const CareCenters = () => {
   return (
-    <SidebarLayout title="Care Centers">
-      <div className="flex flex-col">
-        <div className="self-end">
-          <NewCareCenterForm />
-        </div>
-        <DataTable columns={careCenterColumns} data={mockCareCenters || []} />
+    <div className="flex flex-col">
+      <div className="self-end">
+        <NewCareCenterForm />
       </div>
-    </SidebarLayout>
+      <DataTable columns={careCenterColumns} data={mockCareCenters || []} />
+    </div>
   );
 };
 

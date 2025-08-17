@@ -8,20 +8,15 @@ import { columns } from "./_components/columns";
 
 const Adera = () => {
   return (
-    <SidebarLayout title="Adera">
-      <div className="container mx-auto py-10 flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row justify-between ">
-          <h1 className="font-bold text-xl">List of Adera</h1>
-          <Link
-            href={"/adoption/adera/adera-registration"}
-            className="self-end"
-          >
-            <Button>New Adera</Button>
-          </Link>
-        </div>
-        <DataTable columns={columns} data={mockAderaData} />
+    <div className="container mx-auto py-10 flex flex-col gap-4">
+      <div className="flex flex-col md:flex-row justify-between ">
+        <h1 className="font-bold text-xl">List of Adera</h1>
+        <Link href={"/adoption/adera/adera-registration"} className="self-end">
+          <Button>New Adera</Button>
+        </Link>
       </div>
-    </SidebarLayout>
+      <DataTable columns={columns} data={mockAderaData} />
+    </div>
   );
 };
 

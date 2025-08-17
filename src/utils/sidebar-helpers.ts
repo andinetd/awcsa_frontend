@@ -3,7 +3,7 @@ import { sidebarConfig } from "./sidebar-config";
 
 export function getSidebarItems(orgUnit: OrgType, pathname: string) {
   console.log("getSidebarItems called with:", { orgUnit, pathname });
-  console.log("sidebarConfig.ADOPTION:", sidebarConfig.ADOPTION); // Verify ADOPTION exists
+  console.log("sidebarConfig.ADOPTION:", sidebarConfig.CHILDREN_AFFAIRS);
 
   const localePrefix = /^\/[a-z]{2}\//;
   const cleanPathname = pathname.replace(localePrefix, "/");
@@ -14,9 +14,9 @@ export function getSidebarItems(orgUnit: OrgType, pathname: string) {
     if (cleanPathname.startsWith("/adoption")) {
       console.log(
         "Matched /adoption, returning ADOPTION:",
-        sidebarConfig.ADOPTION
+        sidebarConfig.CHILDREN_AFFAIRS
       );
-      return sidebarConfig.ADOPTION || [];
+      return sidebarConfig.CHILDREN_AFFAIRS || [];
     }
     if (cleanPathname.startsWith("/social-affairs")) {
       console.log("Matched /social-affairs");
