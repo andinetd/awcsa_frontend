@@ -3,6 +3,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { UserRole } from "@/types/api/auth";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
+import CheckingAccess from "./shared/access-check-ui";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -48,11 +49,7 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
   );
 
   if (!hydrated) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
+    return <CheckingAccess />;
   }
 
   if (allowedRoles && !userRole) return null;

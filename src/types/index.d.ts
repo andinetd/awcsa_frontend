@@ -3,15 +3,6 @@ import type { DeputyBureauModule } from "@/hooks/useCurrentRole";
 
 export type AccountType = "CLIENT" | "EMPLOYEE";
 
-export type DeputyBureau =
-  | "SUPER_ADMIN"
-  | "BUREAU_HEAD"
-  | "CHILDREN_AFFAIRS"
-  | "SOCIAL_AFFAIRS"
-  | "EDIR"
-  | "WOMEN_AFFAIRS"
-  | "CLIENT";
-
 export type AppModules =
   | "super-admin"
   | "bureau-head"

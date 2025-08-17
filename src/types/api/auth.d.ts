@@ -1,7 +1,7 @@
 import { DeputyBureau } from "..";
 
 // Employee JWT Payload
-type EmployeeJwtPayload ={
+type EmployeeJwtPayload = {
   sub: number;
   user: {
     id: number;
@@ -9,7 +9,7 @@ type EmployeeJwtPayload ={
     accountType: "EMPLOYEE";
   };
   entity: {
-    type: 'Employee';
+    type: "Employee";
     id: number;
     role: string;
   };
@@ -23,10 +23,10 @@ type EmployeeJwtPayload ={
   };
   iat?: number;
   exp?: number;
-}
+};
 
 // Client JWT Payload
- type ClientJwtPayload = {
+type ClientJwtPayload = {
   sub: number;
   user: {
     id: number;
@@ -34,7 +34,7 @@ type EmployeeJwtPayload ={
     accountType: "CLIENT";
   };
   entity: {
-    type: 'Client';
+    type: "Client";
     id: number;
   };
   auth: {
@@ -42,7 +42,7 @@ type EmployeeJwtPayload ={
   };
   iat?: number;
   exp?: number;
-}
+};
 
 type ClientSignup = {
   firstName: string;
@@ -61,28 +61,35 @@ type ClientSignIn = {
 type JwtPayload = EmployeeJwtPayload | ClientJwtPayload;
 
 type JwtUserType = {
-  id: number,
-  email: string,
-  accountType: AccountType,
-}
+  id: number;
+  email: string;
+  accountType: AccountType;
+};
 
 type UserType = {
   id: number;
   email: string;
-  accountType: AccountType ; 
+  accountType: AccountType;
   entityId: number;
   role?: UserRole;
   permissions?: PermissionOperation[];
   entityType: string;
   failedLoginCount: number;
-  stauts: string; 
+  stauts: string;
 };
 
 type ClientSignInResponse = {
   access_token: string;
 };
 
-
+type DeputyBureau =
+  | "SUPER_ADMIN"
+  | "BUREAU_HEAD"
+  | "CHILDREN_AFFAIRS"
+  | "SOCIAL_AFFAIRS"
+  | "EDIR"
+  | "WOMEN_AFFAIRS"
+  | "CLIENT";
 
 type OrgType = {
   id?: number;
@@ -90,13 +97,16 @@ type OrgType = {
   deputyBureau?: string | null;
 };
 
- type UserRole = 'Bureau_Manager' | 'DEPUTY_MANAGER' | 'DIRECTOR' | 'TEAM_LEADER' | 'EXPERT' | 'SOCIAL_WORKER' | 'FACILITATOR_OFFICER';
+type UserRole =
+  | "Bureau_Manager"
+  | "DEPUTY_MANAGER"
+  | "DIRECTOR"
+  | "TEAM_LEADER"
+  | "EXPERT"
+  | "SOCIAL_WORKER"
+  | "FACILITATOR_OFFICER";
 
-type AccountType = 
-   'EMPLOYEE'
-  | 'CLIENT'
-  | 'CHILD_CARE_FACLITY'
- 
+type AccountType = "EMPLOYEE" | "CLIENT" | "CHILD_CARE_FACLITY";
 
 enum PermissionOperation {
   READ,
@@ -105,9 +115,9 @@ enum PermissionOperation {
   UPDATE,
 }
 
-
 enum UnitType {
-  BUREAU = 'BUREAU',
-  OFFICE = 'OFFICE',
-  WOREDA = 'WOREDA',
+  BUREAU = "BUREAU",
+  OFFICE = "OFFICE",
+  WOREDA = "WOREDA",
+  SUBCITY = "SUBCITY",
 }
