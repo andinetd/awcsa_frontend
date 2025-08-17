@@ -4,28 +4,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 import { EmployeeJwtPayload, JwtPayload } from "./types/api/auth";
 import { routePermissions } from "./utils/routePermissions";
- 
-const intlMiddleWare =  createMiddleware(routing);
 
-export function middleware (req: NextRequest) {
+const intlMiddleWare = createMiddleware(routing);
+
+export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const locale = req.nextUrl.locale || routing.defaultLocale;
 
- const publicRoutes = ['/', '/login', '/unauthorized'];
-    // const isPublicRoute = publicRoutes.includes(pathname) || publicRoutes.some(route => pathname === `/${locale}${route === '/' ? '': route}`);
- 
- const isPublicRoute =
-    publicRoutes.includes(pathname) ||
-    publicRoutes.some(
-      (route) =>
-        pathname ===
-        `/${locale}${route === '/' ? '' : route}`
-    );
+  const segments = pathname.split("/");
+  const firstSegment = segments[1] as (typeof routing.locales)[number];
+  const pathNameWithoutLocale =
+    routing.locales.includes(firstSegment) &&
+    firstSegment !== routing.defaultLocale
+      ? "/" + segments.slice(2).join("/")
+      : pathname;
+
+  const publicRoutes = ["/", "/login", "/unauthorized", "/register", ""];
+
+  const isPublicRoute = publicRoutes.some(
+    (route) =>
+      pathNameWithoutLocale === route ||
+      pathname === `/${locale}${route === "/" ? "" : route}`
+  );
 
   if (isPublicRoute) {
     return intlMiddleWare(req);
   }
 
+  // AUTH CHECK
   const token = req.cookies.get("wcasf_auth_token")?.value;
 
   if (!token) {
@@ -35,39 +41,39 @@ export function middleware (req: NextRequest) {
 
   try {
     const decodedToken = jwtDecode<JwtPayload>(token as string);
-    
-  
-   const matchedRoute = Object.keys(routePermissions).find((route) =>
-      pathname.startsWith(`/${locale}${route}`)
+
+    const matchedRoute = Object.keys(routePermissions).find((route) =>
+      pathNameWithoutLocale.startsWith(route)
     );
-    console.log(`MATCHED ROUTE: ${matchedRoute}`)
+    console.log(`MATCHED ROUTE: ${matchedRoute}`);
 
-    if (!matchedRoute) return intlMiddleWare(req);
-
- const guard = routePermissions[matchedRoute.replace(`/${locale}`, '')]; 
-  
-
-    if (!guard.allowedAccountTypes.includes(decodedToken.user.accountType )) {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    if (!matchedRoute) {
+      return intlMiddleWare(req);
     }
 
-    
-    if(decodedToken.user.accountType == "EMPLOYEE") {
-            const employeeToken = decodedToken as EmployeeJwtPayload;
+    const guard = routePermissions[matchedRoute];
 
-if (
-       guard.allowedRoles &&
-      !guard.allowedRoles.includes(employeeToken.entity.role)
-    ) {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    //ACCOUNT TYPE CHECK
+    if (!guard.allowedAccountTypes.includes(decodedToken.user.accountType)) {
+      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }
+
+    //ROLE CHECK FOR EMPLOYEE ONLY
+    if (decodedToken.user.accountType == "EMPLOYEE") {
+      const employeeToken = decodedToken as EmployeeJwtPayload;
+
+      if (
+        guard.allowedRoles &&
+        !guard.allowedRoles.includes(employeeToken.entity.role)
+      ) {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
+      }
     }
-    
 
     return intlMiddleWare(req);
   } catch (error) {
-    console.error('Middleware error:', error); 
-    return NextResponse.redirect(new URL("/login", req.url));
+    console.error("Middleware error:", error);
+    return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
 }
 

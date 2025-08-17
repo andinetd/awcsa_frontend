@@ -44,6 +44,14 @@ export default function AdoptionRegisterPage() {
   const { mutate, data, isPending, isSuccess, error, isError } =
     useClientSignupMutation();
   const form = useForm<ClientSignUpSchemaType>({
+    defaultValues: {
+      cityIdNumber: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      password: "",
+      phoneNumber: "",
+    },
     resolver: zodResolver(formSchema),
   });
 
@@ -66,7 +74,7 @@ export default function AdoptionRegisterPage() {
     if (isSuccess) {
       console.log(data);
       toast("Signup was successfull");
-      router.push("/adoption/applicant-portal/portal");
+      router.push("/applicant-portal/portal");
     }
     if (isError) {
       console.log(error.message);
