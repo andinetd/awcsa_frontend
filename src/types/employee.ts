@@ -12,7 +12,8 @@ export interface RegisterEmployeeDto {
   lastName: string;
   email: string;
   phoneNumber: string;
-  role: EmployeeRole;
+  role?: EmployeeRole;
+  roleId?: number;
   OrganizationUnitId: number;
-  activeStatus: boolean;
+  activeStatus?: boolean;
 }
