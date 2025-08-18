@@ -1,17 +1,17 @@
 "use client";
 import { useAuthStore } from "@/stores/auth-store";
-import { UserRole } from "@/types/api/auth";
+import { DeputyBureau } from "@/types/api/auth";
 import { useRouter } from "next/navigation";
-import React, { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import CheckingAccess from "./shared/access-check-ui";
 
 interface AuthProviderProps {
   children: ReactNode;
-  allowedRoles?: UserRole[];
+  allowedRoles?: DeputyBureau[];
 }
 
 const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
-  const { userRole, hydrated } = useAuthStore();
+  const { orgUnit, hydrated } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -24,26 +24,29 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
       "Hydrated:",
       hydrated,
       "Role:",
-      userRole,
+      orgUnit,
       "Allowed:",
       allowedRoles
     );
 
-    if (!userRole) {
+    if (!orgUnit) {
       router.replace("/login");
       return;
     }
 
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
+    if (
+      allowedRoles &&
+      !allowedRoles.includes(orgUnit?.deputyBureau as DeputyBureau)
+    ) {
       router.replace("/unauthorized");
     }
-  }, [hydrated, userRole, allowedRoles, router]);
+  }, [hydrated, orgUnit?.deputyBureau, allowedRoles, router]);
 
   console.log(
     "Hydrated:",
     hydrated,
     "Role:",
-    userRole,
+    orgUnit?.deputyBureau,
     "Allowed:",
     allowedRoles
   );
@@ -52,7 +55,7 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
     return <CheckingAccess />;
   }
 
-  if (allowedRoles && !userRole) return null;
+  if (allowedRoles && !orgUnit) return null;
 
   return <>{children}</>;
 };

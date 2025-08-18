@@ -1,8 +1,8 @@
-import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
-import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { EmployeeJwtPayload, JwtPayload } from "./types/api/auth";
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { routing } from "./i18n/routing";
+import { DeputyBureau, EmployeeJwtPayload, JwtPayload } from "./types/api/auth";
 import { routePermissions } from "./utils/routePermissions";
 
 const intlMiddleWare = createMiddleware(routing);
@@ -59,7 +59,7 @@ export function middleware(req: NextRequest) {
 
     const guard = routePermissions[matchedRoute];
 
-    //ACCOUNT TYPE CHECK
+    // ACCOUNT TYPE CHECK
     if (!guard.allowedAccountTypes.includes(decodedToken.user.accountType)) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }
@@ -68,9 +68,15 @@ export function middleware(req: NextRequest) {
     if (decodedToken.user.accountType == "EMPLOYEE") {
       const employeeToken = decodedToken as EmployeeJwtPayload;
 
+      if (employeeToken.orgUnit.deputyBureau === null) {
+        return intlMiddleWare(req);
+      }
+
       if (
         guard.allowedRoles &&
-        !guard.allowedRoles.includes(employeeToken.entity.role)
+        !guard.allowedRoles.includes(
+          employeeToken.orgUnit.deputyBureau as DeputyBureau
+        )
       ) {
         return NextResponse.redirect(
           new URL(`/${locale}/unauthorized`, req.url)

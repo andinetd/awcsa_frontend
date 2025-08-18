@@ -4,9 +4,9 @@ import { ReactNode } from "react";
 
 const SocialAffairslayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider allowedRoles={["Bureau_Manager"]}>
+    <AuthProvider>
       <SidebarProvider>{children}</SidebarProvider>;
-    </AuthProvider >
+    </AuthProvider>
   );
 };
 

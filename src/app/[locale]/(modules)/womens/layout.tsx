@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 const WomenLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider allowedRoles={["Bureau_Manager"]}>
+    <AuthProvider>
       <SidebarLayout title="Women Module">{children}</SidebarLayout>;
     </AuthProvider>
   );

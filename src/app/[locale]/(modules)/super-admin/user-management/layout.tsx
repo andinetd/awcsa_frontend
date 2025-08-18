@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 
 const UserManagementlayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider allowedRoles={["Bureau_Manager"]}>
+    <AuthProvider>
       <SidebarLayout title="User Management">{children}</SidebarLayout>;
     </AuthProvider>
   );

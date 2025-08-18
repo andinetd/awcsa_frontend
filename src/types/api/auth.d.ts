@@ -89,7 +89,8 @@ type DeputyBureau =
   | "SOCIAL_AFFAIRS"
   | "EDIR"
   | "WOMEN_AFFAIRS"
-  | "CLIENT";
+  | "CLIENT"
+  | null;
 
 type OrgType = {
   id?: number;

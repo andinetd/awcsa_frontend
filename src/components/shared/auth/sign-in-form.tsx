@@ -12,10 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
-import { DeputyBureau } from "@/types";
+import { DeputyBureau } from "@/types/api/auth";
 import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -31,9 +32,11 @@ type LoginFormSchemaType = z.infer<typeof formSchema>;
 
 export default function SignInForm() {
   const router = useRouter();
+  const locale = useLocale();
+
   const { mutate, data, isPending, isSuccess, error, isError } =
     useSignInMutation();
-  const { user } = useAuthStore();
+  const { user, orgUnit } = useAuthStore();
 
   const form = useForm<LoginFormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -47,14 +50,6 @@ export default function SignInForm() {
     //TODO: handle submission here
     console.log("values submited: ", { values });
 
-    // await login("test@example.com", "password123");
-    // await login(values.email, values.password);
-    // redirect or show protected dashboard
-    // if (user) {
-    // const route = moduleAndRouteMap(user?.org.deputyBureau);
-    //   router.push(route);
-    // }
-
     const newData = {
       email: values.email,
       password: values.password,
@@ -67,28 +62,25 @@ export default function SignInForm() {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(`SIGN IN RESPONSE: `);
-      console.log(data);
-      toast("Signin was successfull");
-      // const route = moduleAndRouteMap(org?.deputyBureau as DeputyBureau);
-      // if (!route.includes(org?.deputyBureau as DeputyBureau)) {
-      //   router.replace("/adoption/applicant-portal/portal");
-      // }
-      // router.push(route);
-
-      // useAuthStore.setState({
-      //   user: data.user,
-      //   token: data.access_token,
-      //   org: data.org,
-      // });
+      console.log(`SIGN IN RESPONSE: `, data);
+      toast("Signin was successful");
+      if (user?.accountType === "CLIENT") {
+        // router.push(`/${locale}/applicant-portal/portal`);
+        router.push(`/applicant-portal/portal`);
+      } else if (orgUnit?.deputyBureau == null) {
+        router.push("/bureau-head");
+      } else {
+        const route = moduleAndRouteMap(orgUnit?.deputyBureau as DeputyBureau);
+        router.push(route);
+      }
     }
     if (isError) {
       console.log(error.message);
-      toast("SigIn Failed", {
+      toast("SignIn Failed", {
         description: error.message,
       });
     }
-  }, [isSuccess, isError, data, error]);
+  }, [isSuccess, isError, data, error, user, orgUnit, locale]);
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
