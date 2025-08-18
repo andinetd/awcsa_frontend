@@ -13,8 +13,7 @@ export async function createUser(payload: CreateUserPayload) {
   };
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const endpoint = `${baseUrl}/admin/employees`;
-  console.log("API endpoint:", endpoint);
-  // Convert role string to roleId if present
+  
   let sendPayload = { ...payload };
   if (sendPayload.role && typeof sendPayload.role === "string") {
     sendPayload = {
@@ -27,7 +26,6 @@ export async function createUser(payload: CreateUserPayload) {
     delete sendPayload.activeStatus;
   }
   try {
-    console.log("Sending payload:", sendPayload);
     const response = await axios.post(endpoint, sendPayload);
     return response.data;
   } catch (error: any) {
