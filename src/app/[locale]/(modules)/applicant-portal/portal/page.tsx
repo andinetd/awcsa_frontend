@@ -4,6 +4,8 @@ import AuthProvider from "@/components/auth-provider";
 import { UserInfoSection } from "../_components/user-info-section";
 import { ApplicationSummarySection } from "../_components/application-summary-section";
 import { InitiationSection } from "../_components/initiation-section";
+import { useSignInMutation } from "@/hooks/client/auth";
+import UserInfoAndLogout from "@/components/shared/user_logout";
 
 export default function DashboardPage() {
   const application = useTranslations("applicationMessages");
@@ -18,10 +20,13 @@ export default function DashboardPage() {
             </h1>
             <p className="text-gray-600">{application("header.subtitle")}</p>
           </div>
-          <LanguageSwitcher
-            className="py-2 px-4"
-            path={"/applicant-portal/portal"}
-          />
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher
+              className="py-2 px-4"
+              path={"/applicant-portal/portal"}
+            />
+            <UserInfoAndLogout />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

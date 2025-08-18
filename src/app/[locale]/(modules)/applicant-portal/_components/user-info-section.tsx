@@ -1,4 +1,6 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuthStore } from "@/stores/auth-store";
 import { User, Mail, Phone, BadgeIcon as IdCard } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -20,6 +22,7 @@ const mockUserData: UserInfo = {
 export function UserInfoSection() {
   const userInfo = mockUserData; // This will be replaced with actual data fetching
   const applicationMessages = useTranslations("applicationMessages");
+  const { user } = useAuthStore();
 
   return (
     <Card>
@@ -48,7 +51,7 @@ export function UserInfoSection() {
                 {" "}
                 {applicationMessages("userInfo.email")}
               </p>
-              <p className="text-gray-900">{userInfo.email}</p>
+              <p className="text-gray-900">{user?.email}</p>
             </div>
           </div>
 
