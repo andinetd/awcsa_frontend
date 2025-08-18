@@ -60,7 +60,7 @@ export default function AdoptionRegisterPage() {
         {/* Right Side: Registration Form */}
         <Card className="w-full max-w-md flex flex-col px-10 py-10">
           <h1 className="text-xl font-semibold font-lexend mb-4">
-            Adoption Sign Up 
+            Adoption Sign Up
           </h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -129,7 +129,7 @@ export default function AdoptionRegisterPage() {
       </div>
       <div className="absolute bottom-6 left-0 right-0 text-xs flex flex-wrap justify-center items-center gap-2 px-4 text-foreground/65">
         <p className="font-medium text-center font-lexend">
-          {`2025 Bureau of Women, children & social Affairs.`}
+          {`@${new Date().getFullYear()} Bureau of Women, children & social Affairs.`}
         </p>
         <p className="font-semibold cursor-pointer hover:scale-105 transition font-lexend">
           Addis Ababa

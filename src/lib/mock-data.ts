@@ -6,6 +6,7 @@ import { EmployeeRole, RegisterEmployeeDto } from "@/types/employee";
 
 export const sampleChildrenData: ChildDataType[] = [
   {
+    id: "1",
     name_by_care_center: "Daniel A.",
     name_by_family: "Daniel",
     age: 6,
@@ -13,6 +14,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-05-01"),
   },
   {
+    id: "2",
     name_by_care_center: "Mimi B.",
     name_by_family: "Mimi",
     age: 4,
@@ -20,6 +22,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-03-15"),
   },
   {
+    id: "3",
     name_by_care_center: "Abel C.",
     name_by_family: "Abel",
     age: 7,
@@ -27,6 +30,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2023-12-12"),
   },
   {
+    id: "4",
     name_by_care_center: "Sofia D.",
     name_by_family: "Sofia",
     age: 3,
@@ -34,6 +38,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-01-28"),
   },
   {
+    id: "5",
     name_by_care_center: "Yonatan E.",
     name_by_family: "Yonatan",
     age: 5,
@@ -41,6 +46,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-02-18"),
   },
   {
+    id: "6",
     name_by_care_center: "Hanna F.",
     name_by_family: "Hanna",
     age: 2,
@@ -48,6 +54,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-06-01"),
   },
   {
+    id: "7",
     name_by_care_center: "Nahom G.",
     name_by_family: undefined,
     age: 6,
@@ -55,6 +62,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2023-09-23"),
   },
   {
+    id: "8",
     name_by_care_center: "Ruth H.",
     name_by_family: "Ruth",
     age: null,
@@ -62,6 +70,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-04-04"),
   },
   {
+    id: "9",
     name_by_care_center: "Kaleb I.",
     name_by_family: "Kaleb",
     age: 8,
@@ -69,6 +78,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-07-05"),
   },
   {
+    id: "10",
     name_by_care_center: "Lily J.",
     name_by_family: undefined,
     age: 5,
@@ -76,6 +86,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-06-11"),
   },
   {
+    id: "11",
     name_by_care_center: "Teddy K.",
     name_by_family: "Teddy",
     age: 4,
@@ -83,6 +94,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-03-22"),
   },
   {
+    id: "12",
     name_by_care_center: "Betty L.",
     name_by_family: "Betty",
     age: 3,
@@ -90,6 +102,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-02-10"),
   },
   {
+    id: "13",
     name_by_care_center: "Mekdes M.",
     name_by_family: "Mekdes",
     age: null,
@@ -97,6 +110,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2023-11-01"),
   },
   {
+    id: "14",
     name_by_care_center: "Elias N.",
     name_by_family: "Elias",
     age: 9,
@@ -104,6 +118,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-01-13"),
   },
   {
+    id: "15",
     name_by_care_center: "Selam O.",
     name_by_family: undefined,
     age: 6,
@@ -111,6 +126,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-05-25"),
   },
   {
+    id: "16",
     name_by_care_center: "Brook P.",
     name_by_family: "Brook",
     age: 7,
@@ -118,6 +134,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-06-14"),
   },
   {
+    id: "17",
     name_by_care_center: "Feven Q.",
     name_by_family: "Feven",
     age: 5,
@@ -125,6 +142,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2023-10-19"),
   },
   {
+    id: "18",
     name_by_care_center: "Samuel R.",
     name_by_family: "Samuel",
     age: 4,
@@ -132,6 +150,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-07-01"),
   },
   {
+    id: "19",
     name_by_care_center: "Sara S.",
     name_by_family: "Sara",
     age: 3,
@@ -139,6 +158,7 @@ export const sampleChildrenData: ChildDataType[] = [
     found_date: new Date("2024-07-10"),
   },
   {
+    id: "20",
     name_by_care_center: "Lidya T.",
     name_by_family: "Lidya",
     age: null,
@@ -265,6 +285,18 @@ export const mockUsers: User[] = [
       unitId: "1",
       unitType: "BUREAU",
       deputyBureau: "SUPER_ADMIN",
+    },
+  },
+  {
+    id: "8",
+    email: "user8@gmail.com",
+    role: "adoption",
+    accountType: "EMPLOYEE",
+    permissions: ["view_clients"],
+    org: {
+      unitId: "1",
+      unitType: "BUREAU",
+      deputyBureau: "CARE_CENTERS_PORTAL",
     },
   },
 ];

@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Link } from "@/i18n/navigation";
 import { useAuthStore } from "@/stores/auth-store";
 import { moduleAndRouteMap } from "@/utils/app-route";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -109,6 +110,15 @@ export default function SignInForm() {
               Forgot password?
             </Link>
           </div> */}
+
+          <div className="float-right mt-2 mb-6">
+            <Link
+              href="/reset-password"
+              className="text-sm text-foreground underline hover:opacity-80"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           <Button
             type="submit"

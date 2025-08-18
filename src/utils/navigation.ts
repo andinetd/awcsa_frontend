@@ -105,7 +105,20 @@ export const navigationConfig: Record<DeputyBureau, NavigationSection[]> = {
           icon: Home,
         },
         { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
-        { title: "Adoption Requests", url: "/adoption/adoption-requests", icon: FileText },
+        {
+          title: "Adoption Requests",
+          url: "/adoption/adoption-requests",
+          icon: FileText,
+        },
+      ],
+    },
+  ],
+  CARE_CENTERS_PORTAL: [
+    {
+      title: "Care Centers Portal",
+      items: [
+        { title: "Dashboard", url: "/care-centers-portal", icon: Home },
+        { title: "Children", url: "/care-centers-portal", icon: Baby },
       ],
     },
   ],
