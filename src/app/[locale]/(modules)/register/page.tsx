@@ -199,7 +199,7 @@ export default function AdoptionRegisterPage() {
       </div>
       <div className="absolute bottom-6 left-0 right-0 text-xs flex flex-wrap justify-center items-center gap-2 px-4 text-foreground/65">
         <p className="font-medium text-center font-lexend">
-          {`2025 Bureau of Women, children & social Affairs.`}
+          {`@${new Date().getFullYear()} Bureau of Women, children & social Affairs.`}
         </p>
         <p className="font-semibold cursor-pointer hover:scale-105 transition font-lexend">
           Addis Ababa

@@ -193,7 +193,7 @@ export const sidebarConfig: Record<
       ],
     },
   ],
-  WOREDA: [
+      WOREDA: [
     {
       title: "Woreda",
       items: [{ title: "Local Dashboard", url: "/woreda", icon: Map }],

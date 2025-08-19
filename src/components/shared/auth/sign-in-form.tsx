@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Link } from "@/i18n/navigation";
 import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { DeputyBureau } from "@/types/api/auth";
@@ -139,6 +140,15 @@ export default function SignInForm() {
               Forgot password?
             </Link>
           </div> */}
+
+          <div className="float-right mt-2 mb-6">
+            <Link
+              href="/reset-password"
+              className="text-sm text-foreground underline hover:opacity-80"
+            >
+              Forgot password?
+            </Link>
+          </div>
           {isPending ? (
             <Button className="w-full" disabled>
               <Loader2 className="animate-spin" />

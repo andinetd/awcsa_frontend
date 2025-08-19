@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const NewChildformSchema = z.object({
+  id: z.string().optional(),
   name_by_family: z.string().trim().optional(),
   name_by_care_center: z.string().trim().min(1, "Name is required"),
   father_name: z.string().trim().optional(),
@@ -89,6 +90,7 @@ export const NewChildformSchemaSection2 = NewChildformSchema.pick({
 });
 
 export const ChildrenListTableSchema = NewChildformSchema.pick({
+  id: true,
   name_by_care_center: true,
   name_by_family: true,
   age: true,
