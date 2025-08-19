@@ -34,7 +34,7 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }>) {
-  const param  = await params;
+  const param = await params;
   const locale = param.locale;
 
   if (!hasLocale(routing.locales, locale)) {
@@ -47,7 +47,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className={`${lexend.variable} antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>

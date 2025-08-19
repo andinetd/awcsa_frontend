@@ -255,59 +255,55 @@ const AdoptionRequests = () => {
     mockApplications.filter((app) => app.status === status);
 
   return (
-    <SidebarLayout title="Adoption Requests">
-      <div className="p-6">
-        <Tabs value={tab} onValueChange={setTab} className="w-full">
-          <TabsList className="mb-6">
-            {TABS.map((t) => (
-              <TabsTrigger key={t.value} value={t.value} className="capitalize">
-                {t.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+    <div className="p-6">
+      <Tabs value={tab} onValueChange={setTab} className="w-full">
+        <TabsList className="mb-6">
           {TABS.map((t) => (
-            <TabsContent key={t.value} value={t.value} className="w-full">
-              <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {filteredApps(t.value).length === 0 ? (
-                  <div className="text-gray-500 italic">
-                    No applications found.
-                  </div>
-                ) : (
-                  filteredApps(t.value).map((app, idx) => (
-                    <Card
-                      key={app.applicationId}
-                      className="p-5 flex flex-col gap-2 shadow-md border border-gray-200"
-                    >
-                      <div className="font-bold text-lg mb-1">
-                        {app.applicantName}
-                      </div>
-                      <div className="text-xs text-gray-500 mb-1">
-                        Application ID: {app.applicationId}
-                      </div>
-                      <div className="text-xs text-gray-500 mb-1">
-                        Submitted:{" "}
-                        {new Date(app.submittedDate).toLocaleString()}
-                      </div>
-                      <div className="flex gap-2 mt-2">
-                        <Link
-                          href={`/adoption/adoption-requests/${app.applicationId}`}
-                          passHref
-                          legacyBehavior
-                        >
-                          <Button size="sm" asChild>
-                            <a>{t.value === "pending" ? "Review" : "View"}</a>
-                          </Button>
-                        </Link>
-                      </div>
-                    </Card>
-                  ))
-                )}
-              </div>
-            </TabsContent>
+            <TabsTrigger key={t.value} value={t.value} className="capitalize">
+              {t.label}
+            </TabsTrigger>
           ))}
-        </Tabs>
-      </div>
-    </SidebarLayout>
+        </TabsList>
+        {TABS.map((t) => (
+          <TabsContent key={t.value} value={t.value} className="w-full">
+            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {filteredApps(t.value).length === 0 ? (
+                <div className="text-gray-500 italic">
+                  No applications found.
+                </div>
+              ) : (
+                filteredApps(t.value).map((app, idx) => (
+                  <Card
+                    key={app.applicationId}
+                    className="p-5 flex flex-col gap-2 shadow-md border border-gray-200"
+                  >
+                    <div className="font-bold text-lg mb-1">
+                      {app.applicantName}
+                    </div>
+                    <div className="text-xs text-gray-500 mb-1">
+                      Application ID: {app.applicationId}
+                    </div>
+                    <div className="text-xs text-gray-500 mb-1">
+                      Submitted: {new Date(app.submittedDate).toLocaleString()}
+                    </div>
+                    <div className="flex gap-2 mt-2">
+                      <Link
+                        href={`/adoption/adoption-requests/${app.applicationId}`}
+                        passHref
+                      >
+                        <Button size="sm">
+                          {t.value === "pending" ? "Review" : "View"}
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
+    </div>
   );
 };
 

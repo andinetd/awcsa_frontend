@@ -1,14 +1,13 @@
 import AuthProvider from "@/components/auth-provider";
-
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
-const BureauHeadlayout = ({ children }: { children: ReactNode }) => {
+const Adoptionlayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider>
+    <AuthProvider allowedRoles={["CHILDREN_AFFAIRS", null]}>
       <SidebarLayout>{children}</SidebarLayout>;
     </AuthProvider>
   );
 };
 
-export default BureauHeadlayout;
+export default Adoptionlayout;
