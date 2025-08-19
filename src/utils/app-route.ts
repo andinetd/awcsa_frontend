@@ -1,13 +1,12 @@
-import { DeputyBureau } from "@/types";
+import { DeputyBureau } from "@/types/api/auth";
 
 export const moduleAndRouteMap = (deputyBureau: DeputyBureau): string => {
+  if (!deputyBureau) return "/bureau-head";
   switch (deputyBureau) {
     case "BUREAU_HEAD":
       return "/bureau-head";
-
     case "CHILDREN_AFFAIRS":
       return "/adoption/dashboard";
-
     case "SOCIAL_AFFAIRS":
       return "/social-affairs/socials/dashboard";
     case "EDIR":

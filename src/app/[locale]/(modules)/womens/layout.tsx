@@ -1,12 +1,12 @@
-import ModuleGuard from "@/components/shared/module-guard";
+import AuthProvider from "@/components/auth-provider";
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { ReactNode } from "react";
 
 const WomenLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <ModuleGuard allowed={["WOMEN_AFFAIRS"]}>
+    <AuthProvider>
       <SidebarLayout title="Women Module">{children}</SidebarLayout>;
-    </ModuleGuard>
+    </AuthProvider>
   );
 };
 

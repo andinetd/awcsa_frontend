@@ -4,11 +4,9 @@ import NewAderaRegistrationForm from "../_components/adera-registration-form";
 
 const NewAderaRegistration = () => {
   return (
-    <SidebarLayout title="የአደራ ምዝገባ">
-      <div className="">
-        <NewAderaRegistrationForm />
-      </div>
-    </SidebarLayout>
+    <div className="">
+      <NewAderaRegistrationForm />
+    </div>
   );
 };
 

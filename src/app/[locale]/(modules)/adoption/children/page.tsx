@@ -17,20 +17,18 @@ const Children = () => {
     // ...
   ];
   return (
-    <SidebarLayout title="Children">
-      <div className="container mx-auto py-10 flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row justify-between ">
-          <h1 className="font-bold text-xl">List of Children</h1>
-          <Link
-            href={"/adoption/children/child-registration/section1"}
-            className="self-end"
-          >
-            <Button>Add New Child</Button>
-          </Link>
-        </div>
-        <DataTable columns={columns} data={sampleChildrenData} />
+    <div className="container mx-auto py-10 flex flex-col gap-4">
+      <div className="flex flex-col md:flex-row justify-between ">
+        <h1 className="font-bold text-xl">List of Children</h1>
+        <Link
+          href={"/adoption/children/child-registration/section1"}
+          className="self-end"
+        >
+          <Button>Add New Child</Button>
+        </Link>
       </div>
-    </SidebarLayout>
+      <DataTable columns={columns} data={sampleChildrenData} />
+    </div>
   );
 };
 

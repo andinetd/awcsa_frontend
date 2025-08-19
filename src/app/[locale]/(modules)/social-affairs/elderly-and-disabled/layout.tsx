@@ -1,12 +1,12 @@
-import ModuleGuard from "@/components/shared/module-guard";
+import AuthProvider from "@/components/auth-provider";
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { ReactNode } from "react";
 
 const ElderlyAndDisabledLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <ModuleGuard allowed={["SOCIAL_AFFAIRS"]}>
+    <AuthProvider allowedRoles={["DEPUTY_MANAGER", "Bureau_Manager"]}>
       <SidebarLayout title="Elderly and disable">{children}</SidebarLayout>;
-    </ModuleGuard>
+    </AuthProvider>
   );
 };
 

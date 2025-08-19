@@ -14,7 +14,7 @@ import type { AdoptionApplication, AdoptionApplicationField } from "../page";
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
-  
+
   const application: AdoptionApplication | undefined = mockApplications.find(
     (app) => app.applicationId === params.id
   );
@@ -115,94 +115,45 @@ export default function AdoptionRequestReviewPage() {
   }
 
   return (
-    <SidebarLayout title="Review Adoption Application">
-      <div className="max-w-2xl mx-auto p-6 space-y-4">
-        <div className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">Application ID</span>
-          <span className="font-semibold">{application.applicationId}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">Applicant Name</span>
-          <span>{application.applicantName}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">Status</span>
-          <span>{application.status}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">Submitted</span>
-          <span>{new Date(application.submittedDate).toLocaleString()}</span>
-        </div>
-        <div className="mt-6">
-          <h3 className="font-semibold mb-2">Application Details</h3>
-          <div className="space-y-4">
-            {fields.map(
-              (
-                field: AdoptionApplicationField & { showComment: boolean },
-                idx: number
-              ) => (
-                <div
-                  key={field.fieldName}
-                  className="border rounded p-3 bg-muted/30"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium w-56 inline-block">
-                      {field.fieldName}:
-                    </span>
-                    <span>{field.answer}</span>
-                    {application.status === "pending" && (
-                      <>
-                        <Checkbox
-                          checked={field.showComment}
-                          onCheckedChange={() => handleFieldToggle(idx)}
-                          className="ml-4"
-                        />
-                        <span className="text-xs text-muted-foreground">
-                          Feedback?
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  {field.showComment && application.status === "pending" && (
-                    <div className="mt-2">
-                      <Textarea
-                        value={field.comment}
-                        onChange={(e) =>
-                          handleFieldComment(idx, e.target.value)
-                        }
-                        placeholder={`Comment on ${field.fieldName}`}
-                        className="w-full min-h-[60px]"
-                      />
-                    </div>
-                  )}
-                </div>
-              )
-            )}
-          </div>
-        </div>
-        <div className="mt-6">
-          <h3 className="font-semibold mb-2">Attachments</h3>
-          <div className="space-y-4">
-            {attachmentFields.map((file, i) => (
-              <div key={i} className="border rounded p-3 bg-muted/30">
+    <div className="max-w-2xl mx-auto p-6 space-y-4">
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-muted-foreground">Application ID</span>
+        <span className="font-semibold">{application.applicationId}</span>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-muted-foreground">Applicant Name</span>
+        <span>{application.applicantName}</span>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-muted-foreground">Status</span>
+        <span>{application.status}</span>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className="text-sm text-muted-foreground">Submitted</span>
+        <span>{new Date(application.submittedDate).toLocaleString()}</span>
+      </div>
+      <div className="mt-6">
+        <h3 className="font-semibold mb-2">Application Details</h3>
+        <div className="space-y-4">
+          {fields.map(
+            (
+              field: AdoptionApplicationField & { showComment: boolean },
+              idx: number
+            ) => (
+              <div
+                key={field.fieldName}
+                className="border rounded p-3 bg-muted/30"
+              >
                 <div className="flex items-center gap-2">
                   <span className="font-medium w-56 inline-block">
-                    {file.label}:
+                    {field.fieldName}:
                   </span>
-                  <a
-                    href={file.url}
-                    download
-                    className="text-blue-600 underline hover:text-blue-800"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {file.fileName}
-                  </a>
+                  <span>{field.answer}</span>
                   {application.status === "pending" && (
                     <>
                       <Checkbox
-                        checked={file.showComment}
-                        onCheckedChange={() => handleAttachmentToggle(i)}
+                        checked={field.showComment}
+                        onCheckedChange={() => handleFieldToggle(idx)}
                         className="ml-4"
                       />
                       <span className="text-xs text-muted-foreground">
@@ -211,43 +162,83 @@ export default function AdoptionRequestReviewPage() {
                     </>
                   )}
                 </div>
-                {file.showComment && application.status === "pending" && (
+                {field.showComment && application.status === "pending" && (
                   <div className="mt-2">
                     <Textarea
-                      value={file.comment}
-                      onChange={(e) =>
-                        handleAttachmentComment(i, e.target.value)
-                      }
-                      placeholder={`Comment on ${file.label}`}
+                      value={field.comment}
+                      onChange={(e) => handleFieldComment(idx, e.target.value)}
+                      placeholder={`Comment on ${field.fieldName}`}
                       className="w-full min-h-[60px]"
                     />
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+            )
+          )}
         </div>
-        {application.status === "pending" && (
-          <div className="flex gap-2 mt-6">
-            <Button
-              variant="destructive"
-              onClick={() => handleAction("deny")}
-              disabled={submitting}
-            >
-              Deny
-            </Button>
-            <Button onClick={handleReturnToApplicant} disabled={submitting}>
-              Return to Applicant
-            </Button>
-            <Button
-              onClick={() => handleAction("approve")}
-              disabled={submitting}
-            >
-              Approve
-            </Button>
-          </div>
-        )}
       </div>
-    </SidebarLayout>
+      <div className="mt-6">
+        <h3 className="font-semibold mb-2">Attachments</h3>
+        <div className="space-y-4">
+          {attachmentFields.map((file, i) => (
+            <div key={i} className="border rounded p-3 bg-muted/30">
+              <div className="flex items-center gap-2">
+                <span className="font-medium w-56 inline-block">
+                  {file.label}:
+                </span>
+                <a
+                  href={file.url}
+                  download
+                  className="text-blue-600 underline hover:text-blue-800"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {file.fileName}
+                </a>
+                {application.status === "pending" && (
+                  <>
+                    <Checkbox
+                      checked={file.showComment}
+                      onCheckedChange={() => handleAttachmentToggle(i)}
+                      className="ml-4"
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      Feedback?
+                    </span>
+                  </>
+                )}
+              </div>
+              {file.showComment && application.status === "pending" && (
+                <div className="mt-2">
+                  <Textarea
+                    value={file.comment}
+                    onChange={(e) => handleAttachmentComment(i, e.target.value)}
+                    placeholder={`Comment on ${file.label}`}
+                    className="w-full min-h-[60px]"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      {application.status === "pending" && (
+        <div className="flex gap-2 mt-6">
+          <Button
+            variant="destructive"
+            onClick={() => handleAction("deny")}
+            disabled={submitting}
+          >
+            Deny
+          </Button>
+          <Button onClick={handleReturnToApplicant} disabled={submitting}>
+            Return to Applicant
+          </Button>
+          <Button onClick={() => handleAction("approve")} disabled={submitting}>
+            Approve
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

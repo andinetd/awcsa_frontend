@@ -114,7 +114,7 @@ export default function UserManagement() {
   };
 
   return (
-    <SidebarLayout title="User Management">
+    <>
       <EditUserDialog
         open={editDialogOpen}
         user={selectedUser}
@@ -187,6 +187,6 @@ export default function UserManagement() {
         </div>
       </div>
       <UserTable table={table} />
-    </SidebarLayout>
+    </>
   );
 }

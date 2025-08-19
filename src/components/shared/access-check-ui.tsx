@@ -1,5 +1,4 @@
-import { LoaderIcon } from "lucide-react";
-import React from "react";
+import { Loader2 } from "lucide-react";
 
 const CheckingAccess = () => {
   return (
@@ -12,8 +11,8 @@ const CheckingAccess = () => {
 
       <h1 className="text-xl font-semibold font-lexend">
         {`Checking Access `}{" "}
-        <span className="animate-spin">
-          <LoaderIcon />
+        <span className="animate-spin text-primary">
+          <Loader2 />
         </span>
       </h1>
     </div>
