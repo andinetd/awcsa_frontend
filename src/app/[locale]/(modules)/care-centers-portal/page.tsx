@@ -11,7 +11,10 @@ const CareCentersPortal = () => {
       <div className="flex flex-col md:flex-row justify-between ">
         <h1 className="font-bold text-xl">Children Under Your Care</h1>
         <div className="flex gap-2">
-          <Link href={"/care-centers-portal/add-child"} className="self-end">
+          <Link
+            href={"/care-centers-portal/add-child/section1"}
+            className="self-end"
+          >
             <Button>Add New Child</Button>
           </Link>
           <UserInfoAndLogout />

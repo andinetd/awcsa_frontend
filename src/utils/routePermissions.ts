@@ -8,7 +8,9 @@ type RouteGuard = {
 export const routePermissions: Record<string, RouteGuard> = {
   "/register": { allowedAccountTypes: ["CLIENT"] },
   "/applicant-portal": { allowedAccountTypes: ["CLIENT"] },
-  "/care-centers-portal": { allowedAccountTypes: ["CARE_CENTERS_PORTAL"] },
+  "/care-centers-portal": {
+    allowedAccountTypes: ["CARE_CENTERS_PORTAL", "EMPLOYEE"],
+  },
 
   "/bureau-head": {
     allowedAccountTypes: ["EMPLOYEE"],
