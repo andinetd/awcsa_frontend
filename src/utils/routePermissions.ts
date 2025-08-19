@@ -1,13 +1,14 @@
 import { DeputyBureau } from "@/types/api/auth";
 
 type RouteGuard = {
-  allowedAccountTypes: ("EMPLOYEE" | "CLIENT")[];
+  allowedAccountTypes: ("EMPLOYEE" | "CLIENT" | "CARE_CENTERS_PORTAL")[];
   allowedRoles?: DeputyBureau[];
 };
 
 export const routePermissions: Record<string, RouteGuard> = {
   "/register": { allowedAccountTypes: ["CLIENT"] },
   "/applicant-portal": { allowedAccountTypes: ["CLIENT"] },
+  "/care-centers-portal": { allowedAccountTypes: ["CARE_CENTERS_PORTAL"] },
 
   "/bureau-head": {
     allowedAccountTypes: ["EMPLOYEE"],

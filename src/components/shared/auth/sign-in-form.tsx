@@ -68,6 +68,8 @@ export default function SignInForm() {
       if (user?.accountType === "CLIENT") {
         // router.push(`/${locale}/applicant-portal/portal`);
         router.push(`/applicant-portal/portal`);
+      } else if (user?.accountType === "CHILD_CARE_FACLITY") {
+        router.push(`/care-centers-portal`);
       } else if (orgUnit?.deputyBureau == null) {
         router.push("/bureau-head");
       } else {

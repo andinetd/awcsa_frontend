@@ -46,7 +46,7 @@ export default function UserInfoAndLogout() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={isLoggingOut}>
         <button className="focus:outline-none" aria-label="Toggle user menu">
-          <Avatar className="h-9 w-9">
+          <Avatar className="h-9 w-9 border-2">
             <AvatarImage src="/placeholder-user.jpg" alt="User avatar" />
             <AvatarFallback>
               {user?.email ? getInitials(user.email) : "JP"}

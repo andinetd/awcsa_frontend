@@ -174,27 +174,42 @@ export const sidebarConfig: Record<
 
   BUREAU_HEAD: [
     {
-      title: "Management",
+      title: "Global",
       items: [
-        { title: "Dashboard", url: "/bureau-head", icon: Home },
-
-        { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
         {
-          title: "Adoption Module",
+          title: "Adoption",
           url: "/adoption/dashboard",
-          icon: FileText,
+          icon: Users,
         },
         {
-          title: "Social Module",
+          title: "Social Affairs",
           url: "/social-affairs/socials/dashboard",
-          icon: FileText,
+          icon: Building,
         },
-        { title: "Women", url: "/womens/dashboard", icon: User },
-        { title: "Super Admin", url: "/super-admin", icon: FileText },
+        {
+          title: "Women",
+          url: "/womens/dashboard",
+          icon: Users,
+        },
+        {
+          title: "Bureau Head",
+          url: "/bureau-head",
+          icon: Users,
+        },
+        {
+          title: "Super Admin",
+          url: "/super-admin/general-settings",
+          icon: Settings,
+        },
+        {
+          title: "Super Admin management",
+          url: "/super-admin/user-management",
+          icon: Settings,
+        },
       ],
     },
   ],
-      WOREDA: [
+  WOREDA: [
     {
       title: "Woreda",
       items: [{ title: "Local Dashboard", url: "/woreda", icon: Map }],
@@ -207,7 +222,7 @@ export const sidebarConfig: Record<
       items: [{ title: "Subcity Dashboard", url: "/subcity", icon: Building }],
     },
   ],
-    CARE_CENTERS_PORTAL: [
+  CARE_CENTERS_PORTAL: [
     {
       title: "Care Centers Portal",
       items: [

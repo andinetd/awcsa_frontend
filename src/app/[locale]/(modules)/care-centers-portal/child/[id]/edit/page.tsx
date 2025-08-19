@@ -9,11 +9,9 @@ interface EditChildPageProps {
 
 const EditChildPage = ({ params }: EditChildPageProps) => {
   return (
-    <SidebarLayout title="Edit Child Details">
-      <div className="flex flex-col min-h-screen w-full px-6">
-        <EditChildForm childId={params.id} />
-      </div>
-    </SidebarLayout>
+    <div className="flex flex-col min-h-screen w-full px-6">
+      <EditChildForm childId={params.id} />
+    </div>
   );
 };
 

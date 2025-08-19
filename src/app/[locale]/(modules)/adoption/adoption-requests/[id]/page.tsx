@@ -2,20 +2,19 @@
 
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
 import { Button } from "@/components/ui/button";
-import { ApplicantInfoSection } from "../_components/applicant-info-section";
-import { ApplicationFieldsSection } from "../_components/application-fields-section";
-import { ApplicationAttachmentsSection } from "../_components/application-attachments-section";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { ApplicantInfoSection } from "../_components/applicant-info-section";
+import { ApplicationAttachmentsSection } from "../_components/application-attachments-section";
+import { ApplicationFieldsSection } from "../_components/application-fields-section";
 
-import { mockApplications } from "../page";
-import type { AdoptionApplication, AdoptionApplicationField } from "../page";
 import { AttachmentDialog } from "../_components/attachment-dialog";
+import type { AdoptionApplication, AdoptionApplicationField } from "../page";
+import { mockApplications } from "../page";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
-
 
   const application: AdoptionApplication | undefined = mockApplications.find(
     (app) => app.applicationId === params.id
@@ -106,17 +105,16 @@ export default function AdoptionRequestReviewPage() {
     }, 1000);
   }
 
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selectedFile, setSelectedFile] = useState<{
-      fileName: string;
-      fileUrl: string;
-    } | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<{
+    fileName: string;
+    fileUrl: string;
+  } | null>(null);
 
-    function handleViewAttachment(fileName: string, fileUrl: string) {
-      setSelectedFile({ fileName, fileUrl });
-      setOpenDialog(true);
-    }
-
+  function handleViewAttachment(fileName: string, fileUrl: string) {
+    setSelectedFile({ fileName, fileUrl });
+    setOpenDialog(true);
+  }
 
   if (!application) {
     return (
@@ -129,7 +127,7 @@ export default function AdoptionRequestReviewPage() {
   }
 
   return (
-    <SidebarLayout title="Review Adoption Application">
+    <>
       {selectedFile && (
         <AttachmentDialog
           open={openDialog}
@@ -188,6 +186,6 @@ export default function AdoptionRequestReviewPage() {
           </div>
         </div>
       </div>
-    </SidebarLayout>
+    </>
   );
 }
