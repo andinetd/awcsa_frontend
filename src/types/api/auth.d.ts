@@ -90,6 +90,7 @@ type DeputyBureau =
   | "EDIR"
   | "WOMEN_AFFAIRS"
   | "CLIENT"
+  | "CARE_CENTERS_PORTAL"
   | null;
 
 type OrgType = {

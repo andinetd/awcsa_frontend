@@ -33,7 +33,8 @@ export const sidebarConfig: Record<
   | "SUPER_ADMIN"
   | "BUREAU_HEAD"
   | "WOREDA"
-  | "SUBCITY",
+  | "SUBCITY"
+  | "CARE_CENTERS_PORTAL",
   NavigationSection[]
 > = {
   GLOBAL: [
@@ -204,6 +205,15 @@ export const sidebarConfig: Record<
     {
       title: "Sub  city",
       items: [{ title: "Subcity Dashboard", url: "/subcity", icon: Building }],
+    },
+  ],
+    CARE_CENTERS_PORTAL: [
+    {
+      title: "Care Centers Portal",
+      items: [
+        { title: "Dashboard", url: "/care-centers-portal", icon: Home },
+        { title: "Children", url: "/care-centers-portal", icon: Baby },
+      ],
     },
   ],
 };
