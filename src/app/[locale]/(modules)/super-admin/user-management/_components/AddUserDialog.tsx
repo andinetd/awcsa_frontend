@@ -20,6 +20,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RegisterEmployeeDto, EmployeeRole } from "@/types/employee";
 import { formatRole } from "@/lib/utils";
+import { createUser } from "../actions/createUser";
+import { toast } from "sonner";
 
 type AddUserDialogProps = {
   open: boolean;
@@ -35,11 +37,11 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
   onUserAdded,
 }) => {
   const [form, setForm] = useState<Partial<RegisterEmployeeDto>>({
+    cityIdNumber: "",
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
-    cityIdNumber: "",
     role: allRoles[0] || "",
     OrganizationUnitId: 1,
     activeStatus: true,
@@ -57,13 +59,22 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onUserAdded(form as RegisterEmployeeDto);
+    const res = createUser(form as RegisterEmployeeDto)
+      .then((data) => {
+        onUserAdded(form as RegisterEmployeeDto);
+        toast.success(data?.message || "User created successfully");
+      })
+      .catch((error) => {
+        toast.error(error?.message || "Error creating user");
+        console.error("Error creating user:", error.message);
+      });
+      console.log("response", res);
     setForm({
+      cityIdNumber: "",
       firstName: "",
       lastName: "",
       email: "",
       phoneNumber: "",
-      cityIdNumber: "",
       role: allRoles[0] || "",
       OrganizationUnitId: 1,
       activeStatus: true,
