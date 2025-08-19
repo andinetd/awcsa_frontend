@@ -22,6 +22,7 @@ const mockUserData: UserInfo = {
 export function UserInfoSection() {
   const userInfo = mockUserData; // This will be replaced with actual data fetching
   const applicationMessages = useTranslations("applicationMessages");
+
   const { user } = useAuthStore();
 
   return (
@@ -51,7 +52,9 @@ export function UserInfoSection() {
                 {" "}
                 {applicationMessages("userInfo.email")}
               </p>
+
               <p className="text-gray-900">{user?.email}</p>
+
             </div>
           </div>
 
