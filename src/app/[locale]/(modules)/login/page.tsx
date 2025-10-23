@@ -1,12 +1,25 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import SignInForm from "@/components/shared/auth/sign-in-form";
 import { Card } from "@/components/ui/card";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function LoginPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  // This ensures the component only renders on the client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null;
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center  px-4 ">
+    <div className="min-h-screen w-full flex items-center justify-center px-4">
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-5xl gap-10">
         {/* Left Side: Logo and Title */}
-        <div className="flex flex-col items-center   text-center md:text-left">
+        <div className="flex flex-col items-center text-center md:text-left">
           <img
             src="/assets/WCSA_logo.jpg"
             alt="logo"
@@ -16,9 +29,18 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side: SignIn Form */}
-        <Card className="w-full max-w-md flex flex-col  px-10 py-10">
+        <Card className="w-full max-w-md flex flex-col px-10 py-10">
           <h1 className="text-xl font-semibold font-lexend">Sign in</h1>
-          <SignInForm />
+          <GoogleReCaptchaProvider
+            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            scriptProps={{
+              async: true,
+              defer: true,
+              appendTo: "head",
+            }}
+          >
+            <SignInForm />
+          </GoogleReCaptchaProvider>
         </Card>
       </div>
 

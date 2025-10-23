@@ -12,7 +12,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   ApplicationStepOneSchema,
   ApplicationStepOneType,
@@ -20,30 +22,21 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { useApplicationFormStore } from "@/stores/application-form-store";
 
 export default function Step1Page() {
   const router = useRouter();
   const application = useTranslations("applicationMessages");
 
-  const handleInputChange = (field: string, value: string) => {
-    // setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleNext = () => {
-    // Save to localStorage or state management
-    // localStorage.setItem("step1Data", JSON.stringify(formData));
-  };
-
+  const { step1, setStep1 } = useApplicationFormStore();
   const form = useForm<ApplicationStepOneType>({
     resolver: zodResolver(ApplicationStepOneSchema),
-    defaultValues: {},
+    defaultValues: step1 || {},
   });
 
   async function onSubmit(values: ApplicationStepOneType) {
-    //TODO: handle submission here
-    console.log("values submited: ", { values });
-    router.push("/adoption/applicant-portal/application/new/step2");
-    // setData(values);
+    setStep1(values);
+    router.push("/applicant-portal/application/new/step2");
   }
 
   const instructions = (
@@ -56,6 +49,10 @@ export default function Step1Page() {
       </div>
 
       <ul className="space-y-2 font-lexend text-gray-600">
+        <li className="flex items-start gap-2">
+          <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
+          <span>{application("stepone.instructions.zero")}</span>
+        </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
           <span>{application("stepone.instructions.one")}</span>
@@ -87,6 +84,278 @@ export default function Step1Page() {
       {" "}
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 gap-4">
+            <FormField
+              control={form.control}
+              name="cityIdNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.cityId")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={application(
+                        "stepone.form.cityIdPlaceHolder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.dateOfBirth")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="monthlyIncome"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.MonthlyIncome")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.Address")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={application(
+                        "stepone.form.AddressPlaceHolder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="educationLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.EducationLevel")}
+                  </FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="w-full border px-3 py-2 rounded"
+                    >
+                      <option value="">Select</option>
+                      <option value="none">
+                        {application("stepone.form.educationOptions.none")}
+                      </option>
+                      <option value="primary">
+                        {application("stepone.form.educationOptions.primary")}
+                      </option>
+                      <option value="secondary">
+                        {application("stepone.form.educationOptions.secondary")}
+                      </option>
+                      <option value="diploma">
+                        {application("stepone.form.educationOptions.diploma")}
+                      </option>
+                      <option value="bachelor">
+                        {application("stepone.form.educationOptions.bachelor")}
+                      </option>
+                      <option value="master">
+                        {application("stepone.form.educationOptions.master")}
+                      </option>
+                      <option value="doctorate">
+                        {application("stepone.form.educationOptions.doctorate")}
+                      </option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="occupation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.occupation")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={application(
+                        "stepone.form.occupationPlaceholder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="spouseCityIdNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.spouseCityIdNumber")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={application(
+                        "stepone.form.spouseCityIdNumberPlaceholder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="preferredChildren.ageRange.min"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[14px] font-lexend">
+                    {application("stepone.form.preferredChildAgeMin")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="preferredChildren.ageRange.max"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[14px] font-lexend">
+                    {application("stepone.form.preferredChildAgeMax")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="preferredChildren.number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[14px] font-lexend">
+                    {application("stepone.form.preferredNumberOfChildren")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <FormField
+              control={form.control}
+              name="preferredChildren.sex"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[18px] font-lexend">
+                    {application("stepone.form.preferredChildGender")}
+                  </FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="w-full border px-3 py-2 rounded"
+                    >
+                      <option value="ANY">
+                        {application("stepone.form.GenderOptions.any")}
+                      </option>
+                      <option value="MALE">
+                        {application("stepone.form.GenderOptions.male")}
+                      </option>
+                      <option value="FEMALE">
+                        {application("stepone.form.GenderOptions.female")}
+                      </option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="grid grid-cols-1  gap-4">
             <FormField
               control={form.control}
@@ -103,17 +372,7 @@ export default function Step1Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.id?.message}
                     />
@@ -138,18 +397,7 @@ export default function Step1Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.birthCertificate?.message}
                     />
@@ -175,18 +423,7 @@ export default function Step1Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.income?.message}
                     />
@@ -231,7 +468,7 @@ export default function Step1Page() {
           )} */}
 
           <div className="flex justify-end">
-            <Button onClick={handleNext} className="px-8">
+            <Button type="submit" className="px-8">
               Next Step
             </Button>
           </div>

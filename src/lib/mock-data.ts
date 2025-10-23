@@ -1,7 +1,7 @@
 import { AderaTableType } from "@/schemas/adera-schema";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { ChildDataType } from "@/schemas/new-child-form-schema";
-import { User } from "@/types";
+import { User } from "@/schemas";
 import { EmployeeRole, RegisterEmployeeDto } from "@/types/employee";
 
 export const sampleChildrenData: ChildDataType[] = [

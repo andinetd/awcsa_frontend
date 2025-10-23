@@ -38,6 +38,7 @@
   "stepone": {
     "instructions": {
       "title": "አስፈላጊ የግል መረጃ",
+      "zero": "የግል መረጃ ይሙሉ",
       "one": "ምስልዎ በግልጽ የሚታይ የመኖሪያ መታወቂያ ወይም ፓስፖርት ያስገቡ",
       "two": "የልደት ምስክር ወረቀቶን ያስገቡ",
       "three": "ወርሃዊ ወይም ዓመታዊ ገቢ የሚያሳይ ህጋዊ ማስረጃ ያስገቡ",
@@ -46,7 +47,37 @@
     "form": {
       "id": "የመኖሪያ መታወቂያ/ፓስፖርት ያስገቡ",
       "birthCertificate": "የልደት ምስክር ወረቀቶን",
-      "income": "ገቢ የሚያሳይ"
+      "income": "ገቢ የሚያሳይ",
+      "cityId": "የከተማ መታወቂያ ቁጥር",
+      "cityIdPlaceHolder": "የከተማ መታወቂያ ቁጥርዎን ያስገቡ",
+      "dateOfBirth": "የልደት ቀን",
+      "MonthlyIncome": "ወርሃዊ ገቢ",
+      "Address": "አድራሻ",
+      "AddressPlaceHolder": "ሙሉ አድራሻዎን ያስገቡ",
+      "EducationLevel": "የትምህርት ደረጃ",
+      "educationOptions": {
+        "none": "አለመኖር",
+        "primary": "መማርያ 1",
+        "secondary": "ሁለተኛ ደረጃ",
+        "diploma": "ዲፕሎማ",
+        "bachelor": "የቢችለር ዲግሪ",
+        "master": "የማስተር ዲግሪ",
+        "doctorate": "ዶክተር"
+      },
+      "occupation": "ሥራ፣ የስራ ስም",
+      "occupationPlaceholder": "የስራዎን ዝርዝር ያስገቡ",
+      "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
+      "spouseCityIdNumberPlaceholder": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር ያስገቡ",
+      "spouseAgreement": "የባል/ባለቤት ስምምነት",
+      "preferredChildAgeMin": "የሚፈለጉ ሕፃን ዕድሜ (ከ) ",
+      "preferredChildAgeMax": "የሚፈለጉ ሕፃን ዕድሜ (እስከ)",
+      "preferredNumberOfChildren": "የሚፈለጉ የሕፃናት ብዛት",
+      "preferredChildGender": "የሚፈለጉ የሕፃኑ ጾታ",
+      "GenderOptions": {
+        "any": "ማንኛው",
+        "male": "ወንድ",
+        "female": "ሴት"
+      }
     }
   },
   "steptwo": {

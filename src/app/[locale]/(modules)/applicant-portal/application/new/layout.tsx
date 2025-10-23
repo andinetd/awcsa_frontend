@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { StepProgress } from "../../_components/step-progress";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale, useMessages } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export default async function ApplicationLayout({
   children,
@@ -21,14 +22,17 @@ export default async function ApplicationLayout({
     <NextIntlClientProvider locale={locale}>
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Adoption Application
-            </h1>
-            <p className="text-gray-600">
-              Complete all steps to submit your adoption application
-            </p>
+          <div className="flex justify-between items-center">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Adoption Application
+              </h1>
+              <p className="text-gray-600">
+                Complete all steps to submit your adoption application
+              </p>
+            </div>
           </div>
+          
 
           <StepProgress />
 

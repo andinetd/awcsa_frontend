@@ -18,13 +18,14 @@ export const clientSignup = async (data: ClientSignup) => {
       }
     );
     const reqRes = await sendReq.data;
+    console.log("SIGN IN REQ RES: ", reqRes);
     return reqRes;
   } catch (error) {
     throw new Error(error as any);
   }
 };
 
-export const signIn = async (data: ClientSignIn) => {
+export const signIn = async (data: ClientSignIn): Promise<ClientSignInResponse> => {
   try {
     const sendReq = await axios.post<ClientSignInResponse>(
       `${BASE_URL}/auth/login`,
@@ -38,6 +39,10 @@ export const signIn = async (data: ClientSignIn) => {
     const reqRes = await sendReq.data;
     return reqRes;
   } catch (error: any) {
-    throw new Error(error?.message ?? "sing in failed");
+    if (axios.isAxiosError(error)) {
+      console.error("Login error response:", error.response?.data);
+      throw new Error(error.response?.data?.message || "Login failed");
+    }
+    throw new Error("Unexpected error");
   }
 };

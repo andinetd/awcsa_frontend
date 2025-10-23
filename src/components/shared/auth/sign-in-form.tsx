@@ -1,5 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,62 +20,73 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/navigation";
+import { moduleAndRouteMap } from "@/utils/app-route";
+import { DeputyBureau } from "@/types/api/auth";
+
 import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
-import { DeputyBureau } from "@/types/api/auth";
-import { moduleAndRouteMap } from "@/utils/app-route";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const formSchema = z.object({
-  email: z.email("Invalid email address"),
+  email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-type LoginFormSchemaType = z.infer<typeof formSchema>;
+type FormSchemaType = z.infer<typeof formSchema>;
 
 export default function SignInForm() {
   const router = useRouter();
   const locale = useLocale();
-
-  const { mutate, data, isPending, isSuccess, error, isError } =
+  const { mutate, isPending, isSuccess, data, isError, error } =
     useSignInMutation();
   const { user, orgUnit } = useAuthStore();
 
-  const form = useForm<LoginFormSchemaType>({
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const [isRecaptchaLoading, setRecaptchaLoading] = useState(false);
+
+  const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
 
-  async function onSubmit(values: LoginFormSchemaType) {
-    //TODO: handle submission here
-    console.log("values submited: ", { values });
+  async function onSubmit(values: FormSchemaType) {
+    if (!executeRecaptcha) {
+      toast("Recaptcha not yet available, try again in a second");
+      return;
+    }
 
-    const newData = {
-      email: values.email,
-      password: values.password,
-    };
+    try {
+      setRecaptchaLoading(true);
+      // Generate a fresh token on every submit
+      const recaptchaToken = await executeRecaptcha("signin");
 
-    console.log(`NEW DATA ON SIGN IN: `);
-    console.log(newData);
-    mutate(newData);
+      const payload = {
+        email: values.email,
+        password: values.password,
+        recaptchaToken,
+      };
+
+      console.log("Sign-in payload:", payload);
+      mutate(payload);
+    } catch (err) {
+      console.error("Recaptcha execution failed:", err);
+      toast("Recaptcha failed, please try again");
+    } finally {
+      setRecaptchaLoading(false);
+    }
   }
 
+  // Handle success / error redirects and toasts
+  // Redirect after successful login (watch user/orgUnit)
+  useState(() => {}); // keep hooks order if needed
+
   useEffect(() => {
-    if (isSuccess) {
-      console.log(`SIGN IN RESPONSE: `, data);
-      toast("Signin was successful");
+    if (!user && !orgUnit) return;
+
+    // Defer navigation to next tick to avoid interfering with rendering
+    const t = setTimeout(() => {
       if (user?.accountType === "CLIENT") {
-        // router.push(`/${locale}/applicant-portal/portal`);
         router.push(`/applicant-portal/portal`);
       } else if (orgUnit?.deputyBureau == null) {
         router.push("/bureau-head");
@@ -74,14 +94,17 @@ export default function SignInForm() {
         const route = moduleAndRouteMap(orgUnit?.deputyBureau as DeputyBureau);
         router.push(route);
       }
-    }
+    }, 0);
+
+    return () => clearTimeout(t);
+  }, [user, orgUnit, router]);
+
+  // Show error toast when sign-in mutation errors
+  useEffect(() => {
     if (isError) {
-      console.log(error.message);
-      toast("SignIn Failed", {
-        description: error.message,
-      });
+      toast.error("Sign-in failed: " + (error as any)?.message);
     }
-  }, [isSuccess, isError, data, error, user, orgUnit, locale]);
+  }, [isError, error]);
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
@@ -123,24 +146,6 @@ export default function SignInForm() {
             )}
           />
 
-          {/* <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Checkbox id="remember" />
-              <label
-                htmlFor="remember"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember me
-              </label>
-            </div>
-            <Link
-              href="/auth/reset-password"
-              className="text-sm text-foreground underline hover:opacity-80"
-            >
-              Forgot password?
-            </Link>
-          </div> */}
-
           <div className="float-right mt-2 mb-6">
             <Link
               href="/reset-password"
@@ -149,15 +154,19 @@ export default function SignInForm() {
               Forgot password?
             </Link>
           </div>
-          {isPending ? (
-            <Button className="w-full" disabled>
+
+          <Button
+            className="w-full"
+            disabled={
+              form.formState.isSubmitting || isRecaptchaLoading || isPending
+            }
+          >
+            {isRecaptchaLoading || isPending ? (
               <Loader2 className="animate-spin" />
-            </Button>
-          ) : (
-            <Button className="w-full" disabled={form.formState.isSubmitting}>
-              Sign in
-            </Button>
-          )}
+            ) : (
+              "Sign in"
+            )}
+          </Button>
         </form>
       </Form>
     </div>

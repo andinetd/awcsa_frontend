@@ -20,6 +20,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { useApplicationFormStore } from "@/stores/application-form-store";
 import {
   ApplicationStepThreeSchema,
   ApplicationStepThreeType,
@@ -29,28 +30,19 @@ export default function Step3Page() {
   const router = useRouter();
   const application = useTranslations("applicationMessages");
 
+  const { step3, setStep3 } = useApplicationFormStore();
   const form = useForm<ApplicationStepThreeType>({
     resolver: zodResolver(ApplicationStepThreeSchema),
-    defaultValues: {},
+    defaultValues: step3 || {},
   });
 
-  const handleInputChange = (field: string, value: string) => {
-    // setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleNext = () => {
-    // localStorage.setItem("step3Data", JSON.stringify(formData));
-    router.push("/adoption/applicant-portal/application/new/review");
-  };
-
-  const handleBack = () => {
-    router.push("/adoption/applicant-portal/application/new/step2");
+  const handleBack = (values: ApplicationStepThreeType) => {
+    setStep3(values);
+    router.push("/applicant-portal/application/new/step2");
   };
   async function onSubmit(values: ApplicationStepThreeType) {
-    //TODO: handle submission here
-    console.log("values submited: ", { values });
-    router.push("/adoption/applicant-portal/application/new/review");
-    // setData(values);
+    setStep3(values);
+    router.push("/applicant-portal/application/new/review");
   }
 
   const instructions = (
@@ -105,17 +97,7 @@ export default function Step3Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.maritalStatus?.message}
                     />
@@ -127,7 +109,7 @@ export default function Step3Page() {
           <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
-              name="docFromReliousOrEdir"
+              name="psychologicalWellbeing"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
@@ -140,21 +122,10 @@ export default function Step3Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={
-                        form.formState.errors.docFromReliousOrEdir?.message
+                        form.formState.errors.psychologicalWellbeing?.message
                       }
                     />
                   </FormControl>
@@ -179,18 +150,7 @@ export default function Step3Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.photo?.message}
                     />
@@ -201,7 +161,11 @@ export default function Step3Page() {
           </div>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={handleBack}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleBack(form.getValues())}
+            >
               Previous Step
             </Button>
             <Button type="submit" className="px-8">

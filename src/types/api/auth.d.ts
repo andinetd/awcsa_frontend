@@ -56,6 +56,7 @@ type ClientSignup = {
 type ClientSignIn = {
   email: string;
   password: string;
+  recaptchaToken: string;
 };
 
 type JwtPayload = EmployeeJwtPayload | ClientJwtPayload;
