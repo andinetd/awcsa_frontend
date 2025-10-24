@@ -68,7 +68,7 @@
       "occupationPlaceholder": "የስራዎን ዝርዝር ያስገቡ",
       "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
       "spouseCityIdNumberPlaceholder": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር ያስገቡ",
-      "spouseAgreement": "የባል/ባለቤት ስምምነት",
+      "marriageCertificate": "የባል/ባለቤት ስምምነት",
       "preferredChildAgeMin": "የሚፈለጉ ሕፃን ዕድሜ (ከ) ",
       "preferredChildAgeMax": "የሚፈለጉ ሕፃን ዕድሜ (እስከ)",
       "preferredNumberOfChildren": "የሚፈለጉ የሕፃናት ብዛት",
@@ -85,13 +85,13 @@
       "title": "ተጨማሪ መረጃዎች",
       "one": "የጤና ምርመራ የሚያሳይ የህክምና ማስረጃዎን ያስገቡ ",
       "two": "ከወንጀል ነፃ መሆኖን የሚያሳይ ማስረጃ ያስገቡ",
-      "three": "የትዳር ጓደኛ የጉዲፈቻ ስምምነት ሰነድ ያስገቡ",
+      "three": "የትዳር ስርቲፊክት ያስገቡ",
       "note": "ሁሉም መረጃዎች ትክክለኛ  መሆን አለባቸው፡፡ በሚመለከተው አካልም ለግምገማ ይቀርባሉ፡፡"
     },
     "form": {
       "medical": "የጤና ምርመራ",
       "criminal": "ከወንጀል ነፃ",
-      "spouseAgreement": "የትዳር ጓደኛ የጉዲፈቻ ስምምነት"
+      "marriageCertificate": "የትዳር ስርቲፊክት"
     }
   },
   "stepthree": {

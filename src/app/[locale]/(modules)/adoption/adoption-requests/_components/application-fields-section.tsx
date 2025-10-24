@@ -5,6 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 interface ApplicationField {
   fieldName: string;
+  // stable key used when sending fieldComments to the backend (e.g. 'occupation', 'monthlyIncome')
+  fieldKey?: string;
   answer: string;
   showComment: boolean;
   comment?: string;

@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { Eye } from "lucide-react";
-import { AttachmentDialog } from "./attachment-dialog";
+import { Eye, FileText } from "lucide-react";
+// attachment-dialog no longer used here; previews use the filePlaceholder helper instead
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useAuthStore } from "@/stores/auth-store";
 
 interface AttachmentField {
   label: string;
+  // stable key (backend field identifier) when available
+  fieldKey?: string;
   url: string;
   fileName: string;
+  fileType?: string;
   showComment: boolean;
   comment?: string;
 }
@@ -25,6 +31,109 @@ export const ApplicationAttachmentsSection: React.FC<
   ApplicationAttachmentsSectionProps
 > = ({ attachments, status, onToggle, onComment, onView }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { token } = useAuthStore();
+
+  const [objectUrls, setObjectUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    return () => {
+      objectUrls.forEach((u) => {
+        try {
+          URL.revokeObjectURL(u);
+        } catch (e) {
+          // ignore
+        }
+      });
+    };
+  }, [objectUrls]);
+
+  type FileMeta = { url?: string; name?: string; type?: string; size?: number };
+
+  const filePlaceholder = (
+    fileOrMeta: File | FileMeta | null | undefined,
+    label?: string
+  ) => {
+    // If there's no metadata or file, show placeholder
+    if (!fileOrMeta) {
+      return (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between"></div>
+          <div className="flex flex-wrap gap-3">
+            <div className="flex items-center space-x-3 p-3 bg-primary/5 border border-primary/20 rounded-lg min-w-0 flex-1 max-w-xs">
+              <FileText className="h-5 w-5 text-primary flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {label ?? "No file"}
+                </p>
+                <p className="text-xs text-gray-500">No file uploaded</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const meta = fileOrMeta as FileMeta;
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between"></div>
+        <div className="flex flex-wrap gap-3">
+          <div className="flex items-center space-x-3 p-3 bg-primary/5 border border-primary/20 rounded-lg min-w-0 flex-1 max-w-xs">
+            <FileText className="h-5 w-5 text-primary flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {meta.name ?? label ?? "File"}
+              </p>
+              <p className="text-xs text-gray-500">{meta.type ?? ""}</p>
+            </div>
+            <div className="ml-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="hover:cursor-pointer border-blue-200 rounded-lg text-blue-500 hover:text-blue-600"
+                onClick={async () => {
+                  try {
+                    if (!meta.url) {
+                      toast.error("No URL available for preview");
+                      return;
+                    }
+
+                    // Fetch the file with Authorization header so the bearer token is sent.
+                    const headers: Record<string, string> = {};
+                    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+                    const res = await fetch(meta.url, {
+                      method: "GET",
+                      headers,
+                    });
+                    if (!res.ok) {
+                      const text = await res.text().catch(() => null);
+                      toast.error(
+                        `Unable to fetch file: ${res.status} ${res.statusText}` +
+                          (text ? ` - ${text}` : "")
+                      );
+                      return;
+                    }
+
+                    const blob = await res.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    setObjectUrls((s) => [...s, blobUrl]);
+                    window.open(blobUrl, "_blank");
+                  } catch (err) {
+                    console.error("Unable to preview file", err);
+                    toast.error("Unable to preview file");
+                  }
+                }}
+              >
+                <Eye className="text-sm" /> View
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -37,28 +146,34 @@ export const ApplicationAttachmentsSection: React.FC<
               key={i}
               className="flex flex-col gap-2 p-3 bg-gray-50 rounded-lg"
             >
-              <div className="flex items-center gap-2">
+              <div className="items-start gap-4">
                 <span className="font-medium w-32 inline-block">
                   {file.label}:
                 </span>
-                <div
-                  className="py-1 px-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg text-blue-500 text-sm font-bold flex items-center gap-2 cursor-pointer hover:shadow-sm"
-                  onClick={() => onView(file.fileName, file.url)}
-                >
-                  <Eye className="text-sm" /> View
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    {filePlaceholder(
+                      {
+                        url: file.url,
+                        name: file.fileName,
+                        type: file.fileType,
+                      },
+                      file.fileName
+                    )}
+                  </div>
+                  {status === "pending" && (
+                    <div className="ml-4 flex flex-col items-start">
+                      <Checkbox
+                        checked={file.showComment}
+                        onCheckedChange={() => onToggle(i)}
+                        className="ml-0"
+                      />
+                      <span className="text-xs text-muted-foreground mt-1">
+                        Feedback?
+                      </span>
+                    </div>
+                  )}
                 </div>
-                {status === "pending" && (
-                  <>
-                    <Checkbox
-                      checked={file.showComment}
-                      onCheckedChange={() => onToggle(i)}
-                      className="ml-4"
-                    />
-                    <span className="text-xs text-muted-foreground">
-                      Feedback?
-                    </span>
-                  </>
-                )}
               </div>
               {file.showComment && status === "pending" && (
                 <div className="mt-2">

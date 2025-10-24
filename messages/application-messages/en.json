@@ -86,13 +86,13 @@
       "title": "Additional Informations",
       "one": "Medical clearance document ",
       "two": "criminal clearance document",
-      "three": "Spouses written and signed aggreement of the adoption",
+      "three": "Marriage Certificate document",
       "note": "All documents must be accurate and will be reviewed by the authorities."
     },
     "form": {
       "medical": "Medical Document",
       "criminal": "Criminal Clearance",
-      "spouseAgreement": "Spouse Agreement"
+      "marriageCertificate": "Marriage Certificate"
     }
   },
   "stepthree": {

@@ -8,10 +8,12 @@ interface ApplicantInfoSectionProps {
     status: string;
     submittedDate: string | number | Date;
   };
+  photoUrl?: string;
 }
 
 export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
   application,
+  photoUrl,
 }) => (
   <Card>
     <CardHeader>
@@ -21,6 +23,15 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {photoUrl && (
+          <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+            <img
+              src={photoUrl}
+              alt={`Photo of ${application.applicantName}`}
+              className="h-24 w-24 object-cover rounded-md shadow-sm"
+            />
+          </div>
+        )}
         <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
           <span className="text-sm font-medium text-gray-500">
             Application ID

@@ -389,12 +389,12 @@ const handleSubmit = async () => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-500">
-                  Spouse Agreement
+                  Marriage Certificate
                 </span>
 
                 {filePlaceholder(
-                  (step2 as any)?.spouseAgreement ?? null,
-                  "Spouse Agreement"
+                  (step2 as any)?.marriageCertificate ?? null,
+                  "Marriage Certificate"
                 )}
               </div>
               <div>
