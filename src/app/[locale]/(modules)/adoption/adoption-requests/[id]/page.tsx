@@ -112,11 +112,6 @@ export default function AdoptionRequestReviewPage() {
     push("Education Level", info.educationLevel ?? "", "educationLevel");
     push("Occupation", info.occupation ?? "", "occupation");
     push("Monthly Income", info.monthlyIncome ?? "", "monthlyIncome");
-    push(
-      "Family Members Count",
-      info.familyMembersCount ?? "",
-      "familyMembersCount"
-    );
 
     const pref = app.applicationInfo?.preferredChildren;
     if (pref) {
@@ -389,7 +384,7 @@ export default function AdoptionRequestReviewPage() {
       }
     });
 
-    const status = type === "approve" ? "PENDING_HOME_VISIT" : "DENIED";
+    const status = type === "approve" ? "PENDING_HOME_VISIT" : "REJECTED";
 
     const payload = {
       status,
@@ -588,7 +583,7 @@ export default function AdoptionRequestReviewPage() {
                     disabled={submitting}
                     className="cursor-pointer"
                   >
-                    Deny
+                    Reject
                   </Button>
                   <Button
                     onClick={handleReturnToApplicant}

@@ -403,7 +403,7 @@ const AdoptionRequests = () => {
         return "pending";
       case "PENDING_HOME_VISIT":
         return "accepted";
-      case "DENIED":
+      case "REJECTED":
         return "denied";
       case "RETURNED":
         return "returned";

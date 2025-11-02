@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { BASE_URL } from '@/lib/base-url';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const { id } =  await params;
@@ -6,7 +7,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   // Forward the Authorization header if present
   const incomingAuth = req.headers.get('authorization') || '';
 
-  const backendUrl = `http://localhost:3000/adoption/files/${id}`;
+  const backendUrl = `${BASE_URL}/adoption/files/${id}`;
 
   try {
     const res = await fetch(backendUrl, {

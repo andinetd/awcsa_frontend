@@ -24,7 +24,8 @@
   "footer": {
     "title": "Ready to Begin?",
     "subtitle": "Our comprehensive application process will guide you through each step of your adoption journey.",
-    "cta": "Start Application"
+    "cta": "Start Application",
+    "cta_submitted": "Application Submitted"
   },
   "appSummary": {
     "cta": "View Details"

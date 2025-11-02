@@ -1,11 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, CheckCircle, FileText, Users } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-application";
 
 export function InitiationSection() {
   const applicationMessages = useTranslations("applicationMessages");
+  const { application } = useFetchedAdoptionApplicationStore();
 
   const adoptionRequirements = [
     {
@@ -99,11 +103,21 @@ export function InitiationSection() {
           <p className="text-sm text-blue-800 mb-4">
             {applicationMessages("footer.subtitle")}
           </p>
-          <Button asChild className="w-full">
-            <Link href="/applicant-portal/application/new/step1">
-              {applicationMessages("footer.cta")}
-            </Link>
-          </Button>
+          {application ? (
+            <Button
+              disabled
+              className="w-full"
+              title={applicationMessages("footer.cta_submitted") ?? undefined}
+            >
+              {applicationMessages("footer.cta_submitted")}
+            </Button>
+          ) : (
+            <Button asChild className="w-full">
+              <Link href="/applicant-portal/application/new/step1">
+                {applicationMessages("footer.cta")}
+              </Link>
+            </Button>
+          )}
         </div>
 
         <div className="text-center">

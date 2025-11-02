@@ -6,7 +6,7 @@ import {
   ApplicationStepThreeType,
 } from "@/schemas/application/applicationStepsSchema";
 
-// Types for each step's data (replace with your actual types)
+
 export type Step1Data = ApplicationStepOneType | null;
 export type Step2Data = ApplicationStepTwoType | null;
 export type Step3Data = ApplicationStepThreeType | null;
