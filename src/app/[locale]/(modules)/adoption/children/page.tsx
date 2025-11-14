@@ -21,7 +21,7 @@ const Children = () => {
       <div className="flex flex-col md:flex-row justify-between ">
         <h1 className="font-bold text-xl">List of Children</h1>
         <Link
-          href={"/adoption/children/child-registration/section1"}
+          href={"/adoption/children/child-registration/new"}
           className="self-end"
         >
           <Button>Add New Child</Button>
