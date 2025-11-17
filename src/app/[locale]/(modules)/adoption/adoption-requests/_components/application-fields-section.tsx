@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface ApplicationField {
   fieldName: string;
@@ -18,9 +19,12 @@ interface ApplicationFieldsSectionProps {
   onToggle: (idx: number) => void;
   onComment: (idx: number, value: string) => void;
 }
-export const ApplicationFieldsSection: React.FC<
-  ApplicationFieldsSectionProps
-> = ({ fields, status, onToggle, onComment }) => (
+export const ApplicationFieldsSection: React.FC<ApplicationFieldsSectionProps> = ({
+  fields,
+  status,
+  onToggle,
+  onComment,
+}) => (
   <Card>
     <CardHeader>
       <CardTitle className="flex items-center gap-2">
@@ -38,7 +42,12 @@ export const ApplicationFieldsSection: React.FC<
               <span className="font-medium w-56 inline-block">
                 {field.fieldName}:
               </span>
-              <span>{field.answer}</span>
+              {field.fieldName === "Date of Birth" ? (
+                <span>{field.answer.split("T")[0]}</span>
+              ) : (
+                <span>{field.answer}</span>
+              )}
+
               {status === "pending" && (
                 <>
                   <Checkbox

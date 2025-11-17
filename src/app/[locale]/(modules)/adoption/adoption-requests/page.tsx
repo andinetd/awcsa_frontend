@@ -332,6 +332,8 @@ export type BackendAdoptionApplication = {
 const TABS = [
   { value: "pending", label: "Pending" },
   { value: "accepted", label: "Accepted" },
+  { value: "pending_home_visit", label: "Pending Home Visit" },
+  { value: "pending_approval", label: "Pending Approval" },
   { value: "denied", label: "Denied" },
   { value: "returned", label: "Returned to Applicant" },
 ];
@@ -402,6 +404,10 @@ const AdoptionRequests = () => {
       case "PENDING_REVIEW":
         return "pending";
       case "PENDING_HOME_VISIT":
+        return "pending_home_visit";
+      case "PENDING_APPROVAL":
+        return "pending_approval";
+      case "ACCEPTED":
         return "accepted";
       case "REJECTED":
         return "denied";

@@ -14,10 +14,12 @@ import { useAuthStore } from "@/stores/auth-store";
 import type { BackendAdoptionApplication } from "../page";
 import { AttachmentDialog } from "../_components/attachment-dialog";
 import { BASE_URL } from "@/lib/base-url";
+import { useHomeVisitFormStore } from "@/stores/home-visit-store";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
+  const setServiceDataId = useHomeVisitFormStore((state) => state.setServiceDataId);
 
   const user = useAuthStore((state) => state.user);
 
@@ -600,6 +602,29 @@ export default function AdoptionRequestReviewPage() {
                     Approve
                   </Button>
                 </div>
+              </div>
+            )}
+            {(application.status || "").toUpperCase() ===
+              "PENDING_HOME_VISIT" && (
+              <div className="mt-6 flex justify-end">
+                <Button onClick={() => {
+                  setServiceDataId(String(application.applicationId));
+                  router.push("../home-visit/step1")
+                  }}>
+                  Submit Home Visit Feedback
+                </Button>
+              </div>
+            )}
+            {(application.status || "").toUpperCase() ===
+              "PENDING_APPROVAL" && (
+              <div className="mt-6 flex justify-end">
+                <Button
+                  onClick={() => {
+                    router.push(`/adoption/home-visit/${String(application.applicationId)}/fields`);
+                  }}
+                >
+                  View Home Visit Feedback
+                </Button>
               </div>
             )}
           </div>
