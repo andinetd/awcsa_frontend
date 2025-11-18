@@ -69,9 +69,8 @@ export default function NewChildForm() {
       payload.socialWorkerCityIdNumber =
         values?.child_founder_city_id_number ?? undefined;
     } else if (values?.current_status === "IN_CARE") {
-      payload.childCareFacilityId = values?.care_center_id ?? undefined;
-      payload.childIdFromFacility =
-        values?.child_id_from_care_center ?? undefined;
+      payload.childCareFacilityId = Number(values?.care_center_id) ?? undefined;
+      payload.childIdFromFacility = values?.child_id_from_care_center ?? undefined;
     } else if (values?.current_status === "IN_ADERA") {
       payload.baleAderaCityIdNumber =
         values?.bale_adera_city_id_number ?? undefined;

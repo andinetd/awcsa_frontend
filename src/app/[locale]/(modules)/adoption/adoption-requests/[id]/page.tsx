@@ -15,13 +15,19 @@ import type { BackendAdoptionApplication } from "../page";
 import { AttachmentDialog } from "../_components/attachment-dialog";
 import { BASE_URL } from "@/lib/base-url";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
+import axios, { AxiosError } from "axios";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
-  const setServiceDataId = useHomeVisitFormStore((state) => state.setServiceDataId);
+  const setServiceDataId = useHomeVisitFormStore(
+    (state) => state.setServiceDataId
+  );
 
   const user = useAuthStore((state) => state.user);
+
+  const [showMatch, setShowMatch] = useState(false);
+  const [childId, setChildId] = useState("");
 
   const [applications, setApplications] = useState<
     BackendAdoptionApplication[]
@@ -364,6 +370,94 @@ export default function AdoptionRequestReviewPage() {
     }
   }
 
+  async function handleMatch() {
+    if (!application) return;
+
+    if (!childId || childId.trim() === "") {
+      toast.error("Please enter a child ID");
+      return;
+    }
+
+    const applicantIdNum = user?.id != null ? Number(user.id) : undefined;
+    const applicationIdNum = Number(application.applicationId);
+
+    if (
+      applicantIdNum == null ||
+      isNaN(applicantIdNum) ||
+      isNaN(applicationIdNum)
+    ) {
+      toast.error("Invalid applicant or application id");
+      return;
+    }
+
+    const payload = {
+      childIdFromFacility: childId,
+      applicantId: applicantIdNum,
+      applicationId: applicationIdNum,
+      note: "notes about the match",
+    } as any;
+
+   
+    try {
+      const res = await axios.post(`${BASE_URL}/adoption/matches`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      setChildId("");
+      setShowMatch(false);
+      router.push("../adoption-requests");
+      toast.success("Child matched successfully");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+
+      // extract a useful message from AxiosError if possible
+      let message = "Failed to submit home visit feedback. Please try again.";
+
+      if (axios.isAxiosError(error)) {
+        const axiosErr = error as AxiosError<any>;
+        // prefer server-provided message shape
+        const respData = axiosErr.response?.data;
+        if (respData) {
+          if (typeof respData === "string") {
+            message = respData;
+          } else if (respData.message) {
+            message = String(respData.message);
+          } else if (respData.errors) {
+            try {
+              // if errors is array or object, make it readable
+              if (Array.isArray(respData.errors)) {
+                message = respData.errors
+                  .map((e: any) => e.message || JSON.stringify(e))
+                  .join("; ");
+              } else {
+                message = JSON.stringify(respData.errors);
+              }
+            } catch {
+              message = String(respData.errors);
+            }
+          } else {
+            try {
+              message = JSON.stringify(respData);
+            } catch {
+              message = String(respData);
+            }
+          }
+        } else if (axiosErr.message) {
+          message = axiosErr.message;
+        }
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
+
+      // show the extracted message in the toast
+      toast.error(message);
+      return;
+    }
+}
+
   async function handleAction(type: "approve" | "deny") {
     if (!application) return;
     setAction(type);
@@ -607,10 +701,12 @@ export default function AdoptionRequestReviewPage() {
             {(application.status || "").toUpperCase() ===
               "PENDING_HOME_VISIT" && (
               <div className="mt-6 flex justify-end">
-                <Button onClick={() => {
-                  setServiceDataId(String(application.applicationId));
-                  router.push("../home-visit/step1")
-                  }}>
+                <Button
+                  onClick={() => {
+                    setServiceDataId(String(application.applicationId));
+                    router.push("../home-visit/step1");
+                  }}
+                >
                   Submit Home Visit Feedback
                 </Button>
               </div>
@@ -618,13 +714,49 @@ export default function AdoptionRequestReviewPage() {
             {(application.status || "").toUpperCase() ===
               "PENDING_APPROVAL" && (
               <div className="mt-6 flex justify-end">
-                <Button
-                  onClick={() => {
-                    router.push(`/adoption/home-visit/${String(application.applicationId)}/fields`);
-                  }}
-                >
-                  View Home Visit Feedback
-                </Button>
+                <div className="space-x-2">
+                  <Button
+                    onClick={() => {
+                      router.push(
+                        `/adoption/home-visit/${String(
+                          application.applicationId
+                        )}/fields`
+                      );
+                    }}
+                  >
+                    View Home Visit Feedback
+                  </Button>
+                  <Button onClick={() => setShowMatch((s) => !s)}>
+                    Approve and match child
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {showMatch && (
+              <div className="flex items-center gap-2 mt-2 justify-between border p-2 rounded shadow-sm">
+                <div className="flex flex-col space-y-2">
+                  <input
+                    type="text"
+                    value={childId}
+                    onChange={(e) => setChildId(e.target.value)}
+                    placeholder="Enter child ID number"
+                    className="border rounded p-2 w-full"
+                  />
+                </div>
+
+                <div className="space-x-2">
+                  <Button onClick={() => handleMatch()}>Confirm</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setChildId("");
+                      setShowMatch(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             )}
           </div>
