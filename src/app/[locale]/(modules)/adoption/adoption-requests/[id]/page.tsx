@@ -704,7 +704,7 @@ export default function AdoptionRequestReviewPage() {
                 <Button
                   onClick={() => {
                     setServiceDataId(String(application.applicationId));
-                    router.push("../home-visit/step1");
+                    router.push("../home-visit/Registration/step1");
                   }}
                 >
                   Submit Home Visit Feedback
