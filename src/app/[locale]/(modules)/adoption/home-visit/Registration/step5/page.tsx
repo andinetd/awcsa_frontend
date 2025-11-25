@@ -39,13 +39,13 @@ import axios, { AxiosError } from "axios";
 import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { FileDragAndDrop } from "@/components/custom/file-dropzone";
 
 function Step5() {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
 
-  const { step5, setStep5, reset, serviceDataId } =
-    useHomeVisitFormStore();
+  const { step5, setStep5, reset, serviceDataId } = useHomeVisitFormStore();
 
   // Ensure there's always at least one empty witness entry when initializing the form
   const initialValues =
@@ -252,14 +252,24 @@ function Step5() {
                   name="socialWorkerEvaluation.signature"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Signature</FormLabel>
+                      <FormLabel className="text-[18px] font-lexend">
+                        Signature
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter Signature"
-                          {...(field as any)}
+                        <FileDragAndDrop
+                          value={[field.value]}
+                          onChange={(files) => {
+                            field.onChange(files[0]);
+                          }}
+                          maxFiles={1}
+                          acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
+                          maxSize={10 * 1024 * 1024} // 10MB
+                          error={
+                            form.formState.errors.socialWorkerEvaluation
+                              ?.signature?.message
+                          }
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -311,14 +321,24 @@ function Step5() {
                   name="adoptionApplicantFather.signature"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Signature</FormLabel>
+                      <FormLabel className="text-[18px] font-lexend">
+                        Signature
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter Signature"
-                          {...(field as any)}
+                        <FileDragAndDrop
+                          value={[field.value]}
+                          onChange={(files) => {
+                            field.onChange(files[0]);
+                          }}
+                          maxFiles={1}
+                          acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
+                          maxSize={10 * 1024 * 1024} // 10MB
+                          error={
+                            form.formState.errors.adoptionApplicantFather
+                              ?.signature?.message
+                          }
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -370,14 +390,24 @@ function Step5() {
                   name="adoptionApplicantMother.signature"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Signature</FormLabel>
+                      <FormLabel className="text-[18px] font-lexend">
+                        Signature
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter Signature"
-                          {...(field as any)}
+                        <FileDragAndDrop
+                          value={[field.value]}
+                          onChange={(files) => {
+                            field.onChange(files[0]);
+                          }}
+                          maxFiles={1}
+                          acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
+                          maxSize={10 * 1024 * 1024} // 10MB
+                          error={
+                            form.formState.errors.adoptionApplicantMother
+                              ?.signature?.message
+                          }
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

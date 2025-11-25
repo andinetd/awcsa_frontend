@@ -16,6 +16,13 @@ import { AttachmentDialog } from "../_components/attachment-dialog";
 import { BASE_URL } from "@/lib/base-url";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
 import axios, { AxiosError } from "axios";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/custom/custom-card";
+import { Baby, CheckCircle2 } from "lucide-react";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
@@ -397,7 +404,6 @@ export default function AdoptionRequestReviewPage() {
       note: "notes about the match",
     } as any;
 
-   
     try {
       const res = await axios.post(`${BASE_URL}/adoption/matches`, payload, {
         headers: {
@@ -456,7 +462,7 @@ export default function AdoptionRequestReviewPage() {
       toast.error(message);
       return;
     }
-}
+  }
 
   async function handleAction(type: "approve" | "deny") {
     if (!application) return;
@@ -619,19 +625,20 @@ export default function AdoptionRequestReviewPage() {
         />
       )}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="mb-4 text-2xl">Review Adoption Application</div>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            {/* adapt backend application to the small shape ApplicantInfoSection expects */}
-            <ApplicantInfoSection
-              application={{
-                applicationId: String(application.applicationId),
-                applicantName: `${application.applicantInfo.firstName} ${application.applicantInfo.lastName}`,
-                status: (application.status || "").toLowerCase(),
-                submittedDate: application.reviewInfo?.createdAt ?? "",
-              }}
-            />
-            <div className="mt-6">
+        <div className="max-w-7xl mx-auto p-8 space-y-6">
+          <ApplicantInfoSection
+            application={{
+              applicationId: String(application.applicationId),
+              applicantName: `${application.applicantInfo.firstName} ${application.applicantInfo.lastName}`,
+              status: (application.status || "").toLowerCase(),
+              submittedDate: application.reviewInfo?.createdAt ?? "",
+            }}
+            setServiceDataId={setServiceDataId}
+            handleAction={handleAction}
+            handleReturnToApplicant={handleReturnToApplicant}
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
               <ApplicationAttachmentsSection
                 attachments={attachmentFields}
                 status={
@@ -643,122 +650,96 @@ export default function AdoptionRequestReviewPage() {
                 onComment={handleAttachmentComment}
                 onView={handleViewAttachment}
               />
+
+              <ApplicationFieldsSection
+                fields={fields}
+                status={
+                  (application.status || "").toUpperCase() === "PENDING_REVIEW"
+                    ? "pending"
+                    : (application.status || "").toLowerCase()
+                }
+                onToggle={handleFieldToggle}
+                onComment={handleFieldComment}
+              />
             </div>
-          </div>
-          <div className="lg:col-span-2">
-            <ApplicationFieldsSection
-              fields={fields}
-              status={
-                (application.status || "").toUpperCase() === "PENDING_REVIEW"
-                  ? "pending"
-                  : (application.status || "").toLowerCase()
-              }
-              onToggle={handleFieldToggle}
-              onComment={handleFieldComment}
-            />
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Baby className="w-5 h-5 text-slate-400" />
+                    Adoption Preferences
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-slate-500">
+                        Preferred Sex
+                      </span>
+                      <span className="font-bold text-slate-900">
+                        {application.applicationInfo.preferredChildren?.sex}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-slate-500">Quantity</span>
+                      <span className="font-bold text-slate-900">
+                        {application.applicationInfo.preferredChildren?.number}{" "}
+                        Child
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-500">Age Range</span>
+                      <span className="font-bold text-slate-900">
+                        {
+                          application.applicationInfo.preferredChildren
+                            ?.ageRange?.min
+                        }{" "}
+                        -{" "}
+                        {
+                          application.applicationInfo.preferredChildren
+                            ?.ageRange?.max
+                        }{" "}
+                        Years
+                      </span>
+                    </div>
+                  </div>
 
-            {/* Return form: overall comment */}
-            {(application.status || "").toUpperCase() === "PENDING_REVIEW" && (
-              <div className="mt-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Overall comment
-                  </label>
-                  <textarea
-                    value={returnComment}
-                    onChange={(e) => setReturnComment(e.target.value)}
-                    placeholder="Overall comment"
-                    className="w-full border rounded p-2 min-h-[80px]"
-                  />
-                </div>
-
-                <div className="flex gap-2 mt-2">
-                  <Button
-                    variant="destructive"
-                    onClick={() => handleAction("deny")}
-                    disabled={submitting}
-                    className="cursor-pointer"
-                  >
-                    Reject
-                  </Button>
-                  <Button
-                    onClick={handleReturnToApplicant}
-                    disabled={submitting}
-                    className="cursor-pointer"
-                  >
-                    Return to Applicant
-                  </Button>
-                  <Button
-                    onClick={() => handleAction("approve")}
-                    disabled={submitting}
-                    className="cursor-pointer"
-                  >
-                    Approve
-                  </Button>
-                </div>
+                  <div className="pt-4 border-t border-slate-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2
+                        className={`w-4 h-4 ${
+                          application.applicationInfo.spouseAgreement
+                            ? "text-green-500"
+                            : "text-slate-300"
+                        }`}
+                      />
+                      <span className="text-sm font-medium text-slate-700">
+                        Spouse Agreement
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <div className="lg:col-span-2">
+                {/* Return form: overall comment */}
+                {(application.status || "").toUpperCase() ===
+                  "PENDING_REVIEW" && (
+                  <div className="mt-6 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Overall comment
+                      </label>
+                      <textarea
+                        value={returnComment}
+                        onChange={(e) => setReturnComment(e.target.value)}
+                        placeholder="Overall comment"
+                        className="w-full border rounded p-2 min-h-[80px]"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-            {(application.status || "").toUpperCase() ===
-              "PENDING_HOME_VISIT" && (
-              <div className="mt-6 flex justify-end">
-                <Button
-                  onClick={() => {
-                    setServiceDataId(String(application.applicationId));
-                    router.push("../home-visit/Registration/step1");
-                  }}
-                >
-                  Submit Home Visit Feedback
-                </Button>
-              </div>
-            )}
-            {(application.status || "").toUpperCase() ===
-              "PENDING_APPROVAL" && (
-              <div className="mt-6 flex justify-end">
-                <div className="space-x-2">
-                  <Button
-                    onClick={() => {
-                      router.push(
-                        `/adoption/home-visit/${String(
-                          application.applicationId
-                        )}/fields`
-                      );
-                    }}
-                  >
-                    View Home Visit Feedback
-                  </Button>
-                  <Button onClick={() => setShowMatch((s) => !s)}>
-                    Approve and match child
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {showMatch && (
-              <div className="flex items-center gap-2 mt-2 justify-between border p-2 rounded shadow-sm">
-                <div className="flex flex-col space-y-2">
-                  <input
-                    type="text"
-                    value={childId}
-                    onChange={(e) => setChildId(e.target.value)}
-                    placeholder="Enter child ID number"
-                    className="border rounded p-2 w-full"
-                  />
-                </div>
-
-                <div className="space-x-2">
-                  <Button onClick={() => handleMatch()}>Confirm</Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setChildId("");
-                      setShowMatch(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

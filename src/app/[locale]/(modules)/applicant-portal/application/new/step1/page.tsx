@@ -200,8 +200,8 @@ export default function Step1Page() {
                       <option value="Bachelor">
                         {application("stepone.form.educationOptions.bachelor")}
                       </option>
-                      <option value="Master">
-                        {application("stepone.form.educationOptions.master")}
+                      <option value="Masters">
+                        {application("stepone.form.educationOptions.masters")}
                       </option>
                       <option value="Doctorate">
                         {application("stepone.form.educationOptions.doctorate")}

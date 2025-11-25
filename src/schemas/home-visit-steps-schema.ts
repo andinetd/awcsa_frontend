@@ -207,17 +207,23 @@ export const Step5Schema = z.object({
     preparedDate: z.string(),
     approvedBy: z.string(),
     approvedDate: z.string(),
-    signature: z.string(),
+    signature: z.instanceof(File).refine((file) => file != null, {
+      message: "please select social worker signature",
+    }),
   }),
   adoptionApplicantFather: z.object({
     fullName: z.string(),
     date: z.string(),
-    signature: z.string(),
+    signature: z.instanceof(File).refine((file) => file != null, {
+      message: "please select fathers signature",
+    }),
   }),
   adoptionApplicantMother: z.object({
     fullName: z.string(),
     date: z.string(),
-    signature: z.string(),
+    signature: z.instanceof(File).refine((file) => file != null, {
+      message: "please select mothers signature",
+    }),
   }),
 });
 

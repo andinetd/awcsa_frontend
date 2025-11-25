@@ -13,7 +13,7 @@ export const ApplicationStepOneSchema = z.object({
   cityIdNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
   address: z.string().optional(),
-  educationLevel: z.enum(["primary", "secondary", "none", "Diploma", "Bachelor", "Master", "Doctorate"]).optional(),
+  educationLevel: z.enum(["primary", "secondary", "none", "Diploma", "Bachelor", "Masters", "Doctorate"]).optional(),
   occupation: z.string().optional(),
   monthlyIncome: z.number().optional(),
   spouseCityIdNumber: z.string().optional(),
