@@ -20,6 +20,7 @@ interface ApplicantInfoSectionProps {
   setServiceDataId: (id: string) => void;
   handleAction: (action: "approve" | "deny") => void;
   handleReturnToApplicant: () => void;
+  setIsMatchModalOpen: (isOpen: boolean) => void;
 }
 
 const getStatusColor = (status: string) => {
@@ -27,7 +28,7 @@ const getStatusColor = (status: string) => {
   switch (s) {
     case "PENDING_APPROVAL":
       return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "APPROVED":
+    case "MATCHED":
       return "bg-green-100 text-green-800 border-green-200";
     case "REJECTED":
       return "bg-red-100 text-red-800 border-red-200";
@@ -42,6 +43,7 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
   setServiceDataId,
   handleAction,
   handleReturnToApplicant,
+  setIsMatchModalOpen,
 }) => {
   const router = useRouter();
 
@@ -94,7 +96,36 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                   >
                     View Home Visit Feedback
                   </Button>
-                  <Button onClick={() => {}}>Approve and match child</Button>
+                  <Button
+                    onClick={() => setIsMatchModalOpen(true)}
+                    className="flex-1 lg:flex-none"
+                  >
+                    Approve and match child
+                  </Button>
+                </div>
+              </div>
+            )}
+            {(application.status || "").toUpperCase() ===
+              "MATCHED" && (
+              <div className="mt-6 flex justify-end">
+                <div className="space-x-2">
+                  <Button
+                    onClick={() => {
+                      router.push(
+                        `/adoption/home-visit/${String(
+                          application.applicationId
+                        )}/fields`
+                      );
+                    }}
+                  >
+                    View Home Visit Feedback
+                  </Button>
+                  <Button
+                    onClick={() => setIsMatchModalOpen(true)}
+                    className="flex-1 lg:flex-none"
+                  >
+                    View Matched Child Details
+                  </Button>
                 </div>
               </div>
             )}

@@ -18,6 +18,7 @@ export type BackendDocument = {
 };
 
 export type BackendApplicantInfo = {
+  id: number;
   firstName: string;
   lastName: string;
   dateOfBirth?: string;

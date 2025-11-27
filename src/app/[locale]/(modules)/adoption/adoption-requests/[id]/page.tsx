@@ -9,6 +9,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { ChildMatchingModal } from "../_components/child-matching-modal";
 
 // we'll fetch applications from backend instead of using mockApplications
 import type { BackendAdoptionApplication } from "../page";
@@ -31,8 +32,6 @@ export default function AdoptionRequestReviewPage() {
     (state) => state.setServiceDataId
   );
 
-  const user = useAuthStore((state) => state.user);
-
   const [showMatch, setShowMatch] = useState(false);
   const [childId, setChildId] = useState("");
 
@@ -40,6 +39,8 @@ export default function AdoptionRequestReviewPage() {
     BackendAdoptionApplication[]
   >([]);
   const [loadingApps, setLoadingApps] = useState(false);
+
+  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
   const token = useAuthStore((s) => s.token);
 
@@ -377,92 +378,6 @@ export default function AdoptionRequestReviewPage() {
     }
   }
 
-  async function handleMatch() {
-    if (!application) return;
-
-    if (!childId || childId.trim() === "") {
-      toast.error("Please enter a child ID");
-      return;
-    }
-
-    const applicantIdNum = user?.id != null ? Number(user.id) : undefined;
-    const applicationIdNum = Number(application.applicationId);
-
-    if (
-      applicantIdNum == null ||
-      isNaN(applicantIdNum) ||
-      isNaN(applicationIdNum)
-    ) {
-      toast.error("Invalid applicant or application id");
-      return;
-    }
-
-    const payload = {
-      childIdFromFacility: childId,
-      applicantId: applicantIdNum,
-      applicationId: applicationIdNum,
-      note: "notes about the match",
-    } as any;
-
-    try {
-      const res = await axios.post(`${BASE_URL}/adoption/matches`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      setChildId("");
-      setShowMatch(false);
-      router.push("../adoption-requests");
-      toast.success("Child matched successfully");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-
-      // extract a useful message from AxiosError if possible
-      let message = "Failed to submit home visit feedback. Please try again.";
-
-      if (axios.isAxiosError(error)) {
-        const axiosErr = error as AxiosError<any>;
-        // prefer server-provided message shape
-        const respData = axiosErr.response?.data;
-        if (respData) {
-          if (typeof respData === "string") {
-            message = respData;
-          } else if (respData.message) {
-            message = String(respData.message);
-          } else if (respData.errors) {
-            try {
-              // if errors is array or object, make it readable
-              if (Array.isArray(respData.errors)) {
-                message = respData.errors
-                  .map((e: any) => e.message || JSON.stringify(e))
-                  .join("; ");
-              } else {
-                message = JSON.stringify(respData.errors);
-              }
-            } catch {
-              message = String(respData.errors);
-            }
-          } else {
-            try {
-              message = JSON.stringify(respData);
-            } catch {
-              message = String(respData);
-            }
-          }
-        } else if (axiosErr.message) {
-          message = axiosErr.message;
-        }
-      } else if (error instanceof Error) {
-        message = error.message;
-      }
-
-      // show the extracted message in the toast
-      toast.error(message);
-      return;
-    }
-  }
 
   async function handleAction(type: "approve" | "deny") {
     if (!application) return;
@@ -636,6 +551,7 @@ export default function AdoptionRequestReviewPage() {
             setServiceDataId={setServiceDataId}
             handleAction={handleAction}
             handleReturnToApplicant={handleReturnToApplicant}
+            setIsMatchModalOpen={setIsMatchModalOpen}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -743,6 +659,12 @@ export default function AdoptionRequestReviewPage() {
           </div>
         </div>
       </div>
+      <ChildMatchingModal
+        isOpen={isMatchModalOpen}
+        onClose={() => setIsMatchModalOpen(false)}
+        applicationId={application.applicationId}
+        applicantId={application.applicantInfo.id}
+      />
     </div>
   );
 }
