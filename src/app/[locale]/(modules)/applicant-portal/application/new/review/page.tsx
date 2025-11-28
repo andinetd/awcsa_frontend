@@ -9,6 +9,7 @@ import { useApplicationFormStore } from "@/stores/application-form-store";
 import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { formatAge } from "@/lib/utils";
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -349,13 +350,13 @@ const handleSubmit = async () => {
                     <div>
                       <p className="text-xs text-gray-500">Age Min</p>
                       <p className="text-gray-900">
-                        {step1?.preferredChildren?.ageRange?.min ?? "-"}
+                        {formatAge(step1?.preferredChildren?.ageRange?.min) ?? "-"}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Age Max</p>
                       <p className="text-gray-900">
-                        {step1?.preferredChildren?.ageRange?.max ?? "-"}
+                        {formatAge(step1?.preferredChildren?.ageRange?.max) ?? "-"}
                       </p>
                     </div>
                     <div>

@@ -910,3 +910,45 @@ export const mockCareCenters: NewCareCenterSchemaType[] = [
     maxAge: 8,
   },
 ];
+
+export interface MatchedChildInfo {
+  child: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    cityIdNumber: string | null;
+    phoneNumber: string | null;
+  };
+  adopter: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    cityIdNumber: string;
+    phoneNumber: string;
+  };
+  matchedAt: string;
+  facilityChildId: string;
+  status: string;
+}
+
+export const MOCK_MATCHED_CHILD_DATA: MatchedChildInfo = {
+  child: {
+    id: 27,
+    firstName: "Abel",
+    lastName: "Bogale",
+    dateOfBirth: "2018-07-26T00:00:00.000Z",
+    cityIdNumber: null,
+    phoneNumber: null,
+  },
+  adopter: {
+    id: 1,
+    firstName: "Abel",
+    lastName: "Mulat",
+    cityIdNumber: "CLT001",
+    phoneNumber: "0922334455",
+  },
+  matchedAt: "2025-11-27T17:08:18.333Z",
+  facilityChildId: "balk",
+  status: "ADOPTED",
+};

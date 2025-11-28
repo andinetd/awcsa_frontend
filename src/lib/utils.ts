@@ -28,6 +28,25 @@ export function formatRole(role: EmployeeRole | string) {
   }
 }
 
+export function formatAge(years: number | undefined | null): string {
+  if (years === undefined || years === null || isNaN(years)) return "";
+
+  const wholeYears = Math.floor(years);
+  const remainingMonths = Math.round((years - wholeYears) * 12);
+
+  if (wholeYears === 0) {
+    return `${remainingMonths} month${remainingMonths !== 1 ? "s" : ""}`;
+  }
+
+  if (remainingMonths === 0) {
+    return `${wholeYears} year${wholeYears !== 1 ? "s" : ""}`;
+  }
+
+  return `${wholeYears} year${
+    wholeYears !== 1 ? "s" : ""
+  } ${remainingMonths} month${remainingMonths !== 1 ? "s" : ""}`;
+}
+
 export interface RegisterEmployeeDto {
   cityIdNumber: string;
   firstName: string;

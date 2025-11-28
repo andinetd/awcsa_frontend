@@ -21,6 +21,7 @@ interface ApplicantInfoSectionProps {
   handleAction: (action: "approve" | "deny") => void;
   handleReturnToApplicant: () => void;
   setIsMatchModalOpen: (isOpen: boolean) => void;
+  setIsMatchedChildDetailOpen: (isOpen: boolean) => void;
 }
 
 const getStatusColor = (status: string) => {
@@ -44,6 +45,7 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
   handleAction,
   handleReturnToApplicant,
   setIsMatchModalOpen,
+  setIsMatchedChildDetailOpen,
 }) => {
   const router = useRouter();
 
@@ -121,7 +123,7 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                     View Home Visit Feedback
                   </Button>
                   <Button
-                    onClick={() => setIsMatchModalOpen(true)}
+                    onClick={() => setIsMatchedChildDetailOpen(true)}
                     className="flex-1 lg:flex-none"
                   >
                     View Matched Child Details

@@ -169,8 +169,8 @@ const AdoptionRequests = () => {
               {loading ? (
                 <div className="text-gray-500 italic">Loading...</div>
               ) : filteredApps(t.value).length === 0 ? (
-                <div className="text-gray-500 italic">
-                  No applications found.
+                <div className="col-span-full py-12 text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+                  No applications found in this category.
                 </div>
               ) : (
                 filteredApps(t.value).map((app, idx) => (

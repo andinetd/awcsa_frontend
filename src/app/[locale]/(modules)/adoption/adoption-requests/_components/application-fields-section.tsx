@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
+import { formatAge } from "@/lib/utils";
 
 interface ApplicationField {
   fieldName: string;
@@ -53,6 +54,10 @@ export const ApplicationFieldsSection: React.FC<ApplicationFieldsSectionProps> =
                 {field.fieldName === "Date of Birth" ? (
                   <span className="ext-slate-900 font-medium">
                     {field.answer.split("T")[0]}
+                  </span>
+                ) : field.fieldName === "Preferred Age Min" || field.fieldName === "Preferred Age Max" ? (
+                  <span className="ext-slate-900 font-medium">
+                    {formatAge(field.answer === "" ? undefined : Number(field.answer))}
                   </span>
                 ) : (
                   <span className="ext-slate-900 font-medium">

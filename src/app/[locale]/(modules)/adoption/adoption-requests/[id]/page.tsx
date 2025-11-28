@@ -9,7 +9,10 @@ import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { formatAge } from "@/lib/utils";
 import { ChildMatchingModal } from "../_components/child-matching-modal";
+import { MatchedChildDetail } from "../_components/matched-child-detail-modal";
+import { MOCK_MATCHED_CHILD_DATA } from "@/lib/mock-data";
 
 // we'll fetch applications from backend instead of using mockApplications
 import type { BackendAdoptionApplication } from "../page";
@@ -41,6 +44,8 @@ export default function AdoptionRequestReviewPage() {
   const [loadingApps, setLoadingApps] = useState(false);
 
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
+  const [isMatchedChildDetailOpen, setIsMatchedChildDetailOpen] =
+    useState(false);
 
   const token = useAuthStore((s) => s.token);
 
@@ -378,7 +383,6 @@ export default function AdoptionRequestReviewPage() {
     }
   }
 
-
   async function handleAction(type: "approve" | "deny") {
     if (!application) return;
     setAction(type);
@@ -552,6 +556,7 @@ export default function AdoptionRequestReviewPage() {
             handleAction={handleAction}
             handleReturnToApplicant={handleReturnToApplicant}
             setIsMatchModalOpen={setIsMatchModalOpen}
+            setIsMatchedChildDetailOpen={setIsMatchedChildDetailOpen}
           />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -606,16 +611,15 @@ export default function AdoptionRequestReviewPage() {
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-slate-500">Age Range</span>
                       <span className="font-bold text-slate-900">
-                        {
+                        {formatAge(
                           application.applicationInfo.preferredChildren
                             ?.ageRange?.min
-                        }{" "}
+                        )}{" "}
                         -{" "}
-                        {
+                        {formatAge(
                           application.applicationInfo.preferredChildren
                             ?.ageRange?.max
-                        }{" "}
-                        Years
+                        )}{" "}
                       </span>
                     </div>
                   </div>
@@ -664,6 +668,11 @@ export default function AdoptionRequestReviewPage() {
         onClose={() => setIsMatchModalOpen(false)}
         applicationId={application.applicationId}
         applicantId={application.applicantInfo.id}
+      />
+      <MatchedChildDetail
+        isOpen={isMatchedChildDetailOpen}
+        onClose={() => setIsMatchedChildDetailOpen(false)}
+        data={MOCK_MATCHED_CHILD_DATA}
       />
     </div>
   );

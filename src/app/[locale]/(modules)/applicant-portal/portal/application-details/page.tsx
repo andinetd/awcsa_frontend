@@ -8,6 +8,7 @@ import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-ap
 import { useAuthStore } from "@/stores/auth-store";
 import { toast } from "sonner";
 import Link from "next/link";
+import { formatAge } from "@/lib/utils";
 
 export default function Details() {
   const { application } = useFetchedAdoptionApplicationStore();
@@ -249,18 +250,18 @@ export default function Details() {
                     <div>
                       <p className="text-xs text-gray-500">Age Min</p>
                       <p className="text-gray-900">
-                        {form.preferredChildren?.ageRange?.min ??
-                          application.adoptionData?.preferredChildren?.ageRange
-                            ?.min ??
+                        {formatAge(form.preferredChildren?.ageRange?.min) ??
+                          formatAge(application.adoptionData?.preferredChildren?.ageRange
+                            ?.min) ??
                           "-"}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Age Max</p>
                       <p className="text-gray-900">
-                        {form.preferredChildren?.ageRange?.max ??
-                          application.adoptionData?.preferredChildren?.ageRange
-                            ?.max ??
+                        {formatAge(form.preferredChildren?.ageRange?.max) ??
+                          formatAge(application.adoptionData?.preferredChildren?.ageRange
+                            ?.max) ??
                           "-"}
                       </p>
                     </div>

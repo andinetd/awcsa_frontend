@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { useApplicationFormStore } from "@/stores/application-form-store";
+import AgeInput from "@/components/custom/age-input";
 
 export default function Step1Page() {
   const router = useRouter();
@@ -33,6 +34,31 @@ export default function Step1Page() {
     resolver: zodResolver(ApplicationStepOneSchema),
     defaultValues: step1 || {},
   });
+
+  function normalizeAgeDisplay(ageInYears: number | undefined) {
+    if (!ageInYears) {
+      return { displayValue: 1, displayUnit: "years" as const };
+    }
+
+    // If it's a whole number → years
+    if (Number.isInteger(ageInYears)) {
+      return { displayValue: ageInYears, displayUnit: "years" as const };
+    }
+
+    // Float → months
+    return {
+      displayValue: Math.round(ageInYears * 12), // convert years → months
+      displayUnit: "months" as const,
+    };
+  }
+
+  const storedMinAge = step1?.preferredChildren?.ageRange?.min;
+  const storedMaxAge = step1?.preferredChildren?.ageRange?.max;
+
+  const { displayValue: minValue, displayUnit: minUnit } =
+    normalizeAgeDisplay(storedMinAge);
+  const { displayValue: maxValue, displayUnit: maxUnit } =
+    normalizeAgeDisplay(storedMaxAge);
 
   async function onSubmit(values: ApplicationStepOneType) {
     setStep1(values);
@@ -268,12 +294,10 @@ export default function Step1Page() {
                     {application("stepone.form.preferredChildAgeMin")}
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      min={0}
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    <AgeInput
+                      label=""
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -290,12 +314,10 @@ export default function Step1Page() {
                     {application("stepone.form.preferredChildAgeMax")}
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      min={0}
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    <AgeInput
+                      label=""
+                      value={field.value}
+                      onChange={field.onChange} // receives converted years
                     />
                   </FormControl>
                   <FormMessage />
@@ -432,41 +454,6 @@ export default function Step1Page() {
               )}
             />
           </div>
-
-          {/* <div>
-            <Label htmlFor="maritalStatus">Marital Status *</Label>
-            <select
-              id="maritalStatus"
-              value={formData.maritalStatus}
-              onChange={(e) =>
-                handleInputChange("maritalStatus", e.target.value)
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select marital status</option>
-              <option value="single">Single</option>
-              <option value="married">Married</option>
-              <option value="divorced">Divorced</option>
-              <option value="widowed">Widowed</option>
-            </select>
-          </div>
-
-          {formData.maritalStatus === "married" && (
-            <div>
-              <Label htmlFor="spouseInfo">Spouse Information</Label>
-              <Textarea
-                id="spouseInfo"
-                value={formData.spouseInfo}
-                onChange={(e) =>
-                  handleInputChange("spouseInfo", e.target.value)
-                }
-                placeholder="Please provide your spouse's full name, occupation, and employer"
-                rows={3}
-              />
-            </div>
-          )} */}
-
           <div className="flex justify-end">
             <Button type="submit" className="px-8">
               Next Step
