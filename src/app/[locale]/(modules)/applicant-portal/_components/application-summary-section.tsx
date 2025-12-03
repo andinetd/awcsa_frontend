@@ -7,11 +7,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useAuthStore } from "@/stores/auth-store";
-import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-application";
+import { useFetchApplicationQuery } from "@/hooks/applicants-portal";
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -34,6 +32,8 @@ const getStatusColor = (status: string) => {
       return "bg-yellow-100 text-yellow-800";
     case "pending_home_visit":
       return "bg-green-100 text-green-800";
+    case "matched":
+      return "bg-green-100 text-green-800";
     case "returned":
       return "bg-blue-100 text-blue-800";
     case "rejected":
@@ -45,68 +45,32 @@ const getStatusColor = (status: string) => {
 
 export function ApplicationSummarySection() {
   const applicationMessages = useTranslations("applicationMessages");
-  const user = useAuthStore((s) => s.user);
-  const token = useAuthStore((s) => s.token);
   const [loading, setLoading] = useState(false);
   const { application, setApplication } = useFetchedAdoptionApplicationStore();
-
+  const { data: applications , isLoading, isError } = useFetchApplicationQuery();
+  
   useEffect(() => {
-    let mounted = true;
-    const userId = user?.id;
-    if (!userId) return;
-
-    async function fetchApplication() {
+    if (isLoading) {
       setLoading(true);
-      try {
-        const url = `${BASE_URL}/public/adoption/applications`;
-
-        const config = {
-          headers: {
-            Accept: "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          timeout: 10000,
-        };
-
-        const res = await axios.get(url, config);
-        if (!mounted) return;
-        // Expecting either a single object or an array — pick the first if array
-        const payload = res.data;
-        console.log("Fetched application payload:", payload);
-        if (!payload) {
-          setApplication(null);
-          return;
-        }
-
-        // Normalise response shape. Backend may return either:
-        // - an array of applications
-        // - a single application object
-        // - an envelope { message, data } where data is array or object
-        let app: any = null;
-        if (Array.isArray(payload)) {
-          app = payload[0] ?? null;
-        } else if (payload.data) {
-          app = Array.isArray(payload.data)
-            ? payload.data[0] ?? null
-            : payload.data;
-        } else {
-          app = payload;
-        }
-
-        if (mounted) setApplication(app);
-      } catch (err: any) {
-        console.error("Failed to load applicant application", err);
-        setApplication(null);
-      } finally {
-        if (mounted) setLoading(false);
-      }
+      return;
     }
 
-    fetchApplication();
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
+    setLoading(false);
+
+    if (isError) {
+      if (applications === undefined){
+         toast.error("Failed to load application data.");
+      }
+      setApplication(null);
+      return;
+    }
+
+    if (applications && applications.length > 0) {
+      setApplication(applications[0]);
+    } else {
+      setApplication(null);
+    }
+  }, [applications, isLoading, isError]);
 
   return (
     <Card>
@@ -219,6 +183,13 @@ export function ApplicationSummarySection() {
                   We regret to inform you that your adoption application has
                   been rejected. For more information, please contact our support
                   team.
+                </p>
+              </div>
+            )}
+            {application.status === "MATCHED" && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800">
+                  Congratulations! Your adoption application has been matched. Our team will reach out to you with the next steps.
                 </p>
               </div>
             )}

@@ -337,7 +337,7 @@ export default function Details() {
                 )}
               </div>
             </div>
-            {application.remark && (
+            {application.remark && (application.status === "RETURNED" || application.status === "PENDING_REVIEW") && (
               <div className="mt-4 border-t pt-4">
                 <h4 className="text-sm font-semibold text-gray-700 mb-2">
                   Reviewer Comment

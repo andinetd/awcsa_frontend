@@ -454,7 +454,14 @@ export default function Step1Page() {
               )}
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/applicant-portal/portal")}
+            >
+              Back to Portal
+            </Button>
             <Button type="submit" className="px-8">
               Next Step
             </Button>
