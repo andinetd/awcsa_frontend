@@ -10,6 +10,7 @@ import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { formatAge } from "@/lib/utils";
+import { useSubmitApplicationMutation } from "@/hooks/applicants-portal";
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function ReviewPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [objectUrls, setObjectUrls] = useState<string[]>([]);
+  const { mutate, isPending } = useSubmitApplicationMutation();
 
   // cleanup object URLs on unmount — ensure this hook is declared before any early returns
   useEffect(() => {
@@ -41,7 +43,6 @@ const handleSubmit = async () => {
   setSubmitting(true);
   setError(null);
 
-  try {
     if (!token) {
       const msg = "You must be signed in to submit the application.";
       setError(msg);
@@ -100,59 +101,19 @@ const handleSubmit = async () => {
     appendIfFile("medicalDocument", step2?.medical ?? null);
     appendIfFile("birthCertificate", step1?.birthCertificate ?? null);
 
-    const headers: Record<string, string> = {};
-    if (token) headers["Authorization"] = `Bearer ${token}`;
 
-
-    const response = await fetch(`${BASE_URL}/public/adoption/applications`, {
-      method: "POST",
-      headers,
-      body: formData,
+    mutate(formData, {
+      onSuccess: () => {
+        toast.success("Application submitted successfully!");
+        reset();
+        router.push("/applicant-portal/portal");
+      },
+      onError: (error: any) => {
+        toast.error(error.message ?? "Submission failed");
+      },
     });
-   
-    const resultText = await response.text();
-
-    let result: any = null;
-    try {
-      result = JSON.parse(resultText);
-    } catch {
-      // Not JSON — treat as success
-      result = null;
-    }
-
-    if (!response.ok || (result && result.status === "error")) {
-      // handle validation-style errors
-      let messages: string[] = [];
-
-      if (result?.errors && Array.isArray(result.errors)) {
-        messages = result.errors.map((err: any) => err.message);
-      } else if (result?.message) {
-        messages = [result.message];
-      } else {
-        messages = ["Unknown error occurred"];
-      }
-
-      messages.forEach((msg) => toast.error(msg));
-
-      setError(messages.join(", "));
-      setSuccess(false);
-      return; // Stop here; no redirect
-    }
-
-   
-    setSuccess(true);
-    reset();
-    router.push("/applicant-portal/portal");
-    toast.success("Application submitted successfully!");
-  } catch (e: any) {
-    const message = e?.message ?? "Unknown error";
-    setError(message);
-    setSuccess(false);
-    toast.error(message);
-    console.error("Submit error:", e);
-  } finally {
-    setSubmitting(false);
-  }
+  
+ 
 };
 
 
@@ -350,13 +311,15 @@ const handleSubmit = async () => {
                     <div>
                       <p className="text-xs text-gray-500">Age Min</p>
                       <p className="text-gray-900">
-                        {formatAge(step1?.preferredChildren?.ageRange?.min) ?? "-"}
+                        {formatAge(step1?.preferredChildren?.ageRange?.min) ??
+                          "-"}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Age Max</p>
                       <p className="text-gray-900">
-                        {formatAge(step1?.preferredChildren?.ageRange?.max) ?? "-"}
+                        {formatAge(step1?.preferredChildren?.ageRange?.max) ??
+                          "-"}
                       </p>
                     </div>
                     <div>
@@ -491,9 +454,9 @@ const handleSubmit = async () => {
         <Button
           onClick={handleSubmit}
           className="px-8 bg-green-600 hover:bg-green-700"
-          disabled={submitting || success}
+          disabled={isPending || success}
         >
-          {submitting
+          {isPending
             ? "Submitting..."
             : success
             ? "Submitted!"

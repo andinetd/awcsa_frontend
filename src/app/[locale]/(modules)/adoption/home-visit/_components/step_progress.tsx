@@ -7,27 +7,27 @@ const steps = [
   {
     id: 1,
     name: "General & Applicant Information",
-    path: "/adoption/home-visit/step1",
+    path: "/adoption/home-visit/Registration/step1",
   },
   {
     id: 2,
     name: "Family Composition & Background",
-    path: "/adoption/home-visit/step2",
+    path: "/adoption/home-visit/Registration/step2",
   },
   {
     id: 3,
     name: "Lifestyle, Parenting & Adoption Intent",
-    path: "/adoption/home-visit/step3",
+    path: "/adoption/home-visit/Registration/step3",
   },
   {
     id: 4,
     name: "Financial, Home, Health & Legal",
-    path: "/adoption/home-visit/step4",
+    path: "/adoption/home-visit/Registration/step4",
   },
   {
     id: 5,
     name: "Witnesses, Social Worker Evaluation & Signatures",
-    path: "/adoption/home-visit/step5",
+    path: "/adoption/home-visit/Registration/step5",
   },
 ];
 

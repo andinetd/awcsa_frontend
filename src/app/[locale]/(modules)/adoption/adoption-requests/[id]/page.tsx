@@ -27,6 +27,7 @@ import {
   CardTitle,
 } from "@/components/custom/custom-card";
 import { Baby, CheckCircle2 } from "lucide-react";
+import { useGetMatchedChildDetails } from "@/hooks/adoption/adoption-requests";
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
@@ -517,6 +518,9 @@ export default function AdoptionRequestReviewPage() {
     setOpenDialog(true);
   }
 
+    const { data, isLoading, isError, error } =
+      useGetMatchedChildDetails(application?.matchedChildId || 0);
+
   if (loadingApps) {
     return (
       <div className="max-w-2xl mx-auto p-6 text-center text-lg">
@@ -672,7 +676,7 @@ export default function AdoptionRequestReviewPage() {
       <MatchedChildDetail
         isOpen={isMatchedChildDetailOpen}
         onClose={() => setIsMatchedChildDetailOpen(false)}
-        data={MOCK_MATCHED_CHILD_DATA}
+        data={data}
       />
     </div>
   );

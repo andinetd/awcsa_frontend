@@ -32,11 +32,30 @@ interface ServiceData {
   client?: Client;
 }
 
-interface ChildCareFacility {
-  id?: number;
-  name?: string;
+export interface ChildCareFacility {
+  id: number;
+  name: string;
+  place: string;
+  type: string;
+  childrenAgeRange?: {
+    max: number;
+    min: number;
+  };
+  phone?: string | null;
+  email?: string | null;
+  region?: string | null;
+  subCity?: string | null;
+  woreda?: string | null;
+  kebele?: string | null;
+  houseNumber?: string | null;
+  description?: string | null;
+  orgUnitId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  // Account Info
+  contactPerson?: string;
+  loginUsername?: string;
 }
-
 // Main Child interface that matches the example payload
 export interface Child {
   id: number;
@@ -53,7 +72,10 @@ export interface Child {
   createdAt?: string;
   updatedAt?: string;
   serviceData: ServiceData;
-  childCareFacility?: ChildCareFacility | null;
+  childCareFacility?: {
+    id: number;
+    name: string;
+  } | null;
 }
 
 export interface MatchRequest {

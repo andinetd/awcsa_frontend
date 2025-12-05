@@ -422,7 +422,7 @@ export default function HomeVisitFieldsPage() {
                       Digital Signature
                     </dt>
                     <dd className="font-mono text-xs bg-slate-100 px-2 py-1 rounded inline-block">
-                      {formData.socialWorkerEvaluation.signature}
+                      {formData.socialWorkerEvaluation.signature.path}
                     </dd>
                   </div>
                 </div>

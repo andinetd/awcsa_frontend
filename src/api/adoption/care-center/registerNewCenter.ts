@@ -7,7 +7,7 @@ export const registerNewCareCenter = async (data: NewCareCenterSchemaType) => {
   const { token } = useAuthStore.getState();
   try {
     const req = await axios.post(
-      `${BASE_URL}/adoption/care-center/register`,
+      `${BASE_URL}/care-centers`,
       data,
       {
         headers: {

@@ -1,23 +1,66 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/custom/custom-card";
 import { Button } from "@/components/ui/button";
-import { X, User, Calendar, Tag, ShieldCheck } from "lucide-react";
+import {
+  X,
+  User,
+  Calendar,
+  Tag,
+  ShieldCheck,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+  DollarSign,
+  Phone,
+  Mail,
+} from "lucide-react";
 
 export interface MatchedChildInfo {
   child: {
     id: number;
+    cityIdNumber: string | null;
     firstName: string;
     lastName: string;
-    dateOfBirth: string;
-    cityIdNumber: string | null;
     phoneNumber: string | null;
+    address: string | null;
+    dateOfBirth: string;
+    clientCategory: string;
+    educationLevel: string;
+    occupation: string | null;
+    monthlyIncome: number | null;
+    spouseCityIdNumber: string | null;
+    familyMembersCount: number | null;
+    contactInfo: {
+      sex: string;
+      additionalInfo: string;
+    };
+    activeStatus: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
   };
   adopter: {
     id: number;
+    cityIdNumber: string;
     firstName: string;
     lastName: string;
-    cityIdNumber: string;
     phoneNumber: string;
+    address: string;
+    dateOfBirth: string;
+    clientCategory: string;
+    educationLevel: string;
+    occupation: string;
+    monthlyIncome: number;
+    spouseCityIdNumber: string;
+    familyMembersCount: number | null;
+    contactInfo: {
+      email: string;
+      phoneNumber: string;
+    };
+    activeStatus: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
   };
   matchedAt: string;
   facilityChildId: string;
@@ -44,7 +87,9 @@ const DetailRow = ({
       {Icon && <Icon className="w-4 h-4 mr-2" />}
       {label}
     </div>
-    <div className="font-medium text-slate-900 text-sm">{value || "—"}</div>
+    <div className="font-medium text-slate-900 text-sm text-right">
+      {value || "—"}
+    </div>
   </div>
 );
 
@@ -60,7 +105,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[95vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
           <div className="flex items-center gap-3">
@@ -92,15 +137,16 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 <div className="flex items-center gap-2 mb-2 text-blue-200 text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="w-4 h-4" /> Official Adoption Match
                 </div>
-                <h2 className="text-2xl font-bold mb-1">
+                <h2 className="text-3xl font-bold mb-1">
                   {data.child.firstName} {data.child.lastName}
                 </h2>
-                <p className="text-blue-100 text-sm opacity-90">
-                  Matched on {new Date(data.matchedAt).toLocaleDateString()}
+                <p className="text-blue-100 text-sm opacity-90 mt-1">
+                  Matched on {new Date(data.matchedAt).toLocaleDateString()} •
+                  Facility ID: {data.facilityChildId}
                 </p>
               </div>
-              <div className="text-center bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 min-w-[100px]">
-                <span className="block text-2xl font-bold">{childAge}</span>
+              <div className="text-center bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 min-w-[120px]">
+                <span className="block text-3xl font-bold">{childAge}</span>
                 <span className="text-[10px] uppercase font-medium opacity-80">
                   Years Old
                 </span>
@@ -120,23 +166,28 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               <CardContent className="pt-3">
                 <DetailRow label="First Name" value={data.child.firstName} />
                 <DetailRow label="Last Name" value={data.child.lastName} />
+                <DetailRow label="Gender" value={data.child.contactInfo.sex} />
                 <DetailRow
                   label="Date of Birth"
                   value={new Date(data.child.dateOfBirth).toLocaleDateString()}
                   icon={Calendar}
                 />
                 <DetailRow
-                  label="Facility ID"
-                  value={data.facilityChildId}
+                  label="City ID Number"
+                  value={data.child.cityIdNumber}
                   icon={Tag}
                 />
                 <DetailRow
-                  label="City ID Number"
-                  value={data.child.cityIdNumber}
+                  label="Client Category"
+                  value={data.child.clientCategory}
                 />
                 <DetailRow
-                  label="Phone Number"
-                  value={data.child.phoneNumber}
+                  label="Additional Info"
+                  value={data.child.contactInfo.additionalInfo}
+                />
+                <DetailRow
+                  label="Record Created"
+                  value={new Date(data.child.createdAt).toLocaleDateString()}
                 />
               </CardContent>
             </Card>
@@ -150,8 +201,14 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-3">
-                <DetailRow label="First Name" value={data.adopter.firstName} />
-                <DetailRow label="Last Name" value={data.adopter.lastName} />
+                <DetailRow
+                  label="Full Name"
+                  value={`${data.adopter.firstName} ${data.adopter.lastName}`}
+                />
+                <DetailRow
+                  label="Adopter ID"
+                  value={data.adopter.id.toString()}
+                />
                 <DetailRow
                   label="City ID Number"
                   value={data.adopter.cityIdNumber}
@@ -159,11 +216,40 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 />
                 <DetailRow
                   label="Phone Number"
-                  value={data.adopter.phoneNumber}
+                  value={data.adopter.contactInfo.phoneNumber}
+                  icon={Phone}
                 />
                 <DetailRow
-                  label="Adopter ID"
-                  value={data.adopter.id.toString()}
+                  label="Email"
+                  value={data.adopter.contactInfo.email}
+                  icon={Mail}
+                />
+                <DetailRow
+                  label="Address"
+                  value={data.adopter.address}
+                  icon={MapPin}
+                />
+                <DetailRow
+                  label="Occupation"
+                  value={data.adopter.occupation}
+                  icon={Briefcase}
+                />
+                <DetailRow
+                  label="Monthly Income"
+                  value={`${data.adopter.monthlyIncome?.toLocaleString()} ETB`}
+                  icon={DollarSign}
+                />
+                <DetailRow
+                  label="Education"
+                  value={data.adopter.educationLevel}
+                  icon={GraduationCap}
+                />
+                <DetailRow
+                  label="Date of Birth"
+                  value={new Date(
+                    data.adopter.dateOfBirth
+                  ).toLocaleDateString()}
+                  icon={Calendar}
                 />
               </CardContent>
             </Card>

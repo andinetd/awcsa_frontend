@@ -57,6 +57,7 @@ export type BackendAdoptionApplication = {
   applicantInfo: BackendApplicantInfo;
   applicationInfo: BackendApplicationInfo;
   reviewInfo?: BackendReviewInfo;
+  matchedChildId?: number | null;
 };
 
 

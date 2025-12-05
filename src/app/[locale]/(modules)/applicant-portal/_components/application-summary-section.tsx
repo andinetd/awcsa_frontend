@@ -47,7 +47,7 @@ export function ApplicationSummarySection() {
   const applicationMessages = useTranslations("applicationMessages");
   const [loading, setLoading] = useState(false);
   const { application, setApplication } = useFetchedAdoptionApplicationStore();
-  const { data: applications , isLoading, isError } = useFetchApplicationQuery();
+  const { data: applications , isLoading, isError, error } = useFetchApplicationQuery();
   
   useEffect(() => {
     if (isLoading) {
@@ -57,10 +57,25 @@ export function ApplicationSummarySection() {
 
     setLoading(false);
 
-    if (isError) {
-      if (applications === undefined){
-         toast.error("Failed to load application data.");
+    if (isError && applications === undefined) {
+      const err: any = error;
+      const status =
+        err?.status ||
+        err?.response?.status ||
+        err?.statusCode ||
+        err?.data?.statusCode;
+      const message =
+        err?.message || err?.data?.message || err?.response?.data?.message || "";
+
+      const isNotFound =
+        status === 404 || /No adoption applications found/i.test(String(message));
+
+      if (isNotFound) {
+        setApplication(null);
+        return;
       }
+
+      toast.error("Failed to load application data.");
       setApplication(null);
       return;
     }
@@ -70,7 +85,7 @@ export function ApplicationSummarySection() {
     } else {
       setApplication(null);
     }
-  }, [applications, isLoading, isError]);
+  }, [applications, isLoading, isError, error]);
 
   return (
     <Card>
