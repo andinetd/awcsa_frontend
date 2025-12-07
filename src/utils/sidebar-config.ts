@@ -194,7 +194,7 @@ export const sidebarConfig: Record<
       ],
     },
   ],
-      WOREDA: [
+  WOREDA: [
     {
       title: "Woreda",
       items: [{ title: "Local Dashboard", url: "/woreda", icon: Map }],
@@ -207,7 +207,7 @@ export const sidebarConfig: Record<
       items: [{ title: "Subcity Dashboard", url: "/subcity", icon: Building }],
     },
   ],
-    CARE_CENTERS_PORTAL: [
+  CARE_CENTERS_PORTAL: [
     {
       title: "Care Centers Portal",
       items: [

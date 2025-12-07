@@ -13,12 +13,11 @@ export const NewCareCenterSchema = z.object({
   place: z.string(),
   description: z.string(),
   childrenAgeRange: z.object({
-    min: z.number().int(),
-    max: z.number().int(),
+    min: z.number(),
+    max: z.number(),
   }),
-  orgUnitId: z.string().optional(),
-  contactPerson: z.string(),
-  loginUsername: z.string(),
+  orgUnitId: z.coerce.number().optional(),
+  password: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 export type NewCareCenterSchemaType = z.infer<typeof NewCareCenterSchema>;

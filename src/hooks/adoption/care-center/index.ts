@@ -1,5 +1,13 @@
+import { getCareCenters } from "@/api/adoption/care-center/getCareCenters";
 import { registerNewCareCenter } from "@/api/adoption/care-center/registerNewCenter";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+export const useGetCareCentersQuery = () => {
+  return useQuery({
+    queryFn: getCareCenters,
+    queryKey: ["Get All Centers"],
+  });
+};
 
 export const useRegisterCareCenterMutation = () => {
   const queryClient = useQueryClient();

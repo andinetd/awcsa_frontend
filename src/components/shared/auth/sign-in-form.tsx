@@ -84,10 +84,19 @@ export default function SignInForm() {
   useEffect(() => {
     if (!user && !orgUnit) return;
 
+    console.log("DEBUG: Redirection Check", {
+      user,
+      accountType: user?.accountType,
+      orgUnit,
+      deputyBureau: orgUnit?.deputyBureau,
+    });
+
     // Defer navigation to next tick to avoid interfering with rendering
     const t = setTimeout(() => {
       if (user?.accountType === "CLIENT") {
         router.push(`/applicant-portal/portal`);
+      } else if (user?.accountType === "CHILD_CARE_FACLITY") {
+        router.push(`/care-centers-portal`);
       } else if (orgUnit?.deputyBureau == null) {
         router.push("/bureau-head");
       } else {

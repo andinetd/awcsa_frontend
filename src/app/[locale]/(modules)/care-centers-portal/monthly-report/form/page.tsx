@@ -16,6 +16,7 @@ import {
   Users,
   ArrowUpRight,
   ArrowDownLeft,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { BASE_URL } from "@/lib/base-url";
@@ -23,6 +24,7 @@ import axios from "axios";
 import type { AxiosError } from "axios";
 import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface CareCenterReport {
   month: number;
@@ -109,7 +111,6 @@ export const CareCenterReportForm: React.FC = () => {
       toast.error(message);
       return;
     }
-    
   };
 
   const handleChange = (
@@ -127,6 +128,15 @@ export const CareCenterReportForm: React.FC = () => {
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto space-y-6">
+        <Link href="/care-centers-portal">
+          <Button
+            variant="ghost"
+            className="pl-0 hover:bg-transparent hover:text-blue-600"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </Link>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Main Form Section */}
