@@ -7,10 +7,12 @@ import { columns } from "./_components/columns";
 import { useAuthStore } from "@/stores/auth-store";
 import { useCareCenterChildren } from "@/hooks/adoption/care-center/useChildren";
 import { Loader2 } from "lucide-react";
+import { useAuthMeQuery } from "@/hooks/applicants-portal";
 
 const CareCentersPortal = () => {
-  const { user } = useAuthStore();
-  const facilityId = user?.id;
+
+  const { data: me } = useAuthMeQuery();
+  const facilityId = me?.facilityId;  
 
   const { data: children, isLoading } = useCareCenterChildren(facilityId);
 
