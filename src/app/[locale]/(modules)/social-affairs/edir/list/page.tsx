@@ -15,7 +15,7 @@ const EdirList = () => {
   const { data: edirs, isLoading, isError } = useGetEdirAssociationsQuery();
   // ... inside EdirList
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(6);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -50,7 +50,7 @@ const EdirList = () => {
     );
   }
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full p-4">
+    <div className="flex flex-col h-full max-w-7xl mx-auto w-full p-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">
@@ -81,7 +81,7 @@ const EdirList = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-6 flex-1">
         {isLoading ? (
           <div className="col-span-full text-center py-10">Loading...</div>
         ) : currentEdirs.length > 0 ? (
@@ -100,7 +100,7 @@ const EdirList = () => {
       </div>
 
       {totalItems > 0 && (
-        <div className="flex items-center justify-between border-t pt-4">
+        <div className="flex items-center justify-between border-t pt-4 mt-auto">
           <div className="text-sm text-muted-foreground">
             Showing {startIndex + 1} to{" "}
             {Math.min(startIndex + limit, totalItems)} of {totalItems} entries

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useGenerateEdirReportMutation } from "@/hooks/social-affairs"; // Make sure this is exported correctly
+import { useGenerateWomenReportMutation } from "@/hooks/womens";
 import { FileDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -23,38 +23,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GenerateReportPayload } from "@/api/social-affairs/generateEdirReport";
+import { GenerateWomenReportPayload } from "@/api/womens/generateWomenReport";
 
 const AVAILABLE_COLUMNS = [
-  { id: "name", label: "Association Name" },
-  { id: "id", label: "ID" },
+  { id: "clientName", label: "Client Name" },
+  { id: "cityIdNumber", label: "City ID Number" },
   { id: "phoneNumber", label: "Phone Number" },
-  { id: "subCity", label: "Sub City" },
-  { id: "woreda", label: "Woreda" },
-  { id: "bankAccountNumber", label: "Bank Account Number" },
-  { id: "establishmentDate", label: "Establishment Date" },
-  { id: "members", label: "Members" },
+  { id: "address", label: "Address" },
+  { id: "serviceType", label: "Service Type" },
+  { id: "beneficiaryLevel", label: "Beneficiary Level" },
+  { id: "serviceDate", label: "Service Date" },
+  { id: "status", label: "Status" },
 ];
 
-export default function GenerateReportDialog() {
+export default function GenerateWomenReportDialog() {
   const [open, setOpen] = useState(false);
-  const { mutate: generateReport, isPending } = useGenerateEdirReportMutation();
+  const { mutate: generateReport, isPending } =
+    useGenerateWomenReportMutation();
 
   // Form state
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [subCity, setSubCity] = useState("");
   const [woreda, setWoreda] = useState("");
+  const [serviceTypeId, setServiceTypeId] = useState("");
+  const [beneficiaryLevel, setBeneficiaryLevel] = useState<
+    "INDIVIDUAL" | "GROUP" | "ALL"
+  >("ALL");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
-    "name",
-    "id",
+    "clientName",
+    "cityIdNumber",
     "phoneNumber",
-    "subCity",
-    "woreda",
-    "bankAccountNumber",
-    "establishmentDate",
-    "members",
+    "address",
+    "serviceType",
+    "beneficiaryLevel",
+    "serviceDate",
+    "status",
   ]);
 
   const handleColumnToggle = (columnId: string) => {
@@ -66,37 +71,26 @@ export default function GenerateReportDialog() {
   };
 
   const handleGenerate = () => {
-    const payload: GenerateReportPayload = {
+    const payload: GenerateWomenReportPayload = {
       startDate: startDate || undefined,
       endDate: endDate || undefined,
       subCity: subCity || undefined,
       woreda: woreda || undefined,
+      serviceTypeId: serviceTypeId ? parseInt(serviceTypeId) : undefined,
+      beneficiaryLevel:
+        beneficiaryLevel === "ALL" ? undefined : beneficiaryLevel,
       selectedColumns,
       format,
     };
 
     generateReport(payload, {
-      onSuccess: (data) => {
-        const blob = new Blob([data], {
-          type:
-            format === "EXCEL"
-              ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              : "application/pdf",
-        });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        const extension = format === "EXCEL" ? "xlsx" : "pdf";
-        link.setAttribute("download", `edir_report.${extension}`);
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode?.removeChild(link);
-        toast.success("Report generated successfully");
+      onSuccess: () => {
+        toast.success("Report generated and downloaded successfully");
         setOpen(false);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         console.error(error);
-        toast.error("Failed to generate report");
+        toast.error(error?.message || "Failed to generate report");
       },
     });
   };
@@ -109,15 +103,16 @@ export default function GenerateReportDialog() {
           Generate Report
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Generate Edir Report</DialogTitle>
+          <DialogTitle>Generate Women Support Services Report</DialogTitle>
           <DialogDescription>
             Select filters and columns for your report.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
+          {/* Date Range */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Start Date</Label>
@@ -137,6 +132,7 @@ export default function GenerateReportDialog() {
             </div>
           </div>
 
+          {/* Location Filters */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Sub City</Label>
@@ -156,6 +152,38 @@ export default function GenerateReportDialog() {
             </div>
           </div>
 
+          {/* Service Type and Beneficiary Level */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Service Type ID</Label>
+              <Input
+                type="number"
+                placeholder="Service Type ID"
+                value={serviceTypeId}
+                onChange={(e) => setServiceTypeId(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Beneficiary Level</Label>
+              <Select
+                value={beneficiaryLevel}
+                onValueChange={(v) =>
+                  setBeneficiaryLevel(v as "INDIVIDUAL" | "GROUP" | "ALL")
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="All Levels" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">All Levels</SelectItem>
+                  <SelectItem value="INDIVIDUAL">Individual</SelectItem>
+                  <SelectItem value="GROUP">Group</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Format */}
           <div className="space-y-2">
             <Label>Format</Label>
             <Select
@@ -172,8 +200,9 @@ export default function GenerateReportDialog() {
             </Select>
           </div>
 
+          {/* Columns Selection */}
           <div className="space-y-2">
-            <Label>Columns</Label>
+            <Label>Columns to Include</Label>
             <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
               {AVAILABLE_COLUMNS.map((col) => (
                 <div key={col.id} className="flex items-center space-x-2">
@@ -201,7 +230,7 @@ export default function GenerateReportDialog() {
           </Button>
           <Button onClick={handleGenerate} disabled={isPending}>
             {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Download
+            Download Report
           </Button>
         </div>
       </DialogContent>

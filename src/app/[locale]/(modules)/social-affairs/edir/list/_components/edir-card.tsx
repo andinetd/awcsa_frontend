@@ -31,7 +31,7 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow max-h-[300px]">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex justify-between items-start">
           <span>{edir.name}</span>
