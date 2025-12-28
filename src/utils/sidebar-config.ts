@@ -1,12 +1,18 @@
 import {
+  Accessibility,
   Baby,
   BarChart3,
+  Briefcase,
   Building,
   FileDiff,
   FileText,
+  HandHeart,
+  HandHelping,
   Heart,
   Home,
   HouseIcon,
+  LayoutDashboard,
+  Map,
   Settings,
   Settings2,
   User,
@@ -109,20 +115,20 @@ export const sidebarConfig: Record<
         {
           title: "Dashboard",
           url: "/social-affairs/socials/dashboard",
-          icon: Users,
+          icon: LayoutDashboard,
         },
 
-        { title: "Edir", url: "/social-affairs/edir/list", icon: Users },
+        { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
         {
           title: "Elderly",
           url: "/social-affairs/elderly-and-disabled/dashboard",
-          icon: Users,
+          icon: Accessibility,
         },
 
         {
           title: "Beneficiaries",
           url: "/social-affairs/elderly-and-disabled/beneficiaries",
-          icon: Users,
+          icon: HandHeart,
         },
       ],
     },
