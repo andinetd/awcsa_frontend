@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetJobsQuery } from "@/hooks/beneficiaries";
+import { useGetTrainingsQuery } from "@/hooks/beneficiaries";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Plus, Filter, Briefcase, FileDown } from "lucide-react";
+import { Search, Plus, Filter, GraduationCap, FileDown } from "lucide-react";
 import BeneficiaryReportDialog from "../_components/report-dialog";
 import {
   Card,
@@ -21,17 +21,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import JobForm from "../_components/job-form";
+import TrainingForm from "../_components/training-form";
 
-export default function JobsPage() {
-  const { data: jobs, isLoading } = useGetJobsQuery();
+export default function TrainingPage() {
+  const { data: trainings, isLoading } = useGetTrainingsQuery();
   const [search, setSearch] = useState("");
 
   const filteredData =
-    jobs?.filter(
+    trainings?.filter(
       (item: any) =>
-        item.jobTitle.toLowerCase().includes(search.toLowerCase()) ||
-        item.companyIdNumber.toLowerCase().includes(search.toLowerCase()) ||
+        item.trainingType.toLowerCase().includes(search.toLowerCase()) ||
+        item.provider.toLowerCase().includes(search.toLowerCase()) ||
         `${item.client?.firstName} ${item.client?.lastName}`
           .toLowerCase()
           .includes(search.toLowerCase())
@@ -42,28 +42,28 @@ export default function JobsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-            Job Placements
+            Training Sessions
           </h1>
           <p className="text-slate-500 mt-1">
-            Track employment and livelihood support for beneficiaries.
+            Track skills development and training for all beneficiaries.
           </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-          <JobForm />
+          <TrainingForm />
         </div>
       </div>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-primary" />
-            Global Job Placements
+            <GraduationCap className="w-5 h-5 text-primary" />
+            Global Training Records
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
               <Input
-                placeholder="Search position or company ID..."
+                placeholder="Search training or name..."
                 className="pl-8 bg-slate-50/50 border-slate-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -80,44 +80,57 @@ export default function JobsPage() {
               <TableHeader className="bg-slate-50">
                 <TableRow>
                   <TableHead className="font-semibold">Beneficiary</TableHead>
-                  <TableHead className="font-semibold">Company ID</TableHead>
-                  <TableHead className="font-semibold">Position</TableHead>
-                  <TableHead className="font-semibold">Start Date</TableHead>
+                  <TableHead className="font-semibold">Type</TableHead>
+                  <TableHead className="font-semibold">Provider</TableHead>
+                  <TableHead className="font-semibold">Dates</TableHead>
+                  <TableHead className="font-semibold">COC</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-10">
-                      Loading placements...
+                    <TableCell colSpan={5} className="text-center py-10">
+                      Loading trainings...
                     </TableCell>
                   </TableRow>
                 ) : filteredData.length > 0 ? (
-                  filteredData.map((j: any) => (
+                  filteredData.map((t: any) => (
                     <TableRow
-                      key={j.id}
+                      key={t.id}
                       className="hover:bg-slate-50/50 transition-colors"
                     >
                       <TableCell className="font-medium">
-                        {j.client?.firstName} {j.client?.lastName}
+                        {t.client?.firstName} {t.client?.lastName}
                         <p className="text-xs text-slate-400">
-                          {j.client?.cityIdNumber}
+                          {t.client?.cityIdNumber}
                         </p>
                       </TableCell>
-                      <TableCell>{j.companyIdNumber}</TableCell>
-                      <TableCell>{j.jobTitle}</TableCell>
+                      <TableCell>{t.trainingType}</TableCell>
+                      <TableCell>{t.provider}</TableCell>
                       <TableCell className="text-sm">
-                        {new Date(j.startDate).toLocaleDateString()}
+                        {new Date(t.startDate).toLocaleDateString()}
+                        {t.completionDate &&
+                          ` - ${new Date(
+                            t.completionDate
+                          ).toLocaleDateString()}`}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={t.hasCOC ? "default" : "secondary"}
+                          className="rounded-full"
+                        >
+                          {t.hasCOC ? "Yes" : "No"}
+                        </Badge>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={4}
+                      colSpan={5}
                       className="text-center py-10 text-slate-400"
                     >
-                      No job placements found
+                      No training records found
                     </TableCell>
                   </TableRow>
                 )}

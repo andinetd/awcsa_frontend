@@ -17,6 +17,7 @@ import {
   Settings2,
   User,
   Users,
+  GraduationCap,
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -117,18 +118,36 @@ export const sidebarConfig: Record<
           url: "/social-affairs/socials/dashboard",
           icon: LayoutDashboard,
         },
-
         { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
+      ],
+    },
+    {
+      title: "Elderly & Disabled",
+      items: [
         {
-          title: "Elderly",
+          title: "Dashboard",
           url: "/social-affairs/elderly-and-disabled/dashboard",
+          icon: BarChart3,
+        },
+        {
+          title: "Disabled Persons",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
           icon: Accessibility,
         },
-
         {
-          title: "Beneficiaries",
-          url: "/social-affairs/elderly-and-disabled/beneficiaries",
-          icon: HandHeart,
+          title: "Elderly Persons",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
+          icon: Users,
+        },
+        {
+          title: "Training Sessions",
+          url: "/social-affairs/elderly-and-disabled/training",
+          icon: GraduationCap,
+        },
+        {
+          title: "Job Placements",
+          url: "/social-affairs/elderly-and-disabled/jobs",
+          icon: Briefcase,
         },
       ],
     },
