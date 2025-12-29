@@ -48,7 +48,7 @@ const WomenProfileDetail = () => {
   }
 
   return (
-    <div className="w-full p-4 space-y-6">
+    <div className="max-w-7xl mx-auto w-full p-4 space-y-6">
       {/* Header with breadcrumb */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -80,9 +80,13 @@ const WomenProfileDetail = () => {
               {profile.approvalStatus}
             </span>
           )}
-          {profile.isActive && (
+          {profile.isActive ? (
             <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
               Active
+            </span>
+          ) : (
+            <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
+              Inactive
             </span>
           )}
         </div>

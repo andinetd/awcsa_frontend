@@ -6,7 +6,6 @@ import WomenProfileCard from "./_components/women-profile-card";
 import NewWomenProfileForm from "./_components/new-women-profile-form";
 import EditWomenProfileForm from "./_components/edit-women-profile-form";
 import StatusToggleDialog from "./_components/status-toggle-dialog";
-import GenerateWomenReportDialog from "./_components/generate-women-report-dialog";
 import { WomenProfile } from "@/api/womens/women-profile";
 import { Input } from "@/components/ui/input";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
@@ -104,7 +103,6 @@ const WomenList = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <GenerateWomenReportDialog />
           <NewWomenProfileForm />
         </div>
       </div>
