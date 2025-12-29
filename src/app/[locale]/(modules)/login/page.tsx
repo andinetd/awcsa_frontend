@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import SignInForm from "@/components/shared/auth/sign-in-form";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/custom/custom-card";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function LoginPage() {
@@ -29,18 +34,22 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side: SignIn Form */}
-        <Card className="w-full max-w-md flex flex-col px-10 py-10">
-          <h1 className="text-xl font-semibold font-lexend">Sign in</h1>
-          <GoogleReCaptchaProvider
-            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-            scriptProps={{
-              async: true,
-              defer: true,
-              appendTo: "head",
-            }}
-          >
-            <SignInForm />
-          </GoogleReCaptchaProvider>
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="font-lexend">Sign in</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GoogleReCaptchaProvider
+              reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+              scriptProps={{
+                async: true,
+                defer: true,
+                appendTo: "head",
+              }}
+            >
+              <SignInForm />
+            </GoogleReCaptchaProvider>
+          </CardContent>
         </Card>
       </div>
 
