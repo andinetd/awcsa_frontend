@@ -51,12 +51,12 @@ export const sidebarConfig: Record<
         {
           title: "Adoption",
           url: "/adoption/dashboard",
-          icon: Users,
+          icon: Baby,
         },
         {
           title: "Social Affairs",
           url: "/social-affairs/socials/dashboard",
-          icon: Building,
+          icon: HandHeart,
         },
         {
           title: "Women",
@@ -93,13 +93,13 @@ export const sidebarConfig: Record<
           url: "/adoption/care-centers",
           icon: Building,
         },
-        { title: "Benefits", url: "/adoption/benefits", icon: Heart },
-        {
-          title: "Assisted homes",
-          url: "/adoption/assisted-homes",
-          icon: Home,
-        },
-        { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
+        // { title: "Benefits", url: "/adoption/benefits", icon: Heart },
+        // {
+        //   title: "Assisted homes",
+        //   url: "/adoption/assisted-homes",
+        //   icon: Home,
+        // },
+        // { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
         {
           title: "Adoption Requests",
           url: "/adoption/adoption-requests",
@@ -161,13 +161,13 @@ export const sidebarConfig: Record<
         {
           title: "Support Services",
           url: "/womens/support-service",
-          icon: Users,
+          icon: HandHeart,
         },
-        {
-          title: "Women Associations",
-          url: "/womens/women-associations",
-          icon: Users,
-        },
+        // {
+        //   title: "Women Associations",
+        //   url: "/womens/women-associations",
+        //   icon: Users,
+        // },
         { title: "Women List", url: "/womens/women-list", icon: Users },
       ],
     },
@@ -203,19 +203,19 @@ export const sidebarConfig: Record<
       items: [
         { title: "Dashboard", url: "/bureau-head", icon: Home },
 
-        { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
+        // { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
         {
           title: "Adoption Module",
           url: "/adoption/dashboard",
-          icon: FileText,
+          icon: Baby,
         },
         {
           title: "Social Module",
           url: "/social-affairs/socials/dashboard",
-          icon: FileText,
+          icon: HandHeart,
         },
-        { title: "Women", url: "/womens/dashboard", icon: User },
-        { title: "Super Admin", url: "/super-admin", icon: FileText },
+        { title: "Women Module", url: "/womens/dashboard", icon: Users },
+        // { title: "Super Admin", url: "/super-admin", icon: FileText },
       ],
     },
   ],
