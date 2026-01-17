@@ -24,7 +24,8 @@
   "footer": {
     "title": "Ready to Begin?",
     "subtitle": "Our comprehensive application process will guide you through each step of your adoption journey.",
-    "cta": "Start Application"
+    "cta": "Start Application",
+    "cta_submitted": "Application Submitted"
   },
   "appSummary": {
     "cta": "View Details"
@@ -34,17 +35,49 @@
     "name": "Full Name",
     "email": "Email",
     "phone": "Phone Number",
-    "id": "ID number"
+    "id": "ID number",
+    "loading": "Loading user information..."
   },
   "stepone": {
     "instructions": {
       "title": "Required Personal information",
+      "zero": "fill in the personal information fields",
       "one": "upload a residence ID or passport with your image clearly being visible.",
       "two": "Your birth certificate",
       "three": "Monthly or Annual icome verification document",
       "note": "All documents must be accurate and will be reviewed by the authorities."
     },
     "form": {
+      "cityId": "City ID Number",
+      "cityIdPlaceHolder": "Enter your City ID Number",
+      "dateOfBirth": "Date of Birth",
+      "MonthlyIncome": "Monthly Income",
+      "Address": "Address",
+      "AddressPlaceHolder": "Enter your full address",
+      "EducationLevel": "Education Level",
+      "educationOptions": {
+        "none": "None",
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "diploma": "Diploma",
+        "bachelor": "Bachelor's Degree",
+        "masters": "Master's Degree",
+        "doctorate": "Doctorate"
+      },
+      "occupation": "Occupation",
+      "occupationPlaceholder": "Enter your occupation",
+      "spouseCityIdNumber": "Spouse City ID Number",
+      "spouseCityIdNumberPlaceholder": "Enter spouse City ID Number",
+      "spouseAgreement": "Spouse Agreement",
+      "preferredChildAgeMin": "Preferred Child Age Min",
+      "preferredChildAgeMax": "Preferred Child Age Max",
+      "preferredNumberOfChildren": "Number of Children",
+      "preferredChildGender": "Preferred Child Gender",
+      "GenderOptions": {
+        "any": "Any",
+        "male": "Male",
+        "female": "Female"
+      },
       "id": "Kebel ID/ Passport",
       "birthCertificate": "Birth Certificate",
       "income": "Income statement"
@@ -55,13 +88,13 @@
       "title": "Additional Informations",
       "one": "Medical clearance document ",
       "two": "criminal clearance document",
-      "three": "Spouses written and signed aggreement of the adoption",
+      "three": "Marriage Certificate document",
       "note": "All documents must be accurate and will be reviewed by the authorities."
     },
     "form": {
       "medical": "Medical Document",
       "criminal": "Criminal Clearance",
-      "spouseAgreement": "Spouse Agreement"
+      "marriageCertificate": "Marriage Certificate"
     }
   },
   "stepthree": {

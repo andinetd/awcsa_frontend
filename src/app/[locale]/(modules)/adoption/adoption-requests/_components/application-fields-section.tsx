@@ -1,10 +1,20 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/custom/custom-card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { User } from "lucide-react";
+import { formatAge } from "@/lib/utils";
 
 interface ApplicationField {
   fieldName: string;
+  // stable key used when sending fieldComments to the backend (e.g. 'occupation', 'monthlyIncome')
+  fieldKey?: string;
   answer: string;
   showComment: boolean;
   comment?: string;
@@ -16,12 +26,16 @@ interface ApplicationFieldsSectionProps {
   onToggle: (idx: number) => void;
   onComment: (idx: number, value: string) => void;
 }
-export const ApplicationFieldsSection: React.FC<
-  ApplicationFieldsSectionProps
-> = ({ fields, status, onToggle, onComment }) => (
+export const ApplicationFieldsSection: React.FC<ApplicationFieldsSectionProps> = ({
+  fields,
+  status,
+  onToggle,
+  onComment,
+}) => (
   <Card>
     <CardHeader>
       <CardTitle className="flex items-center gap-2">
+        <User className="w-5 h-5 text-slate-400" />
         Application Details
       </CardTitle>
     </CardHeader>
@@ -30,33 +44,51 @@ export const ApplicationFieldsSection: React.FC<
         {fields.map((field, idx) => (
           <div
             key={field.fieldName}
-            className="flex flex-col gap-2 p-3 bg-gray-50 rounded-lg"
+            className="flex flex-col gap-2 p-3 bg-slate-50 rounded-lg border border-slate-100"
           >
-            <div className="flex items-center gap-2">
-              <span className="font-medium w-56 inline-block">
-                {field.fieldName}:
-              </span>
-              <span>{field.answer}</span>
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                <span className="font-medium text-slate-500 w-40 inline-block text-sm">
+                  {field.fieldName}:
+                </span>
+                {field.fieldName === "Date of Birth" ? (
+                  <span className="ext-slate-900 font-medium">
+                    {field.answer.split("T")[0]}
+                  </span>
+                ) : field.fieldName === "Preferred Age Min" || field.fieldName === "Preferred Age Max" ? (
+                  <span className="ext-slate-900 font-medium">
+                    {formatAge(field.answer === "" ? undefined : Number(field.answer))}
+                  </span>
+                ) : (
+                  <span className="ext-slate-900 font-medium">
+                    {field.answer}
+                  </span>
+                )}
+              </div>
+
               {status === "pending" && (
-                <>
+                <div className="flex items-center gap-2 ml-auto">
                   <Checkbox
                     checked={field.showComment}
                     onCheckedChange={() => onToggle(idx)}
-                    className="ml-4"
+                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
-                  <span className="text-xs text-muted-foreground">
+                  <label
+                    htmlFor={`check-${field.fieldKey}`}
+                    className="text-xs text-slate-400 cursor-pointer select-none"
+                  >
                     Feedback?
-                  </span>
-                </>
+                  </label>
+                </div>
               )}
             </div>
             {field.showComment && status === "pending" && (
-              <div className="mt-2">
+              <div className="mt-2 animate-fadeIn">
                 <Textarea
                   value={field.comment}
                   onChange={(e) => onComment(idx, e.target.value)}
-                  placeholder={`Comment on ${field.fieldName}`}
-                  className="w-full min-h-[60px]"
+                  placeholder={`Enter feedback about ${field.fieldName}...`}
+                  className="w-full min-h-[80px] p-3 text-sm rounded-md border border-slate-200 bg-white focus:border-slate-400 focus:ring-1 focus:ring-slate-400 placeholder:text-slate-400 text-slate-800"
                 />
               </div>
             )}

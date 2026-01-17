@@ -40,10 +40,10 @@ export function DynamicSidebar() {
   );
 
   return (
-    <Sidebar>
+    <Sidebar className="">
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="p-1 border-b border-slate-100">
             <Link href={"/"}>
               <SidebarMenuButton size="lg" className="flex items-center gap-2">
                 {/* <Building className="size-4" /> */}
@@ -68,26 +68,30 @@ export function DynamicSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="">
         {sections.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.items.map((item, index) => {
-                  const isActive = pathname === item.url;
+                  const isActive = pathname.endsWith(item.url);
                   return (
                     <SidebarMenuItem key={item.title + index}>
                       <SidebarMenuButton
                         asChild
                         className={cn(
                           isActive
-                            ? "bg-primary/10 text-primary font-semibold"
-                            : "text-muted-foreground"
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                         )}
                       >
                         <a href={item.url}>
-                          <item.icon />
+                          <item.icon
+                            className={`w-5 h-5 ${
+                              isActive ? "text-blue-600" : "text-slate-400"
+                            }`}
+                          />
                           <span>{item.title}</span>
                         </a>
                       </SidebarMenuButton>

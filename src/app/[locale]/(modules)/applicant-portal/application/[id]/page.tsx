@@ -13,6 +13,7 @@ import {
   Mail,
 } from "lucide-react";
 import Link from "next/link";
+import { formatAge } from "@/lib/utils";
 
 interface ApplicationDetail {
   id: string;

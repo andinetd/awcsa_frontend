@@ -1,16 +1,23 @@
 import {
+  Accessibility,
   Baby,
   BarChart3,
+  Briefcase,
   Building,
   FileDiff,
   FileText,
+  HandHeart,
+  HandHelping,
   Heart,
   Home,
   HouseIcon,
+  LayoutDashboard,
+  Map,
   Settings,
   Settings2,
   User,
   Users,
+  GraduationCap,
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -44,12 +51,12 @@ export const sidebarConfig: Record<
         {
           title: "Adoption",
           url: "/adoption/dashboard",
-          icon: Users,
+          icon: Baby,
         },
         {
           title: "Social Affairs",
           url: "/social-affairs/socials/dashboard",
-          icon: Building,
+          icon: HandHeart,
         },
         {
           title: "Women",
@@ -86,13 +93,13 @@ export const sidebarConfig: Record<
           url: "/adoption/care-centers",
           icon: Building,
         },
-        { title: "Benefits", url: "/adoption/benefits", icon: Heart },
-        {
-          title: "Assisted homes",
-          url: "/adoption/assisted-homes",
-          icon: Home,
-        },
-        { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
+        // { title: "Benefits", url: "/adoption/benefits", icon: Heart },
+        // {
+        //   title: "Assisted homes",
+        //   url: "/adoption/assisted-homes",
+        //   icon: Home,
+        // },
+        // { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
         {
           title: "Adoption Requests",
           url: "/adoption/adoption-requests",
@@ -109,20 +116,38 @@ export const sidebarConfig: Record<
         {
           title: "Dashboard",
           url: "/social-affairs/socials/dashboard",
-          icon: Users,
+          icon: LayoutDashboard,
         },
-
-        { title: "Edir", url: "/social-affairs/edir/list", icon: Users },
+        { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
+      ],
+    },
+    {
+      title: "Elderly & Disabled",
+      items: [
         {
-          title: "Elderly",
+          title: "Dashboard",
           url: "/social-affairs/elderly-and-disabled/dashboard",
+          icon: BarChart3,
+        },
+        {
+          title: "Disabled Persons",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
+          icon: Accessibility,
+        },
+        {
+          title: "Elderly Persons",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
           icon: Users,
         },
-
         {
-          title: "Beneficiaries",
-          url: "/social-affairs/elderly-and-disabled/beneficiaries",
-          icon: Users,
+          title: "Training Sessions",
+          url: "/social-affairs/elderly-and-disabled/training",
+          icon: GraduationCap,
+        },
+        {
+          title: "Job Placements",
+          url: "/social-affairs/elderly-and-disabled/jobs",
+          icon: Briefcase,
         },
       ],
     },
@@ -136,13 +161,13 @@ export const sidebarConfig: Record<
         {
           title: "Support Services",
           url: "/womens/support-service",
-          icon: Users,
+          icon: HandHeart,
         },
-        {
-          title: "Women Associations",
-          url: "/womens/women-associations",
-          icon: Users,
-        },
+        // {
+        //   title: "Women Associations",
+        //   url: "/womens/women-associations",
+        //   icon: Users,
+        // },
         { title: "Women List", url: "/womens/women-list", icon: Users },
       ],
     },
@@ -176,36 +201,21 @@ export const sidebarConfig: Record<
     {
       title: "Global",
       items: [
+        { title: "Dashboard", url: "/bureau-head", icon: Home },
+
+        { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
         {
           title: "Adoption",
           url: "/adoption/dashboard",
-          icon: Users,
+          icon: FileText,
         },
         {
           title: "Social Affairs",
           url: "/social-affairs/socials/dashboard",
-          icon: Building,
+          icon: FileText,
         },
-        {
-          title: "Women",
-          url: "/womens/dashboard",
-          icon: Users,
-        },
-        {
-          title: "Bureau Head",
-          url: "/bureau-head",
-          icon: Users,
-        },
-        {
-          title: "Super Admin",
-          url: "/super-admin/general-settings",
-          icon: Settings,
-        },
-        {
-          title: "Super Admin management",
-          url: "/super-admin/user-management",
-          icon: Settings,
-        },
+        { title: "Women", url: "/womens/dashboard", icon: User },
+        { title: "Super Admin", url: "/super-admin", icon: FileText },
       ],
     },
   ],

@@ -24,8 +24,11 @@ export const routePermissions: Record<string, RouteGuard> = {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["BUREAU_HEAD", "SUPER_ADMIN"],
   },
-
   "/social-affairs/socials/dashboard": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["BUREAU_HEAD"],
+  },
+  "/social-affairs/edir/list": {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["BUREAU_HEAD"],
   },

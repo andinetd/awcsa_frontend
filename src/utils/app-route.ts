@@ -6,7 +6,8 @@ export const moduleAndRouteMap = (deputyBureau: DeputyBureau): string => {
     case "BUREAU_HEAD":
       return "/bureau-head";
     case "CHILDREN_AFFAIRS":
-      return "/adoption/dashboard";
+      // return "/adoption/dashboard";
+      return "/care-centers-portal";
     case "SOCIAL_AFFAIRS":
       return "/social-affairs/socials/dashboard";
     case "EDIR":

@@ -5,7 +5,7 @@ import React, { ReactNode } from "react";
 const Adoptionlayout = ({ children }: { children: ReactNode }) => {
   return (
     <AuthProvider allowedRoles={["CHILDREN_AFFAIRS", null]}>
-      <SidebarLayout title="Adoption">{children}</SidebarLayout>;
+      <SidebarLayout title="Adoption Module">{children}</SidebarLayout>;
     </AuthProvider>
   );
 };

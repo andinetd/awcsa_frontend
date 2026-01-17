@@ -1,8 +1,8 @@
 "use client";
 
+import { CareCenterChild } from "@/api/adoption/care-center/children";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import type { ChildDataType } from "@/schemas/new-child-form-schema";
-import type { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,32 +14,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Edit, Eye } from "lucide-react";
 import Link from "next/link";
+import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
-// This type is used to define the shape of our data.
-export type Child = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<ChildDataType>[] = [
+export const columns: ColumnDef<CareCenterChild>[] = [
   {
-    accessorKey: "name_by_care_center",
+    accessorKey: "firstName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name by Center" />
+      <DataTableColumnHeader column={column} title="First Name" />
     ),
   },
   {
-    accessorKey: "name_by_family",
+    accessorKey: "middleName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name by Family" />
+      <DataTableColumnHeader column={column} title="Middle Name" />
     ),
   },
   {
-    accessorKey: "age",
+    accessorKey: "lastName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Age" />
+      <DataTableColumnHeader column={column} title="Last Name" />
     ),
   },
   {
@@ -49,17 +43,31 @@ export const columns: ColumnDef<ChildDataType>[] = [
     ),
     cell: ({ row }) => {
       const gender = row.getValue("gender") as string;
-      return <span className="capitalize">{gender}</span>;
+      return <Badge variant="outline">{gender}</Badge>;
     },
   },
   {
-    accessorKey: "found_date",
+    accessorKey: "dob",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date of Birth" />
+    ),
+    cell: ({ row }) => {
+      const dob = row.getValue("dob") as string | null;
+      return <span>{dob ? format(new Date(dob), "MMM d, yyyy") : "N/A"}</span>;
+    },
+  },
+  {
+    accessorKey: "foundDate",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Found Date" />
     ),
     cell: ({ row }) => {
-      const date = row.getValue("found_date") as Date;
-      return <span>{date ? new Date(date).toLocaleDateString() : "N/A"}</span>;
+      const foundDate = row.getValue("foundDate") as string | null;
+      return (
+        <span>
+          {foundDate ? format(new Date(foundDate), "MMM d, yyyy") : "N/A"}
+        </span>
+      );
     },
   },
   {
@@ -79,17 +87,13 @@ export const columns: ColumnDef<ChildDataType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link
-                href={`/care-centers-portal/child/${child.id}/view`}
-              >
+              <Link href={`/care-centers-portal/child/${child.id}/view`}>
                 <Eye className="mr-2 h-4 w-4" />
                 View Details
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link
-                href={`/care-centers-portal/child/${child.id}/edit`}
-              >
+              <Link href={`/care-centers-portal/child/${child.id}/edit`}>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Child
               </Link>

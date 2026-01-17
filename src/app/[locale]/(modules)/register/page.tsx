@@ -60,10 +60,10 @@ export default function AdoptionRegisterPage() {
     const newData = {
       firstName: data.firstName,
       lastName: data.lastName,
+      phoneNumber: data.phoneNumber,      
+      cityIdNumber: data.cityIdNumber, 
       email: data.email,
-      phoneNumber: data.phoneNumber,
       password: data.password,
-      cityIdNumber: data.cityIdNumber,
     };
     console.log(newData);
     mutate(newData);

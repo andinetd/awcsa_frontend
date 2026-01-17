@@ -56,6 +56,7 @@ type ClientSignup = {
 type ClientSignIn = {
   email: string;
   password: string;
+  recaptchaToken: string;
 };
 
 type JwtPayload = EmployeeJwtPayload | ClientJwtPayload;
@@ -75,11 +76,12 @@ type UserType = {
   permissions?: PermissionOperation[];
   entityType: string;
   failedLoginCount: number;
-  stauts: string;
+  status: string;
 };
 
 type ClientSignInResponse = {
   access_token: string;
+  user: UserType;
 };
 
 type DeputyBureau =

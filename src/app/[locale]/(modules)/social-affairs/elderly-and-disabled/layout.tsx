@@ -4,8 +4,10 @@ import { ReactNode } from "react";
 
 const ElderlyAndDisabledLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider allowedRoles={["DEPUTY_MANAGER", "Bureau_Manager"]}>
-      <SidebarLayout title="Elderly and disable">{children}</SidebarLayout>;
+    <AuthProvider allowedRoles={["SOCIAL_AFFAIRS", null]}>
+      <SidebarLayout title="Disability & Elderly Module">
+        {children}
+      </SidebarLayout>
     </AuthProvider>
   );
 };

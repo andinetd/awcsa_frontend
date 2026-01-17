@@ -1,31 +1,24 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-
-interface Application {
-  id: string;
-  status: "pending" | "approved" | "rejected";
-  submittedDate: string;
-  lastUpdated: string;
-}
-
-// Mock data - will be replaced with TanStack Query
-const mockApplication: Application | null = {
-  id: "APP-2024-001",
-  status: "pending",
-  submittedDate: "2024-01-15",
-  lastUpdated: "2024-01-20",
-};
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-application";
+import { useFetchApplicationQuery } from "@/hooks/applicants-portal";
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case "pending":
+    case "pending_review":
       return <Clock className="h-4 w-4" />;
-    case "approved":
+    case "pending_home_visit":
       return <CheckCircle className="h-4 w-4" />;
+    case "returned":
+      return <Clock className="h-4 w-4" />;
     case "rejected":
       return <XCircle className="h-4 w-4" />;
     default:
@@ -35,10 +28,14 @@ const getStatusIcon = (status: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "pending":
+    case "pending_review":
       return "bg-yellow-100 text-yellow-800";
-    case "approved":
+    case "pending_home_visit":
       return "bg-green-100 text-green-800";
+    case "matched":
+      return "bg-green-100 text-green-800";
+    case "returned":
+      return "bg-blue-100 text-blue-800";
     case "rejected":
       return "bg-red-100 text-red-800";
     default:
@@ -47,8 +44,48 @@ const getStatusColor = (status: string) => {
 };
 
 export function ApplicationSummarySection() {
-  const application = mockApplication; // This will be replaced with actual data fetching
   const applicationMessages = useTranslations("applicationMessages");
+  const [loading, setLoading] = useState(false);
+  const { application, setApplication } = useFetchedAdoptionApplicationStore();
+  const { data: applications , isLoading, isError, error } = useFetchApplicationQuery();
+  
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true);
+      return;
+    }
+
+    setLoading(false);
+
+    if (isError && applications === undefined) {
+      const err: any = error;
+      const status =
+        err?.status ||
+        err?.response?.status ||
+        err?.statusCode ||
+        err?.data?.statusCode;
+      const message =
+        err?.message || err?.data?.message || err?.response?.data?.message || "";
+
+      const isNotFound =
+        status === 404 || /No adoption applications found/i.test(String(message));
+
+      if (isNotFound) {
+        setApplication(null);
+        return;
+      }
+
+      toast.error("Failed to load application data.");
+      setApplication(null);
+      return;
+    }
+
+    if (applications && applications.length > 0) {
+      setApplication(applications[0]);
+    } else {
+      setApplication(null);
+    }
+  }, [applications, isLoading, isError, error]);
 
   return (
     <Card>
@@ -59,22 +96,39 @@ export function ApplicationSummarySection() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {application ? (
+        {loading ? (
+          <div className="text-center py-8">Loading...</div>
+        ) : application ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mx-2">
               <div>
                 <p className="text-sm font-medium text-gray-500">
                   Application ID
                 </p>
-                <p className="text-gray-900">{application.id}</p>
+                <p className="text-gray-900">
+                  {application.id ?? application.applicationId ?? "-"}
+                </p>
               </div>
-              <Badge className={getStatusColor(application.status)}>
-                <span className="flex items-center gap-1">
-                  {getStatusIcon(application.status)}
-                  {application.status.charAt(0).toUpperCase() +
-                    application.status.slice(1)}
-                </span>
-              </Badge>
+              {(() => {
+                const rawStatus =
+                  application.status ??
+                  application.reviewInfo?.status ??
+                  application.applicationInfo?.status ??
+                  "";
+                const status = String(rawStatus ?? "").toLowerCase();
+                const display = status
+                  ? status.charAt(0).toUpperCase() + status.slice(1)
+                  : "Unknown";
+
+                return (
+                  <Badge className={getStatusColor(status)}>
+                    <span className="flex items-center gap-1">
+                      {getStatusIcon(status)}
+                      {display}
+                    </span>
+                  </Badge>
+                );
+              })()}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -83,7 +137,11 @@ export function ApplicationSummarySection() {
                   Submitted Date
                 </p>
                 <p className="text-gray-900">
-                  {new Date(application.submittedDate).toLocaleDateString()}
+                  {new Date(
+                    application.submittedDate ??
+                      application.createdAt ??
+                      Date.now()
+                  ).toLocaleDateString()}
                 </p>
               </div>
 
@@ -92,26 +150,61 @@ export function ApplicationSummarySection() {
                   Last Updated
                 </p>
                 <p className="text-gray-900">
-                  {new Date(application.lastUpdated).toLocaleDateString()}
+                  {new Date(
+                    application.lastUpdated ??
+                      application.updatedAt ??
+                      Date.now()
+                  ).toLocaleDateString()}
                 </p>
               </div>
             </div>
 
             <div className="flex gap-3">
               <Button asChild variant="outline" className="flex-1">
-                <Link
-                  href={`/adoption/applicant-portal/application/${application.id}`}
-                >
-                  {applicationMessages("appSummary.cta")}:
+                <Link href={`/applicant-portal/portal/application-details`}>
+                  {applicationMessages("appSummary.cta")}
                 </Link>
               </Button>
             </div>
 
-            {application.status === "pending" && (
+            {application.status === "PENDING_REVIEW" && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
                   Your application is currently under review. We will notify you
                   once there are updates.
+                </p>
+              </div>
+            )}
+            {application.status === "PENDING_HOME_VISIT" && (
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  Your application is currently pending a home visit. We will
+                  notify you once there are updates.
+                </p>
+              </div>
+            )}
+            {application.status === "RETURNED" && (
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  Your application has been returned by the expert with
+                  comments. Please review the feedback provided and resubmit
+                  your application after addressing the comments.
+                </p>
+              </div>
+            )}
+            {application.status === "REJECTED" && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-800">
+                  We regret to inform you that your adoption application has
+                  been rejected. For more information, please contact our support
+                  team.
+                </p>
+              </div>
+            )}
+            {application.status === "MATCHED" && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800">
+                  Congratulations! Your adoption application has been matched. Our team will reach out to you with the next steps.
                 </p>
               </div>
             )}

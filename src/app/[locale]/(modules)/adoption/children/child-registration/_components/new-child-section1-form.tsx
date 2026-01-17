@@ -285,17 +285,20 @@ export default function NewChildFormSectionOne() {
                 </FormItem>
               )}
             />
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
-              {/* {form.formState.isSubmitting ? "Submitting..." : "Submit Form"} */}
-              {"Next"}
-            </Button>
           </Card>
+          {/* Submit Button */}
+          <div className="flex justify-between mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/adoption/children/")}
+            >
+              Back
+            </Button>
+            <Button type="submit" className="px-8">
+              Next
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

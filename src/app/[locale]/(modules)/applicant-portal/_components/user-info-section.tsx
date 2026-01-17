@@ -1,29 +1,20 @@
 "use client";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuthStore } from "@/stores/auth-store";
 import { User, Mail, Phone, BadgeIcon as IdCard } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useAuthMeQuery } from "@/hooks/applicants-portal";
 
-interface UserInfo {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  idNumber: string;
-}
-
-// Mock data - will be replaced with TanStack Query
-const mockUserData: UserInfo = {
-  fullName: "Ammar Mohammed",
-  email: "ammarmyp@email.com",
-  phoneNumber: "+251941806250",
-  idNumber: "ID123456789",
-};
 
 export function UserInfoSection() {
-  const userInfo = mockUserData; // This will be replaced with actual data fetching
   const applicationMessages = useTranslations("applicationMessages");
+  const { data, isLoading, error } = useAuthMeQuery();
+  const userData = data;
 
-  const { user } = useAuthStore();
+  
+  if (isLoading) {
+    return <div>{applicationMessages("userInfo.loading")}</div>;
+  }
 
   return (
     <Card>
@@ -41,7 +32,7 @@ export function UserInfoSection() {
               <p className="text-sm font-medium text-gray-500">
                 {applicationMessages("userInfo.name")}
               </p>
-              <p className="text-gray-900">{userInfo.fullName}</p>
+              <p className="text-gray-900">{userData?.profile.firstName} {userData?.profile.lastName}</p>
             </div>
           </div>
 
@@ -53,7 +44,7 @@ export function UserInfoSection() {
                 {applicationMessages("userInfo.email")}
               </p>
 
-              <p className="text-gray-900">{user?.email}</p>
+              <p className="text-gray-900">{userData?.email}</p>
 
             </div>
           </div>
@@ -64,7 +55,7 @@ export function UserInfoSection() {
               <p className="text-sm font-medium text-gray-500">
                 {applicationMessages("userInfo.phone")}
               </p>
-              <p className="text-gray-900">{userInfo.phoneNumber}</p>
+              <p className="text-gray-900">{userData?.profile.phoneNumber}</p>
             </div>
           </div>
 
@@ -74,7 +65,7 @@ export function UserInfoSection() {
               <p className="text-sm font-medium text-gray-500">
                 {applicationMessages("userInfo.id")}
               </p>
-              <p className="text-gray-900">{userInfo.idNumber}</p>
+              <p className="text-gray-900">{userData?.id}</p>
             </div>
           </div>
         </div>

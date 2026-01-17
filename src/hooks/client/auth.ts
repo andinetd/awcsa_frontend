@@ -10,13 +10,12 @@ export const useClientSignupMutation = () =>
   });
 
 export const useSignInMutation = () => {
-  const { setUser, setToken } = useAuthStore();
+  const { setToken } = useAuthStore();
   return useMutation<ClientSignInResponse, Error, ClientSignIn>({
     mutationFn: signIn,
     mutationKey: ["Client Sign In"],
     onSuccess:  (data)  => {
       setToken(data.access_token);
-    
     },
   });
 };

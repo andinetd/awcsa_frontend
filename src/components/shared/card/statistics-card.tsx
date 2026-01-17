@@ -27,11 +27,11 @@ const StatsCard = ({
   dataKey,
 }: StatCardProps) => {
   return (
-    <Card className="w-full max-w-sm bg-white border border-zinc-200 rounded-lg group hover:bg-secondary/65 hover:border-secondary transition-all ease-linear duration-300">
+    <Card className="w-full max-w-sm bg-white border border-zinc-200 rounded-xl group hover:shadow-lg hover:-translate-y-0.5 hover:border-zinc-300 hover:bg-zinc-50/50 transition-all ease-in-out duration-300">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center space-x-2">
-          <div className="p-2 bg-zinc-50 rounded-full border-zinc-200 border">
-            <Icon className="h-4 w-4 " />
+          <div className="p-2.5 bg-zinc-100/80 rounded-full group-hover:bg-white group-hover:shadow-sm transition-colors duration-300">
+            <Icon className="h-5 w-5 text-zinc-600 group-hover:text-primary transition-colors duration-300" />
           </div>
         </div>
         <div className="h-16 w-36">
@@ -39,21 +39,22 @@ const StatsCard = ({
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
                 <Line
-                  type="linear"
+                  type="monotone"
                   dataKey={dataKey}
                   stroke={`var(--color-${dataKey})`}
-                  strokeWidth={3}
+                  strokeWidth={2}
                   dot={false}
+                  strokeOpacity={0.8}
                 />
               </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <p className="font-medium text-zinc-500">{title}</p>
+      <CardContent className="space-y-1">
+        <p className="font-medium text-sm text-zinc-500">{title}</p>
         <div className="flex items-baseline space-x-3">
-          <div className="text-4xl font-medium text-zinc-900 group-hover:text-primary">
+          <div className="text-3xl font-bold text-zinc-900 tracking-tight">
             {value}
           </div>
         </div>

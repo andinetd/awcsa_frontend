@@ -24,33 +24,25 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { useApplicationFormStore } from "@/stores/application-form-store";
 
 export default function Step2Page() {
   const router = useRouter();
   const application = useTranslations("applicationMessages");
 
+  const { step2, setStep2 } = useApplicationFormStore();
   const form = useForm<ApplicationStepTwoType>({
     resolver: zodResolver(ApplicationStepTwoSchema),
-    defaultValues: {},
+    defaultValues: step2 || {},
   });
 
-  const handleInputChange = (field: string, value: string) => {
-    // setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleNext = () => {
-    // localStorage.setItem("step2Data", JSON.stringify(formData));
-    router.push("/adoption/applicant-portal/application/new/step3");
-  };
-
-  const handleBack = () => {
-    router.push("/adoption/applicant-portal/application/new/step1");
+  const handleBack = (values: ApplicationStepTwoType) => {
+    setStep2(values);
+    router.push("/applicant-portal/application/new/step1");
   };
   async function onSubmit(values: ApplicationStepTwoType) {
-    //TODO: handle submission here
-    console.log("values submited: ", { values });
-    router.push("/adoption/applicant-portal/application/new/step3");
-    // setData(values);
+    setStep2(values);
+    router.push("/applicant-portal/application/new/step3");
   }
 
   const instructions = (
@@ -105,17 +97,7 @@ export default function Step2Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.medical?.message}
                     />
@@ -140,18 +122,7 @@ export default function Step2Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
                       error={form.formState.errors.criminalClearance?.message}
                     />
@@ -164,11 +135,11 @@ export default function Step2Page() {
           <div className="grid grid-cols-1  gap-4">
             <FormField
               control={form.control}
-              name="spouseAgreement"
+              name="marriageCertificate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("steptwo.form.spouseAgreement")}*
+                    {application("steptwo.form.marriageCertificate")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -177,20 +148,9 @@ export default function Step2Page() {
                         field.onChange(files[0]);
                       }}
                       maxFiles={1}
-                      acceptedFileTypes={
-                        [
-                          // "png",
-                          // ".pdf",
-                          // ".docx",
-                          // ".pptx",
-                          // ".xlsx",
-                          // ".odt",
-                          // ".odp",
-                          // ".ods",
-                        ]
-                      }
+                      acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
-                      error={form.formState.errors.spouseAgreement?.message}
+                      error={form.formState.errors.marriageCertificate?.message}
                     />
                   </FormControl>
                 </FormItem>
@@ -199,7 +159,11 @@ export default function Step2Page() {
           </div>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={handleBack}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleBack(form.getValues())}
+            >
               Previous Step
             </Button>
             <Button type="submit" className="px-8">

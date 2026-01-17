@@ -28,13 +28,21 @@ export const AttachmentDialog: React.FC<AttachmentDialogProps> = ({
         <DialogTitle>{fileName}</DialogTitle>
       </DialogHeader>
       <div className="mt-2">
-        <RPConfig>
-          <RPProvider src="https://cdn.bookey.app/files/pdf/book/en/dear-theo.pdf">
-            <RPDefaultLayout>
-              <RPPages />
-            </RPDefaultLayout>
-          </RPProvider>
-        </RPConfig>
+        {/* If the provided fileUrl is a PDF, use the PDF viewer; otherwise render an image/iframe fallback */}
+        {fileUrl.toLowerCase().endsWith(".pdf") ? (
+          <RPConfig>
+            <RPProvider src={fileUrl}>
+              <RPDefaultLayout>
+                <RPPages />
+              </RPDefaultLayout>
+            </RPProvider>
+          </RPConfig>
+        ) : (
+          <div className="w-full h-[70vh] flex items-center justify-center">
+            {/* basic fallback for images or other embeddable types */}
+            <iframe src={fileUrl} className="w-full h-full border-0" title={fileName} />
+          </div>
+        )}
       </div>
     </DialogContent>
   </Dialog>
