@@ -18,6 +18,7 @@ import {
   User,
   Users,
   GraduationCap,
+  MessageSquareText,
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -187,7 +188,11 @@ export const sidebarConfig: Record<
           url: "/super-admin/user-management",
           icon: Users,
         },
-
+        {
+          title: "Complaints",
+          url: "/complaints",
+          icon: MessageSquareText,
+        },
         {
           title: "General Settings",
           url: "/super-admin/general-settings",
@@ -213,6 +218,11 @@ export const sidebarConfig: Record<
           title: "Social Affairs",
           url: "/social-affairs/socials/dashboard",
           icon: FileText,
+        },
+        {
+          title: "Complaints",
+          url: "/complaints",
+          icon: MessageSquareText,
         },
         { title: "Women", url: "/womens/dashboard", icon: User },
         { title: "Super Admin", url: "/super-admin", icon: FileText },

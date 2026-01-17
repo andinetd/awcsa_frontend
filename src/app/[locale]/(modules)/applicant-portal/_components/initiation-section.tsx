@@ -130,6 +130,14 @@ export function InitiationSection() {
               wcsa@gov.org
             </a>
           </p>
+          <div className="mt-2 pt-2 border-t">
+            <Link
+              href="/applicant-portal/complaints"
+              className="text-sm font-medium text-primary hover:underline flex items-center justify-center gap-1"
+            >
+              Submit a Complaint
+            </Link>
+          </div>
         </div>
       </CardContent>
     </Card>
