@@ -120,11 +120,25 @@ export function InitiationSection() {
           )}
         </div>
 
-        <div className="text-center">
-          <p className="text-xs text-gray-500">
+        <div className="text-center space-y-3 pt-4 border-t">
+          <div className="px-2">
+            <h4 className="text-sm font-semibold text-gray-900 mb-1">
+              {applicationMessages("initiation.complaintsTitle")}
+            </h4>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              {applicationMessages("initiation.complaintsDescription")}
+            </p>
+          </div>
+          <Link
+            href="/applicant-portal/complaints"
+            className="text-sm font-medium text-primary hover:underline flex items-center justify-center gap-1"
+          >
+            Complaints
+          </Link>
+          <p className="text-[10px] text-gray-400">
             Need help? Contact our support team at{" "}
             <a
-              href="mailto:support@adoption.org"
+              href="mailto:wcsa@gov.org"
               className="text-blue-600 hover:underline"
             >
               wcsa@gov.org
