@@ -28,7 +28,7 @@ export function middleware(req: NextRequest) {
   const isPublicRoute = publicRoutes.some(
     (route) =>
       pathNameWithoutLocale === route ||
-      pathname === `/${locale}${route === "/" ? "" : route}`
+      pathname === `/${locale}${route === "/" ? "" : route}`,
   );
 
   if (isPublicRoute) {
@@ -46,9 +46,17 @@ export function middleware(req: NextRequest) {
   try {
     const decodedToken = jwtDecode<JwtPayload>(token as string);
 
+    // EXPIRATION CHECK
+    if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      const loginUrl = new URL(`/${locale}/login`, req.url);
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete("wcasf_auth_token");
+      return response;
+    }
+
     const matchedRoute = Object.keys(routePermissions).find(
       (route) =>
-        normalizedPath === route || normalizedPath.startsWith(route + "/")
+        normalizedPath === route || normalizedPath.startsWith(route + "/"),
     );
     console.log(`MATCHED ROUTE: ${matchedRoute}`);
     console.log("PATH:", normalizedPath, "MATCHED:", matchedRoute);
@@ -75,11 +83,11 @@ export function middleware(req: NextRequest) {
       if (
         guard.allowedRoles &&
         !guard.allowedRoles.includes(
-          employeeToken.orgUnit.deputyBureau as DeputyBureau
+          employeeToken.orgUnit.deputyBureau as DeputyBureau,
         )
       ) {
         return NextResponse.redirect(
-          new URL(`/${locale}/unauthorized`, req.url)
+          new URL(`/${locale}/unauthorized`, req.url),
         );
       }
     }

@@ -26,10 +26,11 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
       "Role:",
       orgUnit,
       "Allowed:",
-      allowedRoles
+      allowedRoles,
     );
 
     if (!orgUnit) {
+      useAuthStore.getState().logout();
       router.replace("/login");
       return;
     }
@@ -48,7 +49,7 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
     "Role:",
     orgUnit?.deputyBureau,
     "Allowed:",
-    allowedRoles
+    allowedRoles,
   );
 
   if (!hydrated) {

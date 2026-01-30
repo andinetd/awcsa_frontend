@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Eye, EyeOff } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -83,7 +84,37 @@ export default function SignInForm() {
   useState(() => {}); // keep hooks order if needed
 
   useEffect(() => {
+    // Landed on login page? Clear any potentially stale state if it's not actually valid
+    const token = useAuthStore.getState().token;
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+          useAuthStore.getState().logout();
+        }
+      } catch (e) {
+        useAuthStore.getState().logout();
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!user && !orgUnit) return;
+
+    // Double check token validity before redirecting
+    const token = useAuthStore.getState().token;
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+          useAuthStore.getState().logout();
+          return;
+        }
+      } catch (e) {
+        useAuthStore.getState().logout();
+        return;
+      }
+    }
 
     console.log("DEBUG: Redirection Check", {
       user,

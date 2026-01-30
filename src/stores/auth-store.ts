@@ -3,11 +3,8 @@ import { persist } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import {
-  UserType,
-  OrgType,
   JwtPayload,
   UserRole,
-  PermissionOperation,
   JwtUserType,
   EmployeeJwtPayload,
   ClientJwtPayload,
@@ -84,7 +81,20 @@ export const useAuthStore = create<AuthState>()(
       loadTokenFromCookie: () => {
         const token = Cookies.get("wcasf_auth_token");
         if (token) {
-          get().setToken(token);
+          try {
+            const decoded: JwtPayload = jwtDecode(token);
+            const isExpired = decoded.exp
+              ? decoded.exp * 1000 < Date.now()
+              : false;
+
+            if (isExpired) {
+              get().logout();
+            } else {
+              get().setToken(token);
+            }
+          } catch (e) {
+            get().logout();
+          }
         }
         set({ hydrated: true });
       },
@@ -99,6 +109,7 @@ export const useAuthStore = create<AuthState>()(
           orgUnit: null,
           userRole: null,
           userPermissions: [],
+          hydrated: true,
         });
       },
 
@@ -108,6 +119,6 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-store", // key in localStorage
-    }
-  )
+    },
+  ),
 );
