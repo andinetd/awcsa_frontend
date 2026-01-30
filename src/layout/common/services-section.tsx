@@ -1,13 +1,10 @@
 "use client";
 
 import {
-  Briefcase,
-  ClipboardCheck,
-  BarChart,
-  Users,
-  TrendingUp,
-  Info,
   Baby,
+  Building2,
+  Accessibility,
+  Heart,
 } from "lucide-react";
 import { delay, motion } from "framer-motion";
 import Link from "next/link";
@@ -24,29 +21,19 @@ const ServicesSection = () => {
       linkText: t("services.adoptionLinkText"),
     },
     {
-      icon: Users,
-      title: t("services.organizingTitle"),
-      description: t("services.organizingDescription"),
+      icon: Building2,
+      title: t("services.edirTitle"),
+      description: t("services.edirDescription"),
     },
     {
-      icon: Info,
-      title: t("services.infoTitle"),
-      description: t("services.infoDescription"),
+      icon: Heart,
+      title: t("services.womenTitle"),
+      description: t("services.womenDescription"),
     },
     {
-      icon: ClipboardCheck,
-      title: t("services.legalTitle"),
-      description: t("services.legalDescription"),
-    },
-    {
-      icon: BarChart,
-      title: t("services.marketTitle"),
-      description: t("services.marketDescription"),
-    },
-    {
-      icon: TrendingUp,
-      title: t("services.kaizenTitle"),
-      description: t("services.kaizenDescription"),
+      icon: Accessibility,
+      title: t("services.elderlyTitle"),
+      description: t("services.elderlyDescription"),
     },
   ];
   const containerVariants = {

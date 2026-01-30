@@ -15,16 +15,12 @@
     "adoptionTitle": "Adoption Services",
     "adoptionDescription": "We provide a comprehensive online platform to facilitate the adoption process, connecting children with loving families.",
     "adoptionLinkText": "Start the Adoption Process",
-    "organizingTitle": "Organizing and Training",
-    "organizingDescription": "We empower women by organizing them into micro and small enterprises and providing training to enhance their skills.",
-    "infoTitle": "Information and Support",
-    "infoDescription": "We offer crucial information and support to help women succeed in their business ventures.",
-    "legalTitle": "Legal Certification",
-    "legalDescription": "We provide legal certification for women-owned businesses, ensuring they meet all necessary requirements.",
-    "marketTitle": "Market Linkage",
-    "marketDescription": "We connect women entrepreneurs with market opportunities to help them grow their businesses.",
-    "kaizenTitle": "Kaizen Implementation",
-    "kaizenDescription": "We support the implementation of Kaizen principles to improve productivity and quality in women-led enterprises."
+    "edirTitle": "Edir Services",
+    "edirDescription": "Community-based associations supporting members in social and financial matters during various life events.",
+    "womenTitle": "Women's Empowerment",
+    "womenDescription": "Supporting women through organizing, training, and economic empowerment programs to enhance their livelihoods.",
+    "elderlyTitle": "Elderly & Disability Services",
+    "elderlyDescription": "Dedicated support and welfare services ensuring the well-being and inclusion of elderly citizens and persons with disabilities."
   },
   "gallery": {
     "title": "Our Gallery",
