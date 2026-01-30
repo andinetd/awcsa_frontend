@@ -5,7 +5,9 @@
   },
   "initiation": {
     "requirement": "Adoption Requirements",
-    "requirementSubtitle": "Before starting your application, please ensure you meet the following requirements:"
+    "requirementSubtitle": "Before starting your application, please ensure you meet the following requirements:",
+    "complaintsTitle": "Complaints & Feedback",
+    "complaintsDescription": "Have concerns about your application process? You can submit and track complaints directly through our dedicated service."
   },
   "requirements": {
     "one": "Age not less than 25 and not more than 60 years,",
