@@ -127,7 +127,7 @@ export const CareCenterReportForm: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <Link href="/care-centers-portal">
           <Button
             variant="ghost"

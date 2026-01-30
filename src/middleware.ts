@@ -23,7 +23,14 @@ export function middleware(req: NextRequest) {
       ? pathNameWithoutLocale.slice(0, -1)
       : pathNameWithoutLocale;
 
-  const publicRoutes = ["/", "/login", "/unauthorized", "/register", ""];
+  const publicRoutes = [
+    "/",
+    "/login",
+    "/unauthorized",
+    "/register",
+    "/reset-password",
+    "",
+  ];
 
   const isPublicRoute = publicRoutes.some(
     (route) =>
@@ -58,11 +65,12 @@ export function middleware(req: NextRequest) {
       (route) =>
         normalizedPath === route || normalizedPath.startsWith(route + "/"),
     );
-    console.log(`MATCHED ROUTE: ${matchedRoute}`);
+
     console.log("PATH:", normalizedPath, "MATCHED:", matchedRoute);
 
     if (!matchedRoute) {
-      return intlMiddleWare(req);
+      // DENY BY DEFAULT for non-public routes
+      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }
 
     const guard = routePermissions[matchedRoute];
