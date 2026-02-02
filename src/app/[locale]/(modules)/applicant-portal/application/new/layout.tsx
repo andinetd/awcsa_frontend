@@ -3,6 +3,7 @@ import { StepProgress } from "../../_components/step-progress";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale, useMessages } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
+import { DynamicBreadcrumb } from "@/components/shared/dynamic-breadcrumb";
 
 export default async function ApplicationLayout({
   children,
@@ -24,6 +25,7 @@ export default async function ApplicationLayout({
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <div className="flex justify-between items-center">
             <div className="mb-8">
+              {/* <DynamicBreadcrumb /> */}
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Adoption Application
               </h1>
@@ -32,7 +34,6 @@ export default async function ApplicationLayout({
               </p>
             </div>
           </div>
-          
 
           <StepProgress />
 

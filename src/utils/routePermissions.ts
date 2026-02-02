@@ -7,7 +7,6 @@ type RouteGuard = {
 
 export const routePermissions: Record<string, RouteGuard> = {
   "/applicant-portal": { allowedAccountTypes: ["CLIENT"] },
-  "/complaints": { allowedAccountTypes: ["CLIENT"] },
   "/care-centers-portal": {
     allowedAccountTypes: ["CHILD_CARE_FACLITY", "EMPLOYEE"],
   },
@@ -31,5 +30,9 @@ export const routePermissions: Record<string, RouteGuard> = {
   "/adoption": {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["BUREAU_HEAD"], // TODO: Add children affairs, removed "CHILDREN_AFFAIRS" because care centers are considered as children affairs
+  },
+  "/complaints": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["BUREAU_HEAD"],
   },
 };

@@ -1,7 +1,8 @@
 "use client";
 
-import type React from "react";
-
+import React from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
   SidebarInset,
   SidebarProvider,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { DynamicSidebar } from "./dynamic-sidebar";
+import { DynamicBreadcrumb } from "./dynamic-breadcrumb";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -24,7 +26,12 @@ export function SidebarLayout({ children, title }: SidebarLayoutProps) {
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 px-4 border-b">
           <SidebarTrigger />
-          {title && <h1 className="text-xl font-semibold">{title}</h1>}
+          <div className="flex flex-col justify-center">
+            {title && (
+              <h1 className="text-lg font-semibold leading-none mb-2">{title}</h1>
+            )}
+            {/* <DynamicBreadcrumb /> */}
+          </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
       </SidebarInset>

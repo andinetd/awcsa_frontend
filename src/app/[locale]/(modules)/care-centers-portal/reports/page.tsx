@@ -30,24 +30,8 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/care-centers-portal">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Monthly Reports</h2>
-          <p className="text-muted-foreground">
-            View and manage your submitted monthly reports.
-          </p>
-        </div>
-      </div>
-
-      <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-2">
-        <DataTable columns={columns} data={reports || []} />
-      </div>
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-2">
+      <DataTable columns={columns} data={reports || []} />
     </div>
   );
 }

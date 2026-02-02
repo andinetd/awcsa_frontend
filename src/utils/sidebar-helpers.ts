@@ -34,6 +34,10 @@ export function getSidebarItems(orgUnit: OrgType, pathname: string) {
       console.log("Matched /bureau-head");
       return sidebarConfig.BUREAU_HEAD;
     }
+    if (cleanPathname.startsWith("/complaints")) {
+      console.log("Matched /complaints");
+      return sidebarConfig.BUREAU_HEAD;
+    }
     console.log("No route matched, defaulting to GLOBAL");
     return sidebarConfig.GLOBAL;
   }

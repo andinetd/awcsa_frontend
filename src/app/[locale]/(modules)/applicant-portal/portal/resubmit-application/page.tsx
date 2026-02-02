@@ -25,7 +25,22 @@ import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-ap
 import { useAuthStore } from "@/stores/auth-store";
 import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
-import { Eye } from "lucide-react";
+import {
+  Eye,
+  ArrowLeft,
+  AlertCircle,
+  CheckCircle2,
+  FileText,
+  Upload,
+} from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+function formatLabel(key: string) {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+}
 
 export default function ResubmitApplicationPage() {
   const t = useTranslations("applicationMessages");
@@ -186,10 +201,10 @@ export default function ResubmitApplicationPage() {
 
   // split into left (text-like) and right (file-like)
   const textFields = fieldsToRender.filter(
-    (k) => (FIELD_MAP[k]?.kind ?? "text") !== "file"
+    (k) => (FIELD_MAP[k]?.kind ?? "text") !== "file",
   );
   const fileFields = fieldsToRender.filter(
-    (k) => (FIELD_MAP[k]?.kind ?? "text") === "file"
+    (k) => (FIELD_MAP[k]?.kind ?? "text") === "file",
   );
 
   const viewRemoteFile = async (publicId: string) => {
@@ -318,27 +333,49 @@ export default function ResubmitApplicationPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto py-8">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Resubmit Application</h2>
-        <p className="text-gray-600">
-          You can update fields flagged by the reviewer and resubmit.
-        </p>
+    <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
+      {/* Premium Header */}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.back()}
+            className="rounded-full hover:bg-slate-100 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-600" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              Resubmit Application
+            </h1>
+            <p className="text-slate-500 mt-1 font-medium">
+              Update the fields flagged for review to proceed with your
+              application.
+            </p>
+          </div>
+        </div>
+        <div className="h-1 w-20 bg-blue-600 rounded-full ml-14"></div>
       </div>
 
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-6 items-start">
             {/* Left: text fields card */}
-            <Card className="flex-1">
-              <CardHeader>
-                <CardTitle>Fields to Update</CardTitle>
+            <Card className="flex-1 shadow-sm border-slate-200 hover:shadow-md transition-shadow">
+              <CardHeader className="bg-slate-50/50 border-b border-slate-100">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  Details to Update
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-6">
+                <div className="space-y-6">
                   {textFields.length === 0 ? (
-                    <div className="text-sm text-gray-600">
-                      No textual fields were commented on.
+                    <div className="text-center py-8">
+                      <p className="text-sm text-slate-500 italic">
+                        No textual fields require update.
+                      </p>
                     </div>
                   ) : (
                     textFields.map((key) => {
@@ -356,7 +393,9 @@ export default function ResubmitApplicationPage() {
                               name={conf.formName as any}
                               render={({ field }: any) => (
                                 <FormItem>
-                                  <FormLabel>{conf.label ?? key}</FormLabel>
+                                  <FormLabel>
+                                    {conf.label ?? formatLabel(key)}
+                                  </FormLabel>
                                   <FormControl>
                                     <select
                                       {...field}
@@ -365,47 +404,54 @@ export default function ResubmitApplicationPage() {
                                       <option value="">Select</option>
                                       <option value="none">
                                         {t(
-                                          "stepone.form.educationOptions.none"
+                                          "stepone.form.educationOptions.none",
                                         )}
                                       </option>
                                       <option value="primary">
                                         {t(
-                                          "stepone.form.educationOptions.primary"
+                                          "stepone.form.educationOptions.primary",
                                         )}
                                       </option>
                                       <option value="secondary">
                                         {t(
-                                          "stepone.form.educationOptions.secondary"
+                                          "stepone.form.educationOptions.secondary",
                                         )}
                                       </option>
                                       <option value="Diploma">
                                         {t(
-                                          "stepone.form.educationOptions.diploma"
+                                          "stepone.form.educationOptions.diploma",
                                         )}
                                       </option>
                                       <option value="Bachelor">
                                         {t(
-                                          "stepone.form.educationOptions.bachelor"
+                                          "stepone.form.educationOptions.bachelor",
                                         )}
                                       </option>
                                       <option value="Master">
                                         {t(
-                                          "stepone.form.educationOptions.master"
+                                          "stepone.form.educationOptions.master",
                                         )}
                                       </option>
                                       <option value="Doctorate">
                                         {t(
-                                          "stepone.form.educationOptions.doctorate"
+                                          "stepone.form.educationOptions.doctorate",
                                         )}
                                       </option>
                                     </select>
                                   </FormControl>
                                   {comment && (
-                                    <div className="p-2 bg-red-50 border border-red-200 rounded-lg">
-                                      <p className="text-sm text-red-800 mt-1">
+                                    <Alert
+                                      variant="destructive"
+                                      className="mt-3 bg-red-50/50 border-red-100"
+                                    >
+                                      <AlertCircle className="h-4 w-4" />
+                                      <AlertTitle className="text-xs font-bold">
+                                        Reviewer Feedback
+                                      </AlertTitle>
+                                      <AlertDescription className="text-sm">
                                         {comment}
-                                      </p>
-                                    </div>
+                                      </AlertDescription>
+                                    </Alert>
                                   )}
                                 </FormItem>
                               )}
@@ -416,7 +462,9 @@ export default function ResubmitApplicationPage() {
                               name={conf.formName as any}
                               render={({ field }: any) => (
                                 <FormItem>
-                                  <FormLabel>{conf.label ?? key}</FormLabel>
+                                  <FormLabel>
+                                    {conf.label ?? formatLabel(key)}
+                                  </FormLabel>
                                   <FormControl>
                                     {conf.kind === "date" ? (
                                       <Input type="date" {...field} />
@@ -434,11 +482,18 @@ export default function ResubmitApplicationPage() {
                                     )}
                                   </FormControl>
                                   {comment && (
-                                    <div className="p-2 bg-red-50 border border-red-200 rounded-lg">
-                                      <p className="text-sm text-red-800 mt-1">
+                                    <Alert
+                                      variant="destructive"
+                                      className="mt-3 bg-red-50/50 border-red-100"
+                                    >
+                                      <AlertCircle className="h-4 w-4" />
+                                      <AlertTitle className="text-xs font-bold">
+                                        Reviewer Feedback
+                                      </AlertTitle>
+                                      <AlertDescription className="text-sm">
                                         {comment}
-                                      </p>
-                                    </div>
+                                      </AlertDescription>
+                                    </Alert>
                                   )}
                                 </FormItem>
                               )}
@@ -453,15 +508,20 @@ export default function ResubmitApplicationPage() {
             </Card>
 
             {/* Right: files card */}
-            <Card className="w-2/3">
-              <CardHeader>
-                <CardTitle>Files to Replace</CardTitle>
+            <Card className="w-full lg:w-2/5 shadow-sm border-slate-200 hover:shadow-md transition-shadow">
+              <CardHeader className="bg-slate-50/50 border-b border-slate-100">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Upload className="w-5 h-5 text-blue-600" />
+                  Files to Replace
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-6">
+                <div className="space-y-8">
                   {fileFields.length === 0 ? (
-                    <div className="text-sm text-gray-600">
-                      No files were commented on.
+                    <div className="text-center py-8">
+                      <p className="text-sm text-slate-500 italic">
+                        No files require replacement.
+                      </p>
                     </div>
                   ) : (
                     fileFields.map((key) => {
@@ -476,7 +536,7 @@ export default function ResubmitApplicationPage() {
                           f.fieldName === key ||
                           f.fieldName === conf.formName ||
                           f.fileName === key ||
-                          f.publicId === key
+                          f.publicId === key,
                       );
                       return (
                         <div key={key}>
@@ -507,11 +567,18 @@ export default function ResubmitApplicationPage() {
                                   />
                                 </FormControl>
                                 {comment && (
-                                  <div className="p-2 bg-red-50 border border-red-200 rounded-lg">
-                                    <p className="text-sm text-red-800 mt-1">
+                                  <Alert
+                                    variant="destructive"
+                                    className="mt-3 bg-red-50/50 border-red-100"
+                                  >
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle className="text-xs font-bold">
+                                      Reviewer Feedback
+                                    </AlertTitle>
+                                    <AlertDescription className="text-sm">
                                       {comment}
-                                    </p>
-                                  </div>
+                                    </AlertDescription>
+                                  </Alert>
                                 )}
                                 {existingFile && (
                                   <div className="mt-2">
@@ -539,10 +606,12 @@ export default function ResubmitApplicationPage() {
             </Card>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <Button
-              onClick={() => onSubmit(form.getValues() as ApplicationStepOneType)}
-              className="px-8"
+              onClick={() =>
+                onSubmit(form.getValues() as ApplicationStepOneType)
+              }
+              className="px-10 py-6 rounded-xl text-lg font-bold shadow-lg shadow-blue-100 hover:shadow-xl transition-all"
               disabled={submitting}
             >
               {submitting ? "Submitting..." : "Resubmit Application"}

@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { toast } from "sonner";
 import Link from "next/link";
 import { formatAge } from "@/lib/utils";
+import { DynamicBreadcrumb } from "@/components/shared/dynamic-breadcrumb";
 
 export default function Details() {
   const { application } = useFetchedAdoptionApplicationStore();
@@ -29,7 +30,7 @@ export default function Details() {
 
   const getFileByField = (fieldName: string) => {
     return application?.files?.find(
-      (f: any) => f.fieldName === fieldName || f.fileName === fieldName
+      (f: any) => f.fieldName === fieldName || f.fileName === fieldName,
     );
   };
 
@@ -110,6 +111,7 @@ export default function Details() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* <DynamicBreadcrumb /> */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Application Details
@@ -139,7 +141,7 @@ export default function Details() {
                 </span>
                 {fileCard(
                   getFileByField("birthCertificate"),
-                  "Birth Certificate"
+                  "Birth Certificate",
                 )}
               </div>
               <div>
@@ -152,7 +154,7 @@ export default function Details() {
                 <span className="font-medium text-gray-500">Medical:</span>
                 {fileCard(
                   getFileByField("medicalDocument"),
-                  "Medical Information"
+                  "Medical Information",
                 )}
               </div>
               <div>
@@ -161,7 +163,7 @@ export default function Details() {
                 </span>
                 {fileCard(
                   getFileByField("criminalClearance"),
-                  "Criminal Document"
+                  "Criminal Document",
                 )}
               </div>
             </div>
@@ -226,7 +228,7 @@ export default function Details() {
                     {String(
                       form.monthlyIncome ??
                         application.adoptionData?.monthlyIncome ??
-                        "-"
+                        "-",
                     )}
                   </p>
                 </div>
@@ -251,8 +253,10 @@ export default function Details() {
                       <p className="text-xs text-gray-500">Age Min</p>
                       <p className="text-gray-900">
                         {formatAge(form.preferredChildren?.ageRange?.min) ??
-                          formatAge(application.adoptionData?.preferredChildren?.ageRange
-                            ?.min) ??
+                          formatAge(
+                            application.adoptionData?.preferredChildren
+                              ?.ageRange?.min,
+                          ) ??
                           "-"}
                       </p>
                     </div>
@@ -260,8 +264,10 @@ export default function Details() {
                       <p className="text-xs text-gray-500">Age Max</p>
                       <p className="text-gray-900">
                         {formatAge(form.preferredChildren?.ageRange?.max) ??
-                          formatAge(application.adoptionData?.preferredChildren?.ageRange
-                            ?.max) ??
+                          formatAge(
+                            application.adoptionData?.preferredChildren
+                              ?.ageRange?.max,
+                          ) ??
                           "-"}
                       </p>
                     </div>
@@ -304,7 +310,7 @@ export default function Details() {
                 {fileCard(
                   getFileByField("marriageCertificate") ??
                     getFileByField("marriage_certificate"),
-                  "Marriage Certificate"
+                  "Marriage Certificate",
                 )}
               </div>
               <div>
@@ -313,14 +319,14 @@ export default function Details() {
                 </span>
                 {fileCard(
                   getFileByField("maritalStatusDocument"),
-                  "Marital Status"
+                  "Marital Status",
                 )}
               </div>
               <div>
                 <span className="font-medium text-gray-500">Well being:</span>
                 {fileCard(
                   getFileByField("psychologicalWellbeing"),
-                  "Well being"
+                  "Well being",
                 )}
               </div>
               <div>
@@ -333,20 +339,22 @@ export default function Details() {
                 </span>
                 {fileCard(
                   getFileByField("criminalClearance"),
-                  "Criminal Document"
+                  "Criminal Document",
                 )}
               </div>
             </div>
-            {application.remark && (application.status === "RETURNED" || application.status === "PENDING_REVIEW") && (
-              <div className="mt-4 border-t pt-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                  Reviewer Comment
-                </h4>
-                <div className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm text-gray-900">
-                  {application.remark}
+            {application.remark &&
+              (application.status === "RETURNED" ||
+                application.status === "PENDING_REVIEW") && (
+                <div className="mt-4 border-t pt-4">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                    Reviewer Comment
+                  </h4>
+                  <div className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm text-gray-900">
+                    {application.remark}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {application.status === "RETURNED" && (
               <div className="flex gap-3">
@@ -369,7 +377,7 @@ export default function Details() {
             <p className="text-sm text-blue-800 mt-1">
               This application was submitted on{" "}
               {new Date(
-                application.createdAt ?? Date.now()
+                application.createdAt ?? Date.now(),
               ).toLocaleDateString()}
               .
             </p>

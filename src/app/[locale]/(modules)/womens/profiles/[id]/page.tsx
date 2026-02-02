@@ -53,9 +53,10 @@ const WomenProfileDetail = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={() => router.push("/womens/women-list")}
+            className="rounded-full"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>

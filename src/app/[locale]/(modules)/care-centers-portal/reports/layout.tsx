@@ -13,9 +13,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
           </Button>
         </Link>
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Monthly Report</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Monthly Reports</h2>
           <p className="text-muted-foreground">
-            Fill in the details for your care center&apos;s monthly statistics.
+            View and manage your submitted monthly reports.
           </p>
         </div>
       </div>

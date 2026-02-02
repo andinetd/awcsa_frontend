@@ -51,7 +51,12 @@ export default function EdirDetailsPage({ params }: PageProps) {
     <div className="flex flex-col gap-6 max-w-5xl mx-auto w-full p-4 md:p-8">
       {/* Header / Back Button */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="rounded-full"
+        >
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <div>

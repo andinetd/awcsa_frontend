@@ -73,7 +73,12 @@ export default function BeneficiaryProfilePage() {
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto w-full">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="rounded-full"
+        >
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div>

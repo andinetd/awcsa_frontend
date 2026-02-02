@@ -54,12 +54,18 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Link href="/care-centers-portal">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to List
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold">Child Information</h1>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">
+              Child Information
+            </h2>
+            <p className="text-muted-foreground">
+              View detailed information about the registered child.
+            </p>
+          </div>
         </div>
         <Link href={`/care-centers-portal/child/${params.id}/edit`}>
           <Button>

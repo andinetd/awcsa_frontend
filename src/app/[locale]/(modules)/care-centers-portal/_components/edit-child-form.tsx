@@ -59,7 +59,9 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
       name_by_family: "John Smith",
       father_name: "Michael Smith",
       age: 8,
-      gender: "male" as const,
+      first_name: "John",
+      last_name: "Smith",
+      sex: "MALE" as const,
       admitance_reason: "Found abandoned near the market area",
       found_address: "Central Market",
       found_subcity: "Addis Ketema",
@@ -88,6 +90,14 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
       care_center_worker_id_no: "CC987654321",
       health_officer_1_name: "Dr. Almaz Tesfaye",
       heallth_officer_2_name: "Dr. Dawit Kebede",
+      child_founder_city_id_number: "CIT-12345",
+      child_id_from_care_center: "CC-990",
+      bale_adera_city_id_number: "BA-887",
+      adopter_city_id_number: "AD-776",
+      blood_relative_city_id_number: "BR-665",
+      previous_adopter_city_id_number: "PA-554",
+      current_status: "IN_CARE" as const,
+      care_center_id: "CC-001",
     };
 
     form.reset(existingData);
@@ -103,16 +113,6 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
 
   return (
     <div className="mx-auto max-w-5xl mt-10">
-      <div className="flex items-center gap-4 mb-6">
-        <Link href={`/care-centers-portal/child/${childId}/view`}>
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Details
-          </Button>
-        </Link>
-        <h1 className="text-xl font-semibold">Edit Child Information</h1>
-      </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {/* Basic Information Section */}
@@ -173,13 +173,13 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="gender"
+                name="sex"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender *</FormLabel>
                     <FormControl>
                       <Select
-                        name="gender"
+                        name="sex"
                         value={field.value}
                         onValueChange={field.onChange}
                       >
@@ -187,8 +187,8 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="MALE">Male</SelectItem>
+                          <SelectItem value="FEMALE">Female</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

@@ -26,16 +26,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/custom/custom-card";
-import { Baby, CheckCircle2 } from "lucide-react";
+import { Baby, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useGetMatchedChildDetails } from "@/hooks/adoption/adoption-requests";
-
 
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
 
   const setServiceDataId = useHomeVisitFormStore(
-    (state) => state.setServiceDataId
+    (state) => state.setServiceDataId,
   );
 
   const [showMatch, setShowMatch] = useState(false);
@@ -64,13 +63,13 @@ export default function AdoptionRequestReviewPage() {
               "Content-Type": "application/json",
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
-          }
+          },
         );
         if (!res.ok) {
           const text = await res.text().catch(() => null);
           toast.error(
             `Failed to load application: ${res.status} ${res.statusText}` +
-              (text ? ` - ${text}` : "")
+              (text ? ` - ${text}` : ""),
           );
           return;
         }
@@ -100,7 +99,7 @@ export default function AdoptionRequestReviewPage() {
   const application: BackendAdoptionApplication | undefined = applications.find(
     (app) =>
       String(app.applicationId) === params.id ||
-      app.applicationId === Number(params.id)
+      app.applicationId === Number(params.id),
   );
   // Build a flat fields array from the backend-shaped application object so the existing
   // ApplicationFieldsSection can render it.
@@ -130,7 +129,7 @@ export default function AdoptionRequestReviewPage() {
     push(
       "Spouse City ID Number",
       info.spouseCityIdNumber ?? "",
-      "spouseCityIdNumber"
+      "spouseCityIdNumber",
     );
     push("Address", info.address ?? "", "address");
     push("Education Level", info.educationLevel ?? "", "educationLevel");
@@ -144,12 +143,12 @@ export default function AdoptionRequestReviewPage() {
       push(
         "Preferred Age Min",
         pref.ageRange?.min ?? "",
-        "preferredChildren.ageRange.min"
+        "preferredChildren.ageRange.min",
       );
       push(
         "Preferred Age Max",
         pref.ageRange?.max ?? "",
-        "preferredChildren.ageRange.max"
+        "preferredChildren.ageRange.max",
       );
     }
 
@@ -166,7 +165,7 @@ export default function AdoptionRequestReviewPage() {
     }[]
   >([]);
   const [action, setAction] = useState<"approve" | "deny" | "return" | null>(
-    null
+    null,
   );
   const [submitting, setSubmitting] = useState(false);
   // For attachment comments
@@ -233,28 +232,28 @@ export default function AdoptionRequestReviewPage() {
   function handleAttachmentToggle(idx: number) {
     setAttachmentFields((prev) =>
       prev.map((a, i) =>
-        i === idx ? { ...a, showComment: !a.showComment } : a
-      )
+        i === idx ? { ...a, showComment: !a.showComment } : a,
+      ),
     );
   }
 
   function handleAttachmentComment(idx: number, value: string) {
     setAttachmentFields((prev) =>
-      prev.map((a, i) => (i === idx ? { ...a, comment: value } : a))
+      prev.map((a, i) => (i === idx ? { ...a, comment: value } : a)),
     );
   }
 
   function handleFieldToggle(idx: number) {
     setFields((prev) =>
       prev.map((f, i) =>
-        i === idx ? { ...f, showComment: !f.showComment } : f
-      )
+        i === idx ? { ...f, showComment: !f.showComment } : f,
+      ),
     );
   }
 
   function handleFieldComment(idx: number, value: string) {
     setFields((prev) =>
-      prev.map((f, i) => (i === idx ? { ...f, comment: value } : f))
+      prev.map((f, i) => (i === idx ? { ...f, comment: value } : f)),
     );
   }
 
@@ -303,7 +302,7 @@ export default function AdoptionRequestReviewPage() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) {
@@ -320,7 +319,8 @@ export default function AdoptionRequestReviewPage() {
         // Update the shared mockApplications array if present so list page sees changes
         try {
           const idx = applications.findIndex(
-            (a) => String(a.applicationId) === String(application.applicationId)
+            (a) =>
+              String(a.applicationId) === String(application.applicationId),
           );
           if (idx !== -1) {
             const prev = applications[idx];
@@ -367,7 +367,7 @@ export default function AdoptionRequestReviewPage() {
                 url: `/api/adoption/files/${d.publicId}`,
                 showComment: false,
                 comment: "",
-              }))
+              })),
             );
           }
         } catch (e) {
@@ -428,7 +428,7 @@ export default function AdoptionRequestReviewPage() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) {
@@ -444,7 +444,8 @@ export default function AdoptionRequestReviewPage() {
       if (respBody) {
         try {
           const idx = applications.findIndex(
-            (a) => String(a.applicationId) === String(application.applicationId)
+            (a) =>
+              String(a.applicationId) === String(application.applicationId),
           );
           if (idx !== -1) {
             const prev = applications[idx];
@@ -489,7 +490,7 @@ export default function AdoptionRequestReviewPage() {
                 url: `/api/adoption/files/${d.publicId}`,
                 showComment: false,
                 comment: "",
-              }))
+              })),
             );
           }
         } catch (e) {
@@ -498,7 +499,7 @@ export default function AdoptionRequestReviewPage() {
       }
 
       toast.success(
-        type === "approve" ? "Application approved" : "Application denied"
+        type === "approve" ? "Application approved" : "Application denied",
       );
       setSubmitting(false);
       router.push("../adoption-requests");
@@ -520,8 +521,9 @@ export default function AdoptionRequestReviewPage() {
     setOpenDialog(true);
   }
 
-    const { data, isLoading, isError, error } =
-      useGetMatchedChildDetails(application?.matchedChildId || 0);
+  const { data, isLoading, isError, error } = useGetMatchedChildDetails(
+    application?.matchedChildId || 0,
+  );
 
   if (loadingApps) {
     return (
@@ -550,7 +552,20 @@ export default function AdoptionRequestReviewPage() {
         />
       )}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="max-w-7xl mx-auto p-8 space-y-6">
+        <div className="flex items-center gap-4 mb-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push("/adoption/adoption-requests")}
+            className="rounded-full"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Review Adoption Application
+          </h1>
+        </div>
+        <div className="max-w-7xl mx-auto space-y-6">
           <ApplicantInfoSection
             application={{
               applicationId: String(application.applicationId),
@@ -619,12 +634,12 @@ export default function AdoptionRequestReviewPage() {
                       <span className="font-bold text-slate-900">
                         {formatAge(
                           application.applicationInfo.preferredChildren
-                            ?.ageRange?.min
+                            ?.ageRange?.min,
                         )}{" "}
                         -{" "}
                         {formatAge(
                           application.applicationInfo.preferredChildren
-                            ?.ageRange?.max
+                            ?.ageRange?.max,
                         )}{" "}
                       </span>
                     </div>
@@ -681,6 +696,5 @@ export default function AdoptionRequestReviewPage() {
         data={data}
       />
     </div>
-
   );
 }
