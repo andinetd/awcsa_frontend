@@ -43,7 +43,7 @@ function formatLabel(key: string) {
 }
 
 export default function ResubmitApplicationPage() {
-  const t = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
   const router = useRouter();
   const { application } = useFetchedAdoptionApplicationStore();
   const { token } = useAuthStore();
@@ -312,7 +312,7 @@ export default function ResubmitApplicationPage() {
         return;
       }
 
-      toast.success("Application resubmitted successfully");
+      toast.success(t("resubmit.success"));
       router.push("/applicant-portal/portal");
     } catch (e: any) {
       console.error("Resubmit error", e);
@@ -325,9 +325,7 @@ export default function ResubmitApplicationPage() {
   if (!application) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600">
-          No application available for resubmission.
-        </p>
+        <p className="text-gray-600">{t("form.noApplication")}</p>
       </div>
     );
   }
@@ -347,11 +345,10 @@ export default function ResubmitApplicationPage() {
           </Button>
           <div>
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Resubmit Application
+              {t("resubmit.title")}
             </h1>
             <p className="text-slate-500 mt-1 font-medium">
-              Update the fields flagged for review to proceed with your
-              application.
+              {t("resubmit.subtitle")}
             </p>
           </div>
         </div>
@@ -366,7 +363,7 @@ export default function ResubmitApplicationPage() {
               <CardHeader className="bg-slate-50/50 border-b border-slate-100">
                 <CardTitle className="text-xl flex items-center gap-2">
                   <FileText className="w-5 h-5 text-blue-600" />
-                  Details to Update
+                  {t("resubmit.detailsToUpdate")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
@@ -374,7 +371,7 @@ export default function ResubmitApplicationPage() {
                   {textFields.length === 0 ? (
                     <div className="text-center py-8">
                       <p className="text-sm text-slate-500 italic">
-                        No textual fields require update.
+                        {t("resubmit.noTextFields")}
                       </p>
                     </div>
                   ) : (
@@ -401,7 +398,9 @@ export default function ResubmitApplicationPage() {
                                       {...field}
                                       className="w-full border px-3 py-2 rounded"
                                     >
-                                      <option value="">Select</option>
+                                      <option value="">
+                                        {t("form.select")}
+                                      </option>
                                       <option value="none">
                                         {t(
                                           "stepone.form.educationOptions.none",
@@ -446,7 +445,7 @@ export default function ResubmitApplicationPage() {
                                     >
                                       <AlertCircle className="h-4 w-4" />
                                       <AlertTitle className="text-xs font-bold">
-                                        Reviewer Feedback
+                                        {t("resubmit.reviewerFeedback")}
                                       </AlertTitle>
                                       <AlertDescription className="text-sm">
                                         {comment}
@@ -488,7 +487,7 @@ export default function ResubmitApplicationPage() {
                                     >
                                       <AlertCircle className="h-4 w-4" />
                                       <AlertTitle className="text-xs font-bold">
-                                        Reviewer Feedback
+                                        {t("resubmit.reviewerFeedback")}
                                       </AlertTitle>
                                       <AlertDescription className="text-sm">
                                         {comment}
@@ -512,7 +511,7 @@ export default function ResubmitApplicationPage() {
               <CardHeader className="bg-slate-50/50 border-b border-slate-100">
                 <CardTitle className="text-xl flex items-center gap-2">
                   <Upload className="w-5 h-5 text-blue-600" />
-                  Files to Replace
+                  {t("resubmit.filesToReplace")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
@@ -520,7 +519,7 @@ export default function ResubmitApplicationPage() {
                   {fileFields.length === 0 ? (
                     <div className="text-center py-8">
                       <p className="text-sm text-slate-500 italic">
-                        No files require replacement.
+                        {t("resubmit.noFiles")}
                       </p>
                     </div>
                   ) : (
@@ -590,7 +589,7 @@ export default function ResubmitApplicationPage() {
                                         viewRemoteFile(existingFile.publicId)
                                       }
                                     >
-                                      <Eye /> View existing file
+                                      <Eye /> {t("resubmit.viewExisting")}
                                     </Button>
                                   </div>
                                 )}
@@ -614,7 +613,7 @@ export default function ResubmitApplicationPage() {
               className="px-10 py-6 rounded-xl text-lg font-bold shadow-lg shadow-blue-100 hover:shadow-xl transition-all"
               disabled={submitting}
             >
-              {submitting ? "Submitting..." : "Resubmit Application"}
+              {submitting ? t("form.submitting") : t("form.resubmit")}
             </Button>
           </div>
         </form>

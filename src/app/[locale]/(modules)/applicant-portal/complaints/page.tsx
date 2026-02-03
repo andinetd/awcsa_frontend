@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function ApplicantComplaintsPage() {
-  const application = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
   const [activeTab, setActiveTab] = useState("new");
 
   return (
@@ -30,7 +30,7 @@ export default function ApplicantComplaintsPage() {
             </Link>
           </Button>
           <h1 className="text-3xl font-bold text-gray-900">
-            Complaints Service
+            {t("initiation.complaintsTitle")}
           </h1>
         </div>
 
@@ -40,16 +40,20 @@ export default function ApplicantComplaintsPage() {
           className="w-full space-y-6"
         >
           <TabsList>
-            <TabsTrigger value="new">New Complaint</TabsTrigger>
-            <TabsTrigger value="history">Complaint History</TabsTrigger>
+            <TabsTrigger value="new">
+              {t("initiation.complaintsTabNew")}
+            </TabsTrigger>
+            <TabsTrigger value="history">
+              {t("initiation.complaintsTabHistory")}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="history">
             <Card>
               <CardHeader>
-                <CardTitle>Complaint History</CardTitle>
+                <CardTitle>{t("initiation.complaintsHistoryTitle")}</CardTitle>
                 <CardDescription>
-                  View and track the status of your submitted complaints.
+                  {t("initiation.complaintsHistoryDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -61,9 +65,9 @@ export default function ApplicantComplaintsPage() {
           <TabsContent value="new">
             <Card>
               <CardHeader>
-                <CardTitle>Submit a New Complaint</CardTitle>
+                <CardTitle>{t("initiation.complaintsCardTitle")}</CardTitle>
                 <CardDescription>
-                  Found an issue with the system or process? Let us know.
+                  {t("initiation.complaintsCardDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -5,15 +5,13 @@ import { User, Mail, Phone, BadgeIcon as IdCard } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useAuthMeQuery } from "@/hooks/applicants-portal";
 
-
 export function UserInfoSection() {
-  const applicationMessages = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
   const { data, isLoading, error } = useAuthMeQuery();
   const userData = data;
 
-  
   if (isLoading) {
-    return <div>{applicationMessages("userInfo.loading")}</div>;
+    return <div>{t("userInfo.loading")}</div>;
   }
 
   return (
@@ -21,7 +19,7 @@ export function UserInfoSection() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <User className="h-5 w-5" />
-          {applicationMessages("userInfo.userInfo")}
+          {t("userInfo.userInfo")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -30,9 +28,11 @@ export function UserInfoSection() {
             <User className="h-4 w-4 text-gray-500" />
             <div>
               <p className="text-sm font-medium text-gray-500">
-                {applicationMessages("userInfo.name")}
+                {t("userInfo.name")}
               </p>
-              <p className="text-gray-900">{userData?.profile.firstName} {userData?.profile.lastName}</p>
+              <p className="text-gray-900">
+                {userData?.profile.firstName} {userData?.profile.lastName}
+              </p>
             </div>
           </div>
 
@@ -41,11 +41,10 @@ export function UserInfoSection() {
             <div>
               <p className="text-sm font-medium text-gray-500">
                 {" "}
-                {applicationMessages("userInfo.email")}
+                {t("userInfo.email")}
               </p>
 
               <p className="text-gray-900">{userData?.email}</p>
-
             </div>
           </div>
 
@@ -53,7 +52,7 @@ export function UserInfoSection() {
             <Phone className="h-4 w-4 text-gray-500" />
             <div>
               <p className="text-sm font-medium text-gray-500">
-                {applicationMessages("userInfo.phone")}
+                {t("userInfo.phone")}
               </p>
               <p className="text-gray-900">{userData?.profile.phoneNumber}</p>
             </div>
@@ -63,7 +62,7 @@ export function UserInfoSection() {
             <IdCard className="h-4 w-4 text-gray-500" />
             <div>
               <p className="text-sm font-medium text-gray-500">
-                {applicationMessages("userInfo.id")}
+                {t("userInfo.id")}
               </p>
               <p className="text-gray-900">{userData?.id}</p>
             </div>

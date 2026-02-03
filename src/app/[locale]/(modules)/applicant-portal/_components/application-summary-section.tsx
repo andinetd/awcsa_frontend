@@ -44,11 +44,16 @@ const getStatusColor = (status: string) => {
 };
 
 export function ApplicationSummarySection() {
-  const applicationMessages = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
   const [loading, setLoading] = useState(false);
   const { application, setApplication } = useFetchedAdoptionApplicationStore();
-  const { data: applications , isLoading, isError, error } = useFetchApplicationQuery();
-  
+  const {
+    data: applications,
+    isLoading,
+    isError,
+    error,
+  } = useFetchApplicationQuery();
+
   useEffect(() => {
     if (isLoading) {
       setLoading(true);
@@ -65,10 +70,14 @@ export function ApplicationSummarySection() {
         err?.statusCode ||
         err?.data?.statusCode;
       const message =
-        err?.message || err?.data?.message || err?.response?.data?.message || "";
+        err?.message ||
+        err?.data?.message ||
+        err?.response?.data?.message ||
+        "";
 
       const isNotFound =
-        status === 404 || /No adoption applications found/i.test(String(message));
+        status === 404 ||
+        /No adoption applications found/i.test(String(message));
 
       if (isNotFound) {
         setApplication(null);
@@ -92,18 +101,20 @@ export function ApplicationSummarySection() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileText className="h-5 w-5" />
-          Application Summary
+          {t("appSummary.title")}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="text-center py-8">Loading...</div>
+          <div className="text-center py-8">
+            {t("adoptionRequests.loading")}
+          </div>
         ) : application ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between mx-2">
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Application ID
+                  {t("appSummary.applicationId")}
                 </p>
                 <p className="text-gray-900">
                   {application.id ?? application.applicationId ?? "-"}
@@ -117,8 +128,8 @@ export function ApplicationSummarySection() {
                   "";
                 const status = String(rawStatus ?? "").toLowerCase();
                 const display = status
-                  ? status.charAt(0).toUpperCase() + status.slice(1)
-                  : "Unknown";
+                  ? t(`statuses.${status}`)
+                  : t("adoptionDetail.matching.unknown");
 
                 return (
                   <Badge className={getStatusColor(status)}>
@@ -134,26 +145,26 @@ export function ApplicationSummarySection() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-sm font-medium text-gray-500">
-                  Submitted Date
+                  {t("appSummary.submittedDate")}
                 </p>
                 <p className="text-gray-900">
                   {new Date(
                     application.submittedDate ??
                       application.createdAt ??
-                      Date.now()
+                      Date.now(),
                   ).toLocaleDateString()}
                 </p>
               </div>
 
               <div className="p-3 bg-gray-50 rounded-lg">
                 <p className="text-sm font-medium text-gray-500">
-                  Last Updated
+                  {t("appSummary.lastUpdated")}
                 </p>
                 <p className="text-gray-900">
                   {new Date(
                     application.lastUpdated ??
                       application.updatedAt ??
-                      Date.now()
+                      Date.now(),
                   ).toLocaleDateString()}
                 </p>
               </div>
@@ -162,7 +173,7 @@ export function ApplicationSummarySection() {
             <div className="flex gap-3">
               <Button asChild variant="outline" className="flex-1">
                 <Link href={`/applicant-portal/portal/application-details`}>
-                  {applicationMessages("appSummary.cta")}
+                  {t("appSummary.cta")}
                 </Link>
               </Button>
             </div>
@@ -170,41 +181,35 @@ export function ApplicationSummarySection() {
             {application.status === "PENDING_REVIEW" && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Your application is currently under review. We will notify you
-                  once there are updates.
+                  {t("appSummary.statuses.pending_review")}
                 </p>
               </div>
             )}
             {application.status === "PENDING_HOME_VISIT" && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Your application is currently pending a home visit. We will
-                  notify you once there are updates.
+                  {t("appSummary.statuses.pending_home_visit")}
                 </p>
               </div>
             )}
             {application.status === "RETURNED" && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Your application has been returned by the expert with
-                  comments. Please review the feedback provided and resubmit
-                  your application after addressing the comments.
+                  {t("appSummary.statuses.returned")}
                 </p>
               </div>
             )}
             {application.status === "REJECTED" && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-800">
-                  We regret to inform you that your adoption application has
-                  been rejected. For more information, please contact our support
-                  team.
+                  {t("appSummary.statuses.rejected")}
                 </p>
               </div>
             )}
             {application.status === "MATCHED" && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-800">
-                  Congratulations! Your adoption application has been matched. Our team will reach out to you with the next steps.
+                  {t("appSummary.statuses.matched")}
                 </p>
               </div>
             )}
@@ -213,10 +218,10 @@ export function ApplicationSummarySection() {
           <div className="text-center py-8">
             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No Application Found
+              {t("appSummary.noApplication")}
             </h3>
             <p className="text-gray-500 mb-4">
-              You haven't submitted an adoption application yet.
+              {t("appSummary.noApplicationDesc")}
             </p>
           </div>
         )}

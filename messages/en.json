@@ -52,5 +52,16 @@
     "contact": "Contact",
     "login": "Login",
     "language": "Lang"
+  },
+  "common": {
+    "table": {
+      "columns": "Columns",
+      "noResults": "No results.",
+      "previous": "Previous",
+      "next": "Next",
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Hide"
+    }
   }
 }

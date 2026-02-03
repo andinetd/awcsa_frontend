@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
 import { LogOut, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -24,6 +25,7 @@ export function DynamicSidebar() {
   const { user, logout, orgUnit } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("sidebar");
 
   const handleLogout = async () => {
     try {
@@ -36,7 +38,7 @@ export function DynamicSidebar() {
 
   const sections = useMemo(
     () => (orgUnit ? getSidebarItems(orgUnit, pathname) : []),
-    [orgUnit, pathname]
+    [orgUnit, pathname],
   );
 
   return (
@@ -56,10 +58,13 @@ export function DynamicSidebar() {
                   />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="font-semibold">WCSA System</span>
-                  <span className="text-xs capitalize">
-                    {/* {user.role.replace("-", " ")} */}
-                    {orgUnit?.type}
+                  <span className="font-semibold">
+                    {t("header.systemName")}
+                  </span>
+                  <span className="text-xs">
+                    {orgUnit?.type && t.has(`orgTypes.${orgUnit.type}`)
+                      ? t(`orgTypes.${orgUnit.type}`)
+                      : orgUnit?.type}
                   </span>
                 </div>
               </SidebarMenuButton>
@@ -71,11 +76,19 @@ export function DynamicSidebar() {
       <SidebarContent className="">
         {sections.map((section) => (
           <SidebarGroup key={section.title}>
-            <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              {t.has(`sections.${section.title}`)
+                ? t(`sections.${section.title}`)
+                : section.title}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.items.map((item, index) => {
                   const isActive = pathname.endsWith(item.url);
+                  const itemTitle = t.has(`items.${item.title}`)
+                    ? t(`items.${item.title}`)
+                    : item.title;
+
                   return (
                     <SidebarMenuItem key={item.title + index}>
                       <SidebarMenuButton
@@ -83,7 +96,7 @@ export function DynamicSidebar() {
                         className={cn(
                           isActive
                             ? "bg-blue-50 text-blue-700"
-                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
                         )}
                       >
                         <a href={item.url}>
@@ -92,7 +105,7 @@ export function DynamicSidebar() {
                               isActive ? "text-blue-600" : "text-slate-400"
                             }`}
                           />
-                          <span>{item.title}</span>
+                          <span>{itemTitle}</span>
                         </a>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -123,7 +136,7 @@ export function DynamicSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton onClick={handleLogout}>
               <LogOut className="size-4" />
-              <span>{false ? "Logging out..." : "Logout"}</span>
+              <span>{t("footer.logout")}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

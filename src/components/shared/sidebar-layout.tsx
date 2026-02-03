@@ -11,6 +11,7 @@ import {
 import { useCurrentRole } from "@/hooks/useCurrentRole";
 import { DynamicSidebar } from "./dynamic-sidebar";
 import { DynamicBreadcrumb } from "./dynamic-breadcrumb";
+import LanguageSwitcher from "./language-switcher";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -28,9 +29,12 @@ export function SidebarLayout({ children, title }: SidebarLayoutProps) {
           <SidebarTrigger />
           <div className="flex flex-col justify-center">
             {title && (
-              <h1 className="text-lg font-semibold leading-none mb-2">{title}</h1>
+              <h1 className="text-lg font-semibold leading-none">{title}</h1>
             )}
             {/* <DynamicBreadcrumb /> */}
+          </div>
+          <div className="ml-auto">
+            <LanguageSwitcher />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>

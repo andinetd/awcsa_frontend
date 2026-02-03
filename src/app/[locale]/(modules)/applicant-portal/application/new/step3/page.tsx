@@ -28,7 +28,7 @@ import {
 
 export default function Step3Page() {
   const router = useRouter();
-  const application = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
 
   const { step3, setStep3 } = useApplicationFormStore();
   const form = useForm<ApplicationStepThreeType>({
@@ -49,29 +49,27 @@ export default function Step3Page() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-primary">
         <User className="h-5 w-5" />
-        <h3 className="font-semibold">
-          {application("stepthree.instructions.title")}
-        </h3>
+        <h3 className="font-semibold">{t("stepthree.instructions.title")}</h3>
       </div>
 
       <ul className="space-y-2 font-lexend text-gray-600">
         <li className="flex items-start gap-2">
           <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("stepthree.instructions.one")}</span>
+          <span>{t("stepthree.instructions.one")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("stepthree.instructions.two")}</span>
+          <span>{t("stepthree.instructions.two")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span> {application("stepthree.instructions.three")} </span>
+          <span> {t("stepthree.instructions.three")} </span>
         </li>
       </ul>
 
       <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-sm font-bold text-yellow-800">
-          {application("stepthree.instructions.note")}
+          {t("stepthree.instructions.note")}
         </p>
       </div>
     </div>
@@ -88,7 +86,7 @@ export default function Step3Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepthree.form.marital")}*
+                    {t("stepthree.form.marital")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -113,7 +111,7 @@ export default function Step3Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepthree.form.wellBeing")}*
+                    {t("stepthree.form.wellBeing")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -141,7 +139,7 @@ export default function Step3Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepthree.form.photo")}*
+                    {t("stepthree.form.photo")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -166,10 +164,10 @@ export default function Step3Page() {
               variant="outline"
               onClick={() => handleBack(form.getValues())}
             >
-              Previous Step
+              {t("form.previousStep")}
             </Button>
             <Button type="submit" className="px-8">
-              Review Application
+              {t("form.reviewApplication")}
             </Button>
           </div>
         </form>

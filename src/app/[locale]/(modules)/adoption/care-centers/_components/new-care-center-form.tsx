@@ -44,8 +44,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const NewCareCenterForm = () => {
+  const t = useTranslations("adoption");
   const [open, setOpen] = useState(false);
   const { mutate, isError } = useRegisterCareCenterMutation();
 
@@ -72,17 +74,19 @@ const NewCareCenterForm = () => {
   const onSubmit: SubmitHandler<NewCareCenterSchemaType> = async (values) => {
     console.log("submitting values: ", JSON.stringify(values));
     if (isError) {
-      toast.error("An error occurred while registering the care center.");
+      toast.error(t("careCenters.toasts.genericError"));
       return;
     }
     mutate(values, {
       onSuccess: () => {
-        toast.success("Care center registered successfully!");
+        toast.success(t("careCenters.toasts.registerSuccess"));
         form.reset();
         setOpen(false);
       },
       onError: (error) => {
-        toast.error("Failed to register care center: " + error.message);
+        toast.error(
+          t("careCenters.toasts.registerError", { message: error.message }),
+        );
       },
     });
   };
@@ -90,16 +94,16 @@ const NewCareCenterForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add New Care Center</Button>
+        <Button>{t("careCenters.addNew")}</Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px] md:max-w-xl lg:max-w-3xl w-full overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Register New Care Center
+            {t("careCenters.form.registerTitle")}
           </DialogTitle>
           <DialogDescription>
-            Register care centers and related organizations for future use.
+            {t("careCenters.form.registerDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -108,7 +112,9 @@ const NewCareCenterForm = () => {
             <div className="max-w-4xl mx-auto space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Register New Facility</CardTitle>
+                  <CardTitle>
+                    {t("careCenters.form.registerFacility")}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Basic Info */}
@@ -118,9 +124,14 @@ const NewCareCenterForm = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Facility Name</FormLabel>
+                          <FormLabel>
+                            {t("careCenters.form.facilityName")}
+                          </FormLabel>
                           <FormControl>
-                            <Input placeholder="Facility Name" {...field} />
+                            <Input
+                              placeholder={t("careCenters.form.facilityName")}
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -132,20 +143,24 @@ const NewCareCenterForm = () => {
                       name="type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Type</FormLabel>
+                          <FormLabel>{t("careCenters.form.type")}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select type" />
+                                <SelectValue
+                                  placeholder={t("careCenters.form.selectType")}
+                                />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="NGO">NGO / Private</SelectItem>
+                              <SelectItem value="NGO">
+                                {t("careCenters.form.ngoPrivate")}
+                              </SelectItem>
                               <SelectItem value="GOVERNMENT">
-                                Government
+                                {t("careCenters.form.government")}
                               </SelectItem>
                             </SelectContent>
                           </Select>
@@ -155,7 +170,7 @@ const NewCareCenterForm = () => {
                     />
 
                     <div className="space-y-2 md:col-span-2">
-                      <FormLabel>Age Range (Min - Max)</FormLabel>
+                      <FormLabel>{t("careCenters.form.ageRange")}</FormLabel>
                       <div className="flex gap-2">
                         <FormField
                           control={form.control}
@@ -201,9 +216,12 @@ const NewCareCenterForm = () => {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone</FormLabel>
+                          <FormLabel>{t("careCenters.form.phone")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Phone" {...field} />
+                            <Input
+                              placeholder={t("careCenters.form.phone")}
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -215,7 +233,7 @@ const NewCareCenterForm = () => {
                   <div className="space-y-4">
                     <h4 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-blue-600" />
-                      Address Details
+                      {t("careCenters.form.addressDetails")}
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <FormField
@@ -223,7 +241,9 @@ const NewCareCenterForm = () => {
                         name="region"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Region</FormLabel>
+                            <FormLabel>
+                              {t("careCenters.form.region")}
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="e.g. Addis Ababa"
@@ -239,14 +259,20 @@ const NewCareCenterForm = () => {
                         name="subCity"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Sub-City</FormLabel>
+                            <FormLabel>
+                              {t("careCenters.form.subCity")}
+                            </FormLabel>
                             <Select
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select Sub-City" />
+                                  <SelectValue
+                                    placeholder={t(
+                                      "careCenters.form.selectSubCity",
+                                    )}
+                                  />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -279,9 +305,14 @@ const NewCareCenterForm = () => {
                         name="woreda"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Woreda</FormLabel>
+                            <FormLabel>
+                              {t("careCenters.form.woreda")}
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="Woreda" {...field} />
+                              <Input
+                                placeholder={t("careCenters.form.woreda")}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -292,9 +323,14 @@ const NewCareCenterForm = () => {
                         name="kebele"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Kebele</FormLabel>
+                            <FormLabel>
+                              {t("careCenters.form.kebele")}
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="Kebele" {...field} />
+                              <Input
+                                placeholder={t("careCenters.form.kebele")}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -305,9 +341,14 @@ const NewCareCenterForm = () => {
                         name="houseNumber"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>House Number</FormLabel>
+                            <FormLabel>
+                              {t("careCenters.form.houseNumber")}
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="House Number" {...field} />
+                              <Input
+                                placeholder={t("careCenters.form.houseNumber")}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -318,7 +359,7 @@ const NewCareCenterForm = () => {
                         name="place"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Place (Display Name)</FormLabel>
+                            <FormLabel>{t("careCenters.form.place")}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="e.g. Near Bole Medhanialem"
@@ -337,10 +378,12 @@ const NewCareCenterForm = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description / Services</FormLabel>
+                        <FormLabel>
+                          {t("careCenters.form.description")}
+                        </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Description..."
+                            placeholder={t("careCenters.form.description")}
                             className="min-h-[100px]"
                             {...field}
                           />
@@ -357,7 +400,7 @@ const NewCareCenterForm = () => {
                 <CardHeader className="bg-slate-50 border-b border-slate-100">
                   <CardTitle className="text-base flex items-center gap-2">
                     <Lock className="w-4 h-4 text-blue-600" />
-                    Account & Contact Information
+                    {t("careCenters.form.accountInfo")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
@@ -367,11 +410,11 @@ const NewCareCenterForm = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t("careCenters.form.email")}</FormLabel>
                           <FormControl>
                             <Input
                               type="email"
-                              placeholder="Email"
+                              placeholder={t("careCenters.form.email")}
                               {...field}
                             />
                           </FormControl>
@@ -384,11 +427,15 @@ const NewCareCenterForm = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel>
+                            {t("careCenters.form.password")}
+                          </FormLabel>
                           <FormControl>
                             <Input
                               type="password"
-                              placeholder="Set initial password"
+                              placeholder={t(
+                                "careCenters.form.initialPassword",
+                              )}
                               {...field}
                             />
                           </FormControl>
@@ -406,11 +453,11 @@ const NewCareCenterForm = () => {
                   variant="ghost"
                   onClick={() => form.reset()}
                 >
-                  Reset
+                  {t("careCenters.form.reset")}
                 </Button>
                 <Button type="submit">
                   <Save className="w-4 h-4 mr-2" />
-                  Register Facility & Create Account
+                  {t("careCenters.form.submit")}
                 </Button>
               </div>
             </div>

@@ -7,11 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/custom/custom-card";
-import { CardFooter } from "@/components/ui/card";  
+import { CardFooter } from "@/components/ui/card";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { Eye, MapPin, Phone, User } from "lucide-react";
 import React from "react";
 import { formatAge } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface CareCenterCardProps {
   careCenter: NewCareCenterSchemaType;
@@ -22,6 +23,8 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
   careCenter,
   onViewDetails,
 }) => {
+  const t = useTranslations("adoption");
+
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
@@ -34,7 +37,7 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
                 : "bg-green-100 text-green-700"
             }`}
           >
-            {careCenter.type}
+            {t(`careCenters.types.${careCenter.type}`)}
           </span>
         </CardTitle>
       </CardHeader>
@@ -52,7 +55,8 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
         <div className="flex items-center gap-2">
           <User className="w-4 h-4" />
           <span>
-            Age: {formatAge(careCenter.childrenAgeRange.min)} -{" "}
+            {t("careCenters.card.age")}:{" "}
+            {formatAge(careCenter.childrenAgeRange.min)} -{" "}
             {formatAge(careCenter.childrenAgeRange.max)}
           </span>
         </div>
@@ -64,7 +68,7 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
           onClick={() => onViewDetails(careCenter)}
         >
           <Eye className="w-4 h-4" />
-          View Details
+          {t("careCenters.card.viewDetails")}
         </Button>
       </CardFooter>
     </Card>

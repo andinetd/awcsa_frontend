@@ -6,8 +6,9 @@ import {
   CardTitle,
 } from "@/components/custom/custom-card";
 import { Button } from "@/components/ui/button";
-import { Home, User, Clock } from "lucide-react";
+import { User, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface ApplicantInfoSectionProps {
   application: {
@@ -48,6 +49,9 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
   setIsMatchedChildDetailOpen,
 }) => {
   const router = useRouter();
+  const t = useTranslations("adoption");
+
+  const statusKey = application.status.toLowerCase();
 
   return (
     <Card className="border-l-4 border-l-blue-600 shadow-md">
@@ -56,14 +60,15 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <h2 className="text-2xl font-bold text-slate-900">
-                Application #{application.applicationId}
+                {t("adoptionDetail.actions.applicationNum")}
+                {application.applicationId}
               </h2>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(
-                  application.status
+                  application.status,
                 )}`}
               >
-                {application.status.replace("_", " ")}
+                {t(`statuses.${statusKey}` as any)}
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
@@ -76,7 +81,7 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
               <span className="hidden md:inline w-1 h-1 rounded-full bg-slate-300"></span>
               <span className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-slate-400" />
-                Submitted{" "}
+                {t("adoptionRequests.submitted")}{" "}
                 {new Date(application.submittedDate).toLocaleDateString()}
               </span>
             </div>
@@ -91,42 +96,41 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                     onClick={() => {
                       router.push(
                         `/adoption/home-visit/${String(
-                          application.applicationId
-                        )}/fields`
+                          application.applicationId,
+                        )}/fields`,
                       );
                     }}
                   >
-                    View Home Visit Feedback
+                    {t("adoptionDetail.actions.viewHomeVisit")}
                   </Button>
                   <Button
                     onClick={() => setIsMatchModalOpen(true)}
                     className="flex-1 lg:flex-none"
                   >
-                    Approve and match child
+                    {t("adoptionDetail.actions.approveAndMatch")}
                   </Button>
                 </div>
               </div>
             )}
-            {(application.status || "").toUpperCase() ===
-              "MATCHED" && (
+            {(application.status || "").toUpperCase() === "MATCHED" && (
               <div className="mt-6 flex justify-end">
                 <div className="space-x-2">
                   <Button
                     onClick={() => {
                       router.push(
                         `/adoption/home-visit/${String(
-                          application.applicationId
-                        )}/fields`
+                          application.applicationId,
+                        )}/fields`,
                       );
                     }}
                   >
-                    View Home Visit Feedback
+                    {t("adoptionDetail.actions.viewHomeVisit")}
                   </Button>
                   <Button
                     onClick={() => setIsMatchedChildDetailOpen(true)}
                     className="flex-1 lg:flex-none"
                   >
-                    View Matched Child Details
+                    {t("adoptionDetail.actions.viewMatchedChild")}
                   </Button>
                 </div>
               </div>
@@ -140,7 +144,7 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                     router.push("../home-visit/Registration/step1");
                   }}
                 >
-                  Submit Home Visit Feedback
+                  {t("adoptionDetail.actions.submitHomeVisit")}
                 </Button>
               </div>
             )}
@@ -151,19 +155,19 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                   onClick={() => handleAction("deny")}
                   className="cursor-pointer"
                 >
-                  Reject
+                  {t("adoptionDetail.actions.reject")}
                 </Button>
                 <Button
                   onClick={() => handleReturnToApplicant()}
                   className="cursor-pointer"
                 >
-                  Return to Applicant
+                  {t("adoptionDetail.actions.returnToApplicant")}
                 </Button>
                 <Button
                   onClick={() => handleAction("approve")}
                   className="cursor-pointer"
                 >
-                  Approve
+                  {t("adoptionDetail.actions.approve")}
                 </Button>
               </div>
             )}

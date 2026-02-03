@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/custom/custom-card";
+import { useTranslations } from "next-intl";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/custom/custom-card";
 import { Button } from "@/components/ui/button";
 import {
   X,
@@ -98,6 +104,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
   onClose,
   data,
 }) => {
+  const t = useTranslations("adoption");
   if (!isOpen) return null;
 
   const childAge =
@@ -110,7 +117,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
         <div className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <h1 className="text-lg font-bold text-slate-900">
-              Matched Child Detail
+              {t("adoptionDetail.matched.title")}
             </h1>
             <div className="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-bold border border-green-200 uppercase tracking-wide">
               {data.status}
@@ -135,20 +142,24 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
               <div>
                 <div className="flex items-center gap-2 mb-2 text-blue-200 text-xs font-bold uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4" /> Official Adoption Match
+                  <ShieldCheck className="w-4 h-4" />{" "}
+                  {t("adoptionDetail.matched.officialMatch")}
                 </div>
                 <h2 className="text-3xl font-bold mb-1">
                   {data.child.firstName} {data.child.lastName}
                 </h2>
                 <p className="text-blue-100 text-sm opacity-90 mt-1">
-                  Matched on {new Date(data.matchedAt).toLocaleDateString()} •
-                  Facility ID: {data.facilityChildId}
+                  {t("adoptionDetail.matched.matchedOn", {
+                    date: new Date(data.matchedAt).toLocaleDateString(),
+                  })}{" "}
+                  • {t("adoptionDetail.matched.facilityId")}:{" "}
+                  {data.facilityChildId}
                 </p>
               </div>
               <div className="text-center bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 min-w-[120px]">
                 <span className="block text-3xl font-bold">{childAge}</span>
                 <span className="text-[10px] uppercase font-medium opacity-80">
-                  Years Old
+                  {t("adoptionDetail.matching.yearsOld", { count: childAge })}
                 </span>
               </div>
             </div>
@@ -160,33 +171,42 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               <CardHeader className="bg-slate-50 border-b border-slate-100 py-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <User className="w-4 h-4 text-blue-600" />
-                  Child Information
+                  {t("adoptionDetail.matched.childInfo")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-3">
-                <DetailRow label="First Name" value={data.child.firstName} />
-                <DetailRow label="Last Name" value={data.child.lastName} />
-                <DetailRow label="Gender" value={data.child.contactInfo.sex} />
                 <DetailRow
-                  label="Date of Birth"
+                  label={t("adoptionDetail.fields.firstName")}
+                  value={data.child.firstName}
+                />
+                <DetailRow
+                  label={t("adoptionDetail.fields.lastName")}
+                  value={data.child.lastName}
+                />
+                <DetailRow
+                  label={t("adoptionDetail.fields.sex")}
+                  value={data.child.contactInfo.sex}
+                />
+                <DetailRow
+                  label={t("adoptionDetail.fields.dateOfBirth")}
                   value={new Date(data.child.dateOfBirth).toLocaleDateString()}
                   icon={Calendar}
                 />
                 <DetailRow
-                  label="City ID Number"
+                  label={t("adoptionDetail.fields.idNumber")}
                   value={data.child.cityIdNumber}
                   icon={Tag}
                 />
                 <DetailRow
-                  label="Client Category"
+                  label={t("adoptionDetail.fields.category")}
                   value={data.child.clientCategory}
                 />
                 <DetailRow
-                  label="Additional Info"
+                  label={t("adoptionDetail.matching.additionalInfo")}
                   value={data.child.contactInfo.additionalInfo}
                 />
                 <DetailRow
-                  label="Record Created"
+                  label={t("adoptionDetail.matched.recordCreated")}
                   value={new Date(data.child.createdAt).toLocaleDateString()}
                 />
               </CardContent>
@@ -197,57 +217,59 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               <CardHeader className="bg-slate-50 border-b border-slate-100 py-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <User className="w-4 h-4 text-green-600" />
-                  Adopter Information
+                  {t("adoptionDetail.matched.adopterInfo")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-3">
                 <DetailRow
-                  label="Full Name"
+                  label={t("adoptionDetail.matched.fullName")}
                   value={`${data.adopter.firstName} ${data.adopter.lastName}`}
                 />
                 <DetailRow
-                  label="Adopter ID"
+                  label={t("adoptionDetail.matched.adopterId")}
                   value={data.adopter.id.toString()}
                 />
                 <DetailRow
-                  label="City ID Number"
+                  label={t("adoptionDetail.fields.idNumber")}
                   value={data.adopter.cityIdNumber}
                   icon={Tag}
                 />
                 <DetailRow
-                  label="Phone Number"
+                  label={t("adoptionDetail.fields.phoneNumber")}
                   value={data.adopter.contactInfo.phoneNumber}
                   icon={Phone}
                 />
                 <DetailRow
-                  label="Email"
+                  label={t("adoptionDetail.fields.email")}
                   value={data.adopter.contactInfo.email}
                   icon={Mail}
                 />
                 <DetailRow
-                  label="Address"
+                  label={t("adoptionDetail.fields.address")}
                   value={data.adopter.address}
                   icon={MapPin}
                 />
                 <DetailRow
-                  label="Occupation"
+                  label={t("adoptionDetail.fields.occupation")}
                   value={data.adopter.occupation}
                   icon={Briefcase}
                 />
                 <DetailRow
-                  label="Monthly Income"
-                  value={`${data.adopter.monthlyIncome?.toLocaleString()} ETB`}
+                  label={t("adoptionDetail.fields.monthlyIncome")}
+                  value={t("adoptionDetail.matched.etb", {
+                    amount: data.adopter.monthlyIncome?.toLocaleString(),
+                  })}
                   icon={DollarSign}
                 />
                 <DetailRow
-                  label="Education"
+                  label={t("adoptionDetail.fields.education")}
                   value={data.adopter.educationLevel}
                   icon={GraduationCap}
                 />
                 <DetailRow
-                  label="Date of Birth"
+                  label={t("adoptionDetail.fields.dateOfBirth")}
                   value={new Date(
-                    data.adopter.dateOfBirth
+                    data.adopter.dateOfBirth,
                   ).toLocaleDateString()}
                   icon={Calendar}
                 />

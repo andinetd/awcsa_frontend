@@ -1,0 +1,51 @@
+{
+  "header": {
+    "systemName": "WCSA System"
+  },
+  "orgTypes": {
+    "BUREAU": "Bureau",
+    "WOREDA": "Woreda",
+    "SUBCITY": "Subcity"
+  },
+  "footer": {
+    "logout": "Logout",
+    "loggingOut": "Logging out..."
+  },
+  "sections": {
+    "Global": "Global",
+    "Adoption Moduel Services": "Adoption Module Services",
+    "Social Affairs": "Social Affairs",
+    "Elderly & Disabled": "Elderly & Disabled",
+    "Womens": "Womens",
+    "Overview": "Overview",
+    "Management": "Management",
+    "Woreda": "Woreda",
+    "Sub  city": "Sub city",
+    "Care Centers Portal": "Care Centers Portal"
+  },
+  "items": {
+    "Adoption": "Adoption",
+    "Social Affairs": "Social Affairs",
+    "Women": "Women",
+    "Bureau Head": "Bureau Head",
+    "Super Admin": "Super Admin",
+    "Super Admin management": "Super Admin management",
+    "Dashboard": "Dashboard",
+    "Children": "Children",
+    "Care Centers": "Care Centers",
+    "Adoption Requests": "Adoption Requests",
+    "Edir": "Edir",
+    "Disabled Persons": "Disabled Persons",
+    "Elderly Persons": "Elderly Persons",
+    "Training Sessions": "Training Sessions",
+    "Job Placements": "Job Placements",
+    "Support Services": "Support Services",
+    "Women List": "Women List",
+    "User Management": "User Management",
+    "Complaints": "Complaints",
+    "General Settings": "General Settings",
+    "Sub city": "Sub city",
+    "Local Dashboard": "Local Dashboard",
+    "Subcity Dashboard": "Subcity Dashboard"
+  }
+}

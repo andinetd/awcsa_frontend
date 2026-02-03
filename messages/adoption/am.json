@@ -1,0 +1,377 @@
+{
+  "moduleTitle": "የጉዲፈቻ ሞጁል",
+  "adoptionRequests": {
+    "title": "የጉዲፈቻ ጥያቄዎች",
+    "tabs": {
+      "pending": "መጠባበቅ ላይ",
+      "returned": "ወደ አመልካች የተመለሰ",
+      "pending_home_visit": "የመስክ ጉብኝት የሚጠበቅ",
+      "pending_approval": "ይሁንታ የሚጠበቅ",
+      "matched": "የተዛመደ",
+      "denied": "ውድቅ የተደረገ"
+    },
+    "noApplications": "በዚህ ምድብ ውስጥ የተገኘ ምንም ማመልከቻ የለም።",
+    "applicationId": "የማመልከቻ መታወቂያ",
+    "submitted": "የተላከበት",
+    "actions": {
+      "review": "ከልስ",
+      "view": "ተመልከት"
+    },
+    "loading": "በመጫን ላይ...",
+    "errors": {
+      "loadFailed": "ማመልከቻዎችን መጫን አልተቻለም",
+      "networkError": "የኔትወርክ ስህተት",
+      "unexpectedShape": "ያልተጠበቀ የመረጃ ቅርጽ"
+    }
+  },
+  "adoptionDetail": {
+    "title": "የጉዲፈቻ ማመልከቻ ግምገማ",
+    "preferences": {
+      "title": "የጉዲፈቻ ምርጫዎች",
+      "preferredSex": "የሚፈለግ ጾታ",
+      "quantity": "ብዛት",
+      "child": "ሕፃን",
+      "ageRange": "የዕድሜ ክልል",
+      "spouseAgreement": "የትዳር አጋር ስምምነት"
+    },
+    "review": {
+      "overallComment": "አጠቃላይ አስተያየት",
+      "overallCommentPlaceholder": "አጠቃላይ አስተያየት እዚህ ያስገቡ...",
+      "returnToApplicant": "ለአመልካች መልስ"
+    },
+    "sections": {
+      "details": "የማመልከቻ ዝርዝሮች",
+      "attachments": "ተያያዥ ሰነዶች",
+      "noFile": "ፋይል የለም",
+      "noFileUploaded": "ምንም ፋይል አልተጫነም",
+      "filePreviewError": "ሊታይ የሚችል ፋይል አልተገኘም",
+      "view": "ተመልከት",
+      "feedback": "አስተያየት?",
+      "feedbackPlaceholder": "ስለ {field} አስተያየት እዚህ ያስገቡ...",
+      "commentPlaceholder": "በ {field} ላይ አስተያየት ይስጡ"
+    },
+    "matching": {
+      "title": "ሕፃን ለመምረጥ ይምረጡ",
+      "subtitle": "ለዚህ አመልካች ከሚገኙት ዝርዝር ውስጥ አንድ ሕፃን ይምረጡ።",
+      "searchPlaceholder": "ሕፃኑን በስም ይፈልጉ...",
+      "yearsOld": "{count} ዓመት",
+      "ageUnknown": "ዕድሜው የማይታወቅ",
+      "locationUnknown": "አድራሻው የማይታወቅ",
+      "dob": "የትውልድ ቀን",
+      "gender": "ጾታ",
+      "facility": "ተቋም",
+      "status": "ሁኔታ",
+      "additionalInfo": "ተጨማሪ መረጃ",
+      "noAdditionalInfo": "ምንም ተጨማሪ መረጃ አልተሰጠም።",
+      "matchingNote": "የማዛመጃ ማስታወሻ",
+      "notePlaceholder": "ስለዚህ ማዛመድ ማስታወሻ እዚህ ያስገቡ...",
+      "emptyState": "ዝርዝሮችን ለማየት ከዝርዝሩ ውስጥ አንድ ሕፃን ይምረጡ።",
+      "confirm": "አዛምድ",
+      "cancel": "ተመለስ",
+      "success": "ሕፃኑ በተሳካ ሁኔታ ተዛምዷል",
+      "fetchError": "የሕፃናት ዝርዝር ማምጣት አልተቻለም።",
+      "invalidId": "የአመልካች ወይም የማመልከቻ መታወቂያ የተሳሳተ ነው",
+      "unknown": "የማይታወቅ"
+    },
+    "matched": {
+      "title": "የተዛመደ ሕፃን ዝርዝር",
+      "officialMatch": "ይፋዊ የሕፃን ማዛመድ",
+      "matchedOn": "በ {date} ተዛምዷል",
+      "facilityId": "የተቋም መለያ",
+      "childInfo": "የሕፃኑ መረጃ",
+      "adopterInfo": "የአመልካች መረጃ",
+      "recordCreated": "መዝገብ የተያዘበት",
+      "adopterId": "የአመልካች መለያ",
+      "fullName": "ሙሉ ስም",
+      "etb": "{amount} ብር"
+    },
+    "toasts": {
+      "returned": "ማመልከቻው ለአመልካች ተመልሷል",
+      "returnError": "ማመልከቻውን በመመለስ ላይ ችግር አጋጥሟል",
+      "reviewError": "ምርመራውን ማስገባት አልተቻለም: {message}",
+      "approved": "ማመልከቻው ጸድቋል",
+      "denied": "ማመልከቻው ውድቅ ተደርጓል"
+    },
+    "status": {
+      "notFound": "ማመልከቻው አልተገኘም።",
+      "loading": "የማመልከቻ ዝርዝሮችን በመጫን ላይ..."
+    },
+    "fields": {
+      "firstName": "መጀመሪያ ስም",
+      "lastName": "የአባት ስም",
+      "dateOfBirth": "የትውልድ ቀን",
+      "phoneNumber": "ልክ ቁጥር",
+      "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+      "spouseCityIdNumber": "የባል/ሚስት መታወቂያ",
+      "address": "አድራሻ",
+      "educationLevel": "የትምህርት ደረጃ",
+      "occupation": "የሥራ መስክ",
+      "monthlyIncome": "ወርሀዊ ገቢ",
+      "preferredNumber": "የሚፈለግ ብዛት",
+      "preferredSex": "የሚፈለግ ጾታ",
+      "preferredAgeMin": "ዝቅተኛ ዕድሜ",
+      "preferredAgeMax": "ከፍተኛ ዕድሜ"
+    },
+    "actions": {
+      "viewHomeVisit": "የመስክ ጉብኝት አስተያየትን ተመልከት",
+      "submitHomeVisit": "የመስክ ጉብኝት አስተያየትን አስገባ",
+      "approveAndMatch": "አፅድቅ እና ሕፃን አዛምድ",
+      "viewMatchedChild": "የተዛመደ ሕፃን ዝርዝር ተመልከት",
+      "reject": "ውድቅ አድርግ",
+      "returnToApplicant": "ለአመልካች መልስ",
+      "approve": "አፅድቅ",
+      "applicationNum": "ማመልከቻ #"
+    }
+  },
+  "statuses": {
+    "pending_review": "በምርመራ ላይ",
+    "pending_home_visit": "የመስክ ጉብኝት የሚጠበቅ",
+    "pending_approval": "ይሁንታ የሚጠበቅ",
+    "matched": "የተዛመደ",
+    "rejected": "ውድቅ የተደረገ",
+    "returned": "የተመለሰ",
+    "denied": "ውድቅ የተደረገ"
+  },
+  "homeVisit": {
+    "title": "የመስክ ጉብኝት ሪፖርት",
+    "back": "ተመለስ",
+    "loading": "በመጫን ላይ...",
+    "errors": {
+      "loadFailed": "የመስክ ጉብኝት መረጃ መጫን አልተቻለም"
+    },
+    "fields": {
+      "socialWorker": "የማህበራዊ ሰራተኛ",
+      "placeOfVisit": "የጉብኝት ቦታ",
+      "date": "ቀን",
+      "time": "ሰዓት",
+      "kebele": "ቀበሌ",
+      "woreda": "ወረዳ",
+      "subCity": "ክፍለ ከተማ",
+      "houseNo": "የቤት ቁጥር",
+      "preference": "ምርጫ",
+      "child": "{count, plural, =1 {ሕፃን} other {ሕፃናት}}",
+      "children": "ሕፃናት",
+      "ageRange": "የዕድሜ ክልል",
+      "years": "ዓመታት",
+      "reason": "ምክንያት",
+      "father": "አባት",
+      "mother": "እናት",
+      "duration": "ቆይታ",
+      "datePlace": "ቀን/ቦታ",
+      "description": "መግለጫ",
+      "conflictResolution": "የግጭት አፈታት",
+      "financialManagement": "የገንዘብ አያያዝ",
+      "houseType": "የቤት ዓይነት",
+      "ownership": "የቤት ባለቤትነት",
+      "size": "መጠን",
+      "livingDuration": "የቆይታ ጊዜ",
+      "compoundCondition": "የግቢው ሁኔታ",
+      "childSuitability": "ለሕፃኑ ተስማሚነት",
+      "neighborhood": "የመኖሪያ አካባቢ ሁኔታ",
+      "parents": "ወላጆች",
+      "siblings": "ወንድሞች/እህቶች",
+      "upbringing": "አስተዳደግ",
+      "workHistory": "የስራ ልምድ",
+      "preparedBy": "ያዘጋጀው",
+      "approvedBy": "ያጸደቀው",
+      "digitalSignature": "ዲጂታል ፊርማ",
+      "fullName": "ሙሉ ስም",
+      "age": "ዕድሜ",
+      "nationality": "ዜግነት",
+      "religion": "ሃይማኖት",
+      "education": "ትምህርት",
+      "occupation": "ሥራ",
+      "monthlyIncome": "ወርሃዊ ገቢ",
+      "phone": "ስልክ",
+      "birthPlace": "የትውልድ ቦታ",
+      "etb": "ብር",
+      "sex": "ጾታ",
+      "relation": "ዝምድና",
+      "educationOccupation": "ትምህርት/ሥራ",
+      "educationAndOccupation": "ትምህርት/ሥራ",
+      "relationToApplicants": "ከአመልካቾች ጋር ያለው ዝምድና",
+      "phoneNumber": "ስልክ ቁጥር",
+      "etbValue": "{amount} ብር",
+      "to": "እስከ",
+      "dateRange": "ከ {start} እስከ {end}",
+      "timeRange": "{start} - {end}"
+    },
+    "sections": {
+      "visitInfo": "የጉብኝት መረጃ",
+      "adoptionInterest": "የጉዲፈቻ ፍላጎት",
+      "applicantProfiles": "የአመልካቾች ፕሮፋይል",
+      "marriageAssessment": "የጋብቻ ግምገማ",
+      "homeEnvironment": "የመኖሪያ አካባቢ",
+      "householdComposition": "የቤተሰብ ስብጥር",
+      "existingChildren": "የቆዩ ልጆች",
+      "otherHouseholdMembers": "ሌሎች የቤተሰብ አባላት",
+      "witnesses": "ምስክሮች",
+      "fatherBackground": "የአባት ዳራ",
+      "motherBackground": "የእናት ዳራ",
+      "evaluation": "የማህበራዊ ሰራተኛ ግምገማ"
+    }
+  },
+  "careCenters": {
+    "title": "የሕፃናት ማሳደጊያ ተቋማት",
+    "loading": "የሕፃናት ማሳደጊያ ተቋማትን በመጫን ላይ...",
+    "error": "ተቋማቱን በመጫን ላይ ስህተት ተከስቷል",
+    "noCareCenters": "ምንም የሕፃናት ማሳደጊያ ተቋማት አልተገኙም",
+    "addNew": "አዲስ ተቋም ጨምር",
+    "card": {
+      "viewDetails": "ዝርዝር መረጃ",
+      "age": "ዕድሜ"
+    },
+    "dialog": {
+      "title": "ስለ ተቋሙ ዝርዝር መረጃ",
+      "contactAddress": "አድራሻ እና ግንኙነት",
+      "capacityServices": "አቅም እና አገልግሎቶች",
+      "email": "ኢሜይል",
+      "phone": "ስልክ",
+      "region": "ክልል",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "kebele": "ቀበሌ",
+      "houseNo": "የቤት ቁጥር",
+      "place": "ቦታ",
+      "ageRange": "የዕድሜ ክልል",
+      "years": "ዓመታት",
+      "orgUnitId": "የድርጅት መለያ",
+      "description": "መግለጫ",
+      "close": "ዝጋ"
+    },
+    "form": {
+      "registerTitle": "አዲስ የሕፃናት ማሳደጊያ ተቋም መመዝገቢያ",
+      "registerDescription": "ተቋማትን ለወደፊት አገልግሎት እንዲውሉ እዚህ ይመዝግቡ",
+      "registerFacility": "አዲስ ተቋም መመዝገቢያ",
+      "facilityName": "የተቋሙ ስም",
+      "type": "ዓይነት",
+      "selectType": "ዓይነት ይምረጡ",
+      "ngoPrivate": "መንግስታዊ ያልሆነ / የግል",
+      "government": "መንግስታዊ",
+      "ageRange": "የዕድሜ ክልል (ከ - እስከ)",
+      "phone": "ስልክ",
+      "addressDetails": "የአድራሻ ዝርዝሮች",
+      "region": "ክልል",
+      "subCity": "ክፍለ ከተማ",
+      "selectSubCity": "ክፍለ ከተማ ይምረጡ",
+      "woreda": "ወረዳ",
+      "kebele": "ቀበሌ",
+      "houseNumber": "የቤት ቁጥር",
+      "place": "ቦታ (የተለየ መጠሪያ)",
+      "description": "መግለጫ / አገልግሎቶች",
+      "accountInfo": "የመለያ እና የግንኙነት መረጃ",
+      "email": "ኢሜይል",
+      "password": "ፓስወርድ",
+      "initialPassword": "የመጀመሪያ ፓስወርድ ያዘጋጁ",
+      "reset": "አጽዳ",
+      "submit": "ተቋሙን መዝግብ እና መለያ ፍጠር"
+    },
+    "toasts": {
+      "registerSuccess": "ተቋሙ በተሳካ ሁኔታ ተመዝግቧል!",
+      "registerError": "ተቋሙን መመዝገብ አልተቻለም: {message}",
+      "genericError": "ተቋሙን በመመዝገብ ላይ ስህተት ተከስቷል"
+    },
+    "types": {
+      "GOVERNMENT": "መንግስታዊ",
+      "NGO": "መንግስታዊ ያልሆነ / የግል",
+      "MIXED": "የተቀላቀለ"
+    }
+  },
+  "children": {
+    "list": {
+      "title": "የሕፃናት ዝርዝር",
+      "addNew": "አዲስ ልጅ ጨምር",
+      "loading": "በመጫን ላይ..."
+    },
+    "columns": {
+      "name": "ሙሉ ስም",
+      "age": "ዕድሜ",
+      "gender": "ጾታ",
+      "placeFound": "የተገኘበት ቦታ",
+      "status": "ሁኔታ"
+    },
+    "registration": {
+      "title": "የሕፃን መረጃ",
+      "fields": {
+        "firstName": "የመጀመሪያ ስም",
+        "lastName": "የአባት ስም",
+        "gender": "ጾታ",
+        "dateOfBirth": "የትውልድ ቀን",
+        "status": "ሁኔታ",
+        "addressFound": "ሕፃኑ የተገኘበት አድራሻ",
+        "foundDate": "ሕፃኑ የተገኘበት ቀን",
+        "socialWorkerId": "የማህበራዊ ሰራተኛ መታወቂያ",
+        "careCenterId": "የማቆያ ማዕከል መታወቂያ",
+        "childIdFromCareCenter": "የሕፃን መታወቂያ ከማቆያ ማዕከል",
+        "baleAderaId": "የባለአደራ ከተማ መታወቂያ",
+        "adopterId": "የጉዲፈቻ አድራጊ ከተማ መታወቂያ",
+        "bloodRelativeId": "የደም ዘመድ ከተማ መታወቂያ",
+        "previousAdopterId": "የቀድሞ ጉዲፈቻ አድራጊ ከተማ መታወቂያ",
+        "additionalInfo": "ተጨማሪ መረጃ"
+      },
+      "placeholders": {
+        "firstName": "የመጀመሪያ ስም ያስገቡ",
+        "lastName": "የአባት ስም ያስገቡ",
+        "selectGender": "ጾታ ይምረጡ",
+        "selectStatus": "ሁኔታ ይምረጡ",
+        "addressFound": "አድራሻ ያስገቡ",
+        "socialWorkerId": "የማህበራዊ ሰራተኛ መታወቂያ ያስገቡ",
+        "careCenterId": "የማቆያ ማዕከል መታወቂያ ያስገቡ",
+        "childIdFromCareCenter": "የሕፃን መታወቂያ ያስገቡ",
+        "baleAderaId": "የባለአደራ ከተማ መታወቂያ ያስገቡ",
+        "adopterId": "የጉዲፈቻ አድራጊ ከተማ መታወቂያ ያስገቡ",
+        "bloodRelativeId": "የደም ዘመድ ከተማ መታወቂያ ያስገቡ",
+        "previousAdopterId": "የቀድሞ ጉዲፈቻ አድራጊ ከተማ መታወቂያ ያስገቡ",
+        "additionalInfo": "ተጨማሪ መረጃ ያስገቡ"
+      },
+      "options": {
+        "male": "ወንድ",
+        "female": "ሴት",
+        "found": "የተገኘ/ች",
+        "inCare": "በማቆያ ያለ/ች",
+        "inAdera": "በአደራ የተሰጠ/ች",
+        "adopted": "ጉዲፈቻ የተሰጠ/ች",
+        "withBloodRelative": "ከደም ዘመድ ጋር ያለ/ች",
+        "returned": "የተመለሰ/ች"
+      },
+      "buttons": {
+        "back": "ተመለስ",
+        "submit": "አስገባ"
+      },
+      "toasts": {
+        "success": "ሕፃኑ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "ሕፃኑን መመዝገብ አልተቻለም: {message}"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "የጉዲፈቻ አገልግሎቶች",
+    "subtitle": "የልጆች፣ የሕፃናት ማሳደጊያ ተቋማት እና የጉዲፈቻ ጥያቄዎች አጠቃላይ መግለጫ።",
+    "newRequests": "አዲስ ጥያቄዎች",
+    "stats": {
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "careCenters": "የሕፃናት ማሳደጊያ ተቋማት",
+      "adoptionRequests": "የጉዲፈቻ ጥያቄዎች",
+      "supportBenefits": "የድጋፍ ጥቅማ ጥቅሞች"
+    },
+    "recentActivity": {
+      "title": "የቅርብ ጊዜ እንቅስቃሴዎች",
+      "empty": {
+        "title": "ምንም የቅርብ ጊዜ ማመልከቻዎች የሉም",
+        "description": "አዲስ የተላኩ የጉዲፈቻ ጥያቄዎች እዚህ ይታያሉ።"
+      }
+    },
+    "quickActions": {
+      "title": "ፈጣን ተግባራት",
+      "manageChildren": "ልጆችን አስተዳድር",
+      "careCenterList": "የሕፃናት ማሳደጊያ ተቋማት ዝርዝር",
+      "adoptionRequests": "የጉዲፈቻ ጥያቄዎች"
+    },
+    "charts": {
+      "children": "ሕፃናት",
+      "centers": "የሕፃናት ማሳደጊያ ተቋማት",
+      "requests": "የጉዲፈቻ ጥያቄዎች",
+      "benefits": "የድጋፍ ጥቅማ ጥቅሞች"
+    } 
+  }
+}

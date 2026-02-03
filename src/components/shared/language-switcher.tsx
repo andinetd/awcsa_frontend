@@ -1,6 +1,7 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -25,13 +26,15 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   const t = useTranslations();
   const params = useParams();
   const router = useRouter();
+  const pathname = usePathname();
+
   const locale = Array.isArray(params?.locale)
     ? params.locale[0]
     : params?.locale || "en";
 
-  function handleSelect(newLocale: string) {
+  function handleSelect(newLocale: "en" | "am") {
     if (newLocale !== locale) {
-      router.push(`/${newLocale}/${path ? path : ""}`);
+      router.replace(pathname, { locale: newLocale });
     }
   }
 
@@ -42,7 +45,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
           <button
             className={cn(
               "px-4 py-1.5 rounded bg-primary text-white font-medium shadow focus:outline-none text-sm font-lexend hover:bg-primary/90 transition-colors hover:cursor-pointer flex items-center gap-1",
-              className
+              className,
             )}
           >
             {locale === "en" ? (
@@ -71,7 +74,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             onSelect={() => handleSelect("en")}
             className={cn(
               locale === "en" && "bg-primary/10 font-semibold text-primary",
-              "flex items-center gap-2"
+              "flex items-center gap-2",
             )}
           >
             {locale === "en" && (
@@ -88,7 +91,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             onSelect={() => handleSelect("am")}
             className={cn(
               locale === "am" && "bg-primary/10 font-semibold text-primary",
-              "flex items-center gap-2"
+              "flex items-center gap-2",
             )}
           >
             {locale === "am" && (

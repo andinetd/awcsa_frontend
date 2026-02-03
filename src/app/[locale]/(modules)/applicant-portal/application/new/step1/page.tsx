@@ -27,7 +27,7 @@ import AgeInput from "@/components/custom/age-input";
 
 export default function Step1Page() {
   const router = useRouter();
-  const application = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
 
   const { step1, setStep1 } = useApplicationFormStore();
   const form = useForm<ApplicationStepOneType>({
@@ -69,33 +69,31 @@ export default function Step1Page() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-primary">
         <User className="h-5 w-5" />
-        <h3 className="font-semibold">
-          {application("stepone.instructions.title")}
-        </h3>
+        <h3 className="font-semibold">{t("stepone.instructions.title")}</h3>
       </div>
 
       <ul className="space-y-2 font-lexend text-gray-600">
         <li className="flex items-start gap-2">
           <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("stepone.instructions.zero")}</span>
+          <span>{t("stepone.instructions.zero")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("stepone.instructions.one")}</span>
+          <span>{t("stepone.instructions.one")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("stepone.instructions.two")}</span>
+          <span>{t("stepone.instructions.two")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span> {application("stepone.instructions.three")} </span>
+          <span> {t("stepone.instructions.three")} </span>
         </li>
       </ul>
 
       <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-sm font-bold text-yellow-800">
-          {application("stepone.instructions.note")}
+          {t("stepone.instructions.note")}
         </p>
       </div>
     </div>
@@ -117,13 +115,11 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.cityId")}
+                    {t("stepone.form.cityId")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={application(
-                        "stepone.form.cityIdPlaceHolder"
-                      )}
+                      placeholder={t("stepone.form.cityIdPlaceHolder")}
                       {...field}
                     />
                   </FormControl>
@@ -140,7 +136,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.dateOfBirth")}
+                    {t("stepone.form.dateOfBirth")}
                   </FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
@@ -156,7 +152,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.MonthlyIncome")}
+                    {t("stepone.form.MonthlyIncome")}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -180,13 +176,11 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.Address")}
+                    {t("stepone.form.Address")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={application(
-                        "stepone.form.AddressPlaceHolder"
-                      )}
+                      placeholder={t("stepone.form.AddressPlaceHolder")}
                       {...field}
                     />
                   </FormControl>
@@ -203,34 +197,34 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.EducationLevel")}
+                    {t("stepone.form.EducationLevel")}
                   </FormLabel>
                   <FormControl>
                     <select
                       {...field}
                       className="w-full border px-3 py-2 rounded"
                     >
-                      <option value="">Select</option>
+                      <option value="">{t("form.select")}</option>
                       <option value="none">
-                        {application("stepone.form.educationOptions.none")}
+                        {t("stepone.form.educationOptions.none")}
                       </option>
                       <option value="primary">
-                        {application("stepone.form.educationOptions.primary")}
+                        {t("stepone.form.educationOptions.primary")}
                       </option>
                       <option value="secondary">
-                        {application("stepone.form.educationOptions.secondary")}
+                        {t("stepone.form.educationOptions.secondary")}
                       </option>
                       <option value="Diploma">
-                        {application("stepone.form.educationOptions.diploma")}
+                        {t("stepone.form.educationOptions.diploma")}
                       </option>
                       <option value="Bachelor">
-                        {application("stepone.form.educationOptions.bachelor")}
+                        {t("stepone.form.educationOptions.bachelor")}
                       </option>
                       <option value="Masters">
-                        {application("stepone.form.educationOptions.masters")}
+                        {t("stepone.form.educationOptions.masters")}
                       </option>
                       <option value="Doctorate">
-                        {application("stepone.form.educationOptions.doctorate")}
+                        {t("stepone.form.educationOptions.doctorate")}
                       </option>
                     </select>
                   </FormControl>
@@ -245,13 +239,11 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.occupation")}
+                    {t("stepone.form.occupation")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={application(
-                        "stepone.form.occupationPlaceholder"
-                      )}
+                      placeholder={t("stepone.form.occupationPlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -268,12 +260,12 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.spouseCityIdNumber")}
+                    {t("stepone.form.spouseCityIdNumber")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={application(
-                        "stepone.form.spouseCityIdNumberPlaceholder"
+                      placeholder={t(
+                        "stepone.form.spouseCityIdNumberPlaceholder",
                       )}
                       {...field}
                     />
@@ -291,7 +283,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[14px] font-lexend">
-                    {application("stepone.form.preferredChildAgeMin")}
+                    {t("stepone.form.preferredChildAgeMin")}
                   </FormLabel>
                   <FormControl>
                     <AgeInput
@@ -311,7 +303,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[14px] font-lexend">
-                    {application("stepone.form.preferredChildAgeMax")}
+                    {t("stepone.form.preferredChildAgeMax")}
                   </FormLabel>
                   <FormControl>
                     <AgeInput
@@ -331,7 +323,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[14px] font-lexend">
-                    {application("stepone.form.preferredNumberOfChildren")}
+                    {t("stepone.form.preferredNumberOfChildren")}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -355,7 +347,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.preferredChildGender")}
+                    {t("stepone.form.preferredChildGender")}
                   </FormLabel>
                   <FormControl>
                     <select
@@ -363,13 +355,13 @@ export default function Step1Page() {
                       className="w-full border px-3 py-2 rounded"
                     >
                       <option value="ANY">
-                        {application("stepone.form.GenderOptions.any")}
+                        {t("stepone.form.GenderOptions.any")}
                       </option>
                       <option value="MALE">
-                        {application("stepone.form.GenderOptions.male")}
+                        {t("stepone.form.GenderOptions.male")}
                       </option>
                       <option value="FEMALE">
-                        {application("stepone.form.GenderOptions.female")}
+                        {t("stepone.form.GenderOptions.female")}
                       </option>
                     </select>
                   </FormControl>
@@ -385,7 +377,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.id")}*
+                    {t("stepone.form.id")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -410,7 +402,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.birthCertificate")}*
+                    {t("stepone.form.birthCertificate")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -436,7 +428,7 @@ export default function Step1Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("stepone.form.income")}*
+                    {t("stepone.form.income")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -460,10 +452,10 @@ export default function Step1Page() {
               variant="outline"
               onClick={() => router.push("/applicant-portal/portal")}
             >
-              Back to Portal
+              {t("form.backToPortal")}
             </Button>
             <Button type="submit" className="px-8">
-              Next Step
+              {t("form.nextStep")}
             </Button>
           </div>
         </form>

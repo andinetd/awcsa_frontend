@@ -12,17 +12,25 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const generalMessages = (await import(`../../messages/${locale}.json`))
     .default;
 
-  const applicationMessages = (
-    await import(`../../messages/application-messages/${locale}.json`)
+  const adoptionMessages = (
+    await import(`../../messages/adoption/${locale}.json`)
   ).default;
 
-  
+  const applicantsPortalMessages = (
+    await import(`../../messages/applicants-portal/${locale}.json`)
+  ).default;
+
+  const sidebarMessages = (
+    await import(`../../messages/sidebar/${locale}.json`)
+  ).default;
 
   return {
     locale,
     messages: {
       ...generalMessages,
-      applicationMessages: applicationMessages,
+      adoption: adoptionMessages,
+      "applicants-portal": applicantsPortalMessages,
+      sidebar: sidebarMessages,
     },
   };
 });

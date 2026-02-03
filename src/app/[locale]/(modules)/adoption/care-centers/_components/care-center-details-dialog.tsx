@@ -12,6 +12,7 @@ import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { Hash, MapPin, Phone, User, Mail, Home } from "lucide-react";
 import React from "react";
 import { formatAge } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface CareCenterDetailsDialogProps {
   careCenter: NewCareCenterSchemaType | null;
@@ -24,6 +25,7 @@ const CareCenterDetailsDialog: React.FC<CareCenterDetailsDialogProps> = ({
   open,
   onOpenChange,
 }) => {
+  const t = useTranslations("adoption");
   if (!careCenter) return null;
 
   return (
@@ -39,77 +41,104 @@ const CareCenterDetailsDialog: React.FC<CareCenterDetailsDialogProps> = ({
                   : "bg-green-100 text-green-700"
               }`}
             >
-              {careCenter.type}
+              {t(`careCenters.types.${careCenter.type}`)}
             </span>
           </DialogTitle>
-          <DialogDescription>
-            Detailed information about the care center.
-          </DialogDescription>
+          <DialogDescription>{t("careCenters.dialog.title")}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="space-y-4">
             <h3 className="font-semibold text-lg border-b pb-2">
-              Contact & Address
+              {t("careCenters.dialog.contactAddress")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Email:</span> {careCenter.email}
+                <span className="font-medium">
+                  {t("careCenters.dialog.email")}:
+                </span>{" "}
+                {careCenter.email}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Phone className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Phone:</span> {careCenter.phone}
+                <span className="font-medium">
+                  {t("careCenters.dialog.phone")}:
+                </span>{" "}
+                {careCenter.phone}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Region:</span> {careCenter.region}
+                <span className="font-medium">
+                  {t("careCenters.dialog.region")}:
+                </span>{" "}
+                {careCenter.region}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Sub-City:</span>{" "}
+                <span className="font-medium">
+                  {t("careCenters.dialog.subCity")}:
+                </span>{" "}
                 {careCenter.subCity}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Woreda:</span> {careCenter.woreda}
+                <span className="font-medium">
+                  {t("careCenters.dialog.woreda")}:
+                </span>{" "}
+                {careCenter.woreda}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Kebele:</span> {careCenter.kebele}
+                <span className="font-medium">
+                  {t("careCenters.dialog.kebele")}:
+                </span>{" "}
+                {careCenter.kebele}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Home className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">House No:</span>{" "}
+                <span className="font-medium">
+                  {t("careCenters.dialog.houseNo")}:
+                </span>{" "}
                 {careCenter.houseNumber}
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Place:</span> {careCenter.place}
+                <span className="font-medium">
+                  {t("careCenters.dialog.place")}:
+                </span>{" "}
+                {careCenter.place}
               </div>
             </div>
           </div>
 
           <div className="space-y-4">
             <h3 className="font-semibold text-lg border-b pb-2">
-              Capacity & Services
+              {t("careCenters.dialog.capacityServices")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2 text-sm">
                 <User className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">Age Range:</span>{" "}
+                <span className="font-medium">
+                  {t("careCenters.dialog.ageRange")}:
+                </span>{" "}
                 {formatAge(careCenter.childrenAgeRange.min)} -{" "}
-                {formatAge(careCenter.childrenAgeRange.max)} years
+                {formatAge(careCenter.childrenAgeRange.max)}{" "}
+                {t("careCenters.dialog.years")}
               </div>
               {careCenter.orgUnitId && (
                 <div className="flex items-center gap-2 text-sm">
                   <Hash className="w-4 h-4 text-gray-500" />
-                  <span className="font-medium">Org Unit ID:</span>{" "}
+                  <span className="font-medium">
+                    {t("careCenters.dialog.orgUnitId")}:
+                  </span>{" "}
                   {careCenter.orgUnitId}
                 </div>
               )}
             </div>
             <div className="space-y-2">
-              <span className="font-medium text-sm">Description:</span>
+              <span className="font-medium text-sm">
+                {t("careCenters.dialog.description")}:
+              </span>
               <p className="text-sm text-gray-600 bg-slate-50 p-3 rounded-md">
                 {careCenter.description}
               </p>
@@ -117,7 +146,9 @@ const CareCenterDetailsDialog: React.FC<CareCenterDetailsDialogProps> = ({
           </div>
         </div>
         <div className="flex justify-end">
-          <Button onClick={() => onOpenChange(false)}>Close</Button>
+          <Button onClick={() => onOpenChange(false)}>
+            {t("careCenters.dialog.close")}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

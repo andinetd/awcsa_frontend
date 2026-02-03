@@ -7,7 +7,34 @@
     "requirement": "Adoption Requirements",
     "requirementSubtitle": "Before starting your application, please ensure you meet the following requirements:",
     "complaintsTitle": "Complaints & Feedback",
-    "complaintsDescription": "Have concerns about your application process? You can submit and track complaints directly through our dedicated service."
+    "complaintsDescription": "Have concerns about your application process? You can submit and track complaints directly through our dedicated service.",
+    "complaintsTabNew": "New Complaint",
+    "complaintsTabHistory": "Complaint History",
+    "complaintsCardTitle": "Submit a New Complaint",
+    "complaintsCardDesc": "Found an issue with the system or process? Let us know.",
+    "complaintsHistoryTitle": "Complaint History",
+    "complaintsHistoryDesc": "View and track the status of your submitted complaints."
+  },
+  "form": {
+    "select": "Select",
+    "backToPortal": "Back to Portal",
+    "previousStep": "Previous Step",
+    "nextStep": "Next Step",
+    "reviewApplication": "Review Application",
+    "submitting": "Submitting...",
+    "resubmit": "Resubmit Application",
+    "noApplication": "No application available for resubmission."
+  },
+  "resubmit": {
+    "title": "Resubmit Application",
+    "subtitle": "Update the fields flagged for review to proceed with your application.",
+    "detailsToUpdate": "Details to Update",
+    "noTextFields": "No textual fields require update.",
+    "filesToReplace": "Files to Replace",
+    "noFiles": "No files require replacement.",
+    "reviewerFeedback": "Reviewer Feedback",
+    "viewExisting": "View existing file",
+    "success": "Application resubmitted successfully"
   },
   "requirements": {
     "one": "Age not less than 25 and not more than 60 years,",
@@ -22,7 +49,6 @@
     "ten": "Applicants must provide evidence of their psychological and social well-being from relevant bodies, such as a religious institution, a religious organization, or the district office.",
     "eleven": "The adoptive family must provide two passport-size (3×4) photographs."
   },
-
   "footer": {
     "title": "Ready to Begin?",
     "subtitle": "Our comprehensive application process will guide you through each step of your adoption journey.",
@@ -30,7 +56,20 @@
     "cta_submitted": "Application Submitted"
   },
   "appSummary": {
-    "cta": "View Details"
+    "title": "Application Summary",
+    "applicationId": "Application ID",
+    "submittedDate": "Submitted Date",
+    "lastUpdated": "Last Updated",
+    "cta": "View Details",
+    "noApplication": "No Application Found",
+    "noApplicationDesc": "You haven't submitted an adoption application yet.",
+    "statuses": {
+      "pending_review": "Your application is currently under review. We will notify you once there are updates.",
+      "pending_home_visit": "Your application is currently pending a home visit. We will notify you once there are updates.",
+      "returned": "Your application has been returned by the expert with comments. Please review the feedback provided and resubmit your application after addressing the comments.",
+      "rejected": "We regret to inform you that your adoption application has been rejected. For more information, please contact our support team.",
+      "matched": "Congratulations! Your adoption application has been matched. Our team will reach out to you with the next steps."
+    }
   },
   "userInfo": {
     "userInfo": "User Information",

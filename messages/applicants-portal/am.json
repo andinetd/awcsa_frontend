@@ -7,7 +7,34 @@
     "requirement": "ጉዲፈቻ አድራጊ ቤተሰብ ማሟላት ያለባቸው መስፈርቶች",
     "requirementSubtitle": "ማመልከቻዎን ከመጀመርዎ በፊት እባክዎ የሚከተሉትን መስፈርቶች ማሟላትዎን ያረጋግጡ።",
     "complaintsTitle": "ቅሬታ እና አስተያየት",
-    "complaintsDescription": "ስለ ማመልከቻዎ ሂደት ስጋት አለዎት? በእኛ ልዩ አገልግሎት ቅሬታዎችን በቀጥታ ማቅረብ እና መከታተል ይችላሉ።"
+    "complaintsDescription": "ስለ ማመልከቻዎ ሂደት ስጋት አለዎት? በእኛ ልዩ አገልግሎት ቅሬታዎችን በቀጥታ ማቅረብ እና መከታተል ይችላሉ።",
+    "complaintsTabNew": "አዲስ ቅሬታ",
+    "complaintsTabHistory": "የቅሬታ ታሪክ",
+    "complaintsCardTitle": "አዲስ ቅሬታ ያቅርቡ",
+    "complaintsCardDesc": "Found an issue with the system or process? Let us know.",
+    "complaintsHistoryTitle": "የቅሬታ ታሪክ",
+    "complaintsHistoryDesc": "ያቀረቡትን ቅሬታዎች ሁኔታ ይመልከቱ እና ይከታተሉ።"
+  },
+  "form": {
+    "select": "ምረጥ",
+    "backToPortal": "ወደ ፖርታል ተመለስ",
+    "previousStep": "የቀድሞው ደረጃ",
+    "nextStep": "ቀጣይ ደረጃ",
+    "reviewApplication": "ማመልከቻውን ይገምግሙ",
+    "submitting": "በመላክ ላይ...",
+    "resubmit": "እንደገና አስገባ",
+    "noApplication": "እንደገና ለማስገባት ምንም ማመልከቻ የለም።"
+  },
+  "resubmit": {
+    "title": "ማመልከቻውን እንደገና ያስገቡ",
+    "subtitle": "ማመልከቻዎን ለመቀጠል ለግምገማ ምልክት የተደረገባቸውን መስኮች ያዘምኑ።",
+    "detailsToUpdate": "የሚታደሱ ዝርዝሮች",
+    "noTextFields": "ምንም የሚታደስ የጽሁፍ መስክ የለም።",
+    "filesToReplace": "የሚተኩ ፋይሎች",
+    "noFiles": "ምንም የሚተካ ፋይል የለም።",
+    "reviewerFeedback": "የገምጋሚ አስተያየት",
+    "viewExisting": "ያለውን ፋይል ይመልከቱ",
+    "success": "ማመልከቻው በተሳካ ሁኔታ እንደገና ተልኳል"
   },
   "requirements": {
     "one": "ዕድሜ ከ25 ያላነሰ እና ከ60 ዓመት ያልበለጠ፣",
@@ -29,7 +56,20 @@
     "cta_submitted": "የማመልከቻ ሂደት ተጠናቋል"
   },
   "appSummary": {
-    "cta": "ዝርዝሮችን ይመልከቱ"
+    "title": "የማመልከቻ ማጠቃለያ",
+    "applicationId": "የማመልከቻ መታወቂያ",
+    "submittedDate": "የተላከበት ቀን",
+    "lastUpdated": "ለመጨረሻ ጊዜ የታደሰው",
+    "cta": "ዝርዝሮችን ይመልከቱ",
+    "noApplication": "ምንም ማመልከቻ አልተገኘም",
+    "noApplicationDesc": "እስካሁን ምንም የጉዲፈቻ ማመልከቻ አላስገቡም።",
+    "statuses": {
+      "pending_review": "ማመልከቻዎ በአሁኑ ጊዜ በግምገማ ላይ ነው። ዝመናዎች ሲኖሩ እናሳውቅዎታለን።",
+      "pending_home_visit": "ማመልከቻዎ በአሁኑ ጊዜ የመስክ ጉብኝት በመጠባበቅ ላይ ነው። ዝመናዎች ሲኖሩ እናሳውቅዎታለን።",
+      "returned": "ማመልከቻዎ በባለሙያው ከአስተያየቶች ጋር ተመልሷል። እባክዎን የቀረበውን አስተያየት ይገምግሙ እና አስተያየቶቹን ካስተካከሉ በኋላ ማመልከቻዎን እንደገና ያስገቡ።",
+      "rejected": "የጉዲፈቻ ማመልከቻዎ ውድቅ መደረጉን ስንገልጽ በጥልቅ እናዝናለን። ለበለጠ መረጃ እባክዎን የድጋፍ ቡድናችንን ያግኙ።",
+      "matched": "እንኳን ደስ አላችሁ! የጉዲፈቻ ማመልከቻዎ ተዛምዷል። ቡድናችን ቀጣይ እርምጃዎችን ይዞ ያገኝዎታል።"
+    }
   },
   "userInfo": {
     "userInfo": "የተጠቃሚ መረጃ",

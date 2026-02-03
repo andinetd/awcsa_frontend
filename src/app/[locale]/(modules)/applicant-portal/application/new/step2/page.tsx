@@ -28,7 +28,7 @@ import { useApplicationFormStore } from "@/stores/application-form-store";
 
 export default function Step2Page() {
   const router = useRouter();
-  const application = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
 
   const { step2, setStep2 } = useApplicationFormStore();
   const form = useForm<ApplicationStepTwoType>({
@@ -49,29 +49,27 @@ export default function Step2Page() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-primary">
         <User className="h-5 w-5" />
-        <h3 className="font-semibold">
-          {application("steptwo.instructions.title")}
-        </h3>
+        <h3 className="font-semibold">{t("steptwo.instructions.title")}</h3>
       </div>
 
       <ul className="space-y-2 font-lexend text-gray-600">
         <li className="flex items-start gap-2">
           <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("steptwo.instructions.one")}</span>
+          <span>{t("steptwo.instructions.one")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span>{application("steptwo.instructions.two")}</span>
+          <span>{t("steptwo.instructions.two")}</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-2 h-2  bg-primary rounded-full mt-2 flex-shrink-0"></span>
-          <span> {application("steptwo.instructions.three")} </span>
+          <span> {t("steptwo.instructions.three")} </span>
         </li>
       </ul>
 
       <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
         <p className="text-sm font-bold text-yellow-800">
-          {application("steptwo.instructions.note")}
+          {t("steptwo.instructions.note")}
         </p>
       </div>
     </div>
@@ -88,7 +86,7 @@ export default function Step2Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("steptwo.form.medical")}*
+                    {t("steptwo.form.medical")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -113,7 +111,7 @@ export default function Step2Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("steptwo.form.criminal")}*
+                    {t("steptwo.form.criminal")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -139,7 +137,7 @@ export default function Step2Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {application("steptwo.form.marriageCertificate")}*
+                    {t("steptwo.form.marriageCertificate")}*
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
@@ -164,10 +162,10 @@ export default function Step2Page() {
               variant="outline"
               onClick={() => handleBack(form.getValues())}
             >
-              Previous Step
+              {t("form.previousStep")}
             </Button>
             <Button type="submit" className="px-8">
-              Next Step
+              {t("form.nextStep")}
             </Button>
           </div>
         </form>

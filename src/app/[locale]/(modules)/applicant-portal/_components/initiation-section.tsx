@@ -8,53 +8,53 @@ import { useTranslations } from "next-intl";
 import { useFetchedAdoptionApplicationStore } from "@/stores/fetched-adoption-application";
 
 export function InitiationSection() {
-  const applicationMessages = useTranslations("applicationMessages");
+  const t = useTranslations("applicants-portal");
   const { application } = useFetchedAdoptionApplicationStore();
 
   const adoptionRequirements = [
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.one"),
+      text: t("requirements.one"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.two"),
+      text: t("requirements.two"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.three"),
+      text: t("requirements.three"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.four"),
+      text: t("requirements.four"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.five"),
+      text: t("requirements.five"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.six"),
+      text: t("requirements.six"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.seven"),
+      text: t("requirements.seven"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.eight"),
+      text: t("requirements.eight"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.nine"),
+      text: t("requirements.nine"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.ten"),
+      text: t("requirements.ten"),
     },
     {
       icon: <CheckCircle className="h-4 w-4" />,
-      text: applicationMessages("requirements.eleven"),
+      text: t("requirements.eleven"),
     },
   ];
   return (
@@ -69,10 +69,10 @@ export function InitiationSection() {
         <div>
           <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            {applicationMessages("initiation.requirement")}
+            {t("initiation.requirement")}
           </h3>
           <p className="text-sm text-gray-600 mb-4">
-            {applicationMessages("initiation.requirementSubtitle")}:
+            {t("initiation.requirementSubtitle")}:
           </p>
           <div className="max-h-72 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
             <ul className="space-y-2">
@@ -96,25 +96,21 @@ export function InitiationSection() {
         <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <Users className="h-4 w-4 text-primary" />
-            <h4 className="font-medium text-primary">
-              {applicationMessages("footer.title")}
-            </h4>
+            <h4 className="font-medium text-primary">{t("footer.title")}</h4>
           </div>
-          <p className="text-sm text-blue-800 mb-4">
-            {applicationMessages("footer.subtitle")}
-          </p>
+          <p className="text-sm text-blue-800 mb-4">{t("footer.subtitle")}</p>
           {application ? (
             <Button
               disabled
               className="w-full"
-              title={applicationMessages("footer.cta_submitted") ?? undefined}
+              title={t("footer.cta_submitted") ?? undefined}
             >
-              {applicationMessages("footer.cta_submitted")}
+              {t("footer.cta_submitted")}
             </Button>
           ) : (
             <Button asChild className="w-full">
               <Link href="/applicant-portal/application/new/step1">
-                {applicationMessages("footer.cta")}
+                {t("footer.cta")}
               </Link>
             </Button>
           )}
@@ -123,10 +119,10 @@ export function InitiationSection() {
         <div className="text-center space-y-3 pt-4 border-t">
           <div className="px-2">
             <h4 className="text-sm font-semibold text-gray-900 mb-1">
-              {applicationMessages("initiation.complaintsTitle")}
+              {t("initiation.complaintsTitle")}
             </h4>
             <p className="text-xs text-gray-500 leading-relaxed">
-              {applicationMessages("initiation.complaintsDescription")}
+              {t("initiation.complaintsDescription")}
             </p>
           </div>
           <Link

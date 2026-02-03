@@ -1,0 +1,377 @@
+{
+  "moduleTitle": "Adoption Module",
+  "adoptionRequests": {
+    "title": "Adoption Requests",
+    "tabs": {
+      "pending": "Pending",
+      "returned": "Returned to Applicant",
+      "pending_home_visit": "Pending Home Visit",
+      "pending_approval": "Pending Approval",
+      "matched": "Matched",
+      "denied": "Denied"
+    },
+    "noApplications": "No applications found in this category.",
+    "applicationId": "Application ID",
+    "submitted": "Submitted",
+    "actions": {
+      "review": "Review",
+      "view": "View"
+    },
+    "loading": "Loading...",
+    "errors": {
+      "loadFailed": "Failed to load applications",
+      "networkError": "Network error loading applications",
+      "unexpectedShape": "Unexpected applications response shape"
+    }
+  },
+  "adoptionDetail": {
+    "title": "Review Adoption Application",
+    "preferences": {
+      "title": "Adoption Preferences",
+      "preferredSex": "Preferred Sex",
+      "quantity": "Quantity",
+      "child": "Child",
+      "ageRange": "Age Range",
+      "spouseAgreement": "Spouse Agreement"
+    },
+    "review": {
+      "overallComment": "Overall comment",
+      "overallCommentPlaceholder": "Enter overall comment...",
+      "returnToApplicant": "Return to Applicant"
+    },
+    "sections": {
+      "details": "Application Details",
+      "attachments": "Attached Documents",
+      "noFile": "No file",
+      "noFileUploaded": "No file uploaded",
+      "filePreviewError": "No URL available for preview",
+      "view": "View",
+      "feedback": "Feedback?",
+      "feedbackPlaceholder": "Enter feedback about {field}...",
+      "commentPlaceholder": "Comment on {field}"
+    },
+    "matching": {
+      "title": "Select Child for Matching",
+      "subtitle": "Choose a child from the available list to match with this applicant.",
+      "searchPlaceholder": "Search child by name...",
+      "yearsOld": "{count} years old",
+      "ageUnknown": "Age unknown",
+      "locationUnknown": "Location Unknown",
+      "dob": "DOB",
+      "gender": "Gender",
+      "facility": "Facility",
+      "status": "Status",
+      "additionalInfo": "Additional Info",
+      "noAdditionalInfo": "No additional info provided.",
+      "matchingNote": "Matching Note",
+      "notePlaceholder": "Add a note about this match...",
+      "emptyState": "Select a child from the list to view details.",
+      "confirm": "Confirm Match",
+      "cancel": "Cancel",
+      "success": "Child matched successfully",
+      "fetchError": "Failed to fetch available children.",
+      "invalidId": "Invalid applicant or application id",
+      "unknown": "Unknown"
+    },
+    "matched": {
+      "title": "Matched Child Detail",
+      "officialMatch": "Official Adoption Match",
+      "matchedOn": "Matched on {date}",
+      "facilityId": "Facility ID",
+      "childInfo": "Child Information",
+      "adopterInfo": "Adopter Information",
+      "recordCreated": "Record Created",
+      "adopterId": "Adopter ID",
+      "fullName": "Full Name",
+      "etb": "{amount} ETB"
+    },
+    "toasts": {
+      "returned": "Application returned to applicant",
+      "returnError": "Network error while returning application",
+      "reviewError": "Failed to submit review: {message}",
+      "approved": "Application approved",
+      "denied": "Application denied"
+    },
+    "status": {
+      "notFound": "Application not found.",
+      "loading": "Loading application details..."
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "dateOfBirth": "Date of Birth",
+      "phoneNumber": "Phone Number",
+      "cityIdNumber": "City ID Number",
+      "spouseCityIdNumber": "Spouse City ID Number",
+      "address": "Address",
+      "educationLevel": "Education Level",
+      "occupation": "Occupation",
+      "monthlyIncome": "Monthly Income",
+      "preferredNumber": "Preferred Number",
+      "preferredSex": "Preferred Sex",
+      "preferredAgeMin": "Preferred Age Min",
+      "preferredAgeMax": "Preferred Age Max"
+    },
+    "actions": {
+      "viewHomeVisit": "View Home Visit Feedback",
+      "submitHomeVisit": "Submit Home Visit Feedback",
+      "approveAndMatch": "Approve and match child",
+      "viewMatchedChild": "View Matched Child Details",
+      "reject": "Reject",
+      "returnToApplicant": "Return to Applicant",
+      "approve": "Approve",
+      "applicationNum": "Application #"
+    }
+  },
+  "statuses": {
+    "pending_review": "Pending Review",
+    "pending_home_visit": "Pending Home Visit",
+    "pending_approval": "Pending Approval",
+    "matched": "Matched",
+    "rejected": "Rejected",
+    "returned": "Returned",
+    "denied": "Denied"
+  },
+  "homeVisit": {
+    "title": "Home Visit Report",
+    "back": "Back",
+    "loading": "Loading...",
+    "errors": {
+      "loadFailed": "Failed to load home visit data"
+    },
+    "fields": {
+      "socialWorker": "Social Worker",
+      "placeOfVisit": "Place of Visit",
+      "date": "Date",
+      "time": "Time",
+      "kebele": "Kebele",
+      "woreda": "Woreda",
+      "subCity": "SubCity",
+      "houseNo": "House No",
+      "preference": "Preference",
+      "child": "{count, plural, =1 {Child} other {Children}}",
+      "children": "Children",
+      "ageRange": "Age Range",
+      "years": "years",
+      "reason": "Reason",
+      "father": "Father",
+      "mother": "Mother",
+      "duration": "Duration",
+      "datePlace": "Date/Place",
+      "description": "Description",
+      "conflictResolution": "Conflict Resolution",
+      "financialManagement": "Financial Management",
+      "houseType": "House Type",
+      "ownership": "Ownership",
+      "size": "Size",
+      "livingDuration": "Living Duration",
+      "compoundCondition": "Compound Condition",
+      "childSuitability": "Child Suitability",
+      "neighborhood": "Neighborhood",
+      "parents": "Parents",
+      "siblings": "Siblings",
+      "upbringing": "Upbringing",
+      "workHistory": "Work History",
+      "preparedBy": "Prepared By",
+      "approvedBy": "Approved By",
+      "digitalSignature": "Digital Signature",
+      "fullName": "Full Name",
+      "age": "Age",
+      "nationality": "Nationality",
+      "religion": "Religion",
+      "education": "Education",
+      "occupation": "Occupation",
+      "monthlyIncome": "Monthly Income",
+      "phone": "Phone",
+      "birthPlace": "Birth Place",
+      "etb": "ETB",
+      "sex": "Sex",
+      "relation": "Relation",
+      "educationOccupation": "Education/Occupation",
+      "educationAndOccupation": "Education/Occupation",
+      "relationToApplicants": "Relation to Applicants",
+      "phoneNumber": "Phone Number",
+      "etbValue": "{amount} ETB",
+      "to": "to",
+      "dateRange": "{start} to {end}",
+      "timeRange": "{start} - {end}"
+    },
+    "sections": {
+      "visitInfo": "Visit Information",
+      "adoptionInterest": "Adoption Interest",
+      "applicantProfiles": "Applicant Profiles",
+      "marriageAssessment": "Marriage Assessment",
+      "homeEnvironment": "Home Environment",
+      "householdComposition": "Household Composition",
+      "existingChildren": "Existing Children",
+      "otherHouseholdMembers": "Other Household Members",
+      "witnesses": "Witnesses",
+      "fatherBackground": "Father's Background",
+      "motherBackground": "Mother's Background",
+      "evaluation": "Social Worker Evaluation"
+    }
+  },
+  "careCenters": {
+    "title": "Care Centers",
+    "loading": "Loading care centers...",
+    "error": "Error loading care centers.",
+    "noCareCenters": "No care centers found.",
+    "addNew": "Add New Care Center",
+    "card": {
+      "viewDetails": "View Details",
+      "age": "Age"
+    },
+    "dialog": {
+      "title": "Detailed information about the care center.",
+      "contactAddress": "Contact & Address",
+      "capacityServices": "Capacity & Services",
+      "email": "Email",
+      "phone": "Phone",
+      "region": "Region",
+      "subCity": "Sub-City",
+      "woreda": "Woreda",
+      "kebele": "Kebele",
+      "houseNo": "House No",
+      "place": "Place",
+      "ageRange": "Age Range",
+      "years": "years",
+      "orgUnitId": "Org Unit ID",
+      "description": "Description",
+      "close": "Close"
+    },
+    "form": {
+      "registerTitle": "Register New Care Center",
+      "registerDescription": "Register care centers and related organizations for future use.",
+      "registerFacility": "Register New Facility",
+      "facilityName": "Facility Name",
+      "type": "Type",
+      "selectType": "Select type",
+      "ngoPrivate": "NGO / Private",
+      "government": "Government",
+      "ageRange": "Age Range (Min - Max)",
+      "phone": "Phone",
+      "addressDetails": "Address Details",
+      "region": "Region",
+      "subCity": "Sub-City",
+      "selectSubCity": "Select Sub-City",
+      "woreda": "Woreda",
+      "kebele": "Kebele",
+      "houseNumber": "House Number",
+      "place": "Place (Display Name)",
+      "description": "Description / Services",
+      "accountInfo": "Account & Contact Information",
+      "email": "Email",
+      "password": "Password",
+      "initialPassword": "Set initial password",
+      "reset": "Reset",
+      "submit": "Register Facility & Create Account"
+    },
+    "toasts": {
+      "registerSuccess": "Care center registered successfully!",
+      "registerError": "Failed to register care center: {message}",
+      "genericError": "An error occurred while registering the care center."
+    },
+    "types": {
+      "GOVERNMENT": "Government",
+      "NGO": "NGO / Private",
+      "MIXED": "Mixed"
+    }
+  },
+  "children": {
+    "list": {
+      "title": "List of Children",
+      "addNew": "Add New Child",
+      "loading": "Loading..."
+    },
+    "columns": {
+      "name": "Name",
+      "age": "Age",
+      "gender": "Gender",
+      "placeFound": "Place Found",
+      "status": "Status"
+    },
+    "registration": {
+      "title": "Child Information",
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "gender": "Gender",
+        "dateOfBirth": "Date of Birth",
+        "status": "Status",
+        "addressFound": "Address the child was found",
+        "foundDate": "Date child was found",
+        "socialWorkerId": "Social Worker City Id Number",
+        "careCenterId": "Care Center ID",
+        "childIdFromCareCenter": "Child ID from Care Center",
+        "baleAderaId": "Bale Adera City ID Number",
+        "adopterId": "Adopter City ID Number",
+        "bloodRelativeId": "Blood Relative City ID Number",
+        "previousAdopterId": "Previous Adopter City ID Number",
+        "additionalInfo": "Additional Information"
+      },
+      "placeholders": {
+        "firstName": "Enter first name",
+        "lastName": "Enter last name",
+        "selectGender": "Select gender",
+        "selectStatus": "Select status",
+        "addressFound": "Enter address",
+        "socialWorkerId": "Enter Social Worker City Id Number",
+        "careCenterId": "Enter Care Center ID",
+        "childIdFromCareCenter": "Enter Child ID from Care Center",
+        "baleAderaId": "Enter Bale Adera City ID Number",
+        "adopterId": "Enter Adopter City ID Number",
+        "bloodRelativeId": "Enter Blood Relative City ID Number",
+        "previousAdopterId": "Enter Previous Adopter City ID Number",
+        "additionalInfo": "Enter Additional Information"
+      },
+      "options": {
+        "male": "Male",
+        "female": "Female",
+        "found": "Found",
+        "inCare": "In Care",
+        "inAdera": "In Adera",
+        "adopted": "Adopted",
+        "withBloodRelative": "With Blood Relative",
+        "returned": "Returned"
+      },
+      "buttons": {
+        "back": "Back",
+        "submit": "Submit"
+      },
+      "toasts": {
+        "success": "Child registered successfully",
+        "error": "Failed to register child: {message}"
+      }
+    }
+  },  
+  "dashboard": {
+    "title": "Adoption Services",
+    "subtitle": "Overview of children, care centers, and adoption requests.",
+    "newRequests": "New Requests",
+    "stats": {
+      "totalChildren": "Total Children",
+      "careCenters": "Care Centers",
+      "adoptionRequests": "Adoption Requests",
+      "supportBenefits": "Support Benefits"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "empty": {
+        "title": "No recent applications",
+        "description": "Newly submitted adoption requests will appear here."
+      }
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "manageChildren": "Manage Children",
+      "careCenterList": "Care center list",
+      "adoptionRequests": "Adoption Requests"
+    },
+    "charts": {
+      "children": "Children",
+      "centers": "Centers",
+      "requests": "Requests",
+      "benefits": "Benefits"
+    }   
+  }
+}

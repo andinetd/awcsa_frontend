@@ -9,6 +9,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { BASE_URL } from "@/lib/base-url";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export type BackendDocument = {
   publicId: string;
@@ -60,24 +62,31 @@ export type BackendAdoptionApplication = {
   matchedChildId?: number | null;
 };
 
-
-const TABS = [
-  { value: "pending", label: "Pending" },
-  { value: "returned", label: "Returned to Applicant" },
-  { value: "pending_home_visit", label: "Pending Home Visit" },
-  { value: "pending_approval", label: "Pending Approval" }, 
-  { value: "matched", label: "Matched" },
-  { value: "denied", label: "Denied" },  
-];
-
 const AdoptionRequests = () => {
   const router = useRouter();
   const [tab, setTab] = useState("pending");
   const token = useAuthStore((s) => s.token);
+  const t = useTranslations("adoption");
+
+  const TABS = [
+    { value: "pending", label: t("adoptionRequests.tabs.pending") },
+    { value: "returned", label: t("adoptionRequests.tabs.returned") },
+    {
+      value: "pending_home_visit",
+      label: t("adoptionRequests.tabs.pending_home_visit"),
+    },
+    {
+      value: "pending_approval",
+      label: t("adoptionRequests.tabs.pending_approval"),
+    },
+    { value: "matched", label: t("adoptionRequests.tabs.matched") },
+    { value: "denied", label: t("adoptionRequests.tabs.denied") },
+  ];
 
   // applications state — start with mock data for fast dev, then replace when fetch completes
-  const [applications, setApplications] =
-    useState<BackendAdoptionApplication[]>([]);
+  const [applications, setApplications] = useState<
+    BackendAdoptionApplication[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -92,14 +101,14 @@ const AdoptionRequests = () => {
               "Content-Type": "application/json",
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
-          }
+          },
         );
 
         if (!res.ok) {
           const text = await res.text().catch(() => null);
           toast.error(
-            `Failed to load applications: ${res.status} ${res.statusText}` +
-              (text ? ` - ${text}` : "")
+            `${t("adoptionRequests.errors.loadFailed")}: ${res.status} ${res.statusText}` +
+              (text ? ` - ${text}` : ""),
           );
           setLoading(false);
           return;
@@ -114,11 +123,11 @@ const AdoptionRequests = () => {
           setApplications(data.items);
         } else {
           // unknown shape — keep mock and warn
-          toast.error("Unexpected applications response shape");
+          toast.error(t("adoptionRequests.errors.unexpectedShape"));
         }
       } catch (err) {
         console.error(err);
-        toast.error("Network error loading applications");
+        toast.error(t("adoptionRequests.errors.networkError"));
       } finally {
         if (mounted) setLoading(false);
       }
@@ -128,7 +137,7 @@ const AdoptionRequests = () => {
     return () => {
       mounted = false;
     };
-  }, [token]);
+  }, [token, t]);
 
   // Map backend statuses to tab values used in the UI
   const mapStatusToTab = (status: string) => {
@@ -156,25 +165,43 @@ const AdoptionRequests = () => {
 
   return (
     <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">{t("adoptionRequests.title")}</h1>
+        {/* <LanguageSwitcher
+          className="py-2 px-4"
+          path={"/adoption/adoption-requests"}
+        /> */}
+      </div>
+
       <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className="mb-6">
+        <TabsList className="mb-6 flex-wrap h-auto gap-2 bg-transparent p-0">
           {TABS.map((t) => (
-            <TabsTrigger key={t.value} value={t.value} className="capitalize">
+            <TabsTrigger
+              key={t.value}
+              value={t.value}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border"
+            >
               {t.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        {TABS.map((t) => (
-          <TabsContent key={t.value} value={t.value} className="w-full">
+        {TABS.map((tabItem) => (
+          <TabsContent
+            key={tabItem.value}
+            value={tabItem.value}
+            className="w-full"
+          >
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {loading ? (
-                <div className="text-gray-500 italic">Loading...</div>
-              ) : filteredApps(t.value).length === 0 ? (
+                <div className="text-gray-500 italic">
+                  {t("adoptionRequests.loading")}
+                </div>
+              ) : filteredApps(tabItem.value).length === 0 ? (
                 <div className="col-span-full py-12 text-center text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
-                  No applications found in this category.
+                  {t("adoptionRequests.noApplications")}
                 </div>
               ) : (
-                filteredApps(t.value).map((app, idx) => (
+                filteredApps(tabItem.value).map((app, idx) => (
                   <Card
                     key={app.applicationId}
                     className="p-5 flex flex-col gap-2 shadow-md border border-gray-200"
@@ -183,23 +210,26 @@ const AdoptionRequests = () => {
                       {`${app.applicantInfo.firstName} ${app.applicantInfo.lastName}`}
                     </div>
                     <div className="text-xs text-gray-500 mb-1">
-                      Application ID: {String(app.applicationId)}
+                      {t("adoptionRequests.applicationId")}:{" "}
+                      {String(app.applicationId)}
                     </div>
                     <div className="text-xs text-gray-500 mb-1">
-                      Submitted:{" "}
+                      {t("adoptionRequests.submitted")}:{" "}
                       {new Date(
-                        app.reviewInfo?.createdAt ?? ""
+                        app.reviewInfo?.createdAt ?? "",
                       ).toLocaleString()}
                     </div>
                     <div className="flex gap-2 mt-2">
                       <Link
                         href={`/adoption/adoption-requests/${String(
-                          app.applicationId
+                          app.applicationId,
                         )}`}
                         passHref
                       >
                         <Button size="sm">
-                          {t.value === "pending" ? "Review" : "View"}
+                          {tabItem.value === "pending"
+                            ? t("adoptionRequests.actions.review")
+                            : t("adoptionRequests.actions.view")}
                         </Button>
                       </Link>
                     </div>

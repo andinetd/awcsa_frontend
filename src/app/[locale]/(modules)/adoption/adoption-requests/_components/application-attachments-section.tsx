@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -37,6 +38,7 @@ export const ApplicationAttachmentsSection: React.FC<
 > = ({ attachments, status, onToggle, onComment, onView }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const { token } = useAuthStore();
+  const t = useTranslations("adoption");
 
   const [objectUrls, setObjectUrls] = useState<string[]>([]);
 
@@ -56,7 +58,7 @@ export const ApplicationAttachmentsSection: React.FC<
 
   const filePlaceholder = (
     fileOrMeta: File | FileMeta | null | undefined,
-    label?: string
+    label?: string,
   ) => {
     // If there's no metadata or file, show placeholder
     if (!fileOrMeta) {
@@ -68,9 +70,11 @@ export const ApplicationAttachmentsSection: React.FC<
               <FileText className="h-5 w-5 text-primary flex-shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {label ?? "No file"}
+                  {label ?? t("adoptionDetail.sections.noFile")}
                 </p>
-                <p className="text-xs text-gray-500">No file uploaded</p>
+                <p className="text-xs text-gray-500">
+                  {t("adoptionDetail.sections.noFileUploaded")}
+                </p>
               </div>
             </div>
           </div>
@@ -102,7 +106,9 @@ export const ApplicationAttachmentsSection: React.FC<
                 onClick={async () => {
                   try {
                     if (!meta.url) {
-                      toast.error("No URL available for preview");
+                      toast.error(
+                        t("adoptionDetail.sections.filePreviewError"),
+                      );
                       return;
                     }
 
@@ -118,7 +124,7 @@ export const ApplicationAttachmentsSection: React.FC<
                       const text = await res.text().catch(() => null);
                       toast.error(
                         `Unable to fetch file: ${res.status} ${res.statusText}` +
-                          (text ? ` - ${text}` : "")
+                          (text ? ` - ${text}` : ""),
                       );
                       return;
                     }
@@ -133,7 +139,7 @@ export const ApplicationAttachmentsSection: React.FC<
                   }
                 }}
               >
-                <Eye className="text-sm" /> View
+                <Eye className="text-sm" /> {t("adoptionDetail.sections.view")}
               </Button>
             </div>
           </div>
@@ -147,7 +153,7 @@ export const ApplicationAttachmentsSection: React.FC<
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileText className="w-5 h-5 text-slate-400" />
-          Attached Documents
+          {t("adoptionDetail.sections.attachments")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -166,7 +172,7 @@ export const ApplicationAttachmentsSection: React.FC<
                         name: file.fileName,
                         type: file.fileType,
                       },
-                      file.label
+                      file.label,
                     )}
                   </div>
                   {status === "pending" && (
@@ -177,7 +183,7 @@ export const ApplicationAttachmentsSection: React.FC<
                         className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       />
                       <label className="text-xs text-slate-400 cursor-pointer select-none">
-                        Feedback?
+                        {t("adoptionDetail.sections.feedback")}
                       </label>
                     </div>
                   )}
@@ -188,7 +194,12 @@ export const ApplicationAttachmentsSection: React.FC<
                   <Textarea
                     value={file.comment}
                     onChange={(e) => onComment(i, e.target.value)}
-                    placeholder={`Comment on ${file.label}`}
+                    placeholder={t(
+                      "adoptionDetail.sections.commentPlaceholder",
+                      {
+                        field: file.label,
+                      },
+                    )}
                     className="w-full min-h-[80px] p-3 text-sm rounded-md border border-slate-200 bg-white focus:border-slate-400 focus:ring-1 focus:ring-slate-400 placeholder:text-slate-400 text-slate-800"
                   />
                 </div>

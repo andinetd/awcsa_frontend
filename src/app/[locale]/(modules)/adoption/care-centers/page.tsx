@@ -6,8 +6,10 @@ import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
 import CareCenterCard from "./_components/care-center-card";
 import CareCenterDetailsDialog from "./_components/care-center-details-dialog";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
+import { useTranslations } from "next-intl";
 
 const CareCenters = () => {
+  const t = useTranslations("adoption");
   const { data: careCenters, isLoading, isError } = useGetCareCentersQuery();
   const [selectedCenter, setSelectedCenter] =
     useState<NewCareCenterSchemaType | null>(null);
@@ -19,17 +21,19 @@ const CareCenters = () => {
   };
 
   if (isLoading) {
-    return <div className="p-4">Loading care centers...</div>;
+    return <div className="p-4">{t("careCenters.loading")}</div>;
   }
 
   if (isError) {
-    return <div className="p-4 text-red-500">Error loading care centers.</div>;
+    return <div className="p-4 text-red-500">{t("careCenters.error")}</div>;
   }
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Care Centers</h1>
+        <h1 className="text-2xl font-bold text-gray-800">
+          {t("careCenters.title")}
+        </h1>
         <NewCareCenterForm />
       </div>
 
@@ -43,7 +47,7 @@ const CareCenters = () => {
         ))}
         {careCenters?.length === 0 && (
           <div className="col-span-full text-center text-gray-500 py-10">
-            No care centers found.
+            {t("careCenters.noCareCenters")}
           </div>
         )}
       </div>

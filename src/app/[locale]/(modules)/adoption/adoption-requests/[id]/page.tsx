@@ -12,7 +12,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { formatAge } from "@/lib/utils";
 import { ChildMatchingModal } from "../_components/child-matching-modal";
 import { MatchedChildDetail } from "../_components/matched-child-detail-modal";
-import { MOCK_MATCHED_CHILD_DATA } from "@/lib/mock-data";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 // we'll fetch applications from backend instead of using mockApplications
 import type { BackendAdoptionApplication } from "../page";
@@ -32,6 +33,7 @@ import { useGetMatchedChildDetails } from "@/hooks/adoption/adoption-requests";
 export default function AdoptionRequestReviewPage() {
   const router = useRouter();
   const params = useParams();
+  const t = useTranslations("adoption");
 
   const setServiceDataId = useHomeVisitFormStore(
     (state) => state.setServiceDataId,
@@ -121,32 +123,64 @@ export default function AdoptionRequestReviewPage() {
         comment: "",
       });
 
-    push("First Name", info.firstName, "firstName");
-    push("Last Name", info.lastName, "lastName");
-    push("Date of Birth", info.dateOfBirth, "dateOfBirth");
-    push("Phone Number", info.phoneNumber, "phoneNumber");
-    push("City ID Number", info.cityIdNumber, "cityIdNumber");
+    push(t("adoptionDetail.fields.firstName"), info.firstName, "firstName");
+    push(t("adoptionDetail.fields.lastName"), info.lastName, "lastName");
     push(
-      "Spouse City ID Number",
+      t("adoptionDetail.fields.dateOfBirth"),
+      info.dateOfBirth,
+      "dateOfBirth",
+    );
+    push(
+      t("adoptionDetail.fields.phoneNumber"),
+      info.phoneNumber,
+      "phoneNumber",
+    );
+    push(
+      t("adoptionDetail.fields.cityIdNumber"),
+      info.cityIdNumber,
+      "cityIdNumber",
+    );
+    push(
+      t("adoptionDetail.fields.spouseCityIdNumber"),
       info.spouseCityIdNumber ?? "",
       "spouseCityIdNumber",
     );
-    push("Address", info.address ?? "", "address");
-    push("Education Level", info.educationLevel ?? "", "educationLevel");
-    push("Occupation", info.occupation ?? "", "occupation");
-    push("Monthly Income", info.monthlyIncome ?? "", "monthlyIncome");
+    push(t("adoptionDetail.fields.address"), info.address ?? "", "address");
+    push(
+      t("adoptionDetail.fields.educationLevel"),
+      info.educationLevel ?? "",
+      "educationLevel",
+    );
+    push(
+      t("adoptionDetail.fields.occupation"),
+      info.occupation ?? "",
+      "occupation",
+    );
+    push(
+      t("adoptionDetail.fields.monthlyIncome"),
+      info.monthlyIncome ?? "",
+      "monthlyIncome",
+    );
 
     const pref = app.applicationInfo?.preferredChildren;
     if (pref) {
-      push("Preferred Number", pref.number ?? "", "preferredChildren.number");
-      push("Preferred Sex", pref.sex ?? "", "preferredChildren.sex");
       push(
-        "Preferred Age Min",
+        t("adoptionDetail.fields.preferredNumber"),
+        pref.number ?? "",
+        "preferredChildren.number",
+      );
+      push(
+        t("adoptionDetail.fields.preferredSex"),
+        pref.sex ?? "",
+        "preferredChildren.sex",
+      );
+      push(
+        t("adoptionDetail.fields.preferredAgeMin"),
         pref.ageRange?.min ?? "",
         "preferredChildren.ageRange.min",
       );
       push(
-        "Preferred Age Max",
+        t("adoptionDetail.fields.preferredAgeMax"),
         pref.ageRange?.max ?? "",
         "preferredChildren.ageRange.max",
       );
@@ -376,12 +410,12 @@ export default function AdoptionRequestReviewPage() {
         }
       }
 
-      toast.success("Application returned to applicant");
+      toast.success(t("adoptionDetail.toasts.returned"));
       setSubmitting(false);
       router.push("../adoption-requests");
     } catch (err) {
       console.error(err);
-      toast.error("Network error while returning application");
+      toast.error(t("adoptionDetail.toasts.returnError"));
       setSubmitting(false);
     }
   }
@@ -434,7 +468,7 @@ export default function AdoptionRequestReviewPage() {
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         const message = body?.message || `Server returned ${res.status}`;
-        toast.error(`Failed to submit review: ${message}`);
+        toast.error(t("adoptionDetail.toasts.reviewError", { message }));
         setSubmitting(false);
         return;
       }
@@ -499,7 +533,9 @@ export default function AdoptionRequestReviewPage() {
       }
 
       toast.success(
-        type === "approve" ? "Application approved" : "Application denied",
+        type === "approve"
+          ? t("adoptionDetail.toasts.approved")
+          : t("adoptionDetail.toasts.denied"),
       );
       setSubmitting(false);
       router.push("../adoption-requests");
@@ -528,7 +564,7 @@ export default function AdoptionRequestReviewPage() {
   if (loadingApps) {
     return (
       <div className="max-w-2xl mx-auto p-6 text-center text-lg">
-        Loading...
+        {t("adoptionDetail.status.loading")}
       </div>
     );
   }
@@ -536,13 +572,13 @@ export default function AdoptionRequestReviewPage() {
   if (!application) {
     return (
       <div className="max-w-2xl mx-auto p-6 text-center text-lg">
-        Application not found.
+        {t("adoptionDetail.status.notFound")}
       </div>
     );
   }
 
   return (
-    <div title="Review Adoption Application">
+    <div title={t("adoptionDetail.title")}>
       {selectedFile && (
         <AttachmentDialog
           open={openDialog}
@@ -552,18 +588,24 @@ export default function AdoptionRequestReviewPage() {
         />
       )}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push("/adoption/adoption-requests")}
-            className="rounded-full"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Review Adoption Application
-          </h1>
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => router.push("/adoption/adoption-requests")}
+              className="rounded-full"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {t("adoptionDetail.title")}
+            </h1>
+          </div>
+          {/* <LanguageSwitcher
+            className="py-2 px-4"
+            path={`/adoption/adoption-requests/${params.id}`}
+          /> */}
         </div>
         <div className="max-w-7xl mx-auto space-y-6">
           <ApplicantInfoSection
@@ -609,28 +651,32 @@ export default function AdoptionRequestReviewPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Baby className="w-5 h-5 text-slate-400" />
-                    Adoption Preferences
+                    {t("adoptionDetail.preferences.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-slate-500">
-                        Preferred Sex
+                        {t("adoptionDetail.preferences.preferredSex")}
                       </span>
                       <span className="font-bold text-slate-900">
                         {application.applicationInfo.preferredChildren?.sex}
                       </span>
                     </div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-slate-500">Quantity</span>
+                      <span className="text-sm text-slate-500">
+                        {t("adoptionDetail.preferences.quantity")}
+                      </span>
                       <span className="font-bold text-slate-900">
                         {application.applicationInfo.preferredChildren?.number}{" "}
-                        Child
+                        {t("adoptionDetail.preferences.child")}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-500">Age Range</span>
+                      <span className="text-sm text-slate-500">
+                        {t("adoptionDetail.preferences.ageRange")}
+                      </span>
                       <span className="font-bold text-slate-900">
                         {formatAge(
                           application.applicationInfo.preferredChildren
@@ -655,7 +701,7 @@ export default function AdoptionRequestReviewPage() {
                         }`}
                       />
                       <span className="text-sm font-medium text-slate-700">
-                        Spouse Agreement
+                        {t("adoptionDetail.preferences.spouseAgreement")}
                       </span>
                     </div>
                   </div>
@@ -668,12 +714,14 @@ export default function AdoptionRequestReviewPage() {
                   <div className="mt-6 space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">
-                        Overall comment
+                        {t("adoptionDetail.review.overallComment")}
                       </label>
                       <textarea
                         value={returnComment}
                         onChange={(e) => setReturnComment(e.target.value)}
-                        placeholder="Overall comment"
+                        placeholder={t(
+                          "adoptionDetail.review.overallCommentPlaceholder",
+                        )}
                         className="w-full border rounded p-2 min-h-[80px]"
                       />
                     </div>

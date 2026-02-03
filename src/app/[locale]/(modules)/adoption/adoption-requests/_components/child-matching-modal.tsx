@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/custom/custom-card";
 import { X, Check, Baby, MapPin, User, Search } from "lucide-react";
@@ -28,6 +29,8 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [availableChildren, setAvailableChildren] = useState<Child[]>([]);
 
+  const t = useTranslations("adoption");
+
   const { token } = useAuthStore();
   const router = useRouter();
 
@@ -41,7 +44,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const resp = response.data;
@@ -60,7 +63,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
           // attempt to find any array value on the response object as a last resort
           try {
             const possibleArray = Object.values(resp || {}).find((v) =>
-              Array.isArray(v)
+              Array.isArray(v),
             );
             if (Array.isArray(possibleArray)) {
               childrenData = possibleArray as Child[];
@@ -73,7 +76,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
         setAvailableChildren(childrenData);
       } catch (error) {
         console.error("Failed to fetch available children:", error);
-        toast.error("Failed to fetch available children.");
+        toast.error(t("adoptionDetail.matching.fetchError"));
       }
     }
     fetchAvailableChildren();
@@ -81,13 +84,13 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
   if (!isOpen) return null;
 
-  const filteredChildren = (Array.isArray(availableChildren) ? availableChildren : []).filter(
-    (child: Child) => {
-      const fullName =
-        `${child.serviceData.formData.firstName} ${child.serviceData.formData.lastName}`.toLowerCase();
-      return fullName.includes(searchQuery.toLowerCase());
-    }
-  );
+  const filteredChildren = (
+    Array.isArray(availableChildren) ? availableChildren : []
+  ).filter((child: Child) => {
+    const fullName =
+      `${child.serviceData.formData.firstName} ${child.serviceData.formData.lastName}`.toLowerCase();
+    return fullName.includes(searchQuery.toLowerCase());
+  });
 
   const handleMatch = async () => {
     if (!selectedChild) return;
@@ -103,7 +106,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
       isNaN(applicantIdNum) ||
       isNaN(applicationIdNum)
     ) {
-      toast.error("Invalid applicant or application id");
+      toast.error(t("adoptionDetail.matching.invalidId"));
       return;
     }
 
@@ -116,7 +119,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
     console.log("Submitting match:", payload);
 
-     try {
+    try {
       const res = await axios.post(`${BASE_URL}/adoption/matches`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -129,7 +132,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
       setIsSubmitting(false);
       onClose();
       router.push("../adoption-requests");
-      toast.success("Child matched successfully");
+      toast.success(t("adoptionDetail.matching.success"));
     } catch (error) {
       console.error("Error submitting form:", error);
 
@@ -185,11 +188,10 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
         <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
           <div>
             <h2 className="text-lg font-bold text-slate-900">
-              Select Child for Matching
+              {t("adoptionDetail.matching.title")}
             </h2>
             <p className="text-sm text-slate-500">
-              Choose a child from the available list to match with this
-              applicant.
+              {t("adoptionDetail.matching.subtitle")}
             </p>
           </div>
           <button
@@ -209,7 +211,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                 <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Search child by name..."
+                  placeholder={t("adoptionDetail.matching.searchPlaceholder")}
                   className="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -237,17 +239,19 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                         <p>
                           {child.serviceData.formData.sex} •{" "}
                           {child.serviceData.formData.dateOfBirth
-                            ? `${
-                                new Date().getFullYear() -
-                                new Date(
-                                  child.serviceData.formData.dateOfBirth
-                                ).getFullYear()
-                              } years old`
-                            : "Age unknown"}
+                            ? t("adoptionDetail.matching.yearsOld", {
+                                count:
+                                  new Date().getFullYear() -
+                                  new Date(
+                                    child.serviceData.formData.dateOfBirth,
+                                  ).getFullYear(),
+                              })
+                            : t("adoptionDetail.matching.ageUnknown")}
                         </p>
                         <p className="flex items-center gap-1">
                           <MapPin className="w-3 h-3" />
-                          {child.placeWhereChildFound || "Location Unknown"}
+                          {child.placeWhereChildFound ||
+                            t("adoptionDetail.matching.locationUnknown")}
                         </p>
                       </div>
                     </div>
@@ -283,19 +287,19 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-bold text-slate-400 uppercase">
-                        DOB
+                        {t("adoptionDetail.matching.dob")}
                       </label>
                       <p className="font-medium">
                         {selectedChild.serviceData.formData.dateOfBirth
                           ? new Date(
-                              selectedChild.serviceData.formData.dateOfBirth
+                              selectedChild.serviceData.formData.dateOfBirth,
                             ).toLocaleDateString()
-                          : "Unknown"}
+                          : t("adoptionDetail.matching.unknown")}
                       </p>
                     </div>
                     <div>
                       <label className="text-xs font-bold text-slate-400 uppercase">
-                        Gender
+                        {t("adoptionDetail.matching.gender")}
                       </label>
                       <p className="font-medium">
                         {selectedChild.serviceData.formData.sex}
@@ -303,7 +307,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                     </div>
                     <div>
                       <label className="text-xs font-bold text-slate-400 uppercase">
-                        Facility
+                        {t("adoptionDetail.matching.facility")}
                       </label>
                       <p className="font-medium">
                         {selectedChild.childCareFacility?.name || "N/A"}
@@ -311,7 +315,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                     </div>
                     <div>
                       <label className="text-xs font-bold text-slate-400 uppercase">
-                        Status
+                        {t("adoptionDetail.matching.status")}
                       </label>
                       <p className="font-medium">
                         {selectedChild.currentStatus}
@@ -321,21 +325,21 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
                   <div>
                     <label className="text-xs font-bold text-slate-400 uppercase block mb-1">
-                      Additional Info
+                      {t("adoptionDetail.matching.additionalInfo")}
                     </label>
                     <div className="p-3 bg-white rounded border border-slate-200 text-slate-600">
                       {selectedChild.additionalInfo ||
-                        "No additional info provided."}
+                        t("adoptionDetail.matching.noAdditionalInfo")}
                     </div>
                   </div>
 
                   <div className="pt-4 border-t border-slate-200">
                     <label className="text-sm font-bold text-slate-700 block mb-2">
-                      Matching Note
+                      {t("adoptionDetail.matching.matchingNote")}
                     </label>
                     <textarea
                       className="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm min-h-[80px]"
-                      placeholder="Add a note about this match..."
+                      placeholder={t("adoptionDetail.matching.notePlaceholder")}
                       value={matchNote}
                       onChange={(e) => setMatchNote(e.target.value)}
                     />
@@ -345,7 +349,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
                 <User className="w-12 h-12 mb-3 opacity-20" />
-                <p>Select a child from the list to view details.</p>
+                <p>{t("adoptionDetail.matching.emptyState")}</p>
               </div>
             )}
           </div>
@@ -354,14 +358,14 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
         {/* Footer */}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
           <Button variant="ghost" onClick={onClose} className="cursor-pointer">
-            Cancel
+            {t("adoptionDetail.matching.cancel")}
           </Button>
           <Button
             disabled={!selectedChild}
             onClick={handleMatch}
             className="cursor-pointer"
           >
-            Confirm Match
+            {t("adoptionDetail.matching.confirm")}
           </Button>
         </div>
       </div>

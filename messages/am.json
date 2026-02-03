@@ -52,5 +52,16 @@
     "contact": "አግኙን",
     "login": "ግባ",
     "language": "ቋንቋ"
+  },
+  "common": {
+    "table": {
+      "columns": "አምዶች",
+      "noResults": "ምንም ውጤት የለም።",
+      "previous": "ቀዳሚ",
+      "next": "ቀጣይ",
+      "asc": "ወደ ላይ",
+      "desc": "ወደ ታች",
+      "hide": "ደብቅ"
+    }
   }
 }
