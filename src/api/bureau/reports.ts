@@ -3,10 +3,10 @@ import { useAuthStore } from "@/stores/auth-store";
 import axios from "axios";
 
 export interface BureauReportFilters {
-  month: number;
-  year: number;
-  subCity: string;
-  facilityId: number;
+  month?: number;
+  year?: number;
+  subCity?: string;
+  facilityId?: number;
 }
 
 export interface BureauReport {

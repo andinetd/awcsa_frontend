@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { BureauReport } from "@/api/bureau/reports";
+import { BureauReport, BureauReportFilters } from "@/api/bureau/reports";
 import { ReportDetailsModal } from "./components/report-details-modal";
 import {
   DropdownMenu,
@@ -96,17 +96,20 @@ const BureauHead = () => {
 
   const { data: careCenters } = useGetCareCentersQuery();
 
-  // Search Filters State
-  const [filters, setFilters] = useState({
+  // Search Filters State (Form)
+  const [filters, setFilters] = useState<BureauReportFilters>({
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
     subCity: "",
     facilityId: 0,
   });
-  const [shouldFetch, setShouldFetch] = useState(false);
+
+  // Active Filters for Query (initially empty to fetch all)
+  const [activeFilters, setActiveFilters] = useState<BureauReportFilters>({});
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<BureauReport | null>(
-    null
+    null,
   );
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
@@ -114,22 +117,21 @@ const BureauHead = () => {
     data: reportsData,
     isLoading: isReportsLoading,
     isError,
-  } = useBureauReports(filters, shouldFetch);
+  } = useBureauReports(activeFilters, true);
 
   const handleSearch = () => {
-    setShouldFetch(true);
+    setActiveFilters(filters);
     setIsDialogOpen(false);
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
       [name]: name === "subCity" ? value : Number(value),
     }));
-    setShouldFetch(false); // Reset fetch trigger on input change
   };
 
   const handleSelectChange = (name: string, value: string) => {
@@ -137,7 +139,6 @@ const BureauHead = () => {
       ...prev,
       [name]: Number(value),
     }));
-    setShouldFetch(false);
   };
 
   const columns: ColumnDef<BureauReport>[] = useMemo(
@@ -244,7 +245,7 @@ const BureauHead = () => {
         },
       },
     ],
-    []
+    [],
   );
 
   if (isStatsLoading) {
@@ -346,7 +347,7 @@ const BureauHead = () => {
                   </Label>
                   <div className="col-span-3">
                     <Select
-                      value={filters.month.toString()}
+                      value={filters.month?.toString()}
                       onValueChange={(val) => handleSelectChange("month", val)}
                     >
                       <SelectTrigger>
@@ -383,7 +384,7 @@ const BureauHead = () => {
                   </Label>
                   <div className="col-span-3">
                     <Select
-                      value={filters.facilityId.toString()}
+                      value={filters.facilityId?.toString()}
                       onValueChange={(val) =>
                         handleSelectChange("facilityId", val)
                       }
