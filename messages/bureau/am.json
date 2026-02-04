@@ -1,0 +1,88 @@
+{
+  "dashboard": {
+    "title": "የዳሽቦርድ አጠቃላይ እይታ",
+    "stats": {
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "totalFacilities": "ጠቅላላ ተቋማት",
+      "submittedReports": "የገቡ ሪፖርቶች",
+      "pendingReports": "በመጠባበቅ ላይ ያሉ ሪፖርቶች"
+    },
+    "loading": "የዳሽቦርድ ስታቲስቲክስ በመጫን ላይ..."
+  },
+  "reports": {
+    "title": "ሪፖርቶች",
+    "filter": {
+      "button": "ሪፖርቶችን አጣራ",
+      "dialogTitle": "ሪፖርቶችን ፈልግ",
+      "dialogDescription": "ሪፖርቶችን በዓመት፣ በወር፣ በቦታ ወይም በተቋም መለያ ቁጥር ያጣሩ።",
+      "year": "ዓመት",
+      "month": "ወር",
+      "selectMonth": "ወር ይምረጡ",
+      "subCity": "ክፍለ ከተማ",
+      "subCityPlaceholder": "ምሳሌ፡ ቦሌ",
+      "facility": "ተቋም",
+      "selectFacility": "ተቋም ይምረጡ",
+      "allFacilities": "ሁሉም ተቋማት",
+      "search": "የፍለጋ ውጤቶች"
+    },
+    "table": {
+      "facility": "ተቋም",
+      "period": "ጊዜ",
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "submittedAt": "የገባበት ቀን",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች",
+      "viewDetails": "ዝርዝሮችን ይመልከቱ",
+      "unknown": "ያልታወቀ"
+    },
+    "loading": "በመጫን ላይ...",
+    "error": "ሪፖርቶችን ማምጣት አልተቻለም።",
+    "errorDescription": "ግብዓቶችዎን ያረጋግጡ ወይም ቆይተው እንደገና ይሞክሩ።"
+  },
+  "reportDetails": {
+    "title": "የሪፖርት ዝርዝሮች",
+    "description": "ዝርዝር መረጃ ለ {name} - {date}",
+    "facilityInfo": "የተቋም መረጃ",
+    "name": "ስም",
+    "subCity": "ክፍለ ከተማ",
+    "region": "ክልል",
+    "reportStatus": "የሪፖርት ሁኔታ",
+    "status": "ሁኔታ",
+    "submitted": "ገብቷል",
+    "approved": "ጸድቋል",
+    "statistics": "ስታቲስቲክስ",
+    "totalChildren": "ጠቅላላ ሕፃናት",
+    "newAdmissions": "አዲስ የገቡ",
+    "discharges": "የወጡ",
+    "notes": "ማስታወሻዎች",
+    "formData": "የቅጽ መረጃ"
+  },
+  "months": {
+    "1": "መስከረም",
+    "2": "ጥቅምት",
+    "3": "ህዳር",
+    "4": "ታህሳስ",
+    "5": "ጥር",
+    "6": "የካቲት",
+    "7": "መጋቢት",
+    "8": "ሚያዝያ",
+    "9": "ግንቦት",
+    "10": "ሰኔ",
+    "11": "ሐምሌ",
+    "12": "ነሐሴ"
+  },
+  "monthsShort": {
+    "1": "መስ",
+    "2": "ጥቅ",
+    "3": "ህዳ",
+    "4": "ታህ",
+    "5": "ጥር",
+    "6": "የካ",
+    "7": "መጋ",
+    "8": "ሚያ",
+    "9": "ግን",
+    "10": "ሰኔ",
+    "11": "ሐም",
+    "12": "ነሐ"
+  }
+}

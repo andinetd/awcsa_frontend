@@ -12,6 +12,7 @@ import React, { useState, useMemo } from "react";
 import { useBureauDashboardSummary } from "@/hooks/bureau/useBureauDashboard";
 import { useBureauReports } from "@/hooks/bureau/useBureauReports";
 import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -71,26 +72,28 @@ const chartData2 = [
   { day: 10, applications: 4 },
 ];
 
-const chartConfig = {
+const getChartConfig = (t: any) => ({
   children: {
-    label: "Children",
+    label: t("dashboard.stats.totalChildren"),
     color: "hsl(var(--chart-1))",
   },
   facilities: {
-    label: "Facilities",
+    label: t("dashboard.stats.totalFacilities"),
     color: "hsl(var(--chart-2))",
   },
   submitted: {
-    label: "Submitted",
+    label: t("dashboard.stats.submittedReports"),
     color: "hsl(var(--chart-3))",
   },
   pending: {
-    label: "Pending",
+    label: t("dashboard.stats.pendingReports"),
     color: "hsl(var(--chart-5))",
   },
-};
+});
 
 const BureauHead = () => {
+  const t = useTranslations("bureau");
+  const chartConfig = useMemo(() => getChartConfig(t), [t]);
   const { data: stats, isLoading: isStatsLoading } =
     useBureauDashboardSummary();
 
@@ -146,28 +149,31 @@ const BureauHead = () => {
       {
         accessorKey: "facility.name",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Facility" />
+          <DataTableColumnHeader
+            column={column}
+            title={t("reports.table.facility")}
+          />
         ),
         cell: ({ row }) => (
           <div className="font-medium text-zinc-900">
             {row.original.facility?.name ||
-              `Facility #${row.original.facilityId}`}
+              `${t("reports.table.facility")} #${row.original.facilityId}`}
           </div>
         ),
       },
       {
         id: "period",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Period" />
+          <DataTableColumnHeader
+            column={column}
+            title={t("reports.table.period")}
+          />
         ),
         cell: ({ row }) => {
           const { month, year } = row.original;
           return (
             <div className="text-zinc-600">
-              {new Date(0, month - 1).toLocaleString("default", {
-                month: "short",
-              })}{" "}
-              {year}
+              {t(`monthsShort.${month}`)} {year}
             </div>
           );
         },
@@ -175,7 +181,10 @@ const BureauHead = () => {
       {
         accessorKey: "totalChildren",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Total Children" />
+          <DataTableColumnHeader
+            column={column}
+            title={t("reports.table.totalChildren")}
+          />
         ),
         cell: ({ row }) => (
           <div className="text-zinc-600">{row.getValue("totalChildren")}</div>
@@ -184,7 +193,10 @@ const BureauHead = () => {
       {
         accessorKey: "submittedAt",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Submitted At" />
+          <DataTableColumnHeader
+            column={column}
+            title={t("reports.table.submittedAt")}
+          />
         ),
         cell: ({ row }) => {
           const date = row.getValue("submittedAt") as string;
@@ -198,7 +210,10 @@ const BureauHead = () => {
       {
         accessorKey: "status",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Status" />
+          <DataTableColumnHeader
+            column={column}
+            title={t("reports.table.status")}
+          />
         ),
         cell: ({ row }) => {
           const status = row.getValue("status") as string;
@@ -210,7 +225,7 @@ const BureauHead = () => {
                   : "bg-amber-100 text-amber-800"
               }`}
             >
-              {status || "Unknown"}
+              {status || t("reports.table.unknown")}
             </span>
           );
         },
@@ -229,7 +244,9 @@ const BureauHead = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {t("reports.table.actions")}
+                </DropdownMenuLabel>
                 <DropdownMenuItem
                   onClick={() => {
                     setSelectedReport(report);
@@ -237,7 +254,7 @@ const BureauHead = () => {
                   }}
                 >
                   <Eye className="mr-2 h-4 w-4" />
-                  View Details
+                  {t("reports.table.viewDetails")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -252,7 +269,7 @@ const BureauHead = () => {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         <div className="animate-pulse text-muted-foreground">
-          Loading dashboard statistics...
+          {t("dashboard.loading")}
         </div>
       </div>
     );
@@ -268,14 +285,14 @@ const BureauHead = () => {
       {/* Header Section */}
       <div className="space-y-4">
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-          Dashboard Overview
+          {t("dashboard.title")}
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
             chartConfig={chartConfig}
             chartData={chartData2}
-            title="Total Children"
+            title={t("dashboard.stats.totalChildren")}
             dataKey="children"
             icon={HandHeart}
             value={stats?.totalChildren || 0}
@@ -283,7 +300,7 @@ const BureauHead = () => {
           <StatsCard
             chartConfig={chartConfig}
             chartData={chartData}
-            title="Total Facilities"
+            title={t("dashboard.stats.totalFacilities")}
             dataKey="facilities"
             icon={HandHelping}
             value={stats?.totalFacilities || 0}
@@ -291,7 +308,7 @@ const BureauHead = () => {
           <StatsCard
             chartConfig={chartConfig}
             chartData={chartData2}
-            title="Submitted Reports"
+            title={t("dashboard.stats.submittedReports")}
             dataKey="submitted"
             icon={File}
             value={stats?.submittedReports || 0}
@@ -299,7 +316,7 @@ const BureauHead = () => {
           <StatsCard
             chartConfig={chartConfig}
             chartData={chartData}
-            title="Pending Reports"
+            title={t("dashboard.stats.pendingReports")}
             dataKey="pending"
             icon={File}
             value={stats?.pendingReports || 0}
@@ -311,26 +328,26 @@ const BureauHead = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
-            Reports
+            {t("reports.title")}
           </h2>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 hover:cursor-pointer">
                 <Filter className="w-4 h-4" />
-                Filter Reports
+                {t("reports.filter.button")}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Search Reports</DialogTitle>
+                <DialogTitle>{t("reports.filter.dialogTitle")}</DialogTitle>
                 <DialogDescription>
-                  Filter reports by year, month, location, or facility ID.
+                  {t("reports.filter.dialogDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="year" className="text-right">
-                    Year
+                    {t("reports.filter.year")}
                   </Label>
                   <Input
                     id="year"
@@ -343,7 +360,7 @@ const BureauHead = () => {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="month" className="text-right">
-                    Month
+                    {t("reports.filter.month")}
                   </Label>
                   <div className="col-span-3">
                     <Select
@@ -351,14 +368,14 @@ const BureauHead = () => {
                       onValueChange={(val) => handleSelectChange("month", val)}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select month" />
+                        <SelectValue
+                          placeholder={t("reports.filter.selectMonth")}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {Array.from({ length: 12 }, (_, i) => (
                           <SelectItem key={i + 1} value={(i + 1).toString()}>
-                            {new Date(0, i).toLocaleString("default", {
-                              month: "long",
-                            })}
+                            {t(`months.${i + 1}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -367,20 +384,20 @@ const BureauHead = () => {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="subCity" className="text-right">
-                    Sub-City
+                    {t("reports.filter.subCity")}
                   </Label>
                   <Input
                     id="subCity"
                     name="subCity"
                     value={filters.subCity}
                     onChange={handleInputChange}
-                    placeholder="e.g. Bole"
+                    placeholder={t("reports.filter.subCityPlaceholder")}
                     className="col-span-3"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="facilityId" className="text-right">
-                    Facility
+                    {t("reports.filter.facility")}
                   </Label>
                   <div className="col-span-3">
                     <Select
@@ -390,10 +407,14 @@ const BureauHead = () => {
                       }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Facility" />
+                        <SelectValue
+                          placeholder={t("reports.filter.selectFacility")}
+                        />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="0">All Facilities</SelectItem>
+                        <SelectItem value="0">
+                          {t("reports.filter.allFacilities")}
+                        </SelectItem>
                         {careCenters?.map((center: any) => (
                           <SelectItem
                             key={center.id}
@@ -408,7 +429,9 @@ const BureauHead = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleSearch}>Search Results</Button>
+                <Button onClick={handleSearch} className="hover:cursor-pointer">
+                  {t("reports.filter.search")}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -418,13 +441,13 @@ const BureauHead = () => {
         <div className="">
           {isReportsLoading ? (
             <div className="p-8 mt-4 text-center text-muted-foreground flex items-center justify-center h-full">
-              Loading...
+              {t("reports.loading")}
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-500 flex flex-col items-center justify-center h-full gap-2">
-              <p>Failed to fetch reports.</p>
+              <p>{t("reports.error")}</p>
               <p className="text-xs text-muted-foreground">
-                Check your inputs or try again later.
+                {t("reports.errorDescription")}
               </p>
             </div>
           ) : (

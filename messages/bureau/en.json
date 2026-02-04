@@ -1,0 +1,88 @@
+{
+  "dashboard": {
+    "title": "Dashboard Overview",
+    "stats": {
+      "totalChildren": "Total Children",
+      "totalFacilities": "Total Facilities",
+      "submittedReports": "Submitted Reports",
+      "pendingReports": "Pending Reports"
+    },
+    "loading": "Loading dashboard statistics..."
+  },
+  "reports": {
+    "title": "Reports",
+    "filter": {
+      "button": "Filter Reports",
+      "dialogTitle": "Search Reports",
+      "dialogDescription": "Filter reports by year, month, location, or facility ID.",
+      "year": "Year",
+      "month": "Month",
+      "selectMonth": "Select month",
+      "subCity": "Sub-City",
+      "subCityPlaceholder": "e.g. Bole",
+      "facility": "Facility",
+      "selectFacility": "Select Facility",
+      "allFacilities": "All Facilities",
+      "search": "Search Results"
+    },
+    "table": {
+      "facility": "Facility",
+      "period": "Period",
+      "totalChildren": "Total Children",
+      "submittedAt": "Submitted At",
+      "status": "Status",
+      "actions": "Actions",
+      "viewDetails": "View Details",
+      "unknown": "Unknown"
+    },
+    "loading": "Loading...",
+    "error": "Failed to fetch reports.",
+    "errorDescription": "Check your inputs or try again later."
+  },
+  "reportDetails": {
+    "title": "Report Details",
+    "description": "Detailed information for {name} - {date}",
+    "facilityInfo": "Facility Information",
+    "name": "Name",
+    "subCity": "Sub-City",
+    "region": "Region",
+    "reportStatus": "Report Status",
+    "status": "Status",
+    "submitted": "Submitted",
+    "approved": "Approved",
+    "statistics": "Statistics",
+    "totalChildren": "Total Children",
+    "newAdmissions": "New Admissions",
+    "discharges": "Discharges",
+    "notes": "Notes",
+    "formData": "Form Data"
+  },
+  "months": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  },
+  "monthsShort": {
+    "1": "Jan",
+    "2": "Feb",
+    "3": "Mar",
+    "4": "Apr",
+    "5": "May",
+    "6": "Jun",
+    "7": "Jul",
+    "8": "Aug",
+    "9": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec"
+  }
+}
