@@ -22,7 +22,7 @@
     "dropOrBrowse": "ፋይሎችዎን እዚህ ያስቀምጡ ወይም {browse}",
     "browse": "ይፈልጉ",
     "maxSize": "ከፍተኛው መጠን: {size}",
-    "filesRemaining": "{count} {file, plural, one {ፋይል} other {ፋይሎች}} ቀርተዋል",
+    "filesRemaining": "{count, plural, one {# ፋይል ቀርቷል} other {# ፋይሎች ቀርተዋል}}",
     "errorTooLarge": "ፋይሉ በጣም ትልቅ ነው። ከፍተኛው መጠን {size} ነው።",
     "errorInvalidType": "ልክ ያልሆነ የፋይል አይነት። እባክዎ የተፈቀዱ የፋይል አይነቶችን ያረጋግጡ።",
     "units": {

@@ -372,6 +372,282 @@
       "centers": "የሕፃናት ማሳደጊያ ተቋማት",
       "requests": "የጉዲፈቻ ጥያቄዎች",
       "benefits": "የድጋፍ ጥቅማ ጥቅሞች"
-    } 
+    }
+  },
+  "homeVisitRegistration": {
+    "layout": {
+      "title": "የመስክ ጉብኝት አስተያየት",
+      "subtitle": "የመስክ ጉብኝት አስተያየትን ለማስገባት ሁሉንም ደረጃዎች ያጠናቅቁ"
+    },
+    "steps": {
+      "step1": "አጠቃላይ እና የአመልካች መረጃ",
+      "step2": "የቤተሰብ ስብጥር እና ዳራ",
+      "step3": "የአኗኗር ሁኔታ፣ አስተዳደግ እና የጉዲፈቻ ፍላጎት",
+      "step4": "ፋይናንስ፣ መኖሪያ፣ ጤና እና ህጋዊ ሁኔታ",
+      "step5": "ምስክሮች፣ የማህበራዊ ሰራተኛ ግምገማ እና ፊርማ",
+      "status": "ደረጃ {current} ከ {total}",
+      "percentComplete": "{percent}% ተጠናቋል"
+    },
+    "step1": {
+      "generalInfo": {
+        "title": "አጠቃላይ መረጃ",
+        "socialWorkerName": "የማህበራዊ ሰራተኛ ስም",
+        "placeOfVisit": "የጉብኝት ቦታ",
+        "startDate": "የመጀመሪያ ቀን",
+        "startTime": "የመጀመሪያ ሰዓት",
+        "endDate": "የማብቂያ ቀን",
+        "endTime": "የማብቂያ ሰዓት",
+        "placeholders": {
+          "socialWorkerName": "የማህበራዊ ሰራተኛ ስም ያስገቡ",
+          "placeOfVisit": "የጉብኝት ቦታ ያስገቡ",
+          "startDate": "የመጀመሪያ ቀን ያስገቡ",
+          "startTime": "የመጀመሪያ ሰዓት ያስገቡ",
+          "endDate": "የማብቂያ ቀን ያስገቡ",
+          "endTime": "የማብቂያ ሰዓት ያስገቡ"
+        }
+      },
+      "address": {
+        "title": "አድራሻ",
+        "region": "ክልል",
+        "subCity": "ክፍለ ከተማ",
+        "woreda": "ወረዳ",
+        "kebele": "ቀበሌ",
+        "houseNumber": "የቤት ቁጥር",
+        "neighborhood": "ሰፈር/አካባቢ",
+        "placeholders": {
+          "region": "ክልል ያስገቡ",
+          "subCity": "ክፍለ ከተማ ያስገቡ",
+          "woreda": "ወረዳ ያስገቡ",
+          "kebele": "ቀበሌ ያስገቡ",
+          "houseNumber": "የቤት ቁጥር ያስገቡ",
+          "neighborhood": "ሰፈር/አካባቢ ያስገቡ"
+        }
+      },
+      "applicant": {
+        "fatherTitle": "አባት / አመልካች",
+        "motherTitle": "እናት / አመልካች",
+        "fullName": "ሙሉ ስም",
+        "birthDateOrAge": "የትውልድ ቀን ወይም ዕድሜ",
+        "birthPlace": "የትውልድ ቦታ",
+        "religion": "ሃይማኖት",
+        "maritalStatus": "የጋብቻ ሁኔታ",
+        "educationLevel": "የትምህርት ደረጃ",
+        "nationality": "ዜግነት",
+        "occupationType": "የስራ ዓይነት",
+        "occupation": "ስራ",
+        "monthlyIncome": "ወርሃዊ ገቢ",
+        "extraIncome": "ተጨማሪ ገቢ",
+        "phoneHome": "ስልክ (ቤት)",
+        "phoneMobile": "ስልክ (ሞባይል)",
+        "placeholders": {
+          "fullName": "ሙሉ ስም ያስገቡ",
+          "birthDateOrAge": "የትውልድ ቀን ወይም ዕድሜ ያስገቡ",
+          "birthPlace": "የትውልድ ቦታ ያስገቡ",
+          "religion": "ሃይማኖት ያስገቡ",
+          "maritalStatus": "የጋብቻ ሁኔታ ያስገቡ",
+          "educationLevel": "የትምህርት ደረጃ ያስገቡ",
+          "nationality": "ዜግነት ያስገቡ",
+          "occupationType": "የስራ ዓይነት ያስገቡ",
+          "occupation": "ስራ ያስገቡ",
+          "monthlyIncome": "ወርሃዊ ገቢ ያስገቡ",
+          "extraIncome": "ተጨማሪ ገቢ ያስገቡ",
+          "phoneHome": "ስልክ (ቤት) ያስገቡ",
+          "phoneMobile": "ስልክ (ሞባይል) ያስገቡ"
+        }
+      },
+      "marriageInfo": {
+        "title": "የጋብቻ መረጃ",
+        "marriageDateAndPlace": "የጋብቻ ቀን እና ቦታ",
+        "marriageDuration": "የጋብቻ ቆይታ",
+        "relationshipDescription": "የግንኙነት መግለጫ",
+        "conflictResolution": "የግጭት አፈታት",
+        "mutualSupport": "የጋራ መረዳዳት",
+        "bigDecisions": "ትላልቅ ውሳኔዎችን የማሳለፍ ልምድ",
+        "financialManagement": "የገንዘብ አያያዝ",
+        "placeholders": {
+          "marriageDateAndPlace": "የጋብቻ ቀን እና ቦታ ያስገቡ",
+          "marriageDuration": "የጋብቻ ቆይታ ያስገቡ",
+          "relationshipDescription": "የግንኙነት መግለጫ ያስገቡ",
+          "conflictResolution": "የግጭት አፈታት ያስገቡ",
+          "mutualSupport": "የጋራ መረዳዳት ያስገቡ",
+          "bigDecisions": "ትላልቅ ውሳኔዎችን የማሳለፍ ልምድ ያስገቡ",
+          "financialManagement": "የገንዘብ አያያዝ ያስገቡ"
+        }
+      }
+    },
+    "step2": {
+      "familyBackground": {
+        "title": "የቤተሰብ ዳራ",
+        "fatherSide": "በአባት በኩል",
+        "motherSide": "በእናት በኩል",
+        "spouseEvaluation": "የትዳር አጋሮች የጋራ ግምገማ",
+        "fields": {
+          "parentsNames": "የወላጆች ስም",
+          "addressIfAlive": "በሕይወት ካሉ አድራሻ",
+          "birthOrder": "የልደት ቅደም ተከተል",
+          "siblingsCount": "የወንድም/እህቶች ብዛት",
+          "relationshipWithFamily": "ከቤተሰብ ጋር ያለው ግንኙነት",
+          "childhoodFamilyOccupation": "የልጅነት የቤተሰብ ስራ",
+          "childhoodExperience": "የልጅነት ተሞክሮ",
+          "childhoodBehavior": "የልጅነት ጠባይ",
+          "workExperience": "የስራ ልምድ",
+          "attitudeToWork": "ለስራ ያለው አመለካከት",
+          "strengthsAndWeaknesses": "ጥንካሬዎች እና ድክመቶች",
+          "relationshipWithChildren": "ከልጆች ጋር ያለው ግንኙነት",
+          "lifeGoalsAsGuardian": "እንደ አሳዳጊ የህይወት ግቦች",
+          "spareTimeActivities": "የትርፍ ጊዜ ተግባራት"
+        }
+      },
+      "existingChildren": {
+        "title": "የነበሩ ልጆች",
+        "childNumber": "ልጅ #{number}",
+        "addChild": "ልጅ ጨምር"
+      },
+      "applicantParents": {
+        "title": "የአመልካች ወላጆች",
+        "personNumber": "ሰው #{number}",
+        "addPerson": "ሰው ጨምር",
+        "addressAndLivingCondition": "አድራሻ እና የኑሮ ሁኔታ"
+      },
+      "householdMembers": {
+        "title": "የቤተሰብ አባላት",
+        "memberNumber": "አባል #{number}",
+        "addMember": "አባል ጨምር",
+        "educationAndOccupation": "ትምህርት እና ስራ"
+      },
+      "common": {
+        "fullName": "ሙሉ ስም",
+        "age": "ዕድሜ",
+        "gender": "ጾታ",
+        "relation": "ዝምድና",
+        "educationOccupation": "ትምህርት / ስራ",
+        "maritalStatus": "የጋብቻ ሁኔታ",
+        "address": "አድራሻ",
+        "remove": "አስወግድ",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "selectGender": "ጾታ ይምረጡ"
+      }
+    },
+    "step3": {
+      "lifeStyle": {
+        "title": "የአኗኗር ሁኔታ እና ማህበራዊ ግንኙነቶች",
+        "fields": {
+          "readinessForCare": "ለእንክብካቤ ዝግጁነት",
+          "familyLawsAndRules": "የቤተሰብ ህጎች እና ደንቦች",
+          "dailyLifeRoutine": "የዕለት ተዕለት የህይወት መርሃ ግብር",
+          "familyWorkDistribution": "የቤተሰብ ስራ ክፍፍል",
+          "familyTime": "የቤተሰብ ጊዜ",
+          "childLifeParticipation": "በልጁ ህይወት ውስጥ ተሳትፎ",
+          "holidayTimeActivities": "የበዓላት ጊዜ ተግባራት",
+          "socialLifeAttitude": "ለማህበራዊ ህይወት ያለው አመለካከት",
+          "communityInvolvement": "በማህበረሰባዊ ተግባራት ተሳትፎ",
+          "changeAfterAdoption": "ከጉዲፈቻ በኋላ የሚጠበቅ ለውጥ"
+        }
+      },
+      "parenting": {
+        "title": "የአስተዳደግ ልምድ",
+        "hasExperience": "የአስተዳደግ ልምድ አሎት?",
+        "disciplineMethods": "የስነ-ምግባር አያያዝ ዘዴዎች",
+        "goodMannersApproach": "መልካም ጠባይ የማስተማሪያ ዘዴዎች",
+        "improvementAreas": "ሊሻሻሉ የሚገባቸው ነገሮች",
+        "yes": "አዎ",
+        "no": "አይ",
+        "select": "ይምረጡ"
+      },
+      "adoptionInterest": {
+        "title": "የጉዲፈቻ ፍላጎት",
+        "meaningOfAdoption": "የጉዲፈቻ ትርጉም",
+        "reasonForAdoption": "የጉዲፈቻ ምክንያት",
+        "preferredChild": {
+          "title": "የሚፈለግ ልጅ",
+          "quantity": "ብዛት",
+          "gender": "ጾታ",
+          "ageRange": "የዕድሜ ክልል",
+          "healthCondition": "የጤና ሁኔታ",
+          "reasonForChoice": "የምርጫ ምክንያት"
+        }
+      },
+      "familyMembers": {
+        "title": "የነበሩ ልጆች እና የቤተሰብ አባላት",
+        "name": "ስም",
+        "behavior": "ጠባይ/ባህሪ",
+        "adoptionAttitude": "ለጉዲፈቻ ያለው አመለካከት",
+        "futureContributions": "ለወደፊት ጉዲፈቻ የሚደረጉ አስተዋጽኦዎች",
+        "mistakeAttitudes": "ለስህተት ያላቸው አመለካከት"
+      }
+    },
+    "step4": {
+      "financial": {
+        "title": "የገቢ እና የፋይናንስ ሁኔታ",
+        "incomeSources": "የገቢ ምንጮች",
+        "incomeSupportSources": "የገቢ ድጋፍ ምንጮች",
+        "incomeShortages": "የገቢ እጥረት",
+        "incomeForExtraChild": "ለተጨማሪ ልጅ የሚሆን ገቢ"
+      },
+      "environment": {
+        "title": "መኖሪያ እና አካባቢ",
+        "houseType": "የቤት ዓይነት",
+        "ownershipStatus": "የቤት ሁኔታ",
+        "roomsAndSize": "የክፍሎች ብዛት እና መጠን",
+        "livingDuration": "የመኖሪያ ቆይታ",
+        "suitability": "ለልጅ ተስማሚነቱ",
+        "compoundCondition": "የግቢው ሁኔታ",
+        "neighborhoodCondition": "የአካባቢው ሁኔታ",
+        "communityAttitude": "የማህበረሰቡ አመለካከት",
+        "serviceAccessibility": "የአገልግሎቶች ተደራሽነት"
+      },
+      "healthLegal": {
+        "title": "ጤና እና ህጋዊ ሁኔታ",
+        "currentHealth": "የአሁኑ የጤና ሁኔታ",
+        "medication": "የሚወሰዱ መድሃኒቶች",
+        "responsibilityHealth": "ቤተሰባዊ ኃላፊነት ለመውሰድ ያለው የጤና ሁኔታ",
+        "mentalHealthIssues": "በቤተሰብ ውስጥ ያሉ የአዕምሮ ጤና ችግሮች"
+      },
+      "criminal": {
+        "title": "የወንጀል ጉዳዮች",
+        "criminalRecord": "የወንጀል ሪኮርድ",
+        "familyCriminalRecord": "የቤተሰብ የወንጀል ሪኮርድ"
+      }
+    },
+    "step5": {
+      "evaluation": {
+        "title": "የማህበራዊ ሰራተኛ ግምገማ",
+        "comment": "አስተያየት",
+        "preparedBy": "ያዘጋጀው",
+        "preparedDate": "የተዘጋጀበት ቀን",
+        "approvedBy": "ያጸደቀው",
+        "approvedDate": "የጸደቀበት ቀን",
+        "signature": "ፊርማ"
+      },
+      "applicantFather": {
+        "title": "የጉዲፈቻ አመልካች - አባት",
+        "fullName": "ሙሉ ስም",
+        "date": "ቀን",
+        "signature": "ፊርማ"
+      },
+      "applicantMother": {
+        "title": "የጉዲፈቻ አመልካች - እናት",
+        "fullName": "ሙሉ ስም",
+        "date": "ቀን",
+        "signature": "ፊርማ"
+      },
+      "witnesses": {
+        "title": "ምስክሮች",
+        "fullName": "ሙሉ ስም",
+        "relationToApplicants": "ከአመልካቾች ጋር ያለው ዝምድና",
+        "phoneNumber": "ስልክ ቁጥር",
+        "addWitness": "ምስክር ጨምር"
+      },
+      "messages": {
+        "success": "የመስክ ጉብኝት አስተያየት በተሳካ ሁኔታ ተልኳል",
+        "error": "አስተያየቱን መላክ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+      }
+    },
+    "buttons": {
+      "back": "ተመለስ",
+      "next": "ቀጣይ",
+      "submit": "አስገባ"
+    }
   }
 }

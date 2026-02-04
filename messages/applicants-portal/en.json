@@ -108,8 +108,12 @@
       },
       "occupation": "Occupation",
       "occupationPlaceholder": "Enter your occupation",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
       "spouseCityIdNumber": "Spouse City ID Number",
-      "spouseCityIdNumberPlaceholder": "Enter spouse City ID Number",
       "spouseAgreement": "Spouse Agreement",
       "preferredChildAgeMin": "Preferred Child Age Min",
       "preferredChildAgeMax": "Preferred Child Age Max",
@@ -136,7 +140,9 @@
     "form": {
       "medical": "Medical Document",
       "criminal": "Criminal Clearance",
-      "marriageCertificate": "Marriage Certificate"
+      "marriageCertificate": "Marriage Certificate",
+      "housePlan": "House Plan",
+      "businessLicense": "Business License"
     }
   },
   "stepthree": {

@@ -34,6 +34,7 @@ import {
   Upload,
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 function formatLabel(key: string) {
   return key
@@ -94,7 +95,37 @@ export default function ResubmitApplicationPage() {
     }
   > = {
     // step1
+    firstName: {
+      kind: "text",
+      formName: "firstName",
+      label: t("stepone.form.firstName"),
+    },
+    middleName: {
+      kind: "text",
+      formName: "middleName",
+      label: t("stepone.form.middleName"),
+    },
+    lastName: {
+      kind: "text",
+      formName: "lastName",
+      label: t("stepone.form.lastName"),
+    },
+    phoneNumber: {
+      kind: "text",
+      formName: "phoneNumber",
+      label: t("stepone.form.phoneNumber"),
+    },
+    email: {
+      kind: "text",
+      formName: "email",
+      label: t("stepone.form.email"),
+    },
     cityIdNumber: {
+      kind: "text",
+      formName: "cityIdNumber",
+      label: t("stepone.form.cityId"),
+    },
+    applicantCityIdNumber: {
       kind: "text",
       formName: "cityIdNumber",
       label: t("stepone.form.cityId"),
@@ -150,40 +181,48 @@ export default function ResubmitApplicationPage() {
     },
 
     // step2 files
-    housePlan: { kind: "file", formName: "housePlan", label: "House Plan" },
+    housePlan: {
+      kind: "file",
+      formName: "housePlan",
+      label: t("steptwo.form.housePlan"),
+    },
     marriageCertificate: {
       kind: "file",
       formName: "marriageCertificate",
-      label: "Marriage Certificate",
+      label: t("steptwo.form.marriageCertificate"),
     },
     businessLicense: {
       kind: "file",
       formName: "businessLicense",
-      label: "Business License",
+      label: t("steptwo.form.businessLicense"),
     },
     medicalDocument: {
       kind: "file",
       formName: "medical",
-      label: "Medical Document",
+      label: t("steptwo.form.medical"),
     },
     criminalClearance: {
       kind: "file",
-      formName: "criminalClearance",
-      label: "Criminal Clearance",
+      formName: "criminal",
+      label: t("steptwo.form.criminal"),
     },
 
     // step3 files
     maritalStatusDocument: {
       kind: "file",
       formName: "maritalStatusDocument",
-      label: "Marital Status Document",
+      label: t("stepthree.form.marital"),
     },
     psychologicalWellbeing: {
       kind: "file",
       formName: "psychologicalWellbeing",
-      label: "Psychological Wellbeing",
+      label: t("stepthree.form.wellBeing"),
     },
-    photo: { kind: "file", formName: "photo", label: "Photo" },
+    photo: {
+      kind: "file",
+      formName: "photo",
+      label: t("stepthree.form.photo"),
+    },
   };
 
   const commentKeys = Object.keys(commentsMap || {});
@@ -219,7 +258,7 @@ export default function ResubmitApplicationPage() {
       window.open(url, "_blank");
     } catch (e: any) {
       console.error("Unable to preview file", e);
-      toast.error("Unable to preview file");
+      toast.error(t("review.unableToPreview"));
     }
   };
 
@@ -334,23 +373,26 @@ export default function ResubmitApplicationPage() {
     <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
       {/* Premium Header */}
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.back()}
-            className="rounded-full hover:bg-slate-100 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-slate-600" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {t("resubmit.title")}
-            </h1>
-            <p className="text-slate-500 mt-1 font-medium">
-              {t("resubmit.subtitle")}
-            </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => router.back()}
+              className="rounded-full hover:bg-slate-100 transition-colors hover:cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5 text-slate-600" />
+            </Button>
+            <div>
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                {t("resubmit.title")}
+              </h1>
+              <p className="text-slate-500 mt-1 font-medium">
+                {t("resubmit.subtitle")}
+              </p>
+            </div>
           </div>
+          <LanguageSwitcher />
         </div>
         <div className="h-1 w-20 bg-blue-600 rounded-full ml-14"></div>
       </div>
@@ -379,7 +421,6 @@ export default function ResubmitApplicationPage() {
                       const conf = FIELD_MAP[key] ?? {
                         kind: "text",
                         formName: key,
-                        label: key,
                       };
                       const comment = commentsMap[key];
                       return (
@@ -428,7 +469,7 @@ export default function ResubmitApplicationPage() {
                                       </option>
                                       <option value="Master">
                                         {t(
-                                          "stepone.form.educationOptions.master",
+                                          "stepone.form.educationOptions.masters",
                                         )}
                                       </option>
                                       <option value="Doctorate">
@@ -527,7 +568,6 @@ export default function ResubmitApplicationPage() {
                       const conf = FIELD_MAP[key] ?? {
                         kind: "file",
                         formName: key,
-                        label: key,
                       };
                       const comment = commentsMap[key];
                       const existingFile = application.files?.find(
@@ -544,7 +584,9 @@ export default function ResubmitApplicationPage() {
                             name={conf.formName as any}
                             render={({ field }: any) => (
                               <FormItem>
-                                <FormLabel>{conf.label ?? key}</FormLabel>
+                                <FormLabel>
+                                  {conf.label ?? formatLabel(key)}
+                                </FormLabel>
                                 <FormControl>
                                   <FileDragAndDrop
                                     value={field.value ? [field.value] : []}
@@ -572,7 +614,7 @@ export default function ResubmitApplicationPage() {
                                   >
                                     <AlertCircle className="h-4 w-4" />
                                     <AlertTitle className="text-xs font-bold">
-                                      Reviewer Feedback
+                                      {t("resubmit.reviewerFeedback")}
                                     </AlertTitle>
                                     <AlertDescription className="text-sm">
                                       {comment}
@@ -580,7 +622,7 @@ export default function ResubmitApplicationPage() {
                                   </Alert>
                                 )}
                                 {existingFile && (
-                                  <div className="mt-2">
+                                  <div className="mt-2 text-right">
                                     <Button
                                       className="hover:cursor-pointer border-blue-200 rounded-lg text-blue-500 hover:text-blue-600"
                                       variant="outline"
@@ -589,7 +631,8 @@ export default function ResubmitApplicationPage() {
                                         viewRemoteFile(existingFile.publicId)
                                       }
                                     >
-                                      <Eye /> {t("resubmit.viewExisting")}
+                                      <Eye className="w-4 h-4 mr-2" />{" "}
+                                      {t("resubmit.viewExisting")}
                                     </Button>
                                   </div>
                                 )}
@@ -610,7 +653,6 @@ export default function ResubmitApplicationPage() {
               onClick={() =>
                 onSubmit(form.getValues() as ApplicationStepOneType)
               }
-              className="px-10 py-6 rounded-xl text-lg font-bold shadow-lg shadow-blue-100 hover:shadow-xl transition-all"
               disabled={submitting}
             >
               {submitting ? t("form.submitting") : t("form.resubmit")}

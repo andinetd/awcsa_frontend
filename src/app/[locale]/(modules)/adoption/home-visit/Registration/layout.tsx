@@ -1,43 +1,36 @@
 import { notFound } from "next/navigation";
 import { StepProgress } from "../_components/step_progress";
 import { routing } from "@/i18n/routing";
-import { NextIntlClientProvider, hasLocale, useMessages } from "next-intl";
+import { NextIntlClientProvider, hasLocale, useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
 
-export default async function ApplicationLayout({
+export default function ApplicationLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const param = await params;
-  const locale = param.locale;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const t = useTranslations("adoption");
 
   return (
-    <NextIntlClientProvider locale={locale}>
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="flex justify-between items-center">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Home Visit Feedback
-              </h1>
-              <p className="text-gray-600">
-                Complete all steps to submit the home visit feedback
-              </p>
-            </div>
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="flex justify-between items-center">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {t("homeVisitRegistration.layout.title")}
+            </h1>
+            <p className="text-gray-600">
+              {t("homeVisitRegistration.layout.subtitle")}
+            </p>
           </div>
-
-          <StepProgress />
-
-          <div className="mt-8">{children}</div>
         </div>
+
+        <StepProgress />
+
+        <div className="mt-8">{children}</div>
       </div>
-    </NextIntlClientProvider>
+    </div>
   );
 }

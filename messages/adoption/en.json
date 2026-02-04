@@ -343,7 +343,7 @@
         "error": "Failed to register child: {message}"
       }
     }
-  },  
+  },
   "dashboard": {
     "title": "Adoption Services",
     "subtitle": "Overview of children, care centers, and adoption requests.",
@@ -372,6 +372,282 @@
       "centers": "Centers",
       "requests": "Requests",
       "benefits": "Benefits"
-    }   
+    }
+  },
+  "homeVisitRegistration": {
+    "layout": {
+      "title": "Home Visit Feedback",
+      "subtitle": "Complete all steps to submit the home visit feedback"
+    },
+    "steps": {
+      "step1": "General & Applicant Information",
+      "step2": "Family Composition & Background",
+      "step3": "Lifestyle, Parenting & Adoption Intent",
+      "step4": "Financial, Home, Health & Legal",
+      "step5": "Witnesses, Social Worker Evaluation & Signatures",
+      "status": "Step {current} of {total}",
+      "percentComplete": "{percent}% Complete"
+    },
+    "step1": {
+      "generalInfo": {
+        "title": "General Information",
+        "socialWorkerName": "Social Worker Name",
+        "placeOfVisit": "Place of Visit",
+        "startDate": "Start Date",
+        "startTime": "Start Time",
+        "endDate": "End Date",
+        "endTime": "End Time",
+        "placeholders": {
+          "socialWorkerName": "Enter Social Worker Name",
+          "placeOfVisit": "Enter Place of Visit",
+          "startDate": "Enter Start Date",
+          "startTime": "Enter Start Time",
+          "endDate": "Enter End Date",
+          "endTime": "Enter End Time"
+        }
+      },
+      "address": {
+        "title": "Address",
+        "region": "Region",
+        "subCity": "Sub City",
+        "woreda": "Woreda",
+        "kebele": "Kebele",
+        "houseNumber": "House Number",
+        "neighborhood": "Neighborhood",
+        "placeholders": {
+          "region": "Enter Region",
+          "subCity": "Enter Sub City",
+          "woreda": "Enter Woreda",
+          "kebele": "Enter Kebele",
+          "houseNumber": "Enter House Number",
+          "neighborhood": "Enter Neighborhood"
+        }
+      },
+      "applicant": {
+        "fatherTitle": "Father / Applicant",
+        "motherTitle": "Mother / Applicant",
+        "fullName": "Full Name",
+        "birthDateOrAge": "Birth Date or Age",
+        "birthPlace": "Birth Place",
+        "religion": "Religion",
+        "maritalStatus": "Marital Status",
+        "educationLevel": "Education Level",
+        "nationality": "Nationality",
+        "occupationType": "Occupation Type",
+        "occupation": "Occupation",
+        "monthlyIncome": "Monthly Income",
+        "extraIncome": "Extra Income",
+        "phoneHome": "Phone (Home)",
+        "phoneMobile": "Phone (Mobile)",
+        "placeholders": {
+          "fullName": "Enter Full Name",
+          "birthDateOrAge": "Enter Birth Date or Age",
+          "birthPlace": "Enter Birth Place",
+          "religion": "Enter Religion",
+          "maritalStatus": "Enter Marital Status",
+          "educationLevel": "Enter Education Level",
+          "nationality": "Enter Nationality",
+          "occupationType": "Enter Occupation Type",
+          "occupation": "Enter Occupation",
+          "monthlyIncome": "Enter Monthly Income",
+          "extraIncome": "Enter Extra Income",
+          "phoneHome": "Enter Phone (Home)",
+          "phoneMobile": "Enter Phone (Mobile)"
+        }
+      },
+      "marriageInfo": {
+        "title": "Marriage Information",
+        "marriageDateAndPlace": "Marriage Date and Place",
+        "marriageDuration": "Marriage Duration",
+        "relationshipDescription": "Relationship Description",
+        "conflictResolution": "Conflict Resolution",
+        "mutualSupport": "Mutual Support",
+        "bigDecisions": "Big Decisions Making Experience",
+        "financialManagement": "Financial Management",
+        "placeholders": {
+          "marriageDateAndPlace": "Enter Marriage Date and Place",
+          "marriageDuration": "Enter Marriage Duration",
+          "relationshipDescription": "Enter Relationship Description",
+          "conflictResolution": "Enter Conflict Resolution",
+          "mutualSupport": "Enter Mutual Support",
+          "bigDecisions": "Enter Big Decisions Making Experience",
+          "financialManagement": "Enter Financial Management"
+        }
+      }
+    },
+    "step2": {
+      "familyBackground": {
+        "title": "Family Background",
+        "fatherSide": "Father Side",
+        "motherSide": "Mother Side",
+        "spouseEvaluation": "Spouse Evaluation Together",
+        "fields": {
+          "parentsNames": "Parents Names",
+          "addressIfAlive": "Address If Alive",
+          "birthOrder": "Birth Order",
+          "siblingsCount": "Siblings Count",
+          "relationshipWithFamily": "Relationship With Family",
+          "childhoodFamilyOccupation": "Childhood Family Occupation",
+          "childhoodExperience": "Childhood Experience",
+          "childhoodBehavior": "Childhood Behavior",
+          "workExperience": "Work Experience",
+          "attitudeToWork": "Attitude To Work",
+          "strengthsAndWeaknesses": "Strengths and Weaknesses",
+          "relationshipWithChildren": "Relationship With Children",
+          "lifeGoalsAsGuardian": "Life Goals As Guardian",
+          "spareTimeActivities": "Spare Time Activities"
+        }
+      },
+      "existingChildren": {
+        "title": "Existing Children",
+        "childNumber": "Child #{number}",
+        "addChild": "Add Child"
+      },
+      "applicantParents": {
+        "title": "Applicant Parents",
+        "personNumber": "Person #{number}",
+        "addPerson": "Add Person",
+        "addressAndLivingCondition": "Address and Living Condition"
+      },
+      "householdMembers": {
+        "title": "Household Members",
+        "memberNumber": "Member #{number}",
+        "addMember": "Add Member",
+        "educationAndOccupation": "Education and Occupation"
+      },
+      "common": {
+        "fullName": "Full Name",
+        "age": "Age",
+        "gender": "Gender",
+        "relation": "Relation",
+        "educationOccupation": "Education / Occupation",
+        "maritalStatus": "Marital Status",
+        "address": "Address",
+        "remove": "Remove",
+        "male": "Male",
+        "female": "Female",
+        "selectGender": "Select gender"
+      }
+    },
+    "step3": {
+      "lifeStyle": {
+        "title": "Life Style & Social Relations",
+        "fields": {
+          "readinessForCare": "Readiness For Care",
+          "familyLawsAndRules": "Family Laws and Rules",
+          "dailyLifeRoutine": "Daily Life Routine",
+          "familyWorkDistribution": "Family Work Distribution",
+          "familyTime": "Family Time",
+          "childLifeParticipation": "Child Life Participation",
+          "holidayTimeActivities": "Holiday Time Activities",
+          "socialLifeAttitude": "Social Life Attitude",
+          "communityInvolvement": "Community Involvement",
+          "changeAfterAdoption": "Change After Adoption"
+        }
+      },
+      "parenting": {
+        "title": "Parenting Experience",
+        "hasExperience": "Has Parenting Experience?",
+        "disciplineMethods": "Discipline Methods",
+        "goodMannersApproach": "Good Manners Approach",
+        "improvementAreas": "Improvement Areas",
+        "yes": "Yes",
+        "no": "No",
+        "select": "Select"
+      },
+      "adoptionInterest": {
+        "title": "Adoption Interest",
+        "meaningOfAdoption": "Meaning Of Adoption",
+        "reasonForAdoption": "Reason For Adoption",
+        "preferredChild": {
+          "title": "Preferred Child",
+          "quantity": "Quantity",
+          "gender": "Gender",
+          "ageRange": "Age Range",
+          "healthCondition": "Health Condition",
+          "reasonForChoice": "Reason For Choice"
+        }
+      },
+      "familyMembers": {
+        "title": "Existing Children & Family Members",
+        "name": "Name",
+        "behavior": "Behavior",
+        "adoptionAttitude": "Adoption Attitude",
+        "futureContributions": "Future Adoption Contributions",
+        "mistakeAttitudes": "Mistake Attitudes Of Family"
+      }
+    },
+    "step4": {
+      "financial": {
+        "title": "Income & Financial Status",
+        "incomeSources": "Income Sources",
+        "incomeSupportSources": "Income Support Sources",
+        "incomeShortages": "Income Shortages",
+        "incomeForExtraChild": "Income For Extra Child"
+      },
+      "environment": {
+        "title": "Home & Environment",
+        "houseType": "House Type",
+        "ownershipStatus": "Ownership Status",
+        "roomsAndSize": "Rooms And Size",
+        "livingDuration": "Living Duration",
+        "suitability": "Suitability For Child",
+        "compoundCondition": "Compound Condition",
+        "neighborhoodCondition": "Neighborhood Condition",
+        "communityAttitude": "Community Attitude",
+        "serviceAccessibility": "Service Accessibility"
+      },
+      "healthLegal": {
+        "title": "Health & Legal",
+        "currentHealth": "Current Health Condition",
+        "medication": "Medication",
+        "responsibilityHealth": "Health Condition For Family Responsibility",
+        "mentalHealthIssues": "Mental Health Issues From Family"
+      },
+      "criminal": {
+        "title": "Criminal Issues",
+        "criminalRecord": "Criminal Record",
+        "familyCriminalRecord": "Family Criminal Record"
+      }
+    },
+    "step5": {
+      "evaluation": {
+        "title": "Social Worker Evaluation",
+        "comment": "Comment",
+        "preparedBy": "Prepared By",
+        "preparedDate": "Prepared Date",
+        "approvedBy": "Approved By",
+        "approvedDate": "Approved Date",
+        "signature": "Signature"
+      },
+      "applicantFather": {
+        "title": "Adoption Applicant - Father",
+        "fullName": "Full Name",
+        "date": "Date",
+        "signature": "Signature"
+      },
+      "applicantMother": {
+        "title": "Adoption Applicant - Mother",
+        "fullName": "Full Name",
+        "date": "Date",
+        "signature": "Signature"
+      },
+      "witnesses": {
+        "title": "Witnesses",
+        "fullName": "Full Name",
+        "relationToApplicants": "Relation To Applicants",
+        "phoneNumber": "Phone Number",
+        "addWitness": "Add Witness"
+      },
+      "messages": {
+        "success": "Home Visit Feedback submitted successfully",
+        "error": "Failed to submit home visit feedback. Please try again."
+      }
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit"
+    }
   }
 }

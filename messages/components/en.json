@@ -22,7 +22,7 @@
     "dropOrBrowse": "Drop your files here or {browse}",
     "browse": "browse",
     "maxSize": "Maximum size: {size}",
-    "filesRemaining": "{count} {file, plural, one {file} other {files}} remaining",
+    "filesRemaining": "{count, plural, one {# file remaining} other {# files remaining}}",
     "errorTooLarge": "File is too large. Maximum size is {size}.",
     "errorInvalidType": "Invalid file type. Please check the accepted file types.",
     "units": {

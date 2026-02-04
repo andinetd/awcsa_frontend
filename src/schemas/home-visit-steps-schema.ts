@@ -158,7 +158,7 @@ export const Step3Schema = z.object({
     behavior: z.string(),
     adoptionAttitude: z.string(),
     futureAdoptionContributions: z.string(),
-    mistakeAttitudesOfFamily: z.string(),
+    mistakeAttitudes: z.string(),
   }),
 });
 

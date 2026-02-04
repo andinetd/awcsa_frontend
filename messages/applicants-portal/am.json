@@ -111,8 +111,12 @@
       },
       "occupation": "ሥራ፣ የስራ ስም",
       "occupationPlaceholder": "የስራዎን ዝርዝር ያስገቡ",
+      "firstName": "ስም",
+      "middleName": "የአባት ስም",
+      "lastName": "የአያት ስም",
+      "phoneNumber": "ስልክ ቁጥር",
+      "email": "ኢሜይል",
       "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
-      "spouseCityIdNumberPlaceholder": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር ያስገቡ",
       "marriageCertificate": "የባል/ባለቤት ስምምነት",
       "preferredChildAgeMin": "የሚፈለጉ ሕፃን ዕድሜ (ከ) ",
       "preferredChildAgeMax": "የሚፈለጉ ሕፃን ዕድሜ (እስከ)",
@@ -136,7 +140,9 @@
     "form": {
       "medical": "የጤና ምርመራ",
       "criminal": "ከወንጀል ነፃት ማጽደቂያ ዶክመንት",
-      "marriageCertificate": "የትዳር ስርቲፊክት"
+      "marriageCertificate": "የትዳር ስርቲፊክት",
+      "housePlan": "የቤት ካርታ",
+      "businessLicense": "የንግድ ፍቃድ"
     }
   },
   "stepthree": {
@@ -233,7 +239,7 @@
   },
   "statuses": {
     "pending_review": "በምርመራ ላይ",
-    "pending_home_visit": "የመስክ ጉብኝት የሚጠበቅ",
+    "pending_home_visit": "የመስክ ጉብኝት በመጠባበቅ ላይ",
     "pending_approval": "ማጽደቅን በመጠባበቅ ላይ",
     "returned": "የተመለሰ",
     "rejected": "ውድቅ የተደረገ",

@@ -40,9 +40,11 @@ import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { FileDragAndDrop } from "@/components/custom/file-dropzone";
+import { useTranslations } from "next-intl";
 
 function Step5() {
   const router = useRouter();
+  const t = useTranslations("adoption");
   const token = useAuthStore((state) => state.token);
 
   const { step5, setStep5, reset, serviceDataId } = useHomeVisitFormStore();
@@ -91,17 +93,17 @@ function Step5() {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
-      toast.success("Home Visit Feedback submitted successfully");
+      toast.success(t("homeVisitRegistration.step5.messages.success"));
       router.push("/adoption/adoption-requests");
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
 
       // extract a useful message from AxiosError if possible
-      let message = "Failed to submit home visit feedback. Please try again.";
+      let message = t("homeVisitRegistration.step5.messages.error");
 
       if (axios.isAxiosError(error)) {
         const axiosErr = error as AxiosError<any>;
@@ -152,7 +154,7 @@ function Step5() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Social Worker Evaluation
+                {t("homeVisitRegistration.step5.evaluation.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -160,10 +162,14 @@ function Step5() {
                   name="socialWorkerEvaluation.comment"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Comment</FormLabel>
+                      <FormLabel>
+                        {t("homeVisitRegistration.step5.evaluation.comment")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Comment"
+                          placeholder={t(
+                            "homeVisitRegistration.step5.evaluation.comment",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -179,10 +185,16 @@ function Step5() {
                     name="socialWorkerEvaluation.preparedBy"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Prepared By</FormLabel>
+                        <FormLabel>
+                          {t(
+                            "homeVisitRegistration.step5.evaluation.preparedBy",
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter Prepared By"
+                            placeholder={t(
+                              "homeVisitRegistration.step5.evaluation.preparedBy",
+                            )}
                             {...(field as any)}
                           />
                         </FormControl>
@@ -196,11 +208,17 @@ function Step5() {
                     name="socialWorkerEvaluation.preparedDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Prepared Date</FormLabel>
+                        <FormLabel>
+                          {t(
+                            "homeVisitRegistration.step5.evaluation.preparedDate",
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="date"
-                            placeholder="Enter Prepared Date"
+                            placeholder={t(
+                              "homeVisitRegistration.step5.evaluation.preparedDate",
+                            )}
                             {...(field as any)}
                           />
                         </FormControl>
@@ -216,10 +234,16 @@ function Step5() {
                     name="socialWorkerEvaluation.approvedBy"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Approved By</FormLabel>
+                        <FormLabel>
+                          {t(
+                            "homeVisitRegistration.step5.evaluation.approvedBy",
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter Approved By"
+                            placeholder={t(
+                              "homeVisitRegistration.step5.evaluation.approvedBy",
+                            )}
                             {...(field as any)}
                           />
                         </FormControl>
@@ -233,11 +257,17 @@ function Step5() {
                     name="socialWorkerEvaluation.approvedDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Approved Date</FormLabel>
+                        <FormLabel>
+                          {t(
+                            "homeVisitRegistration.step5.evaluation.approvedDate",
+                          )}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="date"
-                            placeholder="Enter Approved Date"
+                            placeholder={t(
+                              "homeVisitRegistration.step5.evaluation.approvedDate",
+                            )}
                             {...(field as any)}
                           />
                         </FormControl>
@@ -253,7 +283,7 @@ function Step5() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[18px] font-lexend">
-                        Signature
+                        {t("homeVisitRegistration.step5.evaluation.signature")}
                       </FormLabel>
                       <FormControl>
                         <FileDragAndDrop
@@ -278,7 +308,7 @@ function Step5() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Adoption Applicant - Father
+                {t("homeVisitRegistration.step5.applicantFather.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -286,10 +316,16 @@ function Step5() {
                   name="adoptionApplicantFather.fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step5.applicantFather.fullName",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter Full Name"
+                          placeholder={t(
+                            "homeVisitRegistration.step5.applicantFather.fullName",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -303,11 +339,15 @@ function Step5() {
                   name="adoptionApplicantFather.date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date</FormLabel>
+                      <FormLabel>
+                        {t("homeVisitRegistration.step5.applicantFather.date")}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="date"
-                          placeholder="Enter Date"
+                          placeholder={t(
+                            "homeVisitRegistration.step5.applicantFather.date",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -322,7 +362,9 @@ function Step5() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[18px] font-lexend">
-                        Signature
+                        {t(
+                          "homeVisitRegistration.step5.applicantFather.signature",
+                        )}
                       </FormLabel>
                       <FormControl>
                         <FileDragAndDrop
@@ -347,7 +389,7 @@ function Step5() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Adoption Applicant - Mother
+                {t("homeVisitRegistration.step5.applicantMother.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -355,10 +397,16 @@ function Step5() {
                   name="adoptionApplicantMother.fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step5.applicantMother.fullName",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter Full Name"
+                          placeholder={t(
+                            "homeVisitRegistration.step5.applicantMother.fullName",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -372,11 +420,15 @@ function Step5() {
                   name="adoptionApplicantMother.date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date</FormLabel>
+                      <FormLabel>
+                        {t("homeVisitRegistration.step5.applicantMother.date")}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="date"
-                          placeholder="Enter Date"
+                          placeholder={t(
+                            "homeVisitRegistration.step5.applicantMother.date",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -391,7 +443,9 @@ function Step5() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[18px] font-lexend">
-                        Signature
+                        {t(
+                          "homeVisitRegistration.step5.applicantMother.signature",
+                        )}
                       </FormLabel>
                       <FormControl>
                         <FileDragAndDrop
@@ -414,7 +468,9 @@ function Step5() {
               </div>
             </Card>
             <Card className="flex flex-col space-y-4 py-6 px-4">
-              <CardTitle className="text-lg font-semibold">Witnesses</CardTitle>
+              <CardTitle className="text-lg font-semibold">
+                {t("homeVisitRegistration.step5.witnesses.title")}
+              </CardTitle>
               <div className="space-y-3">
                 {witnessFields.map((w, idx) => (
                   <div key={w.id} className="p-3 border rounded">
@@ -424,10 +480,16 @@ function Step5() {
                         name={`witnesses.${idx}.fullName` as any}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full Name</FormLabel>
+                            <FormLabel>
+                              {t(
+                                "homeVisitRegistration.step5.witnesses.fullName",
+                              )}
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter Full Name"
+                                placeholder={t(
+                                  "homeVisitRegistration.step5.witnesses.fullName",
+                                )}
                                 {...(field as any)}
                               />
                             </FormControl>
@@ -441,10 +503,16 @@ function Step5() {
                         name={`witnesses.${idx}.relationToApplicants` as any}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Relation To Applicants</FormLabel>
+                            <FormLabel>
+                              {t(
+                                "homeVisitRegistration.step5.witnesses.relationToApplicants",
+                              )}
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter Relation"
+                                placeholder={t(
+                                  "homeVisitRegistration.step5.witnesses.relationToApplicants",
+                                )}
                                 {...(field as any)}
                               />
                             </FormControl>
@@ -458,10 +526,16 @@ function Step5() {
                         name={`witnesses.${idx}.phoneNumber` as any}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
+                            <FormLabel>
+                              {t(
+                                "homeVisitRegistration.step5.witnesses.phoneNumber",
+                              )}
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter Phone Number"
+                                placeholder={t(
+                                  "homeVisitRegistration.step5.witnesses.phoneNumber",
+                                )}
                                 {...(field as any)}
                               />
                             </FormControl>
@@ -476,7 +550,7 @@ function Step5() {
                         variant="outline"
                         onClick={() => removeWitness(idx)}
                       >
-                        Remove
+                        {t("homeVisitRegistration.step2.common.remove")}
                       </Button>
                     </div>
                   </div>
@@ -493,7 +567,7 @@ function Step5() {
                       })
                     }
                   >
-                    Add Witness
+                    {t("homeVisitRegistration.step5.witnesses.addWitness")}
                   </Button>
                 </div>
               </div>
@@ -502,10 +576,10 @@ function Step5() {
           {/* Submit Button */}
           <div className="flex justify-between mt-4">
             <Button type="button" variant="outline" onClick={handleBack}>
-              Back
+              {t("homeVisitRegistration.buttons.back")}
             </Button>
             <Button type="submit" className="px-8">
-              Submit
+              {t("homeVisitRegistration.buttons.submit")}
             </Button>
           </div>
         </form>
