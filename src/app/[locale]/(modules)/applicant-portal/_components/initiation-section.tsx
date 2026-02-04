@@ -89,7 +89,7 @@ export function InitiationSection() {
             </ul>
           </div>
           <p className="text-xs text-gray-500 mt-2">
-            Scroll to view all requirements
+            {t("footerLinks.scrollHint")}
           </p>
         </div>
 
@@ -129,15 +129,15 @@ export function InitiationSection() {
             href="/applicant-portal/complaints"
             className="text-sm font-medium text-primary hover:underline flex items-center justify-center gap-1"
           >
-            Complaints
+            {t("footerLinks.complaints")}
           </Link>
           <p className="text-[10px] text-gray-400">
-            Need help? Contact our support team at{" "}
+            {t("footerLinks.supportText")}{" "}
             <a
-              href="mailto:wcsa@gov.org"
+              href={`mailto:${t("footerLinks.supportEmail")}`}
               className="text-blue-600 hover:underline"
             >
-              wcsa@gov.org
+              {t("footerLinks.supportEmail")}
             </a>
           </p>
         </div>

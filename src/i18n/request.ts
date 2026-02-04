@@ -24,6 +24,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/sidebar/${locale}.json`)
   ).default;
 
+  const componentMessages = (
+    await import(`../../messages/components/${locale}.json`)
+  ).default;
+
+  const loginMessages = (await import(`../../messages/login/${locale}.json`))
+    .default;
+
   return {
     locale,
     messages: {
@@ -31,6 +38,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       adoption: adoptionMessages,
       "applicants-portal": applicantsPortalMessages,
       sidebar: sidebarMessages,
+      components: componentMessages,
+      login: loginMessages,
     },
   };
 });

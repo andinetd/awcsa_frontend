@@ -1,0 +1,25 @@
+{
+  "page": {
+    "welcome": "እንኳን ደህና መጡ",
+    "signInTitle": "ይግቡ",
+    "copyright": "@{year} የሴቶች፣ ህጻናትና ማህበራዊ ጉዳይ ቢሮ።",
+    "location": "አዲስ አበባ",
+    "logoAlt": "የቢሮው አርማ"
+  },
+  "form": {
+    "email": "ኢሜይል",
+    "emailPlaceholder": "ኢሜይልዎን ያስገቡ",
+    "password": "ፓስወርድ",
+    "passwordPlaceholder": "ፓስወርድዎን ያስገቡ",
+    "forgotPassword": "ፓስወርድ ረስተዋል?",
+    "signIn": "ይግቡ",
+    "signingIn": "በመግባት ላይ...",
+    "errors": {
+      "invalidEmail": "ልክ ያልሆነ ኢሜይል",
+      "passwordMin": "ፓስወርድ ቢያንስ 8 ቁምፊዎች መሆን አለበት",
+      "recaptchaNotAvailable": "Recaptcha ገና አልተገኘም፣ እባክዎ እንደገና ይሞክሩ",
+      "recaptchaFailed": "Recaptcha አልተሳካም፣ እባክዎ እንደገና ይሞክሩ",
+      "signInFailed": "መግባት አልተሳካም: {message}"
+    }
+  }
+}

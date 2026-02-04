@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,14 +28,8 @@ import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
-const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
-
 export default function SignInForm() {
+  const t = useTranslations("login.form");
   const router = useRouter();
   const locale = useLocale();
   const { mutate, isPending, isSuccess, data, isError, error } =
@@ -47,6 +41,17 @@ export default function SignInForm() {
   const [isRecaptchaLoading, setRecaptchaLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(t("errors.invalidEmail")),
+        password: z.string().min(8, t("errors.passwordMin")),
+      }),
+    [t],
+  );
+
+  type FormSchemaType = z.infer<typeof formSchema>;
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "", password: "" },
@@ -54,7 +59,7 @@ export default function SignInForm() {
 
   async function onSubmit(values: FormSchemaType) {
     if (!executeRecaptcha) {
-      toast("Recaptcha not yet available, try again in a second");
+      toast(t("errors.recaptchaNotAvailable"));
       return;
     }
 
@@ -73,16 +78,13 @@ export default function SignInForm() {
       mutate(payload);
     } catch (err) {
       console.error("Recaptcha execution failed:", err);
-      toast("Recaptcha failed, please try again");
+      toast(t("errors.recaptchaFailed"));
     } finally {
       setRecaptchaLoading(false);
     }
   }
 
   // Handle success / error redirects and toasts
-  // Redirect after successful login (watch user/orgUnit)
-  useState(() => {}); // keep hooks order if needed
-
   useEffect(() => {
     // Landed on login page? Clear any potentially stale state if it's not actually valid
     const token = useAuthStore.getState().token;
@@ -124,7 +126,7 @@ export default function SignInForm() {
     });
 
     // Defer navigation to next tick to avoid interfering with rendering
-    const t = setTimeout(() => {
+    const navTimer = setTimeout(() => {
       if (user?.accountType === "CLIENT") {
         router.push(`/applicant-portal/portal`);
       } else if (user?.accountType === "CHILD_CARE_FACLITY") {
@@ -137,15 +139,17 @@ export default function SignInForm() {
       }
     }, 0);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(navTimer);
   }, [user, orgUnit, router]);
 
   // Show error toast when sign-in mutation errors
   useEffect(() => {
     if (isError) {
-      toast.error("Sign-in failed: " + (error as any)?.message);
+      toast.error(
+        t("errors.signInFailed", { message: (error as any)?.message }),
+      );
     }
-  }, [isError, error]);
+  }, [isError, error, t]);
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
@@ -156,11 +160,11 @@ export default function SignInForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t("emailPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -174,12 +178,12 @@ export default function SignInForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder={t("passwordPlaceholder")}
                       {...field}
                     />
                     <Button
@@ -207,7 +211,7 @@ export default function SignInForm() {
               href="/reset-password"
               className="text-sm text-foreground underline hover:opacity-80"
             >
-              Forgot password?
+              {t("forgotPassword")}
             </Link>
           </div>
 
@@ -220,7 +224,7 @@ export default function SignInForm() {
             {isRecaptchaLoading || isPending ? (
               <Loader2 className="animate-spin" />
             ) : (
-              "Sign in"
+              t("signIn")
             )}
           </Button>
         </form>

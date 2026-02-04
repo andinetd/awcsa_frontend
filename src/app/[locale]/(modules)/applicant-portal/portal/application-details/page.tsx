@@ -10,11 +10,16 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { formatAge } from "@/lib/utils";
 import { DynamicBreadcrumb } from "@/components/shared/dynamic-breadcrumb";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
+import { ArrowLeft } from "lucide-react";
+import router from "next/router";
 
 export default function Details() {
   const { application } = useFetchedAdoptionApplicationStore();
   const { token } = useAuthStore();
   const [objectUrls, setObjectUrls] = useState<string[]>([]);
+  const t = useTranslations("applicants-portal");
 
   useEffect(() => {
     return () => {
@@ -47,7 +52,7 @@ export default function Details() {
       window.open(url, "_blank");
     } catch (e: any) {
       console.error("Unable to preview file", e);
-      toast.error("Unable to preview file");
+      toast.error(t("review.unableToPreview"));
     }
   };
 
@@ -61,9 +66,11 @@ export default function Details() {
               <FileText className="h-5 w-5 text-primary flex-shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {label ?? "No file"}
+                  {label ?? t("applicationDetails.noFile")}
                 </p>
-                <p className="text-xs text-gray-500">No file uploaded</p>
+                <p className="text-xs text-gray-500">
+                  {t("applicationDetails.noFileUploaded")}
+                </p>
               </div>
             </div>
           </div>
@@ -81,7 +88,9 @@ export default function Details() {
               <p className="text-sm font-medium text-gray-900 truncate">
                 {f.fileName ?? f.publicId}
               </p>
-              <p className="text-xs text-gray-500">{f.fileType ?? "file"}</p>
+              <p className="text-xs text-gray-500">
+                {f.fileType ?? t("applicationDetails.fields.file")}
+              </p>
             </div>
             <div className="ml-2">
               <Button
@@ -90,7 +99,7 @@ export default function Details() {
                 className="hover:cursor-pointer border-blue-200 rounded-lg text-blue-500 hover:text-blue-600"
                 onClick={() => viewRemoteFile(f.publicId)}
               >
-                <Eye className="text-sm" /> View
+                <Eye className="text-sm" /> {t("applicationDetails.view")}
               </Button>
             </div>
           </div>
@@ -102,7 +111,7 @@ export default function Details() {
   if (!application) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600">No application found.</p>
+        <p className="text-gray-600">{t("applicationDetails.noApplication")}</p>
       </div>
     );
   }
@@ -110,15 +119,25 @@ export default function Details() {
   const form = application.formData ?? application.applicationInfo ?? {};
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* <DynamicBreadcrumb /> */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Application Details
-        </h2>
-        <p className="text-gray-600">
-          Review the submitted application details
-        </p>
+    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+      <div className="absolute top-6 right-6">
+        <LanguageSwitcher />
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4 mb-8">
+        <div className="flex items-center gap-4">
+          <Link href="/applicant-portal/portal">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <div className="text-left">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {t("applicationDetails.title")}
+            </h2>
+            <p className="text-gray-600">{t("applicationDetails.subtitle")}</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -126,56 +145,66 @@ export default function Details() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Personal Information
+              {t("applicationDetails.personalInfo")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-500">ID</span>
-                {fileCard(getFileByField("idDocument"), "ID")}
+                <span className="font-medium text-gray-500">
+                  {t("applicationDetails.fields.id")}
+                </span>
+                {fileCard(
+                  getFileByField("idDocument"),
+                  t("applicationDetails.fields.id"),
+                )}
               </div>
               <div>
                 <span className="font-medium text-gray-500">
-                  Birth Certificate:
+                  {t("applicationDetails.fields.birthCertificate")}:
                 </span>
                 {fileCard(
                   getFileByField("birthCertificate"),
-                  "Birth Certificate",
+                  t("applicationDetails.fields.birthCertificate"),
                 )}
               </div>
               <div>
                 <span className="font-medium text-gray-500">
-                  Income Document:
+                  {t("applicationDetails.fields.incomeDocument")}:
                 </span>
-                {fileCard(getFileByField("incomeDocument"), "Income Document")}
+                {fileCard(
+                  getFileByField("incomeDocument"),
+                  t("applicationDetails.fields.incomeDocument"),
+                )}
               </div>
               <div>
-                <span className="font-medium text-gray-500">Medical:</span>
+                <span className="font-medium text-gray-500">
+                  {t("applicationDetails.fields.medical")}:
+                </span>
                 {fileCard(
                   getFileByField("medicalDocument"),
-                  "Medical Information",
+                  t("applicationDetails.fields.medical"),
                 )}
               </div>
               <div>
                 <span className="font-medium text-gray-500">
-                  Criminal Document:
+                  {t("applicationDetails.fields.criminalDocument")}:
                 </span>
                 {fileCard(
                   getFileByField("criminalClearance"),
-                  "Criminal Document",
+                  t("applicationDetails.fields.criminalDocument"),
                 )}
               </div>
             </div>
 
             <div className="mt-4 border-t pt-4">
               <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                Details
+                {t("applicationDetails.details")}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <div>
                   <span className="font-medium text-gray-500">
-                    City ID Number
+                    {t("applicationDetails.fields.cityIdNumber")}
                   </span>
                   <p className="text-gray-900">
                     {form.cityIdNumber ??
@@ -186,7 +215,7 @@ export default function Details() {
 
                 <div>
                   <span className="font-medium text-gray-500">
-                    Date of Birth
+                    {t("applicationDetails.fields.dateOfBirth")}
                   </span>
                   <p className="text-gray-900">
                     {form.dateOfBirth ?? application.client?.dateOfBirth ?? "-"}
@@ -194,7 +223,9 @@ export default function Details() {
                 </div>
 
                 <div>
-                  <span className="font-medium text-gray-500">Address</span>
+                  <span className="font-medium text-gray-500">
+                    {t("applicationDetails.fields.address")}
+                  </span>
                   <p className="text-gray-900">
                     {form.address ?? application.client?.address ?? "-"}
                   </p>
@@ -202,7 +233,7 @@ export default function Details() {
 
                 <div>
                   <span className="font-medium text-gray-500">
-                    Education Level
+                    {t("applicationDetails.fields.educationLevel")}
                   </span>
                   <p className="text-gray-900">
                     {form.educationLevel ??
@@ -212,7 +243,9 @@ export default function Details() {
                 </div>
 
                 <div>
-                  <span className="font-medium text-gray-500">Occupation</span>
+                  <span className="font-medium text-gray-500">
+                    {t("applicationDetails.fields.occupation")}
+                  </span>
                   <p className="text-gray-900">
                     {form.occupation ??
                       application.adoptionData?.occupation ??
@@ -222,7 +255,7 @@ export default function Details() {
 
                 <div>
                   <span className="font-medium text-gray-500">
-                    Monthly Income
+                    {t("applicationDetails.fields.monthlyIncome")}
                   </span>
                   <p className="text-gray-900">
                     {String(
@@ -235,7 +268,7 @@ export default function Details() {
 
                 <div>
                   <span className="font-medium text-gray-500">
-                    Spouse City ID Number
+                    {t("applicationDetails.fields.spouseCityIdNumber")}
                   </span>
                   <p className="text-gray-900">
                     {form.spouseCityIdNumber ??
@@ -246,11 +279,13 @@ export default function Details() {
 
                 <div className="md:col-span-2">
                   <span className="font-medium text-gray-500">
-                    Preferred Children
+                    {t("applicationDetails.fields.preferredChildren")}
                   </span>
                   <div className="grid grid-cols-3 gap-2 mt-1">
                     <div>
-                      <p className="text-xs text-gray-500">Age Min</p>
+                      <p className="text-xs text-gray-500">
+                        {t("applicationDetails.fields.ageMin")}
+                      </p>
                       <p className="text-gray-900">
                         {formatAge(form.preferredChildren?.ageRange?.min) ??
                           formatAge(
@@ -261,7 +296,9 @@ export default function Details() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Age Max</p>
+                      <p className="text-xs text-gray-500">
+                        {t("applicationDetails.fields.ageMax")}
+                      </p>
                       <p className="text-gray-900">
                         {formatAge(form.preferredChildren?.ageRange?.max) ??
                           formatAge(
@@ -272,7 +309,9 @@ export default function Details() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Number</p>
+                      <p className="text-xs text-gray-500">
+                        {t("applicationDetails.fields.number")}
+                      </p>
                       <p className="text-gray-900">
                         {form.preferredChildren?.number ??
                           application.adoptionData?.preferredChildren?.number ??
@@ -280,7 +319,9 @@ export default function Details() {
                       </p>
                     </div>
                     <div className="md:col-span-3 mt-1">
-                      <p className="text-xs text-gray-500">Preferred Sex</p>
+                      <p className="text-xs text-gray-500">
+                        {t("applicationDetails.fields.preferredSex")}
+                      </p>
                       <p className="text-gray-900">
                         {form.preferredChildren?.sex ??
                           application.adoptionData?.preferredChildren?.sex ??
@@ -298,48 +339,55 @@ export default function Details() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Additional Documents
+              {t("applicationDetails.additionalDocs")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-500">
-                  Marriage Certificate
+                  {t("applicationDetails.fields.marriageCertificate")}
                 </span>
                 {fileCard(
                   getFileByField("marriageCertificate") ??
                     getFileByField("marriage_certificate"),
-                  "Marriage Certificate",
+                  t("applicationDetails.fields.marriageCertificate"),
                 )}
               </div>
               <div>
                 <span className="font-medium text-gray-500">
-                  Marital Status:
+                  {t("applicationDetails.fields.maritalStatus")}:
                 </span>
                 {fileCard(
                   getFileByField("maritalStatusDocument"),
-                  "Marital Status",
+                  t("applicationDetails.fields.maritalStatus"),
                 )}
-              </div>
-              <div>
-                <span className="font-medium text-gray-500">Well being:</span>
-                {fileCard(
-                  getFileByField("psychologicalWellbeing"),
-                  "Well being",
-                )}
-              </div>
-              <div>
-                <span className="font-medium text-gray-500">Photo:</span>
-                {fileCard(getFileByField("photo"), "Photo")}
               </div>
               <div>
                 <span className="font-medium text-gray-500">
-                  Criminal Document:
+                  {t("applicationDetails.fields.wellBeing")}:
+                </span>
+                {fileCard(
+                  getFileByField("psychologicalWellbeing"),
+                  t("applicationDetails.fields.wellBeing"),
+                )}
+              </div>
+              <div>
+                <span className="font-medium text-gray-500">
+                  {t("applicationDetails.fields.photo")}:
+                </span>
+                {fileCard(
+                  getFileByField("photo"),
+                  t("applicationDetails.fields.photo"),
+                )}
+              </div>
+              <div>
+                <span className="font-medium text-gray-500">
+                  {t("applicationDetails.fields.criminalDocument")}:
                 </span>
                 {fileCard(
                   getFileByField("criminalClearance"),
-                  "Criminal Document",
+                  t("applicationDetails.fields.criminalDocument"),
                 )}
               </div>
             </div>
@@ -348,7 +396,7 @@ export default function Details() {
                 application.status === "PENDING_REVIEW") && (
                 <div className="mt-4 border-t pt-4">
                   <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                    Reviewer Comment
+                    {t("applicationDetails.reviewerComment")}
                   </h4>
                   <div className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm text-gray-900">
                     {application.remark}
@@ -360,7 +408,7 @@ export default function Details() {
               <div className="flex gap-3">
                 <Button asChild variant="outline" className="flex-1">
                   <Link href={`/applicant-portal/portal/resubmit-application`}>
-                    Resubmit Application
+                    {t("form.resubmit")}
                   </Link>
                 </Button>
               </div>
@@ -373,9 +421,11 @@ export default function Details() {
         <div className="flex items-start gap-3">
           <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-blue-900">Submitted</h3>
+            <h3 className="font-semibold text-blue-900">
+              {t("applicationDetails.submitted")}
+            </h3>
             <p className="text-sm text-blue-800 mt-1">
-              This application was submitted on{" "}
+              {t("applicationDetails.submittedOn")}{" "}
               {new Date(
                 application.createdAt ?? Date.now(),
               ).toLocaleDateString()}
@@ -383,12 +433,6 @@ export default function Details() {
             </p>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-end">
-        <Button variant="outline" onClick={() => window.history.back()}>
-          Back
-        </Button>
       </div>
     </div>
   );
