@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export default function ApplicantComplaintsPage() {
   const t = useTranslations("applicants-portal");
@@ -23,15 +24,18 @@ export default function ApplicantComplaintsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-6 flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/applicant-portal/portal">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {t("initiation.complaintsTitle")}
-          </h1>
+        <div className="flex items-center justify-between">
+          <div className="mb-6 flex items-center gap-4">
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/applicant-portal/portal">
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+            </Button>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {t("initiation.complaintsTitle")}
+            </h1>
+          </div>
+          <LanguageSwitcher />
         </div>
 
         <Tabs

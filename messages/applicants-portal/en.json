@@ -238,5 +238,47 @@
     "returned": "Returned",
     "rejected": "Rejected",
     "matched": "Matched"
+  },
+  "complaints": {
+    "form": {
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter complaint subject",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your issue in detail",
+      "submit": "Submit Complaint",
+      "submitting": "Submitting...",
+      "validation": {
+        "subjectMin": "Subject must be at least 5 characters",
+        "categoryRequired": "Please select a category",
+        "descriptionMin": "Description must be at least 10 characters"
+      }
+    },
+    "list": {
+      "noComplaints": "No complaints found.",
+      "table": {
+        "date": "Date",
+        "subject": "Subject",
+        "category": "Category",
+        "status": "Status",
+        "actions": "Actions",
+        "viewDetails": "View Details"
+      },
+      "dialog": {
+        "lastUpdated": "Last updated",
+        "categoryLabel": "Category",
+        "yourMessage": "Your Message",
+        "response": "Response",
+        "reviewingMsg": "Our team is currently reviewing your complaint. You will see the resolution here once completed."
+      }
+    },
+    "categories": {
+      "process_delay": "Process Delay",
+      "staff_behavior": "Staff Behaviour",
+      "documentation_issue": "Documentation Issue",
+      "system_error": "System Error",
+      "other": "Other"
+    }
   }
 }

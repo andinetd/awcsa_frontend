@@ -34,6 +34,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const bureauMessages = (await import(`../../messages/bureau/${locale}.json`))
     .default;
 
+  const complaintsMessages = (
+    await import(`../../messages/complaints/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -44,6 +48,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       components: componentMessages,
       login: loginMessages,
       bureau: bureauMessages,
+      complaints: complaintsMessages,
     },
   };
 });

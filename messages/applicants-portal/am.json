@@ -11,7 +11,7 @@
     "complaintsTabNew": "አዲስ ቅሬታ",
     "complaintsTabHistory": "የቅሬታ ታሪክ",
     "complaintsCardTitle": "አዲስ ቅሬታ ያቅርቡ",
-    "complaintsCardDesc": "Found an issue with the system or process? Let us know.",
+    "complaintsCardDesc": "በስርዓቱ ወይም በሂደቱ ላይ ችግር አጋጥሞዎታል? ያሳውቁን።",
     "complaintsHistoryTitle": "የቅሬታ ታሪክ",
     "complaintsHistoryDesc": "ያቀረቡትን ቅሬታዎች ሁኔታ ይመልከቱ እና ይከታተሉ።"
   },
@@ -238,5 +238,47 @@
     "returned": "የተመለሰ",
     "rejected": "ውድቅ የተደረገ",
     "matched": "የተዛመደ"
+  },
+  "complaints": {
+    "form": {
+      "subject": "ርዕሰ ጉዳይ",
+      "subjectPlaceholder": "የቅሬታውን ርዕስ ያስገቡ",
+      "category": "ምድብ",
+      "categoryPlaceholder": "ምድብ ይምረጡ",
+      "description": "መግለጫ",
+      "descriptionPlaceholder": "ችግሩን በዝርዝር ይግለጹ",
+      "submit": "ቅሬታውን አስገባ",
+      "submitting": "በመላክ ላይ...",
+      "validation": {
+        "subjectMin": "ርዕሰ ጉዳይ ቢያንስ 5 ቁምፊዎች መሆን አለበት",
+        "categoryRequired": "እባክዎን ምድብ ይምረጡ",
+        "descriptionMin": "መግለጫ ቢያንስ 10 ቁምፊዎች መሆን አለበት"
+      }
+    },
+    "list": {
+      "noComplaints": "ምንም ቅሬታ አልተገኘም።",
+      "table": {
+        "date": "ቀን",
+        "subject": "ርዕሰ ጉዳይ",
+        "category": "ምድብ",
+        "status": "ሁኔታ",
+        "actions": "እርምጃዎች",
+        "viewDetails": "ዝርዝሩን ይመልከቱ"
+      },
+      "dialog": {
+        "lastUpdated": "ለመጨረሻ ጊዜ የታደሰው",
+        "categoryLabel": "ምድብ",
+        "yourMessage": "የእርስዎ መልዕክት",
+        "response": "ምላሽ",
+        "reviewingMsg": "ቡድናችን በአሁኑ ጊዜ ቅሬታዎን እየገመገመ ነው። ሲጠናቀቅ መፍትሄውን እዚህ ያያሉ።"
+      }
+    },
+    "categories": {
+      "process_delay": "የሂደት መዘግየት",
+      "staff_behavior": "የሰራተኛ ስነ-ምግባር",
+      "documentation_issue": "የሰነድ ችግር",
+      "system_error": "የስርዓት ስህተት",
+      "other": "ሌላ"
+    }
   }
 }

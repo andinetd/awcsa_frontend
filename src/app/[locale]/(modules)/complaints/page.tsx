@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { ComplaintReviewDialog } from "./_components/complaint-review-dialog";
+import { useTranslations } from "next-intl";
 
 const statusColorMap: Record<ComplaintStatus, string> = {
   [ComplaintStatus.PENDING]: "bg-yellow-100 text-yellow-800",
@@ -32,6 +33,7 @@ const statusColorMap: Record<ComplaintStatus, string> = {
 };
 
 export default function ComplaintsManagementPage() {
+  const t = useTranslations("complaints");
   const { data: complaints, isLoading } = useAllComplaintsQuery();
   const [selectedComplaint, setSelectedComplaint] = useState<string | null>(
     null,
@@ -47,29 +49,48 @@ export default function ComplaintsManagementPage() {
     );
   }
 
+  const getStatusLabel = (status: ComplaintStatus) => {
+    switch (status) {
+      case ComplaintStatus.PENDING:
+        return t("statuses.pending");
+      case ComplaintStatus.IN_PROGRESS:
+        return t("statuses.inProgress");
+      case ComplaintStatus.RESOLVED:
+        return t("statuses.resolved");
+      case ComplaintStatus.REJECTED:
+        return t("statuses.rejected");
+      default:
+        return status;
+    }
+  };
+
+  const getCategoryLabel = (category: string) => {
+    return t(`categories.${category.toLowerCase()}`);
+  };
+
   return (
     <div className="p-8 w-full max-w-7xl mx-auto">
       <div className="mb-8">
-        <p className="text-gray-600">Review and resolve system complaints</p>
+        <p className="text-gray-600">{t("management.description")}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>All Complaints</CardTitle>
-          <CardDescription>
-            A list of all complaints submitted by applicants.
-          </CardDescription>
+          <CardTitle>{t("management.card.title")}</CardTitle>
+          <CardDescription>{t("management.card.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Applicant</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("management.table.date")}</TableHead>
+                <TableHead>{t("management.table.applicant")}</TableHead>
+                <TableHead>{t("management.table.subject")}</TableHead>
+                <TableHead>{t("management.table.category")}</TableHead>
+                <TableHead>{t("management.table.status")}</TableHead>
+                <TableHead className="text-right">
+                  {t("management.table.actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -83,7 +104,7 @@ export default function ComplaintsManagementPage() {
                       <span className="font-medium text-gray-900">
                         {complaint.submittedBy?.client
                           ? `${complaint.submittedBy.client.firstName} ${complaint.submittedBy.client.lastName}`
-                          : "Unknown"}
+                          : t("management.table.unknown")}
                       </span>
                       <span className="text-xs text-gray-500">
                         {complaint.submittedBy?.email}
@@ -93,13 +114,13 @@ export default function ComplaintsManagementPage() {
                   <TableCell className="font-medium">
                     {complaint.subject}
                   </TableCell>
-                  <TableCell>{complaint.category.replace("_", " ")}</TableCell>
+                  <TableCell>{getCategoryLabel(complaint.category)}</TableCell>
                   <TableCell>
                     <Badge
                       variant="secondary"
                       className={statusColorMap[complaint.status]}
                     >
-                      {complaint.status}
+                      {getStatusLabel(complaint.status)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -110,8 +131,9 @@ export default function ComplaintsManagementPage() {
                         setSelectedComplaint(complaint.id);
                         setIsDialogOpen(true);
                       }}
+                      className="hover:cursor-pointer"
                     >
-                      Review
+                      {t("management.table.review")}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -122,7 +144,7 @@ export default function ComplaintsManagementPage() {
                     colSpan={6}
                     className="text-center py-8 text-gray-500"
                   >
-                    No complaints found.
+                    {t("management.table.noComplaints")}
                   </TableCell>
                 </TableRow>
               )}

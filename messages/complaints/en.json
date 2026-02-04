@@ -1,0 +1,81 @@
+{
+  "management": {
+    "layoutTitle": "Complaint Management",
+    "description": "Review and resolve system complaints",
+    "card": {
+      "title": "All Complaints",
+      "description": "A list of all complaints submitted by applicants."
+    },
+    "table": {
+      "date": "Date",
+      "applicant": "Applicant",
+      "subject": "Subject",
+      "category": "Category",
+      "status": "Status",
+      "actions": "Actions",
+      "review": "Review",
+      "noComplaints": "No complaints found.",
+      "unknown": "Unknown"
+    }
+  },
+  "review": {
+    "dialogTitle": "Complaint Review & Resolution",
+    "dialogDescription": "Review the detailed complaint and applicant information to provide a resolution.",
+    "loading": "Loading complaint details...",
+    "error": "Failed to load complaint details.",
+    "applicantDetails": {
+      "title": "Applicant Details",
+      "fullName": "Full Name",
+      "cityId": "City ID",
+      "category": "Category"
+    },
+    "contactInfo": {
+      "title": "Contact Information",
+      "noAddress": "No address provided"
+    },
+    "professionalPersonal": {
+      "title": "Professional & Personal",
+      "education": "Education",
+      "occupation": "Occupation",
+      "familySize": "Family Size"
+    },
+    "vitalDates": {
+      "title": "Vital Dates",
+      "dob": "Date of Birth",
+      "accountCreated": "Account Created",
+      "na": "N/A"
+    },
+    "complaint": {
+      "subject": "Subject",
+      "description": "Description"
+    },
+    "resolution": {
+      "label": "Resolution Details / Decision Rationale",
+      "placeholder": "Provide a detailed explanation of the resolution or why it was rejected...",
+      "note": "This note will be visible to the applicant upon resolution."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "reject": "Reject",
+      "takeAction": "Take Action",
+      "resolve": "Resolve",
+      "close": "Close"
+    },
+    "messages": {
+      "provideResolution": "Please provide a resolution"
+    }
+  },
+  "statuses": {
+    "pending": "Pending",
+    "inProgress": "In Progress",
+    "resolved": "Resolved",
+    "rejected": "Rejected"
+  },
+  "categories": {
+    "process_delay": "Process Delay",
+    "staff_behavior": "Staff Behaviour",
+    "documentation_issue": "Documentation Issue",
+    "system_error": "System Error",
+    "other": "Other"
+  }
+}

@@ -24,18 +24,26 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-
-const complaintSchema = z.object({
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  category: z.nativeEnum(ComplaintCategory, {
-    message: "Please select a category",
-  }),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-});
-
-type ComplaintFormValues = z.infer<typeof complaintSchema>;
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
+  const t = useTranslations("applicants-portal.complaints");
+
+  const complaintSchema = useMemo(
+    () =>
+      z.object({
+        subject: z.string().min(5, t("form.validation.subjectMin")),
+        category: z.nativeEnum(ComplaintCategory, {
+          message: t("form.validation.categoryRequired"),
+        }),
+        description: z.string().min(10, t("form.validation.descriptionMin")),
+      }),
+    [t],
+  );
+
+  type ComplaintFormValues = z.infer<typeof complaintSchema>;
+
   const form = useForm<ComplaintFormValues>({
     resolver: zodResolver(complaintSchema),
     defaultValues: {
@@ -56,6 +64,11 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
     });
   };
 
+  const getCategoryLabel = (category: string) => {
+    const key = category.toLowerCase() as keyof typeof ComplaintCategory;
+    return t(`categories.${category.toLowerCase()}`);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -64,9 +77,9 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
           name="subject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Subject</FormLabel>
+              <FormLabel>{t("form.subject")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter complaint subject" {...field} />
+                <Input placeholder={t("form.subjectPlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,17 +91,21 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{t("form.category")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
+                  <SelectTrigger className="hover:cursor-pointer">
+                    <SelectValue placeholder={t("form.categoryPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {Object.values(ComplaintCategory).map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category.replace("_", " ").toLowerCase()}
+                    <SelectItem
+                      key={category}
+                      value={category}
+                      className="hover:cursor-pointer"
+                    >
+                      {getCategoryLabel(category)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -103,10 +120,10 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("form.description")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Describe your issue in detail"
+                  placeholder={t("form.descriptionPlaceholder")}
                   className="min-h-[120px]"
                   {...field}
                 />
@@ -116,9 +133,13 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button
+          type="submit"
+          className="w-full hover:cursor-pointer"
+          disabled={isPending}
+        >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Submit Complaint
+          {isPending ? t("form.submitting") : t("form.submit")}
         </Button>
       </form>
     </Form>
