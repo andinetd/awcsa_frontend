@@ -28,6 +28,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { WomenProfile } from "@/api/womens/women-profile";
+import { useTranslations } from "next-intl";
 
 interface EditWomenProfileFormProps {
   profile: WomenProfile | null;
@@ -41,6 +42,7 @@ export default function EditWomenProfileForm({
   onOpenChange,
 }: EditWomenProfileFormProps) {
   const updateMutation = useUpdateWomenProfileMutation();
+  const t = useTranslations("womens");
 
   const form = useForm<WomenProfileSchemaType>({
     resolver: zodResolver(womenProfileSchema) as any,
@@ -87,12 +89,12 @@ export default function EditWomenProfileForm({
       {
         onSuccess: () => {
           onOpenChange(false);
-          toast.success("Profile updated successfully");
+          toast.success(t("form.messages.successUpdate"));
         },
         onError: (error: any) => {
-          toast.error(error?.message || "Failed to update profile");
+          toast.error(error?.message || t("form.messages.errorUpdate"));
         },
-      }
+      },
     );
   }
 
@@ -100,26 +102,27 @@ export default function EditWomenProfileForm({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Women Profile</DialogTitle>
-          <DialogDescription>
-            Update the details of the women profile.
-          </DialogDescription>
+          <DialogTitle>{t("form.editTitle")}</DialogTitle>
+          <DialogDescription>{t("form.description")}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Personal Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Personal Information</h3>
+              <h3 className="text-lg font-medium">{t("form.personalInfo")}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="cityIdNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City ID Number</FormLabel>
+                      <FormLabel>{t("form.cityIdNumber")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="ID Number" {...field} />
+                        <Input
+                          placeholder={t("form.cityIdNumber")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -130,7 +133,7 @@ export default function EditWomenProfileForm({
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date of Birth</FormLabel>
+                      <FormLabel>{t("form.dateOfBirth")}</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -143,9 +146,9 @@ export default function EditWomenProfileForm({
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>{t("form.firstName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="First Name" {...field} />
+                        <Input placeholder={t("form.firstName")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -156,9 +159,9 @@ export default function EditWomenProfileForm({
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>{t("form.lastName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Last Name" {...field} />
+                        <Input placeholder={t("form.lastName")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -169,9 +172,9 @@ export default function EditWomenProfileForm({
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t("form.phoneNumber")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Phone Number" {...field} />
+                        <Input placeholder={t("form.phoneNumber")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -182,15 +185,15 @@ export default function EditWomenProfileForm({
 
             {/* Address */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Address</h3>
+              <h3 className="text-lg font-medium">{t("form.addressTitle")}</h3>
               <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Full Address</FormLabel>
+                    <FormLabel>{t("form.fullAddress")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Full Address" {...field} />
+                      <Input placeholder={t("form.fullAddress")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -200,17 +203,19 @@ export default function EditWomenProfileForm({
 
             {/* Education & Employment */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Education & Employment</h3>
+              <h3 className="text-lg font-medium">
+                {t("form.educationEmployment")}
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="educationLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Education Level</FormLabel>
+                      <FormLabel>{t("form.educationLevel")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g., High School, Bachelor's"
+                          placeholder={t("form.educationLevel")}
                           {...field}
                         />
                       </FormControl>
@@ -223,9 +228,9 @@ export default function EditWomenProfileForm({
                   name="occupation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Occupation</FormLabel>
+                      <FormLabel>{t("form.occupation")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Occupation" {...field} />
+                        <Input placeholder={t("form.occupation")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -236,7 +241,7 @@ export default function EditWomenProfileForm({
                   name="monthlyIncome"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Monthly Income</FormLabel>
+                      <FormLabel>{t("form.monthlyIncome")}</FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="0" {...field} />
                       </FormControl>
@@ -249,7 +254,7 @@ export default function EditWomenProfileForm({
                   name="photoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Photo URL (Optional)</FormLabel>
+                      <FormLabel>{t("form.photoUrl")}</FormLabel>
                       <FormControl>
                         <Input placeholder="https://..." {...field} />
                       </FormControl>
@@ -266,10 +271,12 @@ export default function EditWomenProfileForm({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {t("form.buttons.cancel")}
               </Button>
               <Button type="submit" disabled={updateMutation.isPending}>
-                {updateMutation.isPending ? "Updating..." : "Update Profile"}
+                {updateMutation.isPending
+                  ? t("form.buttons.saving")
+                  : t("form.buttons.save")}
               </Button>
             </div>
           </form>

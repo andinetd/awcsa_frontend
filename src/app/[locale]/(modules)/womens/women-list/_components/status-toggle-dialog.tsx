@@ -13,6 +13,7 @@ import {
 import { useUpdateWomenProfileStatusMutation } from "@/hooks/womens";
 import { toast } from "sonner";
 import { WomenProfile } from "@/api/womens/women-profile";
+import { useTranslations } from "next-intl";
 
 interface StatusToggleDialogProps {
   profile: WomenProfile | null;
@@ -26,6 +27,7 @@ export default function StatusToggleDialog({
   onOpenChange,
 }: StatusToggleDialogProps) {
   const statusMutation = useUpdateWomenProfileStatusMutation();
+  const t = useTranslations("womens");
 
   const handleConfirm = () => {
     if (!profile?.id) return;
@@ -37,41 +39,42 @@ export default function StatusToggleDialog({
       {
         onSuccess: () => {
           onOpenChange(false);
-          toast.success(
-            `Profile ${newIsActive ? "activated" : "deactivated"} successfully`
-          );
+          toast.success(t("status.success"));
         },
         onError: (error: any) => {
-          toast.error(error?.message || "Failed to update status");
+          toast.error(error?.message || t("status.error"));
         },
-      }
+      },
     );
   };
 
-  const newStatus = profile?.isActive ? "deactivate" : "activate";
+  const newStatus = profile?.isActive
+    ? t("status.inactive")
+    : t("status.active");
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Change Profile Status</AlertDialogTitle>
+          <AlertDialogTitle>{t("status.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to {newStatus} the profile of{" "}
+            {t("status.description", { status: newStatus })}{" "}
             <strong>
               {profile?.client.firstName} {profile?.client.lastName}
             </strong>
-            ?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={statusMutation.isPending}>
-            Cancel
+            {t("form.buttons.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={statusMutation.isPending}
           >
-            {statusMutation.isPending ? "Updating..." : "Confirm"}
+            {statusMutation.isPending
+              ? t("form.buttons.saving")
+              : t("form.buttons.save")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

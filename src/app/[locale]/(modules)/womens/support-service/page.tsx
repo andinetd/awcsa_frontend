@@ -18,9 +18,11 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import GenerateWomenReportDialog from "./_components/generate-women-report-dialog";
 import QuickRegistrationForm from "./_components/quick-registration-form";
+import { useTranslations } from "next-intl";
 
 export default function SupportServicePage() {
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
+  const t = useTranslations("womens");
 
   const { data: clientHistory, isLoading: isLoadingHistory } =
     useGetClientHistoryQuery(selectedClientId as number);
@@ -29,18 +31,20 @@ export default function SupportServicePage() {
     <div className="w-full max-w-7xl mx-auto p-4 space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold">Support Services</h1>
-          <p className="text-muted-foreground">
-            Manage support services for clients and associations
-          </p>
+          <h1 className="text-3xl font-bold">{t("support.title")}</h1>
+          <p className="text-muted-foreground">{t("support.subtitle")}</p>
         </div>
         <GenerateWomenReportDialog />
       </div>
 
       <Tabs defaultValue="services" className="w-full">
         <TabsList>
-          <TabsTrigger value="services">Service Management</TabsTrigger>
-          <TabsTrigger value="combined">Quick Registration</TabsTrigger>
+          <TabsTrigger value="services">
+            {t("support.tabs.management")}
+          </TabsTrigger>
+          <TabsTrigger value="combined">
+            {t("support.tabs.quickRegistration")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="services" className="space-y-6">
@@ -49,10 +53,9 @@ export default function SupportServicePage() {
             <div className="xl:col-span-3">
               <Card>
                 <CardHeader>
-                  <CardTitle>Register Support Service</CardTitle>
+                  <CardTitle>{t("support.register.title")}</CardTitle>
                   <CardDescription>
-                    Register a new support service for an existing client or
-                    association
+                    {t("support.register.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -65,9 +68,9 @@ export default function SupportServicePage() {
             <div className="xl:col-span-9 space-y-4">
               <Card className="h-full">
                 <CardHeader>
-                  <CardTitle>Service History</CardTitle>
+                  <CardTitle>{t("support.history.title")}</CardTitle>
                   <CardDescription>
-                    Select a woman to view her support service history
+                    {t("support.history.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -77,7 +80,7 @@ export default function SupportServicePage() {
                       onValueChange={(value) =>
                         setSelectedClientId(parseInt(value))
                       }
-                      placeholder="Select a woman to view history"
+                      placeholder={t("support.history.selectWoman")}
                     />
                   </div>
 
@@ -85,16 +88,18 @@ export default function SupportServicePage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold">
-                          Support Records
+                          {t("support.history.records")}
                         </h3>
                         <Badge variant="outline">
-                          {clientHistory?.length || 0} Total
+                          {t("support.history.total", {
+                            total: clientHistory?.length || 0,
+                          })}
                         </Badge>
                       </div>
                       {isLoadingHistory ? (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground py-8 justify-center">
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          Loading history...
+                          {t("support.history.loading")}
                         </div>
                       ) : (
                         <SupportHistoryTable data={clientHistory || []} />
@@ -103,8 +108,7 @@ export default function SupportServicePage() {
                   ) : (
                     <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-lg bg-muted/10">
                       <p className="text-muted-foreground">
-                        Please select a woman above to display her support
-                        records.
+                        {t("support.history.noSelection")}
                       </p>
                     </div>
                   )}
@@ -117,9 +121,9 @@ export default function SupportServicePage() {
         <TabsContent value="combined" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Quick Registration</CardTitle>
+              <CardTitle>{t("support.tabs.quickRegistration")}</CardTitle>
               <CardDescription>
-                Register a new client and support service in one step
+                {t("support.tabs.quickRegistration")}
               </CardDescription>
             </CardHeader>
             <CardContent>

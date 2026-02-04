@@ -19,6 +19,7 @@ import {
 import React from "react";
 import { useRouter } from "next/navigation";
 import { WomenProfile } from "@/api/womens/women-profile";
+import { useTranslations } from "next-intl";
 
 interface WomenProfileCardProps {
   profile: WomenProfile;
@@ -32,6 +33,7 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
   onStatusToggle,
 }) => {
   const router = useRouter();
+  const t = useTranslations("womens");
 
   const handleViewDetails = () => {
     router.push(`/womens/profiles/${profile.id}`);
@@ -51,8 +53,8 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
                   profile.approvalStatus === "APPROVED"
                     ? "bg-green-100 text-green-700"
                     : profile.approvalStatus === "PENDING"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-red-100 text-red-700"
                 }`}
               >
                 {profile.approvalStatus}
@@ -67,7 +69,9 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
       <CardContent className="grid gap-3 text-sm text-slate-600">
         <div className="flex items-center gap-2">
           <User className="w-4 h-4" />
-          <span>ID: {profile.client.cityIdNumber}</span>
+          <span>
+            {t("form.cityIdNumber")}: {profile.client.cityIdNumber}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <Phone className="w-4 h-4" />
@@ -90,17 +94,17 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
                 year: "numeric",
                 month: "short",
                 day: "numeric",
-              }
+              },
             )}
           </span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2 mb-3">
         <Button variant="outline" size="sm" onClick={() => onEdit?.(profile)}>
-          Edit
+          {t("womenList.card.edit")}
         </Button>
         <Button variant="outline" size="sm" onClick={handleViewDetails}>
-          View Details
+          {t("womenList.card.viewDetails")}
         </Button>
       </CardFooter>
     </Card>

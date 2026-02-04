@@ -1,0 +1,234 @@
+{
+  "common": {
+    "loading": "በመጫን ላይ...",
+    "select": "ይምረጡ..."
+  },
+  "layout": {
+    "title": "የሴቶች ጉዳይ"
+  },
+  "dashboard": {
+    "title": "የሴቶች ጉዳይ ዳሽቦርድ",
+    "subtitle": "የሴቶችን መገለጫዎች፣ የድጋፍ አገልግሎቶችን እና የማህበረሰብ መረጃዎችን ያስዳድሩ።",
+    "registerProfile": "መገለጫ ይመዝገቡ",
+    "generateReport": "ሪፖርት ያውጡ",
+    "stats": {
+      "totalProfiles": "ጠቅላላ መገለጫዎች",
+      "supportServices": "የድጋፍ አገልግሎቶች",
+      "activeInterventions": "ንቁ ጣልቃ ገብነቶች",
+      "monthlyReports": "ወርሃዊ ሪፖርቶች"
+    },
+    "activity": {
+      "title": "የቅርብ ጊዜ እንቅስቃሴ",
+      "communityRegistry": "የማህበረሰብ ምዝገባ",
+      "description": "የቅርብ ጊዜ የመገለጫ ምዝገባዎች እና የአገልግሎት ዝመናዎች እዚህ ይታያሉ።"
+    },
+    "quickActions": {
+      "title": "ፈጣን እርምጃዎች",
+      "womenProfiles": "የሴቶች መገለጫዎች",
+      "supportServices": "የድጋፍ አገልግሎቶች",
+      "caseManagement": "የጉዳይ አስተዳደር"
+    }
+  },
+  "womenList": {
+    "title": "የሴቶች መገለጫዎች",
+    "subtitle": "በስርዓቱ ውስጥ የተመዘገቡ ሴቶችን ያስዳድሩ",
+    "searchPlaceholder": "በስም፣ በስልክ ወይም በመታወቂያ ይፈልጉ...",
+    "loading": "የሴቶች መገለጫ በመጫን ላይ...",
+    "error": "የሴቶች መገለጫዎችን በመጫን ላይ ስህተት ተከስቷል።",
+    "noProfiles": "ምንም የሴቶች መገለጫ አልተገኘም።",
+    "pagination": {
+      "showing": "ከ {total} ውስጥ ከ {start} እስከ {end} እያሳየ ነው",
+      "previous": "ቀዳሚ",
+      "next": "ቀጣይ"
+    },
+    "registerButton": "አዲስ ሴት ይመዝገቡ",
+    "card": {
+      "viewDetails": "ዝርዝር መረጃ",
+      "edit": "ያርሙ"
+    }
+  },
+  "form": {
+    "registerTitle": "አዲስ ሴት ይመዝገቡ",
+    "editTitle": "የሴት መገለጫ ያርሙ",
+    "description": "በስርዓቱ ውስጥ ለመመዝገብ የሴቷን ዝርዝር መረጃ ያስገቡ።",
+    "personalInfo": "የግል መረጃ",
+    "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+    "dateOfBirth": "የትውልድ ቀን",
+    "firstName": "የመጀመሪያ ስም",
+    "lastName": "የአያት ስም",
+    "phoneNumber": "የስልክ ቁጥር",
+    "addressTitle": "አድራሻ",
+    "fullAddress": "ሙሉ አድራሻ",
+    "educationEmployment": "ትምህርት እና ስራ",
+    "educationLevel": "የትምህርት ደረጃ",
+    "occupation": "ስራ",
+    "monthlyIncome": "ወርሃዊ ገቢ",
+    "photoUrl": "የፎቶ አድራሻ (አማራጭ)",
+    "buttons": {
+      "cancel": "ይሰርዙ",
+      "register": "ይመዝገቡ",
+      "registering": "በመመዝገብ ላይ...",
+      "save": "ለውጦችን ያስቀምጡ",
+      "saving": "በማስቀመጥ ላይ..."
+    },
+    "messages": {
+      "successRegister": "የሴቶች መገለጫ በተሳካ ሁኔታ ተመዝግቧል",
+      "errorRegister": "መገለጫውን መመዝገብ አልተቻለም",
+      "successUpdate": "መገለጫው በተሳካ ሁኔታ ታድሷል",
+      "errorUpdate": "መገለጫውን ማደስ አልተቻለም"
+    }
+  },
+  "status": {
+    "title": "ሁኔታን ይቀይሩ",
+    "description": "እርግጠኛ ነዎት ይህንን መገለጫ {status} ይፈልጋሉ?",
+    "active": "ማንቃት",
+    "inactive": "ማሰናከል",
+    "success": "ሁኔታው በተሳካ ሁኔታ ተቀይሯል",
+    "error": "ሁኔታውን መቀየር አልተቻለም"
+  },
+  "support": {
+    "title": "የድጋፍ አገልግሎቶች",
+    "subtitle": "ለደንበኞች እና ለማህበራት የድጋፍ አገልግሎቶችን ያስዳድሩ",
+    "tabs": {
+      "management": "የአገልግሎት አስተዳደር",
+      "quickRegistration": "ፈጣን ምዝገባ"
+    },
+    "register": {
+      "title": "የድጋፍ አገልግሎት ይመዝገቡ",
+      "description": "ለነባር ደንበኛ ወይም ማህበር አዲስ የድጋፍ አገልግሎት ይመዝገቡ",
+      "beneficiaryInfo": "የተጠቃሚ መረጃ",
+      "womanClient": "ደንበኛ ሴት",
+      "associationId": "የሴቶች ማህበር መለያ (አማራጭ)",
+      "beneficiaryNote": "* እባክዎን የሴት ደንበኛ መለያ ወይም የሴቶች ማህበር መለያ ያቅርቡ።",
+      "serviceInfo": "የአገልግሎት እና የአቅራቢ መረጃ",
+      "serviceType": "የአገልግሎት ዓይነት",
+      "dateProvided": "የተሰጠበት ቀን",
+      "providerName": "የአቅራቢው ስም",
+      "amountOrQuantity": "መጠን ወይም ብዛት",
+      "locationInfo": "ቦታ እና አስተባባሪ",
+      "facilitatorCityId": "የአስተባባሪው ከተማ መለያ",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "remarks": "አስተያየቶች (አማራጭ)",
+      "placeholder": {
+        "provider": "የአቅራቢውን ስም ያስገቡ",
+        "amount": "ለምሳሌ፦ 500 ብር፣ 2 ሳጥን",
+        "cityId": "የከተማ መለያ ያስገቡ",
+        "subCity": "ክፍለ ከተማ ያስገቡ",
+        "woreda": "ወረዳ ያስገቡ",
+        "remarks": "ተጨማሪ ማስታወሻዎች ወይም አስተያየቶች...",
+        "associationId": "የማህበሩን መለያ ያስገቡ"
+      },
+      "messages": {
+        "success": "የድጋፍ አገልግሎት በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "የድጋፍ አገልግሎት መመዝገብ አልተቻለም"
+      }
+    },
+    "history": {
+      "title": "የአገልግሎት ታሪክ",
+      "description": "የድጋፍ አገልግሎት ታሪኳን ለማየት ሴት ይምረጡ",
+      "selectWoman": "ታሪክ ለማየት ሴት ይምረጡ",
+      "records": "የድጋፍ መዝገቦች",
+      "total": "በጠቅላላ {total}",
+      "loading": "ታሪክ በመጫን ላይ...",
+      "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ይምረጡ።",
+      "table": {
+        "serviceType": "የአገልግሎት ዓይነት",
+        "provider": "አቅራቢ",
+        "amount": "መጠን/ብዛት",
+        "date": "የተሰጠበት ቀን",
+        "location": "ቦታ",
+        "actions": "እርምጃዎች",
+        "noHistory": "ምንም የድጋፍ ታሪክ አልተገኘም።"
+      }
+    },
+    "quick": {
+      "womanInfo": "የሴቲቱ መረጃ",
+      "supportDetails": "የድጋፍ ዝርዝሮች",
+      "submit": "ሴቲቱን እና ድጋፉን ይመዝገቡ",
+      "messages": {
+        "success": "ደንበኛው እና የድጋፍ አገልግሎቱ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "መመዝገብ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+      }
+    }
+  },
+  "report": {
+    "title": "የሴቶች ድጋፍ አገልግሎቶች ሪፖርት ያውጡ",
+    "description": "ለሪፖርትዎ ማጣሪያዎችን እና አምዶችን ይምረጡ።",
+    "startDate": "የመጀመሪያ ቀን",
+    "endDate": "የመጨረሻ ቀን",
+    "subCity": "ክፍለ ከተማ",
+    "woreda": "ወረዳ",
+    "serviceTypeId": "የአገልግሎት አይነት መለያ",
+    "beneficiaryLevel": "የተጠቃሚ ደረጃ",
+    "format": "ፎርማት",
+    "columns": "የሚካተቱ አምዶች",
+    "buttons": {
+      "generate": "ሪፖርት ያውጡ",
+      "download": "ሪፖርት ያውርዱ"
+    },
+    "messages": {
+      "success": "ሪፖርቱ በተሳካ ሁኔታ ተዘጋጅቶ ወርዷል",
+      "error": "ሪፖርቱን ማዘጋጀት አልተቻለም"
+    }
+  },
+  "profileDetail": {
+    "title": "የሴቲቱ መገለጫ ዝርዝር",
+    "loading": "መገለጫ በመጫን ላይ...",
+    "error": "መገለጫውን መጫን አልተቻለም",
+    "goBack": "ተመለስ",
+    "active": "ንቁ",
+    "inactive": "ንቁ ያልሆነ",
+    "editProfile": "መገለጫ ያርሙ",
+    "toggleStatus": "ሁኔታን ይቀይሩ",
+    "personalInfo": "የግል መረጃ",
+    "contactInfo": "የመገናኛ መረጃ",
+    "educationEmployment": "ትምህርት እና ስራ",
+    "additionalInfo": "ተጨማሪ መረጃ",
+    "fullName": "ሙሉ ስም",
+    "email": "ኢሜይል",
+    "viewPhoto": "ፎቶ እይ",
+    "clientCategory": "የደንበኛ ምድብ",
+    "registeredOn": "የተመዘገበበት ቀን",
+    "lastUpdated": "ለመጨረሻ ጊዜ የታደሰበት"
+  },
+  "associations": {
+    "title": "የሴቶች ማህበራት"
+  },
+  "supportDetail": {
+    "title": "የድጋፍ ዝርዝሮች",
+    "referenceId": "የማጣቀሻ መለያ",
+    "serviceInfo": "የአገልግሎት መረጃ",
+    "serviceInfoDesc": "የተሰጠው ድጋፍ ዝርዝር",
+    "noRemarks": "ምንም አስተያየት አልተሰጠም።",
+    "beneficiaryLocation": "ተጠቃሚ እና ቦታ",
+    "beneficiaryType": "የተጠቃሚ ዓይነት",
+    "individualWoman": "ግለሰብ ሴት",
+    "womenAssociation": "የሴቶች ማህበር",
+    "facilitator": "አስተባባሪ",
+    "monitoringHistory": "የክትትል ታሪክ",
+    "monitoringHistoryDesc": "ክትትሎችን እና ውጤቶችን ይከታተሉ",
+    "noLogs": "እስካሁን ምንም የክትትል መዝገብ አልተመዘገበም።",
+    "addFollowUp": "ከላይ ያለውን ቁልፍ በመጠቀም አዲስ ክትትል ያክሉ።",
+    "assessedBy": "በ: {name}",
+    "score": "ውጤት: {score}%"
+  },
+  "monitoring": {
+    "addFollowUp": "ክትትል ያክሉ",
+    "title": "የክትትል መዝገብ ያክሉ",
+    "description": "ለዚህ የድጋፍ አገልግሎት የክትትል ግምገማ ይመዝግቡ።",
+    "monitoringDate": "የክትትል ቀን",
+    "assessedBy": "ገምጋሚ",
+    "assessorPlaceholder": "የገምጋሚውን ስም ያስገቡ...",
+    "currentStatus": "የአሁኑ ሁኔታ",
+    "statusPlaceholder": "ምሳሌ፡ እየተሻሻለ ነው",
+    "score": "ውጤት (0-100)",
+    "remarkPlaceholder": "የግምገማ ዝርዝሮችን ያስገቡ...",
+    "addEntry": "መዝገብ ያክሉ",
+    "adding": "በመጨመር ላይ...",
+    "messages": {
+      "success": "የክትትል መዝገብ በተሳካ ሁኔታ ተጨምሯል",
+      "error": "የክትትል መዝገብ ማከል አልተቻለም"
+    }
+  }
+}

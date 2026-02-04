@@ -1,0 +1,234 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "select": "Select..."
+  },
+  "layout": {
+    "title": "Women's Affairs"
+  },
+  "dashboard": {
+    "title": "Women's Affairs Dashboard",
+    "subtitle": "Manage women profiles, support services, and community data.",
+    "registerProfile": "Register Profile",
+    "generateReport": "Generate Report",
+    "stats": {
+      "totalProfiles": "Total Profiles",
+      "supportServices": "Support Services",
+      "activeInterventions": "Active Interventions",
+      "monthlyReports": "Monthly Reports"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "communityRegistry": "Community Registry",
+      "description": "Latest profile registrations and service updates will be displayed here."
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "womenProfiles": "Women Profiles",
+      "supportServices": "Support Services",
+      "caseManagement": "Case Management"
+    }
+  },
+  "womenList": {
+    "title": "Women Profiles",
+    "subtitle": "Manage registered women in the system",
+    "searchPlaceholder": "Search by name, phone, or ID...",
+    "loading": "Loading women profiles...",
+    "error": "Error loading women profiles.",
+    "noProfiles": "No women profiles found.",
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} entries",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "registerButton": "Register New Woman",
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit"
+    }
+  },
+  "form": {
+    "registerTitle": "Register New Woman",
+    "editTitle": "Edit Woman Profile",
+    "description": "Enter the details of the woman to register in the system.",
+    "personalInfo": "Personal Information",
+    "cityIdNumber": "City ID Number",
+    "dateOfBirth": "Date of Birth",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
+    "addressTitle": "Address",
+    "fullAddress": "Full Address",
+    "educationEmployment": "Education & Employment",
+    "educationLevel": "Education Level",
+    "occupation": "Occupation",
+    "monthlyIncome": "Monthly Income",
+    "photoUrl": "Photo URL (Optional)",
+    "buttons": {
+      "cancel": "Cancel",
+      "register": "Register",
+      "registering": "Registering...",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "successRegister": "Women profile registered successfully",
+      "errorRegister": "Failed to register profile",
+      "successUpdate": "Profile updated successfully",
+      "errorUpdate": "Failed to update profile"
+    }
+  },
+  "status": {
+    "title": "Toggle Status",
+    "description": "Are you sure you want to {status} this profile?",
+    "active": "activate",
+    "inactive": "deactivate",
+    "success": "Status updated successfully",
+    "error": "Failed to update status"
+  },
+  "support": {
+    "title": "Support Services",
+    "subtitle": "Manage support services for clients and associations",
+    "tabs": {
+      "management": "Service Management",
+      "quickRegistration": "Quick Registration"
+    },
+    "register": {
+      "title": "Register Support Service",
+      "description": "Register a new support service for an existing client or association",
+      "beneficiaryInfo": "Beneficiary Information",
+      "womanClient": "Woman Client",
+      "associationId": "Women Association ID (Optional)",
+      "beneficiaryNote": "* Please provide either a Woman Client ID or a Women Association ID.",
+      "serviceInfo": "Service & Provider Information",
+      "serviceType": "Service Type",
+      "dateProvided": "Date Provided",
+      "providerName": "Provider Name",
+      "amountOrQuantity": "Amount or Quantity",
+      "locationInfo": "Location & Facilitator",
+      "facilitatorCityId": "Facilitator City ID",
+      "subCity": "Sub City",
+      "woreda": "Woreda",
+      "remarks": "Remarks (Optional)",
+      "placeholder": {
+        "provider": "Enter provider name",
+        "amount": "e.g. 500 ETB, 2 Boxes",
+        "cityId": "Enter city ID",
+        "subCity": "Enter sub-city",
+        "woreda": "Enter woreda",
+        "remarks": "Additional notes or remarks...",
+        "associationId": "Enter Association ID"
+      },
+      "messages": {
+        "success": "Support service registered successfully",
+        "error": "Failed to register support service"
+      }
+    },
+    "history": {
+      "title": "Service History",
+      "description": "Select a woman to view her support service history",
+      "selectWoman": "Select a woman to view history",
+      "records": "Support Records",
+      "total": "{total} Total",
+      "loading": "Loading history...",
+      "noSelection": "Please select a woman above to display her support records.",
+      "table": {
+        "serviceType": "Service Type",
+        "provider": "Provider",
+        "amount": "Amount/Quantity",
+        "date": "Date Provided",
+        "location": "Location",
+        "actions": "Actions",
+        "noHistory": "No support history found."
+      }
+    },
+    "quick": {
+      "womanInfo": "Woman Information",
+      "supportDetails": "Support Details",
+      "submit": "Register Woman & Support",
+      "messages": {
+        "success": "Client and Support Service registered successfully",
+        "error": "Failed to register. Please try again."
+      }
+    }
+  },
+  "report": {
+    "title": "Generate Women Support Services Report",
+    "description": "Select filters and columns for your report.",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "subCity": "Sub City",
+    "woreda": "Woreda",
+    "serviceTypeId": "Service Type ID",
+    "beneficiaryLevel": "Beneficiary Level",
+    "format": "Format",
+    "columns": "Columns to Include",
+    "buttons": {
+      "generate": "Generate Report",
+      "download": "Download Report"
+    },
+    "messages": {
+      "success": "Report generated and downloaded successfully",
+      "error": "Failed to generate report"
+    }
+  },
+  "profileDetail": {
+    "title": "Women Profile Details",
+    "loading": "Loading profile...",
+    "error": "Failed to load profile",
+    "goBack": "Go Back",
+    "active": "Active",
+    "inactive": "Inactive",
+    "editProfile": "Edit Profile",
+    "toggleStatus": "Toggle Status",
+    "personalInfo": "Personal Information",
+    "contactInfo": "Contact Information",
+    "educationEmployment": "Education & Employment",
+    "additionalInfo": "Additional Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "viewPhoto": "View Photo",
+    "clientCategory": "Client Category",
+    "registeredOn": "Registered On",
+    "lastUpdated": "Last Updated"
+  },
+  "associations": {
+    "title": "Women Associations"
+  },
+  "supportDetail": {
+    "title": "Support Details",
+    "referenceId": "Reference ID",
+    "serviceInfo": "Service Information",
+    "serviceInfoDesc": "Details of the support provided",
+    "noRemarks": "No remarks provided.",
+    "beneficiaryLocation": "Beneficiary & Location",
+    "beneficiaryType": "Beneficiary Type",
+    "individualWoman": "Individual Woman",
+    "womenAssociation": "Women Association",
+    "facilitator": "Facilitator",
+    "monitoringHistory": "Monitoring History",
+    "monitoringHistoryDesc": "Track follow-ups and outcomes",
+    "noLogs": "No monitoring logs recorded yet.",
+    "addFollowUp": "Add a new follow-up using the button above.",
+    "assessedBy": "By: {name}",
+    "score": "Score: {score}%"
+  },
+  "monitoring": {
+    "addFollowUp": "Add Follow-up",
+    "title": "Add Monitoring Log",
+    "description": "Record a follow-up assessment for this support service.",
+    "monitoringDate": "Monitoring Date",
+    "assessedBy": "Assessed By",
+    "assessorPlaceholder": "Enter assessor name...",
+    "currentStatus": "Current Status",
+    "statusPlaceholder": "e.g. Improving",
+    "score": "Score (0-100)",
+    "remarkPlaceholder": "Enter assessment details...",
+    "addEntry": "Add Entry",
+    "adding": "Adding...",
+    "messages": {
+      "success": "Monitoring log added successfully",
+      "error": "Failed to add monitoring log"
+    }
+  }
+}

@@ -22,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ClipboardList } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -30,6 +29,7 @@ import {
   MonitoringSchemaType,
 } from "@/schemas/support-service";
 import { useAddMonitoringMutation } from "@/hooks/support";
+import { useTranslations } from "next-intl";
 
 interface MonitoringFormProps {
   supportServiceId: number;
@@ -40,6 +40,7 @@ export default function MonitoringForm({
 }: MonitoringFormProps) {
   const [open, setOpen] = useState(false);
   const addMonitoringMutation = useAddMonitoringMutation();
+  const t = useTranslations("womens");
 
   const form = useForm<MonitoringSchemaType>({
     resolver: zodResolver(monitoringSchema) as any,
@@ -58,10 +59,10 @@ export default function MonitoringForm({
       onSuccess: () => {
         setOpen(false);
         form.reset();
-        toast.success("Monitoring log added successfully");
+        toast.success(t("monitoring.messages.success"));
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Failed to add monitoring log");
+        toast.error(error?.message || t("monitoring.messages.error"));
       },
     });
   }
@@ -71,15 +72,13 @@ export default function MonitoringForm({
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <ClipboardList className="w-4 h-4" />
-          Add Follow-up
+          {t("monitoring.addFollowUp")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add Monitoring Log</DialogTitle>
-          <DialogDescription>
-            Record a follow-up assessment for this support service.
-          </DialogDescription>
+          <DialogTitle>{t("monitoring.title")}</DialogTitle>
+          <DialogDescription>{t("monitoring.description")}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -89,7 +88,7 @@ export default function MonitoringForm({
               name="monitoringDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Monitoring Date</FormLabel>
+                  <FormLabel>{t("monitoring.monitoringDate")}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -103,9 +102,12 @@ export default function MonitoringForm({
               name="assessedBy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Assessed By</FormLabel>
+                  <FormLabel>{t("monitoring.assessedBy")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter assessor name..." {...field} />
+                    <Input
+                      placeholder={t("monitoring.assessorPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -118,9 +120,12 @@ export default function MonitoringForm({
                 name="currentStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Current Status</FormLabel>
+                    <FormLabel>{t("monitoring.currentStatus")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Improving" {...field} />
+                      <Input
+                        placeholder={t("monitoring.statusPlaceholder")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -132,7 +137,7 @@ export default function MonitoringForm({
                 name="score"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Score (0-100)</FormLabel>
+                    <FormLabel>{t("monitoring.score")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -140,7 +145,9 @@ export default function MonitoringForm({
                         {...field}
                         onChange={(e) =>
                           field.onChange(
-                            e.target.value === "" ? 0 : parseInt(e.target.value)
+                            e.target.value === ""
+                              ? 0
+                              : parseInt(e.target.value),
                           )
                         }
                       />
@@ -156,10 +163,10 @@ export default function MonitoringForm({
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Remark / Notes</FormLabel>
+                  <FormLabel>{t("support.register.remarks")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter assessment details..."
+                      placeholder={t("monitoring.remarkPlaceholder")}
                       rows={4}
                       {...field}
                     />
@@ -175,10 +182,12 @@ export default function MonitoringForm({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("form.buttons.cancel")}
               </Button>
               <Button type="submit" disabled={addMonitoringMutation.isPending}>
-                {addMonitoringMutation.isPending ? "Adding..." : "Add Entry"}
+                {addMonitoringMutation.isPending
+                  ? t("monitoring.adding")
+                  : t("monitoring.addEntry")}
               </Button>
             </div>
           </form>

@@ -21,9 +21,11 @@ import {
 } from "@/schemas/support-service";
 import { useRegisterCombinedMutation } from "@/hooks/support";
 import ServiceTypeSelect from "./service-type-select";
+import { useTranslations } from "next-intl";
 
 export default function QuickRegistrationForm() {
   const registerCombinedMutation = useRegisterCombinedMutation();
+  const t = useTranslations("womens");
 
   const form = useForm<CombinedRegistrationSchemaType>({
     resolver: zodResolver(combinedRegistrationSchema) as any,
@@ -53,10 +55,10 @@ export default function QuickRegistrationForm() {
     registerCombinedMutation.mutate(payload, {
       onSuccess: () => {
         form.reset();
-        toast.success("Client and Support Service registered successfully");
+        toast.success(t("support.quick.messages.success"));
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Failed to register. Please try again.");
+        toast.error(error?.message || t("support.quick.messages.error"));
       },
     });
   }
@@ -68,7 +70,7 @@ export default function QuickRegistrationForm() {
           {/* Woman Profile Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold border-b pb-2">
-              Woman Information
+              {t("support.quick.womanInfo")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <FormField
@@ -76,9 +78,9 @@ export default function QuickRegistrationForm() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{t("form.firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter first name" {...field} />
+                      <Input placeholder={t("form.firstName")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -89,9 +91,9 @@ export default function QuickRegistrationForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{t("form.lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter last name" {...field} />
+                      <Input placeholder={t("form.lastName")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,7 +106,7 @@ export default function QuickRegistrationForm() {
               name="cityIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City ID Number</FormLabel>
+                  <FormLabel>{t("form.cityIdNumber")}</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. AA-12345" {...field} />
                   </FormControl>
@@ -118,7 +120,7 @@ export default function QuickRegistrationForm() {
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
+                  <FormLabel>{t("form.phoneNumber")}</FormLabel>
                   <FormControl>
                     <Input placeholder="09..." {...field} />
                   </FormControl>
@@ -133,9 +135,12 @@ export default function QuickRegistrationForm() {
                 name="educationLevel"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Education Level</FormLabel>
+                    <FormLabel>{t("form.educationLevel")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter level" {...field} />
+                      <Input
+                        placeholder={t("form.educationLevel")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -146,9 +151,9 @@ export default function QuickRegistrationForm() {
                 name="occupation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Occupation</FormLabel>
+                    <FormLabel>{t("form.occupation")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter occupation" {...field} />
+                      <Input placeholder={t("form.occupation")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,7 +165,7 @@ export default function QuickRegistrationForm() {
           {/* Support Service Section */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold border-b pb-2">
-              Support Details
+              {t("support.quick.supportDetails")}
             </h3>
 
             <FormField
@@ -168,7 +173,7 @@ export default function QuickRegistrationForm() {
               name="serviceTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Service Type</FormLabel>
+                  <FormLabel>{t("support.register.serviceType")}</FormLabel>
                   <FormControl>
                     <ServiceTypeSelect
                       value={field.value.toString()}
@@ -186,9 +191,12 @@ export default function QuickRegistrationForm() {
                 name="provider"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Provider Name</FormLabel>
+                    <FormLabel>{t("support.register.providerName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter provider" {...field} />
+                      <Input
+                        placeholder={t("support.register.placeholder.provider")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,9 +207,14 @@ export default function QuickRegistrationForm() {
                 name="amountOrQuantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Amount/Quantity</FormLabel>
+                    <FormLabel>
+                      {t("support.register.amountOrQuantity")}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. 500 ETB" {...field} />
+                      <Input
+                        placeholder={t("support.register.placeholder.amount")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -215,7 +228,7 @@ export default function QuickRegistrationForm() {
                 name="dateProvided"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date Provided</FormLabel>
+                    <FormLabel>{t("support.register.dateProvided")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -228,9 +241,9 @@ export default function QuickRegistrationForm() {
                 name="subCity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sub-City</FormLabel>
+                    <FormLabel>{t("report.subCity")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter sub-city" {...field} />
+                      <Input placeholder={t("report.subCity")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,9 +254,9 @@ export default function QuickRegistrationForm() {
                 name="woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Woreda</FormLabel>
+                    <FormLabel>{t("report.woreda")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter woreda" {...field} />
+                      <Input placeholder={t("report.woreda")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -256,9 +269,14 @@ export default function QuickRegistrationForm() {
               name="facilitatorCityId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Facilitator City ID</FormLabel>
+                  <FormLabel>
+                    {t("support.register.facilitatorCityId")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter facilitator ID" {...field} />
+                    <Input
+                      placeholder={t("support.register.placeholder.cityId")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -270,10 +288,10 @@ export default function QuickRegistrationForm() {
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Remark (Optional)</FormLabel>
+                  <FormLabel>{t("support.register.remarks")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter additional notes..."
+                      placeholder={t("support.register.placeholder.remarks")}
                       {...field}
                     />
                   </FormControl>
@@ -292,8 +310,8 @@ export default function QuickRegistrationForm() {
             disabled={registerCombinedMutation.isPending}
           >
             {registerCombinedMutation.isPending
-              ? "Registering..."
-              : "Register Woman & Support"}
+              ? t("form.buttons.registering")
+              : t("support.quick.submit")}
           </Button>
         </div>
       </form>

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { useGetServiceTypesQuery } from "@/hooks/support";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ServiceTypeSelectProps {
   value?: string;
@@ -20,12 +21,13 @@ export default function ServiceTypeSelect({
   onValueChange,
 }: ServiceTypeSelectProps) {
   const { data: serviceTypes, isLoading } = useGetServiceTypesQuery();
+  const t = useTranslations("womens");
 
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="w-4 h-4 animate-spin" />
-        Loading service types...
+        {t("common.loading")}
       </div>
     );
   }
@@ -33,7 +35,7 @@ export default function ServiceTypeSelect({
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
-        <SelectValue placeholder="Select Service Type" />
+        <SelectValue placeholder={t("report.selectServiceType")} />
       </SelectTrigger>
       <SelectContent>
         {serviceTypes?.map((type) => (
