@@ -80,7 +80,13 @@ const WomenProfileDetail = () => {
                     : "bg-red-100 text-red-700"
               }`}
             >
-              {profile.approvalStatus}
+              {t(
+                `status.approval.${
+                  profile.approvalStatus === "PENDING"
+                    ? "PENDING_APPROVAL"
+                    : profile.approvalStatus
+                }`,
+              )}
             </span>
           )}
           {profile.isActive ? (

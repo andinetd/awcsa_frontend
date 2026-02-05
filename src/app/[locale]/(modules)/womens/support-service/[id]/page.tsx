@@ -91,7 +91,9 @@ export default function SupportDetailPage() {
                 {t("support.register.serviceType")}
               </p>
               <p className="text-lg font-semibold">
-                {support.serviceType?.name || "N/A"}
+                {support.serviceType?.name
+                  ? t(`serviceTypes.${support.serviceType.name}`)
+                  : "N/A"}
               </p>
               {support.serviceType?.category && (
                 <Badge variant="outline" className="mt-1">

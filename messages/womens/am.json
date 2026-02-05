@@ -8,11 +8,11 @@
   },
   "dashboard": {
     "title": "የሴቶች ጉዳይ ዳሽቦርድ",
-    "subtitle": "የሴቶችን መገለጫዎች፣ የድጋፍ አገልግሎቶችን እና የማህበረሰብ መረጃዎችን ያስዳድሩ።",
-    "registerProfile": "መገለጫ ይመዝገቡ",
+    "subtitle": "የሴቶችን ፕሮፍይሎች፣ የድጋፍ አገልግሎቶችን እና የማህበረሰብ መረጃዎችን ያስዳድሩ።",
+    "registerProfile": "ፕሮፍይል ይመዝገቡ",
     "generateReport": "ሪፖርት ያውጡ",
     "stats": {
-      "totalProfiles": "ጠቅላላ መገለጫዎች",
+      "totalProfiles": "ጠቅላላ ፕሮፍይሎች",
       "supportServices": "የድጋፍ አገልግሎቶች",
       "activeInterventions": "ንቁ ጣልቃ ገብነቶች",
       "monthlyReports": "ወርሃዊ ሪፖርቶች"
@@ -20,22 +20,22 @@
     "activity": {
       "title": "የቅርብ ጊዜ እንቅስቃሴ",
       "communityRegistry": "የማህበረሰብ ምዝገባ",
-      "description": "የቅርብ ጊዜ የመገለጫ ምዝገባዎች እና የአገልግሎት ዝመናዎች እዚህ ይታያሉ።"
+      "description": "የቅርብ ጊዜ የፕሮፍይል ምዝገባዎች እና የአገልግሎት ዝመናዎች እዚህ ይታያሉ።"
     },
     "quickActions": {
       "title": "ፈጣን እርምጃዎች",
-      "womenProfiles": "የሴቶች መገለጫዎች",
+      "womenProfiles": "የሴቶች ፕሮፍይሎች",
       "supportServices": "የድጋፍ አገልግሎቶች",
       "caseManagement": "የጉዳይ አስተዳደር"
     }
   },
   "womenList": {
-    "title": "የሴቶች መገለጫዎች",
-    "subtitle": "በስርዓቱ ውስጥ የተመዘገቡ ሴቶችን ያስዳድሩ",
+    "title": "የሴቶች ፕሮፍይሎች",
+    "subtitle": "በሲሰተሙ ውስጥ የተመዘገቡ ሴቶችን ያስዳድሩ",
     "searchPlaceholder": "በስም፣ በስልክ ወይም በመታወቂያ ይፈልጉ...",
-    "loading": "የሴቶች መገለጫ በመጫን ላይ...",
-    "error": "የሴቶች መገለጫዎችን በመጫን ላይ ስህተት ተከስቷል።",
-    "noProfiles": "ምንም የሴቶች መገለጫ አልተገኘም።",
+    "loading": "የሴቶች ፕሮፍይል በመጫን ላይ...",
+    "error": "የሴቶች ፕሮፍይሎችን በመጫን ላይ ስህተት ተከስቷል።",
+    "noProfiles": "ምንም የሴቶች ፕሮፍይሎች አልተገኘም።",
     "pagination": {
       "showing": "ከ {total} ውስጥ ከ {start} እስከ {end} እያሳየ ነው",
       "previous": "ቀዳሚ",
@@ -49,7 +49,7 @@
   },
   "form": {
     "registerTitle": "አዲስ ሴት ይመዝገቡ",
-    "editTitle": "የሴት መገለጫ ያርሙ",
+    "editTitle": "የሴት ፕሮፍይል ያርሙ",
     "description": "በስርዓቱ ውስጥ ለመመዝገብ የሴቷን ዝርዝር መረጃ ያስገቡ።",
     "personalInfo": "የግል መረጃ",
     "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
@@ -72,19 +72,24 @@
       "saving": "በማስቀመጥ ላይ..."
     },
     "messages": {
-      "successRegister": "የሴቶች መገለጫ በተሳካ ሁኔታ ተመዝግቧል",
-      "errorRegister": "መገለጫውን መመዝገብ አልተቻለም",
-      "successUpdate": "መገለጫው በተሳካ ሁኔታ ታድሷል",
-      "errorUpdate": "መገለጫውን ማደስ አልተቻለም"
+      "successRegister": "የሴቶች ፕሮፍይል በተሳካ ሁኔታ ተመዝግቧል",
+      "errorRegister": "ፕሮፍይልውን መመዝገብ አልተቻለም",
+      "successUpdate": "ፕሮፍይልው በተሳካ ሁኔታ ታድሷል",
+      "errorUpdate": "ፕሮፍይልውን ማደስ አልተቻለም"
     }
   },
   "status": {
     "title": "ሁኔታን ይቀይሩ",
-    "description": "እርግጠኛ ነዎት ይህንን መገለጫ {status} ይፈልጋሉ?",
+    "description": "እርግጠኛ ነዎት ይህንን ፕሮፍይል {status} ይፈልጋሉ?",
     "active": "ማንቃት",
     "inactive": "ማሰናከል",
     "success": "ሁኔታው በተሳካ ሁኔታ ተቀይሯል",
-    "error": "ሁኔታውን መቀየር አልተቻለም"
+    "error": "ሁኔታውን መቀየር አልተቻለም",
+    "approval": {
+      "PENDING_APPROVAL": "መጠባበቅ ላይ",
+      "APPROVED": "ጸድቋል",
+      "REJECTED": "ውድቅ የተደረገ"
+    }
   },
   "support": {
     "title": "የድጋፍ አገልግሎቶች",
@@ -155,12 +160,16 @@
   "report": {
     "title": "የሴቶች ድጋፍ አገልግሎቶች ሪፖርት ያውጡ",
     "description": "ለሪፖርትዎ ማጣሪያዎችን እና አምዶችን ይምረጡ።",
+    "selectServiceType": "የአገልግሎት ዓይነት ይምረጡ",
     "startDate": "የመጀመሪያ ቀን",
     "endDate": "የመጨረሻ ቀን",
     "subCity": "ክፍለ ከተማ",
     "woreda": "ወረዳ",
     "serviceTypeId": "የአገልግሎት አይነት መለያ",
     "beneficiaryLevel": "የተጠቃሚ ደረጃ",
+    "allLevels": "ሁሉም ደረጃዎች",
+    "individual": "ግለሰብ",
+    "group": "ቡድን/ማህበር",
     "format": "ፎርማት",
     "columns": "የሚካተቱ አምዶች",
     "buttons": {
@@ -170,16 +179,29 @@
     "messages": {
       "success": "ሪፖርቱ በተሳካ ሁኔታ ተዘጋጅቶ ወርዷል",
       "error": "ሪፖርቱን ማዘጋጀት አልተቻለም"
+    },
+    "columnsList": {
+      "id": "መለያ",
+      "dateProvided": "የተሰጠበት ቀን",
+      "serviceType": "የአገልግሎት ዓይነት",
+      "category": "ምድብ",
+      "provider": "አቅራቢ",
+      "amountOrQuantity": "መጠን/ብዛት",
+      "beneficiaryName": "የተጠቃሚ ስም",
+      "beneficiaryType": "የተጠቃሚ ዓይነት",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "remark": "አስተያየት"
     }
   },
   "profileDetail": {
-    "title": "የሴቲቱ መገለጫ ዝርዝር",
-    "loading": "መገለጫ በመጫን ላይ...",
-    "error": "መገለጫውን መጫን አልተቻለም",
+    "title": "የሴቲቱ ፕሮፍይል ዝርዝር",
+    "loading": "ፕሮፍይል በመጫን ላይ...",
+    "error": "ፕሮፍይልውን መጫን አልተቻለም",
     "goBack": "ተመለስ",
     "active": "ንቁ",
     "inactive": "ንቁ ያልሆነ",
-    "editProfile": "መገለጫ ያርሙ",
+    "editProfile": "ፕሮፍይል ያርሙ",
     "toggleStatus": "ሁኔታን ይቀይሩ",
     "personalInfo": "የግል መረጃ",
     "contactInfo": "የመገናኛ መረጃ",
@@ -230,5 +252,22 @@
       "success": "የክትትል መዝገብ በተሳካ ሁኔታ ተጨምሯል",
       "error": "የክትትል መዝገብ ማከል አልተቻለም"
     }
+  },
+  "serviceTypes": {
+    "Disability Financial Grant": "የአካል ጉዳት የገንዘብ ድጋፍ",
+    "Emergency Medical Fund": "የአስቸኳይ ጊዜ የህክምና ፈንድ",
+    "Food & Nutrition Support": "የምግብ እና የተመጣጠነ ምግብ ድጋፍ",
+    "Health Insurance Coverage": "የጤና መድን ሽፋን",
+    "Legal Counseling": "የህግ ምክር",
+    "Medical Checkup & Treatment": "የህክምና ምርመራ እና ህክምና",
+    "Mobility Device Supply": "የመንቀሳቀሻ መሳሪያዎች አቅርቦት",
+    "Monthly Financial Subsidy": "ወርሃዊ የገንዘብ ድጎማ",
+    "Psychosocial Counseling": "የስነ-ልቦና ማህበራዊ ምክር",
+    "Public Transport Pass": "የህዝብ ትራንስፖርት አገልግሎት",
+    "Sanitary Supplies": "የንጽህና መጠበቂያ ቁሳቁሶች",
+    "School Uniform & Material Support": "የትምህርት ቤት ዩኒፎርም እና ቁሳቁስ ድጋፍ",
+    "Skill Development Training": "የክህሎት ማጎልበቻ ስልጠና",
+    "Startup Capital Support": "የመነሻ ካፒታል ድጋፍ",
+    "Temporary Shelter": "ጊዜያዊ መጠለያ"
   }
 }

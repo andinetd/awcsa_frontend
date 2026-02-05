@@ -84,7 +84,12 @@
     "active": "activate",
     "inactive": "deactivate",
     "success": "Status updated successfully",
-    "error": "Failed to update status"
+    "error": "Failed to update status",
+    "approval": {
+      "PENDING_APPROVAL": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    }
   },
   "support": {
     "title": "Support Services",
@@ -155,12 +160,16 @@
   "report": {
     "title": "Generate Women Support Services Report",
     "description": "Select filters and columns for your report.",
+    "selectServiceType": "Select Service Type",
     "startDate": "Start Date",
     "endDate": "End Date",
     "subCity": "Sub City",
     "woreda": "Woreda",
     "serviceTypeId": "Service Type ID",
     "beneficiaryLevel": "Beneficiary Level",
+    "allLevels": "All Levels",
+    "individual": "Individual",
+    "group": "Group",
     "format": "Format",
     "columns": "Columns to Include",
     "buttons": {
@@ -170,6 +179,19 @@
     "messages": {
       "success": "Report generated and downloaded successfully",
       "error": "Failed to generate report"
+    },
+    "columnsList": {
+      "id": "ID",
+      "dateProvided": "Date Provided",
+      "serviceType": "Service Type",
+      "category": "Category",
+      "provider": "Provider",
+      "amountOrQuantity": "Amount/Quantity",
+      "beneficiaryName": "Beneficiary Name",
+      "beneficiaryType": "Beneficiary Type",
+      "subCity": "Sub City",
+      "woreda": "Woreda",
+      "remark": "Remark"
     }
   },
   "profileDetail": {
@@ -230,5 +252,22 @@
       "success": "Monitoring log added successfully",
       "error": "Failed to add monitoring log"
     }
+  },
+  "serviceTypes": {
+    "Disability Financial Grant": "Disability Financial Grant",
+    "Emergency Medical Fund": "Emergency Medical Fund",
+    "Food & Nutrition Support": "Food & Nutrition Support",
+    "Health Insurance Coverage": "Health Insurance Coverage",
+    "Legal Counseling": "Legal Counseling",
+    "Medical Checkup & Treatment": "Medical Checkup & Treatment",
+    "Mobility Device Supply": "Mobility Device Supply",
+    "Monthly Financial Subsidy": "Monthly Financial Subsidy",
+    "Psychosocial Counseling": "Psychosocial Counseling",
+    "Public Transport Pass": "Public Transport Pass",
+    "Sanitary Supplies": "Sanitary Supplies",
+    "School Uniform & Material Support": "School Uniform & Material Support",
+    "Skill Development Training": "Skill Development Training",
+    "Startup Capital Support": "Startup Capital Support",
+    "Temporary Shelter": "Temporary Shelter"
   }
 }

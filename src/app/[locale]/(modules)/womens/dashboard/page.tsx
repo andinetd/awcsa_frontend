@@ -51,10 +51,10 @@ const WomenDashboard = () => {
               {t("dashboard.registerProfile")}
             </Button>
           </Link>
-          <Button className="gap-2">
+          {/* <Button className="gap-2">
             <Download className="w-4 h-4" />
             {t("dashboard.generateReport")}
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -136,13 +136,13 @@ const WomenDashboard = () => {
                 {t("dashboard.quickActions.supportServices")}
               </Button>
             </Link>
-            <Button
+            {/* <Button
               variant="outline"
               className="w-full justify-start gap-3 h-12 text-zinc-700"
             >
               <FileText className="w-4 h-4 text-zinc-500" />
               {t("dashboard.quickActions.caseManagement")}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

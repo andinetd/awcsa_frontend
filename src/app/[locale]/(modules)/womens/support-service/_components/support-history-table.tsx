@@ -54,7 +54,9 @@ export default function SupportHistoryTable({
           {data.map((service) => (
             <TableRow key={service.id}>
               <TableCell className="font-medium">
-                {service.serviceType?.name || "N/A"}
+                {service.serviceType?.name
+                  ? t(`serviceTypes.${service.serviceType.name}`)
+                  : "N/A"}
               </TableCell>
               <TableCell>{service.provider}</TableCell>
               <TableCell>{service.amountOrQuantity}</TableCell>

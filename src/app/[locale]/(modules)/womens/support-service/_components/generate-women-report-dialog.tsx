@@ -172,7 +172,7 @@ export default function GenerateWomenReportDialog() {
                 <SelectContent>
                   {serviceTypes?.map((type) => (
                     <SelectItem key={type.id} value={type.id.toString()}>
-                      {type.name}
+                      {t(`serviceTypes.${type.name}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -229,7 +229,7 @@ export default function GenerateWomenReportDialog() {
                     onCheckedChange={() => handleColumnToggle(col.id)}
                   />
                   <Label htmlFor={`col-${col.id}`} className="text-sm">
-                    {col.label}
+                    {t(`report.columnsList.${col.id}`)}
                   </Label>
                 </div>
               ))}

@@ -40,7 +40,7 @@ export default function ServiceTypeSelect({
       <SelectContent>
         {serviceTypes?.map((type) => (
           <SelectItem key={type.id} value={type.id.toString()}>
-            {type.name}
+            {t(`serviceTypes.${type.name}`)}
           </SelectItem>
         ))}
       </SelectContent>
