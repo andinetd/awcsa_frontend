@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -50,6 +52,7 @@ export default function NewEdirForm({
   edirId,
   trigger,
 }: NewEdirFormProps) {
+  const t = useTranslations("social-affairs.edir.form");
   const [open, setOpen] = useState(false);
   const createMutation = useCreateEdirMutation();
   const updateMutation = useUpdateEdirMutation();
@@ -67,7 +70,7 @@ export default function NewEdirForm({
       residenceBased: reasons.includes("RESIDENCE"),
       genderBased: reasons.includes("GENDER"),
       ethnicityBased: reasons.includes("ETHNICITY"),
-      other: "", // Mapped separately or not strictly mapped from array if it just contains "OTHER"
+      other: "",
     };
   };
 
@@ -105,7 +108,6 @@ export default function NewEdirForm({
   // Populate form with initial data when available
   useEffect(() => {
     if (initialData) {
-      // Create a date object or use string directly if formatted correctly 'YYYY-MM-DD'
       const dateStr = initialData.establishmentDate
         ? new Date(initialData.establishmentDate).toISOString().split("T")[0]
         : "";
@@ -146,33 +148,31 @@ export default function NewEdirForm({
   }, [initialData, form]);
 
   function onSubmit(values: NewEdirSchemaType) {
-    // Transform nested form data to flat structure expected by API
     const apiPayload = {
       ...values,
       managementMale: values.members.management.male,
       managementFemale: values.members.management.female,
       generalMale: values.members.general.male,
       generalFemale: values.members.general.female,
-      establishmentReasons: values.establishmentReasons, // Send as object as required by backend
+      establishmentReasons: values.establishmentReasons,
       otherReasonDescription: values.establishmentReasons.other,
-      // Remove nested objects meant for form state only
     };
 
     if (isEditMode && edirId) {
       updateMutation.mutate(
-        { id: edirId, data: apiPayload },
+        { id: edirId, data: apiPayload as any },
         {
           onSuccess: () => {
             setOpen(false);
             toast.success("Edir updated successfully");
           },
-        }
+        },
       );
     } else {
       createMutation.mutate(apiPayload as any, {
         onSuccess: () => {
           setOpen(false);
-          form.reset(); // Only reset on create success
+          form.reset();
           toast.success("Edir created successfully");
         },
       });
@@ -187,19 +187,17 @@ export default function NewEdirForm({
         ) : (
           <Button className="gap-2">
             <Plus className="w-4 h-4" />
-            Add New Edir
+            {t("buttons.register")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? "Update Edir Association" : "Register New Edir"}
+            {isEditMode ? t("updateTitle") : t("createTitle")}
           </DialogTitle>
           <DialogDescription>
-            {isEditMode
-              ? "Update the details of the Edir association."
-              : "Enter the details of the new Edir association."}
+            {isEditMode ? t("updateDesc") : t("createDesc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -207,16 +205,16 @@ export default function NewEdirForm({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Basic Info */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Basic Information</h3>
+              <h3 className="text-lg font-medium">{t("sections.basic")}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Edir Name</FormLabel>
+                      <FormLabel>{t("fields.name")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Edir Name" {...field} />
+                        <Input placeholder={t("fields.name")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -227,7 +225,7 @@ export default function NewEdirForm({
                   name="establishmentDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Establishment Date</FormLabel>
+                      <FormLabel>{t("fields.date")}</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -240,7 +238,7 @@ export default function NewEdirForm({
                   name="formationMethod"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Formation Method</FormLabel>
+                      <FormLabel>{t("fields.method")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -253,10 +251,10 @@ export default function NewEdirForm({
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="GOVERNMENT_ISSUED">
-                            Government Issued
+                            {t("methods.government")}
                           </SelectItem>
                           <SelectItem value="WILL_OF_PEOPLE">
-                            Will of People
+                            {t("methods.will")}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -269,16 +267,16 @@ export default function NewEdirForm({
 
             {/* Address */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Address</h3>
+              <h3 className="text-lg font-medium">{t("sections.address")}</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="subCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sub City</FormLabel>
+                      <FormLabel>{t("fields.subCity")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Sub City" {...field} />
+                        <Input placeholder={t("fields.subCity")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -289,9 +287,9 @@ export default function NewEdirForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Woreda</FormLabel>
+                      <FormLabel>{t("fields.woreda")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Woreda" {...field} />
+                        <Input placeholder={t("fields.woreda")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -302,9 +300,9 @@ export default function NewEdirForm({
                   name="kebele"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Kebele</FormLabel>
+                      <FormLabel>{t("fields.kebele")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Kebele" {...field} />
+                        <Input placeholder={t("fields.kebele")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -315,9 +313,12 @@ export default function NewEdirForm({
                   name="houseNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>House Number</FormLabel>
+                      <FormLabel>{t("fields.houseNumber")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="House No." {...field} />
+                        <Input
+                          placeholder={t("fields.houseNumber")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -328,9 +329,9 @@ export default function NewEdirForm({
                   name="specificLocation"
                   render={({ field }) => (
                     <FormItem className="col-span-2">
-                      <FormLabel>Specific Location</FormLabel>
+                      <FormLabel>{t("fields.location")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Near Church" {...field} />
+                        <Input placeholder={t("fields.location")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -341,16 +342,20 @@ export default function NewEdirForm({
 
             {/* Members Stats */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Membership Statistics</h3>
+              <h3 className="text-lg font-medium">
+                {t("sections.membership")}
+              </h3>
               <div className="space-y-2">
-                <FormLabel>Management Members</FormLabel>
+                <FormLabel>{t("fields.managementMembers")}</FormLabel>
                 <div className="grid grid-cols-3 gap-4">
                   <FormField
                     control={form.control}
                     name="members.management.male"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Male</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.male")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -362,7 +367,9 @@ export default function NewEdirForm({
                     name="members.management.female"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Female</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.female")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -374,7 +381,9 @@ export default function NewEdirForm({
                     name="members.management.total"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Total</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.total")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -384,14 +393,16 @@ export default function NewEdirForm({
                 </div>
               </div>
               <div className="space-y-2">
-                <FormLabel>General Members</FormLabel>
+                <FormLabel>{t("fields.generalMembers")}</FormLabel>
                 <div className="grid grid-cols-3 gap-4">
                   <FormField
                     control={form.control}
                     name="members.general.male"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Male</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.male")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -403,7 +414,9 @@ export default function NewEdirForm({
                     name="members.general.female"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Female</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.female")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -415,7 +428,9 @@ export default function NewEdirForm({
                     name="members.general.total"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">Total</FormLabel>
+                        <FormLabel className="text-xs">
+                          {t("fields.total")}
+                        </FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -428,16 +443,21 @@ export default function NewEdirForm({
 
             {/* Financials & Remarks */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Financials & Remarks</h3>
+              <h3 className="text-lg font-medium">
+                {t("sections.financials")}
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="bankAccountNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bank Account Number</FormLabel>
+                      <FormLabel>{t("fields.bankAccount")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Account No." {...field} />
+                        <Input
+                          placeholder={t("fields.bankAccount")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -448,9 +468,12 @@ export default function NewEdirForm({
                   name="monthlyPaymentDetails"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Monthly Contribution</FormLabel>
+                      <FormLabel>{t("fields.contribution")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Amount/Details" {...field} />
+                        <Input
+                          placeholder={t("fields.contribution")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -462,12 +485,9 @@ export default function NewEdirForm({
                 name="remark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Remarks</FormLabel>
+                    <FormLabel>{t("fields.remarks")}</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Any additional notes..."
-                        {...field}
-                      />
+                      <Textarea placeholder={t("fields.remarks")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -477,7 +497,7 @@ export default function NewEdirForm({
 
             {/* Establishment Reasons - Checkboxes */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Establishment Reasons</h3>
+              <h3 className="text-lg font-medium">{t("sections.reasons")}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -491,7 +511,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>Residence Based</FormLabel>
+                        <FormLabel>{t("reasons.residence")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -508,7 +528,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>Religion Based</FormLabel>
+                        <FormLabel>{t("reasons.religion")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -525,7 +545,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>Workplace Based</FormLabel>
+                        <FormLabel>{t("reasons.workplace")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -542,7 +562,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>Gender Based</FormLabel>
+                        <FormLabel>{t("reasons.gender")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -559,7 +579,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>Ethnicity Based</FormLabel>
+                        <FormLabel>{t("reasons.ethnicity")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -573,16 +593,16 @@ export default function NewEdirForm({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("buttons.cancel")}
               </Button>
               <Button type="submit" disabled={isPending}>
                 {isPending
                   ? isEditMode
-                    ? "Updating..."
-                    : "Registering..."
+                    ? t("buttons.updating")
+                    : t("buttons.registering")
                   : isEditMode
-                  ? "Update Edir"
-                  : "Register Edir"}
+                    ? t("buttons.update")
+                    : t("buttons.register")}
               </Button>
             </div>
           </form>

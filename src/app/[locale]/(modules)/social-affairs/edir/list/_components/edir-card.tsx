@@ -18,7 +18,10 @@ interface EdirCardProps {
   onViewDetails?: (edir: Edir) => void;
 }
 
+import { useTranslations } from "next-intl";
+
 const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
+  const t = useTranslations("social-affairs.edir.edir.list");
   const router = useRouter();
   const totalMembers =
     (edir.managementMale || 0) +
@@ -52,17 +55,20 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4" />
           <span>
-            {edir.subCity}, Woreda {edir.woreda}, Kebele {edir.kebele}
+            {edir.subCity}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
+            {edir.kebele}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4" />
-          <span>{Intl.NumberFormat().format(totalMembers || 0)} Members</span>
+          <span>
+            {Intl.NumberFormat().format(totalMembers || 0)} {t("members")}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <CalendarDays className="w-4 h-4" />
           <span>
-            Est:{" "}
+            {t("established")}:{" "}
             {new Date(edir.establishmentDate).toLocaleDateString(undefined, {
               year: "numeric",
               month: "short",
@@ -78,7 +84,7 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
       </CardContent>
       <CardFooter className="flex justify-end mb-3">
         <Button variant="outline" size="sm" onClick={handleViewDetails}>
-          View Details
+          {t("buttons.viewDetails")}
         </Button>
       </CardFooter>
     </Card>

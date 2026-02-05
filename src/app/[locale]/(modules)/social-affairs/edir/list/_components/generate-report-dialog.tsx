@@ -36,7 +36,10 @@ const AVAILABLE_COLUMNS = [
   { id: "members", label: "Members" },
 ];
 
+import { useTranslations } from "next-intl";
+
 export default function GenerateReportDialog() {
+  const t = useTranslations("social-affairs.edir.edir.report");
   const [open, setOpen] = useState(false);
   const { mutate: generateReport, isPending } = useGenerateEdirReportMutation();
 
@@ -61,7 +64,7 @@ export default function GenerateReportDialog() {
     setSelectedColumns((prev) =>
       prev.includes(columnId)
         ? prev.filter((id) => id !== columnId)
-        : [...prev, columnId]
+        : [...prev, columnId],
     );
   };
 
@@ -91,36 +94,45 @@ export default function GenerateReportDialog() {
         document.body.appendChild(link);
         link.click();
         link.parentNode?.removeChild(link);
-        toast.success("Report generated successfully");
+        toast.success(t("success"));
         setOpen(false);
       },
       onError: (error) => {
         console.error(error);
-        toast.error("Failed to generate report");
+        toast.error(t("error"));
       },
     });
   };
+
+  const AVAILABLE_COLUMNS = [
+    { id: "name", label: t("columns.name") },
+    { id: "id", label: t("columns.id") },
+    { id: "phoneNumber", label: t("columns.phone") },
+    { id: "subCity", label: t("columns.subCity") },
+    { id: "woreda", label: t("columns.woreda") },
+    { id: "bankAccountNumber", label: t("columns.bankAccount") },
+    { id: "establishmentDate", label: t("columns.date") },
+    { id: "members", label: t("columns.members") },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <FileDown className="w-4 h-4" />
-          Generate Report
+          {t("buttons.generate")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Generate Edir Report</DialogTitle>
-          <DialogDescription>
-            Select filters and columns for your report.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Start Date</Label>
+              <Label>{t("fields.startDate")}</Label>
               <Input
                 type="date"
                 value={startDate}
@@ -128,7 +140,7 @@ export default function GenerateReportDialog() {
               />
             </div>
             <div className="space-y-2">
-              <Label>End Date</Label>
+              <Label>{t("fields.endDate")}</Label>
               <Input
                 type="date"
                 value={endDate}
@@ -139,17 +151,17 @@ export default function GenerateReportDialog() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Sub City</Label>
+              <Label>{t("fields.subCity")}</Label>
               <Input
-                placeholder="Sub City"
+                placeholder={t("fields.subCity")}
                 value={subCity}
                 onChange={(e) => setSubCity(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label>Woreda</Label>
+              <Label>{t("fields.woreda")}</Label>
               <Input
-                placeholder="Woreda"
+                placeholder={t("fields.woreda")}
                 value={woreda}
                 onChange={(e) => setWoreda(e.target.value)}
               />
@@ -157,7 +169,7 @@ export default function GenerateReportDialog() {
           </div>
 
           <div className="space-y-2">
-            <Label>Format</Label>
+            <Label>{t("fields.format")}</Label>
             <Select
               value={format}
               onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
@@ -166,14 +178,14 @@ export default function GenerateReportDialog() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="EXCEL">Excel</SelectItem>
-                <SelectItem value="PDF">PDF</SelectItem>
+                <SelectItem value="EXCEL">{t("formats.excel")}</SelectItem>
+                <SelectItem value="PDF">{t("formats.pdf")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label>Columns</Label>
+            <Label>{t("columns.title")}</Label>
             <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
               {AVAILABLE_COLUMNS.map((col) => (
                 <div key={col.id} className="flex items-center space-x-2">
@@ -197,11 +209,11 @@ export default function GenerateReportDialog() {
             onClick={() => setOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t("buttons.cancel")}
           </Button>
           <Button onClick={handleGenerate} disabled={isPending}>
             {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Download
+            {t("buttons.download")}
           </Button>
         </div>
       </DialogContent>

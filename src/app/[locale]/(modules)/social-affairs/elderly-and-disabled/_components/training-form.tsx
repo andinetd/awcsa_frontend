@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -44,6 +45,7 @@ export default function TrainingForm({
   cityIdNumber,
   trigger,
 }: TrainingFormProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.training.form");
   const [open, setOpen] = React.useState(false);
   const registerMutation = useRegisterTrainingMutation();
   const { data: disabled } = useGetBeneficiariesQuery("DISABLED");
@@ -68,12 +70,12 @@ export default function TrainingForm({
   const onSubmit = (values: TrainingSchemaType) => {
     registerMutation.mutate(values as any, {
       onSuccess: () => {
-        toast.success("Training record registered successfully");
+        toast.success(t("messages.success"));
         form.reset();
         setOpen(false);
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Failed to register training");
+        toast.error(error?.message || t("messages.error"));
       },
     });
   };
@@ -84,7 +86,7 @@ export default function TrainingForm({
         {trigger || (
           <Button className="gap-2 bg-primary hover:bg-primary/90">
             <Plus className="w-4 h-4" />
-            Add Record
+            {t("addButton")}
           </Button>
         )}
       </DialogTrigger>
@@ -92,7 +94,7 @@ export default function TrainingForm({
         <DialogHeader>
           <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
             <GraduationCap className="w-6 h-6 text-primary" />
-            Add Training Record
+            {t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -106,14 +108,16 @@ export default function TrainingForm({
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Beneficiary</FormLabel>
+                    <FormLabel>{t("fields.beneficiary")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a beneficiary" />
+                          <SelectValue
+                            placeholder={t("placeholders.selectBeneficiary")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -135,48 +139,64 @@ export default function TrainingForm({
               name="trainingType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Training Type</FormLabel>
+                  <FormLabel>{t("fields.trainingType")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select training type" />
+                        <SelectValue
+                          placeholder={t("placeholders.selectTrainingType")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="AGRICULTURE">Agriculture</SelectItem>
-                      <SelectItem value="BUSINESS">Business</SelectItem>
+                      <SelectItem value="AGRICULTURE">
+                        {t("trainingTypes.AGRICULTURE")}
+                      </SelectItem>
+                      <SelectItem value="BUSINESS">
+                        {t("trainingTypes.BUSINESS")}
+                      </SelectItem>
                       <SelectItem value="HOTEL_HOSPITALITY">
-                        Hotel & Hospitality
+                        {t("trainingTypes.HOTEL_HOSPITALITY")}
                       </SelectItem>
                       <SelectItem value="HOUSE_CONSTRUCTION">
-                        House Construction
+                        {t("trainingTypes.HOUSE_CONSTRUCTION")}
                       </SelectItem>
-                      <SelectItem value="AUTOMOTIVE">Automotive</SelectItem>
-                      <SelectItem value="ELECTRICITY">Electricity</SelectItem>
-                      <SelectItem value="ICT">ICT</SelectItem>
+                      <SelectItem value="AUTOMOTIVE">
+                        {t("trainingTypes.AUTOMOTIVE")}
+                      </SelectItem>
+                      <SelectItem value="ELECTRICITY">
+                        {t("trainingTypes.ELECTRICITY")}
+                      </SelectItem>
+                      <SelectItem value="ICT">
+                        {t("trainingTypes.ICT")}
+                      </SelectItem>
                       <SelectItem value="MUNICIPALITY_ADMIN">
-                        Municipality Admin
+                        {t("trainingTypes.MUNICIPALITY_ADMIN")}
                       </SelectItem>
                       <SelectItem value="ROAD_CONSTRUCTION">
-                        Road Construction
+                        {t("trainingTypes.ROAD_CONSTRUCTION")}
                       </SelectItem>
                       <SelectItem value="AGRO_PROCESSING">
-                        Agro Processing
+                        {t("trainingTypes.AGRO_PROCESSING")}
                       </SelectItem>
                       <SelectItem value="FURNITURE_MAKING">
-                        Furniture Making
+                        {t("trainingTypes.FURNITURE_MAKING")}
                       </SelectItem>
                       <SelectItem value="TEXTILE_GARMENT">
-                        Textile & Garment
+                        {t("trainingTypes.TEXTILE_GARMENT")}
                       </SelectItem>
-                      <SelectItem value="LEATHER_WORK">Leather Work</SelectItem>
+                      <SelectItem value="LEATHER_WORK">
+                        {t("trainingTypes.LEATHER_WORK")}
+                      </SelectItem>
                       <SelectItem value="METAL_WORKING">
-                        Metal Working
+                        {t("trainingTypes.METAL_WORKING")}
                       </SelectItem>
-                      <SelectItem value="OTHER">Other</SelectItem>
+                      <SelectItem value="OTHER">
+                        {t("trainingTypes.OTHER")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -189,9 +209,12 @@ export default function TrainingForm({
               name="provider"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Provider / Institution</FormLabel>
+                  <FormLabel>{t("fields.provider")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter provider name" {...field} />
+                    <Input
+                      placeholder={t("placeholders.provider")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -204,7 +227,7 @@ export default function TrainingForm({
                 name="startDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Start Date</FormLabel>
+                    <FormLabel>{t("fields.startDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -217,7 +240,7 @@ export default function TrainingForm({
                 name="completionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Completion Date</FormLabel>
+                    <FormLabel>{t("fields.completionDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -233,7 +256,7 @@ export default function TrainingForm({
                 name="dropoutDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dropout Date (If any)</FormLabel>
+                    <FormLabel>{t("fields.dropoutDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -246,9 +269,12 @@ export default function TrainingForm({
                 name="dropoutReason"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dropout Reason</FormLabel>
+                    <FormLabel>{t("fields.dropoutReason")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="..." {...field} />
+                      <Input
+                        placeholder={t("placeholders.dropoutReason")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -270,7 +296,7 @@ export default function TrainingForm({
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Has COC Certificate</FormLabel>
+                    <FormLabel>{t("fields.hasCOC")}</FormLabel>
                   </div>
                 </FormItem>
               )}
@@ -281,9 +307,9 @@ export default function TrainingForm({
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Remark (Optional)</FormLabel>
+                  <FormLabel>{t("fields.remark")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Add any notes..." {...field} />
+                    <Input placeholder={t("placeholders.remark")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -296,13 +322,13 @@ export default function TrainingForm({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("buttons.cancel")}
               </Button>
               <Button type="submit" disabled={registerMutation.isPending}>
                 {registerMutation.isPending && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                Save Training
+                {t("buttons.save")}
               </Button>
             </div>
           </form>

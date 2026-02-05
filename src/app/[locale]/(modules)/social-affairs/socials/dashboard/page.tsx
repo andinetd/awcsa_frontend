@@ -14,6 +14,7 @@ import { useGetEdirAssociationsQuery } from "@/hooks/social-affairs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SidebarLayout } from "@/components/shared/sidebar-layout";
+import { useTranslations } from "next-intl";
 
 const chartData = [
   { day: 1, value: 5 },
@@ -33,6 +34,7 @@ const chartConfig = {
 };
 
 const SocialsDashboard = () => {
+  const t = useTranslations("social-affairs.socials.dashboard");
   const { data: edirs } = useGetEdirAssociationsQuery();
 
   return (
@@ -41,29 +43,27 @@ const SocialsDashboard = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-zinc-900 font-lexend">
-              Social Affairs Dashboard
+              {t("title")}
             </h1>
-            <p className="text-zinc-500 mt-1">
-              Manage Edir associations, members, and social reports.
-            </p>
+            <p className="text-zinc-500 mt-1">{t("subtitle")}</p>
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <Link href="/social-affairs/edir/list">
               <Button variant="outline" className="gap-2">
                 <Plus className="w-4 h-4" />
-                Register Edir
+                {t("registerEdir")}
               </Button>
             </Link>
             <Button className="gap-2">
               <Download className="w-4 h-4" />
-              Generate Report
+              {t("generateReport")}
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatsCard
-            title="Total Edirs"
+            title={t("stats.totalEdirs")}
             icon={HandHelping}
             value={edirs?.length || 0}
             chartData={chartData}
@@ -71,7 +71,7 @@ const SocialsDashboard = () => {
             dataKey="edirs"
           />
           <StatsCard
-            title="Total Members"
+            title={t("stats.totalMembers")}
             icon={Users}
             value={1240}
             chartData={chartData}
@@ -79,7 +79,7 @@ const SocialsDashboard = () => {
             dataKey="members"
           />
           <StatsCard
-            title="Recent Growth"
+            title={t("stats.recentGrowth")}
             icon={TrendingUp}
             value="+12%"
             chartData={chartData}
@@ -87,7 +87,7 @@ const SocialsDashboard = () => {
             dataKey="growth"
           />
           <StatsCard
-            title="Active Reports"
+            title={t("stats.activeReports")}
             icon={FileText}
             value={28}
             chartData={chartData}
@@ -99,7 +99,7 @@ const SocialsDashboard = () => {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-xl font-semibold text-zinc-900">
-              Recent Activity
+              {t("recentActivity.title")}
             </h2>
             <div className="min-h-[400px] rounded-xl border border-zinc-200 bg-white p-6 flex flex-col items-center justify-center text-center space-y-3">
               <div className="p-4 bg-zinc-50 rounded-full">
@@ -107,10 +107,10 @@ const SocialsDashboard = () => {
               </div>
               <div>
                 <p className="text-zinc-900 font-medium">
-                  Monitoring Social Trends
+                  {t("recentActivity.monitoring")}
                 </p>
                 <p className="text-sm text-zinc-500">
-                  Latest updates from Edir associations will be displayed here.
+                  {t("recentActivity.description")}
                 </p>
               </div>
             </div>
@@ -118,7 +118,7 @@ const SocialsDashboard = () => {
 
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-zinc-900">
-              Quick Actions
+              {t("quickActions.title")}
             </h2>
             <div className="rounded-xl border border-zinc-200 bg-white p-4 space-y-3">
               <Link href="/social-affairs/edir/list" className="block">
@@ -127,7 +127,7 @@ const SocialsDashboard = () => {
                   className="w-full justify-start gap-3 h-12 text-zinc-700"
                 >
                   <HandHelping className="w-4 h-4 text-zinc-500" />
-                  Edir Associations
+                  {t("quickActions.edirAssociations")}
                 </Button>
               </Link>
               <Button
@@ -135,14 +135,14 @@ const SocialsDashboard = () => {
                 className="w-full justify-start gap-3 h-12 text-zinc-700"
               >
                 <FileUp className="w-4 h-4 text-zinc-500" />
-                Import Members
+                {t("quickActions.importMembers")}
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 h-12 text-zinc-700"
               >
                 <FileText className="w-4 h-4 text-zinc-500" />
-                Download Templates
+                {t("quickActions.downloadTemplates")}
               </Button>
             </div>
           </div>

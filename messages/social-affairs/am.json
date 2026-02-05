@@ -1,0 +1,581 @@
+{
+  "socials": {
+    "dashboard": {
+      "title": "የማህበራዊ ጉዳይ ዳሽቦርድ",
+      "subtitle": "የእድር ማህበራትን፣ አባላትን እና ማህበራዊ ሪፖርቶችን ያስተዳድሩ።",
+      "registerEdir": "እድር መዝግብ",
+      "generateReport": "ሪፖርት አውጣ",
+      "stats": {
+        "totalEdirs": "ጠቅላላ እድሮች",
+        "totalMembers": "ጠቅላላ አባላት",
+        "recentGrowth": "የቅርብ ጊዜ እድገት",
+        "activeReports": "ንቁ ሪፖርቶች"
+      },
+      "recentActivity": {
+        "title": "የቅርብ ጊዜ እንቅስቃሴ",
+        "monitoring": "ማህበራዊ አዝማሚያዎችን መከታተል",
+        "description": "ከእድር ማህበራት አዳዲስ መረጃዎች እዚህ ይታያሉ።"
+      },
+      "quickActions": {
+        "title": "ፈጣን ተግባራት",
+        "edirAssociations": "የእድር ማህበራት",
+        "importMembers": "አባላትን አስመጣ",
+        "downloadTemplates": "ናሙናዎችን አውርድ"
+      }
+    }
+  },
+  "elderlyAndDisabled": {
+    "dashboard": {
+      "title": "የአረጋውያን እና የአካል ጉዳተኞች ዳሽቦርድ",
+      "subtitle": "የምዝገባ፣ የስልጠና እና የስራ ስምሪት እንቅስቃሴዎች አጠቃላይ እይታ።"
+    },
+    "layout": {
+      "title": "የአካል ጉዳተኞች እና አረጋውያን ሞጁል"
+    },
+    "registration": {
+      "title": "{type} ይመዝግቡ",
+      "disabled": "አካል ጉዳተኛ",
+      "elderly": "አረጋዊ",
+      "registerNew": "አዲስ መዝግብ",
+      "success": "{type} በተሳካ ሁኔታ ተመዝግቧል",
+      "error": "ምዝገባ አልተሳካም",
+      "sections": {
+        "basicInfo": "መሠረታዊ መረጃ",
+        "details": "የ{type} ዝርዝር መረጃ"
+      },
+      "fields": {
+        "firstName": "ስም",
+        "lastName": "የአባት ስም",
+        "cityId": "የከተማ መታወቂያ ቁጥር",
+        "phone": "ስልክ ቁጥር",
+        "dob": "የትውልድ ቀን",
+        "address": "አድራሻ",
+        "disabilityType": "የአካል ጉዳት ዓይነት",
+        "disabilityLevel": "የአካል ጉዳት ደረጃ",
+        "cause": "ለአካል ጉዳት መንስኤ",
+        "education": "የትምህርት ደረጃ",
+        "occupation": "የሥራ መስክ",
+        "familyCount": "የቤተሰብ አባላት ብዛት"
+      },
+      "placeholders": {
+        "firstName": "ስም ያስገቡ",
+        "lastName": "የአባት ስም ያስገቡ",
+        "cityId": "ለምሳሌ AA-12345",
+        "phone": "09...",
+        "address": "አድራሻ ያስገቡ",
+        "disabilityType": "ለምሳሌ አካላዊ፣ የእይታ",
+        "selectLevel": "ደረጃ ይምረጡ",
+        "cause": "ለምሳሌ አደጋ፣ ከተፈጥሮ",
+        "education": "ደረጃ ያስገቡ",
+        "occupation": "የሥራ መስክ ያስገቡ",
+        "familyCount": "0"
+      },
+      "levels": {
+        "mild": "ቀላል",
+        "moderate": "መካከለኛ",
+        "severe": "ከባድ"
+      },
+      "buttons": {
+        "cancel": "ሰርዝ"
+      }
+    },
+    "beneficiaries": {
+      "disabledTitle": "አካል ጉዳተኞች",
+      "disabledSubtitle": "ለአካል ጉዳተኞች ምዝገባ እና ድጋፍን ያስተዳድሩ።",
+      "elderlyTitle": "አረጋውያን",
+      "elderlySubtitle": "ለአረጋውያን ምዝገባ እና ድጋፍን ያስተዳድሩ።",
+      "registeredCard": "የተመዘገቡ ተጠቃሚዎች",
+      "searchPlaceholder": "ተጠቃሚዎችን ፈልግ...",
+      "filter": "ማጣሪያ",
+      "loading": "ተጠቃሚዎችን በመጫን ላይ...",
+      "noRecords": "ምንም ተጠቃሚዎች አልተገኙም",
+      "noRecordsSubtitle": "ፍለጋዎን ለማስተካከል ይሞክሩ ወይም አዲስ ይመዝግቡ።",
+      "table": {
+        "fullName": "ሙሉ ስም",
+        "cityId": "የከተማ መታወቂያ",
+        "phone": "ስልክ ቁጥር",
+        "disabilityType": "የአካል ጉዳት ዓይነት",
+        "livingCondition": "የኑሮ ሁኔታ",
+        "status": "ሁኔታ",
+        "actions": "ተግባራት",
+        "active": "ንቁ",
+        "inactive": "ንቁ ያልሆነ",
+        "na": "የለም"
+      }
+    },
+    "jobs": {
+      "title": "የሥራ ስምሪት",
+      "subtitle": "ለተጠቃሚዎች የሥራ እና የኑሮ ድጋፍን ይከታተሉ።",
+      "cardTitle": "አጠቃላይ የሥራ ስምሪቶች",
+      "searchPlaceholder": "በሥራ መደብ ወይም በድርጅት መታወቂያ ይፈልጉ...",
+      "table": {
+        "beneficiary": "ተጠቃሚ",
+        "companyId": "የድርጅት መታወቂያ",
+        "position": "የሥራ መደብ",
+        "startDate": "የተጀመረበት ቀን",
+        "loading": "የሥራ ስምሪቶችን በመጫን ላይ...",
+        "noRecords": "ምንም የሥራ ስምሪት አልተገኘም"
+      },
+      "form": {
+        "title": "የሥራ ስምሪት ያክሉ",
+        "addButton": "ስምሪት ያክሉ",
+        "fields": {
+          "beneficiary": "ተጠቃሚ",
+          "companyId": "የድርጅት መታወቂያ ቁጥር",
+          "jobTitle": "የሥራ መደብ",
+          "startDate": "የተጀመረበት ቀን",
+          "remark": "ማስታወሻ (አማራጭ)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "ተጠቃሚ ይምረጡ",
+          "companyId": "የድርጅት መታወቂያ ቁጥር ያስገቡ",
+          "jobTitle": "ለምሳሌ ሂሳብ ሹም፣ ሹፌር",
+          "remark": "ማንኛውም ማስታወሻ ያክሉ..."
+        },
+        "buttons": {
+          "cancel": "ሰርዝ",
+          "save": "ስምሪት አስቀምጥ"
+        },
+        "messages": {
+          "success": "የሥራ ስምሪት በተሳካ ሁኔታ ተመዝግቧል",
+          "error": "የሥራ ስምሪት መመዝገብ አልተሳካም"
+        }
+      }
+    },
+    "training": {
+      "title": "የስልጠና ክፍለ ጊዜዎች",
+      "subtitle": "ለሁሉም ተጠቃሚዎች የክህሎት ማጎልበቻ እና ስልጠናዎችን ይከታተሉ።",
+      "cardTitle": "አጠቃላይ የስልጠና መዝገቦች",
+      "searchPlaceholder": "በስልጠና ወይም በስም ይፈልጉ...",
+      "table": {
+        "beneficiary": "ተጠቃሚ",
+        "type": "ዓይነት",
+        "provider": "አቅራቢ",
+        "dates": "ቀኖች",
+        "coc": "ሲኦሲ",
+        "loading": "ስልጠናዎችን በመጫን ላይ...",
+        "noRecords": "ምንም የስልጠና መዝገብ አልተገኘም"
+      },
+      "coc": {
+        "yes": "አለው",
+        "no": "የለውም"
+      },
+      "form": {
+        "title": "የስልጠና መዝገብ ያክሉ",
+        "addButton": "መዝገብ ያክሉ",
+        "fields": {
+          "beneficiary": "ተጠቃሚ",
+          "trainingType": "የስልጠና ዓይነት",
+          "provider": "አቅራቢ / ተቋም",
+          "startDate": "የተጀመረበት ቀን",
+          "completionDate": "የተጠናቀቀበት ቀን",
+          "dropoutDate": "የተቋረጠበት ቀን (ካለ)",
+          "dropoutReason": "የመቋረጥ ምክንያት",
+          "hasCOC": "የሲኦሲ ሰርተፊኬት አለው",
+          "remark": "ማስታወሻ (አማራጭ)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "ተጠቃሚ ይምረጡ",
+          "selectTrainingType": "የስልጠና ዓይነት ይምረጡ",
+          "provider": "የአቅራቢ ስም ያስገቡ",
+          "dropoutReason": "...",
+          "remark": "ማንኛውም ማስታወሻ ያክሉ..."
+        },
+        "trainingTypes": {
+          "AGRICULTURE": "ግብርና",
+          "BUSINESS": "ንግድ",
+          "HOTEL_HOSPITALITY": "ሆቴል እና እንግዳ መስተንግዶ",
+          "HOUSE_CONSTRUCTION": "የቤት ግንባታ",
+          "AUTOMOTIVE": "አውቶሞቲቭ",
+          "ELECTRICITY": "ኤሌክትሪክ",
+          "ICT": "አይሲቲ",
+          "MUNICIPALITY_ADMIN": "የማዘጋጃ ቤት አስተዳደር",
+          "ROAD_CONSTRUCTION": "የመንገድ ግንባታ",
+          "AGRO_PROCESSING": "የግብርና ምርት ማቀነባበር",
+          "FURNITURE_MAKING": "የቤት ዕቃ ስራ",
+          "TEXTILE_GARMENT": "ጨርቃ ጨርቅ እና አልባሳት",
+          "LEATHER_WORK": "የቆዳ ስራ",
+          "METAL_WORKING": "የብረታ ብረት ስራ",
+          "OTHER": "ሌላ"
+        },
+        "buttons": {
+          "cancel": "ሰርዝ",
+          "save": "ስልጠና አስቀምጥ"
+        },
+        "messages": {
+          "success": "የስልጠና መዝገብ በተሳካ ሁኔታ ተመዝግቧል",
+          "error": "የስልጠና መዝገብ መመዝገብ አልተሳካም"
+        }
+      }
+    },
+    "profile": {
+      "loading": "መገለጫ በመጫን ላይ...",
+      "notFound": "ተጠቃሚ አልተገኘም",
+      "goBack": "ተመለስ",
+      "badges": {
+        "id": "መታወቂያ",
+        "active": "ንቁ",
+        "inactive": "ንቁ ያልሆነ",
+        "disabled": "አካል ጉዳተኛ",
+        "elderly": "አረጋውያን"
+      },
+      "personalInfo": {
+        "title": "የግል መረጃ",
+        "phone": "ስልክ",
+        "address": "አድራሻ",
+        "dob": "የትውልድ ቀን",
+        "education": "ትምህርት",
+        "familyMembers": "የቤተሰብ አባላት",
+        "na": "የለም"
+      },
+      "disabilityDetails": {
+        "title": "የአካል ጉዳት ዝርዝር",
+        "type": "ዓይነት",
+        "cause": "ምክንያት",
+        "unknown": "ያልታወቀ"
+      },
+      "tabs": {
+        "trainingHistory": "የስልጠና ታሪክ",
+        "jobPlacements": "የሥራ ስምሪቶች"
+      },
+      "trainingSection": {
+        "title": "የስልጠና መዝገቦች",
+        "addButton": "+ መዝገብ ያክሉ",
+        "table": {
+          "trainingType": "የስልጠና ዓይነት",
+          "provider": "አቅራቢ",
+          "dates": "ቀናት",
+          "coc": "ሲኦሲ",
+          "yes": "አለው",
+          "no": "የለውም",
+          "noRecords": "ምንም የስልጠና መዝገብ አልተገኘም"
+        }
+      },
+      "jobsSection": {
+        "title": "የሥራ ስምሪቶች",
+        "addButton": "+ ስምሪት ያክሉ",
+        "table": {
+          "companyId": "የድርጅት መታወቂያ",
+          "position": "የሥራ መደብ",
+          "startDate": "የተጀመረበት ቀን",
+          "noRecords": "ምንም የሥራ ስምሪት አልተገኘም"
+        }
+      }
+    },
+    "reports": {
+      "title": "የተጠቃሚዎች ሪፖርት አውጣ",
+      "description": "የሪፖርት ዓይነት፣ ማጣሪያዎች እና የሚካተቱ ዓምዶችን ይምረጡ።",
+      "categories": {
+        "registration": "ምዝገባ",
+        "training": "ስልጠና",
+        "jobs": "ሥራ"
+      },
+      "types": {
+        "all": "ሁሉም ዓይነቶች",
+        "disabled": "አካል ጉዳተኛ",
+        "elderly": "አረጋዊ"
+      }
+    }
+  },
+  "edir": {
+    "list": {
+      "title": "የእድር ማህበራት",
+      "subtitle": "ባህላዊ የማህበረሰብ ማህበራትን ያስተዳድሩ",
+      "search": "ፈልግ...",
+      "noRecords": "ምንም የእድር ማህበራት አልተገኙም።",
+      "loading": "የእድር ማህበራትን በመጫን ላይ...",
+      "error": "የእድር ማህበራትን በመጫን ላይ ስህተት ተፈጥሯል።",
+      "pagination": "ከ {total} ውስጥ ከ {start} እስከ {end} እያሳየ ነው",
+      "previous": "ቀዳሚ",
+      "next": "ቀጣይ"
+    },
+    "form": {
+      "createTitle": "አዲስ እድር መዝግብ",
+      "updateTitle": "የእድር ማህበር መረጃ አድስ",
+      "createDesc": "የአዲሱን እድር ማህበር ዝርዝር መረጃ ያስገቡ።",
+      "updateDesc": "የእድር ማህበሩን ዝርዝር መረጃ ያዘምኑ።",
+      "sections": {
+        "basic": "መሠረታዊ መረጃ",
+        "address": "አድራሻ",
+        "membership": "የአባልነት ስታቲስቲክስ",
+        "financials": "ፋይናንስ እና አስተያየቶች",
+        "reasons": "የምስረታ ምክንያቶች"
+      },
+      "fields": {
+        "name": "የእድር ስም",
+        "date": "የምስረታ ቀን",
+        "method": "የምስረታ ዘዴ",
+        "subCity": "ክፍለ ከተማ",
+        "woreda": "ወረዳ",
+        "kebele": "ቀበሌ",
+        "houseNumber": "የቤት ቁጥር",
+        "location": "ልዩ ቦታ",
+        "bankAccount": "የባንክ ሂሳብ ቁጥር",
+        "contribution": "የወር መዋጮ",
+        "remarks": "አስተያየቶች",
+        "managementMembers": "የሥራ አመራር አባላት",
+        "generalMembers": "ጠቅላላ አባላት",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "total": "ድምር"
+      },
+      "methods": {
+        "government": "በመንግስት የታዘዘ",
+        "will": "በህዝብ ፍላጎት"
+      },
+      "reasons": {
+        "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
+        "religion": "በሃይማኖት ላይ የተመሠረተ",
+        "workplace": "በሥራ ቦታ ላይ የተመሠረተ",
+        "gender": "በጾታ ላይ የተመሠረተ",
+        "ethnicity": "በብሔር ላይ የተመሠረተ"
+      },
+      "buttons": {
+        "cancel": "ሰርዝ",
+        "register": "እድር መዝግብ",
+        "update": "መረጃ አድስ",
+        "registering": "በመመዝገብ ላይ...",
+        "updating": "በማዘመን ላይ..."
+      }
+    },
+    "edir": {
+      "list": {
+        "title": "የዕድር ማኅበራት",
+        "subtitle": "ባህላዊ የማኅበረሰብ ማኅበራትን ያስተዳድሩ",
+        "search": "ፈልግ...",
+        "loading": "የዕድር ማኅበራትን በመጫን ላይ...",
+        "error": "የዕድር ማኅበራትን በመጫን ላይ ስህተት ተከስቷል።",
+        "noRecords": "ምንም የዕድር ማኅበራት አልተገኙም።",
+        "pagination": "ከ {start} እስከ {end} ከጠቅላላ {total} ግቤቶች በማሳየት ላይ",
+        "previous": "ቀዳሚ",
+        "next": "ቀጣይ",
+        "woreda": "ወረዳ",
+        "kebele": "ቀበሌ",
+        "members": "አባላት",
+        "established": "የተመሠረተበት",
+        "buttons": {
+          "viewDetails": "ዝርዝር ይመልከቱ"
+        }
+      },
+      "form": {
+        "updateTitle": "የዕድር ማኅበርን ያዘምኑ",
+        "createTitle": "አዲስ ዕድር ይመዝግቡ",
+        "updateDesc": "የዕድር ማኅበሩን ዝርዝሮች ያዘምኑ።",
+        "createDesc": "የአዲሱን የዕድር ማኅበር ዝርዝሮች ያስገቡ።",
+        "sections": {
+          "basic": "መሠረታዊ መረጃ",
+          "address": "አድራሻ",
+          "membership": "የአባልነት ስታቲስቲክስ",
+          "financials": "ፋይናንስ እና አስተያየቶች",
+          "reasons": "የመመሥረቻ ምክንያቶች"
+        },
+        "fields": {
+          "name": "የዕድር ስም",
+          "date": "የተመሠረተበት ቀን",
+          "method": "የምሥረታ ዘዴ",
+          "subCity": "ክፍለ ከተማ",
+          "woreda": "ወረዳ",
+          "kebele": "ቀበሌ",
+          "houseNumber": "የቤት ቁጥር",
+          "location": "ልዩ ቦታ",
+          "bankAccount": "የባንክ ሒሳብ ቁጥር",
+          "contribution": "ወርሃዊ መዋጮ",
+          "remarks": "አስተያየቶች",
+          "managementMembers": "የሥራ አመራር አባላት",
+          "generalMembers": "ጠቅላላ አባላት",
+          "male": "ወንድ",
+          "female": "ሴት",
+          "total": "ድምር"
+        },
+        "methods": {
+          "government": "በመንግስት ትዕዛዝ",
+          "will": "በሕዝብ ፈቃድ"
+        },
+        "reasons": {
+          "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
+          "religion": "በሃይማኖት ላይ የተመሠረተ",
+          "workplace": "በሥራ ቦታ ላይ የተመሠረተ",
+          "gender": "በጾታ ላይ የተመሠረተ",
+          "ethnicity": "በብሔር ላይ የተመሠረተ"
+        },
+        "buttons": {
+          "register": "አዲስ ዕድር ያክሉ",
+          "cancel": "ሰርዝ",
+          "update": "ዕድር ያዘምኑ",
+          "updating": "በማዘመን ላይ...",
+          "registering": "በመመዝገብ ላይ..."
+        }
+      },
+      "import": {
+        "title": "የዕድር ማኅበራትን ያስገቡ (Import)",
+        "description": "ብዙ የዕድር ማኅበራትን በአንድ ጊዜ ለማስገባት የኤክሴል (Excel) ፋይል ይጫኑ።",
+        "success": "የዕድር ማኅበራት በተሳካ ሁኔታ ገብተዋል",
+        "error": "የዕድር ማኅበራትን ማስገባት አልተቻለም",
+        "buttons": {
+          "import": "የዕድር ማኅበራትን ያስገቡ",
+          "importing": "በማስገባት ላይ...",
+          "cancel": "ሰርዝ"
+        }
+      },
+      "report": {
+        "title": "የዕድር ሪፖርት ያውጡ",
+        "description": "ለሪፖርትዎ ማጣሪያዎችን እና ዓምዶችን ይምረጡ።",
+        "success": "ሪፖርቱ በተሳካ ሁኔታ ተዘጋጅቷል",
+        "error": "ሪፖርቱን ማዘጋጀት አልተቻለም",
+        "fields": {
+          "startDate": "የመጀመሪያ ቀን",
+          "endDate": "የመጨረሻ ቀን",
+          "subCity": "ክፍለ ከተማ",
+          "woreda": "ወረዳ",
+          "format": "ፎርማት"
+        },
+        "formats": {
+          "excel": "ኤክሴል",
+          "pdf": "ፒዲኤፍ"
+        },
+        "columns": {
+          "title": "ዓምዶች",
+          "name": "የማኅበሩ ስም",
+          "id": "መለያ",
+          "phone": "የስልክ ቁጥር",
+          "subCity": "ክፍለ ከተማ",
+          "woreda": "ወረዳ",
+          "bankAccount": "የባንክ ሒሳብ ቁጥር",
+          "date": "የተመሠረተበት ቀን",
+          "members": "አባላት"
+        },
+        "buttons": {
+          "generate": "ሪፖርት አውጣ",
+          "download": "አውርድ",
+          "cancel": "ሰርዝ"
+        }
+      }
+    },
+    "edir-details": {
+      "loading": "ዝርዝሮችን በመጫን ላይ...",
+      "error": "የዕድር ዝርዝሮችን በመጫን ላይ ስህተት ተከስቷል ወይም አልተገኘም።",
+      "tabs": {
+        "overview": "አጠቃላይ እይታ",
+        "members": "አባላት"
+      },
+      "buttons": {
+        "edit": "ዝርዝሮችን ያርሙ"
+      },
+      "status": {
+        "active": "ንቁ",
+        "inactive": "ንቁ ያልሆነ"
+      },
+      "address": {
+        "woreda": "ወረዳ",
+        "kebele": "ቀበሌ"
+      },
+      "sections": {
+        "general": "ጠቅላላ መረጃ",
+        "membership": "የአባልነት ስታቲስቲክስ",
+        "reasons": "የመመሥረቻ ምክንያቶች",
+        "location": "የአድራሻ ዝርዝሮች",
+        "financial": "የፋይናንስ መረጃ"
+      },
+      "fields": {
+        "method": "የምሥረታ ዘዴ",
+        "remarks": "መግለጫ / አስተያየቶች",
+        "noRemarks": "ምንም ተጨማሪ አስተያየት አልተሰጠም።",
+        "otherReason": "ሌላ ምክንያት",
+        "managementMembers": "የሥራ አመራር አባላት",
+        "generalMembers": "ጠቅላላ አባላት",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "total": "ጠቅላላ አባላት",
+        "noReasons": "ምንም የተለየ ምክንያት አልተጠቀሰም።",
+        "subCityWoredaKebele": "ክፍለ ከተማ፣ ወረዳ፣ ቀበሌ",
+        "houseNumber": "የቤት ቁጥር",
+        "specificLocation": "ልዩ ቦታ",
+        "bankAccountNumber": "የባንክ ሒሳብ ቁጥር",
+        "monthlyPayment": "ወርሃዊ ክፍያ",
+        "established": "የተመሠረተበት ቀን"
+      },
+      "reasons": {
+        "RESIDENCE": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
+        "RELIGION": "በሃይማኖት ላይ የተመሠረተ",
+        "WORKPLACE": "በሥራ ቦታ ላይ የተመሠረተ",
+        "GENDER": "በጾታ ላይ የተመሠረተ",
+        "ETHNICITY": "በብሔር ላይ የተመሠረተ"
+      }
+    },
+    "edir-members": {
+      "title": "አባላት ({count})",
+      "loading": "አባላትን በመጫን ላይ...",
+      "error": "አባላትን መጫን አልተቻለም።",
+      "noMembers": "ምንም አባላት አልተገኙም። ለመጀመር አንድ ይጨምሩ።",
+      "table": {
+        "name": "ሙሉ ስም",
+        "id": "የዕድር መለያ",
+        "position": "የሥራ ድርሻ",
+        "phone": "ስልክ",
+        "status": "ሁኔታ",
+        "actions": "ተግባራት"
+      },
+      "status": {
+        "active": "ንቁ",
+        "inactive": "ንቁ ያልሆነ"
+      },
+      "positions": {
+        "MEMBER": "አባል",
+        "LEADER": "መሪ",
+        "COMMITTEE": "ኮሚቴ",
+        "SECRETARY": "ጸሐፊ",
+        "CASHIER": "ገንዘብ ያዥ"
+      },
+      "form": {
+        "title": {
+          "add": "አዲስ አባል ያክሉ",
+          "update": "አባል ያዘምኑ"
+        },
+        "description": {
+          "add": "የአዲሱን አባል ዝርዝሮች ያስገቡ።",
+          "update": "የዕድር አባሉን ዝርዝሮች ያዘምኑ።"
+        },
+        "fields": {
+          "fullName": "ሙሉ ስም",
+          "cityId": "የከተማ መለያ ቁጥር",
+          "phone": "የስልክ ቁጥር",
+          "job": "ሥራ",
+          "position": "የሥራ ድርሻ",
+          "familyMembers": "የቤተሰብ አባላት",
+          "joinedAt": "የተቀላቀለበት ቀን",
+          "leftAt": "የለቀቀበት ቀን (ከተፈለገ)",
+          "isActive": "ንቁ አባል ነው"
+        },
+        "placeholders": {
+          "fullName": "ሙሉ ስም",
+          "cityId": "የከተማ መለያ ቁጥር",
+          "phone": "የስልክ ቁጥር",
+          "job": "ሥራ",
+          "position": "የሥራ ድርሻ ይምረጡ"
+        },
+        "buttons": {
+          "add": "አባል ይጨምሩ",
+          "update": "አባል ያዘምኑ",
+          "cancel": "ሰርዝ",
+          "adding": "በመጨመር ላይ...",
+          "updating": "በማዘመን ላይ..."
+        },
+        "messages": {
+          "successAdd": "አባል በተሳካ ሁኔታ ተጨምሯል",
+          "successUpdate": "አባል በተሳካ ሁኔታ ተዘምኗል"
+        }
+      },
+      "import": {
+        "title": "አባላትን ያስገቡ (Import)",
+        "description": "ብዙ አባላትን በአንድ ጊዜ ለማስገባት የኤክሴል (Excel) ፋይል ይጫኑ።",
+        "success": "አባላት በተሳካ ሁኔታ ገብተዋል",
+        "error": "አባላትን ማስገባት አልተቻለም",
+        "buttons": {
+          "import": "አባላትን ያስገቡ",
+          "importing": "በማስገባት ላይ...",
+          "cancel": "ሰርዝ"
+        }
+      }
+    }
+  }
+}

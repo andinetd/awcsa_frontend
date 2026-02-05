@@ -23,7 +23,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import JobForm from "../_components/job-form";
 
+import { useTranslations } from "next-intl";
+
 export default function JobsPage() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.jobs");
   const { data: jobs, isLoading } = useGetJobsQuery();
   const [search, setSearch] = useState("");
 
@@ -34,7 +37,7 @@ export default function JobsPage() {
         item.companyIdNumber.toLowerCase().includes(search.toLowerCase()) ||
         `${item.client?.firstName} ${item.client?.lastName}`
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(search.toLowerCase()),
     ) || [];
 
   return (
@@ -42,11 +45,9 @@ export default function JobsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-            Job Placements
+            {t("title")}
           </h1>
-          <p className="text-slate-500 mt-1">
-            Track employment and livelihood support for beneficiaries.
-          </p>
+          <p className="text-slate-500 mt-1">{t("subtitle")}</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <JobForm />
@@ -57,13 +58,13 @@ export default function JobsPage() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
-            Global Job Placements
+            {t("cardTitle")}
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
               <Input
-                placeholder="Search position or company ID..."
+                placeholder={t("searchPlaceholder")}
                 className="pl-8 bg-slate-50/50 border-slate-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -79,17 +80,25 @@ export default function JobsPage() {
             <Table>
               <TableHeader className="bg-slate-50">
                 <TableRow>
-                  <TableHead className="font-semibold">Beneficiary</TableHead>
-                  <TableHead className="font-semibold">Company ID</TableHead>
-                  <TableHead className="font-semibold">Position</TableHead>
-                  <TableHead className="font-semibold">Start Date</TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.beneficiary")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.companyId")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.position")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.startDate")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
                     <TableCell colSpan={4} className="text-center py-10">
-                      Loading placements...
+                      {t("table.loading")}
                     </TableCell>
                   </TableRow>
                 ) : filteredData.length > 0 ? (
@@ -117,7 +126,7 @@ export default function JobsPage() {
                       colSpan={4}
                       className="text-center py-10 text-slate-400"
                     >
-                      No job placements found
+                      {t("table.noRecords")}
                     </TableCell>
                   </TableRow>
                 )}

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useGetBeneficiaryProfileQuery,
   useGetTrainingsQuery,
@@ -41,6 +42,7 @@ import TrainingForm from "../../../_components/training-form";
 import JobForm from "../../../_components/job-form";
 
 export default function BeneficiaryProfilePage() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.profile");
   const params = useParams();
   const router = useRouter();
   const id = parseInt(params.id as string);
@@ -54,7 +56,7 @@ export default function BeneficiaryProfilePage() {
   if (isLoadingProfile) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-pulse text-slate-400">Loading profile...</div>
+        <div className="animate-pulse text-slate-400">{t("loading")}</div>
       </div>
     );
   }
@@ -62,8 +64,8 @@ export default function BeneficiaryProfilePage() {
   if (!profile) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-slate-500">Beneficiary not found</p>
-        <Button onClick={() => router.back()}>Go Back</Button>
+        <p className="text-slate-500">{t("notFound")}</p>
+        <Button onClick={() => router.back()}>{t("goBack")}</Button>
       </div>
     );
   }
@@ -87,7 +89,7 @@ export default function BeneficiaryProfilePage() {
           </h1>
           <div className="flex items-center gap-2 mt-1">
             <Badge variant="outline" className="bg-slate-50">
-              ID: {profile.cityIdNumber}
+              {t("badges.id")}: {profile.cityIdNumber}
             </Badge>
             <Badge
               className={
@@ -96,13 +98,13 @@ export default function BeneficiaryProfilePage() {
                   : "bg-slate-50 text-slate-500"
               }
             >
-              {profile.activeStatus ? "Active" : "Inactive"}
+              {profile.activeStatus ? t("badges.active") : t("badges.inactive")}
             </Badge>
             <Badge
               variant="secondary"
               className="bg-blue-50 text-blue-700 border-blue-200 uppercase"
             >
-              {isDisabled ? "Disabled" : "Elderly"}
+              {isDisabled ? t("badges.disabled") : t("badges.elderly")}
             </Badge>
           </div>
         </div>
@@ -115,13 +117,13 @@ export default function BeneficiaryProfilePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <User className="h-4 w-4" />
-                Personal Information
+                {t("personalInfo.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                  Phone
+                  {t("personalInfo.phone")}
                 </p>
                 <p className="text-sm font-medium mt-0.5">
                   {profile.phoneNumber}
@@ -129,33 +131,33 @@ export default function BeneficiaryProfilePage() {
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                  Address
+                  {t("personalInfo.address")}
                 </p>
                 <p className="text-sm font-medium mt-0.5">
-                  {profile.address || "N/A"}
+                  {profile.address || t("personalInfo.na")}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                  Date of Birth
+                  {t("personalInfo.dob")}
                 </p>
                 <p className="text-sm font-medium mt-0.5">
                   {profile.dateOfBirth
                     ? new Date(profile.dateOfBirth).toLocaleDateString()
-                    : "N/A"}
+                    : t("personalInfo.na")}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                  Education
+                  {t("personalInfo.education")}
                 </p>
                 <p className="text-sm font-medium mt-0.5">
-                  {profile.educationLevel || "N/A"}
+                  {profile.educationLevel || t("personalInfo.na")}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                  Family Members
+                  {t("personalInfo.familyMembers")}
                 </p>
                 <p className="text-sm font-medium mt-0.5">
                   {profile.familyMembersCount || 0}
@@ -169,25 +171,27 @@ export default function BeneficiaryProfilePage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Activity className="h-4 w-4" />
-                  Disability Details
+                  {t("disabilityDetails.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <>
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                      Type
+                      {t("disabilityDetails.type")}
                     </p>
                     <p className="text-sm font-medium mt-0.5">
-                      {profile.DisabilityProfile?.disabilityType || "N/A"}
+                      {profile.DisabilityProfile?.disabilityType ||
+                        t("personalInfo.na")}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                      Cause
+                      {t("disabilityDetails.cause")}
                     </p>
                     <p className="text-sm font-medium mt-0.5">
-                      {profile.DisabilityProfile?.cause || "Unknown"}
+                      {profile.DisabilityProfile?.cause ||
+                        t("disabilityDetails.unknown")}
                     </p>
                   </div>
                 </>
@@ -204,13 +208,13 @@ export default function BeneficiaryProfilePage() {
                 value="training"
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none"
               >
-                Training History
+                {t("tabs.trainingHistory")}
               </TabsTrigger>
               <TabsTrigger
                 value="jobs"
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none"
               >
-                Job Placements
+                {t("tabs.jobPlacements")}
               </TabsTrigger>
             </TabsList>
 
@@ -219,14 +223,14 @@ export default function BeneficiaryProfilePage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-base flex items-center gap-2">
                     <GraduationCap className="w-4 h-4" />
-                    Training Records
+                    {t("trainingSection.title")}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <TrainingForm
                       cityIdNumber={profile.cityIdNumber}
                       trigger={
                         <Button size="sm" variant="outline">
-                          + Add Record
+                          {t("trainingSection.addButton")}
                         </Button>
                       }
                     />
@@ -236,10 +240,16 @@ export default function BeneficiaryProfilePage() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Training Type</TableHead>
-                        <TableHead>Provider</TableHead>
-                        <TableHead>Dates</TableHead>
-                        <TableHead>COC</TableHead>
+                        <TableHead>
+                          {t("trainingSection.table.trainingType")}
+                        </TableHead>
+                        <TableHead>
+                          {t("trainingSection.table.provider")}
+                        </TableHead>
+                        <TableHead>
+                          {t("trainingSection.table.dates")}
+                        </TableHead>
+                        <TableHead>{t("trainingSection.table.coc")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -254,14 +264,16 @@ export default function BeneficiaryProfilePage() {
                               {new Date(t.startDate).toLocaleDateString()}
                               {t.completionDate &&
                                 ` - ${new Date(
-                                  t.completionDate
+                                  t.completionDate,
                                 ).toLocaleDateString()}`}
                             </TableCell>
                             <TableCell>
                               <Badge
                                 variant={t.hasCOC ? "default" : "secondary"}
                               >
-                                {t.hasCOC ? "Yes" : "No"}
+                                {t.hasCOC
+                                  ? t("trainingSection.table.yes")
+                                  : t("trainingSection.table.no")}
                               </Badge>
                             </TableCell>
                           </TableRow>
@@ -272,7 +284,7 @@ export default function BeneficiaryProfilePage() {
                             colSpan={4}
                             className="text-center py-10 text-slate-400"
                           >
-                            No training records found
+                            {t("trainingSection.table.noRecords")}
                           </TableCell>
                         </TableRow>
                       )}
@@ -287,14 +299,14 @@ export default function BeneficiaryProfilePage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-base flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
-                    Job Placements
+                    {t("jobsSection.title")}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <JobForm
                       cityIdNumber={profile.cityIdNumber}
                       trigger={
                         <Button size="sm" variant="outline">
-                          + Add Placement
+                          {t("jobsSection.addButton")}
                         </Button>
                       }
                     />
@@ -304,9 +316,13 @@ export default function BeneficiaryProfilePage() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Company ID</TableHead>
-                        <TableHead>Position</TableHead>
-                        <TableHead>Start Date</TableHead>
+                        <TableHead>
+                          {t("jobsSection.table.companyId")}
+                        </TableHead>
+                        <TableHead>{t("jobsSection.table.position")}</TableHead>
+                        <TableHead>
+                          {t("jobsSection.table.startDate")}
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -328,7 +344,7 @@ export default function BeneficiaryProfilePage() {
                             colSpan={3}
                             className="text-center py-10 text-slate-400"
                           >
-                            No job placements found
+                            {t("jobsSection.table.noRecords")}
                           </TableCell>
                         </TableRow>
                       )}

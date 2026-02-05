@@ -45,6 +45,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/care-centers-portal/${locale}.json`)
   ).default;
 
+  const socialAffairsMessages = (
+    await import(`../../messages/social-affairs/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -58,6 +62,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       complaints: complaintsMessages,
       womens: womensMessages,
       "care-centers-portal": careCentersPortalMessages,
+      "social-affairs": socialAffairsMessages,
     },
   };
 });

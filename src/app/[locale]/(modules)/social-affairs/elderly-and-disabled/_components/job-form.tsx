@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -44,6 +45,7 @@ interface JobFormProps {
 }
 
 export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.jobs.form");
   const [open, setOpen] = React.useState(false);
   const registerMutation = useRegisterJobMutation();
   const { data: disabled } = useGetBeneficiariesQuery("DISABLED");
@@ -65,12 +67,12 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
   const onSubmit = (values: JobPlacementSchemaType) => {
     registerMutation.mutate(values, {
       onSuccess: () => {
-        toast.success("Job placement registered successfully");
+        toast.success(t("messages.success"));
         form.reset();
         setOpen(false);
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Failed to register job placement");
+        toast.error(error?.message || t("messages.error"));
       },
     });
   };
@@ -81,7 +83,7 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
         {trigger || (
           <Button className="gap-2 bg-primary hover:bg-primary/90">
             <Plus className="w-4 h-4" />
-            Add Placement
+            {t("addButton")}
           </Button>
         )}
       </DialogTrigger>
@@ -89,7 +91,7 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
         <DialogHeader>
           <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-primary" />
-            Add Job Placement
+            {t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -103,14 +105,16 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Beneficiary</FormLabel>
+                    <FormLabel>{t("fields.beneficiary")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a beneficiary" />
+                          <SelectValue
+                            placeholder={t("placeholders.selectBeneficiary")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -131,9 +135,12 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="companyIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Company ID Number</FormLabel>
+                  <FormLabel>{t("fields.companyId")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter Company ID Number" {...field} />
+                    <Input
+                      placeholder={t("placeholders.companyId")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -144,9 +151,12 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="jobTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job Title</FormLabel>
+                  <FormLabel>{t("fields.jobTitle")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Accountant, Driver" {...field} />
+                    <Input
+                      placeholder={t("placeholders.jobTitle")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -157,7 +167,7 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="startDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>{t("fields.startDate")}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -171,9 +181,9 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Remark (Optional)</FormLabel>
+                  <FormLabel>{t("fields.remark")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Add any notes..." {...field} />
+                    <Input placeholder={t("placeholders.remark")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -185,13 +195,13 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("buttons.cancel")}
               </Button>
               <Button type="submit" disabled={registerMutation.isPending}>
                 {registerMutation.isPending && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                Save Placement
+                {t("buttons.save")}
               </Button>
             </div>
           </form>
