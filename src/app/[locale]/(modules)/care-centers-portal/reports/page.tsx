@@ -1,13 +1,15 @@
 "use client";
 
 import { useCareCenterReports } from "@/hooks/adoption/care-center/useReports";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+import { Columns } from "./columns";
 
 export default function ReportsPage() {
+  const t = useTranslations("care-centers-portal.reports");
+  const columns = Columns();
   const { data: reports, isLoading, isError } = useCareCenterReports();
 
   if (isLoading) {
@@ -21,9 +23,9 @@ export default function ReportsPage() {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center py-20 min-h-[50vh] text-destructive gap-2">
-        <p>Failed to load reports. Please try again later.</p>
+        <p>{t("messages.error")}</p>
         <Button variant="outline" onClick={() => window.location.reload()}>
-          Retry
+          {t("buttons.retry")}
         </Button>
       </div>
     );

@@ -41,6 +41,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const womensMessages = (await import(`../../messages/womens/${locale}.json`))
     .default;
 
+  const careCentersPortalMessages = (
+    await import(`../../messages/care-centers-portal/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -53,6 +57,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       bureau: bureauMessages,
       complaints: complaintsMessages,
       womens: womensMessages,
+      "care-centers-portal": careCentersPortalMessages,
     },
   };
 });

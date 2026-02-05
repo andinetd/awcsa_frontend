@@ -1,0 +1,168 @@
+{
+  "layout": {
+    "title": "Care Centers Portal",
+    "subtitle": "Manage your care center"
+  },
+  "dashboard": {
+    "title": "Children Under Your Care",
+    "addChild": "Add New Child",
+    "submitMonthlyReport": "Submit Monthly Report",
+    "viewPastReports": "View Past Reports",
+    "loading": "Loading children data...",
+    "columns": {
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "foundDate": "Found Date",
+      "actions": "Actions",
+      "viewDetails": "View Details",
+      "editChild": "Edit Child",
+      "openMenu": "Open menu",
+      "status": "Status"
+    }
+  },
+  "addChild": {
+    "title": "New Child Registration",
+    "subtitle": "Register a new child into the care center system.",
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "status": "Status",
+      "foundAddress": "Address the child was found",
+      "foundDate": "Date child was found",
+      "socialWorkerId": "Social Worker City Id Number",
+      "careCenterId": "Care Center ID",
+      "childIdFromCenter": "Child ID from Care Center",
+      "baleAderaId": "Bale Adera City ID Number",
+      "adopterId": "Adopter City ID Number",
+      "bloodRelativeId": "Blood Relative City ID Number",
+      "prevAdopterId": "Previous Adopter City ID Number",
+      "additionalInfo": "Additional Information"
+    },
+    "placeholders": {
+      "firstName": "Enter first name",
+      "lastName": "Enter last name",
+      "selectGender": "Select gender",
+      "selectStatus": "Select status",
+      "address": "Enter address",
+      "socialWorkerId": "Enter Social Worker City Id Number",
+      "careCenterId": "Enter Care Center ID",
+      "childIdFromCenter": "Enter Child ID from Care Center",
+      "baleAderaId": "Enter Bale Adera City ID Number",
+      "adopterId": "Enter Adopter City ID Number",
+      "bloodRelativeId": "Enter Blood Relative City ID Number",
+      "prevAdopterId": "Enter Previous Adopter City ID Number",
+      "additionalInfo": "Enter Additional Information"
+    },
+    "buttons": {
+      "submit": "Submit"
+    },
+    "messages": {
+      "success": "Child registered successfully",
+      "error": "Failed to register child. Please try again."
+    }
+  },
+  "monthlyReport": {
+    "title": "Monthly Report",
+    "subtitle": "Fill in the details for your care center's monthly statistics.",
+    "formTitle": "Monthly Reporting",
+    "formSubtitle": "Please ensure all statistical data is accurate before submission. This report feeds into the central bureau dashboard for resource allocation.",
+    "periodTitle": "Reporting Period",
+    "month": "Month",
+    "year": "Year",
+    "statsTitle": "Population Statistics",
+    "totalChildren": "Total Children",
+    "totalChildrenDesc": "Current census at month end",
+    "newAdmissions": "New Admissions",
+    "newAdmissionsDesc": "Intake during this month",
+    "discharges": "Discharges",
+    "dischargesDesc": "Exits/Adoptions this month",
+    "additionalDetails": "Additional Details",
+    "notes": "Notes & Observations",
+    "notesPlaceholder": "Enter qualitative report details, challenges, or success stories...",
+    "formData": "Additional Form Data (JSON/String)",
+    "formDataPlaceholder": "Paste specific data strings or encoded form data here...",
+    "submit": "Submit Report",
+    "submitting": "Submitting...",
+    "messages": {
+      "success": "Monthly report submitted successfully",
+      "error": "Failed to submit monthly report. Please try again."
+    }
+  },
+  "reports": {
+    "title": "Monthly Reports",
+    "subtitle": "View and manage your submitted monthly reports.",
+    "messages": {
+      "error": "Failed to load reports. Please try again later."
+    },
+    "buttons": {
+      "retry": "Retry"
+    }
+  },
+  "childView": {
+    "title": "Child Information",
+    "subtitle": "View detailed information about the registered child.",
+    "editDetails": "Edit Details",
+    "sections": {
+      "basic": "Basic Information",
+      "location": "Location Information",
+      "founder": "Child Founder Information",
+      "officer": "Officer Information",
+      "worker": "Care Center Worker Information",
+      "health": "Health Officers",
+      "additional": "Additional Details"
+    },
+    "fields": {
+      "nameByCenter": "Name by Care Center",
+      "nameByFamily": "Name by Family",
+      "fatherName": "Father's Name",
+      "age": "{age} years old",
+      "gender": "Gender",
+      "dateFound": "Date Found",
+      "placeFound": "Place Found",
+      "subCity": "Sub City",
+      "woreda": "Woreda",
+      "founderName": "Founder Name",
+      "founderAddress": "Founder Address",
+      "founderSubCity": "Founder Sub City",
+      "founderWoreda": "Founder Woreda",
+      "houseNo": "House Number",
+      "founderPhone": "Founder Phone",
+      "officerName": "Officer Name",
+      "responsibility": "Responsibility",
+      "officerAddress": "Officer Address",
+      "officerSubCity": "Officer Sub City",
+      "officerWoreda": "Officer Woreda",
+      "officerPhone": "Officer Phone",
+      "officerId": "Officer ID",
+      "workerName": "Worker Name",
+      "workerAddress": "Worker Address",
+      "workerSubCity": "Worker Sub City",
+      "workerWoreda": "Worker Woreda",
+      "workerPhone": "Worker Phone",
+      "workerId": "Worker ID",
+      "healthOfficer1": "Health Officer 1",
+      "healthOfficer2": "Health Officer 2",
+      "admittanceReason": "Reason for Admission",
+      "additionalInfo": "Additional Information"
+    }
+  },
+  "enums": {
+    "sex": {
+      "MALE": "Male",
+      "FEMALE": "Female"
+    },
+    "status": {
+      "FOUND": "Found",
+      "IN_CARE": "In Care",
+      "IN_ADERA": "In Adera",
+      "ADOPTED": "Adopted",
+      "WITH_BLOOD_RELATIVE": "With Blood Relative",
+      "RETURNED": "Returned"
+    }
+  }
+}

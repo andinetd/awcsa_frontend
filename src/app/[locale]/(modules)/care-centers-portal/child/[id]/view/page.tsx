@@ -11,14 +11,19 @@ interface ViewChildPageProps {
   };
 }
 
+import { useTranslations } from "next-intl";
+
 const ViewChildPage = ({ params }: ViewChildPageProps) => {
+  const t = useTranslations("care-centers-portal.childView");
+  const te = useTranslations("care-centers-portal.enums");
+
   // TODO: Fetch child data based on params.id
   const childData = {
     name_by_care_center: decodeURIComponent(params.id),
     name_by_family: "John Smith",
     father_name: "Michael Smith",
     age: 8,
-    gender: "male",
+    gender: "MALE",
     admitance_reason: "Found abandoned near the market area",
     found_address: "Central Market",
     found_subcity: "Addis Ketema",
@@ -59,32 +64,27 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </Button>
           </Link>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Child Information
-            </h2>
-            <p className="text-muted-foreground">
-              View detailed information about the registered child.
-            </p>
+            <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
+            <p className="text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
         <Link href={`/care-centers-portal/child/${params.id}/edit`}>
           <Button>
             <Edit className="mr-2 h-4 w-4" />
-            Edit Details
+            {t("editDetails")}
           </Button>
         </Link>
       </div>
 
       <div className="grid gap-6">
-        {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle>{t("sections.basic")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Name by Care Center
+                {t("fields.nameByCenter")}
               </label>
               <p className="text-sm font-semibold">
                 {childData.name_by_care_center}
@@ -92,31 +92,33 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Name by Family
+                {t("fields.nameByFamily")}
               </label>
               <p className="text-sm">{childData.name_by_family || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Father's Name
+                {t("fields.fatherName")}
               </label>
               <p className="text-sm">{childData.father_name || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Age
+                {t("fields.age", { age: "" }).replace("{age}", "")}
               </label>
-              <p className="text-sm">{childData.age} years old</p>
+              <p className="text-sm">
+                {t("fields.age", { age: childData.age })}
+              </p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Gender
+                {t("fields.gender")}
               </label>
-              <div className="capitalize">{childData.gender}</div>
+              <div className="capitalize">{te(`sex.${childData.gender}`)}</div>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Date Found
+                {t("fields.dateFound")}
               </label>
               <p className="text-sm">
                 {childData.found_date.toLocaleDateString()}
@@ -125,27 +127,26 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
           </CardContent>
         </Card>
 
-        {/* Location Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Location Information</CardTitle>
+            <CardTitle>{t("sections.location")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Place Found
+                {t("fields.placeFound")}
               </label>
               <p className="text-sm">{childData.found_address || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Sub City
+                {t("fields.subCity")}
               </label>
               <p className="text-sm">{childData.found_subcity || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Woreda
+                {t("fields.woreda")}
               </label>
               <p className="text-sm">{childData.found_woreda || "N/A"}</p>
             </div>
@@ -154,18 +155,18 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Child Founder Information</CardTitle>
+            <CardTitle>{t("sections.founder")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Founder Name
+                {t("fields.founderName")}
               </label>
               <p className="text-sm">{childData.child_founder_name || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Founder Address
+                {t("fields.founderAddress")}
               </label>
               <p className="text-sm">
                 {childData.child_founder_address || "N/A"}
@@ -173,7 +174,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Founder Sub City
+                {t("fields.founderSubCity")}
               </label>
               <p className="text-sm">
                 {childData.child_founder_subcity || "N/A"}
@@ -181,13 +182,13 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Founder Woreda
+                {t("fields.founderWoreda")}
               </label>
               <p className="text-sm">{childData.child_found_woreda || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                House Number
+                {t("fields.houseNo")}
               </label>
               <p className="text-sm">
                 {childData.child_founder_house_no || "N/A"}
@@ -195,7 +196,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Founder Phone
+                {t("fields.founderPhone")}
               </label>
               <p className="text-sm">
                 {childData.child_founder_phone || "N/A"}
@@ -206,18 +207,18 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Officer Information</CardTitle>
+            <CardTitle>{t("sections.officer")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer Name
+                {t("fields.officerName")}
               </label>
               <p className="text-sm">{childData.officer_name || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Responsibility
+                {t("fields.responsibility")}
               </label>
               <p className="text-sm">
                 {childData.officer_responsibility || "N/A"}
@@ -225,31 +226,31 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer Address
+                {t("fields.officerAddress")}
               </label>
               <p className="text-sm">{childData.officer_address || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer Sub City
+                {t("fields.officerSubCity")}
               </label>
               <p className="text-sm">{childData.officer_subcity || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer Woreda
+                {t("fields.officerWoreda")}
               </label>
               <p className="text-sm">{childData.officer_woreda || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer Phone
+                {t("fields.officerPhone")}
               </label>
               <p className="text-sm">{childData.officer_phone || "N/A"}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Officer ID
+                {t("fields.officerId")}
               </label>
               <p className="text-sm">{childData.officer_id_no || "N/A"}</p>
             </div>
@@ -258,12 +259,12 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Care Center Worker Information</CardTitle>
+            <CardTitle>{t("sections.worker")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker Name
+                {t("fields.workerName")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_name || "N/A"}
@@ -271,7 +272,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Responsibility
+                {t("fields.responsibility")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_responsibility || "N/A"}
@@ -279,7 +280,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker Address
+                {t("fields.workerAddress")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_address || "N/A"}
@@ -287,7 +288,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker Sub City
+                {t("fields.workerSubCity")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_subcity || "N/A"}
@@ -295,7 +296,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker Woreda
+                {t("fields.workerWoreda")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_woreda || "N/A"}
@@ -303,7 +304,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker Phone
+                {t("fields.workerPhone")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_phone || "N/A"}
@@ -311,7 +312,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Worker ID
+                {t("fields.workerId")}
               </label>
               <p className="text-sm">
                 {childData.care_center_worker_id_no || "N/A"}
@@ -322,12 +323,12 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Health Officers</CardTitle>
+            <CardTitle>{t("sections.health")}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Health Officer 1
+                {t("fields.healthOfficer1")}
               </label>
               <p className="text-sm">
                 {childData.health_officer_1_name || "N/A"}
@@ -335,7 +336,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Health Officer 2
+                {t("fields.healthOfficer2")}
               </label>
               <p className="text-sm">
                 {childData.heallth_officer_2_name || "N/A"}
@@ -344,15 +345,14 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
           </CardContent>
         </Card>
 
-        {/* Additional Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Additional Details</CardTitle>
+            <CardTitle>{t("sections.additional")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Reason for Admission
+                {t("fields.admittanceReason")}
               </label>
               <p className="text-sm mt-1">
                 {childData.admitance_reason || "N/A"}
@@ -360,7 +360,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">
-                Additional Information
+                {t("fields.additionalInfo")}
               </label>
               <p className="text-sm mt-1">
                 {childData.additional_information || "N/A"}

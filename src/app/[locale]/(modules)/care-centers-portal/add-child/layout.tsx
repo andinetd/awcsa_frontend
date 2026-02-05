@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useTranslations } from "next-intl";
+
 const RegisterNewChildCareCenter = ({ children }: { children: ReactNode }) => {
+  const t = useTranslations("care-centers-portal.addChild");
+
   return (
     <div className="flex flex-col w-full space-y-6">
       <div className="flex items-center gap-4">
@@ -13,12 +17,8 @@ const RegisterNewChildCareCenter = ({ children }: { children: ReactNode }) => {
           </Button>
         </Link>
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            New Child Registration
-          </h2>
-          <p className="text-muted-foreground">
-            Register a new child into the care center system.
-          </p>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
         </div>
       </div>
       <div className="max-w-3xl mx-auto w-full">{children}</div>
