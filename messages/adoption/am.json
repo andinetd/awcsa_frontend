@@ -110,7 +110,12 @@
       "preferredNumber": "የሚፈለግ ብዛት",
       "preferredSex": "የሚፈለግ ጾታ",
       "preferredAgeMin": "ዝቅተኛ ዕድሜ",
-      "preferredAgeMax": "ከፍተኛ ዕድሜ"
+      "preferredAgeMax": "ከፍተኛ ዕድሜ",
+      "sex": "ጾታ",
+      "idNumber": "መታወቂያ ቁጥር",
+      "category": "ምድብ",
+      "email": "ኢሜይል",
+      "education": "ትምህርት"
     },
     "actions": {
       "viewHomeVisit": "የመስክ ጉብኝት አስተያየትን ተመልከት",
@@ -130,7 +135,19 @@
     "matched": "የተዛመደ",
     "rejected": "ውድቅ የተደረገ",
     "returned": "የተመለሰ",
-    "denied": "ውድቅ የተደረገ"
+    "denied": "ውድቅ የተደረገ",
+    "adopted": "ጉዲፈቻ የተሰጠ/ች",
+    "in_care": "በማቆያ ያለ/ች"
+  },
+  "enums": {
+    "sex": {
+      "MALE": "ወንድ",
+      "FEMALE": "ሴት"
+    },
+    "category": {
+      "CHILD": "ሕፃን",
+      "FACILITY": "ተቋም"
+    }
   },
   "homeVisit": {
     "title": "የመስክ ጉብኝት ሪፖርት",

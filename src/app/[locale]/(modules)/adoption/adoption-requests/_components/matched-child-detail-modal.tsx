@@ -120,7 +120,9 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               {t("adoptionDetail.matched.title")}
             </h1>
             <div className="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-bold border border-green-200 uppercase tracking-wide">
-              {data.status}
+              {data.status
+                ? t(`statuses.${data.status.toLowerCase().replace(/ /g, "_")}`)
+                : "—"}
             </div>
           </div>
           <button
@@ -185,7 +187,11 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.sex")}
-                  value={data.child.contactInfo.sex}
+                  value={
+                    data.child.contactInfo.sex
+                      ? t(`enums.sex.${data.child.contactInfo.sex}`)
+                      : null
+                  }
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.dateOfBirth")}
@@ -199,7 +205,11 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.category")}
-                  value={data.child.clientCategory}
+                  value={
+                    data.child.clientCategory
+                      ? t(`enums.category.${data.child.clientCategory}`)
+                      : null
+                  }
                 />
                 <DetailRow
                   label={t("adoptionDetail.matching.additionalInfo")}

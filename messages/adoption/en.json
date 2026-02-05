@@ -110,7 +110,12 @@
       "preferredNumber": "Preferred Number",
       "preferredSex": "Preferred Sex",
       "preferredAgeMin": "Preferred Age Min",
-      "preferredAgeMax": "Preferred Age Max"
+      "preferredAgeMax": "Preferred Age Max",
+      "sex": "Sex",
+      "idNumber": "ID Number",
+      "category": "Category",
+      "email": "Email",
+      "education": "Education"
     },
     "actions": {
       "viewHomeVisit": "View Home Visit Feedback",
@@ -130,7 +135,19 @@
     "matched": "Matched",
     "rejected": "Rejected",
     "returned": "Returned",
-    "denied": "Denied"
+    "denied": "Denied",
+    "adopted": "Adopted",
+    "in_care": "In Care"
+  },
+  "enums": {
+    "sex": {
+      "MALE": "Male",
+      "FEMALE": "Female"
+    },
+    "category": {
+      "CHILD": "Child",
+      "FACILITY": "Facility"
+    }
   },
   "homeVisit": {
     "title": "Home Visit Report",

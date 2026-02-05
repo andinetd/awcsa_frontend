@@ -264,9 +264,7 @@ export default function Step1Page() {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t(
-                        "stepone.form.spouseCityIdNumberPlaceholder",
-                      )}
+                      placeholder={t("stepone.form.spouseCityIdNumber")}
                       {...field}
                     />
                   </FormControl>
