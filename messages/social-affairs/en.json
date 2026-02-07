@@ -142,6 +142,78 @@
         }
       }
     },
+    "services": {
+      "title": "Support Services",
+      "subtitle": "Provide medical, financial, and material support.",
+      "cardTitle": "Global Support Records",
+      "searchPlaceholder": "Search service or provider...",
+      "table": {
+        "beneficiary": "Beneficiary",
+        "service": "Service",
+        "category": "Category",
+        "frequency": "Frequency",
+        "date": "Date Provided",
+        "loading": "Loading services...",
+        "noRecords": "No support services found"
+      },
+      "types": {
+        "1": "Startup Capital Support",
+        "2": "Monthly Financial Subsidy",
+        "3": "Emergency Medical Fund",
+        "4": "Food & Nutrition Support",
+        "5": "School Uniform & Material Support",
+        "6": "Sanitary Supplies",
+        "7": "Skill Development Training",
+        "8": "Legal Counseling",
+        "9": "Psychosocial Counseling",
+        "10": "Temporary Shelter",
+        "11": "Medical Checkup & Treatment",
+        "12": "Health Insurance Coverage",
+        "13": "Public Transport Pass",
+        "14": "Disability Financial Grant",
+        "15": "Mobility Device Supply"
+      },
+      "categories": {
+        "FINANCIAL": "Financial",
+        "SUPPLIES": "Supplies",
+        "TRAINING": "Training",
+        "LEGAL": "Legal",
+        "COUNSELING": "Counseling",
+        "SHELTER": "Shelter",
+        "MEDICAL": "Medical"
+      },
+      "form": {
+        "title": "Register Support Service",
+        "addButton": "Add Service",
+        "fields": {
+          "beneficiary": "Beneficiary",
+          "serviceType": "Service Type",
+          "provider": "Provider / Organization",
+          "amount": "Amount / Quantity",
+          "dateProvided": "Date Provided",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "remark": "Remark (Optional)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "Select a beneficiary",
+          "selectService": "Select service type",
+          "provider": "e.g. Red Cross, Local Gov",
+          "amount": "e.g. 5000 ETB or 2 Kits",
+          "subCity": "Enter Sub City",
+          "woreda": "Enter Woreda",
+          "remark": "Add specific notes..."
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Register Service"
+        },
+        "messages": {
+          "success": "Service registered successfully",
+          "error": "Failed to register service"
+        }
+      }
+    },
     "training": {
       "title": "Training Sessions",
       "subtitle": "Track skills development and training for all beneficiaries.",
@@ -236,7 +308,8 @@
       },
       "tabs": {
         "trainingHistory": "Training History",
-        "jobPlacements": "Job Placements"
+        "jobPlacements": "Job Placements",
+        "supportServices": "Support Services"
       },
       "trainingSection": {
         "title": "Training Records",
@@ -259,6 +332,17 @@
           "position": "Position",
           "startDate": "Start Date",
           "noRecords": "No job placements found"
+        }
+      },
+      "servicesSection": {
+        "title": "Support Services",
+        "addButton": "+ Add Service",
+        "table": {
+          "service": "Service",
+          "category": "Category",
+          "provider": "Provider",
+          "date": "Date",
+          "noRecords": "No support services found"
         }
       }
     },

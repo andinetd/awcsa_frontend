@@ -1,13 +1,5 @@
 "use client";
-import StatsCard from "@/components/shared/card/statistics-card";
-import {
-  HandHelping,
-  File,
-  HandHeart,
-  Filter,
-  Eye,
-  MoreHorizontal,
-} from "lucide-react";
+
 import React, { useState, useMemo } from "react";
 import { useBureauDashboardSummary } from "@/hooks/bureau/useBureauDashboard";
 import { useBureauReports } from "@/hooks/bureau/useBureauReports";
@@ -41,63 +33,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-
-const chartData = [
-  { day: 1, applications: 3 },
-  { day: 2, applications: 4 },
-  { day: 3, applications: 8 },
-  { day: 4, applications: 3 },
-  { day: 5, applications: 5 },
-  { day: 6, applications: 20 },
-  { day: 7, applications: 10 },
-  { day: 8, applications: 1 },
-  { day: 9, applications: 2 },
-  { day: 10, applications: 7 },
-];
-
-const chartData2 = [
-  { day: 1, applications: 3 },
-  { day: 2, applications: 4 },
-  { day: 3, applications: 3 },
-  { day: 4, applications: 9 },
-  { day: 5, applications: 5 },
-  { day: 6, applications: 15 },
-  { day: 7, applications: 10 },
-  { day: 8, applications: 1 },
-  { day: 9, applications: 13 },
-  { day: 10, applications: 4 },
-];
-
-const getChartConfig = (t: any) => ({
-  children: {
-    label: t("dashboard.stats.totalChildren"),
-    color: "hsl(var(--chart-1))",
-  },
-  facilities: {
-    label: t("dashboard.stats.totalFacilities"),
-    color: "hsl(var(--chart-2))",
-  },
-  submitted: {
-    label: t("dashboard.stats.submittedReports"),
-    color: "hsl(var(--chart-3))",
-  },
-  pending: {
-    label: t("dashboard.stats.pendingReports"),
-    color: "hsl(var(--chart-5))",
-  },
-});
+import {
+  HandHelping,
+  File,
+  HandHeart,
+  Filter,
+  Eye,
+  MoreHorizontal,
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UnifiedStatsOverview } from "@/components/dashboard/UnifiedStatsOverview";
+import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
+import { useGetDashboardAnalyticsQuery } from "@/hooks/dashboard/useAnalytics";
 
 const BureauHead = () => {
   const t = useTranslations("bureau");
-  const chartConfig = useMemo(() => getChartConfig(t), [t]);
   const { data: stats, isLoading: isStatsLoading } =
     useBureauDashboardSummary();
-
   const { data: careCenters } = useGetCareCentersQuery();
+  const { data: analytics, isLoading: isAnalyticsLoading } =
+    useGetDashboardAnalyticsQuery();
 
   // Search Filters State (Form)
   const [filters, setFilters] = useState<BureauReportFilters>({
@@ -287,174 +245,198 @@ const BureauHead = () => {
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
           {t("dashboard.title")}
         </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatsCard
-            chartConfig={chartConfig}
-            chartData={chartData2}
-            title={t("dashboard.stats.totalChildren")}
-            dataKey="children"
-            icon={HandHeart}
-            value={stats?.totalChildren || 0}
-          />
-          <StatsCard
-            chartConfig={chartConfig}
-            chartData={chartData}
-            title={t("dashboard.stats.totalFacilities")}
-            dataKey="facilities"
-            icon={HandHelping}
-            value={stats?.totalFacilities || 0}
-          />
-          <StatsCard
-            chartConfig={chartConfig}
-            chartData={chartData2}
-            title={t("dashboard.stats.submittedReports")}
-            dataKey="submitted"
-            icon={File}
-            value={stats?.submittedReports || 0}
-          />
-          <StatsCard
-            chartConfig={chartConfig}
-            chartData={chartData}
-            title={t("dashboard.stats.pendingReports")}
-            dataKey="pending"
-            icon={File}
-            value={stats?.pendingReports || 0}
-          />
-        </div>
       </div>
 
-      {/* Reports Section with Dialog Search */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
-            {t("reports.title")}
-          </h2>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 hover:cursor-pointer">
-                <Filter className="w-4 h-4" />
-                {t("reports.filter.button")}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>{t("reports.filter.dialogTitle")}</DialogTitle>
-                <DialogDescription>
-                  {t("reports.filter.dialogDescription")}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="year" className="text-right">
-                    {t("reports.filter.year")}
-                  </Label>
-                  <Input
-                    id="year"
-                    name="year"
-                    type="number"
-                    value={filters.year}
-                    onChange={handleInputChange}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="month" className="text-right">
-                    {t("reports.filter.month")}
-                  </Label>
-                  <div className="col-span-3">
-                    <Select
-                      value={filters.month?.toString()}
-                      onValueChange={(val) => handleSelectChange("month", val)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={t("reports.filter.selectMonth")}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <SelectItem key={i + 1} value={(i + 1).toString()}>
-                            {t(`months.${i + 1}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="subCity" className="text-right">
-                    {t("reports.filter.subCity")}
-                  </Label>
-                  <Input
-                    id="subCity"
-                    name="subCity"
-                    value={filters.subCity}
-                    onChange={handleInputChange}
-                    placeholder={t("reports.filter.subCityPlaceholder")}
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="facilityId" className="text-right">
-                    {t("reports.filter.facility")}
-                  </Label>
-                  <div className="col-span-3">
-                    <Select
-                      value={filters.facilityId?.toString()}
-                      onValueChange={(val) =>
-                        handleSelectChange("facilityId", val)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={t("reports.filter.selectFacility")}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="0">
-                          {t("reports.filter.allFacilities")}
-                        </SelectItem>
-                        {careCenters?.map((center: any) => (
-                          <SelectItem
-                            key={center.id}
-                            value={center.id.toString()}
-                          >
-                            {center.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleSearch} className="hover:cursor-pointer">
-                  {t("reports.filter.search")}
+      <Tabs defaultValue="analytics" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="reports">{t("reports.title")}</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="analytics" className="space-y-4">
+          <UnifiedStatsOverview
+            stats={[
+              {
+                key: "children",
+                label: t("dashboard.stats.totalChildren"),
+                value: stats?.totalChildren || 0,
+                icon: HandHeart,
+                color: "text-sky-500",
+                bg: "bg-sky-50 dark:bg-sky-900/20",
+                border: "border-sky-100 dark:border-sky-800",
+              },
+              {
+                key: "facilities",
+                label: t("dashboard.stats.totalFacilities"),
+                value: stats?.totalFacilities || 0,
+                icon: HandHelping,
+                color: "text-emerald-500",
+                bg: "bg-emerald-50 dark:bg-emerald-900/20",
+                border: "border-emerald-100 dark:border-emerald-800",
+              },
+              {
+                key: "submitted",
+                label: t("dashboard.stats.submittedReports"),
+                value: stats?.submittedReports || 0,
+                icon: File,
+                color: "text-cyan-500",
+                bg: "bg-cyan-50 dark:bg-cyan-900/20",
+                border: "border-cyan-100 dark:border-cyan-800",
+              },
+              {
+                key: "pending",
+                label: t("dashboard.stats.pendingReports"),
+                value: stats?.pendingReports || 0,
+                icon: File,
+                color: "text-teal-500",
+                bg: "bg-teal-50 dark:bg-teal-900/20",
+                border: "border-teal-100 dark:border-teal-800",
+              },
+            ]}
+          />
+          {analytics && <AnalyticsCharts data={analytics} />}
+        </TabsContent>
+
+        <TabsContent value="reports" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
+              {t("reports.title")}
+            </h2>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="gap-2 hover:cursor-pointer"
+                >
+                  <Filter className="w-4 h-4" />
+                  {t("reports.filter.button")}
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{t("reports.filter.dialogTitle")}</DialogTitle>
+                  <DialogDescription>
+                    {t("reports.filter.dialogDescription")}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="year" className="text-right">
+                      {t("reports.filter.year")}
+                    </Label>
+                    <Input
+                      id="year"
+                      name="year"
+                      type="number"
+                      value={filters.year}
+                      onChange={handleInputChange}
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="month" className="text-right">
+                      {t("reports.filter.month")}
+                    </Label>
+                    <div className="col-span-3">
+                      <Select
+                        value={filters.month?.toString()}
+                        onValueChange={(val) =>
+                          handleSelectChange("month", val)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t("reports.filter.selectMonth")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 12 }, (_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()}>
+                              {t(`months.${i + 1}`)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="subCity" className="text-right">
+                      {t("reports.filter.subCity")}
+                    </Label>
+                    <Input
+                      id="subCity"
+                      name="subCity"
+                      value={filters.subCity}
+                      onChange={handleInputChange}
+                      placeholder={t("reports.filter.subCityPlaceholder")}
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="facilityId" className="text-right">
+                      {t("reports.filter.facility")}
+                    </Label>
+                    <div className="col-span-3">
+                      <Select
+                        value={filters.facilityId?.toString()}
+                        onValueChange={(val) =>
+                          handleSelectChange("facilityId", val)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t("reports.filter.selectFacility")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="0">
+                            {t("reports.filter.allFacilities")}
+                          </SelectItem>
+                          {careCenters?.map((center: any) => (
+                            <SelectItem
+                              key={center.id}
+                              value={center.id.toString()}
+                            >
+                              {center.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    onClick={handleSearch}
+                    className="hover:cursor-pointer"
+                  >
+                    {t("reports.filter.search")}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
 
-        {/* Results Table */}
-        <div className="">
-          {isReportsLoading ? (
-            <div className="p-8 mt-4 text-center text-muted-foreground flex items-center justify-center h-full">
-              {t("reports.loading")}
-            </div>
-          ) : isError ? (
-            <div className="p-8 text-center text-red-500 flex flex-col items-center justify-center h-full gap-2">
-              <p>{t("reports.error")}</p>
-              <p className="text-xs text-muted-foreground">
-                {t("reports.errorDescription")}
-              </p>
-            </div>
-          ) : (
-            <DataTable columns={columns} data={reports} />
-          )}
-        </div>
-      </div>
+          {/* Results Table */}
+          <div className="">
+            {isReportsLoading ? (
+              <div className="p-8 mt-4 text-center text-muted-foreground flex items-center justify-center h-full">
+                {t("reports.loading")}
+              </div>
+            ) : isError ? (
+              <div className="p-8 text-center text-red-500 flex flex-col items-center justify-center h-full gap-2">
+                <p>{t("reports.error")}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("reports.errorDescription")}
+                </p>
+              </div>
+            ) : (
+              <DataTable columns={columns} data={reports} />
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+
       <ReportDetailsModal
         report={selectedReport}
         isOpen={isDetailsOpen}

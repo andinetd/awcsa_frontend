@@ -49,6 +49,18 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/social-affairs/${locale}.json`)
   ).default;
 
+  const executiveMessages = (
+    await import(`../../messages/executive/${locale}.json`)
+  ).default;
+
+  const childWelfareMessages = (
+    await import(`../../messages/child-welfare/${locale}.json`)
+  ).default;
+
+  const socialRehabMessages = (
+    await import(`../../messages/social-rehab/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -63,6 +75,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
       womens: womensMessages,
       "care-centers-portal": careCentersPortalMessages,
       "social-affairs": socialAffairsMessages,
+      executive: executiveMessages,
+      "child-welfare": childWelfareMessages,
+      "social-rehab": socialRehabMessages,
     },
   };
 });

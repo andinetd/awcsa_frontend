@@ -3,6 +3,7 @@ import { getBeneficiaries } from "@/api/beneficiaries/getBeneficiaries";
 import { registerBeneficiary } from "@/api/beneficiaries/registerBeneficiary";
 import { getTrainings, registerTraining } from "@/api/beneficiaries/training";
 import { getJobs, registerJob } from "@/api/beneficiaries/jobs";
+import { getSupportServices } from "@/api/beneficiaries/services";
 import { getBeneficiaryProfile } from "@/api/beneficiaries/getProfile";
 import { generateBeneficiaryReport } from "@/api/beneficiaries/generateReport";
 import { BeneficiaryType } from "@/api/beneficiaries/types";
@@ -26,10 +27,10 @@ export const useRegisterBeneficiaryMutation = () => {
   });
 };
 
-export const useGetTrainingsQuery = (clientId?: number) => {
+export const useGetTrainingsQuery = (cityId?: string) => {
   return useQuery({
-    queryKey: ["trainings", clientId],
-    queryFn: () => getTrainings(clientId),
+    queryKey: ["trainings", cityId],
+    queryFn: () => getTrainings(cityId),
   });
 };
 
@@ -43,10 +44,10 @@ export const useRegisterTrainingMutation = () => {
   });
 };
 
-export const useGetJobsQuery = (clientId?: number) => {
+export const useGetJobsQuery = (cityId?: string) => {
   return useQuery({
-    queryKey: ["jobs", clientId],
-    queryFn: () => getJobs(clientId),
+    queryKey: ["jobs", cityId],
+    queryFn: () => getJobs(cityId),
   });
 };
 
@@ -57,6 +58,13 @@ export const useRegisterJobMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobs"] });
     },
+  });
+};
+
+export const useGetSupportServicesQuery = (cityId?: string) => {
+  return useQuery({
+    queryKey: ["support-services", cityId],
+    queryFn: () => getSupportServices(cityId),
   });
 };
 

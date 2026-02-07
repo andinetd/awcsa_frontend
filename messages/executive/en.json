@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "title": "Executive Dashboard",
+    "subtitle": "System-wide overview and key metrics",
+    "tabs": {
+      "overview": "Overview",
+      "activity": "Recent Activity"
+    },
+    "loading": "Loading dashboard...",
+    "stats": {
+      "totalChildren": "Total Children",
+      "totalPeople": "Total People Registered",
+      "totalFacilities": "Total Facilities",
+      "totalEdirs": "Total Edir Associations"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "empty": {
+        "title": "No recent activity",
+        "description": "System activities will appear here"
+      },
+      "types": {
+        "CLIENT_REGISTRATION": "Client Registration",
+        "CHILD_REGISTRATION": "Child Registration",
+        "FACILITY_REGISTRATION": "Facility Registration",
+        "EDIR_REGISTRATION": "Edir Registration"
+      }
+    },
+    "analytics": {
+      "trends": {
+        "title": "Trends",
+        "description": "Registrations vs Activities over time",
+        "registrations": "Registrations",
+        "activities": "Activities"
+      },
+      "demographics": {
+        "title": "Demographics",
+        "description": "Distribution by Category",
+        "count": "Count",
+        "elderly": "Elderly",
+        "children": "Children",
+        "women": "Women",
+        "disabled": "Disabled"
+      },
+      "performance": {
+        "title": "Performance",
+        "description": "Department Output & Efficiency",
+        "output": "Output",
+        "efficiency": "Efficiency"
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {
   useGetBeneficiaryProfileQuery,
   useGetTrainingsQuery,
   useGetJobsQuery,
+  useGetSupportServicesQuery,
 } from "@/hooks/beneficiaries";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,18 +41,25 @@ import {
 } from "@/components/ui/table";
 import TrainingForm from "../../../_components/training-form";
 import JobForm from "../../../_components/job-form";
+import ServiceForm from "../../../_components/service-form";
 
 export default function BeneficiaryProfilePage() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.profile");
+  const tServices = useTranslations(
+    "social-affairs.elderlyAndDisabled.services",
+  );
   const params = useParams();
   const router = useRouter();
   const id = parseInt(params.id as string);
 
   const { data: profile, isLoading: isLoadingProfile } =
     useGetBeneficiaryProfileQuery(id);
+  const cityId = profile?.cityIdNumber;
   const { data: trainings, isLoading: isLoadingTrainings } =
-    useGetTrainingsQuery(id);
-  const { data: jobs, isLoading: isLoadingJobs } = useGetJobsQuery(id);
+    useGetTrainingsQuery(cityId);
+  const { data: jobs, isLoading: isLoadingJobs } = useGetJobsQuery(cityId);
+  const { data: services, isLoading: isLoadingServices } =
+    useGetSupportServicesQuery(cityId);
 
   if (isLoadingProfile) {
     return (
@@ -216,6 +224,12 @@ export default function BeneficiaryProfilePage() {
               >
                 {t("tabs.jobPlacements")}
               </TabsTrigger>
+              <TabsTrigger
+                value="services"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none"
+              >
+                {t("tabs.supportServices")}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="training" className="mt-6">
@@ -254,24 +268,28 @@ export default function BeneficiaryProfilePage() {
                     </TableHeader>
                     <TableBody>
                       {trainings && trainings.length > 0 ? (
-                        trainings.map((t: any) => (
-                          <TableRow key={t.id}>
+                        trainings.map((training: any) => (
+                          <TableRow key={training.id}>
                             <TableCell className="font-medium">
-                              {t.trainingType}
+                              {training.trainingType}
                             </TableCell>
-                            <TableCell>{t.provider}</TableCell>
+                            <TableCell>{training.provider}</TableCell>
                             <TableCell className="text-sm">
-                              {new Date(t.startDate).toLocaleDateString()}
-                              {t.completionDate &&
+                              {new Date(
+                                training.startDate,
+                              ).toLocaleDateString()}
+                              {training.completionDate &&
                                 ` - ${new Date(
-                                  t.completionDate,
+                                  training.completionDate,
                                 ).toLocaleDateString()}`}
                             </TableCell>
                             <TableCell>
                               <Badge
-                                variant={t.hasCOC ? "default" : "secondary"}
+                                variant={
+                                  training.hasCOC ? "default" : "secondary"
+                                }
                               >
-                                {t.hasCOC
+                                {training.hasCOC
                                   ? t("trainingSection.table.yes")
                                   : t("trainingSection.table.no")}
                               </Badge>
@@ -345,6 +363,69 @@ export default function BeneficiaryProfilePage() {
                             className="text-center py-10 text-slate-400"
                           >
                             {t("jobsSection.table.noRecords")}
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="services" className="mt-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Heart className="w-4 h-4" />
+                    {t("servicesSection.title")}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <ServiceForm />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>
+                          {t("servicesSection.table.service")}
+                        </TableHead>
+                        <TableHead>
+                          {t("servicesSection.table.category")}
+                        </TableHead>
+                        <TableHead>
+                          {t("servicesSection.table.provider")}
+                        </TableHead>
+                        <TableHead>{t("servicesSection.table.date")}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {services && services.length > 0 ? (
+                        services.map((service: any) => (
+                          <TableRow key={service.id}>
+                            <TableCell className="font-medium">
+                              {tServices(`types.${service.serviceTypeId}`)}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="secondary">
+                                {tServices(`categories.${service.category}`)}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{service.provider}</TableCell>
+                            <TableCell className="text-sm">
+                              {new Date(
+                                service.dateProvided,
+                              ).toLocaleDateString()}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell
+                            colSpan={4}
+                            className="text-center py-10 text-slate-400"
+                          >
+                            {t("servicesSection.table.noRecords")}
                           </TableCell>
                         </TableRow>
                       )}

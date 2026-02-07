@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "title": "የአስፈፃሚ ዳሽቦርድ",
+    "subtitle": "የስርዓት አጠቃላይ እይታ እና ቁልፍ መለኪያዎች",
+    "tabs": {
+      "overview": "አጠቃላይ እይታ",
+      "activity": "የቅርብ ጊዜ እንቅስቃሴዎች"
+    },
+    "loading": "ዳሽቦርድ በመጫን ላይ...",
+    "stats": {
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "totalPeople": "ጠቅላላ የተመዘገቡ ሰዎች",
+      "totalFacilities": "ጠቅላላ ተቋማት",
+      "totalEdirs": "ጠቅላላ እድር ማህበራት"
+    },
+    "recentActivity": {
+      "title": "የቅርብ ጊዜ እንቅስቃሴዎች",
+      "empty": {
+        "title": "ምንም የቅርብ ጊዜ እንቅስቃሴ የለም",
+        "description": "የስርዓት እንቅስቃሴዎች እዚህ ይታያሉ"
+      },
+      "types": {
+        "CLIENT_REGISTRATION": "የደንበኛ ምዝገባ",
+        "CHILD_REGISTRATION": "የሕፃን ምዝገባ",
+        "FACILITY_REGISTRATION": "የተቋም ምዝገባ",
+        "EDIR_REGISTRATION": "የእድር ምዝገባ"
+      }
+    },
+    "analytics": {
+      "trends": {
+        "title": "አዝማሚያዎች",
+        "description": "ምዝገባዎች እና እንቅስቃሴዎች በጊዜ ሂደት",
+        "registrations": "ምዝገባዎች",
+        "activities": "እንቅስቃሴዎች"
+      },
+      "demographics": {
+        "title": "የሕዝብ ስብጥር",
+        "description": "ስርጭት በምድብ",
+        "count": "ብዛት",
+        "elderly": "አረጋውያን",
+        "children": "ሕፃናት",
+        "women": "ሴቶች",
+        "disabled": "አካል ጉዳተኞች"
+      },
+      "performance": {
+        "title": "አፈጻጸም",
+        "description": "የክፍል ውጤት እና ቅልጥፍና",
+        "output": "ውጤት",
+        "efficiency": "ቅልጥፍና"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "Social Rehabilitation Dashboard",
+    "subtitle": "Overview of beneficiaries, community programs, and support services",
+    "loading": "Loading dashboard...",
+    "beneficiaries": {
+      "title": "Beneficiaries",
+      "totalVulnerable": "Total Vulnerable People",
+      "elderly": "Elderly",
+      "disability": "Disability",
+      "women": "Women"
+    },
+    "community": {
+      "title": "Community Programs",
+      "totalEdirs": "Total Edir Associations",
+      "totalMembers": "Total Members"
+    },
+    "support": {
+      "title": "Support Services",
+      "totalServicesProvided": "Total Services Provided"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "registerBeneficiary": "Register Beneficiary",
+      "viewElderly": "View Elderly",
+      "viewDisabled": "View Disabled",
+      "viewWomen": "View Women",
+      "manageEdirs": "Manage Edirs",
+      "viewTrainings": "View Trainings",
+      "viewJobs": "View Job Placements"
+    }
+  }
+}
