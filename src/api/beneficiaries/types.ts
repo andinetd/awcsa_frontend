@@ -135,3 +135,52 @@ export interface BeneficiaryReportPayload {
   format: "EXCEL" | "PDF";
   selectedColumns: string[];
 }
+
+export type ServiceCategory =
+  | "FINANCIAL"
+  | "MEDICAL"
+  | "SUPPLIES"
+  | "EDUCATION"
+  | "TRAINING"
+  | "LEGAL"
+  | "COUNSELING" // From "Psychosocial Counseling"
+  | "SHELTER"
+  | "OTHER";
+
+export type ServiceFrequency =
+  | "ONE_TIME"
+  | "RECURRING_MONTHLY"
+  | "RECURRING_YEARLY"
+  | "AS_NEEDED";
+
+export interface SupportServicePayload {
+  cityIdNumber: string;
+  serviceTypeId: number;
+  provider: string;
+  amountOrQuantity?: string; // Schema shows string "5000"
+  dateProvided: string;
+  subCity: string;
+  woreda: string;
+  remark?: string;
+  facilitatorCityId?: string;
+}
+
+export interface SupportService {
+  id: number;
+  cityIdNumber: string;
+  serviceTypeId: number;
+  provider: string;
+  amountOrQuantity: string;
+  dateProvided: string;
+  subCity: string;
+  woreda: string;
+  remark?: string;
+  facilitatorCityId?: string;
+  createdAt: string;
+  updatedAt: string;
+  client?: Beneficiary;
+  // We might want to include the mocked service details here if backend doesn't populate them
+  serviceName?: string;
+  category?: ServiceCategory;
+  frequency?: ServiceFrequency;
+}

@@ -34,27 +34,70 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
 import { useRouter } from "next/navigation";
 import { Card, CardTitle } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 function Step2() {
   const router = useRouter();
+  const t = useTranslations("adoption");
 
   const { step2, setStep2 } = useHomeVisitFormStore();
 
   // Ensure arrays have at least one empty entry when initializing the form
-  const initialValues = (step2 && (
-    (step2.existingChildren && step2.existingChildren.length > 0) ||
-    (step2.householdMembers && step2.householdMembers.length > 0) ||
-    (step2.applicantParents && step2.applicantParents.length > 0)
-  ))
-    ? step2
-    : {
-        ...(step2 || {}),
-        existingChildren: step2?.existingChildren && step2.existingChildren.length > 0 ? step2.existingChildren : [{ fullName: "", age: "", sex: "MALE", relation: "", educationOccupation: "", maritalStatus: "", address: "" }],
-        householdMembers: step2?.householdMembers && step2.householdMembers.length > 0 ? step2.householdMembers : [{ fullName: "", age: "", sex: "MALE", relation: "", educationAndOccupation: "" }],
-        applicantParents: step2?.applicantParents && step2.applicantParents.length > 0 ? step2.applicantParents : [{ fullName: "", age: "", sex: "MALE", relation: "", educationOccupation: "", addressAndLivingCondition: "" }],
-      } as any;
+  const initialValues =
+    step2 &&
+    ((step2.existingChildren && step2.existingChildren.length > 0) ||
+      (step2.householdMembers && step2.householdMembers.length > 0) ||
+      (step2.applicantParents && step2.applicantParents.length > 0))
+      ? step2
+      : ({
+          ...(step2 || {}),
+          existingChildren:
+            step2?.existingChildren && step2.existingChildren.length > 0
+              ? step2.existingChildren
+              : [
+                  {
+                    fullName: "",
+                    age: "",
+                    sex: "MALE",
+                    relation: "",
+                    educationOccupation: "",
+                    maritalStatus: "",
+                    address: "",
+                  },
+                ],
+          householdMembers:
+            step2?.householdMembers && step2.householdMembers.length > 0
+              ? step2.householdMembers
+              : [
+                  {
+                    fullName: "",
+                    age: "",
+                    sex: "MALE",
+                    relation: "",
+                    educationAndOccupation: "",
+                  },
+                ],
+          applicantParents:
+            step2?.applicantParents && step2.applicantParents.length > 0
+              ? step2.applicantParents
+              : [
+                  {
+                    fullName: "",
+                    age: "",
+                    sex: "MALE",
+                    relation: "",
+                    educationOccupation: "",
+                    addressAndLivingCondition: "",
+                  },
+                ],
+        } as any);
 
   const form = useForm<Step2SchemaType>({
     resolver: zodResolver(Step2Schema),
@@ -94,23 +137,47 @@ function Step2() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Family Background
+                {t("homeVisitRegistration.step2.familyBackground.title")}
               </CardTitle>
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium">Father Side</h4>
+                  <h4 className="font-medium">
+                    {t(
+                      "homeVisitRegistration.step2.familyBackground.fatherSide",
+                    )}
+                  </h4>
                   <div className="grid grid-cols-1 gap-3 mt-2">
                     {Object.entries({
-                      parentsNames: "Parents Names",
-                      addressIfAlive: "Address If Alive",
-                      birthOrder: "Birth Order",
-                      siblingsCount: "Siblings Count",
-                      relationshipWithFamily: "Relationship With Family",
-                      childhoodFamilyOccupation: "Childhood Family Occupation",
-                      childhoodExperience: "Childhood Experience",
-                      childhoodBehavior: "Childhood Behavior",
-                      workExperience: "Work Experience",
-                      attitudeToWork: "Attitude To Work",
+                      parentsNames: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.parentsNames",
+                      ),
+                      addressIfAlive: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.addressIfAlive",
+                      ),
+                      birthOrder: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.birthOrder",
+                      ),
+                      siblingsCount: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.siblingsCount",
+                      ),
+                      relationshipWithFamily: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.relationshipWithFamily",
+                      ),
+                      childhoodFamilyOccupation: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodFamilyOccupation",
+                      ),
+                      childhoodExperience: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodExperience",
+                      ),
+                      childhoodBehavior: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodBehavior",
+                      ),
+                      workExperience: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.workExperience",
+                      ),
+                      attitudeToWork: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.attitudeToWork",
+                      ),
                     }).map(([key, label]) => (
                       <FormField
                         key={key}
@@ -121,7 +188,9 @@ function Step2() {
                             <FormLabel>{label}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder={`Enter ${label}`}
+                                placeholder={t(
+                                  "homeVisitRegistration.step1.marriageInfo.placeholders.relationshipDescription",
+                                ).replace("Relationship Description", label)} // Hacky placeholder or just use label
                                 rows={2}
                                 {...(field as any)}
                               />
@@ -135,19 +204,43 @@ function Step2() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium">Mother Side</h4>
+                  <h4 className="font-medium">
+                    {t(
+                      "homeVisitRegistration.step2.familyBackground.motherSide",
+                    )}
+                  </h4>
                   <div className="grid grid-cols-1 gap-3 mt-2">
                     {Object.entries({
-                      parentsNames: "Parents Names",
-                      addressIfAlive: "Address If Alive",
-                      birthOrder: "Birth Order",
-                      siblingsCount: "Siblings Count",
-                      relationshipWithFamily: "Relationship With Family",
-                      childhoodFamilyOccupation: "Childhood Family Occupation",
-                      childhoodExperience: "Childhood Experience",
-                      childhoodBehavior: "Childhood Behavior",
-                      workExperience: "Work Experience",
-                      attitudeToWork: "Attitude To Work",
+                      parentsNames: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.parentsNames",
+                      ),
+                      addressIfAlive: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.addressIfAlive",
+                      ),
+                      birthOrder: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.birthOrder",
+                      ),
+                      siblingsCount: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.siblingsCount",
+                      ),
+                      relationshipWithFamily: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.relationshipWithFamily",
+                      ),
+                      childhoodFamilyOccupation: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodFamilyOccupation",
+                      ),
+                      childhoodExperience: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodExperience",
+                      ),
+                      childhoodBehavior: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.childhoodBehavior",
+                      ),
+                      workExperience: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.workExperience",
+                      ),
+                      attitudeToWork: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.attitudeToWork",
+                      ),
                     }).map(([key, label]) => (
                       <FormField
                         key={key}
@@ -158,7 +251,7 @@ function Step2() {
                             <FormLabel>{label}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder={`Enter ${label}`}
+                                placeholder={label}
                                 rows={2}
                                 {...(field as any)}
                               />
@@ -172,13 +265,25 @@ function Step2() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium">Spouse Evaluation Together</h4>
+                  <h4 className="font-medium">
+                    {t(
+                      "homeVisitRegistration.step2.familyBackground.spouseEvaluation",
+                    )}
+                  </h4>
                   <div className="grid grid-cols-1 gap-3 mt-2">
                     {Object.entries({
-                      strengthAndWeaknesses: "Strengths and Weaknesses",
-                      relationShipWithChildren: "Relationship With Children",
-                      LifeGoalsAsGuardian: "Life Goals As Guardian",
-                      spareTimeActivities: "Spare Time Activities",
+                      strengthAndWeaknesses: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.strengthsAndWeaknesses",
+                      ),
+                      relationShipWithChildren: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.relationshipWithChildren",
+                      ),
+                      LifeGoalsAsGuardian: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.lifeGoalsAsGuardian",
+                      ),
+                      spareTimeActivities: t(
+                        "homeVisitRegistration.step2.familyBackground.fields.spareTimeActivities",
+                      ),
                     }).map(([key, label]) => (
                       <FormField
                         key={key}
@@ -191,7 +296,7 @@ function Step2() {
                             <FormLabel>{label}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder={`Enter ${label}`}
+                                placeholder={label}
                                 rows={2}
                                 {...(field as any)}
                               />
@@ -211,14 +316,17 @@ function Step2() {
             <div className="space-y-3">
               <Card className="flex flex-col space-y-4 py-6 px-4">
                 <CardTitle className="text-lg font-semibold">
-                  Existing Children
+                  {t("homeVisitRegistration.step2.existingChildren.title")}
                 </CardTitle>
                 <div className="space-y-4">
                   {existingChildrenArray.fields.map((f, idx) => (
                     <div key={f.id} className="border rounded-md p-3">
                       <div className="flex justify-between items-center mb-2">
                         <div className="text-sm font-medium">
-                          Child #{idx + 1}
+                          {t(
+                            "homeVisitRegistration.step2.existingChildren.childNumber",
+                            { number: idx + 1 },
+                          )}
                         </div>
                         <Button
                           type="button"
@@ -226,7 +334,7 @@ function Step2() {
                           size="sm"
                           onClick={() => existingChildrenArray.remove(idx)}
                         >
-                          Remove
+                          {t("homeVisitRegistration.step2.common.remove")}
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -235,10 +343,16 @@ function Step2() {
                           name={`existingChildren.${idx}.fullName` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.fullName",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Full Name"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.fullName",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -251,9 +365,16 @@ function Step2() {
                           name={`existingChildren.${idx}.age` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Age</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.age")}
+                              </FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter Age" {...field} />
+                                <Input
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.age",
+                                  )}
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -264,7 +385,9 @@ function Step2() {
                           name={`existingChildren.${idx}.sex` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Gender</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.gender")}
+                              </FormLabel>
                               <FormControl>
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -274,9 +397,15 @@ function Step2() {
                                     >
                                       {field.value
                                         ? field.value === "MALE"
-                                          ? "Male"
-                                          : "Female"
-                                        : "Select gender"}
+                                          ? t(
+                                              "homeVisitRegistration.step2.common.male",
+                                            )
+                                          : t(
+                                              "homeVisitRegistration.step2.common.female",
+                                            )
+                                        : t(
+                                            "homeVisitRegistration.step2.common.selectGender",
+                                          )}
                                       <ChevronDown />
                                     </Button>
                                   </DropdownMenuTrigger>
@@ -287,12 +416,16 @@ function Step2() {
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("MALE")}
                                     >
-                                      Male
+                                      {t(
+                                        "homeVisitRegistration.step2.common.male",
+                                      )}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("FEMALE")}
                                     >
-                                      Female
+                                      {t(
+                                        "homeVisitRegistration.step2.common.female",
+                                      )}
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
@@ -306,10 +439,16 @@ function Step2() {
                           name={`existingChildren.${idx}.relation` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Relation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.relation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Relation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.relation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -324,10 +463,16 @@ function Step2() {
                           }
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Education / Occupation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.educationOccupation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Education or Occupation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.educationOccupation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -342,10 +487,16 @@ function Step2() {
                           }
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Marital Status</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.maritalStatus",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Marital Status"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.maritalStatus",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -358,9 +509,18 @@ function Step2() {
                           name={`existingChildren.${idx}.address` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Address</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.address",
+                                )}
+                              </FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter Address" {...field} />
+                                <Input
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.address",
+                                  )}
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -383,7 +543,7 @@ function Step2() {
                       })
                     }
                   >
-                    Add Child
+                    {t("homeVisitRegistration.step2.existingChildren.addChild")}
                   </Button>
                 </div>
               </Card>
@@ -391,14 +551,17 @@ function Step2() {
               {/* Applicant Parents */}
               <Card className="flex flex-col space-y-4 py-6 px-4">
                 <CardTitle className="text-lg font-semibold">
-                  Applicant Parents
+                  {t("homeVisitRegistration.step2.applicantParents.title")}
                 </CardTitle>
                 <div className="space-y-4">
                   {applicantParentsArray.fields.map((f, idx) => (
                     <div key={f.id} className="border rounded-md p-3">
                       <div className="flex justify-between items-center mb-2">
                         <div className="text-sm font-medium">
-                          Person #{idx + 1}
+                          {t(
+                            "homeVisitRegistration.step2.applicantParents.personNumber",
+                            { number: idx + 1 },
+                          )}
                         </div>
                         <Button
                           type="button"
@@ -406,7 +569,7 @@ function Step2() {
                           size="sm"
                           onClick={() => applicantParentsArray.remove(idx)}
                         >
-                          Remove
+                          {t("homeVisitRegistration.step2.common.remove")}
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -415,10 +578,16 @@ function Step2() {
                           name={`applicantParents.${idx}.fullName` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.fullName",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Full Name"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.fullName",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -431,9 +600,16 @@ function Step2() {
                           name={`applicantParents.${idx}.age` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Age</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.age")}
+                              </FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter Age" {...field} />
+                                <Input
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.age",
+                                  )}
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -444,7 +620,9 @@ function Step2() {
                           name={`applicantParents.${idx}.sex` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Gender</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.gender")}
+                              </FormLabel>
                               <FormControl>
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -454,9 +632,15 @@ function Step2() {
                                     >
                                       {field.value
                                         ? field.value === "MALE"
-                                          ? "Male"
-                                          : "Female"
-                                        : "Select gender"}
+                                          ? t(
+                                              "homeVisitRegistration.step2.common.male",
+                                            )
+                                          : t(
+                                              "homeVisitRegistration.step2.common.female",
+                                            )
+                                        : t(
+                                            "homeVisitRegistration.step2.common.selectGender",
+                                          )}
                                       <ChevronDown />
                                     </Button>
                                   </DropdownMenuTrigger>
@@ -467,12 +651,16 @@ function Step2() {
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("MALE")}
                                     >
-                                      Male
+                                      {t(
+                                        "homeVisitRegistration.step2.common.male",
+                                      )}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("FEMALE")}
                                     >
-                                      Female
+                                      {t(
+                                        "homeVisitRegistration.step2.common.female",
+                                      )}
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
@@ -486,10 +674,16 @@ function Step2() {
                           name={`applicantParents.${idx}.relation` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Relation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.relation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Relation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.relation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -504,10 +698,16 @@ function Step2() {
                           }
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Education / Occupation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.educationOccupation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Education / Occupation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.educationOccupation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -523,11 +723,15 @@ function Step2() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>
-                                Address and Living Condition
+                                {t(
+                                  "homeVisitRegistration.step2.applicantParents.addressAndLivingCondition",
+                                )}
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Address and Living Condition"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.applicantParents.addressAndLivingCondition",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -551,7 +755,9 @@ function Step2() {
                       })
                     }
                   >
-                    Add Person
+                    {t(
+                      "homeVisitRegistration.step2.applicantParents.addPerson",
+                    )}
                   </Button>
                 </div>
               </Card>
@@ -559,14 +765,17 @@ function Step2() {
               {/* Household Members */}
               <Card className="flex flex-col space-y-4 py-6 px-4">
                 <CardTitle className="text-lg font-semibold">
-                  Household Members
+                  {t("homeVisitRegistration.step2.householdMembers.title")}
                 </CardTitle>
                 <div className="space-y-4">
                   {householdMembersArray.fields.map((f, idx) => (
                     <div key={f.id} className="border rounded-md p-3">
                       <div className="flex justify-between items-center mb-2">
                         <div className="text-sm font-medium">
-                          Member #{idx + 1}
+                          {t(
+                            "homeVisitRegistration.step2.householdMembers.memberNumber",
+                            { number: idx + 1 },
+                          )}
                         </div>
                         <Button
                           type="button"
@@ -574,7 +783,7 @@ function Step2() {
                           size="sm"
                           onClick={() => householdMembersArray.remove(idx)}
                         >
-                          Remove
+                          {t("homeVisitRegistration.step2.common.remove")}
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -583,10 +792,16 @@ function Step2() {
                           name={`householdMembers.${idx}.fullName` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.fullName",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Full Name"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.fullName",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -599,9 +814,16 @@ function Step2() {
                           name={`householdMembers.${idx}.age` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Age</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.age")}
+                              </FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter Age" {...field} />
+                                <Input
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.age",
+                                  )}
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -612,7 +834,9 @@ function Step2() {
                           name={`householdMembers.${idx}.sex` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Gender</FormLabel>
+                              <FormLabel>
+                                {t("homeVisitRegistration.step2.common.gender")}
+                              </FormLabel>
                               <FormControl>
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
@@ -622,9 +846,15 @@ function Step2() {
                                     >
                                       {field.value
                                         ? field.value === "MALE"
-                                          ? "Male"
-                                          : "Female"
-                                        : "Select gender"}
+                                          ? t(
+                                              "homeVisitRegistration.step2.common.male",
+                                            )
+                                          : t(
+                                              "homeVisitRegistration.step2.common.female",
+                                            )
+                                        : t(
+                                            "homeVisitRegistration.step2.common.selectGender",
+                                          )}
                                       <ChevronDown />
                                     </Button>
                                   </DropdownMenuTrigger>
@@ -635,12 +865,16 @@ function Step2() {
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("MALE")}
                                     >
-                                      Male
+                                      {t(
+                                        "homeVisitRegistration.step2.common.male",
+                                      )}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       onSelect={() => field.onChange("FEMALE")}
                                     >
-                                      Female
+                                      {t(
+                                        "homeVisitRegistration.step2.common.female",
+                                      )}
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
@@ -654,10 +888,16 @@ function Step2() {
                           name={`householdMembers.${idx}.relation` as const}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Relation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.common.relation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Relation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.common.relation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -672,10 +912,16 @@ function Step2() {
                           }
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Education and Occupation</FormLabel>
+                              <FormLabel>
+                                {t(
+                                  "homeVisitRegistration.step2.householdMembers.educationAndOccupation",
+                                )}
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter Education and Occupation"
+                                  placeholder={t(
+                                    "homeVisitRegistration.step2.householdMembers.educationAndOccupation",
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -698,7 +944,9 @@ function Step2() {
                       })
                     }
                   >
-                    Add Member
+                    {t(
+                      "homeVisitRegistration.step2.householdMembers.addMember",
+                    )}
                   </Button>
                 </div>
               </Card>
@@ -707,10 +955,10 @@ function Step2() {
           {/* Submit Button */}
           <div className="flex justify-between mt-4">
             <Button type="button" variant="outline" onClick={handleBack}>
-              Back
+              {t("homeVisitRegistration.buttons.back")}
             </Button>
             <Button type="submit" className="px-8">
-              Next
+              {t("homeVisitRegistration.buttons.next")}
             </Button>
           </div>
         </form>

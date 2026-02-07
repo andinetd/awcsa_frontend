@@ -106,9 +106,7 @@ export function ApplicationSummarySection() {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="text-center py-8">
-            {t("adoptionRequests.loading")}
-          </div>
+          <div className="text-center py-8">{t("appSummary.loading")}</div>
         ) : application ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between mx-2">

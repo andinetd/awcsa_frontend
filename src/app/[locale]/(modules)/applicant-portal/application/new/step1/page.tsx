@@ -264,9 +264,7 @@ export default function Step1Page() {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t(
-                        "stepone.form.spouseCityIdNumberPlaceholder",
-                      )}
+                      placeholder={t("stepone.form.spouseCityIdNumber")}
                       {...field}
                     />
                   </FormControl>
@@ -321,7 +319,7 @@ export default function Step1Page() {
               control={form.control}
               name="preferredChildren.number"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-6">
                   <FormLabel className="text-[14px] font-lexend">
                     {t("stepone.form.preferredNumberOfChildren")}
                   </FormLabel>

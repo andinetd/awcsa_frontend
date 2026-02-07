@@ -56,6 +56,7 @@
     "cta_submitted": "Application Submitted"
   },
   "appSummary": {
+    "loading": "Loading Application Summary...",
     "title": "Application Summary",
     "applicationId": "Application ID",
     "submittedDate": "Submitted Date",
@@ -107,8 +108,12 @@
       },
       "occupation": "Occupation",
       "occupationPlaceholder": "Enter your occupation",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
       "spouseCityIdNumber": "Spouse City ID Number",
-      "spouseCityIdNumberPlaceholder": "Enter spouse City ID Number",
       "spouseAgreement": "Spouse Agreement",
       "preferredChildAgeMin": "Preferred Child Age Min",
       "preferredChildAgeMax": "Preferred Child Age Max",
@@ -135,7 +140,9 @@
     "form": {
       "medical": "Medical Document",
       "criminal": "Criminal Clearance",
-      "marriageCertificate": "Marriage Certificate"
+      "marriageCertificate": "Marriage Certificate",
+      "housePlan": "House Plan",
+      "businessLicense": "Business License"
     }
   },
   "stepthree": {
@@ -150,6 +157,134 @@
       "marital": "Marital Document",
       "wellBeing": "Psychological well being Doc",
       "photo": "Photo"
+    }
+  },
+  "applicationDetails": {
+    "title": "Application Details",
+    "subtitle": "Review the submitted application details",
+    "personalInfo": "Personal Information",
+    "additionalDocs": "Additional Documents",
+    "details": "Details",
+    "reviewerComment": "Reviewer Comment",
+    "submitted": "Submitted",
+    "submittedOn": "This application was submitted on",
+    "back": "Back",
+    "noApplication": "No application found.",
+    "noFile": "No file",
+    "noFileUploaded": "No file uploaded",
+    "view": "View",
+    "fields": {
+      "id": "ID",
+      "birthCertificate": "Birth Certificate",
+      "incomeDocument": "Income Document",
+      "medical": "Medical",
+      "criminalDocument": "Criminal Document",
+      "marriageCertificate": "Marriage Certificate",
+      "maritalStatus": "Marital Status",
+      "wellBeing": "Well being",
+      "photo": "Photo",
+      "cityIdNumber": "City ID Number",
+      "dateOfBirth": "Date of Birth",
+      "address": "Address",
+      "educationLevel": "Education Level",
+      "occupation": "Occupation",
+      "monthlyIncome": "Monthly Income",
+      "spouseCityIdNumber": "Spouse City ID Number",
+      "preferredChildren": "Preferred Children",
+      "ageMin": "Age Min",
+      "ageMax": "Age Max",
+      "number": "Number",
+      "preferredSex": "Preferred Sex",
+      "file": "File"
+    }
+  },
+  "review": {
+    "title": "Review Your Application",
+    "subtitle": "Please review all information before submitting",
+    "personalInfo": "Personal Information",
+    "additionalDocs": "Additional Documents",
+    "details": "Details",
+    "readyToSubmit": "Ready to Submit",
+    "confirmationText": "By submitting this application, you confirm that all information provided is accurate and complete. You understand that false information may result in application rejection.",
+    "previousStep": "Previous Step",
+    "submitApplication": "Submit Application",
+    "submitting": "Submitting...",
+    "submitted": "Submitted!",
+    "loadingData": "Loading application data...",
+    "signInRequired": "You must be signed in to submit the application.",
+    "submissionSuccess": "Application submitted successfully!",
+    "submissionFailed": "Submission failed",
+    "unableToPreview": "Unable to preview file"
+  },
+  "applicationLayout": {
+    "title": "Adoption Application",
+    "subtitle": "Complete all steps to submit your adoption application"
+  },
+  "stepProgress": {
+    "step": "Step",
+    "of": "of",
+    "complete": "Complete",
+    "steps": {
+      "step1": "Personal Information",
+      "step2": "Background & References",
+      "step3": "Preferences & Requirements",
+      "step4": "Review & Submit"
+    }
+  },
+  "footerLinks": {
+    "complaints": "Complaints",
+    "supportText": "Need help? Contact our support team at",
+    "supportEmail": "wcsa@gov.org",
+    "scrollHint": "Scroll to view all requirements"
+  },
+  "statuses": {
+    "pending_review": "Pending Review",
+    "pending_home_visit": "Pending Home Visit",
+    "pending_approval": "Pending Approval",
+    "returned": "Returned",
+    "rejected": "Rejected",
+    "matched": "Matched"
+  },
+  "complaints": {
+    "form": {
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter complaint subject",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your issue in detail",
+      "submit": "Submit Complaint",
+      "submitting": "Submitting...",
+      "validation": {
+        "subjectMin": "Subject must be at least 5 characters",
+        "categoryRequired": "Please select a category",
+        "descriptionMin": "Description must be at least 10 characters"
+      }
+    },
+    "list": {
+      "noComplaints": "No complaints found.",
+      "table": {
+        "date": "Date",
+        "subject": "Subject",
+        "category": "Category",
+        "status": "Status",
+        "actions": "Actions",
+        "viewDetails": "View Details"
+      },
+      "dialog": {
+        "lastUpdated": "Last updated",
+        "categoryLabel": "Category",
+        "yourMessage": "Your Message",
+        "response": "Response",
+        "reviewingMsg": "Our team is currently reviewing your complaint. You will see the resolution here once completed."
+      }
+    },
+    "categories": {
+      "process_delay": "Process Delay",
+      "staff_behavior": "Staff Behaviour",
+      "documentation_issue": "Documentation Issue",
+      "system_error": "System Error",
+      "other": "Other"
     }
   }
 }

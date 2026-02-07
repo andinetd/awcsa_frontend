@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation";
+"use client";
 
-const AddChildPage = () => {
-  redirect("/care-centers-portal/add-child/new-form");
-};
+import NewChildForm from "./_components/add-child-form";
 
-export default AddChildPage;
+export default function RegisterNewChildPage() {
+  return <NewChildForm />;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -41,6 +42,7 @@ interface RegistrationFormProps {
 }
 
 export default function RegistrationForm({ type }: RegistrationFormProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.registration");
   const [open, setOpen] = React.useState(false);
   const registerMutation = useRegisterBeneficiaryMutation();
 
@@ -67,15 +69,15 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
     registerMutation.mutate(values, {
       onSuccess: () => {
         toast.success(
-          `${
-            type === "DISABLED" ? "Disabled person" : "Elderly person"
-          } registered successfully`
+          t("success", {
+            type: type === "DISABLED" ? t("disabled") : t("elderly"),
+          }),
         );
         form.reset();
         setOpen(false);
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Registration failed");
+        toast.error(error?.message || t("error"));
       },
     });
   };
@@ -85,14 +87,15 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
       <DialogTrigger asChild>
         <Button className="gap-2 bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4" />
-          Register New
+          {t("registerNew")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-lexend">
-            Register{" "}
-            {type === "DISABLED" ? "Person with Disability" : "Elderly Person"}
+            {t("title", {
+              type: type === "DISABLED" ? t("disabled") : t("elderly"),
+            })}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -103,16 +106,19 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-                  Basic Information
+                  {t("sections.basicInfo")}
                 </h3>
                 <FormField
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>{t("fields.firstName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter first name" {...field} />
+                        <Input
+                          placeholder={t("placeholders.firstName")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,9 +129,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>{t("fields.lastName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter last name" {...field} />
+                        <Input
+                          placeholder={t("placeholders.lastName")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -136,9 +145,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="cityIdNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City ID Number</FormLabel>
+                      <FormLabel>{t("fields.cityId")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. AA-12345" {...field} />
+                        <Input
+                          placeholder={t("placeholders.cityId")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,9 +161,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t("fields.phone")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="09..." {...field} />
+                        <Input
+                          placeholder={t("placeholders.phone")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,7 +178,7 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                     name="dateOfBirth"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Date of Birth</FormLabel>
+                        <FormLabel>{t("fields.dob")}</FormLabel>
                         <FormControl>
                           <Input type="date" {...field} />
                         </FormControl>
@@ -176,9 +191,9 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
 
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-                  {type === "DISABLED"
-                    ? "Disability Details"
-                    : "Elderly Details"}
+                  {t("sections.details", {
+                    type: type === "DISABLED" ? t("disabled") : t("elderly"),
+                  })}
                 </h3>
                 {type === "DISABLED" && (
                   <>
@@ -187,9 +202,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                       name="address"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Address</FormLabel>
+                          <FormLabel>{t("fields.address")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter address" {...field} />
+                            <Input
+                              placeholder={t("placeholders.address")}
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -200,10 +218,10 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                       name="disabilityType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Disability Type</FormLabel>
+                          <FormLabel>{t("fields.disabilityType")}</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="e.g. Physical, Visual"
+                              placeholder={t("placeholders.disabilityType")}
                               {...field}
                             />
                           </FormControl>
@@ -216,21 +234,27 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                       name="disabilityLevel"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Disability Level</FormLabel>
+                          <FormLabel>{t("fields.disabilityLevel")}</FormLabel>
                           <FormControl>
                             <Select
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="Select level" />
+                                <SelectValue
+                                  placeholder={t("placeholders.selectLevel")}
+                                />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="MILD">Mild</SelectItem>
-                                <SelectItem value="MODERATE">
-                                  Moderate
+                                <SelectItem value="MILD">
+                                  {t("levels.mild")}
                                 </SelectItem>
-                                <SelectItem value="SEVERE">Severe</SelectItem>
+                                <SelectItem value="MODERATE">
+                                  {t("levels.moderate")}
+                                </SelectItem>
+                                <SelectItem value="SEVERE">
+                                  {t("levels.severe")}
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -243,10 +267,10 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                       name="cause"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Cause of Disability</FormLabel>
+                          <FormLabel>{t("fields.cause")}</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="e.g. Accident, Birth"
+                              placeholder={t("placeholders.cause")}
                               {...field}
                             />
                           </FormControl>
@@ -262,9 +286,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="educationLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Education Level</FormLabel>
+                      <FormLabel>{t("fields.education")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter level" {...field} />
+                        <Input
+                          placeholder={t("placeholders.education")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -275,9 +302,12 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="occupation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Occupation</FormLabel>
+                      <FormLabel>{t("fields.occupation")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter occupation" {...field} />
+                        <Input
+                          placeholder={t("placeholders.occupation")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -288,9 +318,13 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                   name="familyMembersCount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Family Members Count</FormLabel>
+                      <FormLabel>{t("fields.familyCount")}</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="0" {...field} />
+                        <Input
+                          type="number"
+                          placeholder={t("placeholders.familyCount")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -305,13 +339,13 @@ export default function RegistrationForm({ type }: RegistrationFormProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("buttons.cancel")}
               </Button>
               <Button type="submit" disabled={registerMutation.isPending}>
                 {registerMutation.isPending && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                Register Beneficiary
+                {t("registerNew")}
               </Button>
             </div>
           </form>

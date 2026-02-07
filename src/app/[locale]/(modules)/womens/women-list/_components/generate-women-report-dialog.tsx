@@ -24,22 +24,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GenerateWomenReportPayload } from "@/api/womens/generateWomenReport";
-
-const AVAILABLE_COLUMNS = [
-  { id: "clientName", label: "Client Name" },
-  { id: "cityIdNumber", label: "City ID Number" },
-  { id: "phoneNumber", label: "Phone Number" },
-  { id: "address", label: "Address" },
-  { id: "serviceType", label: "Service Type" },
-  { id: "beneficiaryLevel", label: "Beneficiary Level" },
-  { id: "serviceDate", label: "Service Date" },
-  { id: "status", label: "Status" },
-];
+import { useTranslations } from "next-intl";
 
 export default function GenerateWomenReportDialog() {
   const [open, setOpen] = useState(false);
   const { mutate: generateReport, isPending } =
     useGenerateWomenReportMutation();
+  const t = useTranslations("womens");
+
+  const AVAILABLE_COLUMNS = [
+    { id: "clientName", label: t("report.columns.clientName") },
+    { id: "cityIdNumber", label: t("form.cityIdNumber") },
+    { id: "phoneNumber", label: t("form.phoneNumber") },
+    { id: "address", label: t("form.addressTitle") },
+    { id: "serviceType", label: t("support.register.serviceType") },
+    { id: "beneficiaryLevel", label: t("report.beneficiaryLevel") },
+    { id: "serviceDate", label: t("report.columns.serviceDate") },
+    { id: "status", label: t("report.columns.status") },
+  ];
 
   // Form state
   const [startDate, setStartDate] = useState("");
@@ -66,7 +68,7 @@ export default function GenerateWomenReportDialog() {
     setSelectedColumns((prev) =>
       prev.includes(columnId)
         ? prev.filter((id) => id !== columnId)
-        : [...prev, columnId]
+        : [...prev, columnId],
     );
   };
 
@@ -85,12 +87,12 @@ export default function GenerateWomenReportDialog() {
 
     generateReport(payload, {
       onSuccess: () => {
-        toast.success("Report generated and downloaded successfully");
+        toast.success(t("report.messages.success"));
         setOpen(false);
       },
       onError: (error: any) => {
         console.error(error);
-        toast.error(error?.message || "Failed to generate report");
+        toast.error(error?.message || t("report.messages.error"));
       },
     });
   };
@@ -100,22 +102,20 @@ export default function GenerateWomenReportDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <FileDown className="w-4 h-4" />
-          Generate Report
+          {t("report.buttons.generate")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Generate Women Support Services Report</DialogTitle>
-          <DialogDescription>
-            Select filters and columns for your report.
-          </DialogDescription>
+          <DialogTitle>{t("report.title")}</DialogTitle>
+          <DialogDescription>{t("report.description")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           {/* Date Range */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Start Date</Label>
+              <Label>{t("report.startDate")}</Label>
               <Input
                 type="date"
                 value={startDate}
@@ -123,7 +123,7 @@ export default function GenerateWomenReportDialog() {
               />
             </div>
             <div className="space-y-2">
-              <Label>End Date</Label>
+              <Label>{t("report.endDate")}</Label>
               <Input
                 type="date"
                 value={endDate}
@@ -135,17 +135,17 @@ export default function GenerateWomenReportDialog() {
           {/* Location Filters */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Sub City</Label>
+              <Label>{t("report.subCity")}</Label>
               <Input
-                placeholder="Sub City"
+                placeholder={t("report.subCity")}
                 value={subCity}
                 onChange={(e) => setSubCity(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label>Woreda</Label>
+              <Label>{t("report.woreda")}</Label>
               <Input
-                placeholder="Woreda"
+                placeholder={t("report.woreda")}
                 value={woreda}
                 onChange={(e) => setWoreda(e.target.value)}
               />
@@ -155,16 +155,16 @@ export default function GenerateWomenReportDialog() {
           {/* Service Type and Beneficiary Level */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Service Type ID</Label>
+              <Label>{t("report.serviceTypeId")}</Label>
               <Input
                 type="number"
-                placeholder="Service Type ID"
+                placeholder={t("report.serviceTypeId")}
                 value={serviceTypeId}
                 onChange={(e) => setServiceTypeId(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label>Beneficiary Level</Label>
+              <Label>{t("report.beneficiaryLevel")}</Label>
               <Select
                 value={beneficiaryLevel}
                 onValueChange={(v) =>
@@ -172,12 +172,14 @@ export default function GenerateWomenReportDialog() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="All Levels" />
+                  <SelectValue placeholder={t("report.allLevels")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">All Levels</SelectItem>
-                  <SelectItem value="INDIVIDUAL">Individual</SelectItem>
-                  <SelectItem value="GROUP">Group</SelectItem>
+                  <SelectItem value="ALL">{t("report.allLevels")}</SelectItem>
+                  <SelectItem value="INDIVIDUAL">
+                    {t("report.individual")}
+                  </SelectItem>
+                  <SelectItem value="GROUP">{t("report.group")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -185,7 +187,7 @@ export default function GenerateWomenReportDialog() {
 
           {/* Format */}
           <div className="space-y-2">
-            <Label>Format</Label>
+            <Label>{t("report.format")}</Label>
             <Select
               value={format}
               onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
@@ -202,7 +204,7 @@ export default function GenerateWomenReportDialog() {
 
           {/* Columns Selection */}
           <div className="space-y-2">
-            <Label>Columns to Include</Label>
+            <Label>{t("report.columnsTitle")}</Label>
             <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
               {AVAILABLE_COLUMNS.map((col) => (
                 <div key={col.id} className="flex items-center space-x-2">
@@ -226,11 +228,11 @@ export default function GenerateWomenReportDialog() {
             onClick={() => setOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t("form.buttons.cancel")}
           </Button>
           <Button onClick={handleGenerate} disabled={isPending}>
             {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Download Report
+            {t("report.buttons.download")}
           </Button>
         </div>
       </DialogContent>

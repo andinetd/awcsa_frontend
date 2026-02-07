@@ -1,4 +1,5 @@
 "use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -9,11 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/auth-store";
 import { Loader2, LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export default function UserInfoAndLogout() {
+  const t = useTranslations("components.userLogout");
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -32,12 +35,12 @@ export default function UserInfoAndLogout() {
     try {
       logout();
 
-      toast.success("Successfully logged out", { duration: 2000 });
+      toast.success(t("success"), { duration: 2000 });
 
       router.replace(`/`);
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error("Failed to log out. Please try again.", { duration: 4000 });
+      toast.error(t("failed"), { duration: 4000 });
       setIsLoggingOut(false);
     }
   };
@@ -45,9 +48,9 @@ export default function UserInfoAndLogout() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={isLoggingOut}>
-        <button className="focus:outline-none" aria-label="Toggle user menu">
+        <button className="focus:outline-none" aria-label={t("ariaMenu")}>
           <Avatar className="h-9 w-9 border-2">
-            <AvatarImage src="/placeholder-user.jpg" alt="User avatar" />
+            <AvatarImage src="/placeholder-user.jpg" alt={t("avatarAlt")} />
             <AvatarFallback>
               {user?.email ? getInitials(user.email) : "JP"}
             </AvatarFallback>
@@ -68,14 +71,14 @@ export default function UserInfoAndLogout() {
             onClick={handleLogout}
             disabled={isLoggingOut}
             className="w-full text-left text-destructive flex items-center gap-2"
-            aria-label="Logout"
+            aria-label={t("logout")}
           >
             {isLoggingOut ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <LogOut className="h-4 w-4" />
             )}
-            Logout
+            {isLoggingOut ? t("loggingOut") : t("logout")}
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>

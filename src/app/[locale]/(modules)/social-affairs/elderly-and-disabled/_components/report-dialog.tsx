@@ -60,7 +60,11 @@ const COLUMNS_BY_CATEGORY: Record<string, { id: string; label: string }[]> = {
   ],
 };
 
+import { useTranslations } from "next-intl";
+
 export default function BeneficiaryReportDialog() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.reports");
+  const commonT = useTranslations("components.DataTableColumnHeader");
   const [open, setOpen] = useState(false);
   const { mutate: generateReport, isPending } =
     useGenerateBeneficiaryReportMutation();
@@ -78,7 +82,7 @@ export default function BeneficiaryReportDialog() {
   const [woreda, setWoreda] = useState("");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
   const [selectedColumns, setSelectedColumns] = useState<string[]>(
-    COLUMNS_BY_CATEGORY.REGISTRATION.map((col) => col.id)
+    COLUMNS_BY_CATEGORY.REGISTRATION.map((col) => col.id),
   );
 
   const availableColumns = COLUMNS_BY_CATEGORY[category] || [];
@@ -92,7 +96,7 @@ export default function BeneficiaryReportDialog() {
     setSelectedColumns((prev) =>
       prev.includes(columnId)
         ? prev.filter((id) => id !== columnId)
-        : [...prev, columnId]
+        : [...prev, columnId],
     );
   };
 
@@ -124,17 +128,15 @@ export default function BeneficiaryReportDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <FileDown className="w-4 h-4" />
-          Generate Report
+          {t("title")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-lexend">
-            Generate Beneficiary Report
+            {t("title")}
           </DialogTitle>
-          <DialogDescription>
-            Select report type, filters, and columns to include.
-          </DialogDescription>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
@@ -146,9 +148,13 @@ export default function BeneficiaryReportDialog() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="REGISTRATION">Registration</SelectItem>
-                  <SelectItem value="TRAINING">Training</SelectItem>
-                  <SelectItem value="JOBS">Jobs</SelectItem>
+                  <SelectItem value="REGISTRATION">
+                    {t("categories.registration")}
+                  </SelectItem>
+                  <SelectItem value="TRAINING">
+                    {t("categories.training")}
+                  </SelectItem>
+                  <SelectItem value="JOBS">{t("categories.jobs")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -162,9 +168,11 @@ export default function BeneficiaryReportDialog() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">All Types</SelectItem>
-                  <SelectItem value="DISABLED">Disabled</SelectItem>
-                  <SelectItem value="ELDERLY">Elderly</SelectItem>
+                  <SelectItem value="ALL">{t("types.all")}</SelectItem>
+                  <SelectItem value="DISABLED">
+                    {t("types.disabled")}
+                  </SelectItem>
+                  <SelectItem value="ELDERLY">{t("types.elderly")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

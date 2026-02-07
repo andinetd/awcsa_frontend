@@ -38,6 +38,7 @@ import {
 import { useRegisterSupportMutation } from "@/hooks/support";
 import ServiceTypeSelect from "./service-type-select";
 import WomanSelect from "./woman-select";
+import { useTranslations } from "next-intl";
 
 interface RegisterSupportFormProps {
   defaultClientId?: number;
@@ -50,6 +51,7 @@ export default function RegisterSupportForm({
 }: RegisterSupportFormProps) {
   const [open, setOpen] = useState(false);
   const registerMutation = useRegisterSupportMutation();
+  const t = useTranslations("womens");
 
   const form = useForm<SupportServiceSchemaType>({
     resolver: zodResolver(supportServiceSchema) as any,
@@ -72,10 +74,10 @@ export default function RegisterSupportForm({
       onSuccess: () => {
         setOpen(false);
         form.reset();
-        toast.success("Support service registered successfully");
+        toast.success(t("support.register.messages.success"));
       },
       onError: (error: any) => {
-        toast.error(error?.message || "Failed to register support service");
+        toast.error(error?.message || t("support.register.messages.error"));
       },
     });
   }
@@ -85,14 +87,14 @@ export default function RegisterSupportForm({
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="w-4 h-4" />
-          Register Support Service
+          {t("support.register.title")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Register Support Service</DialogTitle>
+          <DialogTitle>{t("support.register.title")}</DialogTitle>
           <DialogDescription>
-            Register a new support service for a client or association.
+            {t("support.register.description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -100,14 +102,16 @@ export default function RegisterSupportForm({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Client or Association Selection */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Beneficiary Information</h3>
+              <h3 className="text-lg font-medium">
+                {t("support.register.beneficiaryInfo")}
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="clientId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Woman Client</FormLabel>
+                      <FormLabel>{t("support.register.womanClient")}</FormLabel>
                       <FormControl>
                         <WomanSelect
                           value={field.value?.toString()}
@@ -126,17 +130,21 @@ export default function RegisterSupportForm({
                   name="womenAssociationId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Women Association ID (Optional)</FormLabel>
+                      <FormLabel>
+                        {t("support.register.associationId")}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="Enter Association ID"
+                          placeholder={t(
+                            "support.register.placeholder.associationId",
+                          )}
                           value={field.value || ""}
                           onChange={(e) =>
                             field.onChange(
                               e.target.value
                                 ? parseInt(e.target.value)
-                                : undefined
+                                : undefined,
                             )
                           }
                         />
@@ -147,15 +155,14 @@ export default function RegisterSupportForm({
                 />
               </div>
               <p className="text-sm text-muted-foreground">
-                * Please provide either a Woman Client ID or a Women Association
-                ID.
+                {t("support.register.beneficiaryNote")}
               </p>
             </div>
 
             {/* Service & Provider Information */}
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-medium">
-                Service & Provider Information
+                {t("support.register.serviceInfo")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
@@ -163,7 +170,7 @@ export default function RegisterSupportForm({
                   name="serviceTypeId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Service Type</FormLabel>
+                      <FormLabel>{t("support.register.serviceType")}</FormLabel>
                       <FormControl>
                         <ServiceTypeSelect
                           value={field.value?.toString()}
@@ -182,7 +189,9 @@ export default function RegisterSupportForm({
                   name="dateProvided"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date Provided</FormLabel>
+                      <FormLabel>
+                        {t("support.register.dateProvided")}
+                      </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -196,9 +205,16 @@ export default function RegisterSupportForm({
                   name="provider"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Provider Name</FormLabel>
+                      <FormLabel>
+                        {t("support.register.providerName")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter provider name" {...field} />
+                        <Input
+                          placeholder={t(
+                            "support.register.placeholder.provider",
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -210,9 +226,14 @@ export default function RegisterSupportForm({
                   name="amountOrQuantity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Amount or Quantity</FormLabel>
+                      <FormLabel>
+                        {t("support.register.amountOrQuantity")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. 500 ETB, 2 Boxes" {...field} />
+                        <Input
+                          placeholder={t("support.register.placeholder.amount")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -223,16 +244,23 @@ export default function RegisterSupportForm({
 
             {/* Location & Facilitator Information */}
             <div className="space-y-4 pt-2">
-              <h3 className="text-lg font-medium">Location & Facilitator</h3>
+              <h3 className="text-lg font-medium">
+                {t("support.register.locationInfo")}
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="facilitatorCityId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Facilitator City ID</FormLabel>
+                      <FormLabel>
+                        {t("support.register.facilitatorCityId")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter city ID" {...field} />
+                        <Input
+                          placeholder={t("support.register.placeholder.cityId")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -244,9 +272,14 @@ export default function RegisterSupportForm({
                   name="subCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sub City</FormLabel>
+                      <FormLabel>{t("support.register.subCity")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter sub-city" {...field} />
+                        <Input
+                          placeholder={t(
+                            "support.register.placeholder.subCity",
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -258,9 +291,12 @@ export default function RegisterSupportForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Woreda</FormLabel>
+                      <FormLabel>{t("support.register.woreda")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter woreda" {...field} />
+                        <Input
+                          placeholder={t("support.register.placeholder.woreda")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -275,10 +311,10 @@ export default function RegisterSupportForm({
                 name="remark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Remarks (Optional)</FormLabel>
+                    <FormLabel>{t("support.register.remarks")}</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Additional notes or remarks..."
+                        placeholder={t("support.register.placeholder.remarks")}
                         rows={3}
                         {...field}
                       />
@@ -295,10 +331,12 @@ export default function RegisterSupportForm({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("form.buttons.cancel")}
               </Button>
               <Button type="submit" disabled={registerMutation.isPending}>
-                {registerMutation.isPending ? "Registering..." : "Register"}
+                {registerMutation.isPending
+                  ? t("form.buttons.registering")
+                  : t("form.buttons.register")}
               </Button>
             </div>
           </form>

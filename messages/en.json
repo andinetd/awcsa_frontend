@@ -63,5 +63,11 @@
       "desc": "Desc",
       "hide": "Hide"
     }
+  },
+  "unauthorized": {
+    "title": "Access Denied",
+    "description": "You don't have permission to access this page.",
+    "goBack": "Go Back",
+    "logoAlt": "logo"
   }
 }

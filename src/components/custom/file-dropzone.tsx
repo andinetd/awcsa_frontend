@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AlertCircle, FileText, Upload, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -36,6 +37,7 @@ export function FileDragAndDrop({
   maxFiles, // optional - unlimited if not passed
   acceptedFileTypes = ["*/*"], // Accept all files by default
 }: FileDragAndDropProps) {
+  const t = useTranslations("components.fileDropzone");
   const [files, setFiles] = useState<FileItem[]>([]);
 
   // Sync internal files state with value prop
@@ -67,7 +69,7 @@ export function FileDragAndDrop({
         const totalFilesAfterUpload = files.length + acceptedFiles.length;
         if (totalFilesAfterUpload > maxFiles) {
           console.error(
-            `You can only upload up to ${maxFiles} files. Please remove some files first.`
+            `You can only upload up to ${maxFiles} files. Please remove some files first.`,
           );
           return;
         }
@@ -96,19 +98,27 @@ export function FileDragAndDrop({
     fileRejections,
   } = useDropzone({
     onDrop,
-    accept: acceptedFileTypes.reduce((acc, type) => {
-      acc[type] = [];
-      return acc;
-    }, {} as Record<string, string[]>),
+    accept: acceptedFileTypes.reduce(
+      (acc, type) => {
+        acc[type] = [];
+        return acc;
+      },
+      {} as Record<string, string[]>,
+    ),
     maxFiles: maxFiles ? maxFiles - files.length : undefined, // Dynamic max files based on remaining slots, or unlimited
     maxSize,
     disabled: isDisabled,
   });
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
+    if (bytes === 0) return `0 ${t("units.bytes")}`;
     const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const sizes = [
+      t("units.bytes"),
+      t("units.kb"),
+      t("units.mb"),
+      t("units.gb"),
+    ];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
@@ -127,7 +137,7 @@ export function FileDragAndDrop({
         <div className="flex items-center justify-between">
           {isFileLimitReached && (
             <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
-              File limit reached
+              {t("limitReached")}
             </span>
           )}
         </div>
@@ -176,11 +186,12 @@ export function FileDragAndDrop({
             </div>
             <div className="text-center space-y-1">
               <p className="text-sm text-gray-600">
-                File limit reached ({files.length}/{maxFiles})
+                {t("uploadLimit", {
+                  current: files.length,
+                  max: maxFiles ?? 0,
+                })}
               </p>
-              <p className="text-xs text-gray-500">
-                Remove some files to upload more
-              </p>
+              <p className="text-xs text-gray-500">{t("removeToUpload")}</p>
             </div>
           </div>
         </div>
@@ -195,9 +206,9 @@ export function FileDragAndDrop({
           isDragActive && !isDragReject
             ? "border-primary bg-primary/5"
             : isDragReject
-            ? "border-red-400 bg-red-50"
-            : "border-primary/50 hover:border-primary",
-          isViewMode && "opacity-50 cursor-not-allowed"
+              ? "border-red-400 bg-red-50"
+              : "border-primary/50 hover:border-primary",
+          isViewMode && "opacity-50 cursor-not-allowed",
         )}
       >
         <input {...getInputProps()} />
@@ -212,24 +223,25 @@ export function FileDragAndDrop({
           <div className="text-center space-y-1">
             {isDragActive ? (
               isDragReject ? (
-                <p className="text-sm text-red-600">
-                  Invalid file type. Please try again.
-                </p>
+                <p className="text-sm text-red-600">{t("invalidFileType")}</p>
               ) : (
-                <p className="text-sm text-primary">Drop your files here</p>
+                <p className="text-sm text-primary">{t("dropHere")}</p>
               )
             ) : (
               <>
                 <p className="text-sm text-gray-700">
-                  Drop your files here or{" "}
-                  <span className="text-primary font-medium">browse</span>
+                  {t.rich("dropOrBrowse", {
+                    browse: (chunks) => (
+                      <span className="text-primary font-medium">{chunks}</span>
+                    ),
+                  })}
                 </p>
                 <p className="text-xs text-gray-500">
-                  Maximum size: {formatFileSize(maxSize)}
+                  {t("maxSize", { size: formatFileSize(maxSize) })}
                   {maxFiles &&
-                    ` • ${maxFiles - files.length} file${
-                      maxFiles - files.length !== 1 ? "s" : ""
-                    } remaining`}
+                    ` • ${t("filesRemaining", {
+                      count: maxFiles - files.length,
+                    })}`}
                 </p>
               </>
             )}
@@ -256,12 +268,10 @@ export function FileDragAndDrop({
             <p key={error.code} className="flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               {error.code === "file-too-large"
-                ? `File is too large. Maximum size is ${formatFileSize(
-                    maxSize
-                  )}.`
+                ? t("errorTooLarge", { size: formatFileSize(maxSize) })
                 : error.code === "file-invalid-type"
-                ? "Invalid file type. Please check the accepted file types."
-                : error.message}
+                  ? t("errorInvalidType")
+                  : error.message}
             </p>
           ))}
         </div>

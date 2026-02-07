@@ -9,8 +9,11 @@ import {
   CardTitle,
 } from "@/components/custom/custom-card";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 export default function LoginPage() {
+  const t = useTranslations("login.page");
   const [isClient, setIsClient] = useState(false);
 
   // This ensures the component only renders on the client
@@ -21,22 +24,26 @@ export default function LoginPage() {
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 relative">
+      <div className="absolute top-6 right-6">
+        <LanguageSwitcher />
+      </div>
+
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-5xl gap-10">
         {/* Left Side: Logo and Title */}
         <div className="flex flex-col items-center text-center md:text-left">
           <img
             src="/assets/WCSA_logo.jpg"
-            alt="logo"
+            alt={t("logoAlt")}
             className="w-40 h-20 md:w-80 md:h-60 object-contain mb-8"
           />
-          <p className="text-2xl font-semibold font-lexend">Welcome</p>
+          <p className="text-2xl font-semibold font-lexend">{t("welcome")}</p>
         </div>
 
         {/* Right Side: SignIn Form */}
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="font-lexend">Sign in</CardTitle>
+            <CardTitle className="font-lexend">{t("signInTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <GoogleReCaptchaProvider
@@ -55,11 +62,11 @@ export default function LoginPage() {
 
       <div className="absolute bottom-6 left-0 right-0 text-xs flex flex-wrap justify-center items-center gap-2 px-4 text-foreground/65">
         <p className="font-medium text-center font-lexend">
-          {`@${new Date().getFullYear()} Bureau of Women, children & social Affairs.`}
+          {t("copyright", { year: new Date().getFullYear() })}
         </p>
 
         <p className="font-semibold cursor-pointer hover:scale-105 transition font-lexend">
-          Addis Ababa
+          {t("location")}
         </p>
       </div>
     </div>

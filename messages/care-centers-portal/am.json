@@ -1,0 +1,168 @@
+{
+  "layout": {
+    "title": "የሕፃናት ማቆያ ማዕከላት ፖርታል",
+    "subtitle": "የማቆያ ማዕከልዎን ያስተዳድሩ"
+  },
+  "dashboard": {
+    "title": "በእርስዎ እንክብካቤ ስር ያሉ ሕፃናት",
+    "addChild": "አዲስ ሕፃን መዝግብ",
+    "submitMonthlyReport": "የወር ሪፖርት አቅርብ",
+    "viewPastReports": "ያለፉ ሪፖርቶችን ተመልከት",
+    "loading": "የሕፃናት መረጃ በመጫን ላይ...",
+    "columns": {
+      "firstName": "የመጀመሪያ ስም",
+      "middleName": "የአባት ስም",
+      "lastName": "የአያት ስም",
+      "gender": "ጾታ",
+      "dob": "የትውልድ ቀን",
+      "foundDate": "የተገኘበት ቀን",
+      "actions": "ተግባራት",
+      "viewDetails": "ዝርዝር ተመልከት",
+      "editChild": "መረጃ አድስ",
+      "openMenu": "ምናሌ ክፈት",
+      "status": "ሁኔታ"
+    }
+  },
+  "addChild": {
+    "title": "አዲስ የሕፃን ምዝገባ",
+    "subtitle": "አዲስ ሕፃን በማቆያ ማዕከል ስርዓት ውስጥ ይመዝግቡ።",
+    "fields": {
+      "firstName": "የመጀመሪያ ስም",
+      "lastName": "የአያት ስም",
+      "gender": "ጾታ",
+      "dob": "የትውልድ ቀን",
+      "status": "ሁኔታ",
+      "foundAddress": "ሕፃኑ የተገኘበት አድራሻ",
+      "foundDate": "ሕፃኑ የተገኘበት ቀን",
+      "socialWorkerId": "የማህበራዊ ሰራተኛ ከተማ መታወቂያ ቁጥር",
+      "careCenterId": "የማቆያ ማዕከል መለያ",
+      "childIdFromCenter": "ከማቆያ ማዕከሉ የተሰጠ የሕፃን መለያ",
+      "baleAderaId": "በባለ አደራ ከተማ መታወቂያ ቁጥር",
+      "adopterId": "የጉዲፈቻ ሰጪ ከተማ መታወቂያ ቁጥር",
+      "bloodRelativeId": "የደም ዘመድ ከተማ መታወቂያ ቁጥር",
+      "prevAdopterId": "የቀድሞ ጉዲፈቻ ሰጪ ከተማ መታወቂያ ቁጥር",
+      "additionalInfo": "ተጨማሪ መረጃ"
+    },
+    "placeholders": {
+      "firstName": "የመጀመሪያ ስም ያስገቡ",
+      "lastName": "የአያት ስም ያስገቡ",
+      "selectGender": "ጾታ ይምረጡ",
+      "selectStatus": "ሁኔታ ይምረጡ",
+      "address": "አድራሻ ያስገቡ",
+      "socialWorkerId": "የማህበራዊ ሰራተኛ ከተማ መታወቂያ ቁጥር ያስገቡ",
+      "careCenterId": "የማቆያ ማዕከል መለያ ያስገቡ",
+      "childIdFromCenter": "ከማቆያ ማዕከሉ የተሰጠ የሕፃን መለያ ያስገቡ",
+      "baleAderaId": "በባለ አደራ ከተማ መታወቂያ ቁጥር ያስገቡ",
+      "adopterId": "የጉዲፈቻ ሰጪ ከተማ መታወቂያ ቁጥር ያስገቡ",
+      "bloodRelativeId": "የደም ዘመድ ከተማ መታወቂያ ቁጥር ያስገቡ",
+      "prevAdopterId": "የቀድሞ ጉዲፈቻ ሰጪ ከተማ መታወቂያ ቁጥር ያስገቡ",
+      "additionalInfo": "ተጨማሪ መረጃ ያስገቡ"
+    },
+    "buttons": {
+      "submit": "አስገባ"
+    },
+    "messages": {
+      "success": "ሕፃኑ በተሳካ ሁኔታ ተመዝግቧል",
+      "error": "ሕፃኑን መመዝገብ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+    }
+  },
+  "monthlyReport": {
+    "title": "የወር ሪፖርት",
+    "subtitle": "ለማቆያ ማዕከልዎ የወር ስታቲስቲክስ ዝርዝሮችን ይሙሉ",
+    "formTitle": "የወር ሪፖርት አቀራረብ",
+    "formSubtitle": "እባክዎን ከማስገባትዎ በፊት ሁሉም ስታትስቲካዊ መረጃዎች ትክክል መሆናቸውን ያረጋግጡ። ይህ ሪፖርት ለሃብት ክፍፍል ወደ ማዕከላዊ ቢሮ ዳሽቦርድ ይገባል።",
+    "periodTitle": "የሪፖርት ጊዜ",
+    "month": "ወር",
+    "year": "ዓመት",
+    "statsTitle": "የሕዝብ ብዛት ስታቲስቲክስ",
+    "totalChildren": "ጠቅላላ ሕፃናት",
+    "totalChildrenDesc": "በወሩ መጨረሻ ያለው ወቅታዊ ቆጠራ",
+    "newAdmissions": "አዲስ የተቀበልናቸው",
+    "newAdmissionsDesc": "በዚህ ወር ውስጥ የገቡ",
+    "discharges": "የወጡ",
+    "dischargesDesc": "በዚህ ወር የወጡ/ጉዲፈቻ የተሰጡ",
+    "additionalDetails": "ተጨማሪ ዝርዝሮች",
+    "notes": "ማስታወሻዎች እና ምልከታዎች",
+    "notesPlaceholder": "ጥራትን የሚገልጹ የሪፖርት ዝርዝሮችን፣ ተግዳሮቶችን ወይም የስኬት ታሪኮችን ያስገቡ...",
+    "formData": "ተጨማሪ የቅጽ መረጃ (JSON/String)",
+    "formDataPlaceholder": "የተወሰኑ መረጃዎችን ወይም የተቀመሩ የቅጽ መረጃዎችን እዚህ ይለጥፉ...",
+    "submit": "ሪፖርት አቅርብ",
+    "submitting": "በማቅረብ ላይ...",
+    "messages": {
+      "success": "የወር ሪፖርት በተሳካ ሁኔታ ቀርቧል",
+      "error": "የወር ሪፖርት ማቅረብ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+    }
+  },
+  "reports": {
+    "title": "የወር ሪፖርቶች",
+    "subtitle": "የገቡ የወር ሪፖርቶችን ይመልከቱ እና ያስተዳድሩ።",
+    "messages": {
+      "error": "ሪፖርቶችን መጫን አልተቻለም። እባክዎ ቆይተው እንደገና ይሞክሩ።"
+    },
+    "buttons": {
+      "retry": "እንደገና ይሞክሩ"
+    }
+  },
+  "childView": {
+    "title": "የሕፃን መረጃ",
+    "subtitle": "ስለ ተመዘገበው ሕፃን ዝርዝር መረጃ ይመልከቱ።",
+    "editDetails": "መረጃ አድስ",
+    "sections": {
+      "basic": "መሰረታዊ መረጃ",
+      "location": "የቦታ መረጃ",
+      "founder": "ሕፃኑን ያገኘው ሰው መረጃ",
+      "officer": "የባለስልጣን መረጃ",
+      "worker": "የማቆያ ማዕከል ሰራተኛ መረጃ",
+      "health": "የጤና ባለሙያዎች",
+      "additional": "ተጨማሪ ዝርዝሮች"
+    },
+    "fields": {
+      "nameByCenter": "በማቆያ ማዕከሉ የተሰጠ ስም",
+      "nameByFamily": "በቤተሰብ የተሰጠ ስም",
+      "fatherName": "የአባት ስም",
+      "age": "{age} ዓመት",
+      "gender": "ጾታ",
+      "dateFound": "የተገኘበት ቀን",
+      "placeFound": "የተገኘበት ቦታ",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "founderName": "ያገኘው ሰው ስም",
+      "founderAddress": "ያገኘው ሰው አድራሻ",
+      "founderSubCity": "ያገኘው ሰው ክፍለ ከተማ",
+      "founderWoreda": "ያገኘው ሰው ወረዳ",
+      "houseNo": "የቤት ቁጥር",
+      "founderPhone": "ያገኘው ሰው ስልክ",
+      "officerName": "የፖሊስ ስም",
+      "responsibility": "ሃላፊነት",
+      "officerAddress": "የፖሊስ አድራሻ",
+      "officerSubCity": "የፖሊስ ክፍለ ከተማ",
+      "officerWoreda": "የፖሊስ ወረዳ",
+      "officerPhone": "የፖሊስ ስልክ",
+      "officerId": "የፖሊስ መታወቂያ",
+      "workerName": "የሰራተኛ ስም",
+      "workerAddress": "የሰራተኛ አድራሻ",
+      "workerSubCity": "የሰራተኛ ክፍለ ከተማ",
+      "workerWoreda": "የሰራተኛ ወረዳ",
+      "workerPhone": "የሰራተኛ ስልክ",
+      "workerId": "የሰራተኛ መታወቂያ",
+      "healthOfficer1": "የጤና ባለሙያ 1",
+      "healthOfficer2": "የጤና ባለሙያ 2",
+      "admittanceReason": "የመግቢያ ምክንያት",
+      "additionalInfo": "ተጨማሪ መረጃ"
+    }
+  },
+  "enums": {
+    "sex": {
+      "MALE": "ወንድ",
+      "FEMALE": "ሴት"
+    },
+    "status": {
+      "FOUND": "የተገኘ",
+      "IN_CARE": "በማቆያ ያለ",
+      "IN_ADERA": "በባለ አደራ ያለ",
+      "ADOPTED": "ጉዲፈቻ የተሰጠ",
+      "WITH_BLOOD_RELATIVE": "ከደም ዘመድ ጋር ያለ",
+      "RETURNED": "የተመለሰ"
+    }
+  }
+}

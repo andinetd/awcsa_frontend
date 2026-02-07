@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useGetBeneficiariesQuery } from "@/hooks/beneficiaries";
 import BeneficiaryTable from "../../_components/beneficiary-table";
 import RegistrationForm from "../../_components/registration-form";
@@ -18,6 +19,7 @@ import {
 import { Beneficiary } from "@/api/beneficiaries/types";
 
 export default function ElderlyBeneficiariesPage() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
   const { data: beneficiaries, isLoading } =
     useGetBeneficiariesQuery("ELDERLY");
   const [search, setSearch] = useState("");
@@ -28,7 +30,7 @@ export default function ElderlyBeneficiariesPage() {
         `${item.firstName} ${item.lastName}`
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        item.cityIdNumber.toLowerCase().includes(search.toLowerCase())
+        item.cityIdNumber.toLowerCase().includes(search.toLowerCase()),
     ) || [];
 
   return (
@@ -36,11 +38,9 @@ export default function ElderlyBeneficiariesPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-            Elderly Persons
+            {t("elderlyTitle")}
           </h1>
-          <p className="text-slate-500 mt-1">
-            Manage registration and support for elderly beneficiaries.
-          </p>
+          <p className="text-slate-500 mt-1">{t("elderlySubtitle")}</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <RegistrationForm type="ELDERLY" />
@@ -49,12 +49,12 @@ export default function ElderlyBeneficiariesPage() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle>Registered Beneficiaries</CardTitle>
+          <CardTitle>{t("registeredCard")}</CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
               <Input
-                placeholder="Search beneficiaries..."
+                placeholder={t("searchPlaceholder")}
                 className="pl-8 bg-slate-50/50 border-slate-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

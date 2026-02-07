@@ -71,7 +71,7 @@ export const sidebarConfig: Record<
         },
         {
           title: "Super Admin",
-          url: "/super-admin/general-settings",
+          url: "/super-admin/dashboard",
           icon: Settings,
         },
         {
@@ -116,7 +116,7 @@ export const sidebarConfig: Record<
       items: [
         {
           title: "Dashboard",
-          url: "/social-affairs/socials/dashboard",
+          url: "/social-affairs/dashboard",
           icon: LayoutDashboard,
         },
         { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
@@ -126,11 +126,6 @@ export const sidebarConfig: Record<
       title: "Elderly & Disabled",
       items: [
         {
-          title: "Dashboard",
-          url: "/social-affairs/elderly-and-disabled/dashboard",
-          icon: BarChart3,
-        },
-        {
           title: "Disabled Persons",
           url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
           icon: Accessibility,
@@ -139,6 +134,11 @@ export const sidebarConfig: Record<
           title: "Elderly Persons",
           url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
           icon: Users,
+        },
+        {
+          title: "Support Services",
+          url: "/social-affairs/elderly-and-disabled/services",
+          icon: HandHeart,
         },
         {
           title: "Training Sessions",
@@ -177,7 +177,9 @@ export const sidebarConfig: Record<
   SUPER_ADMIN: [
     {
       title: "Overview",
-      items: [{ title: "Dashboard", url: "/super-admin", icon: Home }],
+      items: [
+        { title: "Dashboard", url: "/super-admin/dashboard", icon: Home },
+      ],
     },
 
     {
@@ -187,11 +189,6 @@ export const sidebarConfig: Record<
           title: "User Management",
           url: "/super-admin/user-management",
           icon: Users,
-        },
-        {
-          title: "Complaints",
-          url: "/complaints",
-          icon: MessageSquareText,
         },
         {
           title: "General Settings",
@@ -216,7 +213,7 @@ export const sidebarConfig: Record<
         },
         {
           title: "Social Affairs",
-          url: "/social-affairs/socials/dashboard",
+          url: "/social-affairs/dashboard",
           icon: FileText,
         },
         {
@@ -225,7 +222,7 @@ export const sidebarConfig: Record<
           icon: MessageSquareText,
         },
         { title: "Women", url: "/womens/dashboard", icon: User },
-        { title: "Super Admin", url: "/super-admin", icon: FileText },
+        { title: "Super Admin", url: "/super-admin/dashboard", icon: FileText },
       ],
     },
   ],

@@ -1,11 +1,18 @@
 "use client";
 
+import React from "react";
+import { useTranslations } from "next-intl";
+import { useChildWelfareDashboard } from "@/hooks/dashboard/useChildWelfareDashboard";
 import StatsCard from "@/components/shared/card/statistics-card";
-import { Baby, Building, Heart, FileText } from "lucide-react";
-import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
+import { Baby, Users, Building, FileText, UserCheck, Home } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/custom/custom-card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 
 const chartData = [
   { day: 1, value: 3 },
@@ -17,100 +24,148 @@ const chartData = [
   { day: 7, value: 10 },
 ];
 
-export default function AdoptionDashboard() {
-  const t = useTranslations("adoption");
-  const { data: careCenters } = useGetCareCentersQuery();
+export default function ChildWelfareDashboard() {
+  const t = useTranslations("child-welfare.dashboard");
+  const { data, isLoading } = useChildWelfareDashboard();
 
   const chartConfig = {
-    children: { label: t("dashboard.charts.children"), color: "hsl(var(--chart-1))" },
-    centers: { label: t("dashboard.charts.centers"), color: "hsl(var(--chart-2))" },
-    requests: { label: t("dashboard.charts.requests"), color: "hsl(var(--chart-3))" },
-    benefits: { label: t("dashboard.charts.benefits"), color: "hsl(var(--chart-4))" },
+    total: { label: t("children.total"), color: "hsl(var(--chart-1))" },
+    found: { label: t("children.found"), color: "hsl(var(--chart-2))" },
+    inCare: { label: t("children.inCare"), color: "hsl(var(--chart-3))" },
+    adopted: { label: t("children.adopted"), color: "hsl(var(--chart-4))" },
+    facilities: {
+      label: t("infrastructure.totalFacilities"),
+      color: "hsl(var(--chart-5))",
+    },
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse text-slate-400">{t("loading")}</div>
+      </div>
+    );
+  }
+
+  const pendingReports =
+    data?.infrastructure.reports.find((r) => r.status === "PENDING")?._count ||
+    0;
 
   return (
     <div className="p-6 space-y-8 max-w-7xl mx-auto w-full">
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-zinc-900 font-lexend">
-            {t("dashboard.title")}
+            {t("title")}
           </h1>
-          <p className="text-zinc-500 mt-1">{t("dashboard.subtitle")}</p>
+          <p className="text-zinc-500 mt-1">{t("subtitle")}</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-          <Link href="/adoption/adoption-requests">
-            <Button className="gap-2">{t("dashboard.newRequests")}</Button>
+          <Link href="/adoption/children">
+            <Button className="gap-2">
+              <Baby className="w-4 h-4" />
+              {t("quickActions.registerChild")}
+            </Button>
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stats Cards - First Row: Children Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatsCard
-          title={t("dashboard.stats.totalChildren")}
+          title={t("children.total")}
           icon={Baby}
-          value={124}
+          value={data?.children.total || 0}
           chartData={chartData}
           chartConfig={chartConfig}
-          dataKey="children"
+          dataKey="total"
         />
         <StatsCard
-          title={t("dashboard.stats.careCenters")}
-          icon={Building}
-          value={careCenters?.length || 0}
+          title={t("children.found")}
+          icon={UserCheck}
+          value={data?.children.found || 0}
           chartData={chartData}
           chartConfig={chartConfig}
-          dataKey="centers"
+          dataKey="found"
         />
         <StatsCard
-          title={t("dashboard.stats.adoptionRequests")}
-          icon={FileText}
-          value={42}
+          title={t("children.inCare")}
+          icon={Home}
+          value={data?.children.inCare || 0}
           chartData={chartData}
           chartConfig={chartConfig}
-          dataKey="requests"
+          dataKey="inCare"
         />
         <StatsCard
-          title={t("dashboard.stats.supportBenefits")}
-          icon={Heart}
-          value={86}
+          title={t("children.adopted")}
+          icon={UserCheck}
+          value={data?.children.adopted || 0}
           chartData={chartData}
           chartConfig={chartConfig}
-          dataKey="benefits"
+          dataKey="adopted"
+        />
+        <StatsCard
+          title={t("children.fostered")}
+          icon={Users}
+          value={data?.children.fostered || 0}
+          chartData={chartData}
+          chartConfig={chartConfig}
+          dataKey="adopted"
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-xl font-semibold text-zinc-900">
-            {t("dashboard.recentActivity.title")}
-          </h2>
-          <div className="min-h-[400px] rounded-xl border border-zinc-200 bg-white p-6 flex flex-col items-center justify-center text-center space-y-3">
-            <div className="p-4 bg-zinc-50 rounded-full">
-              <FileText className="w-8 h-8 text-zinc-400" />
-            </div>
-            <div>
-              <p className="text-zinc-900 font-medium">
-                {t("dashboard.recentActivity.empty.title")}
-              </p>
-              <p className="text-sm text-zinc-500">
-                {t("dashboard.recentActivity.empty.description")}
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Stats Cards - Second Row: Adoption & Infrastructure */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatsCard
+          title={t("adoption.totalApplicants")}
+          icon={Users}
+          value={data?.adoption.totalApplicants || 0}
+          chartData={chartData}
+          chartConfig={chartConfig}
+          dataKey="total"
+        />
+        <StatsCard
+          title={t("infrastructure.totalFacilities")}
+          icon={Building}
+          value={data?.infrastructure.totalFacilities || 0}
+          chartData={chartData}
+          chartConfig={chartConfig}
+          dataKey="facilities"
+        />
+        <StatsCard
+          title={t("infrastructure.pending")}
+          icon={FileText}
+          value={pendingReports}
+          chartData={chartData}
+          chartConfig={chartConfig}
+          dataKey="total"
+        />
+      </div>
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-zinc-900">
-            {t("dashboard.quickActions.title")}
-          </h2>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4 space-y-3">
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">{t("quickActions.title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <Link href="/adoption/children" className="block">
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 h-12"
               >
                 <Baby className="w-4 h-4 text-zinc-500" />
-                {t("dashboard.quickActions.manageChildren")}
+                {t("quickActions.viewChildren")}
+              </Button>
+            </Link>
+            <Link href="/adoption/adoption-requests" className="block">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3 h-12"
+              >
+                <Users className="w-4 h-4 text-zinc-500" />
+                {t("quickActions.manageAdoptions")}
               </Button>
             </Link>
             <Link href="/adoption/care-centers" className="block">
@@ -119,21 +174,21 @@ export default function AdoptionDashboard() {
                 className="w-full justify-start gap-3 h-12"
               >
                 <Building className="w-4 h-4 text-zinc-500" />
-                {t("dashboard.quickActions.careCenterList")}
+                {t("quickActions.viewFacilities")}
               </Button>
             </Link>
-            <Link href="/adoption/adoption-requests" className="block">
+            <Link href="/bureau-head" className="block">
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 h-12"
               >
-                <Heart className="w-4 h-4 text-zinc-500" />
-                {t("dashboard.quickActions.adoptionRequests")}
+                <FileText className="w-4 h-4 text-zinc-500" />
+                {t("infrastructure.reports")}
               </Button>
             </Link>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableBody,
@@ -26,11 +27,13 @@ export default function BeneficiaryTable({
   isLoading,
   type,
 }: BeneficiaryTableProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64 border rounded-xl bg-slate-50/50">
         <div className="animate-pulse text-slate-400 font-medium">
-          Loading beneficiaries...
+          {t("loading")}
         </div>
       </div>
     );
@@ -39,10 +42,8 @@ export default function BeneficiaryTable({
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 border rounded-xl bg-slate-50/50 space-y-2">
-        <p className="text-slate-500 font-medium">No beneficiaries found</p>
-        <p className="text-sm text-slate-400">
-          Try adjusting your search or add a new record.
-        </p>
+        <p className="text-slate-500 font-medium">{t("noRecords")}</p>
+        <p className="text-sm text-slate-400">{t("noRecordsSubtitle")}</p>
       </div>
     );
   }
@@ -52,14 +53,20 @@ export default function BeneficiaryTable({
       <Table>
         <TableHeader className="bg-slate-50">
           <TableRow>
-            <TableHead className="font-semibold">Full Name</TableHead>
-            <TableHead className="font-semibold">City ID</TableHead>
-            <TableHead className="font-semibold">Phone Number</TableHead>
             <TableHead className="font-semibold">
-              {type === "DISABLED" ? "Disability Type" : "Living Condition"}
+              {t("table.fullName")}
             </TableHead>
-            <TableHead className="font-semibold">Status</TableHead>
-            <TableHead className="text-right font-semibold">Actions</TableHead>
+            <TableHead className="font-semibold">{t("table.cityId")}</TableHead>
+            <TableHead className="font-semibold">{t("table.phone")}</TableHead>
+            <TableHead className="font-semibold">
+              {type === "DISABLED"
+                ? t("table.disabilityType")
+                : t("table.livingCondition")}
+            </TableHead>
+            <TableHead className="font-semibold">{t("table.status")}</TableHead>
+            <TableHead className="text-right font-semibold">
+              {t("table.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -75,7 +82,7 @@ export default function BeneficiaryTable({
               <TableCell>{item.phoneNumber}</TableCell>
               <TableCell>
                 {type === "DISABLED"
-                  ? item.DisabilityProfile?.disabilityType || "N/A"
+                  ? item.DisabilityProfile?.disabilityType || t("table.na")
                   : "Elderly"}
               </TableCell>
               <TableCell>
@@ -84,10 +91,10 @@ export default function BeneficiaryTable({
                   className={cn(
                     "rounded-full",
                     item.activeStatus &&
-                      "bg-green-50 text-green-700 border-green-200"
+                      "bg-green-50 text-green-700 border-green-200",
                   )}
                 >
-                  {item.activeStatus ? "Active" : "Inactive"}
+                  {item.activeStatus ? t("table.active") : t("table.inactive")}
                 </Badge>
               </TableCell>
               <TableCell className="text-right">
@@ -99,9 +106,6 @@ export default function BeneficiaryTable({
                       <Eye className="w-4 h-4 text-slate-600" />
                     </Link>
                   </Button>
-                  {/* <Button variant="ghost" size="icon">
-                    <Edit className="w-4 h-4 text-blue-600" />
-                  </Button> */}
                 </div>
               </TableCell>
             </TableRow>

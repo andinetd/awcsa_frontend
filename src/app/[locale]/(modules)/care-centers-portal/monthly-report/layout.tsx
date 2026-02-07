@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useTranslations } from "next-intl";
+
 const Layout = ({ children }: { children: ReactNode }) => {
+  const t = useTranslations("care-centers-portal.monthlyReport");
+
   return (
     <div className="flex flex-col w-full space-y-6">
       <div className="flex items-center gap-4">
@@ -13,10 +17,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
           </Button>
         </Link>
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Monthly Report</h2>
-          <p className="text-muted-foreground">
-            Fill in the details for your care center&apos;s monthly statistics.
-          </p>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
         </div>
       </div>
       {children}

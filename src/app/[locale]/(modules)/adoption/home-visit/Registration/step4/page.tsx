@@ -34,9 +34,11 @@ import { useForm } from "react-hook-form";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
 import { useRouter } from "next/navigation";
 import { Card, CardTitle } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 function Step4() {
   const router = useRouter();
+  const t = useTranslations("adoption");
 
   const { step4, setStep4 } = useHomeVisitFormStore();
 
@@ -62,7 +64,7 @@ function Step4() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Income & Financial Status
+                {t("homeVisitRegistration.step4.financial.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -70,10 +72,16 @@ function Step4() {
                   name="incomeAndFinancialStatus.incomeSources"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Income Sources</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.financial.incomeSources",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Income Sources"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.financial.incomeSources",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -88,10 +96,16 @@ function Step4() {
                   name="incomeAndFinancialStatus.incomeSupportSources"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Income Support Sources</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.financial.incomeSupportSources",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Income Support Sources"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.financial.incomeSupportSources",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -106,10 +120,16 @@ function Step4() {
                   name="incomeAndFinancialStatus.incomeShortages"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Income Shortages</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.financial.incomeShortages",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Income Shortages"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.financial.incomeShortages",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -124,10 +144,16 @@ function Step4() {
                   name="incomeAndFinancialStatus.incomeForExtraChild"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Income For Extra Child</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.financial.incomeForExtraChild",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Income For Extra Child"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.financial.incomeForExtraChild",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -141,7 +167,7 @@ function Step4() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Home & Environment
+                {t("homeVisitRegistration.step4.environment.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -149,10 +175,14 @@ function Step4() {
                   name="homeAndEnvironment.houseType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>House Type</FormLabel>
+                      <FormLabel>
+                        {t("homeVisitRegistration.step4.environment.houseType")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter House Type"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.houseType",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -166,10 +196,16 @@ function Step4() {
                   name="homeAndEnvironment.ownershipStatus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ownership Status</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.ownershipStatus",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter Ownership Status"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.ownershipStatus",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -183,10 +219,16 @@ function Step4() {
                   name="homeAndEnvironment.roomsAndSize"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Rooms And Size</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.roomsAndSize",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter Rooms And Size"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.roomsAndSize",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -200,10 +242,16 @@ function Step4() {
                   name="homeAndEnvironment.livingDuration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Living Duration</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.livingDuration",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter Living Duration"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.livingDuration",
+                          )}
                           {...(field as any)}
                         />
                       </FormControl>
@@ -217,10 +265,16 @@ function Step4() {
                   name="homeAndEnvironment.suitabilityForChild"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Suitability For Child</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.suitability",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Suitability For Child"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.suitability",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -235,10 +289,16 @@ function Step4() {
                   name="homeAndEnvironment.compoundCondition"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Compound Condition</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.compoundCondition",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Compound Condition"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.compoundCondition",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -253,10 +313,16 @@ function Step4() {
                   name="homeAndEnvironment.neighborhoodCondition"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Neighborhood Condition</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.neighborhoodCondition",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Neighborhood Condition"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.neighborhoodCondition",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -271,10 +337,16 @@ function Step4() {
                   name="homeAndEnvironment.communityAttitude"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Community Attitude</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.communityAttitude",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Community Attitude"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.communityAttitude",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -289,10 +361,16 @@ function Step4() {
                   name="homeAndEnvironment.serviceAccessibility"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Service Accessibility</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.environment.serviceAccessibility",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Service Accessibility"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.environment.serviceAccessibility",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -306,7 +384,7 @@ function Step4() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Health & Legal
+                {t("homeVisitRegistration.step4.healthLegal.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -314,10 +392,16 @@ function Step4() {
                   name="healthAndLegal.currentHealthCondition"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Health Condition</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.healthLegal.currentHealth",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Current Health Condition"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.healthLegal.currentHealth",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -332,10 +416,16 @@ function Step4() {
                   name="healthAndLegal.medication"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Medication</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.healthLegal.medication",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Medication"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.healthLegal.medication",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -351,11 +441,15 @@ function Step4() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Health Condition For Family Responsibility
+                        {t(
+                          "homeVisitRegistration.step4.healthLegal.responsibilityHealth",
+                        )}
                       </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Health Condition For Family Responsibility"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.healthLegal.responsibilityHealth",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -370,10 +464,16 @@ function Step4() {
                   name="healthAndLegal.mentalHealthIssuesFromFamily"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mental Health Issues From Family</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.healthLegal.mentalHealthIssues",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Mental Health Issues From Family"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.healthLegal.mentalHealthIssues",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -387,7 +487,7 @@ function Step4() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Criminal Issues
+                {t("homeVisitRegistration.step4.criminal.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -395,10 +495,16 @@ function Step4() {
                   name="criminalIssues.criminalRecord"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Criminal Record</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.criminal.criminalRecord",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Criminal Record"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.criminal.criminalRecord",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -413,10 +519,16 @@ function Step4() {
                   name="criminalIssues.familyCriminalRecord"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Family Criminal Record</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step4.criminal.familyCriminalRecord",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Family Criminal Record"
+                          placeholder={t(
+                            "homeVisitRegistration.step4.criminal.familyCriminalRecord",
+                          )}
                           rows={2}
                           {...(field as any)}
                         />
@@ -431,10 +543,10 @@ function Step4() {
           {/* Submit Button */}
           <div className="flex justify-between mt-4">
             <Button type="button" variant="outline" onClick={handleBack}>
-              Back
+              {t("homeVisitRegistration.buttons.back")}
             </Button>
             <Button type="submit" className="px-8">
-              Next
+              {t("homeVisitRegistration.buttons.next")}
             </Button>
           </div>
         </form>

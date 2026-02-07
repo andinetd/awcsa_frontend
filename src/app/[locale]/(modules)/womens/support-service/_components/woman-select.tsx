@@ -11,6 +11,7 @@ import { useGetWomenProfilesQuery } from "@/hooks/womens";
 import { Loader2 } from "lucide-react";
 
 import { WomenProfile } from "@/api/womens/women-profile";
+import { useTranslations } from "next-intl";
 
 interface WomanSelectProps {
   value?: string;
@@ -21,15 +22,16 @@ interface WomanSelectProps {
 export default function WomanSelect({
   value,
   onValueChange,
-  placeholder = "Select a woman",
+  placeholder,
 }: WomanSelectProps) {
   const { data: profiles, isLoading } = useGetWomenProfilesQuery();
+  const t = useTranslations("womens");
 
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="w-4 h-4 animate-spin" />
-        Loading women...
+        {t("common.loading")}
       </div>
     );
   }
@@ -37,7 +39,9 @@ export default function WomanSelect({
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue
+          placeholder={placeholder || t("support.history.selectWoman")}
+        />
       </SelectTrigger>
       <SelectContent>
         {profiles?.map((profile: WomenProfile) => (

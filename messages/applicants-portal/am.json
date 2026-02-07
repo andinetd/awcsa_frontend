@@ -11,7 +11,7 @@
     "complaintsTabNew": "አዲስ ቅሬታ",
     "complaintsTabHistory": "የቅሬታ ታሪክ",
     "complaintsCardTitle": "አዲስ ቅሬታ ያቅርቡ",
-    "complaintsCardDesc": "Found an issue with the system or process? Let us know.",
+    "complaintsCardDesc": "በስርዓቱ ወይም በሂደቱ ላይ ችግር አጋጥሞዎታል? ያሳውቁን።",
     "complaintsHistoryTitle": "የቅሬታ ታሪክ",
     "complaintsHistoryDesc": "ያቀረቡትን ቅሬታዎች ሁኔታ ይመልከቱ እና ይከታተሉ።"
   },
@@ -56,6 +56,7 @@
     "cta_submitted": "የማመልከቻ ሂደት ተጠናቋል"
   },
   "appSummary": {
+    "loading": "የመተግበሪያ ማጠቃለያ በመጫን ላይ...",
     "title": "የማመልከቻ ማጠቃለያ",
     "applicationId": "የማመልከቻ መታወቂያ",
     "submittedDate": "የተላከበት ቀን",
@@ -100,18 +101,22 @@
       "AddressPlaceHolder": "ሙሉ አድራሻዎን ያስገቡ",
       "EducationLevel": "የትምህርት ደረጃ",
       "educationOptions": {
-        "none": "አለመኖር",
-        "primary": "መማርያ 1",
+        "none": "የለም",
+        "primary": "አንደኛ ደረጃ",
         "secondary": "ሁለተኛ ደረጃ",
         "diploma": "ዲፕሎማ",
-        "bachelor": "የቢችለር ዲግሪ",
+        "bachelor": "የባችለር ዲግሪ",
         "masters": "የማስተር ዲግሪ",
         "doctorate": "ዶክተር"
       },
       "occupation": "ሥራ፣ የስራ ስም",
       "occupationPlaceholder": "የስራዎን ዝርዝር ያስገቡ",
+      "firstName": "ስም",
+      "middleName": "የአባት ስም",
+      "lastName": "የአያት ስም",
+      "phoneNumber": "ስልክ ቁጥር",
+      "email": "ኢሜይል",
       "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
-      "spouseCityIdNumberPlaceholder": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር ያስገቡ",
       "marriageCertificate": "የባል/ባለቤት ስምምነት",
       "preferredChildAgeMin": "የሚፈለጉ ሕፃን ዕድሜ (ከ) ",
       "preferredChildAgeMax": "የሚፈለጉ ሕፃን ዕድሜ (እስከ)",
@@ -134,8 +139,10 @@
     },
     "form": {
       "medical": "የጤና ምርመራ",
-      "criminal": "ከወንጀል ነፃ",
-      "marriageCertificate": "የትዳር ስርቲፊክት"
+      "criminal": "ከወንጀል ነፃት ማጽደቂያ ዶክመንት",
+      "marriageCertificate": "የትዳር ስርቲፊክት",
+      "housePlan": "የቤት ካርታ",
+      "businessLicense": "የንግድ ፍቃድ"
     }
   },
   "stepthree": {
@@ -147,9 +154,137 @@
       "note": "ሁሉም መረጃዎች ትክክለኛ  መሆን አለባቸው፡፡ በሚመለከተው አካልም ለግምገማ ይቀርባሉ፡፡"
     },
     "form": {
-      "marital": "የጋብቻ/ያላገቡ ሰነድ",
-      "wellBeing": "የሥነ-ልቦናና ሰነድ",
+      "marital": "የጋብቻ ሰነድ",
+      "wellBeing": "የሥነ-ልቦና ሰነድ",
       "photo": "ጉርድ ፎቶ"
+    }
+  },
+  "applicationDetails": {
+    "title": "የማመልከቻ ዝርዝሮች",
+    "subtitle": "የቀረበውን ማመልከቻ ዝርዝሮች ይገምግሙ",
+    "personalInfo": "የግል መረጃ",
+    "additionalDocs": "ተጨማሪ ሰነዶች",
+    "details": "ዝርዝሮች",
+    "reviewerComment": "የገምጋሚ አስተያየት",
+    "submitted": "ተልኳል",
+    "submittedOn": "ይህ ማመልከቻ የቀረበው በ",
+    "back": "ተመለስ",
+    "noApplication": "ምንም ማመልከቻ አልተገኘም።",
+    "noFile": "ፋይል የለም",
+    "noFileUploaded": "ምንም ፋይል አልተጫነም",
+    "view": "ይመልከቱ",
+    "fields": {
+      "id": "መታወቂያ",
+      "birthCertificate": "የልደት ምስክር ወረቀት",
+      "incomeDocument": "የገቢ ሰነድ",
+      "medical": "የጤና",
+      "criminalDocument": "የወንጀል ሰነድ",
+      "marriageCertificate": "የትዳር ስርቲፊክት",
+      "maritalStatus": "የጋብቻ ሁኔታ",
+      "wellBeing": "የሥነ-ልቦና",
+      "photo": "ፎቶ",
+      "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+      "dateOfBirth": "የልደት ቀን",
+      "address": "አድራሻ",
+      "educationLevel": "የትምህርት ደረጃ",
+      "occupation": "ሥራ",
+      "monthlyIncome": "ወርሃዊ ገቢ",
+      "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
+      "preferredChildren": "የሚፈለጉ ሕፃናት",
+      "ageMin": "ዕድሜ (ከ)",
+      "ageMax": "ዕድሜ (እስከ)",
+      "number": "ብዛት",
+      "preferredSex": "የሚፈለጉ ጾታ",
+      "file": "ፋይል"
+    }
+  },
+  "review": {
+    "title": "ማመልከቻዎን ይገምግሙ",
+    "subtitle": "ከማስገባትዎ በፊት እባክዎን ሁሉንም መረጃ ይገምግሙ",
+    "personalInfo": "የግል መረጃ",
+    "additionalDocs": "ተጨማሪ ሰነዶች",
+    "details": "ዝርዝሮች",
+    "readyToSubmit": "ለማስገባት ዝግጁ",
+    "confirmationText": "ይህን ማመልከቻ በማስገባት የቀረበው መረጃ ሁሉ ትክክለኛ እና ሙሉ መሆኑን ያረጋግጣሉ። የተሳሳተ መረጃ ማመልከቻው እንዲውድቅ ሊያደርግ እንደሚችል ተረድተዋል።",
+    "previousStep": "የቀድሞው ደረጃ",
+    "submitApplication": "ማመልከቻ አስገባ",
+    "submitting": "በመላክ ላይ...",
+    "submitted": "ተልኳል!",
+    "loadingData": "የማመልከቻ መረጃ በመጫን ላይ...",
+    "signInRequired": "ማመልከቻውን ለማስገባት መግባት አለብዎት።",
+    "submissionSuccess": "ማመልከቻው በተሳካ ሁኔታ ተልኳል!",
+    "submissionFailed": "ማስገባት አልተሳካም",
+    "unableToPreview": "ፋይሉን ማየት አልተቻለም"
+  },
+  "applicationLayout": {
+    "title": "የጉዲፈቻ ማመልከቻ",
+    "subtitle": "የጉዲፈቻ ማመልከቻዎን ለማስገባት ሁሉንም ደረጃዎች ያጠናቅቁ"
+  },
+  "stepProgress": {
+    "step": "ደረጃ",
+    "of": "ከ",
+    "complete": "ተጠናቋል",
+    "steps": {
+      "step1": "የግል መረጃ",
+      "step2": "ዳራ እና ማጣቀሻዎች",
+      "step3": "ምርጫዎች እና መስፈርቶች",
+      "step4": "ይገምግሙ እና ያስገቡ"
+    }
+  },
+  "footerLinks": {
+    "complaints": "ቅሬታዎች",
+    "supportText": "እገዛ ይፈልጋሉ? የድጋፍ ቡድናችንን ያግኙ በ",
+    "supportEmail": "wcsa@gov.org",
+    "scrollHint": "ሁሉንም መስፈርቶች ለማየት ይሸብልሉ"
+  },
+  "statuses": {
+    "pending_review": "በምርመራ ላይ",
+    "pending_home_visit": "የመስክ ጉብኝት በመጠባበቅ ላይ",
+    "pending_approval": "ማጽደቅን በመጠባበቅ ላይ",
+    "returned": "የተመለሰ",
+    "rejected": "ውድቅ የተደረገ",
+    "matched": "የተዛመደ"
+  },
+  "complaints": {
+    "form": {
+      "subject": "ርዕሰ ጉዳይ",
+      "subjectPlaceholder": "የቅሬታውን ርዕስ ያስገቡ",
+      "category": "ምድብ",
+      "categoryPlaceholder": "ምድብ ይምረጡ",
+      "description": "መግለጫ",
+      "descriptionPlaceholder": "ችግሩን በዝርዝር ይግለጹ",
+      "submit": "ቅሬታውን አስገባ",
+      "submitting": "በመላክ ላይ...",
+      "validation": {
+        "subjectMin": "ርዕሰ ጉዳይ ቢያንስ 5 ቁምፊዎች መሆን አለበት",
+        "categoryRequired": "እባክዎን ምድብ ይምረጡ",
+        "descriptionMin": "መግለጫ ቢያንስ 10 ቁምፊዎች መሆን አለበት"
+      }
+    },
+    "list": {
+      "noComplaints": "ምንም ቅሬታ አልተገኘም።",
+      "table": {
+        "date": "ቀን",
+        "subject": "ርዕሰ ጉዳይ",
+        "category": "ምድብ",
+        "status": "ሁኔታ",
+        "actions": "እርምጃዎች",
+        "viewDetails": "ዝርዝሩን ይመልከቱ"
+      },
+      "dialog": {
+        "lastUpdated": "ለመጨረሻ ጊዜ የታደሰው",
+        "categoryLabel": "ምድብ",
+        "yourMessage": "የእርስዎ መልዕክት",
+        "response": "ምላሽ",
+        "reviewingMsg": "ቡድናችን በአሁኑ ጊዜ ቅሬታዎን እየገመገመ ነው። ሲጠናቀቅ መፍትሄውን እዚህ ያያሉ።"
+      }
+    },
+    "categories": {
+      "process_delay": "የሂደት መዘግየት",
+      "staff_behavior": "የሰራተኛ ስነ-ምግባር",
+      "documentation_issue": "የሰነድ ችግር",
+      "system_error": "የስርዓት ስህተት",
+      "other": "ሌላ"
     }
   }
 }

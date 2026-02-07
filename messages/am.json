@@ -63,5 +63,11 @@
       "desc": "ወደ ታች",
       "hide": "ደብቅ"
     }
+  },
+  "unauthorized": {
+    "title": "መግባት አልተፈቀደም",
+    "description": "ይህንን ገጽ ለማየት ፈቃድ የለዎትም።",
+    "goBack": "ተመለስ",
+    "logoAlt": "አርማ"
   }
 }

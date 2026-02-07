@@ -237,7 +237,10 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                       </h4>
                       <div className="text-xs text-slate-500 mt-1 space-y-0.5">
                         <p>
-                          {child.serviceData.formData.sex} •{" "}
+                          {child.serviceData.formData.sex
+                            ? t(`enums.sex.${child.serviceData.formData.sex}`)
+                            : t("adoptionDetail.matching.unknown")}{" "}
+                          •{" "}
                           {child.serviceData.formData.dateOfBirth
                             ? t("adoptionDetail.matching.yearsOld", {
                                 count:
@@ -257,7 +260,13 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                     </div>
                     <div className="flex flex-col items-end gap-2">
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 uppercase">
-                        {child.currentStatus}
+                        {child.currentStatus
+                          ? t(
+                              `statuses.${child.currentStatus
+                                .toLowerCase()
+                                .replace(/ /g, "_")}`,
+                            )
+                          : "—"}
                       </span>
                     </div>
                   </div>
@@ -302,7 +311,11 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                         {t("adoptionDetail.matching.gender")}
                       </label>
                       <p className="font-medium">
-                        {selectedChild.serviceData.formData.sex}
+                        {selectedChild.serviceData.formData.sex
+                          ? t(
+                              `enums.sex.${selectedChild.serviceData.formData.sex}`,
+                            )
+                          : t("adoptionDetail.matching.unknown")}
                       </p>
                     </div>
                     <div>
@@ -318,7 +331,13 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                         {t("adoptionDetail.matching.status")}
                       </label>
                       <p className="font-medium">
-                        {selectedChild.currentStatus}
+                        {selectedChild.currentStatus
+                          ? t(
+                              `statuses.${selectedChild.currentStatus
+                                .toLowerCase()
+                                .replace(/ /g, "_")}`,
+                            )
+                          : "—"}
                       </p>
                     </div>
                   </div>

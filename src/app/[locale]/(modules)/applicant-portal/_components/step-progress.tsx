@@ -2,32 +2,34 @@
 
 import { usePathname } from "next/navigation";
 import { CheckCircle, Circle } from "lucide-react";
-
-const steps = [
-  {
-    id: 1,
-    name: "Personal Information",
-    path: "/applicant-portal/application/new/step1",
-  },
-  {
-    id: 2,
-    name: "Background & References",
-    path: "/applicant-portal/application/new/step2",
-  },
-  {
-    id: 3,
-    name: "Preferences & Requirements",
-    path: "/applicant-portal/application/new/step3",
-  },
-  {
-    id: 4,
-    name: "Review & Submit",
-    path: "/applicant-portal/application/new/review",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function StepProgress() {
   const pathname = usePathname();
+  const t = useTranslations("applicants-portal");
+
+  const steps = [
+    {
+      id: 1,
+      name: t("stepProgress.steps.step1"),
+      path: "/applicant-portal/application/new/step1",
+    },
+    {
+      id: 2,
+      name: t("stepProgress.steps.step2"),
+      path: "/applicant-portal/application/new/step2",
+    },
+    {
+      id: 3,
+      name: t("stepProgress.steps.step3"),
+      path: "/applicant-portal/application/new/step3",
+    },
+    {
+      id: 4,
+      name: t("stepProgress.steps.step4"),
+      path: "/applicant-portal/application/new/review",
+    },
+  ];
 
   const getCurrentStep = () => {
     const currentStep = steps.find((step) => pathname.includes(step.path));
@@ -40,10 +42,12 @@ export function StepProgress() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-medium text-gray-500">
-          Step {currentStepId} of {steps.length}
+          {t("stepProgress.step")} {currentStepId} {t("stepProgress.of")}{" "}
+          {steps.length}
         </span>
         <span className="text-sm font-lexend text-gray-500">
-          {Math.round((currentStepId / steps.length) * 100)}% Complete
+          {Math.round((currentStepId / steps.length) * 100)}%{" "}
+          {t("stepProgress.complete")}
         </span>
       </div>
 

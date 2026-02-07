@@ -18,9 +18,12 @@ interface EdirMembersListProps {
   associationId: number;
 }
 
+import { useTranslations } from "next-intl";
+
 export default function EdirMembersList({
   associationId,
 }: EdirMembersListProps) {
+  const t = useTranslations("social-affairs.edir.edir-members");
   const {
     data: members,
     isLoading,
@@ -36,11 +39,7 @@ export default function EdirMembersList({
   }
 
   if (isError) {
-    return (
-      <div className="text-center p-8 text-red-500">
-        Failed to load members.
-      </div>
-    );
+    return <div className="text-center p-8 text-red-500">{t("error")}</div>;
   }
 
   const memberList = members || [];
@@ -48,7 +47,9 @@ export default function EdirMembersList({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Members ({memberList.length})</h3>
+        <h3 className="text-lg font-semibold">
+          {t("title", { count: memberList.length })}
+        </h3>
         <div className="flex items-center gap-2">
           <ImportEdirMembersDialog />
           <EdirMemberForm associationId={associationId} />
@@ -58,12 +59,12 @@ export default function EdirMembersList({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Full Name</TableHead>
-              <TableHead>Edir ID</TableHead>
-              <TableHead>Position</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("table.name")}</TableHead>
+              <TableHead>{t("table.id")}</TableHead>
+              <TableHead>{t("table.position")}</TableHead>
+              <TableHead>{t("table.phone")}</TableHead>
+              <TableHead>{t("table.status")}</TableHead>
+              <TableHead className="text-right">{t("table.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -73,7 +74,7 @@ export default function EdirMembersList({
                   colSpan={6}
                   className="text-center py-8 text-muted-foreground"
                 >
-                  No members found. Add one to get started.
+                  {t("noMembers")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -85,7 +86,7 @@ export default function EdirMembersList({
                   <TableCell>{member.edirIdNumber}</TableCell>
                   <TableCell>
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                      {member.position}
+                      {t(`positions.${member.position}`)}
                     </span>
                   </TableCell>
                   <TableCell>{member.phoneNumber}</TableCell>
@@ -97,7 +98,9 @@ export default function EdirMembersList({
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {member.isActive ? "Active" : "Inactive"}
+                      {member.isActive
+                        ? t("status.active")
+                        : t("status.inactive")}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">

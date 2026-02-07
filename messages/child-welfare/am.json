@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "የሕፃናት ደህንነት ዳሽቦርድ",
+    "subtitle": "የሕፃናት፣ የእንክብካቤ ማዕከላት እና የማደጎ ሂደቶች አጠቃላይ እይታ",
+    "loading": "ዳሽቦርድ በመጫን ላይ...",
+    "children": {
+      "title": "ሕፃናት",
+      "total": "ጠቅላላ ሕፃናት",
+      "found": "የተገኙ",
+      "inCare": "በእንክብካቤ ውስጥ",
+      "adopted": "የተማደጉ",
+      "fostered": "በፎስተር"
+    },
+    "adoption": {
+      "title": "ማደጎ",
+      "totalApplicants": "ጠቅላላ አመልካቾች"
+    },
+    "infrastructure": {
+      "title": "መሠረተ ልማት",
+      "totalFacilities": "ጠቅላላ ተቋማት",
+      "reports": "ሪፖርቶች",
+      "pending": "በመጠባበቅ ላይ ያሉ ሪፖርቶች",
+      "submitted": "የገቡ ሪፖርቶች"
+    },
+    "quickActions": {
+      "title": "ፈጣን እርምጃዎች",
+      "registerChild": "ሕፃን ምዝገባ",
+      "viewChildren": "ሁሉንም ሕፃናት ይመልከቱ",
+      "manageAdoptions": "ማደጎዎችን ያስተዳድሩ",
+      "viewFacilities": "ተቋማትን ይመልከቱ"
+    }
+  }
+}

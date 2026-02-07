@@ -1,0 +1,47 @@
+{
+  "ageInput": {
+    "units": {
+      "years": "Years",
+      "months": "Months"
+    },
+    "placeholders": {
+      "years": "e.g. 2.5",
+      "months": "e.g. 30"
+    },
+    "helper": {
+      "years": "{value} years old",
+      "months": "{value} months old"
+    }
+  },
+  "fileDropzone": {
+    "limitReached": "File limit reached",
+    "uploadLimit": "File limit reached ({current}/{max})",
+    "removeToUpload": "Remove some files to upload more",
+    "invalidFileType": "Invalid file type. Please try again.",
+    "dropHere": "Drop your files here",
+    "dropOrBrowse": "Drop your files here or {browse}",
+    "browse": "browse",
+    "maxSize": "Maximum size: {size}",
+    "filesRemaining": "{count, plural, one {# file remaining} other {# files remaining}}",
+    "errorTooLarge": "File is too large. Maximum size is {size}.",
+    "errorInvalidType": "Invalid file type. Please check the accepted file types.",
+    "units": {
+      "bytes": "Bytes",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB"
+    }
+  },
+  "userLogout": {
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "success": "Successfully logged out",
+    "failed": "Failed to log out. Please try again.",
+    "ariaMenu": "Toggle user menu",
+    "avatarAlt": "User avatar"
+  },
+  "accessCheck": {
+    "checking": "Checking Access",
+    "logoAlt": "WCSA Logo"
+  }
+}

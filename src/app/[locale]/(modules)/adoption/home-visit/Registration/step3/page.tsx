@@ -34,11 +34,18 @@ import { useForm } from "react-hook-form";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
 import { useRouter } from "next/navigation";
 import { Card, CardTitle } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 function Step3() {
   const router = useRouter();
+  const t = useTranslations("adoption");
 
   const { step3, setStep3, reset } = useHomeVisitFormStore();
 
@@ -64,20 +71,70 @@ function Step3() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Life Style & Social Relations
+                {t("homeVisitRegistration.step3.lifeStyle.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  ["readinessForCare", "Readiness For Care"],
-                  ["familyLawsAndRules", "Family Laws and Rules"],
-                  ["dailyLifeRoutine", "Daily Life Routine"],
-                  ["familyWorkDistribution", "Family Work Distribution"],
-                  ["familyTime", "Family Time"],
-                  ["childLifeParticipation", "Child Life Participation"],
-                  ["holidayTimeActivities", "Holiday Time Activities"],
-                  ["socialLifeAttitude", "Social Life Attitude"],
-                  ["communityInvolvement", "Community Involvement"],
-                  ["changeAfterAdoption", "Change After Adoption"],
+                  [
+                    "readinessForCare",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.readinessForCare",
+                    ),
+                  ],
+                  [
+                    "familyLawsAndRules",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.familyLawsAndRules",
+                    ),
+                  ],
+                  [
+                    "dailyLifeRoutine",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.dailyLifeRoutine",
+                    ),
+                  ],
+                  [
+                    "familyWorkDistribution",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.familyWorkDistribution",
+                    ),
+                  ],
+                  [
+                    "familyTime",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.familyTime",
+                    ),
+                  ],
+                  [
+                    "childLifeParticipation",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.childLifeParticipation",
+                    ),
+                  ],
+                  [
+                    "holidayTimeActivities",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.holidayTimeActivities",
+                    ),
+                  ],
+                  [
+                    "socialLifeAttitude",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.socialLifeAttitude",
+                    ),
+                  ],
+                  [
+                    "communityInvolvement",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.communityInvolvement",
+                    ),
+                  ],
+                  [
+                    "changeAfterAdoption",
+                    t(
+                      "homeVisitRegistration.step3.lifeStyle.fields.changeAfterAdoption",
+                    ),
+                  ],
                 ].map(([key, label]) => (
                   <FormField
                     key={String(key)}
@@ -88,7 +145,7 @@ function Step3() {
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={`Enter ${label}`}
+                            placeholder={label}
                             rows={3}
                             {...(field as any)}
                           />
@@ -103,7 +160,7 @@ function Step3() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Parenting Experience
+                {t("homeVisitRegistration.step3.parenting.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -111,18 +168,30 @@ function Step3() {
                   name="parentingExperience.hasExperience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Has Parenting Experience?</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.parenting.hasExperience",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Select
                           value={field.value ? "yes" : "no"}
                           onValueChange={(v) => field.onChange(v === "yes")}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select" />
+                            <SelectValue
+                              placeholder={t(
+                                "homeVisitRegistration.step3.parenting.select",
+                              )}
+                            />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="yes">Yes</SelectItem>
-                            <SelectItem value="no">No</SelectItem>
+                            <SelectItem value="yes">
+                              {t("homeVisitRegistration.step3.parenting.yes")}
+                            </SelectItem>
+                            <SelectItem value="no">
+                              {t("homeVisitRegistration.step3.parenting.no")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -136,10 +205,16 @@ function Step3() {
                   name="parentingExperience.disciplineMethods"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Discipline Methods</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.parenting.disciplineMethods",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Discipline Methods"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.parenting.disciplineMethods",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -154,10 +229,16 @@ function Step3() {
                   name="parentingExperience.goodMannersApproach"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Good Manners Approach</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.parenting.goodMannersApproach",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Good Manners Approach"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.parenting.goodMannersApproach",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -172,10 +253,16 @@ function Step3() {
                   name="parentingExperience.improvementAreas"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Improvement Areas</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.parenting.improvementAreas",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Improvement Areas"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.parenting.improvementAreas",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -189,7 +276,7 @@ function Step3() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Adoption Interest
+                {t("homeVisitRegistration.step3.adoptionInterest.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -197,10 +284,16 @@ function Step3() {
                   name="adoptionInterest.meaningOfAdoption"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Meaning Of Adoption</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.adoptionInterest.meaningOfAdoption",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Meaning Of Adoption"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.adoptionInterest.meaningOfAdoption",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -215,10 +308,16 @@ function Step3() {
                   name="adoptionInterest.reasonForAdoption"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Reason For Adoption</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.adoptionInterest.reasonForAdoption",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Reason For Adoption"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.adoptionInterest.reasonForAdoption",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -229,14 +328,22 @@ function Step3() {
                 />
 
                 <div className="p-2 border rounded">
-                  <h4 className="font-medium">Preferred Child</h4>
+                  <h4 className="font-medium">
+                    {t(
+                      "homeVisitRegistration.step3.adoptionInterest.preferredChild.title",
+                    )}
+                  </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
                     <FormField
                       control={form.control}
                       name="adoptionInterest.preferredChild.quantity"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quantity</FormLabel>
+                          <FormLabel>
+                            {t(
+                              "homeVisitRegistration.step3.adoptionInterest.preferredChild.quantity",
+                            )}
+                          </FormLabel>
                           <FormControl>
                             <Input
                               type="number"
@@ -248,10 +355,12 @@ function Step3() {
                                 field.onChange(
                                   e.target.value === ""
                                     ? undefined
-                                    : Number(e.target.value)
+                                    : Number(e.target.value),
                                 )
                               }
-                              placeholder="Enter Quantity"
+                              placeholder={t(
+                                "homeVisitRegistration.step3.adoptionInterest.preferredChild.quantity",
+                              )}
                             />
                           </FormControl>
                           <FormMessage />
@@ -264,7 +373,9 @@ function Step3() {
                       name="adoptionInterest.preferredChild.sex"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Gender</FormLabel>
+                          <FormLabel>
+                            {t("homeVisitRegistration.step2.common.gender")}
+                          </FormLabel>
                           <FormControl>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -274,9 +385,15 @@ function Step3() {
                                 >
                                   {field.value
                                     ? field.value === "MALE"
-                                      ? "Male"
-                                      : "Female"
-                                    : "Select gender"}
+                                      ? t(
+                                          "homeVisitRegistration.step2.common.male",
+                                        )
+                                      : t(
+                                          "homeVisitRegistration.step2.common.female",
+                                        )
+                                    : t(
+                                        "homeVisitRegistration.step2.common.selectGender",
+                                      )}
                                   <ChevronDown />
                                 </Button>
                               </DropdownMenuTrigger>
@@ -287,12 +404,14 @@ function Step3() {
                                 <DropdownMenuItem
                                   onSelect={() => field.onChange("MALE")}
                                 >
-                                  Male
+                                  {t("homeVisitRegistration.step2.common.male")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onSelect={() => field.onChange("FEMALE")}
                                 >
-                                  Female
+                                  {t(
+                                    "homeVisitRegistration.step2.common.female",
+                                  )}
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -307,10 +426,16 @@ function Step3() {
                       name="adoptionInterest.preferredChild.ageRange"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Age Range</FormLabel>
+                          <FormLabel>
+                            {t(
+                              "homeVisitRegistration.step3.adoptionInterest.preferredChild.ageRange",
+                            )}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Enter Age Range"
+                              placeholder={t(
+                                "homeVisitRegistration.step3.adoptionInterest.preferredChild.ageRange",
+                              )}
                               {...(field as any)}
                             />
                           </FormControl>
@@ -324,10 +449,16 @@ function Step3() {
                       name="adoptionInterest.preferredChild.healthCondition"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Health Condition</FormLabel>
+                          <FormLabel>
+                            {t(
+                              "homeVisitRegistration.step3.adoptionInterest.preferredChild.healthCondition",
+                            )}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Enter Health Condition"
+                              placeholder={t(
+                                "homeVisitRegistration.step3.adoptionInterest.preferredChild.healthCondition",
+                              )}
                               {...(field as any)}
                             />
                           </FormControl>
@@ -341,10 +472,16 @@ function Step3() {
                       name="adoptionInterest.preferredChild.reasonForChoice"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Reason For Choice</FormLabel>
+                          <FormLabel>
+                            {t(
+                              "homeVisitRegistration.step3.adoptionInterest.preferredChild.reasonForChoice",
+                            )}
+                          </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter Reason For Choice"
+                              placeholder={t(
+                                "homeVisitRegistration.step3.adoptionInterest.preferredChild.reasonForChoice",
+                              )}
                               rows={2}
                               {...(field as any)}
                             />
@@ -360,7 +497,7 @@ function Step3() {
 
             <Card className="flex flex-col space-y-4 py-6 px-4">
               <CardTitle className="text-lg font-semibold">
-                Existing Children & Family Members
+                {t("homeVisitRegistration.step3.familyMembers.title")}
               </CardTitle>
               <div className="grid grid-cols-1 gap-3">
                 <FormField
@@ -368,9 +505,16 @@ function Step3() {
                   name="existingChildrenAndFamilyMembers.name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>
+                        {t("homeVisitRegistration.step3.familyMembers.name")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter Name" {...(field as any)} />
+                        <Input
+                          placeholder={t(
+                            "homeVisitRegistration.step3.familyMembers.name",
+                          )}
+                          {...(field as any)}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -382,10 +526,16 @@ function Step3() {
                   name="existingChildrenAndFamilyMembers.behavior"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Behavior</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.familyMembers.behavior",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Behavior"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.familyMembers.behavior",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -400,10 +550,16 @@ function Step3() {
                   name="existingChildrenAndFamilyMembers.adoptionAttitude"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Adoption Attitude</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.familyMembers.adoptionAttitude",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Adoption Attitude"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.familyMembers.adoptionAttitude",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -418,10 +574,16 @@ function Step3() {
                   name="existingChildrenAndFamilyMembers.futureAdoptionContributions"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Future Adoption Contributions</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.familyMembers.futureContributions",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Future Adoption Contributions"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.familyMembers.futureContributions",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -433,13 +595,19 @@ function Step3() {
 
                 <FormField
                   control={form.control}
-                  name="existingChildrenAndFamilyMembers.mistakeAttitudesOfFamily"
+                  name="existingChildrenAndFamilyMembers.mistakeAttitudes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mistake Attitudes Of Family</FormLabel>
+                      <FormLabel>
+                        {t(
+                          "homeVisitRegistration.step3.familyMembers.mistakeAttitudes",
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter Mistake Attitudes Of Family"
+                          placeholder={t(
+                            "homeVisitRegistration.step3.familyMembers.mistakeAttitudes",
+                          )}
                           rows={3}
                           {...(field as any)}
                         />
@@ -454,10 +622,10 @@ function Step3() {
           {/* Submit Button */}
           <div className="flex justify-between mt-4">
             <Button type="button" variant="outline" onClick={handleBack}>
-              Back
+              {t("homeVisitRegistration.buttons.back")}
             </Button>
             <Button type="submit" className="px-8">
-              Next
+              {t("homeVisitRegistration.buttons.next")}
             </Button>
           </div>
         </form>

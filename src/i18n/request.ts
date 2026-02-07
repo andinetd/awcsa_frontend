@@ -24,6 +24,43 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/sidebar/${locale}.json`)
   ).default;
 
+  const componentMessages = (
+    await import(`../../messages/components/${locale}.json`)
+  ).default;
+
+  const loginMessages = (await import(`../../messages/login/${locale}.json`))
+    .default;
+
+  const bureauMessages = (await import(`../../messages/bureau/${locale}.json`))
+    .default;
+
+  const complaintsMessages = (
+    await import(`../../messages/complaints/${locale}.json`)
+  ).default;
+
+  const womensMessages = (await import(`../../messages/womens/${locale}.json`))
+    .default;
+
+  const careCentersPortalMessages = (
+    await import(`../../messages/care-centers-portal/${locale}.json`)
+  ).default;
+
+  const socialAffairsMessages = (
+    await import(`../../messages/social-affairs/${locale}.json`)
+  ).default;
+
+  const executiveMessages = (
+    await import(`../../messages/executive/${locale}.json`)
+  ).default;
+
+  const childWelfareMessages = (
+    await import(`../../messages/child-welfare/${locale}.json`)
+  ).default;
+
+  const socialRehabMessages = (
+    await import(`../../messages/social-rehab/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -31,6 +68,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
       adoption: adoptionMessages,
       "applicants-portal": applicantsPortalMessages,
       sidebar: sidebarMessages,
+      components: componentMessages,
+      login: loginMessages,
+      bureau: bureauMessages,
+      complaints: complaintsMessages,
+      womens: womensMessages,
+      "care-centers-portal": careCentersPortalMessages,
+      "social-affairs": socialAffairsMessages,
+      executive: executiveMessages,
+      "child-welfare": childWelfareMessages,
+      "social-rehab": socialRehabMessages,
     },
   };
 });

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
 interface AgeInputProps {
@@ -7,6 +8,7 @@ interface AgeInputProps {
 }
 
 const AgeInput: React.FC<AgeInputProps> = ({ label, value, onChange }) => {
+  const t = useTranslations("components.ageInput");
   const [unit, setUnit] = useState<"years" | "months">("years");
 
   // Derive display value based on current unit
@@ -19,7 +21,7 @@ const AgeInput: React.FC<AgeInputProps> = ({ label, value, onChange }) => {
 
   // Keep raw input in sync with value prop
   const [rawInput, setRawInput] = useState<string>(
-    displayValue ? String(displayValue) : ""
+    displayValue ? String(displayValue) : "",
   );
 
   // Sync rawInput when value or unit changes externally
@@ -70,7 +72,11 @@ const AgeInput: React.FC<AgeInputProps> = ({ label, value, onChange }) => {
           step={unit === "years" ? "0.01" : "1"}
           value={rawInput}
           onChange={(e) => handleInputChange(e.target.value)}
-          placeholder={unit === "years" ? "e.g. 2.5" : "e.g. 30"}
+          placeholder={
+            unit === "years"
+              ? t("placeholders.years")
+              : t("placeholders.months")
+          }
           className="w-full min-w-0 flex-1 rounded-l-lg border border-r-0 border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
 
@@ -81,19 +87,21 @@ const AgeInput: React.FC<AgeInputProps> = ({ label, value, onChange }) => {
           }
           className="w-28 rounded-r-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="years">Years</option>
-          <option value="months">Months</option>
+          <option value="years">{t("units.years")}</option>
+          <option value="months">{t("units.months")}</option>
         </select>
       </div>
 
       {/* Optional helper text */}
-      {value !== undefined && (
-        <p className="text-xs text-slate-500">
-          {unit === "years"
-            ? `${(value * 12).toFixed(0)} months old`
-            : `${value.toFixed(2)} years old`}
-        </p>
-      )}
+      <p className="text-xs text-slate-500">
+        {unit === "years"
+          ? t("helper.months", {
+              value: value !== undefined ? (value * 12).toFixed(0) : "--",
+            })
+          : t("helper.years", {
+              value: value !== undefined ? value.toFixed(2) : "--",
+            })}
+      </p>
     </div>
   );
 };

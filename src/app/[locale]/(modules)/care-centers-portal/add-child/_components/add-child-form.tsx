@@ -33,8 +33,12 @@ import { toast } from "sonner";
 import { BASE_URL } from "@/lib/base-url";
 import { ChevronDown, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function NewChildForm() {
+  const t = useTranslations("care-centers-portal.addChild");
+  const te = useTranslations("care-centers-portal.enums");
+
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
 
@@ -96,13 +100,13 @@ export default function NewChildForm() {
         },
       });
 
-      toast.success("Child registered successfully");
+      toast.success(t("messages.success"));
       router.push("/adoption/children/");
     } catch (error) {
       console.error("Error submitting form:", error);
 
       // extract a useful message from AxiosError if possible
-      let message = "Failed to register child. Please try again.";
+      let message = t("messages.error");
 
       if (axios.isAxiosError(error)) {
         const axiosErr = error as AxiosError<any>;
@@ -152,7 +156,7 @@ export default function NewChildForm() {
         <div className="">
           <Card className="flex flex-col space-y-2 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Child Information
+              {t("title")}
             </CardTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
               <FormField
@@ -160,11 +164,11 @@ export default function NewChildForm() {
                 name="first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{t("fields.firstName")}</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="Enter first name"
+                        placeholder={t("placeholders.firstName")}
                         {...field}
                       />
                     </FormControl>
@@ -177,11 +181,11 @@ export default function NewChildForm() {
                 name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{t("fields.lastName")}</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="Enter last name"
+                        placeholder={t("placeholders.lastName")}
                         {...field}
                       />
                     </FormControl>
@@ -194,7 +198,7 @@ export default function NewChildForm() {
                 name="sex"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel>{t("fields.gender")}</FormLabel>
                     <FormControl>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -203,10 +207,8 @@ export default function NewChildForm() {
                             className="w-full justify-between text-sm text-gray-800"
                           >
                             {field.value
-                              ? field.value === "MALE"
-                                ? "Male"
-                                : "Female"
-                              : "Select gender"}
+                              ? te(`sex.${field.value}`)
+                              : t("placeholders.selectGender")}
                             <ChevronDown />
                           </Button>
                         </DropdownMenuTrigger>
@@ -214,12 +216,12 @@ export default function NewChildForm() {
                           <DropdownMenuItem
                             onSelect={() => field.onChange("MALE")}
                           >
-                            Male
+                            {te("sex.MALE")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => field.onChange("FEMALE")}
                           >
-                            Female
+                            {te("sex.FEMALE")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -233,7 +235,7 @@ export default function NewChildForm() {
                 name="date_of_birth"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date of Birth</FormLabel>
+                    <FormLabel>{t("fields.dob")}</FormLabel>
                     <FormControl>
                       <Input
                         type="date"
@@ -268,7 +270,7 @@ export default function NewChildForm() {
                 name="current_status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{t("fields.status")}</FormLabel>
                     <FormControl>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -277,20 +279,8 @@ export default function NewChildForm() {
                             className="w-full justify-between text-sm text-gray-800"
                           >
                             {field.value
-                              ? field.value === "FOUND"
-                                ? "Found"
-                                : field.value === "IN_CARE"
-                                  ? "In Care"
-                                  : field.value === "IN_ADERA"
-                                    ? "In Adera"
-                                    : field.value === "ADOPTED"
-                                      ? "Adopted"
-                                      : field.value === "WITH_BLOOD_RELATIVE"
-                                        ? "With Blood Relative"
-                                        : field.value === "RETURNED"
-                                          ? "Returned"
-                                          : field.value
-                              : "Select status"}
+                              ? te(`status.${field.value}`)
+                              : t("placeholders.selectStatus")}
                             <ChevronDown />
                           </Button>
                         </DropdownMenuTrigger>
@@ -301,7 +291,7 @@ export default function NewChildForm() {
                               setStatus("FOUND");
                             }}
                           >
-                            Found
+                            {te("status.FOUND")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
@@ -309,7 +299,7 @@ export default function NewChildForm() {
                               setStatus("IN_ADERA");
                             }}
                           >
-                            In Adera
+                            {te("status.IN_ADERA")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
@@ -317,7 +307,7 @@ export default function NewChildForm() {
                               setStatus("IN_CARE");
                             }}
                           >
-                            In Care
+                            {te("status.IN_CARE")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
@@ -325,7 +315,7 @@ export default function NewChildForm() {
                               setStatus("ADOPTED");
                             }}
                           >
-                            Adopted
+                            {te("status.ADOPTED")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
@@ -333,7 +323,7 @@ export default function NewChildForm() {
                               setStatus("WITH_BLOOD_RELATIVE");
                             }}
                           >
-                            With Blood Relative
+                            {te("status.WITH_BLOOD_RELATIVE")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
@@ -341,7 +331,7 @@ export default function NewChildForm() {
                               setStatus("RETURNED");
                             }}
                           >
-                            Returned
+                            {te("status.RETURNED")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -358,11 +348,11 @@ export default function NewChildForm() {
                   name="found_address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address the child was found</FormLabel>
+                      <FormLabel>{t("fields.foundAddress")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter address"
+                          placeholder={t("placeholders.address")}
                           {...field}
                         />
                       </FormControl>
@@ -375,7 +365,7 @@ export default function NewChildForm() {
                   name="found_date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date child was found</FormLabel>
+                      <FormLabel>{t("fields.foundDate")}</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
@@ -407,11 +397,11 @@ export default function NewChildForm() {
                   name="child_founder_city_id_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Social Worker City Id Number</FormLabel>
+                      <FormLabel>{t("fields.socialWorkerId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Social Worker City Id Number"
+                          placeholder={t("placeholders.socialWorkerId")}
                           {...field}
                         />
                       </FormControl>
@@ -428,11 +418,11 @@ export default function NewChildForm() {
                   name="care_center_id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Care Center ID</FormLabel>
+                      <FormLabel>{t("fields.careCenterId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Care Center ID"
+                          placeholder={t("placeholders.careCenterId")}
                           {...field}
                         />
                       </FormControl>
@@ -445,11 +435,11 @@ export default function NewChildForm() {
                   name="child_id_from_care_center"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Child ID from Care Center</FormLabel>
+                      <FormLabel>{t("fields.childIdFromCenter")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Child ID from Care Center"
+                          placeholder={t("placeholders.childIdFromCenter")}
                           {...field}
                         />
                       </FormControl>
@@ -466,11 +456,11 @@ export default function NewChildForm() {
                   name="bale_adera_city_id_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bale Adera City ID Number</FormLabel>
+                      <FormLabel>{t("fields.baleAderaId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Bale Adera City ID Number"
+                          placeholder={t("placeholders.baleAderaId")}
                           {...field}
                         />
                       </FormControl>
@@ -487,11 +477,11 @@ export default function NewChildForm() {
                   name="adopter_city_id_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Adopter City ID Number</FormLabel>
+                      <FormLabel>{t("fields.adopterId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Adopter City ID Number"
+                          placeholder={t("placeholders.adopterId")}
                           {...field}
                         />
                       </FormControl>
@@ -508,11 +498,11 @@ export default function NewChildForm() {
                   name="blood_relative_city_id_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Blood Relative City ID Number</FormLabel>
+                      <FormLabel>{t("fields.bloodRelativeId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Blood Relative City ID Number"
+                          placeholder={t("placeholders.bloodRelativeId")}
                           {...field}
                         />
                       </FormControl>
@@ -529,11 +519,11 @@ export default function NewChildForm() {
                   name="previous_adopter_city_id_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Previous Adopter City ID Number</FormLabel>
+                      <FormLabel>{t("fields.prevAdopterId")}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Enter Previous Adopter City ID Number"
+                          placeholder={t("placeholders.prevAdopterId")}
                           {...field}
                         />
                       </FormControl>
@@ -549,11 +539,11 @@ export default function NewChildForm() {
                 name="additional_information"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Additional Information</FormLabel>
+                    <FormLabel>{t("fields.additionalInfo")}</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="Enter Additional Information"
+                        placeholder={t("placeholders.additionalInfo")}
                         {...field}
                       />
                     </FormControl>
@@ -566,7 +556,7 @@ export default function NewChildForm() {
         </div>
         <div className="flex justify-end">
           <Button onClick={() => onSubmit(form.getValues())} className="px-8">
-            Submit
+            {t("buttons.submit")}
           </Button>
         </div>
       </form>

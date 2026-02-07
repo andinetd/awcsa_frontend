@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "የማህበራዊ ልምምድ ዳሽቦርድ",
+    "subtitle": "የተጠቃሚዎች፣ የማህበረሰብ ፕሮግራሞች እና የድጋፍ አገልግሎቶች አጠቃላይ እይታ",
+    "loading": "ዳሽቦርድ በመጫን ላይ...",
+    "beneficiaries": {
+      "title": "ተጠቃሚዎች",
+      "totalVulnerable": "ጠቅላላ ተጋላጭ ሰዎች",
+      "elderly": "አረጋውያን",
+      "disability": "የአካል ጉዳተኞች",
+      "women": "ሴቶች"
+    },
+    "community": {
+      "title": "የማህበረሰብ ፕሮግራሞች",
+      "totalEdirs": "ጠቅላላ እድር ማህበራት",
+      "totalMembers": "ጠቅላላ አባላት"
+    },
+    "support": {
+      "title": "የድጋፍ አገልግሎቶች",
+      "totalServicesProvided": "ጠቅላላ የተሰጡ አገልግሎቶች"
+    },
+    "quickActions": {
+      "title": "ፈጣን እርምጃዎች",
+      "registerBeneficiary": "ተጠቃሚ ምዝገባ",
+      "viewElderly": "አረጋውያንን ይመልከቱ",
+      "viewDisabled": "የአካል ጉዳተኞችን ይመልከቱ",
+      "viewWomen": "ሴቶችን ይመልከቱ",
+      "manageEdirs": "እድሮችን ያስተዳድሩ",
+      "viewTrainings": "ስልጠናዎችን ይመልከቱ",
+      "viewJobs": "የስራ ምደባዎችን ይመልከቱ"
+    }
+  }
+}

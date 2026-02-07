@@ -1,0 +1,665 @@
+{
+  "socials": {
+    "dashboard": {
+      "title": "Social Affairs Dashboard",
+      "subtitle": "Manage Edir associations, members, and social reports.",
+      "registerEdir": "Register Edir",
+      "generateReport": "Generate Report",
+      "stats": {
+        "totalEdirs": "Total Edirs",
+        "totalMembers": "Total Members",
+        "recentGrowth": "Recent Growth",
+        "activeReports": "Active Reports"
+      },
+      "recentActivity": {
+        "title": "Recent Activity",
+        "monitoring": "Monitoring Social Trends",
+        "description": "Latest updates from Edir associations will be displayed here."
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "edirAssociations": "Edir Associations",
+        "importMembers": "Import Members",
+        "downloadTemplates": "Download Templates"
+      }
+    }
+  },
+  "elderlyAndDisabled": {
+    "dashboard": {
+      "title": "Elderly and Disabled Dashboard",
+      "subtitle": "Overview of registry, training, and job placement activities."
+    },
+    "layout": {
+      "title": "Disability & Elderly Module"
+    },
+    "registration": {
+      "title": "Register {type}",
+      "disabled": "Person with Disability",
+      "elderly": "Elderly Person",
+      "registerNew": "Register New",
+      "success": "{type} registered successfully",
+      "error": "Registration failed",
+      "sections": {
+        "basicInfo": "Basic Information",
+        "details": "{type} Details"
+      },
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "cityId": "City ID Number",
+        "phone": "Phone Number",
+        "dob": "Date of Birth",
+        "address": "Address",
+        "disabilityType": "Disability Type",
+        "disabilityLevel": "Disability Level",
+        "cause": "Cause of Disability",
+        "education": "Education Level",
+        "occupation": "Occupation",
+        "familyCount": "Family Members Count"
+      },
+      "placeholders": {
+        "firstName": "Enter first name",
+        "lastName": "Enter last name",
+        "cityId": "e.g. AA-12345",
+        "phone": "09...",
+        "address": "Enter address",
+        "disabilityType": "e.g. Physical, Visual",
+        "selectLevel": "Select level",
+        "cause": "e.g. Accident, Birth",
+        "education": "Enter level",
+        "occupation": "Enter occupation",
+        "familyCount": "0"
+      },
+      "levels": {
+        "mild": "Mild",
+        "moderate": "Moderate",
+        "severe": "Severe"
+      },
+      "buttons": {
+        "cancel": "Cancel"
+      }
+    },
+    "beneficiaries": {
+      "disabledTitle": "Persons with Disabilities",
+      "disabledSubtitle": "Manage registration and support for disabled beneficiaries.",
+      "elderlyTitle": "Elderly Persons",
+      "elderlySubtitle": "Manage registration and support for elderly beneficiaries.",
+      "registeredCard": "Registered Beneficiaries",
+      "searchPlaceholder": "Search beneficiaries...",
+      "filter": "Filter",
+      "loading": "Loading beneficiaries...",
+      "noRecords": "No beneficiaries found",
+      "noRecordsSubtitle": "Try adjusting your search or add a new record.",
+      "table": {
+        "fullName": "Full Name",
+        "cityId": "City ID",
+        "phone": "Phone Number",
+        "disabilityType": "Disability Type",
+        "livingCondition": "Living Condition",
+        "status": "Status",
+        "actions": "Actions",
+        "active": "Active",
+        "inactive": "Inactive",
+        "na": "N/A"
+      }
+    },
+    "jobs": {
+      "title": "Job Placements",
+      "subtitle": "Track employment and livelihood support for beneficiaries.",
+      "cardTitle": "Global Job Placements",
+      "searchPlaceholder": "Search position or company ID...",
+      "table": {
+        "beneficiary": "Beneficiary",
+        "companyId": "Company ID",
+        "position": "Position",
+        "startDate": "Start Date",
+        "loading": "Loading placements...",
+        "noRecords": "No job placements found"
+      },
+      "form": {
+        "title": "Add Job Placement",
+        "addButton": "Add Placement",
+        "fields": {
+          "beneficiary": "Beneficiary",
+          "companyId": "Company ID Number",
+          "jobTitle": "Job Title",
+          "startDate": "Start Date",
+          "remark": "Remark (Optional)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "Select a beneficiary",
+          "companyId": "Enter Company ID Number",
+          "jobTitle": "e.g. Accountant, Driver",
+          "remark": "Add any notes..."
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save Placement"
+        },
+        "messages": {
+          "success": "Job placement registered successfully",
+          "error": "Failed to register job placement"
+        }
+      }
+    },
+    "services": {
+      "title": "Support Services",
+      "subtitle": "Provide medical, financial, and material support.",
+      "cardTitle": "Global Support Records",
+      "searchPlaceholder": "Search service or provider...",
+      "table": {
+        "beneficiary": "Beneficiary",
+        "service": "Service",
+        "category": "Category",
+        "frequency": "Frequency",
+        "date": "Date Provided",
+        "loading": "Loading services...",
+        "noRecords": "No support services found"
+      },
+      "types": {
+        "1": "Startup Capital Support",
+        "2": "Monthly Financial Subsidy",
+        "3": "Emergency Medical Fund",
+        "4": "Food & Nutrition Support",
+        "5": "School Uniform & Material Support",
+        "6": "Sanitary Supplies",
+        "7": "Skill Development Training",
+        "8": "Legal Counseling",
+        "9": "Psychosocial Counseling",
+        "10": "Temporary Shelter",
+        "11": "Medical Checkup & Treatment",
+        "12": "Health Insurance Coverage",
+        "13": "Public Transport Pass",
+        "14": "Disability Financial Grant",
+        "15": "Mobility Device Supply"
+      },
+      "categories": {
+        "FINANCIAL": "Financial",
+        "SUPPLIES": "Supplies",
+        "TRAINING": "Training",
+        "LEGAL": "Legal",
+        "COUNSELING": "Counseling",
+        "SHELTER": "Shelter",
+        "MEDICAL": "Medical"
+      },
+      "form": {
+        "title": "Register Support Service",
+        "addButton": "Add Service",
+        "fields": {
+          "beneficiary": "Beneficiary",
+          "serviceType": "Service Type",
+          "provider": "Provider / Organization",
+          "amount": "Amount / Quantity",
+          "dateProvided": "Date Provided",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "remark": "Remark (Optional)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "Select a beneficiary",
+          "selectService": "Select service type",
+          "provider": "e.g. Red Cross, Local Gov",
+          "amount": "e.g. 5000 ETB or 2 Kits",
+          "subCity": "Enter Sub City",
+          "woreda": "Enter Woreda",
+          "remark": "Add specific notes..."
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Register Service"
+        },
+        "messages": {
+          "success": "Service registered successfully",
+          "error": "Failed to register service"
+        }
+      }
+    },
+    "training": {
+      "title": "Training Sessions",
+      "subtitle": "Track skills development and training for all beneficiaries.",
+      "cardTitle": "Global Training Records",
+      "searchPlaceholder": "Search training or name...",
+      "table": {
+        "beneficiary": "Beneficiary",
+        "type": "Type",
+        "provider": "Provider",
+        "dates": "Dates",
+        "coc": "COC",
+        "loading": "Loading trainings...",
+        "noRecords": "No training records found"
+      },
+      "coc": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "form": {
+        "title": "Add Training Record",
+        "addButton": "Add Record",
+        "fields": {
+          "beneficiary": "Beneficiary",
+          "trainingType": "Training Type",
+          "provider": "Provider / Institution",
+          "startDate": "Start Date",
+          "completionDate": "Completion Date",
+          "dropoutDate": "Dropout Date (If any)",
+          "dropoutReason": "Dropout Reason",
+          "hasCOC": "Has COC Certificate",
+          "remark": "Remark (Optional)"
+        },
+        "placeholders": {
+          "selectBeneficiary": "Select a beneficiary",
+          "selectTrainingType": "Select training type",
+          "provider": "Enter provider name",
+          "dropoutReason": "...",
+          "remark": "Add any notes..."
+        },
+        "trainingTypes": {
+          "AGRICULTURE": "Agriculture",
+          "BUSINESS": "Business",
+          "HOTEL_HOSPITALITY": "Hotel & Hospitality",
+          "HOUSE_CONSTRUCTION": "House Construction",
+          "AUTOMOTIVE": "Automotive",
+          "ELECTRICITY": "Electricity",
+          "ICT": "ICT",
+          "MUNICIPALITY_ADMIN": "Municipality Admin",
+          "ROAD_CONSTRUCTION": "Road Construction",
+          "AGRO_PROCESSING": "Agro Processing",
+          "FURNITURE_MAKING": "Furniture Making",
+          "TEXTILE_GARMENT": "Textile & Garment",
+          "LEATHER_WORK": "Leather Work",
+          "METAL_WORKING": "Metal Working",
+          "OTHER": "Other"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save Training"
+        },
+        "messages": {
+          "success": "Training record registered successfully",
+          "error": "Failed to register training"
+        }
+      }
+    },
+    "profile": {
+      "loading": "Loading profile...",
+      "notFound": "Beneficiary not found",
+      "goBack": "Go Back",
+      "badges": {
+        "id": "ID",
+        "active": "Active",
+        "inactive": "Inactive",
+        "disabled": "Disabled",
+        "elderly": "Elderly"
+      },
+      "personalInfo": {
+        "title": "Personal Information",
+        "phone": "Phone",
+        "address": "Address",
+        "dob": "Date of Birth",
+        "education": "Education",
+        "familyMembers": "Family Members",
+        "na": "N/A"
+      },
+      "disabilityDetails": {
+        "title": "Disability Details",
+        "type": "Type",
+        "cause": "Cause",
+        "unknown": "Unknown"
+      },
+      "tabs": {
+        "trainingHistory": "Training History",
+        "jobPlacements": "Job Placements",
+        "supportServices": "Support Services"
+      },
+      "trainingSection": {
+        "title": "Training Records",
+        "addButton": "+ Add Record",
+        "table": {
+          "trainingType": "Training Type",
+          "provider": "Provider",
+          "dates": "Dates",
+          "coc": "COC",
+          "yes": "Yes",
+          "no": "No",
+          "noRecords": "No training records found"
+        }
+      },
+      "jobsSection": {
+        "title": "Job Placements",
+        "addButton": "+ Add Placement",
+        "table": {
+          "companyId": "Company ID",
+          "position": "Position",
+          "startDate": "Start Date",
+          "noRecords": "No job placements found"
+        }
+      },
+      "servicesSection": {
+        "title": "Support Services",
+        "addButton": "+ Add Service",
+        "table": {
+          "service": "Service",
+          "category": "Category",
+          "provider": "Provider",
+          "date": "Date",
+          "noRecords": "No support services found"
+        }
+      }
+    },
+    "reports": {
+      "title": "Generate Beneficiary Report",
+      "description": "Select report type, filters, and columns to include.",
+      "categories": {
+        "registration": "Registration",
+        "training": "Training",
+        "jobs": "Jobs"
+      },
+      "types": {
+        "all": "All Types",
+        "disabled": "Disabled",
+        "elderly": "Elderly"
+      }
+    }
+  },
+  "edir": {
+    "list": {
+      "title": "Edir Associations",
+      "subtitle": "Manage traditional community associations",
+      "search": "Search...",
+      "noRecords": "No Edir associations found.",
+      "loading": "Loading Edir associations...",
+      "error": "Error loading Edir associations.",
+      "pagination": "Showing {start} to {end} of {total} entries",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "form": {
+      "createTitle": "Register New Edir",
+      "updateTitle": "Update Edir Association",
+      "createDesc": "Enter the details of the new Edir association.",
+      "updateDesc": "Update the details of the Edir association.",
+      "sections": {
+        "basic": "Basic Information",
+        "address": "Address",
+        "membership": "Membership Statistics",
+        "financials": "Financials & Remarks",
+        "reasons": "Establishment Reasons"
+      },
+      "fields": {
+        "name": "Edir Name",
+        "date": "Establishment Date",
+        "method": "Formation Method",
+        "subCity": "Sub City",
+        "woreda": "Woreda",
+        "kebele": "Kebele",
+        "houseNumber": "House Number",
+        "location": "Specific Location",
+        "bankAccount": "Bank Account Number",
+        "contribution": "Monthly Contribution",
+        "remarks": "Remarks",
+        "managementMembers": "Management Members",
+        "generalMembers": "General Members",
+        "male": "Male",
+        "female": "Female",
+        "total": "Total"
+      },
+      "methods": {
+        "government": "Government Issued",
+        "will": "Will of People"
+      },
+      "reasons": {
+        "residence": "Residence Based",
+        "religion": "Religion Based",
+        "workplace": "Workplace Based",
+        "gender": "Gender Based",
+        "ethnicity": "Ethnicity Based"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "register": "Register Edir",
+        "update": "Update Edir",
+        "registering": "Registering...",
+        "updating": "Updating..."
+      }
+    },
+    "edir": {
+      "list": {
+        "title": "Edir Associations",
+        "subtitle": "Manage traditional community associations",
+        "search": "Search...",
+        "loading": "Loading Edir associations...",
+        "error": "Error loading Edir associations.",
+        "noRecords": "No Edir associations found.",
+        "pagination": "Showing {start} to {end} of {total} entries",
+        "previous": "Previous",
+        "next": "Next",
+        "woreda": "Woreda",
+        "kebele": "Kebele",
+        "members": "Members",
+        "established": "Est",
+        "buttons": {
+          "viewDetails": "View Details"
+        }
+      },
+      "form": {
+        "updateTitle": "Update Edir Association",
+        "createTitle": "Register New Edir",
+        "updateDesc": "Update the details of the Edir association.",
+        "createDesc": "Enter the details of the new Edir association.",
+        "sections": {
+          "basic": "Basic Information",
+          "address": "Address",
+          "membership": "Membership Statistics",
+          "financials": "Financials & Remarks",
+          "reasons": "Establishment Reasons"
+        },
+        "fields": {
+          "name": "Edir Name",
+          "date": "Establishment Date",
+          "method": "Formation Method",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "kebele": "Kebele",
+          "houseNumber": "House Number",
+          "location": "Specific Location",
+          "bankAccount": "Bank Account Number",
+          "contribution": "Monthly Contribution",
+          "remarks": "Remarks",
+          "managementMembers": "Management Members",
+          "generalMembers": "General Members",
+          "male": "Male",
+          "female": "Female",
+          "total": "Total"
+        },
+        "methods": {
+          "government": "Government Issued",
+          "will": "Will of People"
+        },
+        "reasons": {
+          "residence": "Residence Based",
+          "religion": "Religion Based",
+          "workplace": "Workplace Based",
+          "gender": "Gender Based",
+          "ethnicity": "Ethnicity Based"
+        },
+        "buttons": {
+          "register": "Add New Edir",
+          "cancel": "Cancel",
+          "update": "Update Edir",
+          "updating": "Updating...",
+          "registering": "Registering..."
+        }
+      },
+      "import": {
+        "title": "Import Edir Associations",
+        "description": "Upload an Excel file to import multiple Edir associations at once.",
+        "success": "Edir associations imported successfully",
+        "error": "Failed to import Edir associations",
+        "buttons": {
+          "import": "Import Edir Associations",
+          "importing": "Importing...",
+          "cancel": "Cancel"
+        }
+      },
+      "report": {
+        "title": "Generate Edir Report",
+        "description": "Select filters and columns for your report.",
+        "success": "Report generated successfully",
+        "error": "Failed to generate report",
+        "fields": {
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "format": "Format"
+        },
+        "formats": {
+          "excel": "Excel",
+          "pdf": "PDF"
+        },
+        "columns": {
+          "title": "Columns",
+          "name": "Association Name",
+          "id": "ID",
+          "phone": "Phone Number",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "bankAccount": "Bank Account Number",
+          "date": "Establishment Date",
+          "members": "Members"
+        },
+        "buttons": {
+          "generate": "Generate Report",
+          "download": "Download",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "edir-details": {
+      "loading": "Loading details...",
+      "error": "Error loading Edir details or not found.",
+      "tabs": {
+        "overview": "Overview",
+        "members": "Members"
+      },
+      "buttons": {
+        "edit": "Edit Details"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "address": {
+        "woreda": "Woreda",
+        "kebele": "Kebele"
+      },
+      "sections": {
+        "general": "General Information",
+        "membership": "Membership Statistics",
+        "reasons": "Establishment Reasons",
+        "location": "Location Details",
+        "financial": "Financial Info"
+      },
+      "fields": {
+        "method": "Formation Method",
+        "remarks": "Description / Remarks",
+        "noRemarks": "No additional remarks provided.",
+        "otherReason": "Other Reason",
+        "managementMembers": "Management Members",
+        "generalMembers": "General Members",
+        "male": "Male",
+        "female": "Female",
+        "total": "Total Members",
+        "noReasons": "No specific reasons listed.",
+        "subCityWoredaKebele": "Sub City, Woreda, Kebele",
+        "houseNumber": "House Number",
+        "specificLocation": "Specific Location",
+        "bankAccountNumber": "Bank Account Number",
+        "monthlyPayment": "Monthly Payment",
+        "established": "Established On"
+      },
+      "reasons": {
+        "RESIDENCE": "Residence Based",
+        "RELIGION": "Religion Based",
+        "WORKPLACE": "Workplace Based",
+        "GENDER": "Gender Based",
+        "ETHNICITY": "Ethnicity Based"
+      }
+    },
+    "edir-members": {
+      "title": "Members ({count})",
+      "loading": "Loading members...",
+      "error": "Failed to load members.",
+      "noMembers": "No members found. Add one to get started.",
+      "table": {
+        "name": "Full Name",
+        "id": "Edir ID",
+        "position": "Position",
+        "phone": "Phone",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "positions": {
+        "MEMBER": "Member",
+        "LEADER": "Leader",
+        "COMMITTEE": "Committee",
+        "SECRETARY": "Secretary",
+        "CASHIER": "Cashier"
+      },
+      "form": {
+        "title": {
+          "add": "Add New Member",
+          "update": "Update Member"
+        },
+        "description": {
+          "add": "Enter the details of the new member.",
+          "update": "Update the details of the Edir member."
+        },
+        "fields": {
+          "fullName": "Full Name",
+          "cityId": "City ID",
+          "phone": "Phone Number",
+          "job": "Job",
+          "position": "Position",
+          "familyMembers": "Family Members",
+          "joinedAt": "Joined At",
+          "leftAt": "Left At (Optional)",
+          "isActive": "Is Active Member"
+        },
+        "placeholders": {
+          "fullName": "Full Name",
+          "cityId": "City ID",
+          "phone": "Phone Number",
+          "job": "Job",
+          "position": "Select position"
+        },
+        "buttons": {
+          "add": "Add Member",
+          "update": "Update Member",
+          "cancel": "Cancel",
+          "adding": "Adding...",
+          "updating": "Updating..."
+        },
+        "messages": {
+          "successAdd": "Member added successfully",
+          "successUpdate": "Member updated successfully"
+        }
+      },
+      "import": {
+        "title": "Import Members",
+        "description": "Upload an Excel file to import multiple members at once.",
+        "success": "Members imported successfully",
+        "error": "Failed to import members",
+        "buttons": {
+          "import": "Import Members",
+          "importing": "Importing...",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  }
+}

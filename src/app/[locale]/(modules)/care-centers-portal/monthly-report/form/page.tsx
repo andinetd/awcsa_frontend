@@ -26,6 +26,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import { useTranslations, useLocale } from "next-intl";
+
 export interface CareCenterReport {
   month: number;
   year: number;
@@ -37,6 +39,9 @@ export interface CareCenterReport {
 }
 
 export const CareCenterReportForm: React.FC = () => {
+  const t = useTranslations("care-centers-portal.monthlyReport");
+  const locale = useLocale();
+
   const [report, setReport] = useState<CareCenterReport>({
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
@@ -63,13 +68,13 @@ export const CareCenterReportForm: React.FC = () => {
         },
       });
 
-      toast.success("monthly report submitted successfully");
+      toast.success(t("messages.success"));
       router.push("/care-centers-portal");
     } catch (error) {
       console.error("Error submitting form:", error);
 
       // extract a useful message from AxiosError if possible
-      let message = "Failed to submit monthly report. Please try again.";
+      let message = t("messages.error");
 
       if (axios.isAxiosError(error)) {
         const axiosErr = error as AxiosError<any>;
@@ -134,13 +139,13 @@ export const CareCenterReportForm: React.FC = () => {
             <CardHeader className="bg-gradient-to-r from-slate-50 to-white">
               <CardTitle className="flex items-center gap-2 text-slate-800">
                 <Calendar className="w-5 h-5 text-blue-600" />
-                Reporting Period
+                {t("periodTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6 grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Month
+                  {t("month")}
                 </label>
                 <select
                   name="month"
@@ -150,7 +155,7 @@ export const CareCenterReportForm: React.FC = () => {
                 >
                   {Array.from({ length: 12 }, (_, i) => (
                     <option key={i + 1} value={i + 1}>
-                      {new Date(0, i).toLocaleString("default", {
+                      {new Date(0, i).toLocaleString(locale, {
                         month: "long",
                       })}
                     </option>
@@ -159,7 +164,7 @@ export const CareCenterReportForm: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Year
+                  {t("year")}
                 </label>
                 <input
                   type="number"
@@ -178,14 +183,14 @@ export const CareCenterReportForm: React.FC = () => {
             <CardHeader className="bg-gradient-to-r from-slate-50 to-white">
               <CardTitle className="flex items-center gap-2 text-slate-800">
                 <Users className="w-5 h-5 text-blue-600" />
-                Population Statistics
+                {t("statsTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                   <div className="flex items-center gap-2 mb-2 text-blue-800 font-semibold text-sm">
-                    <Users className="w-4 h-4" /> Total Children
+                    <Users className="w-4 h-4" /> {t("totalChildren")}
                   </div>
                   <input
                     type="number"
@@ -197,13 +202,13 @@ export const CareCenterReportForm: React.FC = () => {
                     placeholder="0"
                   />
                   <p className="text-xs text-blue-600 mt-2">
-                    Current census at month end
+                    {t("totalChildrenDesc")}
                   </p>
                 </div>
 
                 <div className="bg-green-50/50 p-4 rounded-xl border border-green-100">
                   <div className="flex items-center gap-2 mb-2 text-green-800 font-semibold text-sm">
-                    <ArrowUpRight className="w-4 h-4" /> New Admissions
+                    <ArrowUpRight className="w-4 h-4" /> {t("newAdmissions")}
                   </div>
                   <input
                     type="number"
@@ -215,13 +220,13 @@ export const CareCenterReportForm: React.FC = () => {
                     placeholder="0"
                   />
                   <p className="text-xs text-green-600 mt-2">
-                    Intake during this month
+                    {t("newAdmissionsDesc")}
                   </p>
                 </div>
 
                 <div className="bg-orange-50/50 p-4 rounded-xl border border-orange-100">
                   <div className="flex items-center gap-2 mb-2 text-orange-800 font-semibold text-sm">
-                    <ArrowDownLeft className="w-4 h-4" /> Discharges
+                    <ArrowDownLeft className="w-4 h-4" /> {t("discharges")}
                   </div>
                   <input
                     type="number"
@@ -233,7 +238,7 @@ export const CareCenterReportForm: React.FC = () => {
                     placeholder="0"
                   />
                   <p className="text-xs text-orange-600 mt-2">
-                    Exits/Adoptions this month
+                    {t("dischargesDesc")}
                   </p>
                 </div>
               </div>
@@ -244,31 +249,31 @@ export const CareCenterReportForm: React.FC = () => {
             <CardHeader className="bg-gradient-to-r from-slate-50 to-white">
               <CardTitle className="flex items-center gap-2 text-slate-800">
                 <FileText className="w-5 h-5 text-blue-600" />
-                Additional Details
+                {t("additionalDetails")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Notes & Observations
+                  {t("notes")}
                 </label>
                 <textarea
                   name="notes"
                   value={report.notes}
                   onChange={handleChange}
-                  placeholder="Enter qualitative report details, challenges, or success stories..."
+                  placeholder={t("notesPlaceholder")}
                   className="w-full min-h-[120px] p-3 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm resize-y"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Additional Form Data (JSON/String)
+                  {t("formData")}
                 </label>
                 <textarea
                   name="formData"
                   value={report.formData}
                   onChange={handleChange}
-                  placeholder="Paste specific data strings or encoded form data here..."
+                  placeholder={t("formDataPlaceholder")}
                   className="w-full min-h-[100px] p-3 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-mono text-slate-600 bg-slate-50 resize-y"
                 />
               </div>
@@ -281,19 +286,15 @@ export const CareCenterReportForm: React.FC = () => {
           <Card className="shadow-lg">
             <CardContent className="p-6">
               <Building2 className="w-10 h-10 mb-4" />
-              <h3 className="text-lg font-bold mb-2">Monthly Reporting</h3>
-              <p className="text-sm mb-6">
-                Please ensure all statistical data is accurate before
-                submission. This report feeds into the central bureau dashboard
-                for resource allocation.
-              </p>
+              <h3 className="text-lg font-bold mb-2">{t("title")}</h3>
+              <p className="text-sm mb-6">{t("subtitle")}</p>
               <Button
                 type="submit"
                 variant="outline"
                 className="w-full bg-white text-blue-700 hover:bg-blue-50"
               >
                 <Save className="w-4 h-4 mr-2" />
-                Submit Report
+                {t("submit")}
               </Button>
             </CardContent>
           </Card>

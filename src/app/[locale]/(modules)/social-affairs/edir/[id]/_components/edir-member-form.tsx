@@ -45,12 +45,16 @@ interface EdirMemberFormProps {
   onSuccess?: () => void;
 }
 
+import { useTranslations } from "next-intl";
+
 export default function EdirMemberForm({
   associationId,
   initialData,
   trigger,
   onSuccess,
 }: EdirMemberFormProps) {
+  const t = useTranslations("social-affairs.edir.edir-members.form");
+  const tp = useTranslations("social-affairs.edir.edir-members.positions");
   const [open, setOpen] = useState(false);
   const addMutation = useAddEdirMemberMutation();
   const updateMutation = useUpdateEdirMemberMutation();
@@ -121,17 +125,17 @@ export default function EdirMemberForm({
         {
           onSuccess: () => {
             setOpen(false);
-            toast.success("Member updated successfully");
+            toast.success(t("messages.successUpdate"));
             onSuccess?.();
           },
-        }
+        },
       );
     } else {
       addMutation.mutate(payload, {
         onSuccess: () => {
           setOpen(false);
           form.reset();
-          toast.success("Member added successfully");
+          toast.success(t("messages.successAdd"));
           onSuccess?.();
         },
       });
@@ -146,19 +150,17 @@ export default function EdirMemberForm({
         ) : (
           <Button size="sm" className="gap-2">
             <Plus className="w-4 h-4" />
-            Add Member
+            {t("buttons.add")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditMode ? "Update Member" : "Add New Member"}
+            {isEditMode ? t("title.update") : t("title.add")}
           </DialogTitle>
           <DialogDescription>
-            {isEditMode
-              ? "Update the details of the Edir member."
-              : "Enter the details of the new member."}
+            {isEditMode ? t("description.update") : t("description.add")}
           </DialogDescription>
         </DialogHeader>
 
@@ -169,9 +171,12 @@ export default function EdirMemberForm({
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>{t("fields.fullName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Full Name" {...field} />
+                    <Input
+                      placeholder={t("placeholders.fullName")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -184,9 +189,12 @@ export default function EdirMemberForm({
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City ID</FormLabel>
+                    <FormLabel>{t("fields.cityId")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="City ID" {...field} />
+                      <Input
+                        placeholder={t("placeholders.cityId")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,9 +205,9 @@ export default function EdirMemberForm({
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>{t("fields.phone")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Phone Number" {...field} />
+                      <Input placeholder={t("placeholders.phone")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,9 +221,9 @@ export default function EdirMemberForm({
                 name="job"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Job</FormLabel>
+                    <FormLabel>{t("fields.job")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Job" {...field} />
+                      <Input placeholder={t("placeholders.job")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -226,7 +234,7 @@ export default function EdirMemberForm({
                 name="position"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Position</FormLabel>
+                    <FormLabel>{t("fields.position")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -234,15 +242,21 @@ export default function EdirMemberForm({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select position" />
+                          <SelectValue
+                            placeholder={t("placeholders.position")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="MEMBER">Member</SelectItem>
-                        <SelectItem value="LEADER">Leader</SelectItem>
-                        <SelectItem value="COMMITTEE">Committee</SelectItem>
-                        <SelectItem value="SECRETARY">Secretary</SelectItem>
-                        <SelectItem value="CASHIER">Cashier</SelectItem>
+                        <SelectItem value="MEMBER">{tp("MEMBER")}</SelectItem>
+                        <SelectItem value="LEADER">{tp("LEADER")}</SelectItem>
+                        <SelectItem value="COMMITTEE">
+                          {tp("COMMITTEE")}
+                        </SelectItem>
+                        <SelectItem value="SECRETARY">
+                          {tp("SECRETARY")}
+                        </SelectItem>
+                        <SelectItem value="CASHIER">{tp("CASHIER")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -257,7 +271,7 @@ export default function EdirMemberForm({
                 name="familyMembersCount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Family Members</FormLabel>
+                    <FormLabel>{t("fields.familyMembers")}</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -270,7 +284,7 @@ export default function EdirMemberForm({
                 name="joinedAt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Joined At</FormLabel>
+                    <FormLabel>{t("fields.joinedAt")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -286,7 +300,7 @@ export default function EdirMemberForm({
                 name="leftAt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Left At (Optional)</FormLabel>
+                    <FormLabel>{t("fields.leftAt")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -308,7 +322,7 @@ export default function EdirMemberForm({
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Is Active Member</FormLabel>
+                    <FormLabel>{t("fields.isActive")}</FormLabel>
                   </div>
                 </FormItem>
               )}
@@ -320,16 +334,16 @@ export default function EdirMemberForm({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("buttons.cancel")}
               </Button>
               <Button type="submit" disabled={isPending}>
                 {isPending
                   ? isEditMode
-                    ? "Updating..."
-                    : "Adding..."
+                    ? t("buttons.updating")
+                    : t("buttons.adding")
                   : isEditMode
-                  ? "Update Member"
-                  : "Add Member"}
+                    ? t("buttons.update")
+                    : t("buttons.add")}
               </Button>
             </div>
           </form>

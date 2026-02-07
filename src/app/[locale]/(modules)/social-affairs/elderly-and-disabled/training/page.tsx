@@ -23,7 +23,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import TrainingForm from "../_components/training-form";
 
+import { useTranslations } from "next-intl";
+
 export default function TrainingPage() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.training");
   const { data: trainings, isLoading } = useGetTrainingsQuery();
   const [search, setSearch] = useState("");
 
@@ -34,7 +37,7 @@ export default function TrainingPage() {
         item.provider.toLowerCase().includes(search.toLowerCase()) ||
         `${item.client?.firstName} ${item.client?.lastName}`
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(search.toLowerCase()),
     ) || [];
 
   return (
@@ -42,11 +45,9 @@ export default function TrainingPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-            Training Sessions
+            {t("title")}
           </h1>
-          <p className="text-slate-500 mt-1">
-            Track skills development and training for all beneficiaries.
-          </p>
+          <p className="text-slate-500 mt-1">{t("subtitle")}</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <TrainingForm />
@@ -57,13 +58,13 @@ export default function TrainingPage() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-primary" />
-            Global Training Records
+            {t("cardTitle")}
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
               <Input
-                placeholder="Search training or name..."
+                placeholder={t("searchPlaceholder")}
                 className="pl-8 bg-slate-50/50 border-slate-200"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -79,47 +80,57 @@ export default function TrainingPage() {
             <Table>
               <TableHeader className="bg-slate-50">
                 <TableRow>
-                  <TableHead className="font-semibold">Beneficiary</TableHead>
-                  <TableHead className="font-semibold">Type</TableHead>
-                  <TableHead className="font-semibold">Provider</TableHead>
-                  <TableHead className="font-semibold">Dates</TableHead>
-                  <TableHead className="font-semibold">COC</TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.beneficiary")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.type")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.provider")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.dates")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.coc")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-10">
-                      Loading trainings...
+                      {t("table.loading")}
                     </TableCell>
                   </TableRow>
                 ) : filteredData.length > 0 ? (
-                  filteredData.map((t: any) => (
+                  filteredData.map((tr: any) => (
                     <TableRow
-                      key={t.id}
+                      key={tr.id}
                       className="hover:bg-slate-50/50 transition-colors"
                     >
                       <TableCell className="font-medium">
-                        {t.client?.firstName} {t.client?.lastName}
+                        {tr.client?.firstName} {tr.client?.lastName}
                         <p className="text-xs text-slate-400">
-                          {t.client?.cityIdNumber}
+                          {tr.client?.cityIdNumber}
                         </p>
                       </TableCell>
-                      <TableCell>{t.trainingType}</TableCell>
-                      <TableCell>{t.provider}</TableCell>
+                      <TableCell>{tr.trainingType}</TableCell>
+                      <TableCell>{tr.provider}</TableCell>
                       <TableCell className="text-sm">
-                        {new Date(t.startDate).toLocaleDateString()}
-                        {t.completionDate &&
+                        {new Date(tr.startDate).toLocaleDateString()}
+                        {tr.completionDate &&
                           ` - ${new Date(
-                            t.completionDate
+                            tr.completionDate,
                           ).toLocaleDateString()}`}
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={t.hasCOC ? "default" : "secondary"}
+                          variant={tr.hasCOC ? "default" : "secondary"}
                           className="rounded-full"
                         >
-                          {t.hasCOC ? "Yes" : "No"}
+                          {tr.hasCOC ? t("coc.yes") : t("coc.no")}
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -130,7 +141,7 @@ export default function TrainingPage() {
                       colSpan={5}
                       className="text-center py-10 text-slate-400"
                     >
-                      No training records found
+                      {t("table.noRecords")}
                     </TableCell>
                   </TableRow>
                 )}

@@ -577,7 +577,7 @@ export default function NewChildForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.back()}
+              onClick={() => router.push("/adoption/children")}
             >
               {t("buttons.back")}
             </Button>

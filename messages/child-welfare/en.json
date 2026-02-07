@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "Child Welfare Dashboard",
+    "subtitle": "Overview of children, care centers, and adoption processes",
+    "loading": "Loading dashboard...",
+    "children": {
+      "title": "Children",
+      "total": "Total Children",
+      "found": "Found",
+      "inCare": "In Care",
+      "adopted": "Adopted",
+      "fostered": "Fostered"
+    },
+    "adoption": {
+      "title": "Adoption",
+      "totalApplicants": "Total Applicants"
+    },
+    "infrastructure": {
+      "title": "Infrastructure",
+      "totalFacilities": "Total Facilities",
+      "reports": "Reports",
+      "pending": "Pending Reports",
+      "submitted": "Submitted Reports"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "registerChild": "Register Child",
+      "viewChildren": "View All Children",
+      "manageAdoptions": "Manage Adoptions",
+      "viewFacilities": "View Facilities"
+    }
+  }
+}

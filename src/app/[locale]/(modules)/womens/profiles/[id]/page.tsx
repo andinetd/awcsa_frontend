@@ -8,22 +8,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   User,
   Phone,
-  MapPin,
   CalendarDays,
   Briefcase,
   GraduationCap,
-  DollarSign,
   ArrowLeft,
   Edit,
   ToggleLeft,
 } from "lucide-react";
 import EditWomenProfileForm from "../../women-list/_components/edit-women-profile-form";
 import StatusToggleDialog from "../../women-list/_components/status-toggle-dialog";
+import { useTranslations } from "next-intl";
 
 const WomenProfileDetail = () => {
   const params = useParams();
   const router = useRouter();
   const id = parseInt(params.id as string);
+  const t = useTranslations("womens");
 
   const { data: profile, isLoading, isError } = useGetWomenProfileByIdQuery(id);
 
@@ -33,7 +33,7 @@ const WomenProfileDetail = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-lg">Loading profile...</div>
+        <div className="text-lg">{t("profileDetail.loading")}</div>
       </div>
     );
   }
@@ -41,8 +41,10 @@ const WomenProfileDetail = () => {
   if (isError || !profile) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
-        <div className="text-lg text-red-500">Failed to load profile</div>
-        <Button onClick={() => router.back()}>Go Back</Button>
+        <div className="text-lg text-red-500">{t("profileDetail.error")}</div>
+        <Button onClick={() => router.back()}>
+          {t("profileDetail.goBack")}
+        </Button>
       </div>
     );
   }
@@ -64,7 +66,7 @@ const WomenProfileDetail = () => {
             <h1 className="text-3xl font-bold">
               {profile.client.firstName} {profile.client.lastName}
             </h1>
-            <p className="text-muted-foreground">Women Profile Details</p>
+            <p className="text-muted-foreground">{t("profileDetail.title")}</p>
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -74,20 +76,26 @@ const WomenProfileDetail = () => {
                 profile.approvalStatus === "APPROVED"
                   ? "bg-green-100 text-green-700"
                   : profile.approvalStatus === "PENDING"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-red-100 text-red-700"
+                    ? "bg-yellow-100 text-yellow-700"
+                    : "bg-red-100 text-red-700"
               }`}
             >
-              {profile.approvalStatus}
+              {t(
+                `status.approval.${
+                  profile.approvalStatus === "PENDING"
+                    ? "PENDING_APPROVAL"
+                    : profile.approvalStatus
+                }`,
+              )}
             </span>
           )}
           {profile.isActive ? (
             <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
-              Active
+              {t("profileDetail.active")}
             </span>
           ) : (
             <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
-              Inactive
+              {t("profileDetail.inactive")}
             </span>
           )}
         </div>
@@ -97,11 +105,11 @@ const WomenProfileDetail = () => {
       <div className="flex gap-2">
         <Button onClick={() => setEditDialogOpen(true)}>
           <Edit className="h-4 w-4 mr-2" />
-          Edit Profile
+          {t("profileDetail.editProfile")}
         </Button>
         <Button variant="outline" onClick={() => setStatusDialogOpen(true)}>
           <ToggleLeft className="h-4 w-4 mr-2" />
-          Toggle Status
+          {t("profileDetail.toggleStatus")}
         </Button>
       </div>
 
@@ -112,22 +120,28 @@ const WomenProfileDetail = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <User className="h-5 w-5" />
-              Personal Information
+              {t("profileDetail.personalInfo")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground">City ID Number</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.cityIdNumber")}
+              </p>
               <p className="font-medium">{profile.client.cityIdNumber}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Full Name</p>
+              <p className="text-sm text-muted-foreground">
+                {t("profileDetail.fullName")}
+              </p>
               <p className="font-medium">
                 {profile.client.firstName} {profile.client.lastName}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Date of Birth</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.dateOfBirth")}
+              </p>
               <p className="font-medium">
                 {new Date(profile.client.dateOfBirth).toLocaleDateString(
                   undefined,
@@ -135,7 +149,7 @@ const WomenProfileDetail = () => {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  }
+                  },
                 )}
               </p>
             </div>
@@ -147,21 +161,27 @@ const WomenProfileDetail = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Phone className="h-5 w-5" />
-              Contact Information
+              {t("profileDetail.contactInfo")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground">Phone Number</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.phoneNumber")}
+              </p>
               <p className="font-medium">{profile.client.phoneNumber}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Address</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.addressTitle")}
+              </p>
               <p className="font-medium">{profile.client.address}</p>
             </div>
             {profile.client.contactInfo?.email && (
               <div>
-                <p className="text-sm text-muted-foreground">Email</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("profileDetail.email")}
+                </p>
                 <p className="font-medium">
                   {profile.client.contactInfo.email}
                 </p>
@@ -175,20 +195,26 @@ const WomenProfileDetail = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <GraduationCap className="h-5 w-5" />
-              Education & Employment
+              {t("profileDetail.educationEmployment")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground">Education Level</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.educationLevel")}
+              </p>
               <p className="font-medium">{profile.educationLevel}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Occupation</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.occupation")}
+              </p>
               <p className="font-medium">{profile.occupation}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Monthly Income</p>
+              <p className="text-sm text-muted-foreground">
+                {t("form.monthlyIncome")}
+              </p>
               <p className="font-medium">
                 {Intl.NumberFormat("en-US", {
                   style: "currency",
@@ -204,31 +230,37 @@ const WomenProfileDetail = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <CalendarDays className="h-5 w-5" />
-              Additional Information
+              {t("profileDetail.additionalInfo")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {profile.photoUrl && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Photo URL</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("form.photoUrl")}
+                  </p>
                   <a
                     href={profile.photoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline text-sm"
                   >
-                    View Photo
+                    {t("profileDetail.viewPhoto")}
                   </a>
                 </div>
               )}
               <div>
-                <p className="text-sm text-muted-foreground">Client Category</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("profileDetail.clientCategory")}
+                </p>
                 <p className="font-medium">{profile.client.clientCategory}</p>
               </div>
               {profile.createdAt && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Registered On</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("profileDetail.registeredOn")}
+                  </p>
                   <p className="font-medium">
                     {new Date(profile.createdAt).toLocaleDateString(undefined, {
                       year: "numeric",
@@ -240,7 +272,9 @@ const WomenProfileDetail = () => {
               )}
               {profile.updatedAt && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Last Updated</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("profileDetail.lastUpdated")}
+                  </p>
                   <p className="font-medium">
                     {new Date(profile.updatedAt).toLocaleDateString(undefined, {
                       year: "numeric",

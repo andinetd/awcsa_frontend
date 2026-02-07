@@ -3,17 +3,16 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth-store";
 import { TrainingPayload, TrainingRecord } from "./types";
 
-export const getTrainings = async (clientId?: number) => {
+export const getTrainings = async (cityId?: string) => {
   const { token } = useAuthStore.getState();
-  const url = clientId
-    ? `${BASE_URL}/beneficiaries/training/${clientId}`
-    : `${BASE_URL}/beneficiaries/training`;
+  const url = `${BASE_URL}/disability-elderly/history/trainings`;
 
   try {
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: cityId ? { cityId } : undefined,
     });
     return response.data;
   } catch (error: any) {
@@ -28,7 +27,7 @@ export const registerTraining = async (data: TrainingPayload) => {
 
   try {
     const response = await axios.post(
-      `${BASE_URL}/beneficiaries/training`,
+      `${BASE_URL}/disability-elderly/training`,
       data,
       {
         headers: {

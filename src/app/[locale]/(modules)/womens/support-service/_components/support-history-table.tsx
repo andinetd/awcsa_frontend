@@ -8,13 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, ClipboardList } from "lucide-react";
+import { Eye } from "lucide-react";
 import { SupportService } from "@/api/support/support-service";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import MonitoringForm from "./monitoring-form";
+import { useTranslations } from "next-intl";
 
 interface SupportHistoryTableProps {
   data: SupportService[];
@@ -24,10 +23,14 @@ export default function SupportHistoryTable({
   data,
 }: SupportHistoryTableProps) {
   const router = useRouter();
+  const t = useTranslations("womens");
+
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-muted/20">
-        <p className="text-muted-foreground">No support history found.</p>
+        <p className="text-muted-foreground">
+          {t("support.history.table.noHistory")}
+        </p>
       </div>
     );
   }
@@ -37,19 +40,23 @@ export default function SupportHistoryTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Service Type</TableHead>
-            <TableHead>Provider</TableHead>
-            <TableHead>Amount/Quantity</TableHead>
-            <TableHead>Date Provided</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("support.history.table.serviceType")}</TableHead>
+            <TableHead>{t("support.history.table.provider")}</TableHead>
+            <TableHead>{t("support.history.table.amount")}</TableHead>
+            <TableHead>{t("support.history.table.date")}</TableHead>
+            <TableHead>{t("support.history.table.location")}</TableHead>
+            <TableHead className="text-right">
+              {t("support.history.table.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((service) => (
             <TableRow key={service.id}>
               <TableCell className="font-medium">
-                {service.serviceType?.name || "N/A"}
+                {service.serviceType?.name
+                  ? t(`serviceTypes.${service.serviceType.name}`)
+                  : "N/A"}
               </TableCell>
               <TableCell>{service.provider}</TableCell>
               <TableCell>{service.amountOrQuantity}</TableCell>
@@ -63,14 +70,13 @@ export default function SupportHistoryTable({
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                  {/* <MonitoringForm supportServiceId={service.id} /> */}
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() =>
                       router.push(`/womens/support-service/${service.id}`)
                     }
-                    title="View Details"
+                    title={t("womenList.card.viewDetails")}
                   >
                     <Eye className="w-4 h-4" />
                   </Button>

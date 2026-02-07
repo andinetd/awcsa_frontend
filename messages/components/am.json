@@ -1,0 +1,47 @@
+{
+  "ageInput": {
+    "units": {
+      "years": "ዓመታት",
+      "months": "ወራት"
+    },
+    "placeholders": {
+      "years": "ምሳሌ፡ 2.5",
+      "months": "ምሳሌ፡ 30"
+    },
+    "helper": {
+      "years": "{value} ዓመት",
+      "months": "{value} ወር"
+    }
+  },
+  "fileDropzone": {
+    "limitReached": "የፋይል ገደብ ተደርሷል",
+    "uploadLimit": "የፋይል ገደብ ተደርሷል ({current}/{max})",
+    "removeToUpload": "ተጨማሪ ለመጫን የተወሰኑ ፋይሎችን ያስወግዱ",
+    "invalidFileType": "ልክ ያልሆነ የፋይል አይነት። እባክዎ እንደገና ይሞክሩ።",
+    "dropHere": "ፋይሎችዎን እዚህ ያስቀምጡ",
+    "dropOrBrowse": "ፋይሎችዎን እዚህ ያስቀምጡ ወይም {browse}",
+    "browse": "ይፈልጉ",
+    "maxSize": "ከፍተኛው መጠን: {size}",
+    "filesRemaining": "{count, plural, one {# ፋይል ቀርቷል} other {# ፋይሎች ቀርተዋል}}",
+    "errorTooLarge": "ፋይሉ በጣም ትልቅ ነው። ከፍተኛው መጠን {size} ነው።",
+    "errorInvalidType": "ልክ ያልሆነ የፋይል አይነት። እባክዎ የተፈቀዱ የፋይል አይነቶችን ያረጋግጡ።",
+    "units": {
+      "bytes": "ባይት",
+      "kb": "ኪ.ባ",
+      "mb": "ሜ.ባ",
+      "gb": "ጂ.ባ"
+    }
+  },
+  "userLogout": {
+    "logout": "ውጣ",
+    "loggingOut": "በመውጣት ላይ...",
+    "success": "በተሳካ ሁኔታ ወጥተዋል",
+    "failed": "መውጣት አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
+    "ariaMenu": "የተጠቃሚ ሜኑ ቀይር",
+    "avatarAlt": "የተጠቃሚ ምስል"
+  },
+  "accessCheck": {
+    "checking": "ፍቃድ በመፈተሽ ላይ",
+    "logoAlt": "የWCSA አርማ"
+  }
+}

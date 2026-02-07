@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, CheckCircle2, Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const statusColorMap: Record<ComplaintStatus, string> = {
   [ComplaintStatus.PENDING]: "bg-yellow-100 text-yellow-800",
@@ -32,6 +33,8 @@ const statusColorMap: Record<ComplaintStatus, string> = {
 };
 
 export function ComplaintList() {
+  const t = useTranslations("applicants-portal.complaints");
+  const tCommon = useTranslations("complaints"); // Using common status translations
   const { data: complaints, isLoading } = useMyComplaintsQuery();
 
   if (isLoading) {
@@ -44,11 +47,30 @@ export function ComplaintList() {
     );
   }
 
+  const getStatusLabel = (status: ComplaintStatus) => {
+    switch (status) {
+      case ComplaintStatus.PENDING:
+        return tCommon("statuses.pending");
+      case ComplaintStatus.IN_PROGRESS:
+        return tCommon("statuses.inProgress");
+      case ComplaintStatus.RESOLVED:
+        return tCommon("statuses.resolved");
+      case ComplaintStatus.REJECTED:
+        return tCommon("statuses.rejected");
+      default:
+        return status;
+    }
+  };
+
+  const getCategoryLabel = (category: string) => {
+    return t(`categories.${category.toLowerCase()}`);
+  };
+
   if (!complaints || complaints.length === 0) {
     return (
       <div className="text-center py-12 border rounded-xl bg-gray-50/50 flex flex-col items-center gap-3">
         <MessageSquare className="h-8 w-8 text-gray-300" />
-        <p className="text-gray-500 font-medium">No complaints found.</p>
+        <p className="text-gray-500 font-medium">{t("list.noComplaints")}</p>
       </div>
     );
   }
@@ -58,11 +80,13 @@ export function ComplaintList() {
       <Table>
         <TableHeader className="bg-gray-50/50">
           <TableRow>
-            <TableHead className="w-[140px]">Date</TableHead>
-            <TableHead>Subject</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="w-[140px]">{t("list.table.date")}</TableHead>
+            <TableHead>{t("list.table.subject")}</TableHead>
+            <TableHead>{t("list.table.category")}</TableHead>
+            <TableHead>{t("list.table.status")}</TableHead>
+            <TableHead className="text-right">
+              {t("list.table.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -78,14 +102,14 @@ export function ComplaintList() {
                 {complaint.subject}
               </TableCell>
               <TableCell className="text-gray-600 capitalize">
-                {complaint.category.replace("_", " ").toLowerCase()}
+                {getCategoryLabel(complaint.category)}
               </TableCell>
               <TableCell>
                 <Badge
                   variant="secondary"
                   className={`${statusColorMap[complaint.status]} border-none font-medium`}
                 >
-                  {complaint.status.replace("_", " ")}
+                  {getStatusLabel(complaint.status)}
                 </Badge>
               </TableCell>
               <TableCell className="text-right">
@@ -94,22 +118,22 @@ export function ComplaintList() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="hover:bg-primary/5 hover:text-primary"
+                      className="hover:bg-primary/5 hover:text-primary hover:cursor-pointer"
                     >
-                      View Details
+                      {t("list.table.viewDetails")}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-2xl">
+                  <DialogContent className="max-w-2xl hover:cursor-default">
                     <DialogHeader>
                       <div className="flex items-center gap-2 mb-1">
                         <Badge
                           variant="secondary"
                           className={`${statusColorMap[complaint.status]} border-none`}
                         >
-                          {complaint.status}
+                          {getStatusLabel(complaint.status)}
                         </Badge>
                         <span className="text-xs text-gray-400">
-                          Last updated:{" "}
+                          {t("list.dialog.lastUpdated")}:{" "}
                           {format(new Date(complaint.updatedAt), "PPP")}
                         </span>
                       </div>
@@ -117,8 +141,8 @@ export function ComplaintList() {
                         {complaint.subject}
                       </DialogTitle>
                       <DialogDescription className="capitalize">
-                        Category:{" "}
-                        {complaint.category.replace("_", " ").toLowerCase()}
+                        {t("list.dialog.categoryLabel")}:{" "}
+                        {getCategoryLabel(complaint.category)}
                       </DialogDescription>
                     </DialogHeader>
 
@@ -127,7 +151,7 @@ export function ComplaintList() {
                         <div>
                           <h4 className="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
                             <MessageSquare className="h-4 w-4 text-primary" />
-                            Your Message
+                            {t("list.dialog.yourMessage")}
                           </h4>
                           <div className="bg-gray-50 p-4 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
                             {complaint.description}
@@ -138,7 +162,7 @@ export function ComplaintList() {
                           <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                             <h4 className="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2 text-green-700">
                               <CheckCircle2 className="h-4 w-4" />
-                              Response
+                              {t("list.dialog.response")}
                             </h4>
                             <div className="bg-green-50/50 p-4 rounded-lg text-sm text-gray-800 leading-relaxed border border-green-100">
                               {complaint.resolution}
@@ -148,8 +172,7 @@ export function ComplaintList() {
                           <div className="flex items-center gap-3 bg-blue-50/50 p-4 rounded-lg border border-blue-100">
                             <Clock className="h-5 w-5 text-blue-500 animate-pulse" />
                             <p className="text-sm text-blue-700 font-medium">
-                              Our team is currently reviewing your complaint.
-                              You will see the resolution here once completed.
+                              {t("list.dialog.reviewingMsg")}
                             </p>
                           </div>
                         )}

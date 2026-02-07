@@ -1,0 +1,25 @@
+{
+  "page": {
+    "welcome": "Welcome",
+    "signInTitle": "Sign in",
+    "copyright": "@{year} Bureau of Women, children & social Affairs.",
+    "location": "Addis Ababa",
+    "logoAlt": "WCSA Logo"
+  },
+  "form": {
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "errors": {
+      "invalidEmail": "Invalid email address",
+      "passwordMin": "Password must be at least 8 characters",
+      "recaptchaNotAvailable": "Recaptcha not yet available, try again in a second",
+      "recaptchaFailed": "Recaptcha failed, please try again",
+      "signInFailed": "Sign-in failed: {message}"
+    }
+  }
+}

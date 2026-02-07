@@ -1,0 +1,81 @@
+{
+  "management": {
+    "layoutTitle": "የቅሬታ አስተዳደር",
+    "description": "የስርዓት ቅሬታዎችን ይገምግሙ እና ይፍቱ",
+    "card": {
+      "title": "ሁሉም ቅሬታዎች",
+      "description": "በአመልካቾች የቀረቡ የቅሬታዎች ዝርዝር።"
+    },
+    "table": {
+      "date": "ቀን",
+      "applicant": "አመልካች",
+      "subject": "ርዕሰ ጉዳይ",
+      "category": "ምድብ",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች",
+      "review": "ገምግም",
+      "noComplaints": "ምንም ቅሬታ አልተገኘም።",
+      "unknown": "ያልታወቀ"
+    }
+  },
+  "review": {
+    "dialogTitle": "የቅሬታ ግምገማ እና ውሳኔ",
+    "dialogDescription": "ውሳኔ ለመስጠት ዝርዝር ቅሬታውን እና የአመልካቹን መረጃ ይገምግሙ።",
+    "loading": "የቅሬታ ዝርዝሮችን በመጫን ላይ...",
+    "error": "የቅሬታ ዝርዝሮችን መጫን አልተቻለም።",
+    "applicantDetails": {
+      "title": "የአመልካች ዝርዝሮች",
+      "fullName": "ሙሉ ስም",
+      "cityId": "የመታወቂያ ቁጥር",
+      "category": "ምድብ"
+    },
+    "contactInfo": {
+      "title": "የእውቂያ መረጃ",
+      "noAddress": "ምንም አድራሻ አልተሰጠም"
+    },
+    "professionalPersonal": {
+      "title": "ሙያዊ እና ግላዊ",
+      "education": "ትምህርት",
+      "occupation": "ሥራ",
+      "familySize": "የቤተሰብ ብዛት"
+    },
+    "vitalDates": {
+      "title": "አስፈላጊ ቀናት",
+      "dob": "የትውልድ ቀን",
+      "accountCreated": "መለያ የተፈጠረበት",
+      "na": "የለም"
+    },
+    "complaint": {
+      "subject": "ርዕሰ ጉዳይ",
+      "description": "መግለጫ"
+    },
+    "resolution": {
+      "label": "የመፍትሄ ዝርዝሮች / የውሳኔ ምክንያቶች",
+      "placeholder": "ስለ መፍትሄው ወይም ለምን ውድቅ እንደተደረገ ዝርዝር መግለጫ ይስጡ...",
+      "note": "ይህ ማስታወሻ ለውሳኔው ጊዜ ለአመልካቹ ይታያል።"
+    },
+    "buttons": {
+      "cancel": "ተመለስ",
+      "reject": "ውድቅ አድርግ",
+      "takeAction": "እርምጃ ይውሰዱ",
+      "resolve": "ፍታ",
+      "close": "ዝጋ"
+    },
+    "messages": {
+      "provideResolution": "እባክዎን መፍትሄ ይስጡ"
+    }
+  },
+  "statuses": {
+    "pending": "በመጠባበቅ ላይ",
+    "inProgress": "በሂደት ላይ",
+    "resolved": "ተፈቷል",
+    "rejected": "ውድቅ ተደርጓል"
+  },
+  "categories": {
+    "process_delay": "የሂደት መዘግየት",
+    "staff_behavior": "የሰራተኛ ስነ-ምግባር",
+    "documentation_issue": "የሰነድ ችግር",
+    "system_error": "የስርዓት ስህተት",
+    "other": "ሌላ"
+  }
+}

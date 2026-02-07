@@ -1,0 +1,88 @@
+{
+  "dashboard": {
+    "title": "የዳሽቦርድ አጠቃላይ እይታ",
+    "stats": {
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "totalFacilities": "ጠቅላላ ተቋማት",
+      "submittedReports": "የገቡ ሪፖርቶች",
+      "pendingReports": "በመጠባበቅ ላይ ያሉ ሪፖርቶች"
+    },
+    "loading": "የዳሽቦርድ ስታቲስቲክስ በመጫን ላይ..."
+  },
+  "reports": {
+    "title": "ሪፖርቶች",
+    "filter": {
+      "button": "ሪፖርቶችን አጣራ",
+      "dialogTitle": "ሪፖርቶችን ፈልግ",
+      "dialogDescription": "ሪፖርቶችን በዓመት፣ በወር፣ በቦታ ወይም በተቋም መለያ ቁጥር ያጣሩ።",
+      "year": "ዓመት",
+      "month": "ወር",
+      "selectMonth": "ወር ይምረጡ",
+      "subCity": "ክፍለ ከተማ",
+      "subCityPlaceholder": "ምሳሌ፡ ቦሌ",
+      "facility": "ተቋም",
+      "selectFacility": "ተቋም ይምረጡ",
+      "allFacilities": "ሁሉም ተቋማት",
+      "search": "የፍለጋ ውጤቶች"
+    },
+    "table": {
+      "facility": "ተቋም",
+      "period": "ጊዜ",
+      "totalChildren": "ጠቅላላ ሕፃናት",
+      "submittedAt": "የገባበት ቀን",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች",
+      "viewDetails": "ዝርዝሮችን ይመልከቱ",
+      "unknown": "ያልታወቀ"
+    },
+    "loading": "በመጫን ላይ...",
+    "error": "ሪፖርቶችን ማምጣት አልተቻለም።",
+    "errorDescription": "ግብዓቶችዎን ያረጋግጡ ወይም ቆይተው እንደገና ይሞክሩ።"
+  },
+  "reportDetails": {
+    "title": "የሪፖርት ዝርዝሮች",
+    "description": "ዝርዝር መረጃ ለ {name} - {date}",
+    "facilityInfo": "የተቋም መረጃ",
+    "name": "ስም",
+    "subCity": "ክፍለ ከተማ",
+    "region": "ክልል",
+    "reportStatus": "የሪፖርት ሁኔታ",
+    "status": "ሁኔታ",
+    "submitted": "ገብቷል",
+    "approved": "ጸድቋል",
+    "statistics": "ስታቲስቲክስ",
+    "totalChildren": "ጠቅላላ ሕፃናት",
+    "newAdmissions": "አዲስ የገቡ",
+    "discharges": "የወጡ",
+    "notes": "ማስታወሻዎች",
+    "formData": "የቅጽ መረጃ"
+  },
+  "months": {
+    "1": "ጥር",
+    "2": "የካቲት",
+    "3": "መጋቢት",
+    "4": "ሚያዝያ",
+    "5": "ግንቦት",
+    "6": "ሰኔ",
+    "7": "ሐምሌ",
+    "8": "ነሐሴ",
+    "9": "መስከረም",
+    "10": "ጥቅምት",
+    "11": "ህዳር",
+    "12": "ታህሳስ"
+  },
+  "monthsShort": {
+    "1": "ጥር",
+    "2": "የካ",
+    "3": "መጋ",
+    "4": "ሚያ",
+    "5": "ግን",
+    "6": "ሰኔ",
+    "7": "ሐም",
+    "8": "ነሐ",
+    "9": "መስ",
+    "10": "ጥቅ",
+    "11": "ህዳ",
+    "12": "ታህ"
+  }
+}

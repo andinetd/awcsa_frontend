@@ -15,7 +15,10 @@ import { useImportEdirAssociationsMutation } from "@/hooks/social-affairs";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
 
+import { useTranslations } from "next-intl";
+
 export default function ImportEdirDialog() {
+  const t = useTranslations("social-affairs.edir.edir.import");
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const { mutate, isPending } = useImportEdirAssociationsMutation();
@@ -25,12 +28,12 @@ export default function ImportEdirDialog() {
 
     mutate(files[0], {
       onSuccess: () => {
-        toast.success("Edir associations imported successfully");
+        toast.success(t("success"));
         setOpen(false);
         setFiles([]);
       },
       onError: (error) => {
-        toast.error("Failed to import Edir associations");
+        toast.error(t("error"));
         console.error(error);
       },
     });
@@ -41,15 +44,13 @@ export default function ImportEdirDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <Upload className="w-4 h-4" />
-          Import Edir Associations
+          {t("buttons.import")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Import Edir Associations</DialogTitle>
-          <DialogDescription>
-            Upload an Excel file to import multiple Edir associations at once.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <FileDragAndDrop
@@ -68,13 +69,13 @@ export default function ImportEdirDialog() {
             onClick={() => setOpen(false)}
             disabled={isPending}
           >
-            Cancel
+            {t("buttons.cancel")}
           </Button>
           <Button
             onClick={handleImport}
             disabled={files.length === 0 || isPending}
           >
-            {isPending ? "Importing..." : "Import"}
+            {isPending ? t("buttons.importing") : t("buttons.import")}
           </Button>
         </div>
       </DialogContent>
