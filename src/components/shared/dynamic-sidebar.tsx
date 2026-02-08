@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
-import { LogOut, User } from "lucide-react";
+import { Home, LogOut, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -36,10 +36,29 @@ export function DynamicSidebar() {
     }
   };
 
-  const sections = useMemo(
-    () => (orgUnit ? getSidebarItems(orgUnit, pathname) : []),
-    [orgUnit, pathname],
-  );
+  const sections = useMemo(() => {
+    if (!orgUnit) return [];
+    const baseSections = getSidebarItems(orgUnit, pathname);
+    const isGlobalAdmin =
+      orgUnit.type === "BUREAU" && orgUnit.deputyBureau === null;
+
+    if (isGlobalAdmin) {
+      return [
+        {
+          title: "Home",
+          items: [
+            {
+              title: "Home",
+              url: "/bureau-head",
+              icon: Home,
+            },
+          ],
+        },
+        ...baseSections,
+      ];
+    }
+    return baseSections;
+  }, [orgUnit, pathname]);
 
   return (
     <Sidebar className="">

@@ -12,6 +12,7 @@
     "loggingOut": "በመውጣት ላይ..."
   },
   "sections": {
+    "Home": "ቤት",
     "Global": "አለምአቀፍ",
     "Adoption Moduel Services": "የጉዲፈቻ አገልግሎቶች",
     "Social Affairs": "ማህበራዊ ጉዳይ",
@@ -24,6 +25,7 @@
     "Care Centers Portal": "የሕፃናት ማሳደጊያ ተቋማት ፖርታል"
   },
   "items": {
+    "Home": "ቤት",
     "Adoption": "ጉዲፈቻ",
     "Social Affairs": "ማህበራዊ ጉዳይ",
     "Women": "ሴቶች",

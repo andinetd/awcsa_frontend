@@ -12,6 +12,7 @@
     "loggingOut": "Logging out..."
   },
   "sections": {
+    "Home": "Home",
     "Global": "Global",
     "Adoption Moduel Services": "Adoption Module Services",
     "Social Affairs": "Social Affairs",
@@ -24,6 +25,7 @@
     "Care Centers Portal": "Care Centers Portal"
   },
   "items": {
+    "Home": "Home",
     "Adoption": "Adoption",
     "Social Affairs": "Social Affairs",
     "Women": "Women",
