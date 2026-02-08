@@ -191,6 +191,16 @@ export const sidebarConfig: Record<
           icon: Users,
         },
         {
+          title: "Audit Logs",
+          url: "/super-admin/audit-logs",
+          icon: Settings2,
+        },
+        {
+          title: "Backups",
+          url: "/super-admin/backups",
+          icon: Settings2,
+        },
+        {
           title: "General Settings",
           url: "/super-admin/general-settings",
           icon: Settings2,
