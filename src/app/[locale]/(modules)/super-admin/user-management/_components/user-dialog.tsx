@@ -291,37 +291,157 @@ export function UserDialog({
                 <FormField
                   control={form.control}
                   name="orgUnitId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("org")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={t("select")} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {formData?.orgUnits.map((org) => (
-                            <SelectItem key={org.id} value={String(org.id)}>
-                              <span
-                                className="truncate max-w-[180px] block"
-                                title={org.name}
+                  render={({ field }) => {
+                    const bureaus = formData?.structure?.bureaus || [];
+                    const subCities = formData?.structure?.subCities || [];
+                    const woredas = formData?.structure?.woredas || [];
+
+                    // Find if current value is a Woreda, Sub-City, or Bureau
+                    const selectedWoreda = woredas.find(
+                      (w) => String(w.id) === field.value,
+                    );
+                    const selectedSubCity = subCities.find(
+                      (sc) =>
+                        String(sc.id) ===
+                        (selectedWoreda
+                          ? String(selectedWoreda.parentId)
+                          : field.value),
+                    );
+                    const selectedBureau = bureaus.find(
+                      (b) =>
+                        String(b.id) ===
+                        (selectedSubCity
+                          ? String(selectedSubCity.parentId)
+                          : selectedWoreda
+                            ? String(selectedWoreda.parentId) // Fallback (shouldn't happen with correct data)
+                            : field.value),
+                    );
+
+                    const effectiveBureauId = selectedBureau
+                      ? String(selectedBureau.id)
+                      : "";
+                    const effectiveSubCityId = selectedSubCity
+                      ? String(selectedSubCity.id)
+                      : "";
+                    const effectiveWoredaId = selectedWoreda
+                      ? String(selectedWoreda.id)
+                      : "";
+
+                    const filteredSubCities = bureaus.find(
+                      (b) => String(b.id) === effectiveBureauId,
+                    )
+                      ? subCities.filter(
+                          (sc) => String(sc.parentId) === effectiveBureauId,
+                        )
+                      : [];
+
+                    const filteredWoredas = subCities.find(
+                      (sc) => String(sc.id) === effectiveSubCityId,
+                    )
+                      ? woredas.filter(
+                          (w) => String(w.parentId) === effectiveSubCityId,
+                        )
+                      : [];
+
+                    return (
+                      <div className="space-y-4 col-span-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormItem>
+                            <FormLabel>{t("org")}</FormLabel>
+                            <Select
+                              onValueChange={(val) => field.onChange(val)}
+                              value={effectiveBureauId}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t("select")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {bureaus.map((org) => (
+                                  <SelectItem
+                                    key={org.id}
+                                    value={String(org.id)}
+                                  >
+                                    <span
+                                      className="truncate max-w-[150px] block"
+                                      title={org.name}
+                                    >
+                                      {org.name}
+                                    </span>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+
+                          {(filteredSubCities.length > 0 ||
+                            effectiveSubCityId) && (
+                            <FormItem>
+                              <FormLabel>{t("subCity")}</FormLabel>
+                              <Select
+                                onValueChange={(val) => field.onChange(val)}
+                                value={effectiveSubCityId}
                               >
-                                {org.name}
-                              </span>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage>
-                        {form.formState.errors.orgUnitId &&
-                          t("errors.orgRequired")}
-                      </FormMessage>
-                    </FormItem>
-                  )}
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue
+                                      placeholder={t("selectSubCity")}
+                                    />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {filteredSubCities.map((sc) => (
+                                    <SelectItem
+                                      key={sc.id}
+                                      value={String(sc.id)}
+                                    >
+                                      <span
+                                        className="truncate max-w-[150px] block"
+                                        title={sc.name}
+                                      >
+                                        {sc.name}
+                                      </span>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+
+                          {(filteredWoredas.length > 0 ||
+                            effectiveWoredaId) && (
+                            <FormItem>
+                              <FormLabel>{t("woreda")}</FormLabel>
+                              <Select
+                                onValueChange={(val) => field.onChange(val)}
+                                value={effectiveWoredaId}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder={t("select")} />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {filteredWoredas.map((w) => (
+                                    <SelectItem key={w.id} value={String(w.id)}>
+                                      <span
+                                        className="truncate max-w-[150px] block"
+                                        title={w.name}
+                                      >
+                                        {w.name}
+                                      </span>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }}
                 />
               </div>
 

@@ -61,8 +61,11 @@
       "role": "ሚና",
       "org": "ድርጅት",
       "directorate": "ዳይሬክቶሬት (አማራጭ)",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ (አማራጭ)",
       "team": "ቡድን (አማራጭ)",
       "select": "ይምረጡ...",
+      "selectSubCity": "ክፍለ ከተማ ይምረጡ",
       "create": "ተጠቃሚ ፍጠር",
       "cancel": "ሰርዝ",
       "placeholders": {

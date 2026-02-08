@@ -61,8 +61,11 @@
       "role": "Role",
       "org": "Organization",
       "directorate": "Directorate (Optional)",
+      "subCity": "Sub-City",
+      "woreda": "Woreda (Optional)",
       "team": "Team (Optional)",
       "select": "Select...",
+      "selectSubCity": "Select Sub-City",
       "create": "Create User",
       "cancel": "Cancel",
       "placeholders": {

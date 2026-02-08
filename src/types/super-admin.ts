@@ -63,13 +63,13 @@ export interface Permission {
 export interface OrgUnit {
   id: number;
   name: string;
-  type: "BUREAU" | "SUB_CITY" | "WOREDA";
-  description: string;
+  type: "BUREAU" | "SUB_CITY" | "WOREDA" | "OFFICE";
+  description?: string;
   parentId: number | null;
-  subCity: string | null;
-  woreda: string | null;
-  createdAt: string;
-  updatedAt: string;
+  subCity?: string | null;
+  woreda?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Directorate {
@@ -94,7 +94,11 @@ export interface Team {
 
 export interface UserFormData {
   roles: Role[];
-  orgUnits: OrgUnit[];
+  structure: {
+    bureaus: OrgUnit[];
+    subCities: OrgUnit[];
+    woredas: OrgUnit[];
+  };
   directorates: Directorate[];
   teams: Team[];
 }
