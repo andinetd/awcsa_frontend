@@ -9,6 +9,11 @@ import {
   Trash2,
   Edit,
   Shield,
+  Copy,
+  UserCog,
+  ShieldCheck,
+  KeyRound,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,38 +41,32 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ChangeRoleDialog } from "./change-role-dialog";
 
 interface UserActionsProps {
   user: User;
   onUserUpdated: () => void;
-  onEdit: (user: User) => void;
 }
 
-export function UserActions({ user, onUserUpdated, onEdit }: UserActionsProps) {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [passwordResetOpen, setPasswordResetOpen] = useState(false);
-
-  const [newPassword, setNewPassword] = useState("");
+export function UserActions({ user, onUserUpdated }: UserActionsProps) {
+  const t = useTranslations("super-admin.userManagement.actions");
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [roleOpen, setRoleOpen] = useState(false);
 
   const updateStatusMutation = useUpdateUserStatus();
   const deleteUserMutation = useDeleteUser();
   const resetPasswordMutation = useResetUserPassword();
 
-  const loading =
-    updateStatusMutation.isPending ||
-    deleteUserMutation.isPending ||
-    resetPasswordMutation.isPending;
+  const isLocking = updateStatusMutation.isPending;
+  const isActivating = updateStatusMutation.isPending;
+  const isDeleting = deleteUserMutation.isPending;
+  const isResetting = resetPasswordMutation.isPending;
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(user.email);
+    toast.success(t("copyEmail"));
+  };
 
   const handleStatusChange = async () => {
     const newStatus = user.status === "ACTIVE" ? "LOCKED" : "ACTIVE";
@@ -76,8 +75,11 @@ export function UserActions({ user, onUserUpdated, onEdit }: UserActionsProps) {
       {
         onSuccess: () => {
           toast.success(
-            `User ${newStatus === "ACTIVE" ? "activated" : "locked"} successfully`,
+            newStatus === "ACTIVE"
+              ? t("messages.activatedSuccess")
+              : t("messages.lockedSuccess"),
           );
+          onUserUpdated();
         },
       },
     );
@@ -86,26 +88,25 @@ export function UserActions({ user, onUserUpdated, onEdit }: UserActionsProps) {
   const handleDelete = async () => {
     deleteUserMutation.mutate(user.id, {
       onSuccess: () => {
-        setDeleteDialogOpen(false);
+        setDeleteOpen(false);
+        onUserUpdated();
       },
     });
   };
 
-  const handlePasswordReset = async () => {
-    if (!newPassword) {
-      toast.error("Password is required");
-      return;
-    }
-
-    resetPasswordMutation.mutate(
-      { id: user.id, password: newPassword },
-      {
-        onSuccess: () => {
-          setPasswordResetOpen(false);
-          setNewPassword("");
+  const handleResetPassword = async () => {
+    const newPassword = window.prompt(t("messages.passwordRequired"));
+    if (newPassword) {
+      resetPasswordMutation.mutate(
+        { id: user.id, password: newPassword },
+        {
+          onSuccess: () => {
+            toast.success(t("messages.passwordResetSuccess"));
+            onUserUpdated();
+          },
         },
-      },
-    );
+      );
+    }
   };
 
   return (
@@ -113,96 +114,86 @@ export function UserActions({ user, onUserUpdated, onEdit }: UserActionsProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t("label")}</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(user.email)}
-          >
-            Copy Email
+        <DropdownMenuContent align="end" className="w-[160px]">
+          <DropdownMenuItem onClick={handleCopyEmail}>
+            <Copy className="mr-2 h-4 w-4" />
+            {t("copyEmail")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-
-          <DropdownMenuItem onClick={handleStatusChange}>
-            {user.status === "ACTIVE" ? (
+          <DropdownMenuItem onClick={() => setRoleOpen(true)}>
+            <UserCog className="mr-2 h-4 w-4" />
+            {t("changeRole")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleStatusChange}
+            disabled={isLocking || isActivating}
+          >
+            {user.status === "LOCKED" ? (
               <>
-                <Lock className="mr-2 h-4 w-4" /> Lock Account
+                <ShieldCheck className="mr-2 h-4 w-4" />
+                {t("activate")}
               </>
             ) : (
               <>
-                <Unlock className="mr-2 h-4 w-4" /> Activate Account
+                <Lock className="mr-2 h-4 w-4" />
+                {t("lockAccount")}
               </>
             )}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setPasswordResetOpen(true)}>
-            <Key className="mr-2 h-4 w-4" /> Reset Password
+          <DropdownMenuItem
+            onClick={handleResetPassword}
+            disabled={isResetting}
+          >
+            <KeyRound className="mr-2 h-4 w-4" />
+            {t("resetPassword")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => setDeleteDialogOpen(true)}
-            className="text-red-600"
+            className="text-destructive focus:text-destructive"
+            onClick={() => setDeleteOpen(true)}
           >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete Account
+            <Trash2 className="mr-2 h-4 w-4" />
+            {t("deleteAccount")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={passwordResetOpen} onOpenChange={setPasswordResetOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
-            <DialogDescription>
-              Enter a new password for <strong>{user.email}</strong>.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="new-password" className="text-right">
-                Password
-              </Label>
-              <Input
-                id="new-password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setPasswordResetOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handlePasswordReset} disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Reset Password
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ChangeRoleDialog
+        open={roleOpen}
+        onOpenChange={setRoleOpen}
+        user={user}
+        onSuccess={onUserUpdated}
+      />
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t("permissionDialog.deleteTitle")}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              user account and remove their data from our servers.
+              {t("permissionDialog.deleteDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t("permissionDialog.cancel")}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {isDeleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="mr-2 h-4 w-4" />
+              )}
+              {t("permissionDialog.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

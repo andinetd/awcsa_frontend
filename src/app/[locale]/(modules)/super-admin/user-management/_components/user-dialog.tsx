@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -34,20 +35,6 @@ import { useCreateUser, useGetUserFormData } from "@/hooks/super-admin";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-// Schema for the form
-const formSchema = z.object({
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(10, "Valid phone number is required"),
-  cityIdNumber: z.string().min(1, "City ID is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  roleId: z.string().min(1, "Role is required"),
-  orgUnitId: z.string().min(1, "Organization is required"),
-  directorateId: z.string().optional(),
-  teamId: z.string().optional(),
-});
-
 interface UserDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -59,9 +46,26 @@ export function UserDialog({
   onOpenChange,
   onUserSaved,
 }: UserDialogProps) {
+  const t = useTranslations("super-admin.userManagement.dialog");
   const { data: formData, isLoading: loadingConfig } = useGetUserFormData();
   const createUserMutation = useCreateUser();
   const isSaving = createUserMutation.isPending;
+
+  // Schema for the form
+  const formSchema = useMemo(() => {
+    return z.object({
+      firstName: z.string().min(2, t("errors.firstNameRequired")),
+      lastName: z.string().min(2, t("errors.lastNameRequired")),
+      email: z.string().email(t("errors.invalidEmail")),
+      phoneNumber: z.string().min(10, t("errors.phoneRequired")),
+      cityIdNumber: z.string().min(1, t("errors.cityIdRequired")),
+      password: z.string().min(6, t("errors.passwordMin")),
+      roleId: z.string().min(1, t("errors.roleRequired")),
+      orgUnitId: z.string().min(1, t("errors.orgRequired")),
+      directorateId: z.string().optional(),
+      teamId: z.string().optional(),
+    });
+  }, [t]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -105,7 +109,7 @@ export function UserDialog({
       });
     } catch (error: any) {
       console.error(error);
-      toast.error(error.message || "Failed to save user");
+      toast.error(t("errors.saveFailed"));
     }
   };
 
@@ -113,10 +117,8 @@ export function UserDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
-          <DialogDescription>
-            Fill in the details to create a new user account.
-          </DialogDescription>
+          <DialogTitle>{t("addTitle")}</DialogTitle>
+          <DialogDescription>{t("addDescription")}</DialogDescription>
         </DialogHeader>
 
         {loadingConfig ? (
@@ -132,11 +134,17 @@ export function UserDialog({
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>{t("firstName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="John" {...field} />
+                        <Input
+                          placeholder={t("placeholders.firstName")}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.firstName &&
+                          t("errors.firstNameRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -145,11 +153,17 @@ export function UserDialog({
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Last Name</FormLabel>
+                      <FormLabel>{t("lastName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Doe" {...field} />
+                        <Input
+                          placeholder={t("placeholders.lastName")}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.lastName &&
+                          t("errors.lastNameRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -161,11 +175,17 @@ export function UserDialog({
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="john@example.com" {...field} />
+                        <Input
+                          placeholder={t("placeholders.email")}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.email &&
+                          t("errors.invalidEmail")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -174,11 +194,17 @@ export function UserDialog({
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t("phone")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="0911..." {...field} />
+                        <Input
+                          placeholder={t("placeholders.phone")}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.phoneNumber &&
+                          t("errors.phoneRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -190,11 +216,17 @@ export function UserDialog({
                   name="cityIdNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City ID</FormLabel>
+                      <FormLabel>{t("cityId")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="ID123456" {...field} />
+                        <Input
+                          placeholder={t("placeholders.cityId")}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.cityIdNumber &&
+                          t("errors.cityIdRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -203,15 +235,18 @@ export function UserDialog({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("password")}</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="******"
+                          placeholder={t("placeholders.password")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.password &&
+                          t("errors.passwordMin")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -223,14 +258,14 @@ export function UserDialog({
                   name="roleId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Role</FormLabel>
+                      <FormLabel>{t("role")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a role" />
+                            <SelectValue placeholder={t("select")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -246,7 +281,10 @@ export function UserDialog({
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.roleId &&
+                          t("errors.roleRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -255,14 +293,14 @@ export function UserDialog({
                   name="orgUnitId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Organization</FormLabel>
+                      <FormLabel>{t("org")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select organization" />
+                            <SelectValue placeholder={t("select")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -278,7 +316,10 @@ export function UserDialog({
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
+                      <FormMessage>
+                        {form.formState.errors.orgUnitId &&
+                          t("errors.orgRequired")}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -290,14 +331,14 @@ export function UserDialog({
                   name="directorateId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Directorate (Optional)</FormLabel>
+                      <FormLabel>{t("directorate")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select directorate" />
+                            <SelectValue placeholder={t("select")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -322,14 +363,14 @@ export function UserDialog({
                   name="teamId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Team (Optional)</FormLabel>
+                      <FormLabel>{t("team")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select team" />
+                            <SelectValue placeholder={t("select")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -356,7 +397,7 @@ export function UserDialog({
                   {isSaving && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Create User
+                  {t("create")}
                 </Button>
               </DialogFooter>
             </form>

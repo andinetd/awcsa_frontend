@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -50,9 +51,18 @@ export function ChangeRoleDialog({
   user,
   onSuccess,
 }: ChangeRoleDialogProps) {
+  const t = useTranslations(
+    "super-admin.userManagement.actions.changeRoleDialog",
+  );
   const { data: formData, isLoading: loadingFormData } = useGetUserFormData();
   const updateUserMutation = useUpdateUser();
   const isSaving = updateUserMutation.isPending;
+
+  const formSchema = useMemo(() => {
+    return z.object({
+      roleId: z.string().min(1, t("selectRole")),
+    });
+  }, [t]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,9 +99,14 @@ export function ChangeRoleDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change User Role</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Select a new role for <strong>{user.email}</strong>.
+            {t.rich("description", {
+              email: user.email,
+              strong: (chunks: React.ReactNode) => (
+                <strong className="font-bold">{chunks}</strong>
+              ),
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -107,14 +122,14 @@ export function ChangeRoleDialog({
                 name="roleId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>{t("roleLabel")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
+                          <SelectValue placeholder={t("selectRole")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -134,7 +149,7 @@ export function ChangeRoleDialog({
                   {isSaving && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Save Changes
+                  {t("saveChanges")}
                 </Button>
               </DialogFooter>
             </form>

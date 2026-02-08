@@ -8,11 +8,15 @@ import { Download, HardDrive } from "lucide-react";
 import { downloadBackup } from "@/api/super-admin/backups";
 import { toast } from "sonner";
 
-export const columns: ColumnDef<Backup>[] = [
+interface ColumnsProps {
+  t: (key: string) => string;
+}
+
+export const getColumns = ({ t }: ColumnsProps): ColumnDef<Backup>[] => [
   {
     accessorKey: "filename",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Filename" />
+      <DataTableColumnHeader column={column} title={t("filename")} />
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
@@ -24,13 +28,13 @@ export const columns: ColumnDef<Backup>[] = [
   {
     accessorKey: "size",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Size" />
+      <DataTableColumnHeader column={column} title={t("size")} />
     ),
     cell: ({ row }) => {
       // Convert bytes to KB/MB
       const bytes = row.original.size;
-      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
       if (bytes === 0) return "0 Byte";
+      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
       const i = parseInt(
         Math.floor(Math.log(bytes) / Math.log(1024)).toString(),
       );
@@ -39,6 +43,7 @@ export const columns: ColumnDef<Backup>[] = [
   },
   {
     id: "actions",
+    header: t("actions"),
     cell: ({ row }) => {
       const handleDownload = async () => {
         try {
@@ -55,9 +60,9 @@ export const columns: ColumnDef<Backup>[] = [
           variant="ghost"
           size="sm"
           onClick={handleDownload}
-          title="Download Backup"
+          title={t("download")}
         >
-          <Download className="h-4 w-4 mr-2" /> Download
+          <Download className="h-4 w-4 mr-2" /> {t("download")}
         </Button>
       );
     },

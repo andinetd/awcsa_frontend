@@ -14,7 +14,11 @@ import {
 } from "@/api/super-admin/user-management";
 import { getAuditLogs, getAuditLogDetails } from "@/api/super-admin/audit-logs";
 import { getBackups, downloadBackup } from "@/api/super-admin/backups";
-import { CreateUserDto, AuditLogFilters } from "@/types/super-admin";
+import {
+  CreateUserDto,
+  AuditLogFilters,
+  CreateRoleDto,
+} from "@/types/super-admin";
 import { toast } from "sonner";
 
 // User Management Hooks
@@ -158,7 +162,7 @@ export const useGetRoleDetails = (roleId?: number) => {
 export const useCreateRole = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createRole,
+    mutationFn: (data: CreateRoleDto) => createRole(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userFormData"] });
       toast.success("Role created successfully");

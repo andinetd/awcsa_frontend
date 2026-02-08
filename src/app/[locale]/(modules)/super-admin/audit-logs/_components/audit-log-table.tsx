@@ -6,12 +6,14 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { AuditLogDetailsDialog } from "./audit-log-details-dialog";
+import { useTranslations } from "next-intl";
 
 interface AuditLogTableProps {
   logs: AuditLog[];
 }
 
 export function AuditLogTable({ logs }: AuditLogTableProps) {
+  const t = useTranslations("super-admin.auditLogs.table");
   const [selectedLogId, setSelectedLogId] = useState<number | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
@@ -49,15 +51,15 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
           <div>
             <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2">
               <Shield className="w-5 h-5 text-gray-600" />
-              Audit Trail
+              {useTranslations("super-admin.auditLogs")("title")}
             </h3>
             <p className="text-xs text-gray-500">
-              Immutable record of all system actions
+              {useTranslations("super-admin.auditLogs")("description")}
             </p>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs bg-white border px-3 py-1 rounded-full text-slate-600 font-medium">
-              {logs.length} Events Logged
+              {t("eventsLogged", { count: logs.length })}
             </span>
           </div>
         </div>
@@ -65,13 +67,13 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
           <table className="w-full text-sm text-left">
             <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-semibold tracking-wider sticky top-0 z-10">
               <tr>
-                <th className="px-6 py-3 bg-gray-100">Time</th>
-                <th className="px-6 py-3 bg-gray-100">Level</th>
-                <th className="px-6 py-3 bg-gray-100">Actor</th>
-                <th className="px-6 py-3 bg-gray-100">Action</th>
-                <th className="px-6 py-3 bg-gray-100">Specifics</th>
-                <th className="px-6 py-3 bg-gray-100">Details</th>
-                <th className="px-6 py-3 bg-gray-100">Actions</th>
+                <th className="px-6 py-3 bg-gray-100">{t("time")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("level")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("actor")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("action")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("entity")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("details")}</th>
+                <th className="px-6 py-3 bg-gray-100">{t("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -81,7 +83,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
                     colSpan={7}
                     className="px-6 py-8 text-center text-slate-500"
                   >
-                    No audit logs found.
+                    {t("noLogs")}
                   </td>
                 </tr>
               ) : (

@@ -37,7 +37,17 @@ export interface Role {
   isSystemRole?: boolean;
   createdAt: string;
   updatedAt: string;
-  assignedPermissionIds?: number[]; // Present when fetching specific role details
+  assignedPermissions?: {
+    id: number;
+    name: string;
+    resource: string;
+    action: string;
+  }[];
+}
+
+export interface CreateRoleDto {
+  name: string;
+  description: string;
 }
 
 export interface Permission {

@@ -1,0 +1,235 @@
+{
+  "auditLogs": {
+    "title": "Audit Logs",
+    "description": "Monitor system activities and user actions.",
+    "table": {
+      "time": "Time",
+      "level": "Level",
+      "actor": "Actor",
+      "action": "Action",
+      "entity": "Entity",
+      "details": "Details",
+      "specifics": "Specifics",
+      "actions": "Actions",
+      "noLogs": "No audit logs found.",
+      "eventsLogged": "{count} Events Logged"
+    },
+    "detailsDialog": {
+      "title": "Audit Log Details",
+      "description": "View complete information for this event",
+      "id": "ID",
+      "time": "Time",
+      "action": "Action",
+      "entity": "Entity",
+      "actor": "Actor",
+      "remark": "Remark",
+      "oldValue": "Old Value",
+      "newValue": "New Value",
+      "loading": "Loading details...",
+      "error": "Failed to load audit log details.",
+      "entityId": "ID: {id}",
+      "nullValue": "null",
+      "formats": {
+        "dateTime": "MMM d, yyyy HH:mm:ss"
+      }
+    }
+  },
+  "userManagement": {
+    "title": "User Management",
+    "description": "Manage your team members and their account permissions here.",
+    "addUser": "Add User",
+    "managePermissions": "Manage Permissions",
+    "table": {
+      "name": "User",
+      "contact": "Contact",
+      "role": "Role",
+      "organization": "Org Unit",
+      "status": "Status",
+      "created": "Joined",
+      "actions": "Actions",
+      "na": "N/A"
+    },
+    "dialog": {
+      "addTitle": "Add New User",
+      "addDescription": "Fill in the details to create a new user account.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "cityId": "City ID",
+      "password": "Password",
+      "role": "Role",
+      "org": "Organization",
+      "directorate": "Directorate (Optional)",
+      "team": "Team (Optional)",
+      "select": "Select...",
+      "create": "Create User",
+      "cancel": "Cancel",
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com",
+        "phone": "0911...",
+        "cityId": "ID123456",
+        "password": "******"
+      },
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "invalidEmail": "Invalid email address",
+        "phoneRequired": "Valid phone number is required",
+        "cityIdRequired": "City ID is required",
+        "passwordMin": "Password must be at least 6 characters",
+        "roleRequired": "Role is required",
+        "orgRequired": "Organization is required",
+        "saveFailed": "Failed to save user"
+      }
+    },
+    "actions": {
+      "label": "Actions",
+      "copyEmail": "Copy Email",
+      "changeRole": "Change Role",
+      "lockAccount": "Lock Account",
+      "activate": "Activate Account",
+      "resetPassword": "Reset Password",
+      "deleteAccount": "Delete Account",
+      "messages": {
+        "activatedSuccess": "User account activated successfully",
+        "lockedSuccess": "User account locked successfully",
+        "passwordRequired": "Please enter a new password",
+        "passwordResetSuccess": "Password reset successfully"
+      },
+      "changeRoleDialog": {
+        "title": "Change User Role",
+        "description": "Select a new role for {email}.",
+        "roleLabel": "Role",
+        "selectRole": "Select a role",
+        "saveChanges": "Save Changes"
+      },
+      "permissionDialog": {
+        "title": "Manage Role Permissions",
+        "description": "Select a role to view and modify its permissions.",
+        "selectRole": "Select Role",
+        "chooseRole": "Choose a role...",
+        "warningTitle": "Impact Warning",
+        "warningDesc": "Modifying permissions for this role will affect ALL users currently assigned to it.",
+        "save": "Save Permissions",
+        "cancel": "Cancel",
+        "password": "Password",
+        "resetPassword": "Reset Password",
+        "deleteTitle": "Delete User",
+        "deleteDesc": "Are you sure you want to delete this user?",
+        "delete": "Delete"
+      }
+    }
+  },
+  "backups": {
+    "title": "System Backups",
+    "description": "Download database backups.",
+    "refreshList": "Refresh List",
+    "table": {
+      "filename": "Filename",
+      "size": "Size",
+      "date": "Date Created",
+      "actions": "Actions",
+      "download": "Download",
+      "zeroBytes": "0 Byte"
+    },
+    "messages": {
+      "startingDownload": "Starting download...",
+      "downloadStarted": "Download started",
+      "downloadFailed": "Download failed"
+    }
+  },
+  "settings": {
+    "title": "General Settings",
+    "tabs": {
+      "offices": "Offices",
+      "departments": "Departments",
+      "roles": "Roles",
+      "other": "Other"
+    },
+    "offices": {
+      "title": "Offices",
+      "addOffice": "Add Office",
+      "editOffice": "Edit Office",
+      "noOffices": "No offices added yet.",
+      "form": {
+        "name": "Office Name",
+        "code": "Office Code",
+        "type": "Office Type",
+        "description": "Description",
+        "enterName": "Enter office name",
+        "enterCode": "Enter office code",
+        "selectType": "Select type",
+        "optionalDescription": "Description (optional)",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "types": {
+          "headOffice": "Head Office",
+          "branch": "Branch",
+          "subOffice": "Sub Office"
+        }
+      }
+    },
+    "comingSoon": {
+      "departments": "Department settings coming soon...",
+      "roles": "Role settings coming soon...",
+      "other": "Other settings coming soon..."
+    },
+    "roleManagement": {
+      "title": "Role Management",
+      "description": "Define system roles and their permissions.",
+      "addRole": "Add New Role",
+      "table": {
+        "name": "Role Name",
+        "description": "Description",
+        "actions": "Actions",
+        "managePermissions": "Manage Permissions"
+      },
+      "dialog": {
+        "title": "Create New Role",
+        "description": "Define the name and purpose of the new role.",
+        "nameLabel": "Role Name",
+        "namePlaceholder": "e.g., Finance Officer",
+        "descLabel": "Description",
+        "descPlaceholder": "Describe what this role does...",
+        "create": "Create Role",
+        "cancel": "Cancel",
+        "errors": {
+          "nameRequired": "Role name is required",
+          "descRequired": "Description is required"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Executive Dashboard",
+    "description": "Overview of key metrics and system activities.",
+    "stats": {
+      "children": "Total Children",
+      "peopleInNeed": "People in Need",
+      "facilities": "Facilities",
+      "edirs": "Edirs",
+      "totalBeneficiaries": "Total beneficiaries",
+      "activeCenters": "Active centers",
+      "registeredAssociations": "Registered associations"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "description": "Latest system actions and updates.",
+      "noActivity": "No recent activity found.",
+      "placeholders": {
+        "userCreated": "Created new user account"
+      }
+    }
+  },
+  "moduleTitles": {
+    "dashboard": "Executive Dashboard",
+    "userManagement": "User Management",
+    "auditLogs": "Audit Logs",
+    "backups": "Backups",
+    "generalSettings": "General Settings"
+  }
+}

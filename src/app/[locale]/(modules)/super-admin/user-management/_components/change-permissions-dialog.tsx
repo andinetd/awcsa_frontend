@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +36,7 @@ interface ChangePermissionsDialogProps {
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
   user?: User;
+  roleId?: number;
 }
 
 export function ChangePermissionsDialog({
@@ -42,7 +44,11 @@ export function ChangePermissionsDialog({
   onOpenChange,
   onSuccess,
   user,
+  roleId,
 }: ChangePermissionsDialogProps) {
+  const t = useTranslations(
+    "super-admin.userManagement.actions.permissionDialog",
+  );
   const { data: formData, isLoading: loadingFormData } = useGetUserFormData();
   const { data: allPermissions, isLoading: loadingPermissions } =
     useGetPermissions();
@@ -60,8 +66,8 @@ export function ChangePermissionsDialog({
 
   // Initialize selected permissions when role details are loaded
   useEffect(() => {
-    if (roleDetails && roleDetails.assignedPermissionIds) {
-      setSelectedPermissions(roleDetails.assignedPermissionIds);
+    if (roleDetails && roleDetails.assignedPermissions) {
+      setSelectedPermissions(roleDetails.assignedPermissions.map((p) => p.id));
     } else {
       setSelectedPermissions([]);
     }
@@ -70,7 +76,9 @@ export function ChangePermissionsDialog({
   // Pre-select role and reset state
   useEffect(() => {
     if (open) {
-      if (user && formData?.roles) {
+      if (roleId) {
+        setSelectedRoleId(String(roleId));
+      } else if (user && formData?.roles) {
         const userRoleName = user.employee.role.name;
         const matchingRole = formData.roles.find(
           (r) => r.name === userRoleName,
@@ -83,7 +91,7 @@ export function ChangePermissionsDialog({
       setSelectedRoleId("");
       setSelectedPermissions([]);
     }
-  }, [open, user, formData]);
+  }, [open, user, roleId, formData]);
 
   const handleTogglePermission = (permissionId: number) => {
     setSelectedPermissions((prev) =>
@@ -108,8 +116,7 @@ export function ChangePermissionsDialog({
 
   const isLoading = loadingPermissions || loadingRoleDetails || loadingFormData;
 
-  // Group permissions by resource type (assuming naming convention or just list them)
-  // If we had resourceType in permission, we could group. The type has resourceType.
+  // Group permissions by resource type
   const permissionsByResource = allPermissions?.reduce(
     (acc, perm) => {
       const resource = perm.resourceType || "Other";
@@ -126,42 +133,39 @@ export function ChangePermissionsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Manage Role Permissions</DialogTitle>
-          <DialogDescription>
-            Select a role to view and modify its permissions.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
-          <div className="max-w-md">
-            <Label className="mb-2 block">Select Role</Label>
-            <Select
-              value={selectedRoleId}
-              onValueChange={setSelectedRoleId}
-              disabled={loadingFormData}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Choose a role..." />
-              </SelectTrigger>
-              <SelectContent>
-                {formData?.roles.map((role) => (
-                  <SelectItem key={role.id} value={String(role.id)}>
-                    {role.name.replace(/_/g, " ")}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!roleId && (
+            <div className="max-w-md">
+              <Label className="mb-2 block">{t("selectRole")}</Label>
+              <Select
+                value={selectedRoleId}
+                onValueChange={setSelectedRoleId}
+                disabled={loadingFormData}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("chooseRole")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {formData?.roles.map((role) => (
+                    <SelectItem key={role.id} value={String(role.id)}>
+                      {role.name.replace(/_/g, " ")}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {selectedRoleId && (
             <>
               <Alert className="bg-amber-50 border-amber-200 text-amber-800">
                 <ShieldAlert className="h-4 w-4 text-amber-800" />
-                <AlertTitle>Impact Warning</AlertTitle>
-                <AlertDescription>
-                  Modifying permissions for this role will affect{" "}
-                  <strong>ALL users</strong> currently assigned to it.
-                </AlertDescription>
+                <AlertTitle>{t("warningTitle")}</AlertTitle>
+                <AlertDescription>{t("warningDesc")}</AlertDescription>
               </Alert>
 
               {isLoading ? (
@@ -220,11 +224,11 @@ export function ChangePermissionsDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button onClick={onSave} disabled={isSaving || !selectedRoleId}>
             {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Save Permissions
+            {t("save")}
           </Button>
         </DialogFooter>
       </DialogContent>

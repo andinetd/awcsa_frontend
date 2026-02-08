@@ -8,17 +8,17 @@ import { UserActions } from "./user-actions";
 
 interface ColumnsProps {
   onUserUpdated: () => void;
-  onEdit: (user: User) => void;
+  t: (key: string) => string;
 }
 
 export const getColumns = ({
   onUserUpdated,
-  onEdit,
+  t,
 }: ColumnsProps): ColumnDef<User>[] => [
   {
     accessorKey: "employee.firstName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title={t("name")} />
     ),
     cell: ({ row }) => {
       const firstName = row.original.employee?.firstName || "";
@@ -36,20 +36,20 @@ export const getColumns = ({
   {
     accessorKey: "employee.role.name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Role" />
+      <DataTableColumnHeader column={column} title={t("role")} />
     ),
     cell: ({ row }) => {
-      const role = row.original.employee?.role?.name || "N/A";
+      const role = row.original.employee?.role?.name || t("na");
       return <Badge variant="outline">{role.replace(/_/g, " ")}</Badge>;
     },
   },
   {
     accessorKey: "employee.orgUnit.name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Organization" />
+      <DataTableColumnHeader column={column} title={t("organization")} />
     ),
     cell: ({ row }) => {
-      const org = row.original.employee?.orgUnit?.name || "N/A";
+      const org = row.original.employee?.orgUnit?.name || t("na");
       const type = row.original.employee?.orgUnit?.type || "";
       return (
         <div className="flex flex-col">
@@ -66,7 +66,7 @@ export const getColumns = ({
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title={t("status")} />
     ),
     cell: ({ row }) => {
       const status = row.original.status;
@@ -88,11 +88,7 @@ export const getColumns = ({
   {
     id: "actions",
     cell: ({ row }) => (
-      <UserActions
-        user={row.original}
-        onUserUpdated={onUserUpdated}
-        onEdit={onEdit}
-      />
+      <UserActions user={row.original} onUserUpdated={onUserUpdated} />
     ),
   },
 ];

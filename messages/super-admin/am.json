@@ -1,0 +1,235 @@
+{
+  "auditLogs": {
+    "title": "የኦዲት መዝገቦች",
+    "description": "የስርዓት እንቅስቃሴዎችን እና የተጠቃሚ እርምጃዎችን ይቆጣጠሩ።",
+    "table": {
+      "time": "ጊዜ",
+      "level": "ደረጃ",
+      "actor": "አድራጊ",
+      "action": "እርምጃ",
+      "entity": "አካል",
+      "details": "ዝርዝሮች",
+      "specifics": "ልዩ መረጃዎች",
+      "actions": "ድርጊቶች",
+      "noLogs": "ምንም የኦዲት መዝገቦች አልተገኙም።",
+      "eventsLogged": "{count} ክስተቶች ተመዝግበዋል"
+    },
+    "detailsDialog": {
+      "title": "የኦዲት መዝገብ ዝርዝሮች",
+      "description": "ለዚህ ክስተት ሙሉ መረጃ ይመልከቱ",
+      "id": "መለያ",
+      "time": "ጊዜ",
+      "action": "እርምጃ",
+      "entity": "አካል",
+      "actor": "አድራጊ",
+      "remark": "አስተያየት",
+      "oldValue": "የቀድሞ እሴት",
+      "newValue": "አዲስ እሴት",
+      "loading": "ዝርዝሮችን በመጫን ላይ...",
+      "error": "የኦዲት መዝገብ ዝርዝሮችን መጫን አልተቻለም።",
+      "entityId": "መለያ: {id}",
+      "nullValue": "ባዶ (null)",
+      "formats": {
+        "dateTime": "MMM d, yyyy HH:mm:ss"
+      }
+    }
+  },
+  "userManagement": {
+    "title": "የተጠቃሚዎች አስተዳደር",
+    "description": "የቡድን አባላትን እና የመለያ ፈቃዳቸውን እዚህ ያስተዳድሩ።",
+    "addUser": "ተጠቃሚ ጨምር",
+    "managePermissions": "ፈቃዶችን ያስተዳድሩ",
+    "table": {
+      "name": "ተጠቃሚ",
+      "contact": "ግንኙነት",
+      "role": "ሚና",
+      "organization": "ድርጅታዊ ክፍል",
+      "status": "ሁኔታ",
+      "created": "የተቀላቀለበት",
+      "actions": "ድርጊቶች",
+      "na": "አልተገኘም"
+    },
+    "dialog": {
+      "addTitle": "አዲስ ተጠቃሚ ጨምር",
+      "addDescription": "አዲስ የተጠቃሚ መለያ ለመፍጠር ዝርዝሮችን ይሙሉ",
+      "firstName": "መጀመሪያ ስም",
+      "lastName": "የአያት ስም",
+      "email": "ኢሜይል",
+      "phone": "ስልክ ቁጥር",
+      "cityId": "የከተማ መለያ",
+      "password": "የይለፍ ቃል",
+      "role": "ሚና",
+      "org": "ድርጅት",
+      "directorate": "ዳይሬክቶሬት (አማራጭ)",
+      "team": "ቡድን (አማራጭ)",
+      "select": "ይምረጡ...",
+      "create": "ተጠቃሚ ፍጠር",
+      "cancel": "ሰርዝ",
+      "placeholders": {
+        "firstName": "ዮሐንስ",
+        "lastName": "አበበ",
+        "email": "john@example.com",
+        "phone": "0911...",
+        "cityId": "መለያ123456",
+        "password": "******"
+      },
+      "errors": {
+        "firstNameRequired": "መጀመሪያ ስም ያስፈልጋል",
+        "lastNameRequired": "የአያት ስም ያስፈልጋል",
+        "invalidEmail": "ትክክለኛ ያልሆነ ኢሜይል አድራሻ",
+        "phoneRequired": "ትክክለኛ የስልክ ቁጥር ያስፈልጋል",
+        "cityIdRequired": "የከተማ መለያ ያስፈልጋል",
+        "passwordMin": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
+        "roleRequired": "ሚና ያስፈልጋል",
+        "orgRequired": "ድርጅት ያስፈልጋል",
+        "saveFailed": "ተጠቃሚውን ማስቀመጥ አልተቻለም"
+      }
+    },
+    "actions": {
+      "label": "ድርጊቶች",
+      "copyEmail": "ኢሜይል ቅዳ",
+      "changeRole": "ሚና ቀይር",
+      "lockAccount": "መለያ ዝጋ",
+      "activate": "መለያ አንቃ",
+      "resetPassword": "የይለፍ ቃል ቀይር",
+      "deleteAccount": "መለያ ሰርዝ",
+      "messages": {
+        "activatedSuccess": "የተጠቃሚ መለያ በተሳካ ሁኔታ ነቅቷል",
+        "lockedSuccess": "የተጠቃሚ መለያ በተሳካ ሁኔታ ተዘግቷል",
+        "passwordRequired": "እባክዎን አዲስ የይለፍ ቃል ያስገቡ",
+        "passwordResetSuccess": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል"
+      },
+      "changeRoleDialog": {
+        "title": "የተጠቃሚውን ሚና ቀይር",
+        "description": "ለ {email} አዲስ ሚና ይምረጡ።",
+        "roleLabel": "ሚና",
+        "selectRole": "ሚና ይምረጡ",
+        "saveChanges": "ለውጦችን አስቀምጥ"
+      },
+      "permissionDialog": {
+        "title": "የሚና ፈቃዶችን ያስተዳድሩ",
+        "description": "የሚና ፈቃዶችን ለማየት እና ለማሻሻል ሚና ይምረጡ።",
+        "selectRole": "ሚና ይምረጡ",
+        "chooseRole": "ሚና ይምረጡ...",
+        "warningTitle": "ተፅዕኖ ማስጠንቀቂያ",
+        "warningDesc": "ለዚህ ሚና ፈቃዶችን ማሻሻል በአሁኑ ጊዜ ለእሱ የተመደቡትን ሁሉንም ተጠቃሚዎች ይነካል።",
+        "save": "ፈቃዶችን አስቀምጥ",
+        "cancel": "ሰርዝ",
+        "password": "የይለፍ ቃል",
+        "resetPassword": "የይለፍ ቃል ቀይር",
+        "deleteTitle": "ተጠቃሚ ሰርዝ",
+        "deleteDesc": "ይህንን ተጠቃሚ መሰረዝዎን እርግጠኛ ነዎት?",
+        "delete": "ሰርዝ"
+      }
+    }
+  },
+  "backups": {
+    "title": "የስርዓት ቅጂዎች",
+    "description": "የውሂብ ጎታ ቅጂዎችን ያውርዱ።",
+    "refreshList": "ዝርዝሩን አድስ",
+    "table": {
+      "filename": "የፋይል ስም",
+      "size": "መጠን",
+      "date": "የተፈጠረበት ቀን",
+      "actions": "ድርጊቶች",
+      "download": "አውርድ",
+      "zeroBytes": "0 ባይት"
+    },
+    "messages": {
+      "startingDownload": "ማውረድ በመጀመር ላይ...",
+      "downloadStarted": "ማውረድ ተጀምሯል",
+      "downloadFailed": "ማውረድ አልተሳካም"
+    }
+  },
+  "settings": {
+    "title": "አጠቃላይ ማስተካከያዎች",
+    "tabs": {
+      "offices": "ጽህፈት ቤቶች",
+      "departments": "የስራ ክፍሎች",
+      "roles": "ሚናዎች",
+      "other": "ሌሎች"
+    },
+    "offices": {
+      "title": "ጽህፈት ቤቶች",
+      "addOffice": "ጽህፈት ቤት ጨምር",
+      "editOffice": "ጽህፈት ቤት አስተካክል",
+      "noOffices": "ምንም ጽህፈት ቤቶች አልተመዘገቡም",
+      "form": {
+        "name": "የጽህፈት ቤቱ ስም",
+        "code": "የጽህፈት ቤቱ ኮድ",
+        "type": "የጽህፈት ቤቱ አይነት",
+        "description": "መግለጫ",
+        "enterName": "የጽህፈት ቤቱን ስም ያስገቡ",
+        "enterCode": "የጽህፈት ቤቱን ኮድ ያስገቡ",
+        "selectType": "አይነት ይምረጡ",
+        "optionalDescription": "መግለጫ (አማራጭ)",
+        "save": "አስቀምጥ",
+        "cancel": "ሰርዝ",
+        "edit": "አስተካክል",
+        "types": {
+          "headOffice": "ዋና መስሪያ ቤት",
+          "branch": "ቅርንጫፍ",
+          "subOffice": "ንዑስ ጽህፈት ቤት"
+        }
+      }
+    },
+    "comingSoon": {
+      "departments": "የስራ ክፍል ማስተካከያዎች በቅርቡ ይለቀቃሉ...",
+      "roles": "የሚና ማስተካከያዎች በቅርቡ ይለቀቃሉ...",
+      "other": "ሌሎች ማስተካከያዎች በቅርቡ ይለቀቃሉ..."
+    },
+    "roleManagement": {
+      "title": "የሚና አስተዳደር",
+      "description": "የስርዓት ሚናዎችን እና ፈቃዶቻቸውን ይግለጹ።",
+      "addRole": "አዲስ ሚና ጨምር",
+      "table": {
+        "name": "የሚና ስም",
+        "description": "መግለጫ",
+        "actions": "ድርጊቶች",
+        "managePermissions": "ፈቃዶችን ያስተዳድሩ"
+      },
+      "dialog": {
+        "title": "አዲስ ሚና ፍጠር",
+        "description": "የአዲሱን ሚና ስም እና ዓላማ ይግለጹ።",
+        "nameLabel": "የሚና ስም",
+        "namePlaceholder": "ምሳሌ፡ የፋይናንስ ኦፊሰር",
+        "descLabel": "መግለጫ",
+        "descPlaceholder": "ይህ ሚና ምን እንደሚሰራ ይግለጹ...",
+        "create": "ሚና ፍጠር",
+        "cancel": "ሰርዝ",
+        "errors": {
+          "nameRequired": "የሚና ስም ያስፈልጋል",
+          "descRequired": "መግለጫ ያስፈልጋል"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "title": "የስራ አመራር ዳሽቦርድ",
+    "description": "ቁልፍ መለኪያዎች እና የስርዓት እንቅስቃሴዎች አጠቃላይ እይታ።",
+    "stats": {
+      "children": "ጠቅላላ ህፃናት",
+      "peopleInNeed": "ድጋፍ የሚሹ ሰዎች",
+      "facilities": "ተቋማት",
+      "edirs": "እድሮች",
+      "totalBeneficiaries": "ጠቅላላ ተጠቃሚዎች",
+      "activeCenters": "ንቁ ማዕከላት",
+      "registeredAssociations": "የተመዘገቡ ማህበራት"
+    },
+    "recentActivity": {
+      "title": "የቅርብ ጊዜ እንቅስቃሴዎች",
+      "description": "የቅርብ ጊዜ የስርዓት እርምጃዎች እና ዝማኔዎች።",
+      "noActivity": "ምንም የቅርብ ጊዜ እንቅስቃሴ አልተገኘም።",
+      "placeholders": {
+        "userCreated": "አዲስ ተጠቃሚ ተፈጥሯል"
+      }
+    }
+  },
+  "moduleTitles": {
+    "dashboard": "የስራ አመራር ዳሽቦርድ",
+    "userManagement": "የተጠቃሚዎች አስተዳደር",
+    "auditLogs": "የኦዲት መዝገቦች",
+    "backups": "የስርዓት ቅጂዎች",
+    "generalSettings": "አጠቃላይ ማስተካከያዎች"
+  }
+}

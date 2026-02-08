@@ -7,6 +7,7 @@ import {
   UserFormData,
   Permission,
   Role,
+  CreateRoleDto,
 } from "@/types/super-admin";
 
 const getAuthHeader = () => {
@@ -56,12 +57,10 @@ export const getRoleDetails = async (id: number): Promise<Role> => {
   return res.data;
 };
 
-export const createRole = async () => {
-  // Schema said "no parameters", typically this might be for creating a blank role or strictly defined by creating one via a different flow?
-  // Following user request: "for POST /admin/users/roles, no parameters"
+export const createRole = async (data: CreateRoleDto) => {
   const res = await axios.post(
     `${BASE_URL}/admin/users/roles`,
-    {},
+    data,
     getAuthHeader(),
   );
   return res.data;

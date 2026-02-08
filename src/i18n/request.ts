@@ -61,6 +61,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/social-rehab/${locale}.json`)
   ).default;
 
+  const superAdminMessages = (
+    await import(`../../messages/super-admin/${locale}.json`)
+  ).default;
+
   return {
     locale,
     messages: {
@@ -78,6 +82,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       executive: executiveMessages,
       "child-welfare": childWelfareMessages,
       "social-rehab": socialRehabMessages,
+      "super-admin": superAdminMessages,
     },
   };
 });
