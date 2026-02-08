@@ -30,6 +30,7 @@ import {
   useDeleteUser,
   useResetUserPassword,
 } from "@/hooks/super-admin";
+import { useAuthStore } from "@/stores/auth-store";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -54,9 +55,12 @@ export function UserActions({ user, onUserUpdated }: UserActionsProps) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
 
+  const { user: currentUser } = useAuthStore();
   const updateStatusMutation = useUpdateUserStatus();
   const deleteUserMutation = useDeleteUser();
   const resetPasswordMutation = useResetUserPassword();
+
+  const isSelf = currentUser?.id === user.id;
 
   const isLocking = updateStatusMutation.isPending;
   const isActivating = updateStatusMutation.isPending;
@@ -130,7 +134,7 @@ export function UserActions({ user, onUserUpdated }: UserActionsProps) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleStatusChange}
-            disabled={isLocking || isActivating}
+            disabled={isLocking || isActivating || isSelf}
           >
             {user.status === "LOCKED" ? (
               <>
@@ -155,6 +159,7 @@ export function UserActions({ user, onUserUpdated }: UserActionsProps) {
           <DropdownMenuItem
             className="text-destructive focus:text-destructive"
             onClick={() => setDeleteOpen(true)}
+            disabled={isSelf}
           >
             <Trash2 className="mr-2 h-4 w-4" />
             {t("deleteAccount")}
