@@ -18,14 +18,14 @@ import { useGetDashboardAnalyticsQuery } from "@/hooks/dashboard/useAnalytics";
 import { UnifiedStatsOverview } from "@/components/dashboard/UnifiedStatsOverview";
 
 export default function ExecutiveDashboard() {
-  const t = useTranslations("executive.dashboard");
+  const t = useTranslations("super-admin.dashboard");
   const { data, isLoading } = useExecutiveDashboard();
   const { data: analyticsData } = useGetDashboardAnalyticsQuery();
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-pulse text-slate-400">{t("loading")}</div>
+        <div className="animate-pulse text-slate-400">Loading...</div>
       </div>
     );
   }
@@ -87,14 +87,16 @@ export default function ExecutiveDashboard() {
           <h1 className="text-3xl font-bold text-zinc-900 font-lexend">
             {t("title")}
           </h1>
-          <p className="text-zinc-500 mt-1">{t("subtitle")}</p>
+          <p className="text-zinc-500 mt-1">{t("description")}</p>
         </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
-          <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">
+            {t("recentActivity.title")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -103,7 +105,7 @@ export default function ExecutiveDashboard() {
             stats={[
               {
                 key: "children",
-                label: t("stats.totalChildren"),
+                label: t("stats.children"),
                 value: data?.overview.totalChildren || 0,
                 icon: Baby,
                 color: "text-sky-500",
@@ -112,7 +114,7 @@ export default function ExecutiveDashboard() {
               },
               {
                 key: "people",
-                label: t("stats.totalPeople"),
+                label: t("stats.peopleInNeed"),
                 value: data?.overview.totalPeopleRegistered || 0,
                 icon: Users,
                 color: "text-emerald-500",
@@ -121,7 +123,7 @@ export default function ExecutiveDashboard() {
               },
               {
                 key: "facilities",
-                label: t("stats.totalFacilities"),
+                label: t("stats.facilities"),
                 value: data?.overview.totalFacilities || 0,
                 icon: Building,
                 color: "text-cyan-500",
@@ -130,7 +132,7 @@ export default function ExecutiveDashboard() {
               },
               {
                 key: "edirs",
-                label: t("stats.totalEdirs"),
+                label: t("stats.edirs"),
                 value: data?.overview.totalEdirs || 0,
                 icon: HandHeart,
                 color: "text-teal-500",
@@ -172,7 +174,7 @@ export default function ExecutiveDashboard() {
                             {activity.title}
                           </h4>
                           <Badge variant="outline" className="text-xs">
-                            {t(`recentActivity.types.${activity.type}`)}
+                            {activity.type}
                           </Badge>
                         </div>
                         <p className="text-sm text-slate-600 mt-1">
@@ -189,10 +191,7 @@ export default function ExecutiveDashboard() {
                 <div className="text-center py-12 text-slate-400">
                   <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
                   <p className="font-medium">
-                    {t("recentActivity.empty.title")}
-                  </p>
-                  <p className="text-sm mt-1">
-                    {t("recentActivity.empty.description")}
+                    {t("recentActivity.noActivity")}
                   </p>
                 </div>
               )}

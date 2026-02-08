@@ -1,192 +1,54 @@
 "use client";
 
-import { SidebarLayout } from "@/components/shared/sidebar-layout";
-import React, { useMemo, useState } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-} from "@tanstack/react-table";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import { User } from "@/types/super-admin";
+import { useGetUsers } from "@/hooks/super-admin";
+import { DataTable } from "@/components/ui/data-table";
+import { getColumns } from "./_components/columns";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import UserTable from "./_components/UserTable";
-import type { RegisterEmployeeDto } from "@/types/employee";
-import { EmployeeRole } from "./types";
-import { mockEmployeeData } from "@/lib/mock-data";
-import { getUserColumns } from "./_components/UserColumns";
-import EditUserDialog from "./_components/EditUserDialog";
-import DeleteUserDialog from "./_components/DeleteUserDialog";
-import AddUserDialog from "@/app/[locale]/(modules)/super-admin/user-management/_components/AddUserDialog";
-import { formatRole } from "@/lib/utils";
+import { Plus, Shield } from "lucide-react";
+import { UserDialog } from "./_components/user-dialog";
+import { ChangePermissionsDialog } from "./_components/change-permissions-dialog";
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-const initialData: RegisterEmployeeDto[] = mockEmployeeData;
-
-export default function UserManagement() {
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<EmployeeRole | null>(null);
-  const [data, setData] = useState<RegisterEmployeeDto[]>(initialData);
-  // Dialog state
+export default function UserManagementPage() {
+  const t = useTranslations("super-admin.userManagement");
+  const { data: users = [], isLoading } = useGetUsers();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [permissionDialogOpen, setPermissionDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [editOriginalEmail, setEditOriginalEmail] = useState<string | null>(
-    null
-  );
-  const [selectedUser, setSelectedUser] = useState<RegisterEmployeeDto | null>(
-    null
-  );
 
-  const allRoles: string[] = useMemo(
-    () => Array.from(new Set(data.map((user) => user.role))),
-    [data]
-  );
-
-  // Filtered data based on search and role
-  const filteredData = useMemo(() => {
-    return data.filter((user) => {
-      const matchesSearch =
-        user.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        user.lastName.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase()) ||
-        user.cityIdNumber.toLowerCase().includes(search.toLowerCase()) ||
-        user.phoneNumber.toLowerCase().includes(search.toLowerCase());
-      const matchesRole = !roleFilter || user.role === roleFilter;
-      return matchesSearch && matchesRole;
-    });
-  }, [search, roleFilter, data]);
-
-  // Handlers for row actions
-
-  const handleEdit = (user: RegisterEmployeeDto) => {
-    setSelectedUser(user);
-    setEditOriginalEmail(user.email);
-    setEditDialogOpen(true);
-  };
-
-  const handleChangePermission = (user: RegisterEmployeeDto) => {
-    setSelectedUser(user);
-    setPermissionDialogOpen(true);
-  };
-  const handleDelete = (user: RegisterEmployeeDto) => {
-    setSelectedUser(user);
-    setDeleteDialogOpen(true);
-  };
-
-  const columns = useMemo(
-    () =>
-      getUserColumns({
-        onEdit: handleEdit,
-        onDelete: handleDelete,
-      }),
-    [data]
-  );
-
-  const table = useReactTable({
-    data: filteredData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    rowCount: filteredData.length,
+  const columns = getColumns({
+    onUserUpdated: () => {},
+    t: (key) => t(`table.${key}`),
   });
 
-  // Save handlers for dialogs
-
-  const handleEditSave = (user: RegisterEmployeeDto) => {
-    setData((prev) =>
-      prev.map((u) => (u.email === editOriginalEmail ? user : u))
-    );
-    setEditDialogOpen(false);
-    setSelectedUser(null);
-    setEditOriginalEmail(null);
-  };
-
-  const handleDeleteConfirm = (user: RegisterEmployeeDto) => {
-    setData((prev) => prev.filter((u) => u.email !== user.email));
-    setDeleteDialogOpen(false);
-    setSelectedUser(null);
-  };
-
   return (
-    <>
-      <EditUserDialog
-        open={editDialogOpen}
-        user={selectedUser}
-        onOpenChange={(open) => {
-          setEditDialogOpen(open);
-          if (!open) setSelectedUser(null);
-        }}
-        onSave={handleEditSave}
-      />
-      <DeleteUserDialog
-        open={deleteDialogOpen}
-        user={selectedUser}
-        onOpenChange={(open) => {
-          setDeleteDialogOpen(open);
-          if (!open) setSelectedUser(null);
-        }}
-        onDelete={handleDeleteConfirm}
-      />
-      <div className="flex space-x-2 justify-between items-center ">
-        <AddUserDialog
-          open={dialogOpen}
-          onOpenChange={setDialogOpen}
-          allRoles={allRoles as EmployeeRole[]}
-          onUserAdded={(user) => {
-            setData((prev) => [
-              ...prev,
-              {
-                ...user,
-                activeStatus: true,
-              },
-            ]);
-            setDialogOpen(false);
-          }}
-        />
-        <Input
-          placeholder="Search"
-          className=" w-[50%]"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <div className="flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm hover:bg-gray-300 hover:cursor-pointer">
-                {roleFilter
-                  ? `Role: ${formatRole(roleFilter)}`
-                  : "Filter by Role"}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setRoleFilter(null)}>
-                All Roles
-              </DropdownMenuItem>
-              {allRoles.map((role) => (
-                <DropdownMenuItem
-                  key={role}
-                  onClick={() => setRoleFilter(role as EmployeeRole)}
-                >
-                  {formatRole(role)}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button
-            className="px-4 py-2 rounded-md text-sm hover:cursor-pointer"
-            onClick={() => setDialogOpen(true)}
-          >
-            + Add user
+    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+      <div className="flex items-center justify-between space-y-2">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("description")}</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> {t("addUser")}
           </Button>
         </div>
       </div>
-      <UserTable table={table} />
-    </>
+
+      {isLoading ? (
+        <div className="flex h-[400px] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : (
+        <DataTable data={users} columns={columns} />
+      )}
+
+      <UserDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onUserSaved={() => setDialogOpen(false)}
+      />
+    </div>
   );
 }
