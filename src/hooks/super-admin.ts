@@ -11,6 +11,7 @@ import {
   getRoleDetails,
   createRole,
   assignPermissionsToRole,
+  changeUserRole,
 } from "@/api/super-admin/user-management";
 import { getAuditLogs, getAuditLogDetails } from "@/api/super-admin/audit-logs";
 import { getBackups, downloadBackup } from "@/api/super-admin/backups";
@@ -20,6 +21,7 @@ import {
   CreateRoleDto,
 } from "@/types/super-admin";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 // User Management Hooks
 
@@ -39,49 +41,53 @@ export const useGetUserFormData = () => {
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({
     mutationFn: createUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User created successfully");
+      toast.success(t("createSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to create user");
+      toast.error(error.message || t("createError"));
     },
   });
 };
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<CreateUserDto> }) =>
       updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User updated successfully");
+      toast.success(t("updateSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update user");
+      toast.error(error.message || t("updateError"));
     },
   });
 };
 
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User deleted successfully");
+      toast.success(t("deleteSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to delete user");
+      toast.error(error.message || t("deleteError"));
     },
   });
 };
 
 export const useUpdateUserStatus = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: string }) =>
       updateUserStatus(id, status),
@@ -89,20 +95,21 @@ export const useUpdateUserStatus = () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update user status");
+      toast.error(error.message || t("statusError"));
     },
   });
 };
 
 export const useResetUserPassword = () => {
+  const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({
     mutationFn: ({ id, password }: { id: number; password: string }) =>
       resetUserPassword(id, password),
     onSuccess: () => {
-      toast.success("Password reset successfully");
+      toast.success(t("passwordResetSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to reset password");
+      toast.error(error.message || t("passwordResetError"));
     },
   });
 };
@@ -134,10 +141,11 @@ export const useGetBackups = () => {
 };
 
 export const useDownloadBackup = () => {
+  const t = useTranslations("super-admin.backups.messages");
   return useMutation({
     mutationFn: downloadBackup,
     onError: (error: any) => {
-      toast.error(error.message || "Failed to download backup");
+      toast.error(error.message || t("downloadFailed"));
     },
   });
 };
@@ -161,20 +169,22 @@ export const useGetRoleDetails = (roleId?: number) => {
 
 export const useCreateRole = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.settings.roleManagement.messages");
   return useMutation({
     mutationFn: (data: CreateRoleDto) => createRole(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userFormData"] });
-      toast.success("Role created successfully");
+      toast.success(t("createSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to create role");
+      toast.error(error.message || t("createError"));
     },
   });
 };
 
 export const useAssignPermissionsToRole = () => {
   const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.settings.roleManagement.messages");
   return useMutation({
     mutationFn: ({
       roleId,
@@ -185,10 +195,26 @@ export const useAssignPermissionsToRole = () => {
     }) => assignPermissionsToRole(roleId, permissionIds),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["role", variables.roleId] });
-      toast.success("Permissions assigned successfully");
+      toast.success(t("permissionsAssignSuccess"));
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to assign permissions");
+      toast.error(error.message || t("permissionsAssignError"));
+    },
+  });
+};
+
+export const useChangeUserRole = () => {
+  const queryClient = useQueryClient();
+  const t = useTranslations("super-admin.userManagement.actions.messages");
+  return useMutation({
+    mutationFn: ({ userId, roleId }: { userId: number; roleId: number }) =>
+      changeUserRole(userId, roleId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success(t("roleUpdateSuccess"));
+    },
+    onError: (error: any) => {
+      toast.error(error.message || t("roleUpdateError"));
     },
   });
 };

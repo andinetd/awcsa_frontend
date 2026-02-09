@@ -8,11 +8,15 @@ import { UserActions } from "./user-actions";
 
 interface ColumnsProps {
   onUserUpdated: () => void;
+  onChangeRole: (user: User) => void;
+  onChangePermissions: (user: User) => void;
   t: (key: string) => string;
 }
 
 export const getColumns = ({
   onUserUpdated,
+  onChangeRole,
+  onChangePermissions,
   t,
 }: ColumnsProps): ColumnDef<User>[] => [
   {
@@ -88,7 +92,12 @@ export const getColumns = ({
   {
     id: "actions",
     cell: ({ row }) => (
-      <UserActions user={row.original} onUserUpdated={onUserUpdated} />
+      <UserActions
+        user={row.original}
+        onUserUpdated={onUserUpdated}
+        onChangeRole={onChangeRole}
+        onChangePermissions={onChangePermissions}
+      />
     ),
   },
 ];

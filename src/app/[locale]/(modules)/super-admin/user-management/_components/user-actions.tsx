@@ -48,12 +48,18 @@ import { ChangeRoleDialog } from "./change-role-dialog";
 interface UserActionsProps {
   user: User;
   onUserUpdated: () => void;
+  onChangeRole: (user: User) => void;
+  onChangePermissions: (user: User) => void;
 }
 
-export function UserActions({ user, onUserUpdated }: UserActionsProps) {
+export function UserActions({
+  user,
+  onUserUpdated,
+  onChangeRole,
+  onChangePermissions,
+}: UserActionsProps) {
   const t = useTranslations("super-admin.userManagement.actions");
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [roleOpen, setRoleOpen] = useState(false);
 
   const { user: currentUser } = useAuthStore();
   const updateStatusMutation = useUpdateUserStatus();
@@ -128,10 +134,14 @@ export function UserActions({ user, onUserUpdated }: UserActionsProps) {
             {t("copyEmail")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setRoleOpen(true)}>
+          <DropdownMenuItem onClick={() => onChangeRole(user)}>
             <UserCog className="mr-2 h-4 w-4" />
             {t("changeRole")}
           </DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={() => onChangePermissions(user)}>
+            <Shield className="mr-2 h-4 w-4" />
+            {t("changePermissions")}
+          </DropdownMenuItem> */}
           <DropdownMenuItem
             onClick={handleStatusChange}
             disabled={isLocking || isActivating || isSelf}
@@ -166,13 +176,6 @@ export function UserActions({ user, onUserUpdated }: UserActionsProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <ChangeRoleDialog
-        open={roleOpen}
-        onOpenChange={setRoleOpen}
-        user={user}
-        onSuccess={onUserUpdated}
-      />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>

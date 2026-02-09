@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { User } from "@/types/super-admin";
-import { useGetUserFormData, useUpdateUser } from "@/hooks/super-admin";
+import { useGetUserFormData, useChangeUserRole } from "@/hooks/super-admin";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -55,8 +55,8 @@ export function ChangeRoleDialog({
     "super-admin.userManagement.actions.changeRoleDialog",
   );
   const { data: formData, isLoading: loadingFormData } = useGetUserFormData();
-  const updateUserMutation = useUpdateUser();
-  const isSaving = updateUserMutation.isPending;
+  const changeUserRoleMutation = useChangeUserRole();
+  const isSaving = changeUserRoleMutation.isPending;
 
   const formSchema = useMemo(() => {
     return z.object({
@@ -84,8 +84,8 @@ export function ChangeRoleDialog({
   }, [open, formData, user, form]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateUserMutation.mutate(
-      { id: user.id, data: { roleId: Number(values.roleId) } },
+    changeUserRoleMutation.mutate(
+      { userId: user.id, roleId: Number(values.roleId) },
       {
         onSuccess: () => {
           onSuccess();

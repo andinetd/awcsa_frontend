@@ -92,6 +92,7 @@
       "label": "Actions",
       "copyEmail": "Copy Email",
       "changeRole": "Change Role",
+      "changePermissions": "Change Permissions",
       "lockAccount": "Lock Account",
       "activate": "Activate Account",
       "resetPassword": "Reset Password",
@@ -100,7 +101,17 @@
         "activatedSuccess": "User account activated successfully",
         "lockedSuccess": "User account locked successfully",
         "passwordRequired": "Please enter a new password",
-        "passwordResetSuccess": "Password reset successfully"
+        "passwordResetSuccess": "Password reset successfully",
+        "createSuccess": "User created successfully",
+        "createError": "Failed to create user",
+        "updateSuccess": "User updated successfully",
+        "updateError": "Failed to update user",
+        "deleteSuccess": "User deleted successfully",
+        "deleteError": "Failed to delete user",
+        "statusError": "Failed to update user status",
+        "passwordResetError": "Failed to reset password",
+        "roleUpdateSuccess": "User role updated successfully",
+        "roleUpdateError": "Failed to update user role"
       },
       "changeRoleDialog": {
         "title": "Change User Role",
@@ -203,6 +214,12 @@
         "errors": {
           "nameRequired": "Role name is required",
           "descRequired": "Description is required"
+        },
+        "messages": {
+          "createSuccess": "Role created successfully",
+          "createError": "Failed to create role",
+          "permissionsAssignSuccess": "Permissions assigned successfully",
+          "permissionsAssignError": "Failed to assign permissions"
         }
       }
     }

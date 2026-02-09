@@ -45,7 +45,7 @@ export const useAuthStore = create<AuthState>()(
           Cookies.set("wcasf_auth_token", token, {
             secure: true,
             sameSite: "strict",
-            expires: 7,
+            expires: 1,
             path: "/",
           });
           const decodedToken: JwtPayload = jwtDecode(token);

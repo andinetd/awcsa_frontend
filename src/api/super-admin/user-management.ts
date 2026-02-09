@@ -87,6 +87,15 @@ export const updateUserStatus = async (id: number, status: string) => {
   return res.data;
 };
 
+export const changeUserRole = async (userId: number, roleId: number) => {
+  const res = await axios.patch(
+    `${BASE_URL}/admin/users/${userId}/role`,
+    { roleId },
+    getAuthHeader(),
+  );
+  return res.data;
+};
+
 export const resetUserPassword = async (id: number, newPassword: string) => {
   const res = await axios.post(
     `${BASE_URL}/admin/users/${id}/reset-password`,
