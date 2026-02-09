@@ -28,15 +28,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center px-4 relative">
-      <div className="absolute top-6 left-6">
-        <Button variant="ghost" size="sm" asChild className="gap-2">
-          <Link href="/">
-            <Home className="size-4" />
-            <span>{t("home")}</span>
-          </Link>
-        </Button>
-      </div>
-
       <div className="absolute top-6 right-6">
         <LanguageSwitcher />
       </div>
@@ -53,23 +44,32 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side: SignIn Form */}
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="font-lexend">{t("signInTitle")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <GoogleReCaptchaProvider
-              reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-              scriptProps={{
-                async: true,
-                defer: true,
-                appendTo: "head",
-              }}
-            >
-              <SignInForm />
-            </GoogleReCaptchaProvider>
-          </CardContent>
-        </Card>
+        <div className="flex flex-col w-full max-w-md gap-4">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="font-lexend">{t("signInTitle")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <GoogleReCaptchaProvider
+                reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                scriptProps={{
+                  async: true,
+                  defer: true,
+                  appendTo: "head",
+                }}
+              >
+                <SignInForm />
+              </GoogleReCaptchaProvider>
+              <Link
+                href="/"
+                className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-lexend mt-4 hover:underline"
+              >
+                <Home className="size-4" />
+                <span>{t("backToHome")}</span>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <div className="absolute bottom-6 left-0 right-0 text-xs flex flex-wrap justify-center items-center gap-2 px-4 text-foreground/65">

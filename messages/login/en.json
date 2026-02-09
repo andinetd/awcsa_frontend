@@ -5,7 +5,8 @@
     "copyright": "@{year} Bureau of Women, children & social Affairs.",
     "location": "Addis Ababa",
     "logoAlt": "WCSA Logo",
-    "home": "Home"
+    "home": "Home",
+    "backToHome": "Get back to home"
   },
   "form": {
     "email": "Email",

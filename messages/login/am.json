@@ -5,7 +5,8 @@
     "copyright": "@{year} የሴቶች፣ ህጻናትና ማህበራዊ ጉዳይ ቢሮ።",
     "location": "አዲስ አበባ",
     "logoAlt": "የቢሮው አርማ",
-    "home": "ዋና ገጽ"
+    "home": "ዋና ገጽ",
+    "backToHome": "ወደ ዋና ገጽ ይመለሱ"
   },
   "form": {
     "email": "ኢሜይል",
