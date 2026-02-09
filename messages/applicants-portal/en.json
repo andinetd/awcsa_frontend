@@ -77,7 +77,7 @@
     "name": "Full Name",
     "email": "Email",
     "phone": "Phone Number",
-    "id": "ID number",
+    "id": "City ID number",
     "loading": "Loading user information..."
   },
   "stepone": {

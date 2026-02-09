@@ -64,7 +64,7 @@ export function UserInfoSection() {
               <p className="text-sm font-medium text-gray-500">
                 {t("userInfo.id")}
               </p>
-              <p className="text-gray-900">{userData?.id}</p>
+              <p className="text-gray-900">{userData?.profile?.cityIdNumber}</p>
             </div>
           </div>
         </div>
