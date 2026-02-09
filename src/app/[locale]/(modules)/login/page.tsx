@@ -11,6 +11,9 @@ import {
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
+import { Home } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const t = useTranslations("login.page");
@@ -25,6 +28,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center px-4 relative">
+      <div className="absolute top-6 left-6">
+        <Button variant="ghost" size="sm" asChild className="gap-2">
+          <Link href="/">
+            <Home className="size-4" />
+            <span>{t("home")}</span>
+          </Link>
+        </Button>
+      </div>
+
       <div className="absolute top-6 right-6">
         <LanguageSwitcher />
       </div>

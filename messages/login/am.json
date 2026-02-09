@@ -4,7 +4,8 @@
     "signInTitle": "ይግቡ",
     "copyright": "@{year} የሴቶች፣ ህጻናትና ማህበራዊ ጉዳይ ቢሮ።",
     "location": "አዲስ አበባ",
-    "logoAlt": "የቢሮው አርማ"
+    "logoAlt": "የቢሮው አርማ",
+    "home": "ዋና ገጽ"
   },
   "form": {
     "email": "ኢሜይል",

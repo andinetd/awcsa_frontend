@@ -4,7 +4,8 @@
     "signInTitle": "Sign in",
     "copyright": "@{year} Bureau of Women, children & social Affairs.",
     "location": "Addis Ababa",
-    "logoAlt": "WCSA Logo"
+    "logoAlt": "WCSA Logo",
+    "home": "Home"
   },
   "form": {
     "email": "Email",
