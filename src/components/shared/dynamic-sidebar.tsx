@@ -66,7 +66,10 @@ export function DynamicSidebar() {
         <SidebarMenu>
           <SidebarMenuItem className="p-1 border-b border-slate-100">
             <Link href={"/"}>
-              <SidebarMenuButton size="lg" className="flex items-center gap-2">
+              <SidebarMenuButton
+                size="lg"
+                className="flex items-center gap-2 hover:bg-slate-50 hover:underline transition-colors cursor-pointer p-2"
+              >
                 {/* <Building className="size-4" /> */}
                 <div>
                   <img
