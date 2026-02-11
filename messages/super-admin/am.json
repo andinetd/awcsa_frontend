@@ -214,13 +214,13 @@
         "errors": {
           "nameRequired": "የሚና ስም ያስፈልጋል",
           "descRequired": "መግለጫ ያስፈልጋል"
-        },
-        "messages": {
-          "createSuccess": "ሚናው በተሳካ ሁኔታ ተፈጥሯል",
-          "createError": "ሚናውን መፍጠር አልተቻለም",
-          "permissionsAssignSuccess": "ፈቃዶች በተሳካ ሁኔታ ተመድበዋል",
-          "permissionsAssignError": "ፈቃዶችን መመደብ አልተቻለም"
         }
+      },
+      "messages": {
+        "createSuccess": "ሚናው በተሳካ ሁኔታ ተፈጥሯል",
+        "createError": "ሚናውን መፍጠር አልተቻለም",
+        "permissionsAssignSuccess": "ፈቃዶች በተሳካ ሁኔታ ተመድበዋል",
+        "permissionsAssignError": "ፈቃዶችን መመደብ አልተቻለም"
       }
     }
   },
@@ -250,6 +250,50 @@
     "userManagement": "የተጠቃሚዎች አስተዳደር",
     "auditLogs": "የኦዲት መዝገቦች",
     "backups": "የስርዓት ቅጂዎች",
-    "generalSettings": "አጠቃላይ ማስተካከያዎች"
+    "generalSettings": "አጠቃላይ ማስተካከያዎች",
+    "landingPage": "የመነሻ ገጽ አስተዳደር"
+  },
+  "cms": {
+    "title": "የመነሻ ገጽ አስተዳደር",
+    "description": "የመነሻ ገጽ ይዘቶችን፣ ክፍሎችን እና ምስሎችን ያስተዳድሩ።",
+    "sections": {
+      "hero": "የመክፈቻ ክፍል",
+      "service": "አገልግሎት",
+      "services": "አገልግሎቶቻችን",
+      "testimonial": "ምስክርነት",
+      "testimonials": "ምስክርነቶች",
+      "gallery": "ጋለሪ",
+      "contact": "የግንኙነት መረጃ",
+      "social": "ማህበራዊ ትስስር",
+      "quick_link": "ፈጣን ሊንክ",
+      "quickLinks": "ፈጣን ሊንኮች"
+    },
+    "actions": {
+      "save": "ለውጦችን አስቀምጥ",
+      "add": "ጨምር",
+      "edit": "አስተካክል",
+      "delete": "ሰርዝ",
+      "visibility": "ታይነት"
+    },
+    "fields": {
+      "title": "ርዕስ",
+      "subtitle": "ንዑስ ርዕስ",
+      "content": "ይዘት",
+      "imageUrl": "የምስል ሊንክ",
+      "order": "ቅደም ተከተል",
+      "link": "ሊንክ",
+      "linkText": "የሊንክ ጽሁፍ",
+      "isVisible": "ይታይ"
+    },
+    "messages": {
+      "settingsUpdateSuccess": "ማስተካከያው በተሳካ ሁኔታ ተዘምኗል",
+      "settingsUpdateError": "ማስተካከያውን ማዘመን አልተቻለም",
+      "contentCreateSuccess": "ይዘቱ በተሳካ ሁኔታ ተፈጥሯል",
+      "contentCreateError": "ይዘቱን መፍጠር አልተቻለም",
+      "contentUpdateSuccess": "ይዘቱ በተሳካ ሁኔታ ተዘምኗል",
+      "contentUpdateError": "ይዘቱን ማዘመን አልተቻለም",
+      "contentDeleteSuccess": "ይዘቱ በተሳካ ሁኔታ ተሰርዟል",
+      "contentDeleteError": "ይዘቱን መሰረዝ አልተቻለም"
+    }
   }
 }

@@ -1,18 +1,23 @@
 "use client";
 
-import {
-  Baby,
-  Building2,
-  Accessibility,
-  Heart,
-} from "lucide-react";
+import { Baby, Building2, Accessibility, Heart } from "lucide-react";
 import { delay, motion } from "framer-motion";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-const ServicesSection = () => {
+import { CMSContent } from "@/types/cms";
+
+const ServicesSection = ({ items }: { items?: CMSContent[] }) => {
   const t = useTranslations();
-  const services = [
+
+  const iconMap: Record<string, any> = {
+    Baby: Baby,
+    Building2: Building2,
+    Accessibility: Accessibility,
+    Heart: Heart,
+  };
+
+  const staticServices = [
     {
       icon: Baby,
       title: t("services.adoptionTitle"),
@@ -36,6 +41,20 @@ const ServicesSection = () => {
       description: t("services.elderlyDescription"),
     },
   ];
+
+  const services =
+    items && items.length > 0
+      ? items
+          .filter((i) => i.isVisible)
+          .map((item) => ({
+            icon: iconMap[item.imageUrl || ""] || Heart,
+            title: item.title,
+            description: item.content,
+            link: item.metadata?.link,
+            linkText: item.metadata?.linkText,
+          }))
+      : staticServices;
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

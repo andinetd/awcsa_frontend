@@ -5,13 +5,21 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
-const HeroBanner = () => {
+const HeroBanner = ({ data }: { data?: any }) => {
   const t = useTranslations();
+
+  const title = data?.title || t("hero.title_first") + t("hero.title");
+  const subtitle = data?.subtitle || t("hero.description");
+  const description = data?.description || "";
+  const imageUrl = data?.imageUrl || "/assets/background-placeholder.jpg";
+  const buttonText = data?.buttonText || t("hero.signIn");
+  const buttonLink = data?.buttonLink || "/login";
+
   return (
     <div
       className="min-h-screen w-full pt-20 sm:pt-24 md:pt-28 lg:pt-32 flex flex-col items-center justify-center px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 relative"
       style={{
-        backgroundImage: "url('/assets/background-placeholder.jpg')",
+        backgroundImage: `url('${imageUrl}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -25,15 +33,17 @@ const HeroBanner = () => {
         transition={{ duration: 0.5 }}
       >
         <p className="text-white font-medium font-lexend text-xs sm:text-sm md:text-base px-4">
-          {t("hero.description")}
+          {subtitle}
         </p>
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold font-lexend leading-tight text-white tracking-tight">
-          <span className="text-white">{t("hero.title_first")}</span>
-          <span className="text-primary">{t("hero.title")}</span>
+          {title}
         </h1>
-        <Link href={"/login"}>
+        {description && (
+          <p className="text-lg text-white/80 max-w-2xl">{description}</p>
+        )}
+        <Link href={buttonLink}>
           <Button className="w-40 h-10 font-lexend text-lg">
-            {t("hero.signIn")}
+            {buttonText}
           </Button>
         </Link>
       </motion.div>

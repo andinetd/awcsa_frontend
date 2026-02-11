@@ -205,6 +205,11 @@ export const sidebarConfig: Record<
           url: "/super-admin/general-settings",
           icon: Settings2,
         },
+        {
+          title: "Landing Page",
+          url: "/super-admin/landing-page",
+          icon: Settings2,
+        },
       ],
     },
   ],
