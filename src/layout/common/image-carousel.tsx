@@ -10,16 +10,26 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const images = [
-  "/assets/WCSA_logo.jpg",
-  "/assets/WCSA_logo.jpg",
-  "/assets/WCSA_logo.jpg",
-  "/assets/WCSA_logo.jpg",
-  "/assets/WCSA_logo.jpg",
-];
+import { CMSContent } from "@/types/cms";
 
-export default function ImageCarousel() {
+export default function ImageCarousel({ items }: { items?: CMSContent[] }) {
   const t = useTranslations();
+
+  const staticImages = [
+    "/assets/WCSA_logo.jpg",
+    "/assets/WCSA_logo.jpg",
+    "/assets/WCSA_logo.jpg",
+    "/assets/WCSA_logo.jpg",
+    "/assets/WCSA_logo.jpg",
+  ];
+
+  const galleryItems =
+    items && items.length > 0
+      ? items
+          .filter((i) => i.isVisible)
+          .map((item) => item.imageUrl || "/assets/WCSA_logo.jpg")
+      : staticImages;
+
   return (
     <section
       className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800"
@@ -41,7 +51,7 @@ export default function ImageCarousel() {
             className="w-full max-w-4xl mx-auto"
           >
             <CarouselContent>
-              {images.map((src, index) => (
+              {galleryItems.map((src, index) => (
                 <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                   <div className="p-1">
                     <Card>
