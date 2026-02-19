@@ -21,8 +21,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/navigation";
-import { moduleAndRouteMap } from "@/utils/app-route";
-import { DeputyBureau } from "@/types/api/auth";
+import {
+  getRouteByDirectorate,
+  getRouteByDepartment,
+} from "@/utils/directorate-route";
 
 import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
@@ -84,9 +86,16 @@ export default function SignInForm() {
     }
   }
 
-  // Handle success / error redirects and toasts
+  // Reset form state on mount to ensure clean state after logout/redirect
   useEffect(() => {
-    // Landed on login page? Clear any potentially stale state if it's not actually valid
+    form.reset();
+    setShowPassword(false);
+    setRecaptchaLoading(false);
+  }, []);
+
+
+  useEffect(() => {
+    // Clear any potentially stale state if it's not actually valid
     const token = useAuthStore.getState().token;
     if (token) {
       try {
@@ -101,48 +110,61 @@ export default function SignInForm() {
   }, []);
 
   useEffect(() => {
-    if (!user && !orgUnit) return;
+    if (!user) return;
 
-    // Double check token validity before redirecting
     const token = useAuthStore.getState().token;
-    if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-          useAuthStore.getState().logout();
-          return;
-        }
-      } catch (e) {
+    if (!token) return;
+
+    // Double check token validity
+    try {
+      const decoded: any = jwtDecode(token);
+      if (decoded.exp && decoded.exp * 1000 < Date.now()) {
         useAuthStore.getState().logout();
         return;
       }
+    } catch (e) {
+      useAuthStore.getState().logout();
+      return;
     }
+
+    const { userRole } = useAuthStore.getState();
 
     console.log("DEBUG: Redirection Check", {
       user,
-      accountType: user?.accountType,
+      accountType: user.accountType,
+      userRole,
       orgUnit,
-      deputyBureau: orgUnit?.deputyBureau,
     });
 
-    // Defer navigation to next tick to avoid interfering with rendering
     const navTimer = setTimeout(() => {
-      if (user?.accountType === "CLIENT") {
+      if (
+        user.accountType === "CLIENT" ||
+        (user as any).accountType === "CLIENT"
+      ) {
         router.push(`/applicant-portal/portal`);
-      } else if (user?.accountType === "CHILD_CARE_FACLITY") {
+      } else if (
+        user.accountType === "CHILD_CARE_FACLITY" ||
+        user.accountType === "CHILD_CARE_FACILITY"
+      ) {
         router.push(`/care-centers-portal`);
-      } else if (orgUnit?.deputyBureau == null) {
-        router.push("/bureau-head");
-      } else {
-        const route = moduleAndRouteMap(orgUnit?.deputyBureau as DeputyBureau);
-        router.push(route);
+      } else if (user.accountType === "EMPLOYEE") {
+        if (userRole === "Super_Admin") {
+          router.push("/super-admin/dashboard");
+        } else {
+          const { department, userRole } = useAuthStore.getState();
+
+          if (userRole === "Super_Admin") {
+            router.push("/super-admin/dashboard");
+          } else {
+            const route = getRouteByDepartment(department);
+            router.push(route);
+          }
+        }
       }
     }, 0);
 
     return () => clearTimeout(navTimer);
   }, [user, orgUnit, router]);
-
-  // Show error toast when sign-in mutation errors
   useEffect(() => {
     if (isError) {
       toast.error(

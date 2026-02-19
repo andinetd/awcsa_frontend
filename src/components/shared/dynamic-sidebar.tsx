@@ -15,14 +15,22 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
-import { Home, LogOut, User } from "lucide-react";
+import { Home, LogOut, User, LayoutDashboard } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 export function DynamicSidebar() {
-  const { user, logout, orgUnit } = useAuthStore();
+  const {
+    user,
+    userRole,
+    logout,
+    orgUnit,
+    userPermissions,
+    entity,
+    department,
+  } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("sidebar");
@@ -37,12 +45,20 @@ export function DynamicSidebar() {
   };
 
   const sections = useMemo(() => {
-    if (!orgUnit) return [];
-    const baseSections = getSidebarItems(orgUnit, pathname);
-    const isGlobalAdmin =
-      orgUnit.type === "BUREAU" && orgUnit.deputyBureau === null;
+    const entityRole = (entity as any)?.role || "";
+    const baseSections = getSidebarItems(
+      orgUnit,
+      pathname,
+      user,
+      userRole,
+      userPermissions,
+      entityRole,
+      department,
+    );
 
-    if (isGlobalAdmin) {
+    const isSystemUser = department === "SYSTEM";
+
+    if (isSystemUser) {
       return [
         {
           title: "Home",
@@ -50,7 +66,7 @@ export function DynamicSidebar() {
             {
               title: "Home",
               url: "/bureau-head",
-              icon: Home,
+              icon: LayoutDashboard,
             },
           ],
         },
@@ -58,7 +74,7 @@ export function DynamicSidebar() {
       ];
     }
     return baseSections;
-  }, [orgUnit, pathname]);
+  }, [orgUnit, pathname, user, userRole, department]);
 
   return (
     <Sidebar className="">

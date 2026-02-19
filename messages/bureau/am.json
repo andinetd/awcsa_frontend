@@ -1,6 +1,7 @@
 {
   "dashboard": {
     "title": "የዳሽቦርድ አጠቃላይ እይታ",
+    "analytics": "ትንተና",
     "stats": {
       "totalChildren": "ጠቅላላ ሕፃናት",
       "totalFacilities": "ጠቅላላ ተቋማት",

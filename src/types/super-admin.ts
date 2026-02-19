@@ -17,6 +17,21 @@ export interface User {
   employee: Employee;
 }
 
+export type EmployeeRole =
+  | "BUREAU_MANAGER"
+  | "DEPUTY_MANAGER"
+  | "DIRECTOR"
+  | "TEAM_LEADER"
+  | "EXPERT"
+  | "SOCIAL_WORKER"
+  | "FACILITATOR_OFFICER";
+
+export type Department =
+  | "CHILDREN_AFFAIRS"
+  | "WOMEN_AFFAIRS"
+  | "SOCIAL_AFFAIRS"
+  | "SYSTEM";
+
 export interface CreateUserDto {
   firstName: string;
   lastName: string;
@@ -26,6 +41,8 @@ export interface CreateUserDto {
   password: string;
   roleId: number;
   orgUnitId: number;
+  employeeRole: EmployeeRole;
+  department: Department;
   directorateId?: number; // Optional based on hierarchy
   teamId?: number; // Optional based on hierarchy
 }

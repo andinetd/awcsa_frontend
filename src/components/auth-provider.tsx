@@ -11,7 +11,7 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
-  const { orgUnit, hydrated } = useAuthStore();
+  const { user, department, hydrated, orgUnit } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,31 +23,45 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
     console.log(
       "Hydrated:",
       hydrated,
-      "Role:",
-      orgUnit,
+      "User:",
+      user?.email,
+      "OrgUnit:",
+      orgUnit?.deputyBureau,
       "Allowed:",
       allowedRoles,
     );
 
-    if (!orgUnit) {
+    if (!user) {
       useAuthStore.getState().logout();
       router.replace("/login");
       return;
     }
 
-    if (
-      allowedRoles &&
-      !allowedRoles.includes(orgUnit?.deputyBureau as DeputyBureau)
-    ) {
-      router.replace("/unauthorized");
+    if (allowedRoles) {
+      const { userRole, department } = useAuthStore.getState();
+      const isAuthorized = allowedRoles.some((role) => {
+        if (role === "CLIENT") return user.accountType === "CLIENT";
+        if (role === "CARE_CENTERS_PORTAL")
+          return (
+            user.accountType === "CHILD_CARE_FACILITY" ||
+            user.accountType === "CHILD_CARE_FACLITY"
+          );
+        // "SYSTEM" department allows everything, or specific role check
+        if (department === "SYSTEM") return true;
+        return department === role;
+      });
+
+      if (!isAuthorized) {
+        router.replace("/unauthorized");
+      }
     }
-  }, [hydrated, orgUnit?.deputyBureau, allowedRoles, router]);
+  }, [hydrated, user, department, allowedRoles, router]);
 
   console.log(
-    "Hydrated:",
+    "AuthProvider Rendering - Hydrated:",
     hydrated,
-    "Role:",
-    orgUnit?.deputyBureau,
+    "User:",
+    user?.email,
     "Allowed:",
     allowedRoles,
   );
@@ -56,7 +70,7 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
     return <CheckingAccess />;
   }
 
-  if (allowedRoles && !orgUnit) return null;
+  if (allowedRoles && !user) return null;
 
   return <>{children}</>;
 };

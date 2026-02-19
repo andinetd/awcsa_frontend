@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateUserDto } from "@/types/super-admin";
+import { CreateUserDto, EmployeeRole } from "@/types/super-admin";
 import { useCreateUser, useGetUserFormData } from "@/hooks/super-admin";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -62,6 +62,8 @@ export function UserDialog({
       password: z.string().min(6, t("errors.passwordMin")),
       roleId: z.string().min(1, t("errors.roleRequired")),
       orgUnitId: z.string().min(1, t("errors.orgRequired")),
+      employeeRole: z.string().min(1, t("errors.employeeRoleRequired")),
+      department: z.string().min(1, t("errors.departmentRequired")),
       directorateId: z.string().optional(),
       teamId: z.string().optional(),
     });
@@ -78,6 +80,8 @@ export function UserDialog({
       password: "",
       roleId: "",
       orgUnitId: "",
+      employeeRole: "",
+      department: "",
       directorateId: "",
       teamId: "",
     },
@@ -94,6 +98,8 @@ export function UserDialog({
         password: values.password,
         roleId: Number(values.roleId),
         orgUnitId: Number(values.orgUnitId),
+        employeeRole: values.employeeRole as EmployeeRole,
+        department: values.department as any, // Cast to any or Department type if imported
         directorateId: values.directorateId
           ? Number(values.directorateId)
           : undefined,
@@ -288,6 +294,88 @@ export function UserDialog({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="employeeRole"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("employeeRole")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t("select")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="BUREAU_MANAGER">
+                            Bureau Manager
+                          </SelectItem>
+                          <SelectItem value="DEPUTY_MANAGER">
+                            Deputy Manager
+                          </SelectItem>
+                          <SelectItem value="DIRECTOR">Director</SelectItem>
+                          <SelectItem value="TEAM_LEADER">
+                            Team Leader
+                          </SelectItem>
+                          <SelectItem value="EXPERT">Expert</SelectItem>
+                          <SelectItem value="SOCIAL_WORKER">
+                            Social Worker
+                          </SelectItem>
+                          <SelectItem value="FACILITATOR_OFFICER">
+                            Facilitator Officer
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage>
+                        {form.formState.errors.employeeRole &&
+                          t("errors.employeeRoleRequired")}
+                      </FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="department"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel>{t("department")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t("select")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="CHILDREN_AFFAIRS">
+                            {t("departments.CHILDREN_AFFAIRS")}
+                          </SelectItem>
+                          <SelectItem value="WOMEN_AFFAIRS">
+                            {t("departments.WOMEN_AFFAIRS")}
+                          </SelectItem>
+                          <SelectItem value="SOCIAL_AFFAIRS">
+                            {t("departments.SOCIAL_AFFAIRS")}
+                          </SelectItem>
+                          <SelectItem value="SYSTEM">
+                            {t("departments.SYSTEM")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="orgUnitId"

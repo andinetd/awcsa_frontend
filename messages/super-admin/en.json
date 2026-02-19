@@ -59,11 +59,19 @@
       "cityId": "City ID",
       "password": "Password",
       "role": "Role",
+      "employeeRole": "Employee Role",
       "org": "Organization",
       "directorate": "Directorate (Optional)",
       "subCity": "Sub-City",
       "woreda": "Woreda (Optional)",
       "team": "Team (Optional)",
+      "department": "Department",
+      "departments": {
+        "CHILDREN_AFFAIRS": "Children Affairs",
+        "WOMEN_AFFAIRS": "Women Affairs",
+        "SOCIAL_AFFAIRS": "Social Affairs",
+        "SYSTEM": "System"
+      },
       "select": "Select...",
       "selectSubCity": "Select Sub-City",
       "create": "Create User",
@@ -84,6 +92,8 @@
         "cityIdRequired": "City ID is required",
         "passwordMin": "Password must be at least 6 characters",
         "roleRequired": "Role is required",
+        "employeeRoleRequired": "Employee role is required",
+        "departmentRequired": "Department is required",
         "orgRequired": "Organization is required",
         "saveFailed": "Failed to save user"
       }
@@ -214,13 +224,13 @@
         "errors": {
           "nameRequired": "Role name is required",
           "descRequired": "Description is required"
-        },
-        "messages": {
-          "createSuccess": "Role created successfully",
-          "createError": "Failed to create role",
-          "permissionsAssignSuccess": "Permissions assigned successfully",
-          "permissionsAssignError": "Failed to assign permissions"
         }
+      },
+      "messages": {
+        "createSuccess": "Role created successfully",
+        "createError": "Failed to create role",
+        "permissionsAssignSuccess": "Permissions assigned successfully",
+        "permissionsAssignError": "Failed to assign permissions"
       }
     }
   },

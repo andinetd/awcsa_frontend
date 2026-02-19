@@ -80,19 +80,17 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }
 
-    //ROLE CHECK FOR EMPLOYEE ONLY
+    // ROLE CHECK FOR EMPLOYEE ONLY
     if (decodedToken.user.accountType == "EMPLOYEE") {
       const employeeToken = decodedToken as EmployeeJwtPayload;
+      const department = employeeToken.department;
 
-      if (employeeToken.orgUnit.deputyBureau === null) {
-        return intlMiddleWare(req);
-      }
+      // Use department directly for matching in routePermissions
+      const effectiveRole = department;
 
       if (
         guard.allowedRoles &&
-        !guard.allowedRoles.includes(
-          employeeToken.orgUnit.deputyBureau as DeputyBureau,
-        )
+        !guard.allowedRoles.includes(effectiveRole as any)
       ) {
         return NextResponse.redirect(
           new URL(`/${locale}/unauthorized`, req.url),

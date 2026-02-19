@@ -59,11 +59,19 @@
       "cityId": "የከተማ መለያ",
       "password": "የይለፍ ቃል",
       "role": "ሚና",
+      "employeeRole": "የሰራተኛ ሚና",
       "org": "ድርጅት",
       "directorate": "ዳይሬክቶሬት (አማራጭ)",
       "subCity": "ክፍለ ከተማ",
       "woreda": "ወረዳ (አማራጭ)",
       "team": "ቡድን (አማራጭ)",
+      "department": "የስራ ክፍል",
+      "departments": {
+        "CHILDREN_AFFAIRS": "የህፃናት ጉዳይ",
+        "WOMEN_AFFAIRS": "የሴቶች ጉዳይ",
+        "SOCIAL_AFFAIRS": "የማህበራዊ ጉዳይ",
+        "SYSTEM": "ሲስተም"
+      },
       "select": "ይምረጡ...",
       "selectSubCity": "ክፍለ ከተማ ይምረጡ",
       "create": "ተጠቃሚ ፍጠር",
@@ -84,6 +92,8 @@
         "cityIdRequired": "የከተማ መለያ ያስፈልጋል",
         "passwordMin": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
         "roleRequired": "ሚና ያስፈልጋል",
+        "employeeRoleRequired": "የሰራተኛ ሚና ያስፈልጋል",
+        "departmentRequired": "የስራ ክፍል ያስፈልጋል",
         "orgRequired": "ድርጅት ያስፈልጋል",
         "saveFailed": "ተጠቃሚውን ማስቀመጥ አልተቻለም"
       }
@@ -214,13 +224,13 @@
         "errors": {
           "nameRequired": "የሚና ስም ያስፈልጋል",
           "descRequired": "መግለጫ ያስፈልጋል"
-        },
-        "messages": {
-          "createSuccess": "ሚናው በተሳካ ሁኔታ ተፈጥሯል",
-          "createError": "ሚናውን መፍጠር አልተቻለም",
-          "permissionsAssignSuccess": "ፈቃዶች በተሳካ ሁኔታ ተመድበዋል",
-          "permissionsAssignError": "ፈቃዶችን መመደብ አልተቻለም"
         }
+      },
+      "messages": {
+        "createSuccess": "ሚናው በተሳካ ሁኔታ ተፈጥሯል",
+        "createError": "ሚናውን መፍጠር አልተቻለም",
+        "permissionsAssignSuccess": "ፈቃዶች በተሳካ ሁኔታ ተመድበዋል",
+        "permissionsAssignError": "ፈቃዶችን መመደብ አልተቻለም"
       }
     }
   },

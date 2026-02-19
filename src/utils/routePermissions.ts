@@ -1,7 +1,12 @@
 import { DeputyBureau } from "@/types/api/auth";
 
 type RouteGuard = {
-  allowedAccountTypes: ("EMPLOYEE" | "CLIENT" | "CHILD_CARE_FACLITY")[];
+  allowedAccountTypes: (
+    | "EMPLOYEE"
+    | "CLIENT"
+    | "CHILD_CARE_FACLITY"
+    | "CHILD_CARE_FACILITY"
+  )[];
   allowedRoles?: DeputyBureau[];
 };
 
@@ -9,30 +14,31 @@ export const routePermissions: Record<string, RouteGuard> = {
   "/applicant-portal": { allowedAccountTypes: ["CLIENT"] },
   "/care-centers-portal": {
     allowedAccountTypes: ["CHILD_CARE_FACLITY", "EMPLOYEE"],
+    allowedRoles: ["SYSTEM", "CHILDREN_AFFAIRS"],
   },
 
   "/bureau-head": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD"],
+    allowedRoles: ["SYSTEM"],
   },
   "/super-admin": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD", "SUPER_ADMIN"],
+    allowedRoles: ["SYSTEM"],
   },
   "/social-affairs": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD", "SOCIAL_AFFAIRS", "EDIR"],
+    allowedRoles: ["SYSTEM", "SOCIAL_AFFAIRS", "EDIR"],
   },
   "/womens": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD", "WOMEN_AFFAIRS"],
+    allowedRoles: ["SYSTEM", "WOMEN_AFFAIRS"],
   },
   "/adoption": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD"], // TODO: Add children affairs, removed "CHILDREN_AFFAIRS" because care centers are considered as children affairs
+    allowedRoles: ["SYSTEM", "CHILDREN_AFFAIRS"],
   },
   "/complaints": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["BUREAU_HEAD"],
+    allowedRoles: ["SYSTEM"],
   },
 };

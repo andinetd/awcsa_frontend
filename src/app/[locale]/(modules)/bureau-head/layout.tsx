@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 const BureauHeadlayout = ({ children }: { children: ReactNode }) => {
   return (
     <AuthProvider>
-      <SidebarLayout>{children}</SidebarLayout>;
+      <SidebarLayout>{children}</SidebarLayout>
     </AuthProvider>
   );
 };

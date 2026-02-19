@@ -249,7 +249,9 @@ const BureauHead = () => {
 
       <Tabs defaultValue="analytics" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="analytics">
+            {t("dashboard.analytics")}
+          </TabsTrigger>
           <TabsTrigger value="reports">{t("reports.title")}</TabsTrigger>
         </TabsList>
 

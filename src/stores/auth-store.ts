@@ -18,6 +18,9 @@ interface AuthState {
   orgUnit: EmployeeJwtPayload["orgUnit"] | null;
   userRole: UserRole | null;
   userPermissions: string[];
+  directorateId: number | null;
+  teamId: number | null;
+  department: string | null;
   hydrated: boolean;
   setUser: (user: JwtUserType | null) => void;
   setToken: (token: string | null) => void;
@@ -37,43 +40,61 @@ export const useAuthStore = create<AuthState>()(
       orgUnit: null,
       userRole: null,
       userPermissions: [],
+      directorateId: null,
+      teamId: null,
+      department: null,
       hydrated: false,
 
       setUser: (user) => set({ user }),
       setToken: (token) => {
         if (token) {
-          Cookies.set("wcasf_auth_token", token, {
-            secure: true,
-            sameSite: "strict",
-            expires: 1,
-            path: "/",
-          });
-          const decodedToken: JwtPayload = jwtDecode(token);
-          if (decodedToken.user.accountType === "EMPLOYEE") {
-            const employeeToken = decodedToken as EmployeeJwtPayload;
-            set({
-              token,
-              user: employeeToken.user,
-              entity: employeeToken.entity,
-              auth: employeeToken.auth,
-              orgUnit: employeeToken.orgUnit,
-              userRole: employeeToken.entity.role as UserRole,
-              userPermissions: employeeToken.auth.permissions,
-              hydrated: true,
+          try {
+            Cookies.set("wcasf_auth_token", token, {
+              secure: true,
+              sameSite: "strict",
+              expires: 1,
+              path: "/",
             });
-          }
 
-          if (decodedToken.user.accountType === "CLIENT") {
-            const clientToken = decodedToken as ClientJwtPayload;
-            set({
+            const decodedToken: JwtPayload = jwtDecode(token);
+            const { user, entity, auth, iat, exp } = decodedToken;
+
+            // Common state updates
+            const newState: Partial<AuthState> = {
               token,
-              user: clientToken.user,
-              entity: clientToken.entity,
-              auth: clientToken.auth,
-              orgUnit: null,
-              userRole: null,
-              userPermissions: clientToken.auth.permissions,
-            });
+              user,
+              auth,
+              userPermissions: auth?.permissions || [],
+              hydrated: true,
+            };
+
+            if (user.accountType === "EMPLOYEE") {
+              const employeeToken = decodedToken as EmployeeJwtPayload;
+              newState.entity = employeeToken.entity;
+              newState.orgUnit = employeeToken.orgUnit || null;
+              newState.userRole = employeeToken.entity.role as UserRole;
+              newState.directorateId = employeeToken.directorateId ?? null;
+              newState.teamId = employeeToken.teamId ?? null;
+              newState.department = employeeToken.department ?? null;
+            } else if (
+              user.accountType === "CHILD_CARE_FACLITY" ||
+              user.accountType === "CHILD_CARE_FACILITY"
+            ) {
+              const cfToken = decodedToken as any; // Handle flexible schema for CF
+              newState.entity = cfToken.entity || null;
+              newState.orgUnit = null;
+              newState.userRole = (cfToken.entity?.role as UserRole) || null;
+            } else if (user.accountType === "CLIENT") {
+              const clientToken = decodedToken as ClientJwtPayload;
+              newState.entity = clientToken.entity;
+              newState.orgUnit = null;
+              newState.userRole = null;
+            }
+
+            set(newState);
+          } catch (error) {
+            console.error("Failed to decode or set token:", error);
+            get().logout();
           }
         }
       },
@@ -93,6 +114,7 @@ export const useAuthStore = create<AuthState>()(
               get().setToken(token);
             }
           } catch (e) {
+            console.error("Failed to load token from cookie:", e);
             get().logout();
           }
         }
@@ -109,6 +131,9 @@ export const useAuthStore = create<AuthState>()(
           orgUnit: null,
           userRole: null,
           userPermissions: [],
+          directorateId: null,
+          teamId: null,
+          department: null,
           hydrated: true,
         });
       },

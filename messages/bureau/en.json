@@ -1,6 +1,7 @@
 {
   "dashboard": {
     "title": "Dashboard Overview",
+    "analytics": "Analytics",
     "stats": {
       "totalChildren": "Total Children",
       "totalFacilities": "Total Facilities",

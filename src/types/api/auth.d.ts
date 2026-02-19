@@ -16,11 +16,16 @@ type EmployeeJwtPayload = {
   auth: {
     permissions: string[];
   };
-  orgUnit: {
+  orgUnit?: {
     id: number;
     type: UnitType;
-    deputyBureau: string | null;
+    deputyBureau?: string | null; // Deprecated - use directorateId/teamId instead
+    directorateId?: number;
+    teamId?: number;
   };
+  directorateId?: number; // Top-level directorate ID (1-4)
+  teamId?: number; // Top-level team ID (1-8)
+  department?: string; // NEW: Department string for routing
   iat?: number;
   exp?: number;
 };
@@ -44,6 +49,26 @@ type ClientJwtPayload = {
   exp?: number;
 };
 
+// Child Care Facility JWT Payload
+type ChildCareFacilityJwtPayload = {
+  sub: number;
+  user: {
+    id: number;
+    email: string;
+    accountType: "CHILD_CARE_FACLITY" | "CHILD_CARE_FACILITY";
+  };
+  entity?: {
+    type: "ChildCareFacility";
+    id: number;
+    role: string;
+  };
+  auth: {
+    permissions: string[];
+  };
+  iat?: number;
+  exp?: number;
+};
+
 type ClientSignup = {
   firstName: string;
   lastName: string;
@@ -59,7 +84,10 @@ type ClientSignIn = {
   recaptchaToken: string;
 };
 
-type JwtPayload = EmployeeJwtPayload | ClientJwtPayload;
+type JwtPayload =
+  | EmployeeJwtPayload
+  | ClientJwtPayload
+  | ChildCareFacilityJwtPayload;
 
 type JwtUserType = {
   id: number;
@@ -85,6 +113,7 @@ type ClientSignInResponse = {
 };
 
 type DeputyBureau =
+  | "SYSTEM"
   | "SUPER_ADMIN"
   | "BUREAU_HEAD"
   | "CHILDREN_AFFAIRS"
@@ -102,6 +131,7 @@ type OrgType = {
 };
 
 type UserRole =
+  | "Super_Admin"
   | "Bureau_Manager"
   | "DEPUTY_MANAGER"
   | "DIRECTOR"
@@ -110,7 +140,11 @@ type UserRole =
   | "SOCIAL_WORKER"
   | "FACILITATOR_OFFICER";
 
-type AccountType = "EMPLOYEE" | "CLIENT" | "CHILD_CARE_FACLITY";
+type AccountType =
+  | "EMPLOYEE"
+  | "CLIENT"
+  | "CHILD_CARE_FACILITY"
+  | "CHILD_CARE_FACLITY";
 
 enum PermissionOperation {
   READ,
