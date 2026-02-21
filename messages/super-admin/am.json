@@ -237,6 +237,7 @@
   "dashboard": {
     "title": "የስራ አመራር ዳሽቦርድ",
     "description": "ቁልፍ መለኪያዎች እና የስርዓት እንቅስቃሴዎች አጠቃላይ እይታ።",
+    "overview": "አጠቃላይ እይታ",
     "stats": {
       "children": "ጠቅላላ ህፃናት",
       "peopleInNeed": "ድጋፍ የሚሹ ሰዎች",

@@ -237,6 +237,7 @@
   "dashboard": {
     "title": "Executive Dashboard",
     "description": "Overview of key metrics and system activities.",
+    "overview": "Overview",
     "stats": {
       "children": "Total Children",
       "peopleInNeed": "People in Need",
