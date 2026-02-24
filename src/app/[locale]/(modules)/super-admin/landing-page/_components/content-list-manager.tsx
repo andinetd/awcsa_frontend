@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { CMSContent, CMSContentType } from "@/types/cms";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
 import {
@@ -40,6 +40,7 @@ export default function ContentListManager({
   onSuccess,
 }: ContentListManagerProps) {
   const t = useTranslations("super-admin.cms");
+  const locale = useLocale();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CMSContent | undefined>();
   const deleteContent = useDeleteCMSContent();
@@ -80,17 +81,23 @@ export default function ContentListManager({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items
+            {(Array.isArray(items) ? [...items] : [])
               .sort((a, b) => a.order - b.order)
               .map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.order}</TableCell>
                   <TableCell className="font-medium">
-                    {item.title || "No Title"}
+                    {item.title?.[locale as "en" | "am"] ||
+                      item.title?.en ||
+                      item.title?.am ||
+                      "No Title"}
                   </TableCell>
                   <TableCell>
                     {item.isVisible ? (
-                      <Badge variant="secondary" className="gap-1">
+                      <Badge
+                        variant="outline"
+                        className="gap-1 bg-emerald-50 text-emerald-700 border-emerald-200"
+                      >
                         <Eye className="h-3 w-3" />
                         Visible
                       </Badge>
@@ -134,7 +141,7 @@ export default function ContentListManager({
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleDelete(item.id!)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            className="bg-destructive text-white hover:bg-destructive/90"
                           >
                             Delete
                           </AlertDialogAction>
@@ -144,7 +151,7 @@ export default function ContentListManager({
                   </TableCell>
                 </TableRow>
               ))}
-            {items.length === 0 && (
+            {(!Array.isArray(items) || items.length === 0) && (
               <TableRow>
                 <TableCell
                   colSpan={4}

@@ -72,7 +72,10 @@ export default function GeneralSettings() {
                     <div className="flex items-center gap-2">
                       {role.name.replace(/_/g, " ")}
                       {role.isSystemRole && (
-                        <Badge variant="secondary" className="text-[10px] py-0">
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] py-0 bg-emerald-50 text-emerald-700 border-emerald-200"
+                        >
                           System
                         </Badge>
                       )}

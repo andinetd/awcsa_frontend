@@ -7,9 +7,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
-import { CMSContent } from "@/types/cms";
+import { CMSContent, LocalizedField } from "@/types/cms";
 
 export default function TestimonialCarousel({
   items,
@@ -17,6 +17,13 @@ export default function TestimonialCarousel({
   items?: CMSContent[];
 }) {
   const t = useTranslations();
+  const locale = useLocale() as "en" | "am";
+
+  const getLocalized = (field?: LocalizedField | string) => {
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    return field[locale] || field.en || field.am || "";
+  };
 
   const staticTestimonials = [
     {
@@ -56,9 +63,9 @@ export default function TestimonialCarousel({
       ? items
           .filter((i) => i.isVisible)
           .map((item) => ({
-            quote: item.content,
-            name: item.title,
-            title: item.subtitle,
+            quote: getLocalized(item.content),
+            name: getLocalized(item.title),
+            title: getLocalized(item.subtitle),
           }))
       : staticTestimonials;
 

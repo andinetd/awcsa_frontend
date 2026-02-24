@@ -69,5 +69,9 @@
     "description": "You don't have permission to access this page.",
     "goBack": "Go Back",
     "logoAlt": "logo"
+  },
+  "partners": {
+    "title": "Our Partners",
+    "description": "Collaborating with leading organizations to drive social impact and empower our community."
   }
 }

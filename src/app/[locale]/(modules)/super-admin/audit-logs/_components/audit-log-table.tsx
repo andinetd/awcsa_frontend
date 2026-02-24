@@ -35,7 +35,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
       case "LOGOUT":
       default:
         // Info / Emerald/Blue
-        return "bg-emerald-100 text-emerald-700";
+        return "bg-emerald-50 text-emerald-700";
     }
   };
 

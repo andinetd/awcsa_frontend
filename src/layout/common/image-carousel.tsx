@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import {
   Carousel,
   CarouselContent,
@@ -8,12 +9,16 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import Autoplay from "embla-carousel-autoplay";
 import { useTranslations } from "next-intl";
 
 import { CMSContent } from "@/types/cms";
 
 export default function ImageCarousel({ items }: { items?: CMSContent[] }) {
   const t = useTranslations();
+  const plugin = React.useRef(
+    Autoplay({ delay: 10000, stopOnInteraction: false }),
+  );
 
   const staticImages = [
     "/assets/WCSA_logo.jpg",
@@ -48,23 +53,25 @@ export default function ImageCarousel({ items }: { items?: CMSContent[] }) {
               align: "start",
               loop: true,
             }}
-            className="w-full max-w-4xl mx-auto"
+            plugins={[plugin.current]}
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.reset}
+            className="w-full max-w-6xl mx-auto"
           >
-            <CarouselContent>
+            <CarouselContent className="-ml-4">
               {galleryItems.map((src, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <Card>
-                      <CardContent className="flex items-center justify-center p-6">
-                        <Image
-                          src={src}
-                          alt={t("gallery.imageAlt", { number: index + 1 })}
-                          width={400}
-                          height={300}
-                          className="rounded-lg object-cover"
-                        />
-                      </CardContent>
-                    </Card>
+                <CarouselItem
+                  key={index}
+                  className="pl-4 basis-full md:basis-1/2"
+                >
+                  <div className="relative aspect-video overflow-hidden rounded-xl border bg-muted shadow-sm hover:shadow-md transition-shadow">
+                    <Image
+                      src={src}
+                      alt={t("gallery.imageAlt", { number: index + 1 })}
+                      fill
+                      className="object-cover transition-transform hover:scale-105 duration-300"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                   </div>
                 </CarouselItem>
               ))}

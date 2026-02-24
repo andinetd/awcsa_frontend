@@ -38,6 +38,11 @@ export default function LandingPageCMS() {
             {t("sections.testimonials")}
           </TabsTrigger>
           <TabsTrigger value="gallery">{t("sections.gallery")}</TabsTrigger>
+          <TabsTrigger value="social">{t("sections.social")}</TabsTrigger>
+          <TabsTrigger value="partners">{t("sections.partners")}</TabsTrigger>
+          <TabsTrigger value="quickLinks">
+            {t("sections.quickLinks")}
+          </TabsTrigger>
           <TabsTrigger value="contact">{t("sections.contact")}</TabsTrigger>
         </TabsList>
 
@@ -63,18 +68,42 @@ export default function LandingPageCMS() {
 
         <TabsContent value="gallery" className="space-y-4">
           <ContentListManager
-            type="GALLERY"
+            type="GALLERY_IMAGE"
             items={landingData?.gallery || []}
             onSuccess={refetch}
           />
         </TabsContent>
 
+        <TabsContent value="social" className="space-y-4">
+          <ContentListManager
+            type="SOCIAL_LINK"
+            items={landingData?.social || []}
+            onSuccess={refetch}
+          />
+        </TabsContent>
+
+        <TabsContent value="quickLinks" className="space-y-4">
+          <ContentListManager
+            type="QUICK_LINK"
+            items={landingData?.quickLinks || []}
+            onSuccess={refetch}
+          />
+        </TabsContent>
+
+        <TabsContent value="partners" className="space-y-4">
+          <ContentListManager
+            type="PARTNER_LOGO"
+            items={landingData?.partners || []}
+            onSuccess={refetch}
+          />
+        </TabsContent>
+
         <TabsContent value="contact" className="space-y-4">
-          <div className="rounded-lg border bg-card p-6">
-            <p className="text-muted-foreground">
-              Contact settings coming soon...
-            </p>
-          </div>
+          <ContentListManager
+            type="CONTACT"
+            items={landingData?.contact || []}
+            onSuccess={refetch}
+          />
         </TabsContent>
       </Tabs>
     </div>

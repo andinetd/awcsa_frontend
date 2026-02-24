@@ -3,17 +3,44 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const HeroBanner = ({ data }: { data?: any }) => {
   const t = useTranslations();
+  const locale = useLocale() as "en" | "am";
 
-  const title = data?.title || t("hero.title_first") + t("hero.title");
-  const subtitle = data?.subtitle || t("hero.description");
-  const description = data?.description || "";
+  const getLocalized = (field: any, name?: string) => {
+    if (!field && name) {
+      // Try flattened pattern (e.g., title_en)
+      const flatValue =
+        data?.[`${name}_${locale}`] ||
+        data?.[`${name}_en`] ||
+        data?.[`${name}_am`];
+      if (flatValue) return flatValue;
+    }
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    if (typeof field === "object") {
+      return field[locale] || field.en || field.am || "";
+    }
+    return "";
+  };
+
+  const title =
+    getLocalized(data?.title, "title") ||
+    t("hero.title_first") + t("hero.title");
+  const subtitle =
+    getLocalized(data?.subtitle, "subtitle") || t("hero.description");
+  const description =
+    getLocalized(data?.description || data?.content, "description") ||
+    getLocalized(data?.description || data?.content, "content");
   const imageUrl = data?.imageUrl || "/assets/background-placeholder.jpg";
-  const buttonText = data?.buttonText || t("hero.signIn");
-  const buttonLink = data?.buttonLink || "/login";
+  const buttonText =
+    getLocalized(data?.buttonText || data?.linkText, "buttonText") ||
+    getLocalized(data?.buttonText || data?.linkText, "linkText") ||
+    t("hero.signIn");
+  const buttonLink =
+    data?.buttonLink || data?.link || data?.metadata?.link || "#services";
 
   return (
     <div
@@ -42,9 +69,7 @@ const HeroBanner = ({ data }: { data?: any }) => {
           <p className="text-lg text-white/80 max-w-2xl">{description}</p>
         )}
         <Link href={buttonLink}>
-          <Button className="w-40 h-10 font-lexend text-lg">
-            {buttonText}
-          </Button>
+          <Button className="h-10 font-lexend text-lg">{buttonText}</Button>
         </Link>
       </motion.div>
     </div>

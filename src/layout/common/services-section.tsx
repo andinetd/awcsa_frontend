@@ -3,12 +3,19 @@
 import { Baby, Building2, Accessibility, Heart } from "lucide-react";
 import { delay, motion } from "framer-motion";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
-import { CMSContent } from "@/types/cms";
+import { CMSContent, LocalizedField } from "@/types/cms";
 
 const ServicesSection = ({ items }: { items?: CMSContent[] }) => {
   const t = useTranslations();
+  const locale = useLocale() as "en" | "am";
+
+  const getLocalized = (field?: LocalizedField | string) => {
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    return field[locale] || field.en || field.am || "";
+  };
 
   const iconMap: Record<string, any> = {
     Baby: Baby,
@@ -48,10 +55,10 @@ const ServicesSection = ({ items }: { items?: CMSContent[] }) => {
           .filter((i) => i.isVisible)
           .map((item) => ({
             icon: iconMap[item.imageUrl || ""] || Heart,
-            title: item.title,
-            description: item.content,
+            title: getLocalized(item.title),
+            description: getLocalized(item.content),
             link: item.metadata?.link,
-            linkText: item.metadata?.linkText,
+            linkText: getLocalized(item.metadata?.linkText),
           }))
       : staticServices;
 

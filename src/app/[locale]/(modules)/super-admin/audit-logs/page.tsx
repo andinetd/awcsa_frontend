@@ -21,7 +21,7 @@ export default function AuditLogsPage() {
           <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
-      </div> */}
+      </div>
 
       {loading ? (
         <div className="flex h-[400px] items-center justify-center">

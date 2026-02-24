@@ -1,18 +1,24 @@
 export type CMSContentType =
   | "HERO"
   | "TESTIMONIAL"
-  | "GALLERY"
+  | "GALLERY_IMAGE"
   | "SERVICE"
-  | "SOCIAL"
+  | "SOCIAL_LINK"
   | "QUICK_LINK"
+  | "PARTNER_LOGO"
   | "CONTACT";
+
+export interface LocalizedField {
+  en: string;
+  am: string;
+}
 
 export interface CMSContent {
   id?: number;
   type: CMSContentType;
-  title?: string;
-  subtitle?: string;
-  content?: string;
+  title?: LocalizedField;
+  subtitle?: LocalizedField;
+  content?: LocalizedField;
   imageUrl?: string;
   isVisible: boolean;
   order: number;
@@ -32,4 +38,5 @@ export interface LandingPageData {
   social: CMSContent[];
   quickLinks: CMSContent[];
   services?: CMSContent[]; // Added based on ServicesSection existence
+  partners?: CMSContent[];
 }
