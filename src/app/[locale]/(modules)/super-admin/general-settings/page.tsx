@@ -34,7 +34,7 @@ export default function GeneralSettings() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -72,7 +72,10 @@ export default function GeneralSettings() {
                     <div className="flex items-center gap-2">
                       {role.name.replace(/_/g, " ")}
                       {role.isSystemRole && (
-                        <Badge variant="secondary" className="text-[10px] py-0">
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] py-0 bg-emerald-50 text-emerald-700 border-emerald-200"
+                        >
                           System
                         </Badge>
                       )}

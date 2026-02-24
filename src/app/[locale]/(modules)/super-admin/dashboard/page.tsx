@@ -50,7 +50,7 @@ export default function ExecutiveDashboard() {
       case "CHILD_REGISTRATION":
         return "bg-blue-50 text-blue-700 border-blue-200";
       case "CLIENT_REGISTRATION":
-        return "bg-green-50 text-green-700 border-green-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "FACILITY_REGISTRATION":
         return "bg-purple-50 text-purple-700 border-purple-200";
       case "EDIR_REGISTRATION":
