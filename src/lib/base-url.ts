@@ -2,4 +2,4 @@
 // export const BASE_URL = "https://12948572ff09.ngrok-free.app";
 const ip_address = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const BASE_URL = `http://${ip_address}`;
+export const BASE_URL = `${ip_address}`;
