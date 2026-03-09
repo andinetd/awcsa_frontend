@@ -261,6 +261,71 @@
     "userManagement": "User Management",
     "auditLogs": "Audit Logs",
     "backups": "Backups",
-    "generalSettings": "General Settings"
+    "generalSettings": "General Settings",
+    "landingPage": "Landing Page CMS"
+  },
+  "cms": {
+    "title": "Landing Page Management",
+    "description": "Manage the content, sections, and images for the landing page.",
+    "sections": {
+      "hero": "Hero Section",
+      "service": "Service",
+      "services": "Our Services",
+      "testimonial": "Testimonial",
+      "testimonials": "Testimonials",
+      "gallery": "Gallery",
+      "galleryimage": "Gallery Image",
+      "partners": "Partners",
+      "contact": "Contact Information",
+      "social": "Social Links",
+      "sociallink": "Social Link",
+      "quick_link": "Quick Link",
+      "quicklink": "Quick Link",
+      "partnerlogo": "Partner Logo",
+      "quickLinks": "Quick Links"
+    },
+    "actions": {
+      "save": "Save Changes",
+      "add": "Add Item",
+      "edit": "Edit",
+      "delete": "Delete",
+      "visibility": "Visibility"
+    },
+    "fields": {
+      "title": "Title",
+      "platformName": "Platform Name",
+      "subtitle": "Subtitle",
+      "content": "Content",
+      "imageUrl": "Image URL",
+      "order": "Order",
+      "link": "Link",
+      "linkText": "Link Text",
+      "logoUrl": "Logo URL",
+      "isVisible": "Visible",
+      "serviceName": "Service Name",
+      "serviceDescription": "Description",
+      "linkName": "Link Name",
+      "address": "Address",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "iconKey": "Icon Key",
+      "personName": "Person Name",
+      "role": "Role/Organization",
+      "quote": "Quote",
+      "avatarUrl": "Avatar URL",
+      "galleryImage": "Gallery Image URL",
+      "label": "Label",
+      "value": "Value"
+    },
+    "messages": {
+      "settingsUpdateSuccess": "Settings updated successfully",
+      "settingsUpdateError": "Failed to update settings",
+      "contentCreateSuccess": "Content created successfully",
+      "contentCreateError": "Failed to create content",
+      "contentUpdateSuccess": "Content updated successfully",
+      "contentUpdateError": "Failed to update content",
+      "contentDeleteSuccess": "Content deleted successfully",
+      "contentDeleteError": "Failed to delete content"
+    }
   }
 }

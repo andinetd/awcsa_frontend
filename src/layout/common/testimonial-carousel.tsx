@@ -7,43 +7,68 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
-const testimonials = [
-  {
-    quote:
-      "This organization has been a beacon of hope for countless women in our community. Their dedication and support have transformed so many lives.",
-    name: "Jane Doe",
-    title: "Community Leader",
-  },
-  {
-    quote:
-      "The resources and programs offered here are invaluable. I've seen firsthand the positive impact on women's empowerment and social well-being.",
-    name: "John Smith",
-    title: "Social Worker",
-  },
-  {
-    quote:
-      "A truly inspiring team doing incredible work. They are making a real difference in the fight for gender equality and social justice.",
-    name: "Emily White",
-    title: "Volunteer",
-  },
-  {
-    quote:
-      "I am so grateful for the support I received from this organization. They helped me get back on my feet and build a better future for myself and my children.",
-    name: "Maria Garcia",
-    title: "Beneficiary",
-  },
-  {
-    quote:
-      "The workshops and training sessions are top-notch. They provide practical skills and knowledge that empower women to succeed.",
-    name: "David Lee",
-    title: "Partner Organization",
-  },
-];
+import { CMSContent, LocalizedField } from "@/types/cms";
 
-export default function TestimonialCarousel() {
+export default function TestimonialCarousel({
+  items,
+}: {
+  items?: CMSContent[];
+}) {
   const t = useTranslations();
+  const locale = useLocale() as "en" | "am";
+
+  const getLocalized = (field?: LocalizedField | string) => {
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    return field[locale] || field.en || field.am || "";
+  };
+
+  const staticTestimonials = [
+    {
+      quote:
+        "This organization has been a beacon of hope for countless women in our community. Their dedication and support have transformed so many lives.",
+      name: "Jane Doe",
+      title: "Community Leader",
+    },
+    {
+      quote:
+        "The resources and programs offered here are invaluable. I've seen firsthand the positive impact on women's empowerment and social well-being.",
+      name: "John Smith",
+      title: "Social Worker",
+    },
+    {
+      quote:
+        "A truly inspiring team doing incredible work. They are making a real difference in the fight for gender equality and social justice.",
+      name: "Emily White",
+      title: "Volunteer",
+    },
+    {
+      quote:
+        "I am so grateful for the support I received from this organization. They helped me get back on my feet and build a better future for myself and my children.",
+      name: "Maria Garcia",
+      title: "Beneficiary",
+    },
+    {
+      quote:
+        "The workshops and training sessions are top-notch. They provide practical skills and knowledge that empower women to succeed.",
+      name: "David Lee",
+      title: "Partner Organization",
+    },
+  ];
+
+  const testimonials =
+    items && items.length > 0
+      ? items
+          .filter((i) => i.isVisible)
+          .map((item) => ({
+            quote: getLocalized(item.content),
+            name: getLocalized(item.title),
+            title: getLocalized(item.subtitle),
+          }))
+      : staticTestimonials;
+
   return (
     <section
       className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800"

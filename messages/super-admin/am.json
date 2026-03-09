@@ -261,6 +261,71 @@
     "userManagement": "የተጠቃሚዎች አስተዳደር",
     "auditLogs": "የኦዲት መዝገቦች",
     "backups": "የስርዓት ቅጂዎች",
-    "generalSettings": "አጠቃላይ ማስተካከያዎች"
+    "generalSettings": "አጠቃላይ ማስተካከያዎች",
+    "landingPage": "የመነሻ ገጽ አስተዳደር"
+  },
+  "cms": {
+    "title": "የመነሻ ገጽ አስተዳደር",
+    "description": "የመነሻ ገጽ ይዘቶችን፣ ክፍሎችን እና ምስሎችን ያስተዳድሩ።",
+    "sections": {
+      "hero": "የመክፈቻ ክፍል",
+      "service": "አገልግሎት",
+      "services": "አገልግሎቶቻችን",
+      "testimonial": "ምስክርነት",
+      "testimonials": "ምስክርነቶች",
+      "gallery": "ጋለሪ",
+      "galleryimage": "የጋለሪ ምስል",
+      "contact": "የግንኙነት መረጃ",
+      "social": "ማህበራዊ ትስስር",
+      "sociallink": "ማህበራዊ ትስስር ሊንክ",
+      "quick_link": "ፈጣን ሊንክ",
+      "quicklink": "ፈጣን ሊንክ",
+      "partners": "አጋሮች",
+      "partnerlogo": "የአጋር ድርጅት አርማ",
+      "quickLinks": "ፈጣን ሊንኮች"
+    },
+    "actions": {
+      "save": "ለውጦችን አስቀምጥ",
+      "add": "ጨምር",
+      "edit": "አስተካክል",
+      "delete": "ሰርዝ",
+      "visibility": "ታይነት"
+    },
+    "fields": {
+      "title": "ርዕስ",
+      "platformName": "የማህበራዊ ትስስር ስም",
+      "subtitle": "ንዑስ ርዕስ",
+      "content": "ይዘት",
+      "imageUrl": "የምስል ሊንክ",
+      "order": "ቅደም ተከተል",
+      "link": "ሊንክ",
+      "linkText": "የሊንክ ጽሁፍ",
+      "isVisible": "ይታይ",
+      "serviceName": "የአገልግሎት ስም",
+      "serviceDescription": "መግለጫ",
+      "linkName": "የሊንክ ስም",
+      "logoUrl": "የአርማ ዩአርኤል",
+      "address": "አድራሻ",
+      "phone": "ስልክ ቁጥር",
+      "email": "ኢሜይል",
+      "iconKey": "የአዶ ኮድ",
+      "personName": "የሰው ስም",
+      "role": "ኃላፊነት/ድርጅት",
+      "quote": "ጥቅስ",
+      "avatarUrl": "የፎቶ URL",
+      "galleryImage": "የጋለሪ ምስል URL",
+      "label": "መለያ",
+      "value": "እሴት"
+    },
+    "messages": {
+      "settingsUpdateSuccess": "ማስተካከያው በተሳካ ሁኔታ ተዘምኗል",
+      "settingsUpdateError": "ማስተካከያውን ማዘመን አልተቻለም",
+      "contentCreateSuccess": "ይዘቱ በተሳካ ሁኔታ ተፈጥሯል",
+      "contentCreateError": "ይዘቱን መፍጠር አልተቻለም",
+      "contentUpdateSuccess": "ይዘቱ በተሳካ ሁኔታ ተዘምኗል",
+      "contentUpdateError": "ይዘቱን ማዘመን አልተቻለም",
+      "contentDeleteSuccess": "ይዘቱ በተሳካ ሁኔታ ተሰርዟል",
+      "contentDeleteError": "ይዘቱን መሰረዝ አልተቻለም"
+    }
   }
 }
