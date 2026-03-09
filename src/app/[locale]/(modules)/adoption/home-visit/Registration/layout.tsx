@@ -4,13 +4,14 @@ import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider, hasLocale, useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
 
-export default function ApplicationLayout({
+export default async function ApplicationLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const t = useTranslations("adoption");
 
   return (

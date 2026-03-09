@@ -1,19 +1,17 @@
 "use client";
 
 import { useAuthStore } from "@/stores/auth-store";
-import { AppModules, DeputyBureau } from "@/types";
-import { EmployeeRole } from "@/types/employee";
+import { DeputyBureau } from "@/types/api/auth";
+import { EmployeeRole } from "@/types/super-admin";
 export function useCurrentRole() {
-  const { user } = useAuthStore();
+  const { userRole } = useAuthStore();
 
-  if (!user?.role) return undefined;
-  console.log("USER IN useCurrentRole: ", JSON.stringify(user));
+  if (!userRole) return undefined;
 
-  return user?.role;
+  return userRole;
 }
 
 export function useEmployeModule(): DeputyBureau | undefined {
-
-  const { org } = useAuthStore();
-  return org?.deputyBureau as DeputyBureau;
+  const { orgUnit } = useAuthStore();
+  return orgUnit?.deputyBureau as DeputyBureau;
 }

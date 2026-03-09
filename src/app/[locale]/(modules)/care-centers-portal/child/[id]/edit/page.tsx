@@ -4,17 +4,18 @@ import { ArrowLeft } from "lucide-react";
 import EditChildForm from "../../../_components/edit-child-form";
 
 interface EditChildPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-const EditChildPage = ({ params }: EditChildPageProps) => {
+const EditChildPage = async ({ params }: EditChildPageProps) => {
+  const { id } = await params;
   return (
     <div className="flex flex-col min-h-screen w-full p-6 space-y-6">
       <div className="max-w-5xl mx-auto w-full">
         <div className="flex items-center gap-4 mb-6">
-          <Link href={`/care-centers-portal/child/${params.id}/view`}>
+          <Link href={`/care-centers-portal/child/${id}/view`}>
             <Button variant="ghost" size="icon" className="rounded-full">
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -28,7 +29,7 @@ const EditChildPage = ({ params }: EditChildPageProps) => {
             </p>
           </div>
         </div>
-        <EditChildForm childId={params.id} />
+        <EditChildForm childId={id} />
       </div>
     </div>
   );

@@ -160,7 +160,7 @@ export function getAggregatedHomeVisitData(): any {
     },
 
     parentingExperience: {
-      hasExperience: step3?.parentingExperience?.hasExperience ?? true ,
+      hasExperience: step3?.parentingExperience?.hasExperience ?? true,
       disciplineMethods: step3?.parentingExperience?.disciplineMethods ?? "",
       goodMannersApproach:
         step3?.parentingExperience?.goodMannersApproach ?? "",
@@ -189,8 +189,8 @@ export function getAggregatedHomeVisitData(): any {
       futureAdoptionContributions:
         step3?.existingChildrenAndFamilyMembers?.futureAdoptionContributions ??
         "",
-      mistakeAttitudesOfFamily:
-        step3?.existingChildrenAndFamilyMembers?.mistakeAttitudesOfFamily ?? "",
+      mistakeAttitudes:
+        step3?.existingChildrenAndFamilyMembers?.mistakeAttitudes ?? "",
     },
 
     incomeAndFinancialStatus: {

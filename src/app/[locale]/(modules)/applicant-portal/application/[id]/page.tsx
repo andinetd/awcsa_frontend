@@ -117,11 +117,12 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export default function ApplicationDetailPage({
+export default async function ApplicationDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const { id } = await params;
   const application = mockApplicationDetail; // This will be replaced with actual data fetching
 
   return (
@@ -207,7 +208,7 @@ export default function ApplicationDetailPage({
                       </p>
                       <p className="text-gray-900">
                         {new Date(
-                          application.applicantInfo.dateOfBirth
+                          application.applicantInfo.dateOfBirth,
                         ).toLocaleDateString()}
                       </p>
                     </div>

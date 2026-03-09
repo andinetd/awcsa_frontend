@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import Link from "next/link";
 import React from "react";
-import { mockAderaData } from "@/lib/mock-data";
 import { columns } from "./_components/columns";
+
+const mockAderaData: any[] = [];
 
 const Adera = () => {
   return (

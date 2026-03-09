@@ -6,20 +6,21 @@ import Link from "next/link";
 import { Edit, ArrowLeft } from "lucide-react";
 
 interface ViewChildPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 import { useTranslations } from "next-intl";
 
-const ViewChildPage = ({ params }: ViewChildPageProps) => {
+const ViewChildPage = async ({ params }: ViewChildPageProps) => {
+  const { id } = await params;
   const t = useTranslations("care-centers-portal.childView");
   const te = useTranslations("care-centers-portal.enums");
 
   // TODO: Fetch child data based on params.id
   const childData = {
-    name_by_care_center: decodeURIComponent(params.id),
+    name_by_care_center: decodeURIComponent(id),
     name_by_family: "John Smith",
     father_name: "Michael Smith",
     age: 8,
@@ -68,7 +69,7 @@ const ViewChildPage = ({ params }: ViewChildPageProps) => {
             <p className="text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
-        <Link href={`/care-centers-portal/child/${params.id}/edit`}>
+        <Link href={`/care-centers-portal/child/${id}/edit`}>
           <Button>
             <Edit className="mr-2 h-4 w-4" />
             {t("editDetails")}

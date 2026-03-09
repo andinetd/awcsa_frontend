@@ -69,14 +69,12 @@ export const NewChildformSchema = z.object({
   heallth_officer_2_name: z.string().optional(),
 });
 
-
-
 export const NewChildformSchemaNew = NewChildformSchema.pick({
   first_name: true,
   last_name: true,
   sex: true,
   date_of_birth: true,
-  
+
   current_status: true,
 
   // FOUND
@@ -84,8 +82,8 @@ export const NewChildformSchemaNew = NewChildformSchema.pick({
   found_date: true,
   child_founder_city_id_number: true,
 
-  // IN_CARE 
-  care_center_id: true,  
+  // IN_CARE
+  care_center_id: true,
   child_id_from_care_center: true,
 
   // IN_ADERA
@@ -100,74 +98,67 @@ export const NewChildformSchemaNew = NewChildformSchema.pick({
   // RETURNED
   previous_adopter_city_id_number: true,
 
-  
   additional_information: true,
 });
 
+export const NewChildformSchemaSection1 = NewChildformSchema.pick({
+  name_by_family: true,
+  name_by_care_center: true,
+  father_name: true,
+  age: true,
 
-// export const NewChildformSchemaSection1 = NewChildformSchema.pick({
-//   name_by_family: true,
-//   name_by_care_center: true,
-//   father_name: true,
-//   age: true,
+  sex: true,
+  admitance_reason: true,
+  found_address: true,
+  found_subcity: true,
+  found_woreda: true,
+  additional_information: true,
+  found_date: true,
+});
 
-//   gender: true,
-//   admitance_reason: true,
-//   found_address: true,
-//   found_subcity: true,
-//   found_woreda: true,
-//   additional_information: true,
-//   found_date: true,
-// });
+export const NewChildformSchemaSection2 = NewChildformSchema.pick({
+  child_founder_name: true,
+  child_founder_address: true,
+  child_found_woreda: true,
+  child_founder_house_no: true,
+  child_founder_phone: true,
+  child_founder_subcity: true,
+  officer_address: true,
+  officer_id_no: true,
+  officer_name: true,
+  officer_phone: true,
+  officer_responsibility: true,
+  officer_subcity: true,
+  officer_woreda: true,
+  care_center_worker_address: true,
+  care_center_worker_id_no: true,
+  care_center_worker_phone: true,
+  care_center_worker_responsibility: true,
+  care_center_worker_subcity: true,
+  care_center_worker_woreda: true,
+  care_center_worker_name: true,
 
+  health_officer_1_name: true,
+  heallth_officer_2_name: true,
+});
 
-// export const NewChildformSchemaSection2 = NewChildformSchema.pick({
-//   child_founder_name: true,
-//   child_founder_address: true,
-//   child_found_woreda: true,
-//   child_founder_house_no: true,
-//   child_founder_phone: true,
-//   child_founder_subcity: true,
-//   officer_address: true,
-//   officer_id_no: true,
-//   officer_name: true,
-//   officer_phone: true,
-//   officer_responsibility: true,
-//   officer_subcity: true,
-//   officer_woreda: true,
-//   care_center_worker_address: true,
-//   care_center_worker_id_no: true,
-//   care_center_worker_phone: true,
-//   care_center_worker_responsibility: true,
-//   care_center_worker_subcity: true,
-//   care_center_worker_woreda: true,
-//   care_center_worker_name: true,
-
-//   health_officer_1_name: true,
-//   heallth_officer_2_name: true,
-// });
-
-// export const ChildrenListTableSchema = NewChildformSchema.pick({
-//   id: true,
-//   name_by_care_center: true,
-//   name_by_family: true,
-//   age: true,
-//   gender: true,
-//   found_date: true,
-// });
-
-
+export const ChildrenListTableSchema = NewChildformSchema.pick({
+  id: true,
+  name_by_care_center: true,
+  name_by_family: true,
+  age: true,
+  sex: true,
+  found_date: true,
+});
 
 export type NewChildformSchemaType = z.infer<typeof NewChildformSchema>;
 
-export type NewChildformTypeNew = z.infer<
-  typeof NewChildformSchemaNew
+export type NewChildformTypeNew = z.infer<typeof NewChildformSchemaNew>;
+export type ChildDataType = z.infer<typeof ChildrenListTableSchema>;
+export type NewChildformTypeSection1 = z.infer<
+  typeof NewChildformSchemaSection1
 >;
-// export type ChildDataType = z.infer<typeof ChildrenListTableSchema>;
-// export type NewChildformTypeSection1 = z.infer<
-//   typeof NewChildformSchemaSection1
-// >;
 
-// export type NewChildformTypeSection2 = z.infer<
-//   typeof NewChildformSchemaSection2
-// >;
+export type NewChildformTypeSection2 = z.infer<
+  typeof NewChildformSchemaSection2
+>;

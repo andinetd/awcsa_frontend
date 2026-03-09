@@ -115,13 +115,13 @@ export default function CareCenterChildFormSectionOne() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="gender"
+                name="sex"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
                     <FormControl>
                       <Select
-                        name="gender"
+                        name="sex"
                         value={field.value}
                         onValueChange={field.onChange}
                       >
@@ -129,8 +129,8 @@ export default function CareCenterChildFormSectionOne() {
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="MALE">Male</SelectItem>
+                          <SelectItem value="FEMALE">Female</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
