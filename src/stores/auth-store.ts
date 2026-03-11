@@ -50,7 +50,7 @@ export const useAuthStore = create<AuthState>()(
         if (token) {
           try {
             Cookies.set("wcasf_auth_token", token, {
-              secure: true,
+              secure: process.env.NEXT_PUBLIC_SECURE_COOKIES === "true",
               sameSite: "strict",
               expires: 1,
               path: "/",
