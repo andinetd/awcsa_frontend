@@ -24,7 +24,7 @@ jobs:
             git reset --hard
             git pull origin dev
 
-            npm install --production
+            npm install
 
             npm run build
 
