@@ -106,7 +106,7 @@ export default function ExecutiveDashboard() {
               {
                 key: "children",
                 label: t("stats.children"),
-                value: data?.overview.totalChildren || 0,
+                value: data?.overview?.totalChildren || 0,
                 icon: Baby,
                 color: "text-sky-500",
                 bg: "bg-sky-50 dark:bg-sky-900/20",
@@ -115,7 +115,7 @@ export default function ExecutiveDashboard() {
               {
                 key: "people",
                 label: t("stats.peopleInNeed"),
-                value: data?.overview.totalPeopleRegistered || 0,
+                value: data?.overview?.totalPeopleRegistered || 0,
                 icon: Users,
                 color: "text-emerald-500",
                 bg: "bg-emerald-50 dark:bg-emerald-900/20",
@@ -124,7 +124,7 @@ export default function ExecutiveDashboard() {
               {
                 key: "facilities",
                 label: t("stats.facilities"),
-                value: data?.overview.totalFacilities || 0,
+                value: data?.overview?.totalFacilities || 0,
                 icon: Building,
                 color: "text-cyan-500",
                 bg: "bg-cyan-50 dark:bg-cyan-900/20",
@@ -133,7 +133,7 @@ export default function ExecutiveDashboard() {
               {
                 key: "edirs",
                 label: t("stats.edirs"),
-                value: data?.overview.totalEdirs || 0,
+                value: data?.overview?.totalEdirs || 0,
                 icon: HandHeart,
                 color: "text-teal-500",
                 bg: "bg-teal-50 dark:bg-teal-900/20",
