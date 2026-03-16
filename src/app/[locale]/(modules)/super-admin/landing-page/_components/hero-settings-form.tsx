@@ -27,14 +27,8 @@ const localizedSchema = z.object({
 });
 
 const heroSchema = z.object({
-  title: localizedSchema.refine(
-    (data) => data.en.trim().length > 0 || data.am.trim().length > 0,
-    { message: "Title is required in at least one language" },
-  ),
-  subtitle: localizedSchema.refine(
-    (data) => data.en.trim().length > 0 || data.am.trim().length > 0,
-    { message: "Subtitle is required in at least one language" },
-  ),
+  title: localizedSchema,
+  subtitle: localizedSchema,
   description: localizedSchema,
   imageUrl: z.string().optional(),
   buttonText: localizedSchema,

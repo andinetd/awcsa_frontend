@@ -46,19 +46,6 @@ const contentSchema = z
     order: z.number().default(0),
     link: z.string().optional(),
     linkText: localizedSchema.optional(),
-  })
-  .superRefine((data, ctx) => {
-    // Only require title if not a GALLERY item
-    if (data.type !== "GALLERY_IMAGE") {
-      const title = data.title as { en: string; am: string };
-      if (!title.en?.trim() && !title.am?.trim()) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Title is required in at least one language",
-          path: ["title"],
-        });
-      }
-    }
   });
 
 type ContentValues = z.infer<typeof contentSchema>;
