@@ -41,7 +41,6 @@ export interface CreateUserDto {
   password: string;
   roleId: number;
   orgUnitId: number;
-  employeeRole: EmployeeRole;
   department: Department;
   directorateId?: number; // Optional based on hierarchy
   teamId?: number; // Optional based on hierarchy
