@@ -48,7 +48,7 @@ export default function ChildWelfareDashboard() {
   }
 
   const pendingReports =
-    data?.infrastructure.reports.find((r) => r.status === "PENDING")?._count ||
+    data?.infrastructure?.reports?.find((r) => r.status === "PENDING")?._count ||
     0;
 
   return (

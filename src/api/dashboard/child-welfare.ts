@@ -30,5 +30,24 @@ export const getChildWelfareDashboard =
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.data;
+
+    const data = res.data || {};
+    return {
+      children: {
+        total: data.children?.total || 0,
+        found: data.children?.found || 0,
+        inCare: data.children?.inCare || 0,
+        adopted: data.children?.adopted || 0,
+        fostered: data.children?.fostered || 0,
+      },
+      adoption: {
+        totalApplicants: data.adoption?.totalApplicants || 0,
+      },
+      infrastructure: {
+        totalFacilities: data.infrastructure?.totalFacilities || 0,
+        reports: Array.isArray(data.infrastructure?.reports)
+          ? data.infrastructure.reports
+          : [],
+      },
+    };
   };

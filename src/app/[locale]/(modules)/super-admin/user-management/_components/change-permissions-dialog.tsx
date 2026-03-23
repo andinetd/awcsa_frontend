@@ -117,7 +117,9 @@ export function ChangePermissionsDialog({
   const isLoading = loadingPermissions || loadingRoleDetails || loadingFormData;
 
   // Group permissions by resource type
-  const permissionsByResource = allPermissions?.reduce(
+  const permissionsByResource = (
+    Array.isArray(allPermissions) ? allPermissions : []
+  ).reduce(
     (acc, perm) => {
       const resource = perm.resourceType || "Other";
       if (!acc[resource]) {
@@ -126,7 +128,7 @@ export function ChangePermissionsDialog({
       acc[resource].push(perm);
       return acc;
     },
-    {} as Record<string, typeof allPermissions>,
+    {} as Record<string, any[]>,
   );
 
   return (

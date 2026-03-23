@@ -21,7 +21,7 @@ const getAuthHeader = () => {
 
 export const getUsers = async (): Promise<User[]> => {
   const res = await axios.get(`${BASE_URL}/admin/users`, getAuthHeader());
-  return res.data;
+  return Array.isArray(res.data) ? res.data : [];
 };
 
 export const getUserFormData = async (): Promise<UserFormData> => {
@@ -29,7 +29,23 @@ export const getUserFormData = async (): Promise<UserFormData> => {
     `${BASE_URL}/admin/users/form-data`,
     getAuthHeader(),
   );
-  return res.data;
+  const data = res.data || {};
+  return {
+    roles: Array.isArray(data.roles) ? data.roles : [],
+    structure: {
+      bureaus: Array.isArray(data.structure?.bureaus)
+        ? data.structure.bureaus
+        : [],
+      subCities: Array.isArray(data.structure?.subCities)
+        ? data.structure.subCities
+        : [],
+      woredas: Array.isArray(data.structure?.woredas)
+        ? data.structure.woredas
+        : [],
+    },
+    directorates: Array.isArray(data.directorates) ? data.directorates : [],
+    teams: Array.isArray(data.teams) ? data.teams : [],
+  };
 };
 
 export const createUser = async (data: CreateUserDto) => {
@@ -46,7 +62,7 @@ export const getPermissions = async (): Promise<Permission[]> => {
     `${BASE_URL}/admin/users/permissions`,
     getAuthHeader(),
   );
-  return res.data;
+  return Array.isArray(res.data) ? res.data : [];
 };
 
 export const getRoleDetails = async (id: number): Promise<Role> => {
@@ -54,7 +70,13 @@ export const getRoleDetails = async (id: number): Promise<Role> => {
     `${BASE_URL}/admin/users/roles/${id}`,
     getAuthHeader(),
   );
-  return res.data;
+  const data = res.data || {};
+  return {
+    ...data,
+    assignedPermissions: Array.isArray(data.assignedPermissions)
+      ? data.assignedPermissions
+      : [],
+  };
 };
 
 export const createRole = async (data: CreateRoleDto) => {
