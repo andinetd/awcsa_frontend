@@ -112,23 +112,23 @@ export function DynamicSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="">
-        {sections.map((section) => (
-          <SidebarGroup key={section.title}>
+        {(sections || []).map((section) => (
+          <SidebarGroup key={section?.title || Math.random()}>
             <SidebarGroupLabel>
-              {t.has(`sections.${section.title}`)
-                ? t(`sections.${section.title}`)
-                : section.title}
+              {t.has(`sections.${section?.title}`)
+                ? t(`sections.${section?.title}`)
+                : section?.title}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item, index) => {
-                  const isActive = pathname.endsWith(item.url);
-                  const itemTitle = t.has(`items.${item.title}`)
-                    ? t(`items.${item.title}`)
-                    : item.title;
+                {(section?.items || []).map((item, index) => {
+                  const isActive = pathname.endsWith(item?.url || "");
+                  const itemTitle = t.has(`items.${item?.title}`)
+                    ? t(`items.${item?.title}`)
+                    : item?.title;
 
                   return (
-                    <SidebarMenuItem key={item.title + index}>
+                    <SidebarMenuItem key={(item?.title || "") + index}>
                       <SidebarMenuButton
                         asChild
                         className={cn(
@@ -137,12 +137,14 @@ export function DynamicSidebar() {
                             : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
                         )}
                       >
-                        <a href={item.url}>
-                          <item.icon
-                            className={`w-5 h-5 ${
-                              isActive ? "text-blue-600" : "text-slate-400"
-                            }`}
-                          />
+                        <a href={item?.url || "#"}>
+                          {item?.icon && (
+                            <item.icon
+                              className={`w-5 h-5 ${
+                                isActive ? "text-blue-600" : "text-slate-400"
+                              }`}
+                            />
+                          )}
                           <span>{itemTitle}</span>
                         </a>
                       </SidebarMenuButton>
