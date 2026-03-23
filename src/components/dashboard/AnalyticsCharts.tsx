@@ -102,7 +102,7 @@ export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
           >
             <AreaChart
               accessibilityLayer
-              data={data.trends}
+              data={data.trends || []}
               margin={{
                 left: 12,
                 right: 12,
@@ -188,13 +188,13 @@ export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Pie
-                data={data.demographics}
+                data={data.demographics || []}
                 dataKey="count"
                 nameKey="category"
                 innerRadius={60}
                 strokeWidth={5}
               >
-                {data.demographics.map((entry, index) => (
+                {(data.demographics || []).map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={`var(--color-${entry.category})`}
@@ -218,7 +218,7 @@ export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
             config={performanceConfig}
             className="max-h-[300px] w-full"
           >
-            <BarChart accessibilityLayer data={data.performance}>
+            <BarChart accessibilityLayer data={data.performance || []}>
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="department"

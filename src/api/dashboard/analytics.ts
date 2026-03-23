@@ -27,5 +27,11 @@ export const getDashboardAnalytics = async (): Promise<AnalyticsData> => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.data;
+  const raw = res.data;
+  // Normalize: ensure array fields are always arrays even if backend returns null
+  return {
+    trends: Array.isArray(raw?.trends) ? raw.trends : [],
+    demographics: Array.isArray(raw?.demographics) ? raw.demographics : [],
+    performance: Array.isArray(raw?.performance) ? raw.performance : [],
+  };
 };
