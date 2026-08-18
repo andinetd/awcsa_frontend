@@ -61,7 +61,10 @@
       "next": "ቀጣይ",
       "asc": "ወደ ላይ",
       "desc": "ወደ ታች",
-      "hide": "ደብቅ"
+      "hide": "ደብቅ",
+      "showing": "ከ {from} እስከ {to} ያሉ {total} እየታዩ ነው",
+      "pageSize": "በገጽ ረድፎች",
+      "pageInfo": "ገጽ {page} ከ {totalPages}"
     }
   },
   "unauthorized": {

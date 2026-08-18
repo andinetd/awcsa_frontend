@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -27,9 +26,9 @@ import {
   useAssignPermissionsToRole,
 } from "@/hooks/super-admin";
 import { User } from "@/types/super-admin";
-import { Loader2, AlertTriangle, ShieldAlert } from "lucide-react";
+import { Loader2, ShieldAlert } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
+import { PermissionsMatrix } from "@/components/shared/permissions-matrix";
 
 interface ChangePermissionsDialogProps {
   open: boolean;
@@ -54,6 +53,7 @@ export function ChangePermissionsDialog({
     useGetPermissions();
 
   const [selectedRoleId, setSelectedRoleId] = useState<string>("");
+  const [selectedRoleName, setSelectedRoleName] = useState<string>("");
 
   // Fetch role details (to get assigned permissions) when a role is selected
   const { data: roleDetails, isLoading: loadingRoleDetails } =
@@ -78,6 +78,8 @@ export function ChangePermissionsDialog({
     if (open) {
       if (roleId) {
         setSelectedRoleId(String(roleId));
+        const role = formData?.roles.find((r) => r.id === roleId);
+        setSelectedRoleName(role?.name ?? "");
       } else if (user && formData?.roles) {
         const userRoleName = user.employee.role.name;
         const matchingRole = formData.roles.find(
@@ -85,10 +87,12 @@ export function ChangePermissionsDialog({
         );
         if (matchingRole) {
           setSelectedRoleId(String(matchingRole.id));
+          setSelectedRoleName(matchingRole.name);
         }
       }
     } else {
       setSelectedRoleId("");
+      setSelectedRoleName("");
       setSelectedPermissions([]);
     }
   }, [open, user, roleId, formData]);
@@ -100,6 +104,29 @@ export function ChangePermissionsDialog({
         : [...prev, permissionId],
     );
   };
+
+  const handleSelectAll = (_resource: string, permissionIds: number[]) => {
+    setSelectedPermissions((prev) => {
+      const merged = new Set(prev);
+      permissionIds.forEach((id) => merged.add(id));
+      return Array.from(merged);
+    });
+  };
+
+  const handleClearAll = (resource: string) => {
+    setSelectedPermissions((prev) => {
+      const removeIds = new Set(
+        (Array.isArray(allPermissions) ? allPermissions : [])
+          .filter((perm) => (perm.resourceType || "Other") === resource)
+          .map((perm) => perm.id),
+      );
+      return prev.filter((id) => !removeIds.has(id));
+    });
+  };
+
+  const selectedRole = formData?.roles.find(
+    (r) => r.id === Number(selectedRoleId),
+  );
 
   const onSave = () => {
     if (!selectedRoleId) return;
@@ -116,111 +143,87 @@ export function ChangePermissionsDialog({
 
   const isLoading = loadingPermissions || loadingRoleDetails || loadingFormData;
 
-  // Group permissions by resource type
-  const permissionsByResource = (
-    Array.isArray(allPermissions) ? allPermissions : []
-  ).reduce(
-    (acc, perm) => {
-      const resource = perm.resourceType || "Other";
-      if (!acc[resource]) {
-        acc[resource] = [];
-      }
-      acc[resource].push(perm);
-      return acc;
-    },
-    {} as Record<string, any[]>,
-  );
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col p-0">
+        <DialogHeader className="p-6 pb-0">
           <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogDescription>
+            {selectedRoleName
+              ? t("descriptionWithRole", {
+                  role: selectedRoleName.replace(/_/g, " "),
+                  name: user
+                    ? `${user.employee.firstName} ${user.employee.lastName}`
+                    : "",
+                })
+              : t("description")}
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {!roleId && (
-            <div className="max-w-md">
-              <Label className="mb-2 block">{t("selectRole")}</Label>
-              <Select
-                value={selectedRoleId}
-                onValueChange={setSelectedRoleId}
-                disabled={loadingFormData}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={t("chooseRole")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {formData?.roles.map((role) => (
-                    <SelectItem key={role.id} value={String(role.id)}>
-                      {role.name.replace(/_/g, " ")}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="space-y-6">
+            {!roleId && (
+              <div className="max-w-md">
+                <Label className="mb-2 block">{t("selectRole")}</Label>
+                <Select
+                  value={selectedRoleId}
+                  onValueChange={(value) => {
+                    setSelectedRoleId(value);
+                    const role = formData?.roles.find(
+                      (r) => r.id === Number(value),
+                    );
+                    setSelectedRoleName(role?.name ?? "");
+                  }}
+                  disabled={loadingFormData}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("chooseRole")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {formData?.roles.map((role) => (
+                      <SelectItem key={role.id} value={String(role.id)}>
+                        {role.name.replace(/_/g, " ")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
-          {selectedRoleId && (
-            <>
+            {selectedRoleId && (
               <Alert className="bg-amber-50 border-amber-200 text-amber-800">
                 <ShieldAlert className="h-4 w-4 text-amber-800" />
                 <AlertTitle>{t("warningTitle")}</AlertTitle>
-                <AlertDescription>{t("warningDesc")}</AlertDescription>
+                <AlertDescription>
+                  {t("warningDesc")}
+                  {typeof selectedRole?.userCount === "number" && (
+                    <span>
+                      {" "}
+                      ({t("usersCount", { count: selectedRole.userCount })})
+                    </span>
+                  )}
+                </AlertDescription>
               </Alert>
+            )}
 
-              {isLoading ? (
+            {selectedRoleId &&
+              (isLoading ? (
                 <div className="flex justify-center p-12">
                   <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
               ) : (
-                <div className="space-y-6">
-                  {Object.entries(permissionsByResource || {}).map(
-                    ([resource, permissions]) => (
-                      <div key={resource} className="rounded-lg border p-4">
-                        <h3 className="mb-4 text-lg font-semibold capitalize">
-                          {resource.replace(/_/g, " ").toLowerCase()}
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {permissions.map((permission) => (
-                            <div
-                              key={permission.id}
-                              className="flex items-start space-x-2"
-                            >
-                              <Checkbox
-                                id={`perm-${permission.id}`}
-                                checked={selectedPermissions.includes(
-                                  permission.id,
-                                )}
-                                onCheckedChange={() =>
-                                  handleTogglePermission(permission.id)
-                                }
-                              />
-                              <div className="grid gap-1.5 leading-none">
-                                <Label
-                                  htmlFor={`perm-${permission.id}`}
-                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                >
-                                  {permission.name.replace(/_/g, " ")}
-                                </Label>
-                                <p className="text-xs text-muted-foreground">
-                                  {permission.description}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ),
-                  )}
-                </div>
-              )}
-            </>
-          )}
+                <PermissionsMatrix
+                  permissions={allPermissions ?? []}
+                  selected={selectedPermissions}
+                  onToggle={handleTogglePermission}
+                  onSelectAll={handleSelectAll}
+                  onClearAll={handleClearAll}
+                />
+              ))}
+          </div>
         </div>
 
-        <DialogFooter className="mt-6">
+        <DialogFooter className="p-6 border-t bg-slate-50/50">
           <Button
             type="button"
             variant="outline"

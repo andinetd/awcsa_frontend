@@ -3,6 +3,8 @@ import { BASE_URL } from "@/lib/base-url";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   User,
+  UserResponse,
+  UserFilters,
   CreateUserDto,
   UserFormData,
   Permission,
@@ -19,9 +21,17 @@ const getAuthHeader = () => {
   };
 };
 
-export const getUsers = async (): Promise<User[]> => {
-  const res = await axios.get(`${BASE_URL}/admin/users`, getAuthHeader());
-  return Array.isArray(res.data) ? res.data : [];
+export const getUsers = async (
+  filters?: UserFilters,
+): Promise<UserResponse> => {
+  const res = await axios.get(`${BASE_URL}/admin/users`, {
+    ...getAuthHeader(),
+    params: filters,
+  });
+  if (res.data && Array.isArray(res.data.data) && res.data.meta) {
+    return res.data as UserResponse;
+  }
+  return { meta: { total: 0, page: 1, limit: 10, totalPages: 0 }, data: [] };
 };
 
 export const getUserFormData = async (): Promise<UserFormData> => {

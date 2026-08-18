@@ -31,16 +31,15 @@ import {
 import { Loader2, ShieldAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { PermissionsMatrix } from "@/components/shared/permissions-matrix";
 
 interface RoleDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
   roleId?: number;
+  userCount?: number;
 }
 
 export function RoleDialog({
@@ -48,6 +47,7 @@ export function RoleDialog({
   onOpenChange,
   onSuccess,
   roleId,
+  userCount,
 }: RoleDialogProps) {
   const t = useTranslations("super-admin.settings.roleManagement.dialog");
   const pt = useTranslations(
@@ -104,10 +104,28 @@ export function RoleDialog({
     );
   };
 
+  const handleSelectAll = (_resource: string, permissionIds: number[]) => {
+    setSelectedPermissions((prev) => {
+      const merged = new Set(prev);
+      permissionIds.forEach((id) => merged.add(id));
+      return Array.from(merged);
+    });
+  };
+
+  const handleClearAll = (resource: string) => {
+    setSelectedPermissions((prev) => {
+      const removeIds = new Set(
+        (Array.isArray(allPermissions) ? allPermissions : [])
+          .filter((p) => (p.resourceType || "Other") === resource)
+          .map((p) => p.id),
+      );
+      return prev.filter((id) => !removeIds.has(id));
+    });
+  };
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (roleId) {
-      // If editing, we update permissions (and potentially name/desc if supported,
-      // but following the GET details logic we focus on permissions here)
+      // If editing, we update permissions (name/desc are read-only for roles)
       assignPermissionsMutation.mutate(
         { roleId, permissionIds: selectedPermissions },
         {
@@ -147,21 +165,6 @@ export function RoleDialog({
     createRoleMutation.isPending || assignPermissionsMutation.isPending;
   const isLoading = (roleId && loadingRoleDetails) || loadingPermissions;
 
-  // Group permissions by resource type
-  const permissionsByResource = (
-    Array.isArray(allPermissions) ? allPermissions : []
-  ).reduce(
-    (acc, perm) => {
-      const resource = perm.resourceType || "Other";
-      if (!acc[resource]) {
-        acc[resource] = [];
-      }
-      acc[resource].push(perm);
-      return acc;
-    },
-    {} as Record<string, any[]>,
-  );
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0">
@@ -195,7 +198,7 @@ export function RoleDialog({
                             <Input
                               placeholder={t("namePlaceholder")}
                               {...field}
-                              disabled={!!roleId} // Typically role names are not editable if they are keys
+                              disabled={!!roleId}
                             />
                           </FormControl>
                           <FormMessage />
@@ -221,72 +224,31 @@ export function RoleDialog({
                     />
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold">
-                        Permissions
-                      </Label>
-                      <Badge variant="outline">
-                        {selectedPermissions.length} selected
-                      </Badge>
-                    </div>
+                  {roleId && (
+                    <Alert className="bg-amber-50 border-amber-200 text-amber-800 py-2">
+                      <ShieldAlert className="h-4 w-4 text-amber-800" />
+                      <AlertTitle className="text-sm">
+                        {pt("warningTitle")}
+                      </AlertTitle>
+                      <AlertDescription className="text-xs">
+                        {pt("warningDesc")}
+                        {typeof userCount === "number" && (
+                          <span>
+                            {" "}
+                            ({pt("usersCount", { count: userCount })})
+                          </span>
+                        )}
+                      </AlertDescription>
+                    </Alert>
+                  )}
 
-                    {roleId && (
-                      <Alert className="bg-amber-50 border-amber-200 text-amber-800 py-2">
-                        <ShieldAlert className="h-4 w-4 text-amber-800" />
-                        <AlertTitle className="text-sm">
-                          {pt("warningTitle")}
-                        </AlertTitle>
-                        <AlertDescription className="text-xs">
-                          {pt("warningDesc")}
-                        </AlertDescription>
-                      </Alert>
-                    )}
-
-                    <div className="space-y-6">
-                      {Object.entries(permissionsByResource || {}).map(
-                        ([resource, permissions]) => (
-                          <div
-                            key={resource}
-                            className="rounded-lg border p-4 bg-slate-50/50"
-                          >
-                            <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                              {resource.replace(/_/g, " ")}
-                            </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              {permissions.map((permission) => (
-                                <div
-                                  key={permission.id}
-                                  className="flex items-start space-x-2"
-                                >
-                                  <Checkbox
-                                    id={`perm-${permission.id}`}
-                                    checked={selectedPermissions.includes(
-                                      permission.id,
-                                    )}
-                                    onCheckedChange={() =>
-                                      handleTogglePermission(permission.id)
-                                    }
-                                  />
-                                  <div className="grid gap-1 leading-none">
-                                    <Label
-                                      htmlFor={`perm-${permission.id}`}
-                                      className="text-sm font-medium leading-none cursor-pointer"
-                                    >
-                                      {permission.name.replace(/_/g, " ")}
-                                    </Label>
-                                    <p className="text-[10px] text-muted-foreground line-clamp-1">
-                                      {permission.description}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ),
-                      )}
-                    </div>
-                  </div>
+                  <PermissionsMatrix
+                    permissions={allPermissions ?? []}
+                    selected={selectedPermissions}
+                    onToggle={handleTogglePermission}
+                    onSelectAll={handleSelectAll}
+                    onClearAll={handleClearAll}
+                  />
                 </div>
               </div>
 

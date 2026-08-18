@@ -3,9 +3,7 @@
 import { useState } from "react";
 import {
   MoreHorizontal,
-  Key,
   Lock,
-  Unlock,
   Trash2,
   Edit,
   Shield,
@@ -20,7 +18,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -28,7 +25,6 @@ import { User } from "@/types/super-admin";
 import {
   useUpdateUserStatus,
   useDeleteUser,
-  useResetUserPassword,
 } from "@/hooks/super-admin";
 import { useAuthStore } from "@/stores/auth-store";
 import { toast } from "sonner";
@@ -43,11 +39,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useTranslations } from "next-intl";
-import { ChangeRoleDialog } from "./change-role-dialog";
+import { ResetPasswordDialog } from "./reset-password-dialog";
 
 interface UserActionsProps {
   user: User;
   onUserUpdated: () => void;
+  onEdit: (user: User) => void;
   onChangeRole: (user: User) => void;
   onChangePermissions: (user: User) => void;
 }
@@ -55,23 +52,23 @@ interface UserActionsProps {
 export function UserActions({
   user,
   onUserUpdated,
+  onEdit,
   onChangeRole,
   onChangePermissions,
 }: UserActionsProps) {
   const t = useTranslations("super-admin.userManagement.actions");
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
 
   const { user: currentUser } = useAuthStore();
   const updateStatusMutation = useUpdateUserStatus();
   const deleteUserMutation = useDeleteUser();
-  const resetPasswordMutation = useResetUserPassword();
 
   const isSelf = currentUser?.id === user.id;
 
   const isLocking = updateStatusMutation.isPending;
   const isActivating = updateStatusMutation.isPending;
   const isDeleting = deleteUserMutation.isPending;
-  const isResetting = resetPasswordMutation.isPending;
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(user.email);
@@ -104,19 +101,8 @@ export function UserActions({
     });
   };
 
-  const handleResetPassword = async () => {
-    const newPassword = window.prompt(t("messages.passwordRequired"));
-    if (newPassword) {
-      resetPasswordMutation.mutate(
-        { id: user.id, password: newPassword },
-        {
-          onSuccess: () => {
-            toast.success(t("messages.passwordResetSuccess"));
-            onUserUpdated();
-          },
-        },
-      );
-    }
+  const handleResetPassword = () => {
+    setResetOpen(true);
   };
 
   return (
@@ -128,20 +114,27 @@ export function UserActions({
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[190px]">
           <DropdownMenuItem onClick={handleCopyEmail}>
             <Copy className="mr-2 h-4 w-4" />
             {t("copyEmail")}
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onEdit(user)}>
+            <Edit className="mr-2 h-4 w-4" />
+            {t("edit")}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => onChangeRole(user)}>
+          <DropdownMenuItem
+            onClick={() => onChangeRole(user)}
+            disabled={isSelf}
+          >
             <UserCog className="mr-2 h-4 w-4" />
             {t("changeRole")}
           </DropdownMenuItem>
-          {/* <DropdownMenuItem onClick={() => onChangePermissions(user)}>
+          <DropdownMenuItem onClick={() => onChangePermissions(user)}>
             <Shield className="mr-2 h-4 w-4" />
             {t("changePermissions")}
-          </DropdownMenuItem> */}
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleStatusChange}
             disabled={isLocking || isActivating || isSelf}
@@ -158,10 +151,7 @@ export function UserActions({
               </>
             )}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={handleResetPassword}
-            disabled={isResetting}
-          >
+          <DropdownMenuItem onClick={handleResetPassword}>
             <KeyRound className="mr-2 h-4 w-4" />
             {t("resetPassword")}
           </DropdownMenuItem>
@@ -206,6 +196,12 @@ export function UserActions({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <ResetPasswordDialog
+        open={resetOpen}
+        onOpenChange={setResetOpen}
+        userId={user.id}
+        userEmail={user.email}
+      />
     </>
   );
 }

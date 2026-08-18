@@ -39,6 +39,25 @@
     "description": "የቡድን አባላትን እና የመለያ ፈቃዳቸውን እዚህ ያስተዳድሩ።",
     "addUser": "ተጠቃሚ ጨምር",
     "managePermissions": "ፈቃዶችን ያስተዳድሩ",
+    "tabs": {
+      "users": "ተጠቃሚዎች",
+      "roles": "ሚናዎች እና ፈቃዶች"
+    },
+    "filters": {
+      "searchPlaceholder": "በስም ወይም በኢሜይል ይፈልጉ...",
+      "status": "ሁኔታ",
+      "allStatuses": "ሁሉም ሁኔታዎች",
+      "statuses": {
+        "ACTIVE": "ንቁ",
+        "INACTIVE": "እንቅስቃሴ የሌለው",
+        "LOCKED": "ተዘግቷል"
+      },
+      "role": "ሚና",
+      "allRoles": "ሁሉም ሚናዎች",
+      "department": "የስራ ክፍል",
+      "allDepartments": "ሁሉም የስራ ክፍሎች",
+      "clear": "አጽዳ"
+    },
     "table": {
       "name": "ተጠቃሚ",
       "contact": "ግንኙነት",
@@ -52,6 +71,15 @@
     "dialog": {
       "addTitle": "አዲስ ተጠቃሚ ጨምር",
       "addDescription": "አዲስ የተጠቃሚ መለያ ለመፍጠር ዝርዝሮችን ይሙሉ",
+      "editTitle": "ተጠቃሚ አስተካክል",
+      "editDescription": "የተጠቃሚውን መገለጫ እና የስራ ዝርዝሮችን ያዘምኑ።",
+      "save": "ለውጦችን አስቀምጥ",
+      "generate": "አመንጭ",
+      "section": {
+        "personal": "የግል መረጃ",
+        "account": "መለያ እና ተደራሽነት",
+        "assignment": "ድርጅት እና ምደባ"
+      },
       "firstName": "መጀመሪያ ስም",
       "lastName": "የአያት ስም",
       "email": "ኢሜይል",
@@ -70,7 +98,8 @@
         "CHILDREN_AFFAIRS": "የህፃናት ጉዳይ",
         "WOMEN_AFFAIRS": "የሴቶች ጉዳይ",
         "SOCIAL_AFFAIRS": "የማህበራዊ ጉዳይ",
-        "SYSTEM": "ሲስተም"
+        "SYSTEM": "ሲስተም",
+        "EDIR": "እድር (EDIR)"
       },
       "select": "ይምረጡ...",
       "selectSubCity": "ክፍለ ከተማ ይምረጡ",
@@ -101,6 +130,7 @@
     "actions": {
       "label": "ድርጊቶች",
       "copyEmail": "ኢሜይል ቅዳ",
+      "edit": "ተጠቃሚ አስተካክል",
       "changeRole": "ሚና ቀይር",
       "changePermissions": "ፈቃዶችን ቀይር",
       "lockAccount": "መለያ ዝጋ",
@@ -128,15 +158,45 @@
         "description": "ለ {email} አዲስ ሚና ይምረጡ።",
         "roleLabel": "ሚና",
         "selectRole": "ሚና ይምረጡ",
-        "saveChanges": "ለውጦችን አስቀምጥ"
+        "saveChanges": "ለውጦችን አስቀምጥ",
+        "currentRole": "የአሁኑ ሚና",
+        "targetTitle": "የዒላማ ሚና",
+        "targetPermissions": "ይህ ሚና {count} ፈቃዶችን ይሰጣል።",
+        "systemRole": "የስርዓት ሚና",
+        "selfWarningTitle": "የራስዎን ሚና መቀየር",
+        "selfWarningDesc": "የራስዎን ሚና መቀየር የአሁኑን የአስተዳደር ተደራሽነትዎን ሊሽር ይችላል። ይህ በቀላሉ ሊቀለበስ አይችልም።"
+      },
+      "resetPasswordDialog": {
+        "title": "የይለፍ ቃል ቀይር",
+        "description": "ለ {email} አዲስ የይለፍ ቃል ያዘጋጁ።",
+        "signOutNote": "ተጠቃሚው በሚቀጥለው ጥያቄ ላይ ከመለያው ይወጣል።",
+        "newPassword": "አዲስ የይለፍ ቃል",
+        "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+        "generate": "አመንጭ",
+        "reset": "የይለፍ ቃል ቀይር",
+        "cancel": "ሰርዝ",
+        "placeholders": {
+          "password": "ጠንካራ የይለፍ ቃል ያስገቡ",
+          "confirm": "የይለፍ ቃሉን እንደገና ያስገቡ"
+        },
+        "errors": {
+          "passwordMin": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
+          "passwordMismatch": "የይለፍ ቃሎቹ አይመሳሰሉም"
+        },
+        "messages": {
+          "success": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል",
+          "error": "የይለፍ ቃሉን መቀየር አልተቻለም"
+        }
       },
       "permissionDialog": {
         "title": "የሚና ፈቃዶችን ያስተዳድሩ",
         "description": "የሚና ፈቃዶችን ለማየት እና ለማሻሻል ሚና ይምረጡ።",
+        "descriptionWithRole": "ለ {name} ለተመደበው {role} ሚና ፈቃዶችን ያስተዳድሩ።",
         "selectRole": "ሚና ይምረጡ",
         "chooseRole": "ሚና ይምረጡ...",
         "warningTitle": "ተፅዕኖ ማስጠንቀቂያ",
         "warningDesc": "ለዚህ ሚና ፈቃዶችን ማሻሻል በአሁኑ ጊዜ ለእሱ የተመደቡትን ሁሉንም ተጠቃሚዎች ይነካል።",
+        "usersCount": "{count} ተጠቃሚዎች ተመድበዋል",
         "save": "ፈቃዶችን አስቀምጥ",
         "cancel": "ሰርዝ",
         "password": "የይለፍ ቃል",
@@ -146,6 +206,12 @@
         "delete": "ሰርዝ"
       }
     }
+  },
+  "permissionsMatrix": {
+    "searchPlaceholder": "ፈቃዶችን ይፈልጉ...",
+    "label": "ፈቃዶች",
+    "selected": "{selected} / {total} ተመርጠዋል",
+    "noPermissions": "ምንም ፈቃዶች አልተገኙም።"
   },
   "backups": {
     "title": "የስርዓት ቅጂዎች",
@@ -209,6 +275,9 @@
       "table": {
         "name": "የሚና ስም",
         "description": "መግለጫ",
+        "users": "ተጠቃሚዎች",
+        "system": "ስርዓት",
+        "noRoles": "ምንም ሚናዎች አልተገኙም።",
         "actions": "ድርጊቶች",
         "managePermissions": "ፈቃዶችን ያስተዳድሩ"
       },

@@ -61,7 +61,10 @@
       "next": "Next",
       "asc": "Asc",
       "desc": "Desc",
-      "hide": "Hide"
+      "hide": "Hide",
+      "showing": "Showing {from}–{to} of {total}",
+      "pageSize": "Rows per page",
+      "pageInfo": "Page {page} of {totalPages}"
     }
   },
   "unauthorized": {

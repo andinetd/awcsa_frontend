@@ -1,12 +1,26 @@
 export interface Employee {
+  id?: number;
   firstName: string;
   lastName: string;
+  phoneNumber?: string;
+  cityIdNumber?: string;
+  department?: string;
   role: {
+    id?: number;
     name: string;
   };
   orgUnit: {
+    id?: number;
     name: string;
-    type: string;
+    type?: string;
+  };
+  directorate?: {
+    id?: number;
+    name: string;
+  };
+  team?: {
+    id?: number;
+    name: string;
   };
 }
 
@@ -14,7 +28,28 @@ export interface User {
   id: number;
   email: string;
   status: "ACTIVE" | "INACTIVE" | "LOCKED" | "SUSPENDED"; // Assuming other statuses based on standard conventions
+  createdAt?: string;
   employee: Employee;
+}
+
+export interface UserResponse {
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+  data: User[];
+}
+
+export interface UserFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+  roleId?: number;
+  orgUnitId?: number;
+  department?: string;
 }
 
 export type EmployeeRole =
@@ -30,7 +65,8 @@ export type Department =
   | "CHILDREN_AFFAIRS"
   | "WOMEN_AFFAIRS"
   | "SOCIAL_AFFAIRS"
-  | "SYSTEM";
+  | "SYSTEM"
+  | "EDIR";
 
 export interface CreateUserDto {
   firstName: string;
@@ -51,6 +87,7 @@ export interface Role {
   name: string;
   description: string;
   isSystemRole?: boolean;
+  userCount?: number;
   createdAt: string;
   updatedAt: string;
   assignedPermissions?: {

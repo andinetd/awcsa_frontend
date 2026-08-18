@@ -1,31 +1,29 @@
 import {
   Accessibility,
   Baby,
-  BarChart3,
   Briefcase,
   Building,
-  FileDiff,
   FileText,
+  GraduationCap,
   HandHeart,
   HandHelping,
   Heart,
   Home,
-  HouseIcon,
   LayoutDashboard,
-  Map,
-  Settings,
-  Settings2,
-  User,
-  Users,
-  GraduationCap,
+  LucideIcon,
   MessageSquareText,
+  Settings2,
+  ShieldCheck,
+  UserRoundCog,
+  Users,
 } from "lucide-react";
 
 export interface NavigationItem {
   title: string;
-  url: string;
-  icon: any;
+  url?: string;
+  icon: LucideIcon;
   orgType?: string[];
+  children?: NavigationItem[];
 }
 
 export interface NavigationSection {
@@ -34,73 +32,30 @@ export interface NavigationSection {
 }
 
 export const sidebarConfig: Record<
-  | "GLOBAL"
   | "CHILDREN_AFFAIRS"
   | "SOCIAL_AFFAIRS"
   | "WOMENS"
   | "SUPER_ADMIN"
   | "BUREAU_HEAD"
-  | "WOREDA"
-  | "SUBCITY"
   | "CARE_CENTERS_PORTAL",
   NavigationSection[]
 > = {
-  GLOBAL: [
-    {
-      title: "Global",
-      items: [
-        {
-          title: "Adoption",
-          url: "/adoption/dashboard",
-          icon: Baby,
-        },
-        {
-          title: "Social Affairs",
-          url: "/social-affairs/socials/dashboard",
-          icon: HandHeart,
-        },
-        {
-          title: "Women",
-          url: "/womens/dashboard",
-          icon: Users,
-        },
-        {
-          title: "Bureau Head",
-          url: "/bureau-head",
-          icon: Users,
-        },
-        {
-          title: "Super Admin",
-          url: "/super-admin/dashboard",
-          icon: Settings,
-        },
-        {
-          title: "Super Admin management",
-          url: "/super-admin/user-management",
-          icon: Settings,
-        },
-      ],
-    },
-  ],
-
   CHILDREN_AFFAIRS: [
     {
-      title: "Adoption Moduel Services",
+      title: "Overview",
       items: [
-        { title: "Dashboard", url: "/adoption/dashboard", icon: Home },
+        { title: "Dashboard", url: "/adoption/dashboard", icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: "Adoption Management",
+      items: [
         { title: "Children", url: "/adoption/children", icon: Baby },
         {
           title: "Care Centers",
           url: "/adoption/care-centers",
           icon: Building,
         },
-        // { title: "Benefits", url: "/adoption/benefits", icon: Heart },
-        // {
-        //   title: "Assisted homes",
-        //   url: "/adoption/assisted-homes",
-        //   icon: Home,
-        // },
-        // { title: "Adera", url: "/adoption/adera", icon: HouseIcon },
         {
           title: "Adoption Requests",
           url: "/adoption/adoption-requests",
@@ -108,11 +63,36 @@ export const sidebarConfig: Record<
         },
       ],
     },
+    {
+      title: "Additional Services",
+      items: [
+        {
+          title: "Home Visit",
+          url: "/adoption/home-visit",
+          icon: Home,
+        },
+        {
+          title: "Benefits",
+          url: "/adoption/benefits",
+          icon: Heart,
+        },
+        {
+          title: "Assisted Homes",
+          url: "/adoption/assisted-homes",
+          icon: Home,
+        },
+        {
+          title: "Adera",
+          url: "/adoption/adera",
+          icon: Building,
+        },
+      ],
+    },
   ],
 
   SOCIAL_AFFAIRS: [
     {
-      title: "Social Affairs",
+      title: "Overview",
       items: [
         {
           title: "Dashboard",
@@ -126,14 +106,20 @@ export const sidebarConfig: Record<
       title: "Elderly & Disabled",
       items: [
         {
-          title: "Disabled Persons",
-          url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
-          icon: Accessibility,
-        },
-        {
-          title: "Elderly Persons",
-          url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
+          title: "Beneficiaries",
           icon: Users,
+          children: [
+            {
+              title: "Disabled Persons",
+              url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
+              icon: Accessibility,
+            },
+            {
+              title: "Elderly Persons",
+              url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
+              icon: Users,
+            },
+          ],
         },
         {
           title: "Support Services",
@@ -156,20 +142,25 @@ export const sidebarConfig: Record<
 
   WOMENS: [
     {
-      title: "Womens",
+      title: "Overview",
       items: [
-        { title: "Dashboard", url: "/womens/dashboard", icon: Home },
+        { title: "Dashboard", url: "/womens/dashboard", icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: "Women Services",
+      items: [
         {
           title: "Support Services",
           url: "/womens/support-service",
           icon: HandHeart,
         },
-        // {
-        //   title: "Women Associations",
-        //   url: "/womens/women-associations",
-        //   icon: Users,
-        // },
         { title: "Women List", url: "/womens/women-list", icon: Users },
+        {
+          title: "Women Associations",
+          url: "/womens/women-associations",
+          icon: Users,
+        },
       ],
     },
   ],
@@ -178,10 +169,9 @@ export const sidebarConfig: Record<
     {
       title: "Overview",
       items: [
-        { title: "Dashboard", url: "/super-admin/dashboard", icon: Home },
+        { title: "Dashboard", url: "/super-admin/dashboard", icon: LayoutDashboard },
       ],
     },
-
     {
       title: "Management",
       items: [
@@ -193,18 +183,14 @@ export const sidebarConfig: Record<
         {
           title: "Audit Logs",
           url: "/super-admin/audit-logs",
-          icon: Settings2,
+          icon: ShieldCheck,
         },
-        {
-          title: "Backups",
-          url: "/super-admin/backups",
-          icon: Settings2,
-        },
-        {
-          title: "General Settings",
-          url: "/super-admin/general-settings",
-          icon: Settings2,
-        },
+        { title: "Backups", url: "/super-admin/backups", icon: Settings2 },
+      ],
+    },
+    {
+      title: "Settings",
+      items: [
         {
           title: "Landing Page",
           url: "/super-admin/landing-page",
@@ -216,50 +202,115 @@ export const sidebarConfig: Record<
 
   BUREAU_HEAD: [
     {
-      title: "Global",
+      title: "Overview",
       items: [
-        { title: "Dashboard", url: "/bureau-head", icon: Home },
-
-        { title: "Sub city", url: "/bureau-head/sub-city", icon: Baby },
+        { title: "Dashboard", url: "/bureau-head", icon: LayoutDashboard },
+        { title: "Sub City", url: "/bureau-head/sub-city", icon: Building },
+        { title: "Complaints", url: "/complaints", icon: MessageSquareText },
+      ],
+    },
+    {
+      title: "Modules",
+      items: [
         {
           title: "Adoption",
-          url: "/adoption/dashboard",
-          icon: FileText,
+          icon: Baby,
+          children: [
+            {
+              title: "Dashboard",
+              url: "/adoption/dashboard",
+              icon: LayoutDashboard,
+            },
+            { title: "Children", url: "/adoption/children", icon: Baby },
+            {
+              title: "Care Centers",
+              url: "/adoption/care-centers",
+              icon: Building,
+            },
+            {
+              title: "Adoption Requests",
+              url: "/adoption/adoption-requests",
+              icon: FileText,
+            },
+          ],
         },
         {
           title: "Social Affairs",
-          url: "/social-affairs/dashboard",
-          icon: FileText,
+          icon: HandHeart,
+          children: [
+            {
+              title: "Dashboard",
+              url: "/social-affairs/dashboard",
+              icon: LayoutDashboard,
+            },
+            {
+              title: "Edir",
+              url: "/social-affairs/edir/list",
+              icon: HandHelping,
+            },
+            {
+              title: "Elderly & Disabled",
+              url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
+              icon: Users,
+            },
+          ],
         },
         {
-          title: "Complaints",
-          url: "/complaints",
-          icon: MessageSquareText,
+          title: "Women",
+          icon: Users,
+          children: [
+            {
+              title: "Dashboard",
+              url: "/womens/dashboard",
+              icon: LayoutDashboard,
+            },
+            {
+              title: "Support Services",
+              url: "/womens/support-service",
+              icon: HandHeart,
+            },
+            { title: "Women List", url: "/womens/women-list", icon: Users },
+          ],
         },
-        { title: "Women", url: "/womens/dashboard", icon: User },
-        { title: "Super Admin", url: "/super-admin/dashboard", icon: FileText },
+        {
+          title: "Admin",
+          icon: UserRoundCog,
+          children: [
+            {
+              title: "Dashboard",
+              url: "/super-admin/dashboard",
+              icon: LayoutDashboard,
+            },
+            {
+              title: "User Management",
+              url: "/super-admin/user-management",
+              icon: Users,
+            },
+            { title: "Audit Logs", url: "/super-admin/audit-logs", icon: ShieldCheck },
+            { title: "Backups", url: "/super-admin/backups", icon: Settings2 },
+            {
+              title: "Landing Page",
+              url: "/super-admin/landing-page",
+              icon: Settings2,
+            },
+          ],
+        },
       ],
     },
   ],
-  WOREDA: [
-    {
-      title: "Woreda",
-      items: [{ title: "Local Dashboard", url: "/woreda", icon: Map }],
-    },
-  ],
 
-  SUBCITY: [
-    {
-      title: "Sub  city",
-      items: [{ title: "Subcity Dashboard", url: "/subcity", icon: Building }],
-    },
-  ],
   CARE_CENTERS_PORTAL: [
     {
-      title: "Care Centers Portal",
+      title: "Care Center",
       items: [
-        { title: "Dashboard", url: "/care-centers-portal", icon: Home },
-        { title: "Children", url: "/care-centers-portal", icon: Baby },
+        { title: "Dashboard", url: "/care-centers-portal", icon: LayoutDashboard },
+        { title: "Add Child", url: "/care-centers-portal/add-child", icon: Baby },
+        { title: "Reports", url: "/care-centers-portal/reports", icon: FileText },
+        {
+          title: "Monthly Report",
+          url: "/care-centers-portal/monthly-report",
+          icon: FileText,
+        },
       ],
     },
   ],

@@ -39,6 +39,25 @@
     "description": "Manage your team members and their account permissions here.",
     "addUser": "Add User",
     "managePermissions": "Manage Permissions",
+    "tabs": {
+      "users": "Users",
+      "roles": "Roles & Permissions"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name or email...",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "statuses": {
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "LOCKED": "Locked"
+      },
+      "role": "Role",
+      "allRoles": "All roles",
+      "department": "Department",
+      "allDepartments": "All departments",
+      "clear": "Clear"
+    },
     "table": {
       "name": "User",
       "contact": "Contact",
@@ -52,6 +71,15 @@
     "dialog": {
       "addTitle": "Add New User",
       "addDescription": "Fill in the details to create a new user account.",
+      "editTitle": "Edit User",
+      "editDescription": "Update the user's profile and assignment details.",
+      "save": "Save Changes",
+      "generate": "Generate",
+      "section": {
+        "personal": "Personal Information",
+        "account": "Account & Access",
+        "assignment": "Organization & Assignment"
+      },
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
@@ -70,7 +98,8 @@
         "CHILDREN_AFFAIRS": "Children Affairs",
         "WOMEN_AFFAIRS": "Women Affairs",
         "SOCIAL_AFFAIRS": "Social Affairs",
-        "SYSTEM": "System"
+        "SYSTEM": "System",
+        "EDIR": "Edir (EDIR)"
       },
       "select": "Select...",
       "selectSubCity": "Select Sub-City",
@@ -101,6 +130,7 @@
     "actions": {
       "label": "Actions",
       "copyEmail": "Copy Email",
+      "edit": "Edit User",
       "changeRole": "Change Role",
       "changePermissions": "Change Permissions",
       "lockAccount": "Lock Account",
@@ -128,15 +158,45 @@
         "description": "Select a new role for {email}.",
         "roleLabel": "Role",
         "selectRole": "Select a role",
-        "saveChanges": "Save Changes"
+        "saveChanges": "Save Changes",
+        "currentRole": "Current role",
+        "targetTitle": "Target role",
+        "targetPermissions": "This role grants {count} permissions.",
+        "systemRole": "System role",
+        "selfWarningTitle": "Changing your own role",
+        "selfWarningDesc": "Changing your own role may revoke your current administrative access. This cannot be undone easily."
+      },
+      "resetPasswordDialog": {
+        "title": "Reset Password",
+        "description": "Set a new password for {email}.",
+        "signOutNote": "The user will be signed out on their next request.",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm Password",
+        "generate": "Generate",
+        "reset": "Reset Password",
+        "cancel": "Cancel",
+        "placeholders": {
+          "password": "Enter a strong password",
+          "confirm": "Re-enter the password"
+        },
+        "errors": {
+          "passwordMin": "Password must be at least 6 characters",
+          "passwordMismatch": "Passwords do not match"
+        },
+        "messages": {
+          "success": "Password reset successfully",
+          "error": "Failed to reset password"
+        }
       },
       "permissionDialog": {
         "title": "Manage Role Permissions",
         "description": "Select a role to view and modify its permissions.",
+        "descriptionWithRole": "Manage permissions for the {role} role assigned to {name}.",
         "selectRole": "Select Role",
         "chooseRole": "Choose a role...",
         "warningTitle": "Impact Warning",
         "warningDesc": "Modifying permissions for this role will affect ALL users currently assigned to it.",
+        "usersCount": "{count} users assigned",
         "save": "Save Permissions",
         "cancel": "Cancel",
         "password": "Password",
@@ -146,6 +206,12 @@
         "delete": "Delete"
       }
     }
+  },
+  "permissionsMatrix": {
+    "searchPlaceholder": "Search permissions...",
+    "label": "Permissions",
+    "selected": "{selected} / {total} selected",
+    "noPermissions": "No permissions found."
   },
   "backups": {
     "title": "System Backups",
@@ -209,6 +275,9 @@
       "table": {
         "name": "Role Name",
         "description": "Description",
+        "users": "Users",
+        "system": "System",
+        "noRoles": "No roles found.",
         "actions": "Actions",
         "managePermissions": "Manage Permissions"
       },

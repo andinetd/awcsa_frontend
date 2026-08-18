@@ -17,6 +17,7 @@ import { getAuditLogs, getAuditLogDetails } from "@/api/super-admin/audit-logs";
 import { getBackups, downloadBackup } from "@/api/super-admin/backups";
 import {
   CreateUserDto,
+  UserFilters,
   AuditLogFilters,
   CreateRoleDto,
 } from "@/types/super-admin";
@@ -25,10 +26,10 @@ import { useTranslations } from "next-intl";
 
 // User Management Hooks
 
-export const useGetUsers = () => {
+export const useGetUsers = (filters?: UserFilters) => {
   return useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
+    queryKey: ["users", filters],
+    queryFn: () => getUsers(filters),
   });
 };
 
