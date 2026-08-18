@@ -76,7 +76,6 @@ export default function SignInForm() {
         recaptchaToken,
       };
 
-      console.log("Sign-in payload:", payload);
       mutate(payload);
     } catch (err) {
       console.error("Recaptcha execution failed:", err);
@@ -127,15 +126,6 @@ export default function SignInForm() {
       return;
     }
 
-    const { userRole } = useAuthStore.getState();
-
-    console.log("DEBUG: Redirection Check", {
-      user,
-      accountType: user.accountType,
-      userRole,
-      orgUnit,
-    });
-
     const navTimer = setTimeout(() => {
       if (
         user.accountType === "CLIENT" ||
@@ -148,17 +138,13 @@ export default function SignInForm() {
       ) {
         router.push(`/care-centers-portal`);
       } else if (user.accountType === "EMPLOYEE") {
+        const { department, userRole } = useAuthStore.getState();
+
         if (userRole === "Super_Admin") {
           router.push("/super-admin/dashboard");
         } else {
-          const { department, userRole } = useAuthStore.getState();
-
-          if (userRole === "Super_Admin") {
-            router.push("/super-admin/dashboard");
-          } else {
-            const route = getRouteByDepartment(department);
-            router.push(route);
-          }
+          const route = getRouteByDepartment(department);
+          router.push(route);
         }
       }
     }, 0);

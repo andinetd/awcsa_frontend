@@ -31,7 +31,7 @@ export function SidebarLayout({ children, title }: SidebarLayoutProps) {
             {title && (
               <h1 className="text-lg font-semibold leading-none">{title}</h1>
             )}
-            {/* <DynamicBreadcrumb /> */}
+            <DynamicBreadcrumb />
           </div>
           <div className="ml-auto">
             <LanguageSwitcher />

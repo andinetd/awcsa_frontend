@@ -1,5 +1,4 @@
 import {
-  EmployeeJwtPayload,
   JwtUserType,
   OrgType,
   UserRole,
@@ -8,7 +7,7 @@ import { sidebarConfig } from "./sidebar-config";
 
 export function getSidebarItems(
   orgUnit: OrgType | null | undefined,
-  pathname: string,
+  _pathname: string,
   user?: JwtUserType | null,
   userRole?: UserRole | null,
   permissions?: string[],
@@ -17,18 +16,7 @@ export function getSidebarItems(
 ) {
   const accountType = user?.accountType;
 
-  console.log("getSidebarItems called with:", {
-    orgUnit,
-    pathname,
-    accountType,
-    userRole,
-    permissions,
-  });
-
-  const localePrefix = /^\/[a-z]{2}\//;
-  const cleanPathname = pathname.replace(localePrefix, "/");
-
-  // Priority 1: Care Centers Portal
+  // Priority 1: Care Centers Portal (facility account)
   if (
     accountType === "CHILD_CARE_FACLITY" ||
     accountType === "CHILD_CARE_FACILITY"
@@ -36,95 +24,66 @@ export function getSidebarItems(
     return sidebarConfig.CARE_CENTERS_PORTAL;
   }
 
-  // Priority 2: Path-based detection for SYSTEM users
+  // Priority 2: SYSTEM users see the unified multi-module sidebar
   if (department === "SYSTEM") {
-    if (cleanPathname.startsWith("/bureau-head") || cleanPathname === "/") {
-      return sidebarConfig.BUREAU_HEAD;
-    }
-    if (cleanPathname.startsWith("/super-admin")) {
-      return sidebarConfig.SUPER_ADMIN;
-    }
-    if (cleanPathname.startsWith("/adoption"))
-      return sidebarConfig.CHILDREN_AFFAIRS;
-    if (cleanPathname.startsWith("/social-affairs"))
-      return sidebarConfig.SOCIAL_AFFAIRS;
-    if (cleanPathname.startsWith("/womens")) return sidebarConfig.WOMENS;
-    if (cleanPathname.startsWith("/complaints"))
-      return sidebarConfig.BUREAU_HEAD;
+    return sidebarConfig.BUREAU_HEAD;
   }
 
-  // Priority 3: Default Super Admin (for paths not matched above)
+  // Priority 3: Super Admin gets the admin management menu
   if (userRole === "Super_Admin") {
     return sidebarConfig.SUPER_ADMIN;
   }
 
-  // Priority 3: Bureau Staff & Local Units (Base on orgUnit)
+  // Priority 4: Resolve by org unit / deputy bureau
   if (orgUnit) {
+    const deputyMap: Record<string, keyof typeof sidebarConfig> = {
+      BUREAU_HEAD: "BUREAU_HEAD",
+      CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
+      SOCIAL_AFFAIRS: "SOCIAL_AFFAIRS",
+      EDIR: "SOCIAL_AFFAIRS",
+      WOMEN_AFFAIRS: "WOMENS",
+      SUPER_ADMIN: "SUPER_ADMIN",
+      CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
+    };
+
+    if (orgUnit.deputyBureau) {
+      const deputy = deputyMap[orgUnit.deputyBureau];
+      if (deputy) return sidebarConfig[deputy];
+    }
+
     if (
       orgUnit.type === "BUREAU" ||
-      orgUnit.type === "OFFICE" ||
-      orgUnit.type === "SUBCITY" ||
-      orgUnit.type === "WOREDA"
+      orgUnit.type === "OFFICE"
     ) {
-      // First try pathname-based detection (most accurate for navigation)
-      if (cleanPathname.startsWith("/adoption"))
+      // Fallback: try to infer the module from role and permissions
+      const roleStr = (entityRole || "").toLowerCase();
+      const isWomensRole = roleStr.includes("women");
+      const isChildrenRole =
+        roleStr.includes("child") || roleStr.includes("adoption");
+      const isSocialRole = roleStr.includes("social");
+
+      const hasWomensPermissions = permissions?.some((p) =>
+        p.toLowerCase().includes("women"),
+      );
+      const hasChildrenPermissions = permissions?.some(
+        (p) =>
+          p.toLowerCase().includes("child") ||
+          p.toLowerCase().includes("adoption"),
+      );
+      const hasSocialPermissions = permissions?.some(
+        (p) =>
+          p.toLowerCase().includes("social") ||
+          p.toLowerCase().includes("edir"),
+      );
+
+      if (isWomensRole || hasWomensPermissions) return sidebarConfig.WOMENS;
+      if (isChildrenRole || hasChildrenPermissions)
         return sidebarConfig.CHILDREN_AFFAIRS;
-      if (cleanPathname.startsWith("/social-affairs"))
+      if (isSocialRole || hasSocialPermissions)
         return sidebarConfig.SOCIAL_AFFAIRS;
-      if (cleanPathname.startsWith("/womens")) return sidebarConfig.WOMENS;
-      if (cleanPathname.startsWith("/super-admin"))
-        return sidebarConfig.SUPER_ADMIN;
-      if (cleanPathname.startsWith("/bureau-head"))
-        return sidebarConfig.BUREAU_HEAD;
-      if (cleanPathname.startsWith("/complaints"))
-        return sidebarConfig.BUREAU_HEAD;
-
-      // Special handling for legacy/specific bureau head logic
-      if (orgUnit.type === "BUREAU" && !orgUnit.deputyBureau) {
-        // Fallback: Try to infer from role and permissions
-        const roleStr = (entityRole || "").toLowerCase();
-        const isWomensRole = roleStr.includes("women");
-        const isChildrenRole =
-          roleStr.includes("child") || roleStr.includes("adoption");
-        const isSocialRole = roleStr.includes("social");
-
-        const hasWomensPermissions = permissions?.some((p) =>
-          p.toLowerCase().includes("women"),
-        );
-        const hasChildrenPermissions = permissions?.some(
-          (p) =>
-            p.toLowerCase().includes("child") ||
-            p.toLowerCase().includes("adoption"),
-        );
-        const hasSocialPermissions = permissions?.some(
-          (p) =>
-            p.toLowerCase().includes("social") ||
-            p.toLowerCase().includes("edir"),
-        );
-
-        if (isWomensRole || hasWomensPermissions) return sidebarConfig.WOMENS;
-        if (isChildrenRole || hasChildrenPermissions)
-          return sidebarConfig.CHILDREN_AFFAIRS;
-        if (isSocialRole || hasSocialPermissions)
-          return sidebarConfig.SOCIAL_AFFAIRS;
-
-        return sidebarConfig.GLOBAL;
-      }
-
-      // Specific Deputy Bureau (if set)
-      if (orgUnit.deputyBureau) {
-        const deputy = orgUnit.deputyBureau as keyof typeof sidebarConfig;
-        return sidebarConfig[deputy] || [];
-      }
-
-      // Default for local units if no specific path or deputy is matched
-      if (orgUnit.type === "WOREDA") return sidebarConfig.WOREDA || [];
-      if (orgUnit.type === "SUBCITY") return sidebarConfig.SUBCITY || [];
-
-      // Fallback for OFFICE or BUREAU without deputy
-      return sidebarConfig.BUREAU_HEAD;
     }
   }
 
-  return [];
+  // Fallback: unified sidebar keeps every user able to navigate
+  return sidebarConfig.BUREAU_HEAD;
 }
