@@ -8,6 +8,7 @@ import { UserActions } from "./user-actions";
 
 interface ColumnsProps {
   onUserUpdated: () => void;
+  onEdit: (user: User) => void;
   onChangeRole: (user: User) => void;
   onChangePermissions: (user: User) => void;
   t: (key: string) => string;
@@ -15,6 +16,7 @@ interface ColumnsProps {
 
 export const getColumns = ({
   onUserUpdated,
+  onEdit,
   onChangeRole,
   onChangePermissions,
   t,
@@ -95,6 +97,7 @@ export const getColumns = ({
       <UserActions
         user={row.original}
         onUserUpdated={onUserUpdated}
+        onEdit={onEdit}
         onChangeRole={onChangeRole}
         onChangePermissions={onChangePermissions}
       />
