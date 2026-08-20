@@ -116,13 +116,15 @@ export default function NewCouncilForm({
         toast.success(t("form.messages.successCreate"));
       }
       setOpen(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      toast.error(error?.message || t("form.messages.saveError"));
     }
   };
 
   const isEdit = !!initialData;
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
+  const watchedLevel = form.watch("level");
+  const showWoreda = watchedLevel !== "CITY";
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -231,22 +233,24 @@ export default function NewCouncilForm({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="woreda"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("form.fields.woreda")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.placeholders.woreda")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {showWoreda && (
+                <FormField
+                  control={form.control}
+                  name="woreda"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.fields.woreda")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("form.placeholders.woreda")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="kebele"

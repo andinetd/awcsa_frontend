@@ -888,7 +888,8 @@
         },
         "messages": {
           "successCreate": "Council registered successfully",
-          "successUpdate": "Council updated successfully"
+          "successUpdate": "Council updated successfully",
+          "saveError": "Failed to save council. Please check the details and try again."
         }
       },
       "detail": {

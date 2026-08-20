@@ -59,8 +59,8 @@ export const registerEdirCouncil = async (
       headers: getAuthHeaders(),
     });
     return response.data;
-  } catch (error) {
-    throw new Error(error as any);
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to register council");
   }
 };
 
@@ -78,8 +78,8 @@ export const updateEdirCouncil = async ({
       { headers: getAuthHeaders() }
     );
     return response.data;
-  } catch (error) {
-    throw new Error(error as any);
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to update council");
   }
 };
 
