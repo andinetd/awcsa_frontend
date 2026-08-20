@@ -1,5 +1,7 @@
 export type EdirStatus = "ACTIVE" | "EXPIRED" | "REVOKED" | "CANCELLED";
 
+export type EdirLevel = "WOREDA" | "SUB_CITY" | "CITY";
+
 export type EdirCancellationReason =
   | "DISSOLVED"
   | "MEMBER_MAJORITY_REQUEST"
@@ -61,7 +63,7 @@ export interface Edir {
   otherReasonDescription?: string | null;
 
   // Directive 151/2016 accreditation fields
-  registerLevel?: string;
+  registerLevel?: EdirLevel;
   registrationNumber?: string | null;
   registrationDate?: string | null;
   certificateIssuedAt?: string | null;
@@ -81,4 +83,44 @@ export interface Edir {
   _count?: {
     members: number;
   };
+}
+
+export interface EdirCouncilMember {
+  id: number;
+  name: string;
+  registrationNumber: string | null;
+  status: EdirStatus;
+  registerLevel: EdirLevel;
+  subCity: string;
+  woreda: string | null;
+  registrationDate: string | null;
+}
+
+export interface EdirCouncil {
+  id: number;
+  name: string;
+  level: EdirLevel;
+  subCity: string;
+  woreda: string | null;
+  kebele: string | null;
+  establishmentDate: string;
+  chairpersonName: string | null;
+  chairpersonPhone: string | null;
+  contactPhone: string | null;
+  address: string | null;
+  registrationNumber: string | null;
+  registrationDate: string | null;
+  certificateIssuedAt: string | null;
+  status: EdirStatus;
+  lastRenewedAt: string | null;
+  renewedForYear: number | null;
+  renewalPenaltyApplied: boolean;
+  cancellationReason: EdirCancellationReason | null;
+  cancelledAt: string | null;
+  memberEdirs: EdirCouncilMember[];
+  _count?: {
+    memberEdirs: number;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }

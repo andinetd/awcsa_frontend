@@ -378,6 +378,12 @@
         "EXPIRED": "Expired",
         "REVOKED": "Revoked",
         "CANCELLED": "Cancelled"
+      },
+      "levels": {
+        "all": "All Levels",
+        "WOREDA": "Woreda",
+        "SUB_CITY": "Sub City",
+        "CITY": "City"
       }
     },
     "form": {
@@ -400,6 +406,7 @@
         "name": "Edir Name",
         "date": "Establishment Date",
         "method": "Formation Method",
+        "registerLevel": "Registration Level",
         "subCity": "Sub City",
         "woreda": "Woreda",
         "kebele": "Kebele",
@@ -428,6 +435,11 @@
       "methods": {
         "government": "Government Issued",
         "will": "Will of People"
+      },
+      "levels": {
+        "WOREDA": "Woreda",
+        "SUB_CITY": "Sub City",
+        "CITY": "City"
       },
       "reasons": {
         "residence": "Residence Based",
@@ -783,6 +795,129 @@
         "EXPIRED": "Expired",
         "REVOKED": "Revoked",
         "CANCELLED": "Cancelled"
+      }
+    },
+    "councils": {
+      "list": {
+        "title": "Idir Councils",
+        "subtitle": "Register and manage councils at the woreda, sub-city, and city levels",
+        "search": "Search...",
+        "noRecords": "No Idir councils found.",
+        "loading": "Loading councils...",
+        "error": "Failed to load councils.",
+        "pagination": "Showing {start}–{end} of {total}",
+        "previous": "Previous",
+        "next": "Next",
+        "levels": {
+          "all": "All Levels",
+          "WOREDA": "Woreda",
+          "SUB_CITY": "Sub City",
+          "CITY": "City"
+        },
+        "status": {
+          "all": "All Statuses",
+          "ACTIVE": "Active",
+          "EXPIRED": "Expired",
+          "REVOKED": "Revoked",
+          "CANCELLED": "Cancelled"
+        }
+      },
+      "level": {
+        "WOREDA": "Woreda",
+        "SUB_CITY": "Sub City",
+        "CITY": "City"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "EXPIRED": "Expired",
+        "REVOKED": "Revoked",
+        "CANCELLED": "Cancelled"
+      },
+      "buttons": {
+        "add": "Register Council",
+        "edit": "Edit",
+        "renew": "Renew",
+        "renewSuccess": "Council registration renewed",
+        "viewDetails": "View details",
+        "cancel": "Cancel",
+        "dismiss": "Close",
+        "confirmCancel": "Confirm Cancellation",
+        "cancelling": "Cancelling...",
+        "renaming": "Renewing...",
+        "addMember": "Add Members",
+        "removeMember": "Remove",
+        "removing": "Removing...",
+        "addingMembers": "Adding...",
+        "save": "Save",
+        "saving": "Saving...",
+        "goBack": "Back to Councils"
+      },
+      "form": {
+        "createTitle": "Register Idir Council",
+        "updateTitle": "Edit Idir Council",
+        "createDesc": "Register a new council at the woreda, sub-city, or city level.",
+        "updateDesc": "Update the council's registration details.",
+        "sections": {
+          "general": "General Information",
+          "location": "Location",
+          "leadership": "Leadership & Contact"
+        },
+        "fields": {
+          "name": "Council Name",
+          "level": "Registration Level",
+          "subCity": "Sub City",
+          "woreda": "Woreda",
+          "kebele": "Kebele",
+          "establishmentDate": "Establishment Date",
+          "chairpersonName": "Chairperson Name",
+          "chairpersonPhone": "Chairperson Phone",
+          "contactPhone": "Contact Phone",
+          "address": "Address"
+        },
+        "placeholders": {
+          "name": "e.g. Woreda 5 Idir Council",
+          "subCity": "Sub city / city",
+          "woreda": "Woreda (optional)",
+          "kebele": "Kebele (optional)",
+          "chairpersonName": "Full name",
+          "chairpersonPhone": "Phone number",
+          "contactPhone": "Phone number",
+          "address": "Office address"
+        },
+        "messages": {
+          "successCreate": "Council registered successfully",
+          "successUpdate": "Council updated successfully"
+        }
+      },
+      "detail": {
+        "loading": "Loading council...",
+        "error": "Council not found or failed to load.",
+        "membersTitle": "Member Edirs ({count})",
+        "noMembers": "No member Edirs yet. Add registered Edirs to this council.",
+        "accreditation": "Registration & Accreditation",
+        "registrationNumber": "Registration Number",
+        "registrationDate": "Registered On",
+        "certificateIssuedAt": "Certificate Issued On",
+        "renewedForYear": "Renewed For Year",
+        "notRenewed": "Not renewed",
+        "notAvailable": "N/A",
+        "penaltyApplied": "Renewed with penalty",
+        "cancelledAt": "Cancelled On",
+        "cancellationReason": "Cancellation Reason",
+        "established": "Established On",
+        "chairperson": "Chairperson",
+        "contactPhone": "Contact Phone",
+        "address": "Address",
+        "leader": "Leadership",
+        "location": "Location",
+        "memberSince": "Registered",
+        "cancellationReasons": {
+          "DISSOLVED": "Council dissolved per its by-laws",
+          "MEMBER_MAJORITY_REQUEST": "Request by 2/3 majority of members",
+          "LAWS_VIOLATION": "Violation of rules or laws",
+          "LICENSE_MISUSE": "Use of license outside its purpose",
+          "FALSE_DOCUMENTS": "Registered with false documents"
+        }
       }
     }
   }

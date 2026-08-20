@@ -77,6 +77,7 @@ export default function NewEdirForm({
       name: "",
       establishmentDate: new Date().toISOString().split("T")[0],
       formationMethod: "WILL_OF_PEOPLE",
+      registerLevel: "WOREDA",
       subCity: "",
       woreda: "",
       kebele: "",
@@ -141,6 +142,7 @@ export default function NewEdirForm({
         name: initialData.name,
         establishmentDate: dateStr,
         formationMethod: initialData.formationMethod as any,
+        registerLevel: (initialData.registerLevel || "WOREDA") as any,
         subCity: initialData.subCity,
         woreda: initialData.woreda,
         kebele: initialData.kebele,
@@ -314,6 +316,36 @@ export default function NewEdirForm({
                           <SelectItem value="WILL_OF_PEOPLE">
                             {t("methods.will")}
                           </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="registerLevel"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.registerLevel")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select level" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {(["WOREDA", "SUB_CITY", "CITY"] as const).map(
+                            (level) => (
+                              <SelectItem key={level} value={level}>
+                                {t(`levels.${level}`)}
+                              </SelectItem>
+                            )
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />

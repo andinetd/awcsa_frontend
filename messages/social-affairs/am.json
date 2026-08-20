@@ -378,6 +378,12 @@
         "EXPIRED": "ጊዜ ያለፈ",
         "REVOKED": "የተሰረዘ",
         "CANCELLED": "የተቋረጠ"
+      },
+      "levels": {
+        "all": "ሁሉም ደረጃዎች",
+        "WOREDA": "ወረዳ",
+        "SUB_CITY": "ክፍለ ከተማ",
+        "CITY": "ከተማ"
       }
     },
     "form": {
@@ -400,6 +406,7 @@
         "name": "የእድር ስም",
         "date": "የምስረታ ቀን",
         "method": "የምስረታ ዘዴ",
+        "registerLevel": "የምዝገባ ደረጃ",
         "subCity": "ክፍለ ከተማ",
         "woreda": "ወረዳ",
         "kebele": "ቀበሌ",
@@ -428,6 +435,11 @@
       "methods": {
         "government": "በመንግስት የተቋቋመ",
         "will": "በህዝብ ፈቃድ"
+      },
+      "levels": {
+        "WOREDA": "ወረዳ",
+        "SUB_CITY": "ክፍለ ከተማ",
+        "CITY": "ከተማ"
       },
       "reasons": {
         "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
@@ -783,6 +795,129 @@
         "EXPIRED": "ጊዜ ያለፈ",
         "REVOKED": "የተሰረዘ",
         "CANCELLED": "የተቋረጠ"
+      }
+    },
+    "councils": {
+      "list": {
+        "title": "የእድር ምክር ቤቶች",
+        "subtitle": "በወረዳ፣ ክፍለ ከተማ እና ከተማ ደረጃ ምክር ቤቶችን ይመዝገቡ እና ያስተዳድሩ",
+        "search": "ፈልግ...",
+        "noRecords": "ምንም የእድር ምክር ቤቶች አልተገኙም።",
+        "loading": "ምክር ቤቶችን በመጫን ላይ...",
+        "error": "ምክር ቤቶችን ማግኘት አልተሳካም።",
+        "pagination": "ከ{total} {start}–{end} እያሳየ",
+        "previous": "ቀዳሚ",
+        "next": "ቀጣይ",
+        "levels": {
+          "all": "ሁሉም ደረጃዎች",
+          "WOREDA": "ወረዳ",
+          "SUB_CITY": "ክፍለ ከተማ",
+          "CITY": "ከተማ"
+        },
+        "status": {
+          "all": "ሁሉም ሁኔታዎች",
+          "ACTIVE": "ንቁ",
+          "EXPIRED": "ጊዜ ያለፈ",
+          "REVOKED": "የተሰረዘ",
+          "CANCELLED": "የተቋረጠ"
+        }
+      },
+      "level": {
+        "WOREDA": "ወረዳ",
+        "SUB_CITY": "ክፍለ ከተማ",
+        "CITY": "ከተማ"
+      },
+      "status": {
+        "ACTIVE": "ንቁ",
+        "EXPIRED": "ጊዜ ያለፈ",
+        "REVOKED": "የተሰረዘ",
+        "CANCELLED": "የተቋረጠ"
+      },
+      "buttons": {
+        "add": "ምክር ቤት መዝግብ",
+        "edit": "አርትዕ",
+        "renew": "አድስ",
+        "renewSuccess": "የምክር ቤቱ ምዝገባ ታድሷል",
+        "viewDetails": "ዝርዝሮችን ተመልከት",
+        "cancel": "ተዉ",
+        "dismiss": "ዝጋ",
+        "confirmCancel": "መሰረዙን አረጋግጥ",
+        "cancelling": "በመሰረዝ ላይ...",
+        "renaming": "በማደስ ላይ...",
+        "addMember": "አባላት ጨምር",
+        "removeMember": "አስወግድ",
+        "removing": "በማስወገድ ላይ...",
+        "addingMembers": "በመጨመር ላይ...",
+        "save": "አስቀምጥ",
+        "saving": "በማስቀመጥ ላይ...",
+        "goBack": "ወደ ምክር ቤቶች ተመለስ"
+      },
+      "form": {
+        "createTitle": "የእድር ምክር ቤት መዝግብ",
+        "updateTitle": "የእድር ምክር ቤት አርትዕ",
+        "createDesc": "በወረዳ፣ ክፍለ ከተማ ወይም በከተማ ደረጃ አዲስ ምክር ቤት ይመዝገብ።",
+        "updateDesc": "የምክር ቤቱን የምዝገባ መረጃ ያዘምኑ።",
+        "sections": {
+          "general": "አጠቃላይ መረጃ",
+          "location": "አድራሻ",
+          "leadership": "አመራር እና መገናኛ"
+        },
+        "fields": {
+          "name": "የምክር ቤት ስም",
+          "level": "የምዝገባ ደረጃ",
+          "subCity": "ክፍለ ከተማ",
+          "woreda": "ወረዳ",
+          "kebele": "ቀበሌ",
+          "establishmentDate": "የተቋቋመበት ቀን",
+          "chairpersonName": "የሊቀመንበር ስም",
+          "chairpersonPhone": "የሊቀመንበር ስልክ",
+          "contactPhone": "የመገናኛ ስልክ",
+          "address": "አድራሻ"
+        },
+        "placeholders": {
+          "name": "ለምሳሌ የወረዳ 5 የእድር ምክር ቤት",
+          "subCity": "ክፍለ ከተማ / ከተማ",
+          "woreda": "ወረዳ (አማራጭ)",
+          "kebele": "ቀበሌ (አማራጭ)",
+          "chairpersonName": "ሙሉ ስም",
+          "chairpersonPhone": "ስልክ ቁጥር",
+          "contactPhone": "ስልክ ቁጥር",
+          "address": "የጽህፈት ቤት አድራሻ"
+        },
+        "messages": {
+          "successCreate": "ምክር ቤቱ በተሳካ ሁኔታ ተመዝግቧል",
+          "successUpdate": "ምክር ቤቱ በተሳካ ሁኔታ ተዘምኗል"
+        }
+      },
+      "detail": {
+        "loading": "ምክር ቤቱን በመጫን ላይ...",
+        "error": "ምክር ቤቱ አልተገኘም ወይም ለመጫን አልተሳካም።",
+        "membersTitle": "አባል እድሮች ({count})",
+        "noMembers": "እስካሁን አባል እድሮች የሉም። የተመዘገቡ እድሮችን ለምክር ቤቱ ይጨምሩ።",
+        "accreditation": "ምዝገባ እና እውቅና",
+        "registrationNumber": "የምዝገባ ቁጥር",
+        "registrationDate": "የተመዘገበበት",
+        "certificateIssuedAt": "የምስክር ወረቀት የተሰጠበት",
+        "renewedForYear": "ለየትኛው ዓመት ታድሷል",
+        "notRenewed": "አልተደሰም",
+        "notAvailable": "የለም",
+        "penaltyApplied": "በቅጣት የታደሰ",
+        "cancelledAt": "የተቋረጠበት ቀን",
+        "cancellationReason": "የመቋረጥ ምክንያት",
+        "established": "የተቋቋመበት",
+        "chairperson": "ሊቀመንበር",
+        "contactPhone": "የመገናኛ ስልክ",
+        "address": "አድራሻ",
+        "leader": "አመራር",
+        "location": "አድራሻ",
+        "memberSince": "የተመዘገበበት",
+        "cancellationReasons": {
+          "DISSOLVED": "ምክር ቤቱ በህጉ መሰረት ፈርሷል",
+          "MEMBER_MAJORITY_REQUEST": "በአባላቶቹ 2/3 አብላጫ ጥያቄ",
+          "LAWS_VIOLATION": "ደንቦችን ወይም ህጎችን መጣስ",
+          "LICENSE_MISUSE": "ፍቃዱን ከዓላማው ውጭ መጠቀም",
+          "FALSE_DOCUMENTS": "በሐሰተኛ ሰነዶች መመዝገብ"
+        }
       }
     }
   }

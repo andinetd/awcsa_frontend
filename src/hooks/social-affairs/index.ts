@@ -22,7 +22,18 @@ import {
   reissueEdirCertificate,
   uploadEdirDocument,
 } from "@/api/social-affairs/accreditation-api";
-import { EdirCancellationReason } from "@/api/social-affairs/edir";
+import {
+  getEdirCouncils,
+  getEdirCouncilById,
+  registerEdirCouncil,
+  updateEdirCouncil,
+  renewEdirCouncil,
+  cancelEdirCouncil,
+  addEdirsToCouncil,
+  removeEdirFromCouncil,
+  getEdirsForCouncilSelection,
+} from "@/api/social-affairs/council-api";
+import { EdirCancellationReason, EdirLevel, EdirStatus } from "@/api/social-affairs/edir";
 
 export const useImportEdirAssociationsMutation = () => {
   const queryClient = useQueryClient();
@@ -179,5 +190,108 @@ export const useReissueEdirCertificateMutation = () => {
 export const useUploadEdirDocumentMutation = () => {
   return useMutation({
     mutationFn: uploadEdirDocument,
+  });
+};
+
+export const useGetEdirCouncilsQuery = (params?: {
+  level?: EdirLevel;
+  status?: EdirStatus | "ALL";
+}) => {
+  return useQuery({
+    queryKey: ["edir-councils", params],
+    queryFn: () => getEdirCouncils(params),
+  });
+};
+
+export const useGetEdirCouncilByIdQuery = (councilId: number) => {
+  return useQuery({
+    queryKey: ["edir-council", councilId],
+    queryFn: () => getEdirCouncilById(councilId),
+    enabled: !!councilId,
+  });
+};
+
+export const useCreateEdirCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: registerEdirCouncil,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+    },
+  });
+};
+
+export const useUpdateEdirCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateEdirCouncil,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-council", variables.councilId],
+      });
+    },
+  });
+};
+
+export const useRenewEdirCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: renewEdirCouncil,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-council", variables.councilId],
+      });
+    },
+  });
+};
+
+export const useCancelEdirCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: cancelEdirCouncil,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-council", variables.councilId],
+      });
+    },
+  });
+};
+
+export const useAddEdirsToCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: addEdirsToCouncil,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-council", variables.councilId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+    },
+  });
+};
+
+export const useRemoveEdirFromCouncilMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removeEdirFromCouncil,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-councils"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-council", variables.councilId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+    },
+  });
+};
+
+export const useGetEdirsForCouncilSelectionQuery = (level?: EdirLevel) => {
+  return useQuery({
+    queryKey: ["edir-councils-available", level],
+    queryFn: () => getEdirsForCouncilSelection(level || "WOREDA"),
+    enabled: !!level,
   });
 };

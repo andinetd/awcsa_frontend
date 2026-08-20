@@ -100,6 +100,11 @@ export const sidebarConfig: Record<
           icon: LayoutDashboard,
         },
         { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
+        {
+          title: "Idir Councils",
+          url: "/social-affairs/edir/councils",
+          icon: ShieldCheck,
+        },
       ],
     },
     {
@@ -247,6 +252,11 @@ export const sidebarConfig: Record<
               title: "Edir",
               url: "/social-affairs/edir/list",
               icon: HandHelping,
+            },
+            {
+              title: "Idir Councils",
+              url: "/social-affairs/edir/councils",
+              icon: ShieldCheck,
             },
             {
               title: "Elderly & Disabled",

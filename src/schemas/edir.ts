@@ -28,6 +28,7 @@ export const newEdirSchema = z.object({
     "WILL_OF_PEOPLE",
     "GOVERNMENT_ISSUED",
   ]),
+  registerLevel: z.enum(["WOREDA", "SUB_CITY", "CITY"]).default("WOREDA"),
   subCity: z.string().min(2, "Sub-city is required"),
   woreda: z.string().min(1, "Woreda is required"),
   kebele: z.string().min(1, "Kebele is required"),
