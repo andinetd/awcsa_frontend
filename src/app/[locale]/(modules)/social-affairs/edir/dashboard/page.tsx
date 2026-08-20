@@ -2,7 +2,10 @@
 
 import React from "react";
 import { useTranslations } from "next-intl";
-import { useGetEdirAssociationsQuery } from "@/hooks/social-affairs";
+import {
+  useGetEdirAssociationsQuery,
+  useGetEdirCouncilsQuery,
+} from "@/hooks/social-affairs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   HandHelping,
@@ -11,6 +14,7 @@ import {
   FileX2,
   Ban,
   RefreshCw,
+  Building2,
 } from "lucide-react";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 
@@ -24,8 +28,10 @@ const statusStyles: Record<EdirStatus, string> = {
 export default function EdirDashboard() {
   const t = useTranslations("social-affairs.edir.dashboard");
   const { data: edirs, isLoading } = useGetEdirAssociationsQuery();
+  const { data: councils, isLoading: councilsLoading } =
+    useGetEdirCouncilsQuery();
 
-  if (isLoading) {
+  if (isLoading || councilsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-pulse text-slate-400">{t("loading")}</div>
@@ -52,6 +58,15 @@ export default function EdirDashboard() {
     { key: "cancelled", icon: Ban, value: cancelled, color: "text-gray-500" },
   ];
 
+  const councilList = councils || [];
+  const councilStats = [
+    { key: "total", icon: Building2, value: councilList.length, color: "text-primary" },
+    { key: "active", icon: ShieldCheck, value: councilList.filter((c) => c.status === "ACTIVE").length, color: "text-green-600" },
+    { key: "expired", icon: Clock, value: councilList.filter((c) => c.status === "EXPIRED").length, color: "text-amber-600" },
+    { key: "revoked", icon: FileX2, value: councilList.filter((c) => c.status === "REVOKED").length, color: "text-red-600" },
+    { key: "cancelled", icon: Ban, value: councilList.filter((c) => c.status === "CANCELLED").length, color: "text-gray-500" },
+  ];
+
   const recent = [...list]
     .sort(
       (a, b) =>
@@ -69,6 +84,31 @@ export default function EdirDashboard() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map(({ key, icon: Icon, value, color }) => (
+          <Card key={key}>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <div className={`p-2.5 rounded-full bg-zinc-100/80 ${color}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-zinc-900">{value}</p>
+                  <p className="text-sm text-muted-foreground">{t(`stats.${key}`)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold text-zinc-900">
+          {t("councilsTitle")}
+        </h2>
+        <p className="text-muted-foreground mt-1">{t("councilsSubtitle")}</p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {councilStats.map(({ key, icon: Icon, value, color }) => (
           <Card key={key}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">

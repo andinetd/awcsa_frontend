@@ -270,6 +270,11 @@ export const useAddEdirsToCouncilMutation = () => {
         queryKey: ["edir-council", variables.councilId],
       });
       queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      variables.associationIds.forEach((associationId) => {
+        queryClient.invalidateQueries({
+          queryKey: ["edir-association", associationId],
+        });
+      });
     },
   });
 };
@@ -284,6 +289,9 @@ export const useRemoveEdirFromCouncilMutation = () => {
         queryKey: ["edir-council", variables.councilId],
       });
       queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      queryClient.invalidateQueries({
+        queryKey: ["edir-association", variables.associationId],
+      });
     },
   });
 };

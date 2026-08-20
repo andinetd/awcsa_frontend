@@ -466,7 +466,7 @@
         "subtitle": "Manage traditional community associations",
         "search": "Search...",
         "loading": "Loading Edir associations...",
-        "error": "Error loading Edir associations.",
+"error": "Error loading Edir associations.",
         "noRecords": "No Edir associations found.",
         "pagination": "Showing {start} to {end} of {total} entries",
         "previous": "Previous",
@@ -776,6 +776,8 @@
       "loading": "Loading dashboard...",
       "recent": "Recent Registrations",
       "noRecords": "No Edir associations found.",
+      "councilsTitle": "Idir Councils",
+      "councilsSubtitle": "Council registration and accreditation overview",
       "stats": {
         "total": "Total",
         "active": "Active",
