@@ -3,6 +3,7 @@ import { DeputyBureau } from "..";
 // Employee JWT Payload
 type EmployeeJwtPayload = {
   sub: number;
+  sessionId?: string;
   user: {
     id: number;
     email: string;
@@ -33,6 +34,7 @@ type EmployeeJwtPayload = {
 // Client JWT Payload
 type ClientJwtPayload = {
   sub: number;
+  sessionId?: string;
   user: {
     id: number;
     email: string;
@@ -82,6 +84,7 @@ type ClientSignIn = {
   email: string;
   password: string;
   recaptchaToken: string;
+  rememberMe?: boolean;
 };
 
 type JwtPayload =
@@ -109,6 +112,8 @@ type UserType = {
 
 type ClientSignInResponse = {
   access_token: string;
+  refresh_token: string;
+  expiresAt: string;
   user: UserType;
 };
 

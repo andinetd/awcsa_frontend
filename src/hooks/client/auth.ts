@@ -10,12 +10,16 @@ export const useClientSignupMutation = () =>
   });
 
 export const useSignInMutation = () => {
-  const { setToken } = useAuthStore();
+  const { setAuthSession } = useAuthStore();
   return useMutation<ClientSignInResponse, Error, ClientSignIn>({
     mutationFn: signIn,
     mutationKey: ["Client Sign In"],
-    onSuccess:  (data)  => {
-      setToken(data.access_token);
+    onSuccess: (data, variables) => {
+      setAuthSession(
+        data.access_token,
+        data.refresh_token,
+        !!variables.rememberMe,
+      );
     },
   });
 };

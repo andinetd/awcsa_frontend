@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useGetEdirAssociationsQuery } from "@/hooks/social-affairs";
 import EdirCard from "./_components/edir-card";
 import NewEdirForm from "./_components/new-edir-form";
-import { Edir } from "@/api/social-affairs/edir";
+import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 import ImportEdirDialog from "./_components/import-edir-dialog";
 import GenerateReportDialog from "./_components/generate-report-dialog";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,14 @@ import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { useTranslations } from "next-intl";
+
+const STATUS_OPTIONS: (EdirStatus | "ALL")[] = [
+  "ALL",
+  "ACTIVE",
+  "EXPIRED",
+  "REVOKED",
+  "CANCELLED",
+];
 
 const EdirList = () => {
   const t = useTranslations("social-affairs.edir.list");
@@ -21,6 +29,7 @@ const EdirList = () => {
   const [limit] = useState(6);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,9 +44,14 @@ const EdirList = () => {
   if (isLoading) {
     return <div className="p-8">{t("loading")}</div>;
   }
-  const filteredEdirs = (edirs || []).filter((edir: Edir) =>
-    edir.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-  );
+  const filteredEdirs = (edirs || []).filter((edir: Edir) => {
+    const matchesSearch = edir.name
+      .toLowerCase()
+      .includes(debouncedSearch.toLowerCase());
+    const matchesStatus =
+      statusFilter === "ALL" || edir.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Client-side pagination
   const totalItems = filteredEdirs.length;
@@ -76,6 +90,21 @@ const EdirList = () => {
           <ImportEdirDialog />
           <NewEdirForm />
         </div>
+      </div>
+      <div className="flex flex-wrap items-center gap-2 mt-4">
+        {STATUS_OPTIONS.map((status) => (
+          <Button
+            key={status}
+            size="sm"
+            variant={statusFilter === status ? "default" : "outline"}
+            onClick={() => {
+              setStatusFilter(status);
+              setPage(1);
+            }}
+          >
+            {status === "ALL" ? t("status.all") : t(`status.${status}`)}
+          </Button>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-6 flex-1">

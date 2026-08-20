@@ -285,7 +285,7 @@ export function DynamicSidebar() {
 
   const handleLogout = async () => {
     try {
-      logout();
+      logout({ notifyServer: true });
       router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);

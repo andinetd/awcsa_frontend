@@ -18,10 +18,7 @@ export default function DashboardPage() {
             <p className="text-gray-600">{t("header.subtitle")}</p>
           </div>
           <div className="flex items-center gap-2">
-            <LanguageSwitcher
-              className="py-2 px-4"
-              path={"/applicant-portal/portal"}
-            />
+            <LanguageSwitcher className="py-2 px-4" />
             <UserInfoAndLogout />
           </div>
         </div>

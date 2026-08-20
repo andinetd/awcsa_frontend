@@ -17,10 +17,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <p className="text-gray-600">{t("subtitle")}</p>
           </div>
           <div className="flex items-center gap-2">
-            <LanguageSwitcher
-              className="py-2 px-4"
-              path={"/care-centers-portal"}
-            />
+            <LanguageSwitcher className="py-2 px-4" />
             <UserInfoAndLogout />
           </div>
         </div>

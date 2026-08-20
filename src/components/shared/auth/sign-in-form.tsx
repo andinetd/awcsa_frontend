@@ -11,6 +11,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -48,6 +49,7 @@ export default function SignInForm() {
       z.object({
         email: z.string().email(t("errors.invalidEmail")),
         password: z.string().min(8, t("errors.passwordMin")),
+        rememberMe: z.boolean(),
       }),
     [t],
   );
@@ -56,7 +58,7 @@ export default function SignInForm() {
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "", rememberMe: false },
   });
 
   async function onSubmit(values: FormSchemaType) {
@@ -74,6 +76,7 @@ export default function SignInForm() {
         email: values.email,
         password: values.password,
         recaptchaToken,
+        rememberMe: values.rememberMe,
       };
 
       mutate(payload);
@@ -222,6 +225,30 @@ export default function SignInForm() {
               {t("forgotPassword")}
             </Link>
           </div>
+
+          <FormField
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="rememberMe"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <label
+                      htmlFor="rememberMe"
+                      className="text-sm text-muted-foreground cursor-pointer"
+                    >
+                      {t("rememberMe")}
+                    </label>
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
           <Button
             className="w-full"

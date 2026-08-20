@@ -46,3 +46,43 @@ export const signIn = async (data: ClientSignIn): Promise<ClientSignInResponse> 
     throw new Error("Unexpected error");
   }
 };
+
+export const refreshAccessToken = async (
+  refreshToken: string
+): Promise<ClientSignInResponse> => {
+  try {
+    const sendReq = await axios.post<ClientSignInResponse>(
+      `${BASE_URL}/auth/refresh`,
+      { refreshToken },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return sendReq.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Refresh failed");
+    }
+    throw new Error("Unexpected error");
+  }
+};
+
+export const logoutApi = async (accessToken: string): Promise<void> => {
+  try {
+    await axios.post(
+      `${BASE_URL}/auth/logout`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  } catch (error) {
+    // Logout is best-effort; never surface the failure to the user.
+    console.error("Server-side logout failed:", error);
+  }
+};

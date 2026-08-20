@@ -13,10 +13,22 @@ import {
   Building2,
   CreditCard,
   FileText,
+  ScrollText,
+  HandCoins,
+  FolderOpen,
 } from "lucide-react";
-import { Edir } from "@/api/social-affairs/edir";
+import { Edir, EdirStatus } from "@/api/social-affairs/edir";
+import { downloadEdirDocument } from "@/api/social-affairs/accreditation-api";
 import NewEdirForm from "../list/_components/new-edir-form";
 import EdirMembersList from "./_components/edir-members-list";
+import EdirAccreditationActions from "./_components/edir-accreditation-actions";
+
+const statusStyles: Record<EdirStatus, string> = {
+  ACTIVE: "bg-green-100 text-green-700",
+  EXPIRED: "bg-amber-100 text-amber-700",
+  REVOKED: "bg-red-100 text-red-700",
+  CANCELLED: "bg-gray-200 text-gray-700",
+};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -61,17 +73,15 @@ export default function EdirDetailsPage({ params }: PageProps) {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{typedEdir.name}</h1>
           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-            <span
-              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                typedEdir.status === "ACTIVE"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {typedEdir.status === "ACTIVE"
-                ? t("status.active")
-                : t("status.inactive")}
-            </span>
+            {typedEdir.status && (
+              <span
+                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                  statusStyles[typedEdir.status] || "bg-gray-100 text-gray-700"
+                }`}
+              >
+                {t(`status.${typedEdir.status}`)}
+              </span>
+            )}
             <span>•</span>
             <span>
               {t("fields.established")}:{" "}
@@ -88,7 +98,8 @@ export default function EdirDetailsPage({ params }: PageProps) {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6 mt-6">
-          <div className="flex justify-end">
+          <div className="flex flex-wrap justify-end items-center gap-2">
+            <EdirAccreditationActions edir={typedEdir} />
             <NewEdirForm
               initialData={typedEdir}
               edirId={typedEdir.id}
@@ -98,6 +109,225 @@ export default function EdirDetailsPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Main Info Column */}
             <div className="md:col-span-2 space-y-6">
+              {/* Registration & Accreditation */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <ScrollText className="w-5 h-5 text-primary" />
+                    {t("sections.accreditation")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">
+                      {t("fields.registrationNumber")}
+                    </p>
+                    <p className="font-mono font-medium">
+                      {typedEdir.registrationNumber || t("fields.notAvailable")}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">
+                      {t("fields.registrationDate")}
+                    </p>
+                    <p className="font-medium">
+                      {typedEdir.registrationDate
+                        ? new Date(typedEdir.registrationDate).toLocaleDateString()
+                        : t("fields.notAvailable")}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">
+                      {t("fields.certificateIssuedAt")}
+                    </p>
+                    <p className="font-medium">
+                      {typedEdir.certificateIssuedAt
+                        ? new Date(typedEdir.certificateIssuedAt).toLocaleDateString()
+                        : t("fields.notAvailable")}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">
+                      {t("fields.renewedForYear")}
+                    </p>
+                    <p className="font-medium">
+                      {typedEdir.renewedForYear ?? t("fields.notRenewed")}
+                    </p>
+                  </div>
+                  {typedEdir.renewalPenaltyApplied && (
+                    <div className="col-span-full">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                        {t("fields.penaltyApplied")}
+                      </span>
+                    </div>
+                  )}
+                  {typedEdir.cancelledAt && (
+                    <div className="col-span-full">
+                      <p className="text-muted-foreground">
+                        {t("fields.cancelledAt")}
+                      </p>
+                      <p className="font-medium">
+                        {new Date(typedEdir.cancelledAt).toLocaleDateString()}
+                        {typedEdir.cancellationReason
+                          ? ` — ${t(`cancellationReasons.${typedEdir.cancellationReason}`)}`
+                          : ""}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Founding Members (Article 7.a) */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Users className="w-5 h-5 text-primary" />
+                    {t("sections.foundingMembers")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {typedEdir.foundingMembers?.length ? (
+                    <div className="border rounded-md overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead className="bg-muted/50 text-left">
+                          <tr>
+                            <th className="px-4 py-2 font-medium">
+                              {t("fields.founderName")}
+                            </th>
+                            <th className="px-4 py-2 font-medium">
+                              {t("fields.founderAddress")}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {typedEdir.foundingMembers.map((fm) => (
+                            <tr key={fm.id ?? fm.fullName} className="border-t">
+                              <td className="px-4 py-2">{fm.fullName}</td>
+                              <td className="px-4 py-2 text-muted-foreground">
+                                {fm.address || "—"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">
+                      {t("fields.noFoundingMembers")}
+                    </p>
+                  )}
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full font-medium ${
+                        typedEdir.assetsAuditedByAuditCommittee
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {t("fields.auditCommittee")}
+                    </span>
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full font-medium ${
+                        typedEdir.assetsApprovedByGeneralAssembly
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {t("fields.generalAssembly")}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Assets at registration (Article 7.b) */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <HandCoins className="w-5 h-5 text-primary" />
+                    {t("sections.assets")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {typedEdir.assets?.length ? (
+                    <div className="border rounded-md overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead className="bg-muted/50 text-left">
+                          <tr>
+                            <th className="px-4 py-2 font-medium">
+                              {t("fields.assetType")}
+                            </th>
+                            <th className="px-4 py-2 font-medium">
+                              {t("fields.assetDescription")}
+                            </th>
+                            <th className="px-4 py-2 font-medium text-right">
+                              {t("fields.assetValue")}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {typedEdir.assets.map((asset) => (
+                            <tr key={asset.id ?? asset.description} className="border-t">
+                              <td className="px-4 py-2">
+                                {t(`assetTypes.${asset.type}`)}
+                              </td>
+                              <td className="px-4 py-2">{asset.description}</td>
+                              <td className="px-4 py-2 text-right font-medium">
+                                {Number(asset.value).toLocaleString(
+                                  undefined,
+                                  { style: "currency", currency: "ETB" }
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">
+                      {t("fields.noAssets")}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Documents (Article 7.e) */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <FolderOpen className="w-5 h-5 text-primary" />
+                    {t("sections.documents")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {typedEdir.byLawsDoc ? (
+                    <div className="flex items-center justify-between gap-4 rounded-md border p-3">
+                      <div className="flex items-center gap-2 text-sm">
+                        <FileText className="w-4 h-4 text-primary" />
+                        <span className="font-medium">
+                          {typedEdir.byLawsDoc.fileName}
+                        </span>
+                      </div>
+                      <a
+                        href="/social-affairs/edir/list"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          downloadEdirDocument(typedEdir.byLawsDoc!.id).then(
+                            (url) => window.open(url, "_blank")
+                          );
+                        }}
+                        className="text-sm text-primary underline"
+                      >
+                        {t("fields.viewDocument")}
+                      </a>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">
+                      {t("fields.noDocument")}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
               {/* General Information */}
               <Card>
                 <CardHeader>

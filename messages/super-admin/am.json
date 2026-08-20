@@ -211,7 +211,14 @@
     "searchPlaceholder": "ፈቃዶችን ይፈልጉ...",
     "label": "ፈቃዶች",
     "selected": "{selected} / {total} ተመርጠዋል",
-    "noPermissions": "ምንም ፈቃዶች አልተገኙም።"
+    "noPermissions": "ምንም ፈቃዶች አልተገኙም።",
+    "preset": {
+      "none": "የለም",
+      "viewOnly": "ማየት ብቻ",
+      "manage": "ማየት + ማርትዕ",
+      "fullControl": "ሙሉ ቁጥጥር",
+      "custom": "ብጁ"
+    }
   },
   "backups": {
     "title": "የስርዓት ቅጂዎች",

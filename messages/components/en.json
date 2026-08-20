@@ -43,5 +43,9 @@
   "accessCheck": {
     "checking": "Checking Access",
     "logoAlt": "WCSA Logo"
+  },
+  "session": {
+    "expired": "Your session has expired. Please sign in again.",
+    "inactivityLogout": "You have been signed out due to inactivity."
   }
 }

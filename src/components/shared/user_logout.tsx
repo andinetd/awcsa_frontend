@@ -33,7 +33,7 @@ export default function UserInfoAndLogout() {
     event.stopPropagation();
     setIsLoggingOut(true);
     try {
-      logout();
+      logout({ notifyServer: true });
 
       toast.success(t("success"), { duration: 2000 });
 

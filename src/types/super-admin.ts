@@ -109,6 +109,8 @@ export interface Permission {
   resourceType: string;
   operation: "READ" | "WRITE" | "UPDATE" | "DELETE" | "MANAGE";
   description: string;
+  module?: string;
+  isActive?: boolean;
   createdAt: string;
   updatedAt: string;
 }

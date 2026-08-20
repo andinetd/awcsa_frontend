@@ -16,6 +16,13 @@ import {
   getEdirMemberById,
   updateEdirMember,
 } from "@/api/social-affairs/member-api";
+import {
+  renewEdirAssociation,
+  cancelEdirAssociation,
+  reissueEdirCertificate,
+  uploadEdirDocument,
+} from "@/api/social-affairs/accreditation-api";
+import { EdirCancellationReason } from "@/api/social-affairs/edir";
 
 export const useImportEdirAssociationsMutation = () => {
   const queryClient = useQueryClient();
@@ -133,5 +140,44 @@ export const useUpdateEdirMutation = () => {
         queryKey: ["edir-association", variables.id],
       });
     },
+  });
+};
+
+export const useRenewEdirMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: renewEdirAssociation,
+    onSuccess: (updated, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      queryClient.invalidateQueries({ queryKey: ["edir-association", variables.id] });
+    },
+  });
+};
+
+export const useCancelEdirMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: cancelEdirAssociation,
+    onSuccess: (updated, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      queryClient.invalidateQueries({ queryKey: ["edir-association", variables.id] });
+    },
+  });
+};
+
+export const useReissueEdirCertificateMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: reissueEdirCertificate,
+    onSuccess: (updated) => {
+      queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      queryClient.invalidateQueries({ queryKey: ["edir-association", updated.id] });
+    },
+  });
+};
+
+export const useUploadEdirDocumentMutation = () => {
+  return useMutation({
+    mutationFn: uploadEdirDocument,
   });
 };

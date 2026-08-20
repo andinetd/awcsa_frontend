@@ -43,5 +43,9 @@
   "accessCheck": {
     "checking": "ፍቃድ በመፈተሽ ላይ",
     "logoAlt": "የWCSA አርማ"
+  },
+  "session": {
+    "expired": "የእርስዎ ክፍለ ጊዜ አልቋል። እባክዎ እንደገና ይግቡ።",
+    "inactivityLogout": "በእንቅስቃሴ እጦት ምክንያት ከመለያዎ ወጥተዋል።"
   }
 }

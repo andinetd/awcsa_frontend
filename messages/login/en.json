@@ -22,6 +22,7 @@
       "recaptchaNotAvailable": "Recaptcha not yet available, try again in a second",
       "recaptchaFailed": "Recaptcha failed, please try again",
       "signInFailed": "Sign-in failed: {message}"
-    }
+    },
+    "rememberMe": "Remember me"
   }
 }

@@ -11,7 +11,7 @@ import { CardFooter } from "@/components/ui/card";
 import { MapPin, Phone, User, CalendarDays, Users } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Edir } from "@/api/social-affairs/edir";
+import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 
 interface EdirCardProps {
   edir: Edir;
@@ -19,6 +19,13 @@ interface EdirCardProps {
 }
 
 import { useTranslations } from "next-intl";
+
+const statusStyles: Record<EdirStatus, string> = {
+  ACTIVE: "bg-green-100 text-green-700",
+  EXPIRED: "bg-amber-100 text-amber-700",
+  REVOKED: "bg-red-100 text-red-700",
+  CANCELLED: "bg-gray-200 text-gray-700",
+};
 
 const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
   const t = useTranslations("social-affairs.edir.edir.list");
@@ -41,12 +48,10 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
           {edir.status && (
             <span
               className={`text-xs px-2 py-1 rounded-full ${
-                edir.status === "ACTIVE"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-700"
+                statusStyles[edir.status] || "bg-gray-100 text-gray-700"
               }`}
             >
-              {edir.status}
+              {t(`status.${edir.status}`)}
             </span>
           )}
         </CardTitle>
@@ -81,6 +86,13 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
             {edir.formationMethod}
           </span>
         </div>
+        {edir.registrationNumber && (
+          <div className="text-xs text-slate-500">
+            <span className="font-medium">{t("registrationNumber")}:</span>{" "}
+            {edir.registrationNumber}
+            {edir.renewedForYear ? ` • ${t("renewedForYear")} ${edir.renewedForYear}` : ""}
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-end mb-3">
         <Button variant="outline" size="sm" onClick={handleViewDetails}>

@@ -22,6 +22,7 @@
       "recaptchaNotAvailable": "Recaptcha ገና አልተገኘም፣ እባክዎ እንደገና ይሞክሩ",
       "recaptchaFailed": "Recaptcha አልተሳካም፣ እባክዎ እንደገና ይሞክሩ",
       "signInFailed": "መግባት አልተሳካም: {message}"
-    }
+    },
+    "rememberMe": "አስታውሰኝ"
   }
 }

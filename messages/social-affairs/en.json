@@ -371,7 +371,14 @@
       "error": "Error loading Edir associations.",
       "pagination": "Showing {start} to {end} of {total} entries",
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "status": {
+        "all": "All",
+        "ACTIVE": "Active",
+        "EXPIRED": "Expired",
+        "REVOKED": "Revoked",
+        "CANCELLED": "Cancelled"
+      }
     },
     "form": {
       "createTitle": "Register New Edir",
@@ -383,7 +390,11 @@
         "address": "Address",
         "membership": "Membership Statistics",
         "financials": "Financials & Remarks",
-        "reasons": "Establishment Reasons"
+        "reasons": "Establishment Reasons",
+        "foundingMembers": "Founding Members",
+        "assets": "Assets at Registration",
+        "approvals": "Audit & Approval",
+        "documents": "Founding Document / By-laws"
       },
       "fields": {
         "name": "Edir Name",
@@ -401,7 +412,18 @@
         "generalMembers": "General Members",
         "male": "Male",
         "female": "Female",
-        "total": "Total"
+        "total": "Total",
+        "founderName": "Founding Member Name",
+        "founderAddress": "Address",
+        "assetType": "Type",
+        "assetDescription": "Description",
+        "assetValue": "Value (ETB)",
+        "auditCommittee": "Assets counted by the Audit Committee",
+        "generalAssembly": "Assets approved by the General Assembly"
+      },
+      "assetTypes": {
+        "CASH": "Cash",
+        "IN_KIND": "In Kind"
       },
       "methods": {
         "government": "Government Issued",
@@ -409,17 +431,21 @@
       },
       "reasons": {
         "residence": "Residence Based",
-        "religion": "Religion Based",
-        "workplace": "Workplace Based",
-        "gender": "Gender Based",
-        "ethnicity": "Ethnicity Based"
+        "workplace": "Workplace Based"
       },
       "buttons": {
         "cancel": "Cancel",
         "register": "Register Edir",
         "update": "Update Edir",
         "registering": "Registering...",
-        "updating": "Updating..."
+        "updating": "Updating...",
+        "addFounder": "Add Founding Member",
+        "addAsset": "Add Asset"
+      },
+      "messages": {
+        "byLawsUploading": "Uploading document...",
+        "byLawsUploaded": "By-laws / founding document attached",
+        "byLawsUploadError": "Failed to upload document"
       }
     },
     "edir": {
@@ -437,6 +463,14 @@
         "kebele": "Kebele",
         "members": "Members",
         "established": "Est",
+        "registrationNumber": "Registration No.",
+        "renewedForYear": "Renewed",
+        "status": {
+          "ACTIVE": "Active",
+          "EXPIRED": "Expired",
+          "REVOKED": "Revoked",
+          "CANCELLED": "Cancelled"
+        },
         "buttons": {
           "viewDetails": "View Details"
         }
@@ -477,10 +511,7 @@
         },
         "reasons": {
           "residence": "Residence Based",
-          "religion": "Religion Based",
-          "workplace": "Workplace Based",
-          "gender": "Gender Based",
-          "ethnicity": "Ethnicity Based"
+          "workplace": "Workplace Based"
         },
         "buttons": {
           "register": "Add New Edir",
@@ -546,8 +577,43 @@
         "edit": "Edit Details"
       },
       "status": {
+        "ACTIVE": "Active",
+        "EXPIRED": "Expired",
+        "REVOKED": "Revoked",
+        "CANCELLED": "Cancelled",
         "active": "Active",
         "inactive": "Inactive"
+      },
+      "actions": {
+        "renew": {
+          "label": "Renew",
+          "success": "Registration renewed successfully"
+        },
+        "reissue": {
+          "label": "Reissue Certificate",
+          "success": "Certificate issued successfully"
+        },
+        "cancel": {
+          "label": "Cancel Registration",
+          "title": "Cancel Registration",
+          "description": "Select the reason for cancelling this Edir's registration (Directive Article 15).",
+          "reasonLabel": "Reason",
+          "reasonPlaceholder": "Select a reason",
+          "descriptionLabel": "Additional Details (Optional)",
+          "descriptionPlaceholder": "Describe the circumstances...",
+          "reasons": {
+            "DISSOLVED": "Edir dissolved per its by-laws",
+            "MEMBER_MAJORITY_REQUEST": "Request by 2/3 majority of members",
+            "LAWS_VIOLATION": "Violation of rules or laws",
+            "LICENSE_MISUSE": "Use of license outside its purpose",
+            "FALSE_DOCUMENTS": "Registered with false documents"
+          },
+          "needReason": "Please select a cancellation reason",
+          "dismiss": "Close",
+          "confirm": "Confirm Cancellation",
+          "cancelling": "Cancelling...",
+          "success": "Registration cancelled successfully"
+        }
       },
       "address": {
         "woreda": "Woreda",
@@ -558,7 +624,11 @@
         "membership": "Membership Statistics",
         "reasons": "Establishment Reasons",
         "location": "Location Details",
-        "financial": "Financial Info"
+        "financial": "Financial Info",
+        "accreditation": "Registration & Accreditation",
+        "foundingMembers": "Founding Members",
+        "assets": "Assets at Registration",
+        "documents": "Founding Document / By-laws"
       },
       "fields": {
         "method": "Formation Method",
@@ -576,14 +646,41 @@
         "specificLocation": "Specific Location",
         "bankAccountNumber": "Bank Account Number",
         "monthlyPayment": "Monthly Payment",
-        "established": "Established On"
+        "established": "Established On",
+        "registrationNumber": "Registration Number",
+        "registrationDate": "Registration Date",
+        "certificateIssuedAt": "Certificate Issued On",
+        "renewedForYear": "Renewed For Year",
+        "notRenewed": "Not renewed",
+        "notAvailable": "N/A",
+        "penaltyApplied": "Renewed with penalty",
+        "cancelledAt": "Cancelled On",
+        "founderName": "Full Name",
+        "founderAddress": "Address",
+        "auditCommittee": "Counted by Audit Committee",
+        "generalAssembly": "Approved by General Assembly",
+        "noFoundingMembers": "No founding members recorded.",
+        "assetType": "Type",
+        "assetDescription": "Description",
+        "assetValue": "Value (ETB)",
+        "noAssets": "No assets recorded at registration.",
+        "viewDocument": "View / Download",
+        "noDocument": "No by-laws or founding document uploaded."
+      },
+      "assetTypes": {
+        "CASH": "Cash",
+        "IN_KIND": "In Kind"
+      },
+      "cancellationReasons": {
+        "DISSOLVED": "Dissolved per by-laws",
+        "MEMBER_MAJORITY_REQUEST": "2/3 majority request",
+        "LAWS_VIOLATION": "Violation of laws",
+        "LICENSE_MISUSE": "License misuse",
+        "FALSE_DOCUMENTS": "False documents"
       },
       "reasons": {
         "RESIDENCE": "Residence Based",
-        "RELIGION": "Religion Based",
-        "WORKPLACE": "Workplace Based",
-        "GENDER": "Gender Based",
-        "ETHNICITY": "Ethnicity Based"
+        "WORKPLACE": "Workplace Based"
       }
     },
     "edir-members": {
@@ -659,6 +756,33 @@
           "importing": "Importing...",
           "cancel": "Cancel"
         }
+      }
+    },
+    "dashboard": {
+      "title": "Edir Dashboard",
+      "subtitle": "Registration and accreditation overview",
+      "loading": "Loading dashboard...",
+      "recent": "Recent Registrations",
+      "noRecords": "No Edir associations found.",
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "renewed": "Renewed This Year",
+        "expired": "Expired",
+        "revoked": "Revoked",
+        "cancelled": "Cancelled"
+      },
+      "table": {
+        "name": "Name",
+        "registration": "Registered On",
+        "location": "Location",
+        "status": "Status"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "EXPIRED": "Expired",
+        "REVOKED": "Revoked",
+        "CANCELLED": "Cancelled"
       }
     }
   }

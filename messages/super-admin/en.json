@@ -211,7 +211,14 @@
     "searchPlaceholder": "Search permissions...",
     "label": "Permissions",
     "selected": "{selected} / {total} selected",
-    "noPermissions": "No permissions found."
+    "noPermissions": "No permissions found.",
+    "preset": {
+      "none": "None",
+      "viewOnly": "View only",
+      "manage": "View + Edit",
+      "fullControl": "Full control",
+      "custom": "Custom"
+    }
   },
   "backups": {
     "title": "System Backups",

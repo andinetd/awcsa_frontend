@@ -371,7 +371,14 @@
       "error": "የእድር ማህበራትን በመጫን ላይ ስህተት ተፈጥሯል።",
       "pagination": "ከ {total} ውስጥ ከ {start} እስከ {end} እያሳየ ነው",
       "previous": "ቀዳሚ",
-      "next": "ቀጣይ"
+      "next": "ቀጣይ",
+      "status": {
+        "all": "ሁሉም",
+        "ACTIVE": "ንቁ",
+        "EXPIRED": "ጊዜ ያለፈ",
+        "REVOKED": "የተሰረዘ",
+        "CANCELLED": "የተቋረጠ"
+      }
     },
     "form": {
       "createTitle": "አዲስ እድር መዝግብ",
@@ -383,7 +390,11 @@
         "address": "አድራሻ",
         "membership": "የአባልነት ስታቲስቲክስ",
         "financials": "ፋይናንስ እና አስተያየቶች",
-        "reasons": "የምስረታ ምክንያቶች"
+        "reasons": "የምስረታ ምክንያቶች",
+        "foundingMembers": "መስራች አባላት",
+        "assets": "በምዝገባ ወቅት የነበሩ ንብረቶች",
+        "approvals": "ኦዲት እና ማፅደቅ",
+        "documents": "የምስረታ ሰነድ / ህገ-ደንብ"
       },
       "fields": {
         "name": "የእድር ስም",
@@ -401,25 +412,40 @@
         "generalMembers": "ጠቅላላ አባላት",
         "male": "ወንድ",
         "female": "ሴት",
-        "total": "ድምር"
+        "total": "ጠቅላላ",
+        "founderName": "የመስራች አባል ስም",
+        "founderAddress": "አድራሻ",
+        "assetType": "ዓይነት",
+        "assetDescription": "መግለጫ",
+        "assetValue": "ዋጋ (ETB)",
+        "auditCommittee": "ንብረቶች በኦዲት ኮሚቴ ተቆጥረዋል",
+        "generalAssembly": "ንብረቶች በጠቅላላ ጉባኤ ጸድቀዋል"
+      },
+      "assetTypes": {
+        "CASH": "ገንዘብ",
+        "IN_KIND": "በዓይነት"
       },
       "methods": {
-        "government": "በመንግስት የታዘዘ",
-        "will": "በህዝብ ፍላጎት"
+        "government": "በመንግስት የተቋቋመ",
+        "will": "በህዝብ ፈቃድ"
       },
       "reasons": {
         "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-        "religion": "በሃይማኖት ላይ የተመሠረተ",
-        "workplace": "በሥራ ቦታ ላይ የተመሠረተ",
-        "gender": "በጾታ ላይ የተመሠረተ",
-        "ethnicity": "በብሔር ላይ የተመሠረተ"
+        "workplace": "በሥራ ቦታ ላይ የተመሠረተ"
       },
       "buttons": {
         "cancel": "ሰርዝ",
         "register": "እድር መዝግብ",
         "update": "መረጃ አድስ",
         "registering": "በመመዝገብ ላይ...",
-        "updating": "በማዘመን ላይ..."
+        "updating": "በማዘመን ላይ...",
+        "addFounder": "መስራች አባል ጨምር",
+        "addAsset": "ንብረት ጨምር"
+      },
+      "messages": {
+        "byLawsUploading": "ሰነድ በመጫን ላይ...",
+        "byLawsUploaded": "የምስረታ ሰነድ / ህገ-ደንብ ተያይዟል",
+        "byLawsUploadError": "ሰነድ መጫን አልተሳካም"
       }
     },
     "edir": {
@@ -437,6 +463,14 @@
         "kebele": "ቀበሌ",
         "members": "አባላት",
         "established": "የተመሠረተበት",
+        "registrationNumber": "የምዝገባ ቁጥር",
+        "renewedForYear": "የታደሰበት",
+        "status": {
+          "ACTIVE": "ንቁ",
+          "EXPIRED": "ጊዜ ያለፈ",
+          "REVOKED": "የተሰረዘ",
+          "CANCELLED": "የተቋረጠ"
+        },
         "buttons": {
           "viewDetails": "ዝርዝር ይመልከቱ"
         }
@@ -477,10 +511,7 @@
         },
         "reasons": {
           "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-          "religion": "በሃይማኖት ላይ የተመሠረተ",
-          "workplace": "በሥራ ቦታ ላይ የተመሠረተ",
-          "gender": "በጾታ ላይ የተመሠረተ",
-          "ethnicity": "በብሔር ላይ የተመሠረተ"
+          "workplace": "በሥራ ቦታ ላይ የተመሠረተ"
         },
         "buttons": {
           "register": "አዲስ ዕድር ያክሉ",
@@ -546,8 +577,43 @@
         "edit": "ዝርዝሮችን ያርሙ"
       },
       "status": {
+        "ACTIVE": "ንቁ",
+        "EXPIRED": "ጊዜ ያለፈ",
+        "REVOKED": "የተሰረዘ",
+        "CANCELLED": "የተቋረጠ",
         "active": "ንቁ",
         "inactive": "ንቁ ያልሆነ"
+      },
+      "actions": {
+        "renew": {
+          "label": "አድስ",
+          "success": "ምዝገባ በተሳካ ሁኔታ ታድሷል"
+        },
+        "reissue": {
+          "label": "የምስክር ወረቀት አውጣ",
+          "success": "የምስክር ወረቀት በተሳካ ሁኔታ ተሰጥቷል"
+        },
+        "cancel": {
+          "label": "ምዝገባ ተሰርዝ",
+          "title": "ምዝገባ ተሰርዝ",
+          "description": "ለዚህ የዕድር ማኅበር ምዝገባ የመሰረዝ ምክንያት ይምረጡ (መመሪያ ቁጥር 15)።",
+          "reasonLabel": "ምክንያት",
+          "reasonPlaceholder": "ምክንያት ይምረጡ",
+          "descriptionLabel": "ተጨማሪ ዝርዝር (አማራጭ)",
+          "descriptionPlaceholder": "ሁኔታውን ይግለጹ...",
+          "reasons": {
+            "DISSOLVED": "ዕድሩ በህገ-ደንቡ መሠረት ፈርሷል",
+            "MEMBER_MAJORITY_REQUEST": "የ2/3 አባላት ጥያቄ",
+            "LAWS_VIOLATION": "ደንቦችን ወይም ህጎችን መጣስ",
+            "LICENSE_MISUSE": "ፈቃዱን ከዓላማው ውጭ መጠቀም",
+            "FALSE_DOCUMENTS": "በሐሰት ሰነዶች መመዝገብ"
+          },
+          "needReason": "እባክዎ የመሰረዝ ምክንያት ይምረጡ",
+          "dismiss": "ዝጋ",
+          "confirm": "መሰረዙን ያረጋግጡ",
+          "cancelling": "በመሰረዝ ላይ...",
+          "success": "ምዝገባ በተሳካ ሁኔታ ተሰርዟል"
+        }
       },
       "address": {
         "woreda": "ወረዳ",
@@ -558,7 +624,11 @@
         "membership": "የአባልነት ስታቲስቲክስ",
         "reasons": "የመመሥረቻ ምክንያቶች",
         "location": "የአድራሻ ዝርዝሮች",
-        "financial": "የፋይናንስ መረጃ"
+        "financial": "የፋይናንስ መረጃ",
+        "accreditation": "ምዝገባ እና እውቅና",
+        "foundingMembers": "መስራች አባላት",
+        "assets": "በምዝገባ ወቅት የነበሩ ንብረቶች",
+        "documents": "የምስረታ ሰነድ / ህገ-ደንብ"
       },
       "fields": {
         "method": "የምሥረታ ዘዴ",
@@ -576,14 +646,41 @@
         "specificLocation": "ልዩ ቦታ",
         "bankAccountNumber": "የባንክ ሒሳብ ቁጥር",
         "monthlyPayment": "ወርሃዊ ክፍያ",
-        "established": "የተመሠረተበት ቀን"
+        "established": "የተመሠረተበት ቀን",
+        "registrationNumber": "የምዝገባ ቁጥር",
+        "registrationDate": "የምዝገባ ቀን",
+        "certificateIssuedAt": "የምስክር ወረቀት የተሰጠበት ቀን",
+        "renewedForYear": "የታደሰበት ዓመት",
+        "notRenewed": "አልታደሰም",
+        "notAvailable": "የለም",
+        "penaltyApplied": "በቅጣት ታድሷል",
+        "cancelledAt": "የተሰረዘበት ቀን",
+        "founderName": "ሙሉ ስም",
+        "founderAddress": "አድራሻ",
+        "auditCommittee": "በኦዲት ኮሚቴ ተቆጥሯል",
+        "generalAssembly": "በጠቅላላ ጉባኤ ጸድቋል",
+        "noFoundingMembers": "ምንም መስራች አባላት አልተመዘገቡም።",
+        "assetType": "ዓይነት",
+        "assetDescription": "መግለጫ",
+        "assetValue": "ዋጋ (ETB)",
+        "noAssets": "በምዝገባ ወቅት ምንም ንብረት አልተመዘገበም።",
+        "viewDocument": "ተመልከት / አውርድ",
+        "noDocument": "የምስረታ ሰነድ ወይም ህገ-ደንብ አልተሰቀለም።"
+      },
+      "assetTypes": {
+        "CASH": "ገንዘብ",
+        "IN_KIND": "በዓይነት"
+      },
+      "cancellationReasons": {
+        "DISSOLVED": "በህገ-ደንብ መሠረት ፈርሷል",
+        "MEMBER_MAJORITY_REQUEST": "የ2/3 አባላት ጥያቄ",
+        "LAWS_VIOLATION": "ህግን መጣስ",
+        "LICENSE_MISUSE": "የፈቃድ አላግባብ መጠቀም",
+        "FALSE_DOCUMENTS": "ሐሰተኛ ሰነዶች"
       },
       "reasons": {
         "RESIDENCE": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-        "RELIGION": "በሃይማኖት ላይ የተመሠረተ",
-        "WORKPLACE": "በሥራ ቦታ ላይ የተመሠረተ",
-        "GENDER": "በጾታ ላይ የተመሠረተ",
-        "ETHNICITY": "በብሔር ላይ የተመሠረተ"
+        "WORKPLACE": "በሥራ ቦታ ላይ የተመሠረተ"
       }
     },
     "edir-members": {
@@ -659,6 +756,33 @@
           "importing": "በማስገባት ላይ...",
           "cancel": "ሰርዝ"
         }
+      }
+    },
+    "dashboard": {
+      "title": "የዕድር ዳሽቦርድ",
+      "subtitle": "የምዝገባ እና የእውቅና አጠቃላይ እይታ",
+      "loading": "ዳሽቦርድን በመጫን ላይ...",
+      "recent": "የቅርብ ጊዜ ምዝገባዎች",
+      "noRecords": "ምንም የዕድር ማኅበራት አልተገኙም።",
+      "stats": {
+        "total": "ጠቅላላ",
+        "active": "ንቁ",
+        "renewed": "ዘንድሮ የታደሱ",
+        "expired": "ጊዜ ያለፈ",
+        "revoked": "የተሰረዘ",
+        "cancelled": "የተቋረጠ"
+      },
+      "table": {
+        "name": "ስም",
+        "registration": "የተመዘገበበት",
+        "location": "አድራሻ",
+        "status": "ሁኔታ"
+      },
+      "status": {
+        "ACTIVE": "ንቁ",
+        "EXPIRED": "ጊዜ ያለፈ",
+        "REVOKED": "የተሰረዘ",
+        "CANCELLED": "የተቋረጠ"
       }
     }
   }

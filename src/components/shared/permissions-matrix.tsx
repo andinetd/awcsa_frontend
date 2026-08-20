@@ -2,13 +2,85 @@
 
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Check, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Permission } from "@/types/super-admin";
 import { useTranslations } from "next-intl";
+
+type PermissionOperation = Permission["operation"];
+
+const OPERATION_RANK: Record<PermissionOperation, number> = {
+  READ: 0,
+  WRITE: 1,
+  MANAGE: 1,
+  UPDATE: 2,
+  DELETE: 3,
+};
+
+type AccessLevel = "none" | "view" | "manage" | "full" | "custom";
+
+interface ResourcePreset {
+  resource: string;
+  viewIds: number[];
+  manageIds: number[];
+  fullIds: number[];
+  hasView: boolean;
+}
+
+function buildPresets(permissions: Permission[]): ResourcePreset[] {
+  const grouped = permissions.reduce(
+    (acc, perm) => {
+      if (!acc[perm.resourceType]) acc[perm.resourceType] = [];
+      acc[perm.resourceType].push(perm);
+      return acc;
+    },
+    {} as Record<string, Permission[]>,
+  );
+
+  return Object.entries(grouped).map(([resource, perms]) => {
+    const viewIds = perms
+      .filter((p) => OPERATION_RANK[p.operation] <= OPERATION_RANK.READ)
+      .map((p) => p.id);
+    const manageIds = perms
+      .filter((p) => OPERATION_RANK[p.operation] <= OPERATION_RANK.UPDATE)
+      .map((p) => p.id);
+    const fullIds = perms.map((p) => p.id);
+    return {
+      resource,
+      viewIds,
+      manageIds,
+      fullIds,
+      hasView: viewIds.length > 0,
+    };
+  });
+}
+
+function arraysEqual(a: number[], b: number[]): boolean {
+  if (a.length !== b.length) return false;
+  const aSorted = [...a].sort((x, y) => x - y);
+  const bSorted = [...b].sort((x, y) => x - y);
+  return aSorted.every((v, i) => v === bSorted[i]);
+}
+
+function resolveLevel(
+  preset: ResourcePreset,
+  selected: number[],
+): AccessLevel {
+  if (selected.length === 0) return "none";
+  if (arraysEqual(selected, preset.fullIds)) return "full";
+  if (arraysEqual(selected, preset.manageIds)) return "manage";
+  if (preset.hasView && arraysEqual(selected, preset.viewIds)) return "view";
+  return "custom";
+}
 
 interface PermissionsMatrixProps {
   permissions: Permission[];
@@ -24,7 +96,6 @@ interface PermissionsMatrixProps {
 export function PermissionsMatrix({
   permissions,
   selected,
-  onToggle,
   onSelectAll,
   onClearAll,
   disabled = false,
@@ -39,29 +110,47 @@ export function PermissionsMatrix({
     [permissions],
   );
 
-  const groups = useMemo(() => {
-    const lower = searchTerm.trim().toLowerCase();
-    const grouped = allPermissions.reduce(
-      (acc, perm) => {
-        const resource = perm.resourceType || "Other";
-        if (
-          lower &&
-          !perm.name.toLowerCase().includes(lower) &&
-          !resource.toLowerCase().includes(lower)
-        ) {
-          return acc;
-        }
-        if (!acc[resource]) acc[resource] = [];
-        acc[resource].push(perm);
-        return acc;
-      },
-      {} as Record<string, Permission[]>,
-    );
-    return grouped;
-  }, [allPermissions, searchTerm]);
+  const presets = useMemo(() => buildPresets(allPermissions), [allPermissions]);
 
-  const totalSelected = selected.length;
+  const visiblePresets = useMemo(() => {
+    const lower = searchTerm.trim().toLowerCase();
+    if (!lower) return presets;
+    return presets.filter((preset) => {
+      const resourceMatches = preset.resource.toLowerCase().includes(lower);
+      const permMatches = allPermissions
+        .filter((p) => p.resourceType === preset.resource)
+        .some(
+          (p) =>
+            p.name.toLowerCase().includes(lower) ||
+            (p.description ?? "").toLowerCase().includes(lower),
+        );
+      return resourceMatches || permMatches;
+    });
+  }, [presets, allPermissions, searchTerm]);
+
+  const totalSelected = allPermissions.filter((p) =>
+    selected.includes(p.id),
+  ).length;
   const totalPermissions = allPermissions.length;
+
+  const handleLevelChange = (
+    level: Exclude<AccessLevel, "custom">,
+    preset: ResourcePreset,
+  ) => {
+    if (level === "none") {
+      onClearAll(preset.resource);
+      return;
+    }
+    onClearAll(preset.resource);
+    onSelectAll(
+      preset.resource,
+      level === "view"
+        ? preset.viewIds
+        : level === "manage"
+          ? preset.manageIds
+          : preset.fullIds,
+    );
+  };
 
   return (
     <div className={className}>
@@ -98,75 +187,75 @@ export function PermissionsMatrix({
         </Badge>
       </div>
 
-      {Object.keys(groups).length === 0 && (
+      {visiblePresets.length === 0 && (
         <p className="py-8 text-center text-sm text-muted-foreground">
           {t("noPermissions")}
         </p>
       )}
 
       <div className="space-y-4">
-        {Object.entries(groups).map(([resource, groupPermissions]) => {
-          const groupIds = groupPermissions.map((p) => p.id);
-          const selectedCount = groupIds.filter((id) =>
-            selected.includes(id),
-          ).length;
-          const allChecked = selectedCount === groupIds.length;
-          const someChecked = selectedCount > 0 && !allChecked;
+        {visiblePresets.map((preset) => {
+          const resourcePerms = allPermissions.filter(
+            (p) => p.resourceType === preset.resource,
+          );
+          const moduleName = resourcePerms.find((p) => p.module)?.module;
+          const resourceSelected = selected.filter((id) =>
+            preset.fullIds.includes(id),
+          );
+          const level = resolveLevel(preset, resourceSelected);
 
           return (
             <div
-              key={resource}
+              key={preset.resource}
               className="rounded-lg border p-4 bg-slate-50/50"
             >
-              <div className="mb-3 flex items-center gap-3">
-                <Checkbox
-                  id={`group-${resource}`}
-                  checked={someChecked ? "indeterminate" : allChecked}
-                  onCheckedChange={(checked) => {
-                    if (checked) onSelectAll(resource, groupIds);
-                    else onClearAll(resource);
-                  }}
-                  disabled={disabled}
-                />
-                <Label
-                  htmlFor={`group-${resource}`}
-                  className="text-sm font-bold uppercase tracking-wider text-muted-foreground cursor-pointer"
-                >
-                  {resource.replace(/_/g, " ")}
+              <div className="mb-3 flex flex-wrap items-center gap-3">
+                <Label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                  {preset.resource.replace(/_/g, " ")}
                 </Label>
+                {moduleName && (
+                  <Badge variant="outline">{moduleName}</Badge>
+                )}
                 <Badge variant="secondary" className="ml-auto">
-                  {selectedCount}/{groupIds.length}
+                  {resourceSelected.length}/{preset.fullIds.length}
                 </Badge>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {groupPermissions.map((permission) => {
-                  const isSelected = selected.includes(permission.id);
+              <Select
+                value={level}
+                disabled={disabled}
+                onValueChange={(value) =>
+                  handleLevelChange(value as Exclude<AccessLevel, "custom">, preset)
+                }
+              >
+                <SelectTrigger className="w-full md:w-[240px]">
+                  <SelectValue placeholder={t("preset.none")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t("preset.none")}</SelectItem>
+                  {preset.hasView && (
+                    <SelectItem value="view">{t("preset.viewOnly")}</SelectItem>
+                  )}
+                  <SelectItem value="manage">{t("preset.manage")}</SelectItem>
+                  <SelectItem value="full">{t("preset.fullControl")}</SelectItem>
+                  {level === "custom" && (
+                    <SelectItem value="custom" disabled>
+                      {t("preset.custom")}
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {resourcePerms.map((perm) => {
+                  const isSelected = resourceSelected.includes(perm.id);
                   return (
-                    <div
-                      key={permission.id}
-                      className="flex items-start space-x-2 rounded-md p-2 hover:bg-muted/40"
+                    <Badge
+                      key={perm.id}
+                      variant={isSelected ? "default" : "outline"}
+                      title={perm.description || perm.name}
+                      className="text-[11px] font-normal"
                     >
-                      <Checkbox
-                        id={`perm-${permission.id}`}
-                        checked={isSelected}
-                        onCheckedChange={() => onToggle(permission.id)}
-                        disabled={disabled}
-                      />
-                      <div className="grid gap-1 leading-none">
-                        <Label
-                          htmlFor={`perm-${permission.id}`}
-                          className="text-sm font-medium leading-none cursor-pointer"
-                        >
-                          {permission.name.replace(/_/g, " ")}
-                        </Label>
-                        <p className="text-[10px] text-muted-foreground line-clamp-1">
-                          {permission.description}
-                        </p>
-                      </div>
-                      {isSelected && (
-                        <Check className="ml-auto h-3.5 w-3.5 text-primary" />
-                      )}
-                    </div>
+                      {perm.name.replace(/_/g, " ")}
+                    </Badge>
                   );
                 })}
               </div>
