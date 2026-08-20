@@ -14,19 +14,21 @@ interface SubCitySelectProps {
   value?: string;
   onValueChange: (value: string) => void;
   placeholder: string;
+  extraOptions?: string[];
 }
 
 export function SubCitySelect({
   value,
   onValueChange,
   placeholder,
+  extraOptions = [],
 }: SubCitySelectProps) {
   const t = useTranslations("social-affairs.edir.location");
   const { data: subCities, isLoading } = useGetSubCitiesQuery();
 
   const known = subCities || [];
   const knownNames = new Set(known.map((s) => s.name));
-  const includeFallback = value && !knownNames.has(value);
+  const extras = [...new Set(extraOptions.filter((o) => !knownNames.has(o)))];
 
   return (
     <Select
@@ -38,14 +40,14 @@ export function SubCitySelect({
         <SelectValue placeholder={isLoading ? t("loading") : placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {includeFallback && (
-          <SelectItem key={value} value={value}>
-            {value}
-          </SelectItem>
-        )}
         {known.map((subCity) => (
           <SelectItem key={subCity.id} value={subCity.name}>
             {subCity.name}
+          </SelectItem>
+        ))}
+        {extras.map((option) => (
+          <SelectItem key={option} value={option}>
+            {option}
           </SelectItem>
         ))}
       </SelectContent>
@@ -71,8 +73,6 @@ export function WoredaSelect({
 
   const subCityRef = (subCities || []).find((s) => s.name === subCity);
   const woredas = subCityRef?.woredas || [];
-  const knownCodes = new Set(woredas.map((w) => w.code));
-  const includeFallback = value && subCityRef && !knownCodes.has(value);
 
   return (
     <Select
@@ -82,21 +82,10 @@ export function WoredaSelect({
     >
       <SelectTrigger>
         <SelectValue
-          placeholder={
-            isLoading
-              ? t("loading")
-              : !subCityRef
-                ? placeholder
-                : placeholder
-          }
+          placeholder={isLoading ? t("loading") : placeholder}
         />
       </SelectTrigger>
       <SelectContent>
-        {includeFallback && (
-          <SelectItem key={value} value={value}>
-            {t("woredaCode", { code: value })}
-          </SelectItem>
-        )}
         {woredas.map((woreda) => (
           <SelectItem key={woreda.id} value={woreda.code}>
             {t("woredaCode", { code: woreda.code })}

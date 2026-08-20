@@ -27,6 +27,10 @@ import {
   BeneficiaryReportPayload,
   BeneficiaryType,
 } from "@/api/beneficiaries/types";
+import {
+  SubCitySelect,
+  WoredaSelect,
+} from "@/components/shared/location-selects";
 
 const COLUMNS_BY_CATEGORY: Record<string, { id: string; label: string }[]> = {
   REGISTRATION: [
@@ -200,18 +204,19 @@ export default function BeneficiaryReportDialog() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Sub-city</Label>
-              <Input
-                placeholder="Enter sub-city"
+              <SubCitySelect
                 value={subCity}
-                onChange={(e) => setSubCity(e.target.value)}
+                onValueChange={setSubCity}
+                placeholder="Select sub-city"
               />
             </div>
             <div className="space-y-2">
               <Label>Woreda</Label>
-              <Input
-                placeholder="Enter woreda"
+              <WoredaSelect
                 value={woreda}
-                onChange={(e) => setWoreda(e.target.value)}
+                onValueChange={setWoreda}
+                subCity={subCity}
+                placeholder="Select woreda"
               />
             </div>
           </div>

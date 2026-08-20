@@ -40,6 +40,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  SubCitySelect,
+  WoredaSelect,
+} from "@/components/shared/location-selects";
 
 export default function ServiceForm() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.services.form");
@@ -236,9 +240,10 @@ export default function ServiceForm() {
                   <FormItem>
                     <FormLabel>{t("fields.subCity")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <SubCitySelect
+                        value={field.value}
+                        onValueChange={field.onChange}
                         placeholder={t("placeholders.subCity")}
-                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -253,9 +258,11 @@ export default function ServiceForm() {
                   <FormItem>
                     <FormLabel>{t("fields.woreda")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <WoredaSelect
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        subCity={form.watch("subCity")}
                         placeholder={t("placeholders.woreda")}
-                        {...field}
                       />
                     </FormControl>
                     <FormMessage />

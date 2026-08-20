@@ -233,6 +233,7 @@ export default function NewCouncilForm({
                         value={field.value}
                         onValueChange={field.onChange}
                         placeholder={t("form.placeholders.subCity")}
+                        extraOptions={watchedLevel === "CITY" ? ["Addis Ababa"] : []}
                       />
                     </FormControl>
                     <FormMessage />
