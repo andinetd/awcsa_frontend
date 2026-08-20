@@ -922,6 +922,10 @@
           "FALSE_DOCUMENTS": "በሐሰተኛ ሰነዶች መመዝገብ"
         }
       }
+    },
+    "location": {
+      "loading": "አማራጮችን በመጫን ላይ...",
+      "woredaCode": "ወረዳ {code}"
     }
   }
 }

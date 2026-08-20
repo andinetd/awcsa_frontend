@@ -42,6 +42,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Edir } from "@/api/social-affairs/edir";
 import { FileDragAndDrop } from "@/components/custom/file-dropzone";
+import {
+  SubCitySelect,
+  WoredaSelect,
+} from "@/components/shared/location-selects";
 
 interface NewEdirFormProps {
   initialData?: Edir;
@@ -366,7 +370,11 @@ export default function NewEdirForm({
                     <FormItem>
                       <FormLabel>{t("fields.subCity")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("fields.subCity")} {...field} />
+                        <SubCitySelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          placeholder={t("fields.subCity")}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -379,7 +387,12 @@ export default function NewEdirForm({
                     <FormItem>
                       <FormLabel>{t("fields.woreda")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("fields.woreda")} {...field} />
+                        <WoredaSelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          subCity={form.watch("subCity")}
+                          placeholder={t("fields.woreda")}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

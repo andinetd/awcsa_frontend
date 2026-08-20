@@ -33,6 +33,7 @@ import {
   removeEdirFromCouncil,
   getEdirsForCouncilSelection,
 } from "@/api/social-affairs/council-api";
+import { getSubCities } from "@/api/social-affairs/location-api";
 import { EdirCancellationReason, EdirLevel, EdirStatus } from "@/api/social-affairs/edir";
 
 export const useImportEdirAssociationsMutation = () => {
@@ -301,5 +302,13 @@ export const useGetEdirsForCouncilSelectionQuery = (level?: EdirLevel) => {
     queryKey: ["edir-councils-available", level],
     queryFn: () => getEdirsForCouncilSelection(level || "WOREDA"),
     enabled: !!level,
+  });
+};
+
+export const useGetSubCitiesQuery = () => {
+  return useQuery({
+    queryKey: ["edir-sub-cities"],
+    queryFn: getSubCities,
+    staleTime: Infinity,
   });
 };

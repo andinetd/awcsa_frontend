@@ -24,6 +24,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GenerateReportPayload } from "@/api/social-affairs/generateEdirReport";
+import {
+  SubCitySelect,
+  WoredaSelect,
+} from "@/components/shared/location-selects";
 
 const AVAILABLE_COLUMNS = [
   { id: "name", label: "Association Name" },
@@ -152,18 +156,19 @@ export default function GenerateReportDialog() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>{t("fields.subCity")}</Label>
-              <Input
-                placeholder={t("fields.subCity")}
+              <SubCitySelect
                 value={subCity}
-                onChange={(e) => setSubCity(e.target.value)}
+                onValueChange={setSubCity}
+                placeholder={t("fields.subCity")}
               />
             </div>
             <div className="space-y-2">
               <Label>{t("fields.woreda")}</Label>
-              <Input
-                placeholder={t("fields.woreda")}
+              <WoredaSelect
                 value={woreda}
-                onChange={(e) => setWoreda(e.target.value)}
+                onValueChange={setWoreda}
+                subCity={subCity}
+                placeholder={t("fields.woreda")}
               />
             </div>
           </div>

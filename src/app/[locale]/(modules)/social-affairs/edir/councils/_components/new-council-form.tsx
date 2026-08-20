@@ -40,6 +40,10 @@ import { newEdirCouncilSchema, NewEdirCouncilSchemaType } from "@/schemas/edir-c
 import { toast } from "sonner";
 import { EdirCouncil, EdirLevel } from "@/api/social-affairs/edir";
 import { EdirCouncilPayload } from "@/api/social-affairs/council-api";
+import {
+  SubCitySelect,
+  WoredaSelect,
+} from "@/components/shared/location-selects";
 
 interface NewCouncilFormProps {
   initialData?: EdirCouncil;
@@ -125,6 +129,7 @@ export default function NewCouncilForm({
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
   const watchedLevel = form.watch("level");
   const showWoreda = watchedLevel !== "CITY";
+  const watchedSubCity = form.watch("subCity");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -224,9 +229,10 @@ export default function NewCouncilForm({
                   <FormItem>
                     <FormLabel>{t("form.fields.subCity")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <SubCitySelect
+                        value={field.value}
+                        onValueChange={field.onChange}
                         placeholder={t("form.placeholders.subCity")}
-                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -241,9 +247,11 @@ export default function NewCouncilForm({
                     <FormItem>
                       <FormLabel>{t("form.fields.woreda")}</FormLabel>
                       <FormControl>
-                        <Input
+                        <WoredaSelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          subCity={watchedSubCity}
                           placeholder={t("form.placeholders.woreda")}
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
