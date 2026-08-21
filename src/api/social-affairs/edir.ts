@@ -43,7 +43,6 @@ export interface Edir {
   id?: number;
   name: string;
   establishmentDate: string;
-  formationMethod: "GOVERNMENT_ISSUED" | "WILL_OF_PEOPLE" | string;
   subCity: string;
   woreda: string;
   kebele: string;
@@ -54,13 +53,10 @@ export interface Edir {
   managementFemale: number;
   generalMale: number;
   generalFemale: number;
-  // Array of strings for reasons
-  establishmentReasons: string[];
   bankAccountNumber: string;
   monthlyPaymentDetails: string;
   remark?: string;
   status?: EdirStatus;
-  otherReasonDescription?: string | null;
 
   // Directive 151/2016 accreditation fields
   registerLevel?: EdirLevel;

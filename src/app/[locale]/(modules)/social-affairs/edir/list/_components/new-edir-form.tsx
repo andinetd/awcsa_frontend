@@ -66,21 +66,11 @@ export default function NewEdirForm({
   const isPending = createMutation.isPending || updateMutation.isPending;
   const isEditMode = !!edirId;
 
-  // Helper to map array reasons to object
-  const mapReasonsToObject = (reasons: string[] = []) => {
-    return {
-      workplaceBased: reasons.includes("WORKPLACE"),
-      residenceBased: reasons.includes("RESIDENCE"),
-      other: "",
-    };
-  };
-
   const form = useForm<NewEdirSchemaType>({
     resolver: zodResolver(newEdirSchema) as any,
     defaultValues: {
       name: "",
       establishmentDate: new Date().toISOString().split("T")[0],
-      formationMethod: "WILL_OF_PEOPLE",
       registerLevel: "WOREDA",
       subCity: "",
       woreda: "",
@@ -90,11 +80,6 @@ export default function NewEdirForm({
       members: {
         management: { male: 0, female: 0, total: 0 },
         general: { male: 0, female: 0, total: 0 },
-      },
-      establishmentReasons: {
-        workplaceBased: false,
-        residenceBased: false,
-        other: "",
       },
       bankAccountNumber: "",
       monthlyPaymentDetails: "",
@@ -145,7 +130,6 @@ export default function NewEdirForm({
       form.reset({
         name: initialData.name,
         establishmentDate: dateStr,
-        formationMethod: initialData.formationMethod as any,
         registerLevel: (initialData.registerLevel || "WOREDA") as any,
         subCity: initialData.subCity,
         woreda: initialData.woreda,
@@ -166,10 +150,6 @@ export default function NewEdirForm({
             total:
               (initialData.generalMale || 0) + (initialData.generalFemale || 0),
           },
-        },
-        establishmentReasons: {
-          ...mapReasonsToObject(initialData.establishmentReasons),
-          other: initialData.otherReasonDescription || "",
         },
         bankAccountNumber: initialData.bankAccountNumber,
         monthlyPaymentDetails: initialData.monthlyPaymentDetails,
@@ -206,8 +186,6 @@ export default function NewEdirForm({
       managementFemale: values.members.management.female,
       generalMale: values.members.general.male,
       generalFemale: values.members.general.female,
-      establishmentReasons: values.establishmentReasons,
-      otherReasonDescription: values.establishmentReasons.other,
       foundingMembers: values.foundingMembers.map((fm) => ({
         fullName: fm.fullName,
         address: fm.address || "",
@@ -293,35 +271,6 @@ export default function NewEdirForm({
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="formationMethod"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("fields.method")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select method" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="GOVERNMENT_ISSUED">
-                            {t("methods.government")}
-                          </SelectItem>
-                          <SelectItem value="WILL_OF_PEOPLE">
-                            {t("methods.will")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -596,47 +545,6 @@ export default function NewEdirForm({
                   </FormItem>
                 )}
               />
-            </div>
-
-            {/* Establishment Reasons - Checkboxes */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.reasons")}</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="establishmentReasons.residenceBased"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{t("reasons.residence")}</FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="establishmentReasons.workplaceBased"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{t("reasons.workplace")}</FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
             </div>
 
             {/* Founding Members (Directive Art 7.a) */}

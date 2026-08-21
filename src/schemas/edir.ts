@@ -24,10 +24,6 @@ export const newEdirSchema = z.object({
   establishmentDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "Invalid date",
   }),
-  formationMethod: z.enum([
-    "WILL_OF_PEOPLE",
-    "GOVERNMENT_ISSUED",
-  ]),
   registerLevel: z.enum(["WOREDA", "SUB_CITY", "CITY"]).default("WOREDA"),
   subCity: z.string().min(2, "Sub-city is required"),
   woreda: z.string().min(1, "Woreda is required"),
@@ -37,11 +33,6 @@ export const newEdirSchema = z.object({
   members: z.object({
     management: edirMemberDetailSchema,
     general: edirMemberDetailSchema,
-  }),
-  establishmentReasons: z.object({
-    workplaceBased: z.boolean().default(false),
-    residenceBased: z.boolean().default(false),
-    other: z.string().optional(),
   }),
   bankAccountNumber: z.string().min(1, "Bank account number is required"),
   monthlyPaymentDetails: z.string().min(1, "Payment details are required"),

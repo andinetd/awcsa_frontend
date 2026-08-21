@@ -396,7 +396,6 @@
         "address": "Address",
         "membership": "Membership Statistics",
         "financials": "Financials & Remarks",
-        "reasons": "Establishment Reasons",
         "foundingMembers": "Founding Members",
         "assets": "Assets at Registration",
         "approvals": "Audit & Approval",
@@ -405,7 +404,6 @@
       "fields": {
         "name": "Edir Name",
         "date": "Establishment Date",
-        "method": "Formation Method",
         "registerLevel": "Registration Level",
         "subCity": "Sub City",
         "woreda": "Woreda",
@@ -432,18 +430,10 @@
         "CASH": "Cash",
         "IN_KIND": "In Kind"
       },
-      "methods": {
-        "government": "Government Issued",
-        "will": "Will of People"
-      },
       "levels": {
         "WOREDA": "Woreda",
         "SUB_CITY": "Sub City",
         "CITY": "City"
-      },
-      "reasons": {
-        "residence": "Residence Based",
-        "workplace": "Workplace Based"
       },
       "buttons": {
         "cancel": "Cancel",
@@ -496,13 +486,11 @@
           "basic": "Basic Information",
           "address": "Address",
           "membership": "Membership Statistics",
-          "financials": "Financials & Remarks",
-          "reasons": "Establishment Reasons"
+          "financials": "Financials & Remarks"
         },
         "fields": {
           "name": "Edir Name",
           "date": "Establishment Date",
-          "method": "Formation Method",
           "subCity": "Sub City",
           "woreda": "Woreda",
           "kebele": "Kebele",
@@ -516,14 +504,6 @@
           "male": "Male",
           "female": "Female",
           "total": "Total"
-        },
-        "methods": {
-          "government": "Government Issued",
-          "will": "Will of People"
-        },
-        "reasons": {
-          "residence": "Residence Based",
-          "workplace": "Workplace Based"
         },
         "buttons": {
           "register": "Add New Edir",
@@ -634,7 +614,6 @@
       "sections": {
         "general": "General Information",
         "membership": "Membership Statistics",
-        "reasons": "Establishment Reasons",
         "location": "Location Details",
         "financial": "Financial Info",
         "accreditation": "Registration & Accreditation",
@@ -643,16 +622,13 @@
         "documents": "Founding Document / By-laws"
       },
       "fields": {
-        "method": "Formation Method",
         "remarks": "Description / Remarks",
         "noRemarks": "No additional remarks provided.",
-        "otherReason": "Other Reason",
         "managementMembers": "Management Members",
         "generalMembers": "General Members",
         "male": "Male",
         "female": "Female",
         "total": "Total Members",
-        "noReasons": "No specific reasons listed.",
         "subCityWoredaKebele": "Sub City, Woreda, Kebele",
         "houseNumber": "House Number",
         "specificLocation": "Specific Location",
@@ -689,10 +665,6 @@
         "LAWS_VIOLATION": "Violation of laws",
         "LICENSE_MISUSE": "License misuse",
         "FALSE_DOCUMENTS": "False documents"
-      },
-      "reasons": {
-        "RESIDENCE": "Residence Based",
-        "WORKPLACE": "Workplace Based"
       }
     },
     "edir-members": {

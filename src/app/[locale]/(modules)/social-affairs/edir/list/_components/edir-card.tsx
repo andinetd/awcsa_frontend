@@ -81,11 +81,6 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
             })}
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs bg-slate-100 rounded px-2 py-0.5 max-w-full truncate">
-            {edir.formationMethod}
-          </span>
-        </div>
         {edir.registrationNumber && (
           <div className="text-xs text-slate-500">
             <span className="font-medium">{t("registrationNumber")}:</span>{" "}

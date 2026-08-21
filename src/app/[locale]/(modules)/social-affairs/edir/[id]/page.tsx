@@ -337,12 +337,6 @@ export default function EdirDetailsPage({ params }: PageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">
-                      {t("fields.method")}
-                    </p>
-                    <p className="font-medium">{typedEdir.formationMethod}</p>
-                  </div>
                   <div className="col-span-full">
                     <p className="text-muted-foreground">
                       {t("fields.remarks")}
@@ -351,14 +345,6 @@ export default function EdirDetailsPage({ params }: PageProps) {
                       {typedEdir.remark || t("fields.noRemarks")}
                     </p>
                   </div>
-                  {typedEdir.otherReasonDescription && (
-                    <div className="col-span-full">
-                      <p className="text-muted-foreground">
-                        {t("fields.otherReason")}
-                      </p>
-                      <p className="mt-1">{typedEdir.otherReasonDescription}</p>
-                    </div>
-                  )}
                 </CardContent>
               </Card>
 
@@ -431,37 +417,6 @@ export default function EdirDetailsPage({ params }: PageProps) {
                 </CardContent>
               </Card>
 
-              {/* Establishment Reasons */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-primary" />
-                    {t("sections.reasons")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {typedEdir.establishmentReasons?.length > 0 ? (
-                      typedEdir.establishmentReasons.map((reason, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
-                        >
-                          {t(`reasons.${reason}`)}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-muted-foreground text-sm">
-                        {t("fields.noReasons")}
-                      </span>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Side Info Column */}
-            <div className="space-y-6">
               {/* Location */}
               <Card>
                 <CardHeader>

@@ -396,7 +396,6 @@
         "address": "አድራሻ",
         "membership": "የአባልነት ስታቲስቲክስ",
         "financials": "ፋይናንስ እና አስተያየቶች",
-        "reasons": "የምስረታ ምክንያቶች",
         "foundingMembers": "መስራች አባላት",
         "assets": "በምዝገባ ወቅት የነበሩ ንብረቶች",
         "approvals": "ኦዲት እና ማፅደቅ",
@@ -405,7 +404,6 @@
       "fields": {
         "name": "የእድር ስም",
         "date": "የምስረታ ቀን",
-        "method": "የምስረታ ዘዴ",
         "registerLevel": "የምዝገባ ደረጃ",
         "subCity": "ክፍለ ከተማ",
         "woreda": "ወረዳ",
@@ -432,18 +430,10 @@
         "CASH": "ገንዘብ",
         "IN_KIND": "በዓይነት"
       },
-      "methods": {
-        "government": "በመንግስት የተቋቋመ",
-        "will": "በህዝብ ፈቃድ"
-      },
       "levels": {
         "WOREDA": "ወረዳ",
         "SUB_CITY": "ክፍለ ከተማ",
         "CITY": "ከተማ"
-      },
-      "reasons": {
-        "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-        "workplace": "በሥራ ቦታ ላይ የተመሠረተ"
       },
       "buttons": {
         "cancel": "ሰርዝ",
@@ -496,13 +486,11 @@
           "basic": "መሠረታዊ መረጃ",
           "address": "አድራሻ",
           "membership": "የአባልነት ስታቲስቲክስ",
-          "financials": "ፋይናንስ እና አስተያየቶች",
-          "reasons": "የመመሥረቻ ምክንያቶች"
+          "financials": "ፋይናንስ እና አስተያየቶች"
         },
         "fields": {
           "name": "የዕድር ስም",
           "date": "የተመሠረተበት ቀን",
-          "method": "የምሥረታ ዘዴ",
           "subCity": "ክፍለ ከተማ",
           "woreda": "ወረዳ",
           "kebele": "ቀበሌ",
@@ -516,14 +504,6 @@
           "male": "ወንድ",
           "female": "ሴት",
           "total": "ድምር"
-        },
-        "methods": {
-          "government": "በመንግስት ትዕዛዝ",
-          "will": "በሕዝብ ፈቃድ"
-        },
-        "reasons": {
-          "residence": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-          "workplace": "በሥራ ቦታ ላይ የተመሠረተ"
         },
         "buttons": {
           "register": "አዲስ ዕድር ያክሉ",
@@ -634,7 +614,6 @@
       "sections": {
         "general": "ጠቅላላ መረጃ",
         "membership": "የአባልነት ስታቲስቲክስ",
-        "reasons": "የመመሥረቻ ምክንያቶች",
         "location": "የአድራሻ ዝርዝሮች",
         "financial": "የፋይናንስ መረጃ",
         "accreditation": "ምዝገባ እና እውቅና",
@@ -643,16 +622,13 @@
         "documents": "የምስረታ ሰነድ / ህገ-ደንብ"
       },
       "fields": {
-        "method": "የምሥረታ ዘዴ",
         "remarks": "መግለጫ / አስተያየቶች",
         "noRemarks": "ምንም ተጨማሪ አስተያየት አልተሰጠም።",
-        "otherReason": "ሌላ ምክንያት",
         "managementMembers": "የሥራ አመራር አባላት",
         "generalMembers": "ጠቅላላ አባላት",
         "male": "ወንድ",
         "female": "ሴት",
         "total": "ጠቅላላ አባላት",
-        "noReasons": "ምንም የተለየ ምክንያት አልተጠቀሰም።",
         "subCityWoredaKebele": "ክፍለ ከተማ፣ ወረዳ፣ ቀበሌ",
         "houseNumber": "የቤት ቁጥር",
         "specificLocation": "ልዩ ቦታ",
@@ -689,10 +665,6 @@
         "LAWS_VIOLATION": "ህግን መጣስ",
         "LICENSE_MISUSE": "የፈቃድ አላግባብ መጠቀም",
         "FALSE_DOCUMENTS": "ሐሰተኛ ሰነዶች"
-      },
-      "reasons": {
-        "RESIDENCE": "በመኖሪያ አካባቢ ላይ የተመሠረተ",
-        "WORKPLACE": "በሥራ ቦታ ላይ የተመሠረተ"
       }
     },
     "edir-members": {
