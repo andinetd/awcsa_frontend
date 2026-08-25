@@ -29,7 +29,7 @@ export const routePermissions: Record<string, RouteGuard> = {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["SYSTEM", "SOCIAL_AFFAIRS", "EDIR"],
   },
-  "/womens": {
+  "/women": {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["SYSTEM", "WOMEN_AFFAIRS"],
   },

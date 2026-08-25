@@ -2,20 +2,22 @@
 
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
 import { useAuthStore } from "@/stores/auth-store";
-import { refreshAccessToken } from "@/api/auth/auth";
 import type { JwtPayload } from "@/types/api/auth";
+import type { WarningReason } from "@/hooks/use-session-warning";
 
-const INACTIVITY_MS = 30 * 60 * 1000;
+const INACTIVITY_MS = 24 * 60 * 60 * 1000;
 const REFRESH_THRESHOLD_MS = 2 * 60 * 1000;
+const WARNING_SECONDS = 120;
 const WATCHDOG_INTERVAL_MS = 30 * 1000;
 
-export function useSessionMonitor(): void {
-  const t = useTranslations("components.session");
-  const router = useRouter();
+interface UseSessionMonitorOpts {
+  onWarning: (reason: WarningReason, seconds: number) => void;
+}
+
+export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
+  useTranslations("components.session");
   const lastActivityRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -33,37 +35,6 @@ export function useSessionMonitor(): void {
     ];
     events.forEach((event) => window.addEventListener(event, touch));
 
-    const logout = (message?: string) => {
-      useAuthStore.getState().logout();
-      if (message) {
-        toast.error(message, { duration: 5000 });
-      }
-      router.replace("/login");
-    };
-
-    const attemptRefresh = async (): Promise<boolean> => {
-      const { refreshToken } = useAuthStore.getState();
-      if (!refreshToken) {
-        return false;
-      }
-      try {
-        const res = await refreshAccessToken(refreshToken);
-        if (res?.access_token && res?.refresh_token) {
-          useAuthStore
-            .getState()
-            .setAuthSession(
-              res.access_token,
-              res.refresh_token,
-              useAuthStore.getState().rememberMe,
-            );
-          return true;
-        }
-        return false;
-      } catch {
-        return false;
-      }
-    };
-
     const watchdog = setInterval(() => {
       const { user, token } = useAuthStore.getState();
       if (!user || !token) {
@@ -73,11 +44,7 @@ export function useSessionMonitor(): void {
       const idleMilliseconds = Date.now() - lastActivityRef.current;
 
       if (idleMilliseconds >= INACTIVITY_MS) {
-        attemptRefresh().then((ok) => {
-          if (!ok) {
-            logout(t("inactivityLogout"));
-          }
-        });
+        onWarning("inactivity", WARNING_SECONDS);
         return;
       }
 
@@ -85,14 +52,14 @@ export function useSessionMonitor(): void {
         const decoded = jwtDecode<JwtPayload>(token);
         const expiresAtMs = decoded.exp ? decoded.exp * 1000 : 0;
         if (expiresAtMs - Date.now() < REFRESH_THRESHOLD_MS) {
-          attemptRefresh().then((ok) => {
-            if (!ok) {
-              logout(t("expired"));
-            }
-          });
+          const secondsUntilExpiry = Math.max(
+            0,
+            Math.floor((expiresAtMs - Date.now()) / 1000),
+          );
+          onWarning("token", Math.min(secondsUntilExpiry, WARNING_SECONDS));
         }
       } catch {
-        logout(t("expired"));
+        onWarning("token", WARNING_SECONDS);
       }
     }, WATCHDOG_INTERVAL_MS);
 
@@ -100,5 +67,5 @@ export function useSessionMonitor(): void {
       events.forEach((event) => window.removeEventListener(event, touch));
       clearInterval(watchdog);
     };
-  }, [router, t]);
+  }, [onWarning]);
 }

@@ -168,7 +168,7 @@ export default function SocialRehabDashboard() {
                 {t("quickActions.viewDisabled")}
               </Button>
             </Link>
-            <Link href="/womens/beneficiaries" className="block">
+            <Link href="/women/profiles" className="block">
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 h-12"

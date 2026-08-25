@@ -69,9 +69,13 @@
   },
   "unauthorized": {
     "title": "Access Denied",
-    "description": "You don't have permission to access this page.",
+    "description": "You don't have permission to access this page. If you believe this is an error, please contact your administrator.",
     "goBack": "Go Back",
-    "logoAlt": "logo"
+    "goHome": "Go to Home",
+    "logoAlt": "logo",
+    "helpText": "Need access?",
+    "contactInfo": "Reach out to your system administrator to request access to this page.",
+    "errorCode": "Error 403"
   },
   "partners": {
     "title": "Our Partners",

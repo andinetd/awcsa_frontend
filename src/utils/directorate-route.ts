@@ -17,7 +17,7 @@ export const getRouteByDirectorate = (
       return "/social-affairs/dashboard";
 
     case 4: // Women Directorate
-      return "/womens/dashboard";
+      return "/women/dashboard";
 
     default:
       return "/bureau-head";
@@ -31,7 +31,7 @@ export const getRouteByDepartment = (
 
   switch (department) {
     case "WOMEN_AFFAIRS":
-      return "/womens/dashboard";
+      return "/women/dashboard";
     case "CHILDREN_AFFAIRS":
       return "/adoption/dashboard";
     case "SOCIAL_AFFAIRS":

@@ -26,6 +26,7 @@ import {
   getRouteByDirectorate,
   getRouteByDepartment,
 } from "@/utils/directorate-route";
+import { routePermissions } from "@/utils/routePermissions";
 
 import { useSignInMutation } from "@/hooks/client/auth";
 import { useAuthStore } from "@/stores/auth-store";
@@ -62,30 +63,27 @@ export default function SignInForm() {
   });
 
   async function onSubmit(values: FormSchemaType) {
-    if (!executeRecaptcha) {
-      toast(t("errors.recaptchaNotAvailable"));
-      return;
+    let recaptchaToken = "";
+
+    if (executeRecaptcha) {
+      try {
+        setRecaptchaLoading(true);
+        recaptchaToken = await executeRecaptcha("signin");
+      } catch (err) {
+        console.error("Recaptcha execution failed:", err);
+      } finally {
+        setRecaptchaLoading(false);
+      }
     }
 
-    try {
-      setRecaptchaLoading(true);
-      // Generate a fresh token on every submit
-      const recaptchaToken = await executeRecaptcha("signin");
+    const payload = {
+      email: values.email,
+      password: values.password,
+      recaptchaToken,
+      rememberMe: values.rememberMe,
+    };
 
-      const payload = {
-        email: values.email,
-        password: values.password,
-        recaptchaToken,
-        rememberMe: values.rememberMe,
-      };
-
-      mutate(payload);
-    } catch (err) {
-      console.error("Recaptcha execution failed:", err);
-      toast(t("errors.recaptchaFailed"));
-    } finally {
-      setRecaptchaLoading(false);
-    }
+    mutate(payload);
   }
 
   // Reset form state on mount to ensure clean state after logout/redirect
@@ -147,7 +145,22 @@ export default function SignInForm() {
           router.push("/super-admin/dashboard");
         } else {
           const route = getRouteByDepartment(department);
-          router.push(route);
+
+          const matchedRoute = Object.keys(routePermissions).find(
+            (r) => route === r || route.startsWith(r + "/"),
+          );
+          if (matchedRoute) {
+            const guard = routePermissions[matchedRoute];
+            const accountOk = guard.allowedAccountTypes.includes("EMPLOYEE");
+            const roleOk = !guard.allowedRoles || (department != null && guard.allowedRoles.includes(department as any));
+            if (accountOk && roleOk) {
+              router.push(route);
+            } else {
+              router.push("/unauthorized");
+            }
+          } else {
+            router.push("/unauthorized");
+          }
         }
       }
     }, 0);

@@ -1,0 +1,741 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "select": "Select..."
+  },
+  "layout": {
+    "title": "Women's Affairs"
+  },
+  "dashboard": {
+    "title": "Women's Affairs Dashboard",
+    "subtitle": "Manage women profiles, support services, and community data.",
+    "registerProfile": "Register Profile",
+    "generateReport": "Generate Report",
+    "stats": {
+      "totalProfiles": "Total Profiles",
+      "supportServices": "Support Services",
+      "activeInterventions": "Active Interventions",
+      "monthlyReports": "Monthly Reports",
+      "associations": "Associations"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "communityRegistry": "Community Registry",
+      "description": "Latest profile registrations and service updates will be displayed here."
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "womenProfiles": "Women Profiles",
+      "supportServices": "Support Services",
+      "caseManagement": "Case Management"
+    }
+  },
+  "womenList": {
+    "title": "Women Profiles",
+    "subtitle": "Manage registered women in the system",
+    "searchPlaceholder": "Search by name, phone, or ID...",
+    "loading": "Loading women profiles...",
+    "error": "Error loading women profiles.",
+    "noProfiles": "No women profiles found.",
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} entries",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "registerButton": "Register New Woman",
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit"
+    }
+  },
+  "form": {
+    "registerTitle": "Register New Woman",
+    "editTitle": "Edit Woman Profile",
+    "description": "Enter the details of the woman to register in the system.",
+    "personalInfo": "Personal Information",
+    "cityIdNumber": "City ID Number",
+    "dateOfBirth": "Date of Birth",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
+    "addressTitle": "Address",
+    "fullAddress": "Full Address",
+    "educationEmployment": "Education & Employment",
+    "educationLevel": "Education Level",
+    "occupation": "Occupation",
+    "monthlyIncome": "Monthly Income",
+    "photoUrl": "Photo URL (Optional)",
+    "buttons": {
+      "cancel": "Cancel",
+      "register": "Register",
+      "registering": "Registering...",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "successRegister": "Women profile registered successfully",
+      "errorRegister": "Failed to register profile",
+      "successUpdate": "Profile updated successfully",
+      "errorUpdate": "Failed to update profile"
+    }
+  },
+  "status": {
+    "title": "Toggle Status",
+    "description": "Are you sure you want to {status} this profile?",
+    "active": "activate",
+    "inactive": "deactivate",
+    "success": "Status updated successfully",
+    "error": "Failed to update status",
+    "approval": {
+      "PENDING_APPROVAL": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    }
+  },
+  "support": {
+    "title": "Support Services",
+    "subtitle": "Manage support services for clients and associations",
+    "tabs": {
+      "management": "Service Management",
+      "quickRegistration": "Quick Registration"
+    },
+    "register": {
+      "title": "Register Support Service",
+      "description": "Register a new support service for an existing client or association",
+      "beneficiaryInfo": "Beneficiary Information",
+      "womanClient": "Woman Client",
+      "associationId": "Women Association ID (Optional)",
+      "beneficiaryNote": "* Please provide either a Woman Client ID or a Women Association ID.",
+      "serviceInfo": "Service & Provider Information",
+      "serviceType": "Service Type",
+      "dateProvided": "Date Provided",
+      "providerName": "Provider Name",
+      "amountOrQuantity": "Amount or Quantity",
+      "locationInfo": "Location & Facilitator",
+      "facilitatorCityId": "Facilitator City ID",
+      "subCity": "Sub City",
+      "woreda": "Woreda",
+      "remarks": "Remarks (Optional)",
+      "placeholder": {
+        "provider": "Enter provider name",
+        "amount": "e.g. 500 ETB, 2 Boxes",
+        "cityId": "Enter city ID",
+        "subCity": "Enter sub-city",
+        "woreda": "Enter woreda",
+        "remarks": "Additional notes or remarks...",
+        "associationId": "Enter Association ID"
+      },
+      "messages": {
+        "success": "Support service registered successfully",
+        "error": "Failed to register support service"
+      }
+    },
+    "history": {
+      "title": "Service History",
+      "description": "Select a woman to view her support service history",
+      "selectWoman": "Select a woman to view history",
+      "records": "Support Records",
+      "total": "{total} Total",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "loading": "Loading history...",
+      "noSelection": "Please select a woman above to display her support records.",
+      "table": {
+        "serviceType": "Service Type",
+        "provider": "Provider",
+        "amount": "Amount/Quantity",
+        "date": "Date Provided",
+        "location": "Location",
+        "actions": "Actions",
+        "noHistory": "No support history found."
+      }
+    },
+    "quick": {
+      "womanInfo": "Woman Information",
+      "supportDetails": "Support Details",
+      "submit": "Register Woman & Support",
+      "messages": {
+        "success": "Client and Support Service registered successfully",
+        "error": "Failed to register. Please try again."
+      }
+    }
+  },
+  "report": {
+    "title": "Generate Women Support Services Report",
+    "description": "Select filters and columns for your report.",
+    "titles": {
+      "SUPPORT_SERVICE": "Generate Women Support Services Report",
+      "TECHNOLOGY_SUPPORT": "Generate Women Technology Support Report",
+      "TRAINING": "Generate Women Training Report",
+      "EMPLOYMENT": "Generate Women Employment Report",
+      "ASSOCIATION": "Generate Women Associations Report"
+    },
+    "options": {
+      "all": "All",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "selectServiceType": "Select Service Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "subCity": "Sub City",
+    "woreda": "Woreda",
+    "serviceTypeId": "Service Type ID",
+    "beneficiaryLevel": "Beneficiary Level",
+    "allLevels": "All Levels",
+    "individual": "Individual",
+    "group": "Group",
+    "technologyType": "Technology Type",
+    "isPoor": "Is She Poor?",
+    "isSexWorker": "Engaged in Sex Work?",
+    "trainingTopic": "Training Topic",
+    "attended": "Attended",
+    "employmentType": "Employment Type",
+    "sector": "Sector",
+    "year": "Year",
+    "associationType": "Association Type",
+    "associationStatus": "Status",
+    "format": "Format",
+    "columns": "Columns to Include",
+    "buttons": {
+      "generate": "Generate Report",
+      "download": "Download Report"
+    },
+    "messages": {
+      "success": "Report generated and downloaded successfully",
+      "error": "Failed to generate report"
+    },
+    "columnsList": {
+      "id": "ID",
+      "dateProvided": "Date Provided",
+      "registeredOn": "Registered On",
+      "serviceType": "Service Type",
+      "category": "Category",
+      "provider": "Provider",
+      "amountOrQuantity": "Amount/Quantity",
+      "beneficiaryName": "Beneficiary Name",
+      "beneficiaryType": "Beneficiary Type",
+      "subCity": "Sub City",
+      "woreda": "Woreda",
+      "remark": "Remark",
+      "cityIdNumber": "City ID Number",
+      "technologyType": "Technology Type",
+      "associationName": "Association Name",
+      "isPoor": "Is Poor",
+      "isSexWorker": "Engaged in Sex Work",
+      "disabilities": "Disabilities",
+      "healthConditions": "Health Conditions",
+      "trainingTopic": "Training Topic",
+      "startDate": "Start Date",
+      "completionDate": "Completion Date",
+      "attended": "Attended",
+      "employmentType": "Employment Type",
+      "sector": "Sector",
+      "year": "Year",
+      "name": "Association Name",
+      "type": "Type",
+      "block": "Block",
+      "totalMembers": "Total Members",
+      "establishmentDate": "Establishment Date",
+      "chairpersonName": "Chairperson Name",
+      "chairpersonPhone": "Chairperson Phone",
+      "enteredBy": "Entered By",
+      "approvedBy": "Approved By",
+      "status": "Status"
+    }
+  },
+  "profileDetail": {
+    "title": "Women Profile Details",
+    "loading": "Loading profile...",
+    "error": "Failed to load profile",
+    "goBack": "Go Back",
+    "active": "Active",
+    "inactive": "Inactive",
+    "editProfile": "Edit Profile",
+    "toggleStatus": "Toggle Status",
+    "personalInfo": "Personal Information",
+    "contactInfo": "Contact Information",
+    "educationEmployment": "Education & Employment",
+    "additionalInfo": "Additional Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "viewPhoto": "View Photo",
+    "clientCategory": "Client Category",
+    "registeredOn": "Registered On",
+    "lastUpdated": "Last Updated"
+  },
+  "associations": {
+    "title": "Women Development Associations",
+    "subtitle": "Manage women's development association records across sub-cities",
+    "searchPlaceholder": "Search by name, leader, or location...",
+    "cardTitle": "Association Records",
+    "showing": "Showing {from}-{to} of {total}",
+    "types": {
+      "ASSOCIATION": "Association",
+      "DEVELOPMENT_ASSOCIATION": "Development Association",
+      "FEDERATION": "Federation"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "SUBMITTED": "Submitted",
+      "PENDING_APPROVAL": "Pending Approval",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "filters": {
+      "allTypes": "All Types",
+      "allStatuses": "All Statuses"
+    },
+    "table": {
+      "name": "Association Name",
+      "type": "Type",
+      "location": "Location",
+      "leader": "Leader",
+      "block": "Block",
+      "totalMembers": "Total Members",
+      "status": "Status",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "noRecords": "No association records found."
+    },
+    "messages": {
+      "deleteSuccess": "Association deleted successfully",
+      "deleteError": "Failed to delete association"
+    },
+    "delete": {
+      "title": "Confirm Delete",
+      "description": "Are you sure you want to delete this association record? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "form": {
+      "addButton": "Register Association",
+      "title": "Register Women Development Association",
+      "editTitle": "Edit Women Development Association",
+      "leaderSection": "Leader Information",
+      "committeeSection": "Executive Committee (5 members)",
+      "committeeHint": "The first three positions are required. The remaining two are optional.",
+      "optional": "optional",
+      "leaderPositions": {
+        "CHAIRPERSON": "Chairperson (የመልካም አስተዳደርና የሴት አደረጃጀት ተጠሪ)",
+        "VICE_CHAIRPERSON": "Vice Chairperson (የሴቶች ጉዳይ ተጠሪ)",
+        "SECRETARY": "Secretary (የጤና ተጠሪ)",
+        "WORK_SKILLS_RESPONSIBLE": "Member (የስራና ክህሎት ተጠሪ)",
+        "EDUCATION_RESPONSIBLE": "Member (የትምህርት ተጠሪ)"
+      },
+      "fields": {
+        "name": "Association Name",
+        "type": "Association Type",
+        "subCity": "Sub City",
+        "woreda": "Woreda",
+        "block": "Block",
+        "houseNumber": "House Number",
+        "totalMembers": "Total Members",
+        "establishmentDate": "Establishment Date",
+        "objective": "Objective",
+        "leaderFullName": "Full Name",
+        "leaderPhone": "Phone Number"
+      },
+      "placeholders": {
+        "name": "Enter association name...",
+        "type": "Select type...",
+        "subCity": "Select sub city...",
+        "woreda": "Select woreda...",
+        "block": "e.g. B12",
+        "houseNumber": "House number",
+        "totalMembers": "0",
+        "objective": "Association objective...",
+        "leaderFullName": "Full name...",
+        "leaderPhone": "09..."
+      },
+      "types": {
+        "ASSOCIATION": "Association",
+        "DEVELOPMENT_ASSOCIATION": "Development Association",
+        "FEDERATION": "Federation"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "messages": {
+        "success": "Association saved successfully",
+        "error": "Failed to save association"
+      },
+      "lockedNotice": "This record is locked — only drafts can be edited.",
+      "fields": {
+        "memberFullName": "Full Name",
+        "memberPhone": "Phone Number"
+      },
+      "placeholders": {
+        "memberFullName": "Full name...",
+        "memberPhone": "09..."
+      }
+    },
+    "members": {
+      "title": "\"1-to-10\" Group Members",
+      "description": "Enter up to 10 members for each of the three groups, matching the paper form.",
+      "unsaved": "Unsaved changes",
+      "filledCount": "{count} filled",
+      "save": "Save Members",
+      "groupTab": "Group {group}",
+      "serialNo": "No.",
+      "errors": {
+        "nameRequired": "Row {row} of group {group}: a phone number was entered without a full name"
+      },
+      "messages": {
+        "success": "Members saved successfully",
+        "error": "Failed to save members"
+      }
+    },
+    "workflow": {
+      "title": "Approval Workflow",
+      "enteredBy": "Entered By",
+      "reviewedBy": "Reviewed By",
+      "approvedBy": "Approved By",
+      "rejectionReason": "Rejection Reason",
+      "submit": "Submit for Approval",
+      "pendingReview": "Awaiting review decision.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approvedNotice": "This record has been approved.",
+      "rejectedNotice": "This record has been rejected.",
+      "viewSignature": "View signature",
+      "viewSignatureError": "Failed to open signature document",
+      "submitTitle": "Submit for Approval",
+      "submitDescription": "Provide the data entry expert's details to submit this record for approval.",
+      "enteredByNameLabel": "Data Entry Expert Name",
+      "enteredByNamePlaceholder": "Full name...",
+      "entrySignature": "Entry Signature",
+      "optional": "optional",
+      "cancel": "Cancel",
+      "confirmSubmit": "Submit",
+      "approveTitle": "Approve Association",
+      "rejectTitle": "Reject Association",
+      "approverNameLabel": "Approver Name",
+      "approverNamePlaceholder": "Full name...",
+      "rejectionReasonPlaceholder": "Why is this record being rejected?",
+      "approvalSignature": "Approval Signature",
+      "confirmApprove": "Confirm Approval",
+      "confirmReject": "Confirm Rejection",
+      "errors": {
+        "nameRequired": "Name is required",
+        "reasonRequired": "A rejection reason is required"
+      },
+      "messages": {
+        "submitted": "Record submitted for approval",
+        "approved": "Record approved successfully",
+        "rejected": "Record rejected",
+        "error": "Action failed. Please try again."
+      }
+    },
+    "detail": {
+      "loading": "Loading association...",
+      "error": "Record not found",
+      "goBack": "Go Back",
+      "edit": "Edit",
+      "generalInfo": "General Information",
+      "location": "Location",
+      "leader": "Leadership",
+      "membership": "Membership & Support",
+      "registeredMembers": "Registered Members",
+      "totalMembersDeclared": "Declared Total",
+      "supportRecords": "Support Records"
+    },
+    "stats": {
+      "total": "Total Associations",
+      "declaredMembers": "Declared Members"
+    }
+  },
+  "technologySupport": {
+    "title": "Technology Support",
+    "subtitle": "Manage appropriate technology support for women beneficiaries",
+    "searchPlaceholder": "Search by name, ID, or technology type...",
+    "cardTitle": "Technology Support Records",
+    "poor": "Poor",
+    "sexWorker": "Sex Worker",
+    "disabled": "Disabled",
+    "table": {
+      "beneficiary": "Beneficiary",
+      "technologyType": "Technology Type",
+      "association": "Association",
+      "status": "Status",
+      "health": "Health",
+      "loading": "Loading...",
+      "noRecords": "No technology support records found.",
+      "actions": "Actions"
+    },
+    "form": {
+      "addButton": "Register Support",
+      "title": "Register Technology Support",
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "woman": "Woman",
+        "technologyType": "Technology Type",
+        "associationName": "Development Association Name",
+        "statusSection": "Status Information",
+        "isPoor": "Is She Poor?",
+        "isSexWorker": "Engaged in Sex Work?",
+        "disabilities": "Disabilities",
+        "healthConditions": "Health Conditions"
+      },
+      "placeholders": {
+        "firstName": "Enter first name...",
+        "lastName": "Enter last name...",
+        "selectWoman": "Select a woman...",
+        "selectTechnology": "Select technology type...",
+        "associationName": "Enter association name"
+      },
+      "technologyTypes": {
+        "SOLAR": "Solar",
+        "WATER_PUMP": "Water Pump",
+        "IMPROVED_STOVE": "Improved Stove",
+        "BIODIGESTER": "Biodigester",
+        "ELECTRIC_MILL": "Electric Mill",
+        "OTHER": "Other"
+      },
+      "disabilityOptions": {
+        "PHYSICAL_LEG": "Physical Disability (Leg)",
+        "PHYSICAL_HAND": "Physical Disability (Hand)",
+        "BLIND": "Blindness",
+        "DEAF": "Deafness"
+      },
+      "healthOptions": {
+        "BREAST_CANCER": "Breast Cancer Patient",
+        "CERVICAL_CANCER": "Cervical Cancer Patient",
+        "HIV_AIDS": "HIV/AIDS Patient"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "messages": {
+        "success": "Technology support registered successfully",
+        "error": "Failed to register technology support",
+        "updateSuccess": "Technology support updated successfully",
+        "updateError": "Failed to update technology support"
+      },
+      "editTitle": "Edit Technology Support",
+      "showing": "Showing {from}-{to} of {total}"
+    },
+    "filter": {
+      "allTypes": "All Types",
+      "solar": "Solar",
+      "waterPump": "Water Pump",
+      "improvedStove": "Improved Stove",
+      "biodigester": "Biodigester",
+      "electricMill": "Electric Mill",
+      "other": "Other",
+      "poorStatus": "Poor status",
+      "hasDisabilities": "Has disabilities",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "clearFilters": "Clear filters"
+    },
+    "delete": {
+      "title": "Confirm Delete",
+      "description": "Are you sure you want to delete this technology support record? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "deleting": "Deleting...",
+      "success": "Technology support record deleted",
+      "error": "Delete failed"
+    },
+    "detail": {
+      "title": "Technology Support Details",
+      "technologyType": "Technology Type",
+      "association": "Association",
+      "status": "Status",
+      "healthConditions": "Health Conditions",
+      "beneficiary": "Beneficiary",
+      "phone": "Phone:",
+      "address": "Address:",
+      "goBack": "Go Back",
+      "error": "Record not found",
+      "monitoringHistory": "Monitoring History",
+      "monitoringHistoryDesc": "Track follow-ups and outcomes"
+    }
+  },
+  "training": {
+    "title": "Women Training",
+    "subtitle": "Manage training sessions and attendance for women",
+    "searchPlaceholder": "Search by name, ID, or training topic...",
+    "cardTitle": "Training Records",
+    "attendedYes": "Attended",
+    "attendedNo": "Not Attended",
+    "table": {
+      "beneficiary": "Beneficiary",
+      "trainingTopic": "Training Topic",
+      "dates": "Dates",
+      "attended": "Attended",
+      "remark": "Remark",
+      "loading": "Loading...",
+      "noRecords": "No training records found."
+    },
+    "filter": {
+      "dateFrom": "From",
+      "dateTo": "To"
+    },
+    "form": {
+      "addButton": "Register Training",
+      "title": "Register Women Training",
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "woman": "Woman",
+        "trainingTopic": "Training Topic",
+        "startDate": "Start Date",
+        "completionDate": "Completion Date",
+        "attended": "Took Training",
+        "remark": "Remark"
+      },
+      "placeholders": {
+        "firstName": "Enter first name...",
+        "lastName": "Enter last name...",
+        "selectWoman": "Select a woman...",
+        "selectTrainingTopic": "Select training topic...",
+        "remark": "Additional notes..."
+      },
+      "trainingTopics": {
+        "ENTREPRENEURSHIP": "Entrepreneurship",
+        "TAILORING": "Tailoring",
+        "AGRICULTURE": "Agriculture",
+        "BAKERY": "Bakery",
+        "BEAUTY_SALON": "Beauty Salon",
+        "INFORMATION_TECHNOLOGY": "Information Technology",
+        "LITERACY": "Literacy",
+        "HEALTH_AWARENESS": "Health Awareness",
+        "LEGAL_RIGHTS": "Legal Rights",
+        "LEADERSHIP": "Leadership",
+        "OTHER": "Other"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "messages": {
+        "success": "Training registered successfully",
+        "error": "Failed to register training"
+      }
+    }
+  },
+  "employment": {
+    "title": "Employment Creation",
+    "subtitle": "Track employment opportunities created for women",
+    "searchPlaceholder": "Search by name, ID, or sector...",
+    "cardTitle": "Employment Records",
+    "individual": "Individual",
+    "group": "Group Based",
+    "table": {
+      "beneficiary": "Beneficiary",
+      "type": "Type",
+      "sector": "Sector",
+      "year": "Year",
+      "remark": "Remark",
+      "loading": "Loading...",
+      "noRecords": "No employment records found."
+    },
+    "filter": {
+      "dateFrom": "From",
+      "dateTo": "To"
+    },
+    "form": {
+      "addButton": "Register Employment",
+      "title": "Register Employment Opportunity",
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "woman": "Woman",
+        "employmentType": "Employment Type",
+        "sector": "Sector",
+        "year": "Year",
+        "remark": "Remark"
+      },
+      "placeholders": {
+        "firstName": "Enter first name...",
+        "lastName": "Enter last name...",
+        "selectWoman": "Select a woman...",
+        "selectSector": "Select sector...",
+        "remark": "Additional notes..."
+      },
+      "employmentTypes": {
+        "INDIVIDUAL": "Individually Organized",
+        "GROUP": "Group Based Organized"
+      },
+      "sectors": {
+        "AGRICULTURE": "Agriculture",
+        "TEXTILE": "Textile",
+        "TRADE": "Trade",
+        "SERVICES": "Services",
+        "MANUFACTURING": "Manufacturing",
+        "CONSTRUCTION": "Construction",
+        "TRANSPORT": "Transport",
+        "EDUCATION": "Education",
+        "HEALTHCARE": "Healthcare",
+        "OTHER": "Other"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "messages": {
+        "success": "Employment registered successfully",
+        "error": "Failed to register employment"
+      }
+    }
+  },
+  "supportDetail": {
+    "title": "Support Details",
+    "referenceId": "Reference ID",
+    "serviceInfo": "Service Information",
+    "serviceInfoDesc": "Details of the support provided",
+    "noRemarks": "No remarks provided.",
+    "beneficiaryLocation": "Beneficiary & Location",
+    "beneficiaryType": "Beneficiary Type",
+    "individualWoman": "Individual Woman",
+    "womenAssociation": "Women Association",
+    "facilitator": "Facilitator",
+    "monitoringHistory": "Monitoring History",
+    "monitoringHistoryDesc": "Track follow-ups and outcomes",
+    "noLogs": "No monitoring logs recorded yet.",
+    "addFollowUp": "Add a new follow-up using the button above.",
+    "assessedBy": "By: {name}",
+    "score": "Score: {score}%"
+  },
+  "monitoring": {
+    "addFollowUp": "Add Follow-up",
+    "title": "Add Monitoring Log",
+    "description": "Record a follow-up assessment for this support service.",
+    "monitoringDate": "Monitoring Date",
+    "assessedBy": "Assessed By",
+    "assessorPlaceholder": "Enter assessor name...",
+    "currentStatus": "Current Status",
+    "statusPlaceholder": "e.g. Improving",
+    "score": "Score (0-100)",
+    "remarkPlaceholder": "Enter assessment details...",
+    "addEntry": "Add Entry",
+    "adding": "Adding...",
+    "messages": {
+      "success": "Monitoring log added successfully",
+      "error": "Failed to add monitoring log"
+    }
+  },
+  "serviceTypes": {
+    "Disability Financial Grant": "Disability Financial Grant",
+    "Emergency Medical Fund": "Emergency Medical Fund",
+    "Food & Nutrition Support": "Food & Nutrition Support",
+    "Health Insurance Coverage": "Health Insurance Coverage",
+    "Legal Counseling": "Legal Counseling",
+    "Medical Checkup & Treatment": "Medical Checkup & Treatment",
+    "Mobility Device Supply": "Mobility Device Supply",
+    "Monthly Financial Subsidy": "Monthly Financial Subsidy",
+    "Psychosocial Counseling": "Psychosocial Counseling",
+    "Public Transport Pass": "Public Transport Pass",
+    "Sanitary Supplies": "Sanitary Supplies",
+    "School Uniform & Material Support": "School Uniform & Material Support",
+    "Skill Development Training": "Skill Development Training",
+    "Startup Capital Support": "Startup Capital Support",
+    "Temporary Shelter": "Temporary Shelter",
+    "Elderly Financial Support": "Elderly Financial Support"
+  }
+}

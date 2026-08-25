@@ -46,6 +46,12 @@
   },
   "session": {
     "expired": "Your session has expired. Please sign in again.",
-    "inactivityLogout": "You have been signed out due to inactivity."
+    "inactivityLogout": "You have been signed out due to inactivity.",
+    "warningTitle": "Session Expiring Soon",
+    "warningDescription": "Your session will expire in {seconds} seconds. You will be signed out automatically.",
+    "inactivityWarningTitle": "Inactivity Warning",
+    "inactivityWarningDescription": "You will be signed out in {seconds} seconds due to inactivity.",
+    "staySignedIn": "Stay signed in",
+    "signOut": "Sign out"
   }
 }

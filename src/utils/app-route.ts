@@ -15,7 +15,7 @@ export const moduleAndRouteMap = (deputyBureau: DeputyBureau): string => {
     case "SUPER_ADMIN":
       return "/super-admin/user-management";
     case "WOMEN_AFFAIRS":
-      return "/womens/dashboard";
+      return "/women/dashboard";
     case "CARE_CENTERS_PORTAL":
       return "/care-centers-portal";
     default:

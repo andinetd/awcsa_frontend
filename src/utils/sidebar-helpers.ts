@@ -41,7 +41,7 @@ export function getSidebarItems(
       CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
       SOCIAL_AFFAIRS: "SOCIAL_AFFAIRS",
       EDIR: "SOCIAL_AFFAIRS",
-      WOMEN_AFFAIRS: "WOMENS",
+      WOMEN_AFFAIRS: "WOMEN",
       SUPER_ADMIN: "SUPER_ADMIN",
       CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
     };
@@ -76,7 +76,7 @@ export function getSidebarItems(
           p.toLowerCase().includes("edir"),
       );
 
-      if (isWomensRole || hasWomensPermissions) return sidebarConfig.WOMENS;
+      if (isWomensRole || hasWomensPermissions) return sidebarConfig.WOMEN;
       if (isChildrenRole || hasChildrenPermissions)
         return sidebarConfig.CHILDREN_AFFAIRS;
       if (isSocialRole || hasSocialPermissions)

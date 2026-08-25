@@ -1,0 +1,741 @@
+{
+  "common": {
+    "loading": "በመጫን ላይ...",
+    "select": "ይምረጡ..."
+  },
+  "layout": {
+    "title": "የሴቶች ጉዳይ"
+  },
+  "dashboard": {
+    "title": "የሴቶች ጉዳይ ዳሽቦርድ",
+    "subtitle": "የሴቶችን ፕሮፍይሎች፣ የድጋፍ አገልግሎቶችን እና የማህበረሰብ መረጃዎችን ያስዳድሩ።",
+    "registerProfile": "ፕሮፍይል ይመዝገቡ",
+    "generateReport": "ሪፖርት ያውጡ",
+    "stats": {
+      "totalProfiles": "ጠቅላላ ፕሮፋይሎች",
+      "supportServices": "የድጋፍ አገልግሎቶች",
+      "activeInterventions": "ንቁ ጣሪያዎች",
+      "monthlyReports": "ወርሃዊ ሪፖርቶች",
+      "associations": "ማህበራት"
+    },
+    "activity": {
+      "title": "የቅርብ ጊዜ እንቅስቃሴ",
+      "communityRegistry": "የማህበረሰብ ምዝገባ",
+      "description": "የቅርብ ጊዜ የፕሮፍይል ምዝገባዎች እና የአገልግሎት ዝመናዎች እዚህ ይታያሉ።"
+    },
+    "quickActions": {
+      "title": "ፈጣን እርምጃዎች",
+      "womenProfiles": "የሴቶች ፕሮፍይሎች",
+      "supportServices": "የድጋፍ አገልግሎቶች",
+      "caseManagement": "የጉዳይ አስተዳደር"
+    }
+  },
+  "womenList": {
+    "title": "የሴቶች ፕሮፍይሎች",
+    "subtitle": "በሲሰተሙ ውስጥ የተመዘገቡ ሴቶችን ያስዳድሩ",
+    "searchPlaceholder": "በስም፣ በስልክ ወይም በመታወቂያ ይፈልጉ...",
+    "loading": "የሴቶች ፕሮፍይል በመጫን ላይ...",
+    "error": "የሴቶች ፕሮፍይሎችን በመጫን ላይ ስህተት ተከስቷል።",
+    "noProfiles": "ምንም የሴቶች ፕሮፍይሎች አልተገኘም።",
+    "pagination": {
+      "showing": "ከ {total} ውስጥ ከ {start} እስከ {end} እያሳየ ነው",
+      "previous": "ቀዳሚ",
+      "next": "ቀጣይ"
+    },
+    "registerButton": "አዲስ ሴት ይመዝገቡ",
+    "card": {
+      "viewDetails": "ዝርዝር መረጃ",
+      "edit": "ያርሙ"
+    }
+  },
+  "form": {
+    "registerTitle": "አዲስ ሴት ይመዝገቡ",
+    "editTitle": "የሴት ፕሮፍይል ያርሙ",
+    "description": "በስርዓቱ ውስጥ ለመመዝገብ የሴቷን ዝርዝር መረጃ ያስገቡ።",
+    "personalInfo": "የግል መረጃ",
+    "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+    "dateOfBirth": "የትውልድ ቀን",
+    "firstName": "የመጀመሪያ ስም",
+    "lastName": "የአያት ስም",
+    "phoneNumber": "የስልክ ቁጥር",
+    "addressTitle": "አድራሻ",
+    "fullAddress": "ሙሉ አድራሻ",
+    "educationEmployment": "ትምህርት እና ስራ",
+    "educationLevel": "የትምህርት ደረጃ",
+    "occupation": "ስራ",
+    "monthlyIncome": "ወርሃዊ ገቢ",
+    "photoUrl": "የፎቶ አድራሻ (አማራጭ)",
+    "buttons": {
+      "cancel": "ይሰርዙ",
+      "register": "ይመዝገቡ",
+      "registering": "በመመዝገብ ላይ...",
+      "save": "ለውጦችን ያስቀምጡ",
+      "saving": "በማስቀመጥ ላይ..."
+    },
+    "messages": {
+      "successRegister": "የሴቶች ፕሮፍይል በተሳካ ሁኔታ ተመዝግቧል",
+      "errorRegister": "ፕሮፍይልውን መመዝገብ አልተቻለም",
+      "successUpdate": "ፕሮፍይልው በተሳካ ሁኔታ ታድሷል",
+      "errorUpdate": "ፕሮፍይልውን ማደስ አልተቻለም"
+    }
+  },
+  "status": {
+    "title": "ሁኔታን ይቀይሩ",
+    "description": "እርግጠኛ ነዎት ይህንን ፕሮፍይል {status} ይፈልጋሉ?",
+    "active": "ማንቃት",
+    "inactive": "ማሰናከል",
+    "success": "ሁኔታው በተሳካ ሁኔታ ተቀይሯል",
+    "error": "ሁኔታውን መቀየር አልተቻለም",
+    "approval": {
+      "PENDING_APPROVAL": "መጠባበቅ ላይ",
+      "APPROVED": "ጸድቋል",
+      "REJECTED": "ውድቅ የተደረገ"
+    }
+  },
+  "support": {
+    "title": "የድጋፍ አገልግሎቶች",
+    "subtitle": "ለደንበኞች እና ለማህበራት የድጋፍ አገልግሎቶችን ያስዳድሩ",
+    "tabs": {
+      "management": "የአገልግሎት አስተዳደር",
+      "quickRegistration": "ፈጣን ምዝገባ"
+    },
+    "register": {
+      "title": "የድጋፍ አገልግሎት ይመዝገቡ",
+      "description": "ለነባር ደንበኛ ወይም ማህበር አዲስ የድጋፍ አገልግሎት ይመዝገቡ",
+      "beneficiaryInfo": "የተጠቃሚ መረጃ",
+      "womanClient": "ደንበኛ ሴት",
+      "associationId": "የሴቶች ማህበር መለያ (አማራጭ)",
+      "beneficiaryNote": "* እባክዎን የሴት ደንበኛ መለያ ወይም የሴቶች ማህበር መለያ ያቅርቡ።",
+      "serviceInfo": "የአገልግሎት እና የአቅራቢ መረጃ",
+      "serviceType": "የአገልግሎት ዓይነት",
+      "dateProvided": "የተሰጠበት ቀን",
+      "providerName": "የአቅራቢው ስም",
+      "amountOrQuantity": "መጠን ወይም ብዛት",
+      "locationInfo": "ቦታ እና አስተባባሪ",
+      "facilitatorCityId": "የአስተባባሪው ከተማ መለያ",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "remarks": "አስተያየቶች (አማራጭ)",
+      "placeholder": {
+        "provider": "የአቅራቢውን ስም ያስገቡ",
+        "amount": "ለምሳሌ፦ 500 ብር፣ 2 ሳጥን",
+        "cityId": "የከተማ መለያ ያስገቡ",
+        "subCity": "ክፍለ ከተማ ያስገቡ",
+        "woreda": "ወረዳ ያስገቡ",
+        "remarks": "ተጨማሪ ማስታወሻዎች ወይም አስተያየቶች...",
+        "associationId": "የማህበሩን መለያ ያስገቡ"
+      },
+      "messages": {
+        "success": "የድጋፍ አገልግሎት በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "የድጋፍ አገልግሎት መመዝገብ አልተቻለም"
+      }
+    },
+    "history": {
+      "title": "የአገልግሎት ታሪክ",
+      "description": "የድጋፍ አገልግሎት ታሪኳን ለማየት ሴት ይምረጡ",
+      "selectWoman": "ታሪክ ለማየት ሴት ይምረጡ",
+      "records": "የድጋፍ መዝገቦች",
+      "total": "በጠቅላላ {total}",
+      "dateFrom": "ከ",
+      "dateTo": "እስከ",
+      "loading": "ታሪክ በመጫን ላይ...",
+      "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ይምረጡ።",
+      "table": {
+        "serviceType": "የአገልግሎት ዓይነት",
+        "provider": "አቅራቢ",
+        "amount": "መጠን/ብዛት",
+        "date": "የተሰጠበት ቀን",
+        "location": "ቦታ",
+        "actions": "እርምጃዎች",
+        "noHistory": "ምንም የድጋፍ ታሪክ አልተገኘም።"
+      }
+    },
+    "quick": {
+      "womanInfo": "የሴቲቱ መረጃ",
+      "supportDetails": "የድጋፍ ዝርዝሮች",
+      "submit": "ሴቲቱን እና ድጋፉን ይመዝገቡ",
+      "messages": {
+        "success": "ደንበኛው እና የድጋፍ አገልግሎቱ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "መመዝገብ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+      }
+    }
+  },
+  "report": {
+    "title": "የሴቶች ድጋፍ አገልግሎቶች ሪፖርት ያውጡ",
+    "description": "ለሪፖርትዎ ማጣሪያዎችን እና አምዶችን ይምረጡ።",
+    "titles": {
+      "SUPPORT_SERVICE": "የሴቶች ድጋፍ አገልግሎቶች ሪፖርት ያውጡ",
+      "TECHNOLOGY_SUPPORT": "የሴቶች ቴክኖሎጂ ድጋፍ ሪፖርት ያውጡ",
+      "TRAINING": "የሴቶች ስልጠና ሪፖርት ያውጡ",
+      "EMPLOYMENT": "የሴቶች ስራ ፈጠራ ሪፖርት ያውጡ",
+      "ASSOCIATION": "የሴቶች ልማት ህብረት ማህበራት ሪፖርት ያውጡ"
+    },
+    "options": {
+      "all": "ሁሉም",
+      "yes": "አዎ",
+      "no": "አይ"
+    },
+    "selectServiceType": "የአገልግሎት ዓይነት ይምረጡ",
+    "startDate": "የመጀመሪያ ቀን",
+    "endDate": "የመጨረሻ ቀን",
+    "subCity": "ክፍለ ከተማ",
+    "woreda": "ወረዳ",
+    "serviceTypeId": "የአገልግሎት አይነት መለያ",
+    "beneficiaryLevel": "የተጠቃሚ ደረጃ",
+    "allLevels": "ሁሉም ደረጃዎች",
+    "individual": "ግለሰብ",
+    "group": "ቡድን/ማህበር",
+    "technologyType": "የቴክኖሎጂ አይነት",
+    "isPoor": "ድሃ ናት?",
+    "isSexWorker": "በወሲብ ስራ ትሰማራለች?",
+    "trainingTopic": "የስልጠና ርዕስ",
+    "attended": "ተሳትፋለች",
+    "employmentType": "የስራ አይነት",
+    "sector": "ዘርፍ",
+    "year": "ዓመት",
+    "associationType": "የማህበሩ አይነት",
+    "associationStatus": "ሁኔታ",
+    "format": "ፎርማት",
+    "columns": "የሚካተቱ አምዶች",
+    "buttons": {
+      "generate": "ሪፖርት ያውጡ",
+      "download": "ሪፖርት ያውርዱ"
+    },
+    "messages": {
+      "success": "ሪፖርቱ በተሳካ ሁኔታ ተዘጋጅቶ ወርዷል",
+      "error": "ሪፖርቱን ማዘጋጀት አልተቻለም"
+    },
+    "columnsList": {
+      "id": "መለያ",
+      "dateProvided": "የተሰጠበት ቀን",
+      "registeredOn": "የተመዘገበበት ቀን",
+      "serviceType": "የአገልግሎት ዓይነት",
+      "category": "ምድብ",
+      "provider": "አቅራቢ",
+      "amountOrQuantity": "መጠን/ብዛት",
+      "beneficiaryName": "የተጠቃሚ ስም",
+      "beneficiaryType": "የተጠቃሚ ዓይነት",
+      "subCity": "ክፍለ ከተማ",
+      "woreda": "ወረዳ",
+      "remark": "አስተያየት",
+      "cityIdNumber": "የከተማ መለያ ቁጥር",
+      "technologyType": "የቴክኖሎጂ አይነት",
+      "associationName": "የማህበር ስም",
+      "isPoor": "ድሃ ናት",
+      "isSexWorker": "በወሲብ ስራ ትሰማራለች",
+      "disabilities": "የአካል ጉዳቶች",
+      "healthConditions": "የጤና ሁኔታዎች",
+      "trainingTopic": "የስልጠና ርዕስ",
+      "startDate": "የመጀመሪያ ቀን",
+      "completionDate": "የማጠናቀቂያ ቀን",
+      "attended": "ተሳትፋለች",
+      "employmentType": "የስራ አይነት",
+      "sector": "ዘርፍ",
+      "year": "ዓመት",
+      "name": "የማህበሩ ስም",
+      "type": "አይነት",
+      "block": "ብሎክ",
+      "totalMembers": "የአባላት ብዛት",
+      "establishmentDate": "የተቋቋመበት ቀን",
+      "chairpersonName": "የሰብሳቢው ስም",
+      "chairpersonPhone": "የሰብሳቢው ስልክ",
+      "enteredBy": "ያስገባው",
+      "approvedBy": "ያጸደቀው",
+      "status": "ሁኔታ"
+    }
+  },
+  "profileDetail": {
+    "title": "የሴቲቱ ፕሮፍይል ዝርዝር",
+    "loading": "ፕሮፍይል በመጫን ላይ...",
+    "error": "ፕሮፍይልውን መጫን አልተቻለም",
+    "goBack": "ተመለስ",
+    "active": "ንቁ",
+    "inactive": "ንቁ ያልሆነ",
+    "editProfile": "ፕሮፍይል ያርሙ",
+    "toggleStatus": "ሁኔታን ይቀይሩ",
+    "personalInfo": "የግል መረጃ",
+    "contactInfo": "የመገናኛ መረጃ",
+    "educationEmployment": "ትምህርት እና ስራ",
+    "additionalInfo": "ተጨማሪ መረጃ",
+    "fullName": "ሙሉ ስም",
+    "email": "ኢሜይል",
+    "viewPhoto": "ፎቶ እይ",
+    "clientCategory": "የደንበኛ ምድብ",
+    "registeredOn": "የተመዘገበበት ቀን",
+    "lastUpdated": "ለመጨረሻ ጊዜ የታደሰበት"
+  },
+  "associations": {
+    "title": "የሴቶች ልማት ህብረት ማህበራት",
+    "subtitle": "የሴቶች ልማት ህብረት ማህበራትን በክፍለ ከተማ ያስተዳድሩ",
+    "searchPlaceholder": "በስም፣ በመሪ ወይም በአድራሻ ይፈልጉ...",
+    "cardTitle": "የማህበር መዝገቦች",
+    "showing": "ከ {total} ውስጥ {from}-{to} እያሳየ ነው",
+    "types": {
+      "ASSOCIATION": "ማህበር",
+      "DEVELOPMENT_ASSOCIATION": "የልማት ህብረት",
+      "FEDERATION": "ፌዴሬሽን"
+    },
+    "status": {
+      "DRAFT": "ረቂቅ",
+      "SUBMITTED": "የጸደቀ",
+      "PENDING_APPROVAL": "እስካሁን ያልተጸደቀ",
+      "APPROVED": "የተጸደቀ",
+      "REJECTED": "ውድቅ የተደረገ"
+    },
+    "filters": {
+      "allTypes": "ሁሉም አይነቶች",
+      "allStatuses": "ሁሉም ሁኔታዎች"
+    },
+    "table": {
+      "name": "የማህበሩ ስም",
+      "type": "አይነት",
+      "location": "አድራሻ",
+      "leader": "መሪ",
+      "block": "ብሎክ",
+      "totalMembers": "የአባላት ብዛት",
+      "status": "ሁኔታ",
+      "actions": "እርምጃዎች",
+      "loading": "በመጫን ላይ...",
+      "noRecords": "ምንም የማህበር መዝገብ አልተገኘም።"
+    },
+    "messages": {
+      "deleteSuccess": "ማህበሩ በተሳካ ሁኔታ ተጥፏል",
+      "deleteError": "ማህበሩን መሰረዝ አልተቻለም"
+    },
+    "delete": {
+      "title": "ማጥፋት ያረጋግጡ",
+      "description": "እርግጠኛ ነዎት ይህንን የማህበር መዝገብ ማጥፋት ይፈልጋሉ? ይህ መስራት አይቻላም።",
+      "cancel": "ይሰረዝ",
+      "confirm": "ያጥፉ"
+    },
+    "form": {
+      "addButton": "ማህበር ይመዝገቡ",
+      "title": "የሴቶች ልማት ህብረት ይመዝገቡ",
+      "editTitle": "የሴቶች ልማት ህብረት ያርሙ",
+      "leaderSection": "የመሪ መረጃ",
+      "committeeSection": "የስራ አመራር ኮሚቴ (5 አባላት)",
+      "committeeHint": "የመጀመሪያዎቹ ሦስት ቦታዎች ግዴታ ናቸው። ቀሪዎቹ ሁለት አማራጭ ናቸው።",
+      "optional": "አማራጭ",
+      "leaderPositions": {
+        "CHAIRPERSON": "ሰብሳቢ (የመልካም አስተዳደርና የሴት አደረጃጀት ተጠሪ)",
+        "VICE_CHAIRPERSON": "ምክትል ሰብሳቢ (የሴቶች ጉዳይ ተጠሪ)",
+        "SECRETARY": "ፀሐፊ (የጤና ተጠሪ)",
+        "WORK_SKILLS_RESPONSIBLE": "አባል (የስራና ክህሎት ተጠሪ)",
+        "EDUCATION_RESPONSIBLE": "አባል (የትምህርት ተጠሪ)"
+      },
+      "fields": {
+        "name": "የማህበሩ ስም",
+        "type": "የማህበሩ አይነት",
+        "subCity": "ክፍለ ከተማ",
+        "woreda": "ወረዳ",
+        "block": "ብሎክ",
+        "houseNumber": "የቤት ቁጥር",
+        "totalMembers": "የአባላት ብዛት",
+        "establishmentDate": "የተቋቋመበት ቀን",
+        "objective": "ዓላማ",
+        "leaderFullName": "ሙሉ ስም",
+        "leaderPhone": "ስልክ ቁጥር"
+      },
+      "placeholders": {
+        "name": "የማህበሩን ስም ያስገቡ...",
+        "type": "አይነት ይምረጡ...",
+        "subCity": "ክፍለ ከተማ ይምረጡ...",
+        "woreda": "ወረዳ ይምረጡ...",
+        "block": "ለምሳሌ B12",
+        "houseNumber": "የቤት ቁጥር",
+        "totalMembers": "0",
+        "objective": "የማህበሩ ዓላማ...",
+        "leaderFullName": "ሙሉ ስም...",
+        "leaderPhone": "09..."
+      },
+      "types": {
+        "ASSOCIATION": "ማህበር",
+        "DEVELOPMENT_ASSOCIATION": "የልማት ህብረት",
+        "FEDERATION": "ፌዴሬሽን"
+      },
+      "buttons": {
+        "cancel": "ይሰረዝ",
+        "save": "ያስቀምጡ"
+      },
+      "messages": {
+        "success": "ማህበሩ በተሳካ ሁኔታ ተቀምጧል",
+        "error": "ማህበሩን ማስቀመጥ አልተቻለም"
+      },
+      "lockedNotice": "ይህ መዝገብ የታሸገ ነው — ረቂቆች ብቻ ሊስተካከሉ ይችላሉ።",
+      "fields": {
+        "memberFullName": "ሙሉ ስም",
+        "memberPhone": "ስልክ ቁጥር"
+      },
+      "placeholders": {
+        "memberFullName": "ሙሉ ስም...",
+        "memberPhone": "09..."
+      }
+    },
+    "members": {
+      "title": "\"የ1-10\" የቡድን አባላት",
+      "description": "እስከ 10 አባላትን ለእያንዳንዱ ከሦስቱ ቡድኖች በወረቀቱ ቅጽ መሠረት ያስገቡ።",
+      "unsaved": "ያልተቀመጡ ለውጦች",
+      "filledCount": "{count} ተሞልቷል",
+      "save": "አባላትን ያስቀምጡ",
+      "groupTab": "ቡድን {group}",
+      "serialNo": "ተ.ቁ",
+      "errors": {
+        "nameRequired": "የቡድን {group} ረድፍ {row}፡ ያለ ሙሉ ስም ስልክ ቁጥር ገብቷል"
+      },
+      "messages": {
+        "success": "አባላት በተሳካ ሁኔታ ተቀምጠዋል",
+        "error": "አባላትን ማስቀመጥ አልተቻለም"
+      }
+    },
+    "workflow": {
+      "title": "የመጸደቅ ሂደት",
+      "enteredBy": "ያስገባው",
+      "reviewedBy": "ያረጋገጠው",
+      "approvedBy": "ያጸደቀው",
+      "rejectionReason": "የውድቅ ምክንያት",
+      "submit": "ለመጸደቅ ያስገቡ",
+      "pendingReview": "የውሳኔ ውሳነት በመጠባበቅ ላይ።",
+      "approve": "አጽድቅ",
+      "reject": "አትጽድቅ",
+      "approvedNotice": "ይህ መዝገብ ጸድቋል።",
+      "rejectedNotice": "ይህ መዝገብ ውድቅ የተደረገ ነው።",
+      "viewSignature": "ፊርማ ይመልከቱ",
+      "viewSignatureError": "የፊርማ ሰነዱን መክፈት አልተቻለም",
+      "submitTitle": "ለመጸደቅ ያስገቡ",
+      "submitDescription": "ይህንን መዝገብ ለመጸድቅ የመረጃ አስገቢ ባለሞያውን መረጃ ያስገቡ።",
+      "enteredByNameLabel": "የመረጃ አስገቢ ባለሞያ ስም",
+      "enteredByNamePlaceholder": "ሙሉ ስም...",
+      "entrySignature": "የመግቢያ ፊርማ",
+      "optional": "አማራጭ",
+      "cancel": "ይሰረዝ",
+      "confirmSubmit": "አስገባ",
+      "approveTitle": "ማህበሩን አጽድቅ",
+      "rejectTitle": "ማህበሩን አትጽድቅ",
+      "approverNameLabel": "የአጽዳቂው ስም",
+      "approverNamePlaceholder": "ሙሉ ስም...",
+      "rejectionReasonPlaceholder": "ይህ መዝገብ ለምን እንደሚታገድ?",
+      "approvalSignature": "የመጸድቅ ፊርማ",
+      "confirmApprove": "መጸድቁን አረጋግጥ",
+      "confirmReject": "ውድቅ ማድረጉን አረጋግጥ",
+      "errors": {
+        "nameRequired": "ስም ያስፈልጋል",
+        "reasonRequired": "የውድቅ ምክንያት ያስፈልጋል"
+      },
+      "messages": {
+        "submitted": "መዝገቡ ለመጸድቅ ገብቷል",
+        "approved": "መዝገቡ በተሳካ ሁኔታ ጸድቋል",
+        "rejected": "መዝገቡ ውድቅ የተደረገ",
+        "error": "እርምጃው አልተሳካም። እባክዎ እንደገና ይሞክሩ።"
+      }
+    },
+    "detail": {
+      "loading": "ማህበር በመጫን ላይ...",
+      "error": "መዝገብ አልተገኘም",
+      "goBack": "ተመለስ",
+      "edit": "አርም",
+      "generalInfo": "አጠቃላይ መረጃ",
+      "location": "አድራሻ",
+      "leader": "አመራር",
+      "membership": "አባልነትና ድጋፍ",
+      "registeredMembers": "የተመዘገቡ አባላት",
+      "totalMembersDeclared": "የተገለጸ ጠቅላላ",
+      "supportRecords": "የድጋፍ መዝገቦች"
+    },
+    "stats": {
+      "total": "ጠቅላላ ማህበራት",
+      "declaredMembers": "የተገለጹ አባላት"
+    }
+  },
+  "technologySupport": {
+    "title": "የቴክኖሎጂ ድጋፍ",
+    "subtitle": "ለሴቶች ተጠቃሚዎች የሚሰጠውን አግባብነት ያለው የቴክኖሎጂ ድጋፍ ያስተዳድሩ",
+    "searchPlaceholder": "በስም፣ መለያ ወይም የቴክኖሎጂ አይነት ይፈልጉ...",
+    "cardTitle": "የቴክኖሎጂ ድጋፍ መዝገቦች",
+    "poor": "ድሃ",
+    "sexWorker": "የወሲብ ስራ",
+    "disabled": "አካል ጉዳተኛ",
+    "table": {
+      "beneficiary": "ተጠቃሚ",
+      "technologyType": "የቴክኖሎጂ አይነት",
+      "association": "ማህበር",
+      "status": "ሁኔታ",
+      "health": "ጤና",
+      "loading": "በመጫን ላይ...",
+      "noRecords": "ምንም የቴክኖሎጂ ድጋፍ መዝገብ አልተገኘም።",
+      "actions": "እርምጃዎች"
+    },
+    "form": {
+      "addButton": "ድጋፍ ይመዝገቡ",
+      "title": "የቴክኖሎጂ ድጋፍ ይመዝገቡ",
+      "fields": {
+        "firstName": "የመጀመሪያ ስም",
+        "lastName": "የአባት ስም",
+        "woman": "ሴት",
+        "technologyType": "የቴክኖሎጂ አይነት",
+        "associationName": "የልማት ማህበር ስም",
+        "statusSection": "የሁኔታ መረጃ",
+        "isPoor": "ድሃ ናት?",
+        "isSexWorker": "በወሲብ ስራ ትሰማራለች?",
+        "disabilities": "የአካል ጉዳቶች",
+        "healthConditions": "የጤና ሁኔታዎች"
+      },
+      "placeholders": {
+        "firstName": "የመጀመሪያ ስም ያስገቡ...",
+        "lastName": "የአባት ስም ያስገቡ...",
+        "selectWoman": "ሴት ይምረጡ...",
+        "selectTechnology": "የቴክኖሎጂ አይነት ይምረጡ...",
+        "associationName": "የማህበሩን ስም ያስገቡ"
+      },
+      "technologyTypes": {
+        "SOLAR": "የፀሐይ ኃይል",
+        "WATER_PUMP": "የውሃ ፓምፕ",
+        "IMPROVED_STOVE": "የተሻሻለ ምድጃ",
+        "BIODIGESTER": "ባዮዳይጀስተር",
+        "ELECTRIC_MILL": "ኤሌክትሪክ ወፍጮ",
+        "OTHER": "ሌላ"
+      },
+      "disabilityOptions": {
+        "PHYSICAL_LEG": "የአካል ጉዳት (እግር)",
+        "PHYSICAL_HAND": "የአካል ጉዳት (እጅ)",
+        "BLIND": "ዓይነ ስውር",
+        "DEAF": "መስማት የተሳነ"
+      },
+      "healthOptions": {
+        "BREAST_CANCER": "የጡት ካንሰር",
+        "CERVICAL_CANCER": "የማህፀን አንገት ካንሰር",
+        "HIV_AIDS": "ኤችአይቪ/ኤድስ"
+      },
+      "buttons": {
+        "cancel": "ይሰረዝ",
+        "save": "ያስቀምጡ"
+      },
+      "messages": {
+        "success": "የቴክኖሎጂ ድጋፍ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "የቴክኖሎጂ ድጋፍ መመዝገብ አልተቻለም",
+        "updateSuccess": "የቴክኖሎጂ ድጋፍ በተሳካ ሁኔታ ተ䄠ሷል",
+        "updateError": "የቴክኖሎጂ ድጋፍ ማረም አልተቻለም"
+      },
+      "editTitle": "የቴክኖሎጂ ድጋፍ ያርሙ",
+      "showing": "ከ {total} ውስጥ {from}-{to} እያሳየ ነው"
+    },
+    "filter": {
+      "allTypes": "ሁሉም አይነቶች",
+      "solar": "የፀሐይ ኃይል",
+      "waterPump": "የውሃ ፓምፕ",
+      "improvedStove": "የተሻሻለ ምድጃ",
+      "biodigester": "ባዮዳይጀስተር",
+      "electricMill": "ኤሌክትሪክ ወፍጮ",
+      "other": "ሌላ",
+      "poorStatus": "የድሃ ሁኔታ",
+      "hasDisabilities": "የአካል ጉዳተኛ",
+      "dateFrom": "ከ",
+      "dateTo": "እስከ",
+      "clearFilters": "ማጣሪያዎችን ያጽዱ"
+    },
+    "delete": {
+      "title": "ማጥፋት ያረጋግጡ",
+      "description": "እርግጠኛ ነዎት ይህንን የቴክኖሎጂ ድጋፍ መዝገብ ማጥፋት ይፈልጋሉ? ይህ መስራት አይተลาም።",
+      "cancel": "ይሰረዝ",
+      "confirm": "ያጥፉ",
+      "deleting": "በማጥፋት ላይ...",
+      "success": "የቴክኖሎጂ ድጋፍ መዝገብ ተጥፍቷል",
+      "error": "ማጥፋት አልተቻለም"
+    },
+    "detail": {
+      "title": "የቴክኖሎጂ ድጋፍ ዝርዝሮች",
+      "technologyType": "የቴክኖሎጂ አይነት",
+      "association": "ማህበር",
+      "status": "ሁኔታ",
+      "healthConditions": "የጤና ሁኔታዎች",
+      "beneficiary": "ተጠቃሚ",
+      "phone": "ስልክ:",
+      "address": "አድራሻ:",
+      "goBack": "ተመለስ",
+      "error": "መዝገብ አልተገኘም",
+      "monitoringHistory": "የክትትል ታሪክ",
+      "monitoringHistoryDesc": "ክትትሎችን እና ውጤቶችን ይከታተሉ"
+    }
+  },
+  "training": {
+    "title": "የሴቶች ስልጠና",
+    "subtitle": "የስልጠና ክፍለ ጊዜዎችን እና ተሳትፎን ያስተዳድሩ",
+    "searchPlaceholder": "በስም፣ መለያ ወይም የስልጠና ርዕስ ይፈልጉ...",
+    "cardTitle": "የስልጠና መዝገቦች",
+    "attendedYes": "ተሳትፋለች",
+    "attendedNo": "አልተሳተፈችም",
+    "table": {
+      "beneficiary": "ተጠቃሚ",
+      "trainingTopic": "የስልጠና ርዕስ",
+      "dates": "ቀኖች",
+      "attended": "ተሳትፋለች",
+      "remark": "ማስታወሻ",
+      "loading": "በመጫን ላይ...",
+      "noRecords": "ምንም የስልጠና መዝገብ አልተገኘም።"
+    },
+    "filter": {
+      "dateFrom": "ከ",
+      "dateTo": "እስከ"
+    },
+    "form": {
+      "addButton": "ስልጠና ይመዝገቡ",
+      "title": "የሴቶች ስልጠና ይመዝገቡ",
+      "fields": {
+        "firstName": "የመጀመሪያ ስም",
+        "lastName": "የአባት ስም",
+        "woman": "ሴት",
+        "trainingTopic": "የስልጠና ርዕስ",
+        "startDate": "የመጀመሪያ ቀን",
+        "completionDate": "የማጠናቀቂያ ቀን",
+        "attended": "ስልጠና ወስዳለች",
+        "remark": "ማስታወሻ"
+      },
+      "placeholders": {
+        "firstName": "የመጀመሪያ ስም ያስገቡ...",
+        "lastName": "የአባት ስም ያስገቡ...",
+        "selectWoman": "ሴት ይምረጡ...",
+        "selectTrainingTopic": "የስልጠና ርዕስ ይምረጡ...",
+        "remark": "ተጨማሪ ማስታወሻዎች..."
+      },
+      "trainingTopics": {
+        "ENTREPRENEURSHIP": "ስራ ፈጠራ",
+        "TAILORING": "የልብስ ስፌት",
+        "AGRICULTURE": "ግብርና",
+        "BAKERY": "ዳቦ መጋገሪያ",
+        "BEAUTY_SALON": "የውበት ሳሎን",
+        "INFORMATION_TECHNOLOGY": "የኢንፎርሜሽን ቴክኖሎጂ",
+        "LITERACY": "ማንበብ እና መጻፍ",
+        "HEALTH_AWARENESS": "የጤና ግንዛቤ",
+        "LEGAL_RIGHTS": "የህግ መብቶች",
+        "LEADERSHIP": "አመራር",
+        "OTHER": "ሌላ"
+      },
+      "buttons": {
+        "cancel": "ይሰረዝ",
+        "save": "ያስቀምጡ"
+      },
+      "messages": {
+        "success": "ስልጠና በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "ስልጠና መመዝገብ አልተቻለም"
+      }
+    }
+  },
+  "employment": {
+    "title": "የስራ ፈጠራ",
+    "subtitle": "ለሴቶች የተፈጠሩ የስራ እድሎችን ይከታተሉ",
+    "searchPlaceholder": "በስም፣ መለያ ወይም ዘርፍ ይፈልጉ...",
+    "cardTitle": "የስራ መዝገቦች",
+    "individual": "ግለሰብ",
+    "group": "በቡድን የተደራጀ",
+    "table": {
+      "beneficiary": "ተጠቃሚ",
+      "type": "አይነት",
+      "sector": "ዘርፍ",
+      "year": "ዓመት",
+      "remark": "ማስታወሻ",
+      "loading": "በመጫን ላይ...",
+      "noRecords": "ምንም የስራ መዝገብ አልተገኘም።"
+    },
+    "filter": {
+      "dateFrom": "ከ",
+      "dateTo": "እስከ"
+    },
+    "form": {
+      "addButton": "ስራ ይመዝገቡ",
+      "title": "የስራ እድል ይመዝገቡ",
+      "fields": {
+        "firstName": "የመጀመሪያ ስም",
+        "lastName": "የአባት ስም",
+        "woman": "ሴት",
+        "employmentType": "የስራ አይነት",
+        "sector": "ዘርፍ",
+        "year": "ዓመት",
+        "remark": "ማስታወሻ"
+      },
+      "placeholders": {
+        "firstName": "የመጀመሪያ ስም ያስገቡ...",
+        "lastName": "የአባት ስም ያስገቡ...",
+        "selectWoman": "ሴት ይምረጡ...",
+        "selectSector": "ዘርፍ ይምረጡ...",
+        "remark": "ተጨማሪ ማስታወሻዎች..."
+      },
+      "employmentTypes": {
+        "INDIVIDUAL": "በግል የተደራጀ",
+        "GROUP": "በቡድን የተደራጀ"
+      },
+      "sectors": {
+        "AGRICULTURE": "ግብርና",
+        "TEXTILE": "ጨርቃ ጨርቅ",
+        "TRADE": "ንግድ",
+        "SERVICES": "አገልግሎት",
+        "MANUFACTURING": "ማምረቻ",
+        "CONSTRUCTION": "ኮንስትራክሽን",
+        "TRANSPORT": "ትራንስፖርት",
+        "EDUCATION": "ትምህርት",
+        "HEALTHCARE": "ጤና አጠባበቅ",
+        "OTHER": "ሌላ"
+      },
+      "buttons": {
+        "cancel": "ይሰረዝ",
+        "save": "ያስቀምጡ"
+      },
+      "messages": {
+        "success": "ስራ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "ስራ መመዝገብ አልተቻለም"
+      }
+    }
+  },
+  "supportDetail": {
+    "title": "የድጋፍ ዝርዝሮች",
+    "referenceId": "የማጣቀሻ መለያ",
+    "serviceInfo": "የአገልግሎት መረጃ",
+    "serviceInfoDesc": "የተሰጠው ድጋፍ ዝርዝር",
+    "noRemarks": "ምንም አስተያየት አልተሰጠም።",
+    "beneficiaryLocation": "ተጠቃሚ እና ቦታ",
+    "beneficiaryType": "የተጠቃሚ ዓይነት",
+    "individualWoman": "ግለሰብ ሴት",
+    "womenAssociation": "የሴቶች ማህበር",
+    "facilitator": "አስተባባሪ",
+    "monitoringHistory": "የክትትል ታሪክ",
+    "monitoringHistoryDesc": "ክትትሎችን እና ውጤቶችን ይከታተሉ",
+    "noLogs": "እስካሁን ምንም የክትትል መዝገብ አልተመዘገበም።",
+    "addFollowUp": "ከላይ ያለውን ቁልፍ በመጠቀም አዲስ ክትትል ያክሉ።",
+    "assessedBy": "በ: {name}",
+    "score": "ውጤት: {score}%"
+  },
+  "monitoring": {
+    "addFollowUp": "ክትትል ያክሉ",
+    "title": "የክትትል መዝገብ ያክሉ",
+    "description": "ለዚህ የድጋፍ አገልግሎት የክትትል ግምገማ ይመዝግቡ።",
+    "monitoringDate": "የክትትል ቀን",
+    "assessedBy": "ገምጋሚ",
+    "assessorPlaceholder": "የገምጋሚውን ስም ያስገቡ...",
+    "currentStatus": "የአሁኑ ሁኔታ",
+    "statusPlaceholder": "ምሳሌ፡ እየተሻሻለ ነው",
+    "score": "ውጤት (0-100)",
+    "remarkPlaceholder": "የግምገማ ዝርዝሮችን ያስገቡ...",
+    "addEntry": "መዝገብ ያክሉ",
+    "adding": "በመጨመር ላይ...",
+    "messages": {
+      "success": "የክትትል መዝገብ በተሳካ ሁኔታ ተጨምሯል",
+      "error": "የክትትል መዝገብ ማከል አልተቻለም"
+    }
+  },
+  "serviceTypes": {
+    "Disability Financial Grant": "የአካል ጉዳት የገንዘብ ድጋፍ",
+    "Emergency Medical Fund": "የአስቸኳይ ጊዜ የህክምና ፈንድ",
+    "Food & Nutrition Support": "የምግብ እና የተመጣጠነ ምግብ ድጋፍ",
+    "Health Insurance Coverage": "የጤና መድን ሽፋን",
+    "Legal Counseling": "የህግ ምክር",
+    "Medical Checkup & Treatment": "የህክምና ምርመራ እና ህክምና",
+    "Mobility Device Supply": "የመንቀሳቀሻ መሳሪያዎች አቅርቦት",
+    "Monthly Financial Subsidy": "ወርሃዊ የገንዘብ ድጎማ",
+    "Psychosocial Counseling": "የስነ-ልቦና ማህበራዊ ምክር",
+    "Public Transport Pass": "የህዝብ ትራንስፖርት አገልግሎት",
+    "Sanitary Supplies": "የንጽህና መጠበቂያ ቁሳቁሶች",
+    "School Uniform & Material Support": "የትምህርት ቤት ዩኒፎርም እና ቁሳቁስ ድጋፍ",
+    "Skill Development Training": "የክህሎት ማጎልበቻ ስልጠና",
+    "Startup Capital Support": "የመነሻ ካፒታል ድጋፍ",
+    "Temporary Shelter": "ጊዜያዊ መጠለያ",
+    "Elderly Financial Support": "የአረጋውያን የገንዘብ ድጋፍ"
+  }
+}

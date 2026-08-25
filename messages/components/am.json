@@ -46,6 +46,12 @@
   },
   "session": {
     "expired": "የእርስዎ ክፍለ ጊዜ አልቋል። እባክዎ እንደገና ይግቡ።",
-    "inactivityLogout": "በእንቅስቃሴ እጦት ምክንያት ከመለያዎ ወጥተዋል።"
+    "inactivityLogout": "በእንቅስቃሴ እጦት ምክንያት ከመለያዎ ወጥተዋል።",
+    "warningTitle": "ክፍለ ጊዜዎ በቅርቡ ያልቅቃል",
+    "warningDescription": "ክፍለ ጊዜዎ በ {seconds} ሰከንዶች ውስጥ ያልቅቃል። በራስ-ሰር ይʚመለሳሉ።",
+    "inactivityWarningTitle": "የእንቅስቃሴ ማስጠንቀቂያ",
+    "inactivityWarningDescription": "በእንቅስቃሴ እጦት ምክንያት በ {seconds} ሰከንዶች ውስጥ ይʚመለሳሉ።",
+    "staySignedIn": "እንደገና ይግቡ",
+    "signOut": "ውጣ"
   }
 }

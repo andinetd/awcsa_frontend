@@ -2,16 +2,42 @@ import { BASE_URL } from "@/lib/base-url";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth-store";
 
+export type WomenReportCategory =
+  | "SUPPORT_SERVICE"
+  | "TECHNOLOGY_SUPPORT"
+  | "TRAINING"
+  | "EMPLOYMENT"
+  | "ASSOCIATION";
+
 export interface GenerateWomenReportPayload {
+  category?: WomenReportCategory;
   startDate?: string;
   endDate?: string;
   subCity?: string;
   woreda?: string;
   serviceTypeId?: number;
-  beneficiaryLevel?: "INDIVIDUAL" | "GROUP";
+  beneficiaryLevel?: "INDIVIDUAL" | "ASSOCIATION";
+  technologyType?: string;
+  isPoor?: boolean;
+  isSexWorker?: boolean;
+  trainingTopic?: string;
+  attended?: boolean;
+  year?: string;
+  employmentType?: "INDIVIDUAL" | "GROUP";
+  sector?: string;
+  associationType?: "ASSOCIATION" | "DEVELOPMENT_ASSOCIATION" | "FEDERATION";
+  status?: "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
   selectedColumns?: string[];
   format: "EXCEL" | "PDF";
 }
+
+const FILE_PREFIXES: Record<WomenReportCategory, string> = {
+  SUPPORT_SERVICE: "women_support_services_report",
+  TECHNOLOGY_SUPPORT: "women_technology_support_report",
+  TRAINING: "women_training_report",
+  EMPLOYMENT: "women_employment_report",
+  ASSOCIATION: "women_associations_report",
+};
 
 export const generateWomenReport = async (
   payload: GenerateWomenReportPayload
@@ -37,7 +63,8 @@ export const generateWomenReport = async (
     link.href = url;
 
     const fileExtension = payload.format === "EXCEL" ? "xlsx" : "pdf";
-    const fileName = `women_support_services_report_${
+    const prefix = FILE_PREFIXES[payload.category ?? "SUPPORT_SERVICE"];
+    const fileName = `${prefix}_${
       new Date().toISOString().split("T")[0]
     }.${fileExtension}`;
 

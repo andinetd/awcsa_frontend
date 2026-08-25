@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   UserRoundCog,
   Users,
+  Zap,
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -34,7 +35,7 @@ export interface NavigationSection {
 export const sidebarConfig: Record<
   | "CHILDREN_AFFAIRS"
   | "SOCIAL_AFFAIRS"
-  | "WOMENS"
+  | "WOMEN"
   | "SUPER_ADMIN"
   | "BUREAU_HEAD"
   | "CARE_CENTERS_PORTAL",
@@ -145,27 +146,17 @@ export const sidebarConfig: Record<
     },
   ],
 
-  WOMENS: [
-    {
-      title: "Overview",
-      items: [
-        { title: "Dashboard", url: "/womens/dashboard", icon: LayoutDashboard },
-      ],
-    },
+  WOMEN: [
     {
       title: "Women Services",
       items: [
-        {
-          title: "Support Services",
-          url: "/womens/support-service",
-          icon: HandHeart,
-        },
-        { title: "Women List", url: "/womens/women-list", icon: Users },
-        {
-          title: "Women Associations",
-          url: "/womens/women-associations",
-          icon: Users,
-        },
+        { title: "Dashboard", url: "/women/dashboard", icon: LayoutDashboard },
+        { title: "Profiles", url: "/women/profiles", icon: Users },
+        { title: "Support Services", url: "/women/services", icon: HandHeart },
+        { title: "Technology Support", url: "/women/technology", icon: Zap },
+        { title: "Training", url: "/women/training", icon: GraduationCap },
+        { title: "Employment", url: "/women/employment", icon: Briefcase },
+        { title: "Associations", url: "/women/associations", icon: Users },
       ],
     },
   ],
@@ -269,17 +260,13 @@ export const sidebarConfig: Record<
           title: "Women",
           icon: Users,
           children: [
-            {
-              title: "Dashboard",
-              url: "/womens/dashboard",
-              icon: LayoutDashboard,
-            },
-            {
-              title: "Support Services",
-              url: "/womens/support-service",
-              icon: HandHeart,
-            },
-            { title: "Women List", url: "/womens/women-list", icon: Users },
+            { title: "Dashboard", url: "/women/dashboard", icon: LayoutDashboard },
+            { title: "Profiles", url: "/women/profiles", icon: Users },
+            { title: "Support Services", url: "/women/services", icon: HandHeart },
+            { title: "Technology Support", url: "/women/technology", icon: Zap },
+            { title: "Training", url: "/women/training", icon: GraduationCap },
+            { title: "Employment", url: "/women/employment", icon: Briefcase },
+            { title: "Associations", url: "/women/associations", icon: Users },
           ],
         },
         {

@@ -38,7 +38,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await import(`../../messages/complaints/${locale}.json`)
   ).default;
 
-  const womensMessages = (await import(`../../messages/womens/${locale}.json`))
+  const womenMessages = (await import(`../../messages/women/${locale}.json`))
     .default;
 
   const careCentersPortalMessages = (
@@ -76,7 +76,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       login: loginMessages,
       bureau: bureauMessages,
       complaints: complaintsMessages,
-      womens: womensMessages,
+      women: womenMessages,
       "care-centers-portal": careCentersPortalMessages,
       "social-affairs": socialAffairsMessages,
       executive: executiveMessages,

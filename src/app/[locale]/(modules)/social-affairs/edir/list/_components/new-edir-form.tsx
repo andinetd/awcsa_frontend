@@ -104,6 +104,22 @@ export default function NewEdirForm({
   const uploadDocMutation = useUploadEdirDocumentMutation();
   const [byLawsFile, setByLawsFile] = useState<File[]>([]);
 
+  // Auto-compute totals from male + female
+  const managementMale = form.watch("members.management.male");
+  const managementFemale = form.watch("members.management.female");
+  const generalMale = form.watch("members.general.male");
+  const generalFemale = form.watch("members.general.female");
+
+  useEffect(() => {
+    const total = Number(managementMale || 0) + Number(managementFemale || 0);
+    form.setValue("members.management.total", total);
+  }, [managementMale, managementFemale, form]);
+
+  useEffect(() => {
+    const total = Number(generalMale || 0) + Number(generalFemale || 0);
+    form.setValue("members.general.total", total);
+  }, [generalMale, generalFemale, form]);
+
   const handleByLawsSelect = (files: File[]) => {
     setByLawsFile(files);
     if (files.length > 0) {
@@ -437,7 +453,7 @@ export default function NewEdirForm({
                           {t("fields.total")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input type="number" {...field} disabled readOnly />
                         </FormControl>
                       </FormItem>
                     )}
@@ -484,7 +500,7 @@ export default function NewEdirForm({
                           {t("fields.total")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input type="number" {...field} disabled readOnly />
                         </FormControl>
                       </FormItem>
                     )}
