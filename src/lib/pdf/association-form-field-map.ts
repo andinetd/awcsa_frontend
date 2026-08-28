@@ -27,6 +27,9 @@ import {
   LEADER_NAME_Y,
   LEADER_PHONE_Y,
   LEADERSHIP_LEFT_X,
+  LEADERSHIP_NAME_BLANK_W,
+  LEADERSHIP_PHONE_BLANK_X,
+  LEADERSHIP_PHONE_BLANK_W,
   LEADERSHIP_RIGHT_X,
   PAGE_HEIGHT,
   PAGE_WIDTH,
@@ -223,40 +226,41 @@ function buildLeadershipFields(): FormFieldDef[] {
         1,
         LEADER_NAME_Y[i],
         LEADERSHIP_LEFT_X,
-        LEADERSHIP_RIGHT_X - LEADERSHIP_LEFT_X,
+        LEADERSHIP_NAME_BLANK_W,
         { kind: "leader.fullName", leaderIndex: i },
-        { size: 9 }
+        { size: 7 }
       ),
       baselineTextField(
         `leader.${i}.phone`,
         1,
-        LEADER_PHONE_Y[i],
-        LEADERSHIP_LEFT_X,
-        LEADERSHIP_RIGHT_X - LEADERSHIP_LEFT_X,
+        LEADER_NAME_Y[i] - 8,
+        LEADERSHIP_PHONE_BLANK_X,
+        LEADERSHIP_PHONE_BLANK_W,
         { kind: "leader.phone", leaderIndex: i },
-        { size: 9 }
+        { size: 7 }
       )
     );
   }
   /* Leader 5 lives on page 2, above rows 9 & 10. */
+  const leader5Index = 5 as const;
   fields.push(
     baselineTextField(
       "leader.5.fullName",
       2,
       LEADER5_NAME_Y_P2,
       LEADERSHIP_LEFT_X,
-      LEADERSHIP_RIGHT_X - LEADERSHIP_LEFT_X,
-      { kind: "leader.fullName", leaderIndex: 5 },
-      { size: 9 }
+      LEADERSHIP_NAME_BLANK_W,
+      { kind: "leader.fullName", leaderIndex: leader5Index },
+      { size: 7 }
     ),
     baselineTextField(
       "leader.5.phone",
       2,
-      LEADER5_PHONE_Y_P2,
-      LEADERSHIP_LEFT_X,
-      LEADERSHIP_RIGHT_X - LEADERSHIP_LEFT_X,
-      { kind: "leader.phone", leaderIndex: 5 },
-      { size: 9 }
+      LEADER5_NAME_Y_P2 - 8,
+      LEADERSHIP_PHONE_BLANK_X,
+      LEADERSHIP_PHONE_BLANK_W,
+      { kind: "leader.phone", leaderIndex: leader5Index },
+      { size: 7 }
     )
   );
   return fields;
@@ -278,18 +282,18 @@ function buildMemberGridFields(
           page,
           y,
           GROUP_NAME_X[g],
-          GROUP_NAME_W[g],
+          GROUP_NAME_W,
           { kind: "group.row.name", groupNumber: g, rowNumber: rowConst },
-          { size: 9 }
+          { size: 7 }
         ),
         baselineTextField(
           `group.${g}.row${row}.phone`,
           page,
           y,
           GROUP_PHONE_X[g],
-          GROUP_PHONE_W[g],
+          GROUP_PHONE_W,
           { kind: "group.row.phone", groupNumber: g, rowNumber: rowConst },
-          { size: 9 }
+          { size: 7 }
         )
       );
     }

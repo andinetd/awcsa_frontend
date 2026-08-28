@@ -96,8 +96,9 @@ HEADER_COUNT_VALUE_W = 9.0
 
 # === LEADERSHIP COLUMN (page 1) ===
 # 5 leader blocks stacked vertically. Each block: title + subtitle + name + phone.
+# The column is widened to fit ~16 Amharic chars for the name.
 LEADERSHIP_X = 0.5
-LEADERSHIP_W = 6.0
+LEADERSHIP_W = 7.0
 
 # y positions for each leader block's name label (cm from top)
 # Each block is ~3.2 cm tall
@@ -283,11 +284,10 @@ for idx, (n, title, subtitle, name_blanks, phone_blanks) in enumerate(LEADER_DAT
     insert_anchored_textbox(p1, title, LEADERSHIP_X, block_y - 0.4, LEADERSHIP_W, 0.6, font_size_pt=9, bold=True)
     # Subtitle (italic, smaller) - we can't italicize in our helper, so use regular
     insert_anchored_textbox(p1, subtitle, LEADERSHIP_X, block_y, LEADERSHIP_W, 0.5, font_size_pt=8)
-    # Name label
-    insert_anchored_textbox(p1, name_blanks, LEADERSHIP_X, block_y + 0.6, LEADERSHIP_W, 0.5, font_size_pt=9)
-    # Phone label
-    insert_anchored_textbox(p1, phone_blanks, LEADERSHIP_X, block_y + 1.1, LEADERSHIP_W, 0.5, font_size_pt=9)
-
+    # Name blank at the title row's bottom
+    insert_anchored_textbox(p1, name_blanks, LEADERSHIP_X, block_y + 0.55, LEADERSHIP_W, 0.5, font_size_pt=9)
+    # Phone blank: same y as name baseline (use the same y_cm value)
+    insert_anchored_textbox(p1, phone_blanks, LEADERSHIP_X, block_y + 0.55, LEADERSHIP_W, 0.5, font_size_pt=9)
 # Member grid headers (page 1) - "ቡድን 1", "ቡድን 2", "ቡድን 3"
 GRID_HEADER_Y = 4.0
 GRID_COL_HEADERS_Y = 4.7
@@ -300,20 +300,21 @@ for g in range(1, 4):
     insert_anchored_textbox(p1, "ሙሉ ስም", gx + NUMBER_W, GRID_COL_HEADERS_Y, NAME_W, 0.4, font_size_pt=8, align="center")
     insert_anchored_textbox(p1, "ስልክ ቁጥር", gx + NUMBER_W + NAME_W, GRID_COL_HEADERS_Y, PHONE_W, 0.4, font_size_pt=8, align="center")
 
-# Right edge column header
+# Right edge column header (notes column)
 insert_anchored_textbox(p1, "ማስታወሻ", GRID_RIGHT_X - 1.0, GRID_HEADER_Y, 1.0, 0.5, font_size_pt=9, bold=True, align="center")
 
-# Member rows 1-8 (page 1) - just the number "N" + empty boxes
+# Member rows 1-8 (page 1) - number + name blank + phone blank, all on the same y
 for row in range(1, ROWS_ON_PAGE1 + 1):
     row_y = ROW_Y[row]
     for g in range(1, 4):
         gx = GRID_LEFT_X + (g - 1) * GROUP_W
         # Number
-        insert_anchored_textbox(p1, str(row), gx, row_y, NUMBER_W, ROW_STEP, font_size_pt=9, align="center")
-        # Name blank line
-        insert_anchored_textbox(p1, "___________________", gx + NUMBER_W, row_y, NAME_W, ROW_STEP, font_size_pt=9)
-        # Phone blank line
-        insert_anchored_textbox(p1, "___________________", gx + NUMBER_W + NAME_W, row_y, PHONE_W, ROW_STEP, font_size_pt=9)
+        insert_anchored_textbox(p1, str(row), gx, row_y, NUMBER_W, 0.5, font_size_pt=9, align="center")
+        # Name blank (long enough to accommodate 3-word Amharic names with
+        # the small (7pt) font used for dynamic data)
+        insert_anchored_textbox(p1, "__________________________", gx + NUMBER_W, row_y, NAME_W, 0.5, font_size_pt=9)
+        # Phone blank (long enough for +251 9X XXX XXXX, about 64pt)
+        insert_anchored_textbox(p1, "________________", gx + NUMBER_W + NAME_W, row_y, PHONE_W, 0.5, font_size_pt=9)
 
 # === PAGE 2 ===
 # Use a page break
@@ -331,27 +332,24 @@ p2_pf.space_before = Pt(0)
 p2_pf.space_after = Pt(0)
 p2_pf.line_spacing = 1.0
 
-# Member rows 9-10 (page 2)
+# Member rows 9-10 (page 2) - same structure as page 1
 GRID_LEFT_X_P2 = 0.5
-GRID_RIGHT_X_P2 = GRID_LEFT_X_P2 + GROUP_W * 3 + 1.0  # 22.7 + 1.0
+GRID_RIGHT_X_P2 = GRID_LEFT_X_P2 + GROUP_W * 3 + 1.0
 for row in [9, 10]:
     row_y = P2_ROW_Y[row]
     for g in range(1, 4):
         gx = GRID_LEFT_X_P2 + (g - 1) * GROUP_W
-        # Number
-        insert_anchored_textbox(p2, str(row), gx, row_y, NUMBER_W, ROW_STEP, font_size_pt=9, align="center")
-        # Name blank
-        insert_anchored_textbox(p2, "___________________", gx + NUMBER_W, row_y, NAME_W, ROW_STEP, font_size_pt=9)
-        # Phone blank
-        insert_anchored_textbox(p2, "___________________", gx + NUMBER_W + NAME_W, row_y, PHONE_W, ROW_STEP, font_size_pt=9)
+        insert_anchored_textbox(p2, str(row), gx, row_y, NUMBER_W, 0.5, font_size_pt=9, align="center")
+        insert_anchored_textbox(p2, "__________________________", gx + NUMBER_W, row_y, NAME_W, 0.5, font_size_pt=9)
+        insert_anchored_textbox(p2, "________________", gx + NUMBER_W + NAME_W, row_y, PHONE_W, 0.5, font_size_pt=9)
 
 # Leader 5 (page 2)
 LEADER5_TITLE = "5.የልማት ህብረቱ አባል"
 LEADER5_SUBTITLE = "(የትምህርት ተጠሪ)"
 insert_anchored_textbox(p2, LEADER5_TITLE, LEADERSHIP_X, LEADER5_NAME_Y - 0.4, LEADERSHIP_W, 0.5, font_size_pt=9, bold=True)
 insert_anchored_textbox(p2, LEADER5_SUBTITLE, LEADERSHIP_X, LEADER5_NAME_Y, LEADERSHIP_W, 0.5, font_size_pt=8)
-insert_anchored_textbox(p2, "ሙሉ ስም......................", LEADERSHIP_X, LEADER5_PHONE_Y, LEADERSHIP_W, 0.5, font_size_pt=9)
-insert_anchored_textbox(p2, "ስልክ ቁጥር...........", LEADERSHIP_X, LEADER5_PHONE_Y + 0.5, LEADERSHIP_W, 0.5, font_size_pt=9)
+# Name blank and phone blank on the same y
+insert_anchored_textbox(p2, "ሙሉ ስም: __________________________   ስልክ: ____________", LEADERSHIP_X, LEADER5_NAME_Y + 0.55, LEADERSHIP_W, 0.5, font_size_pt=9)
 
 # Bottom: signature lines
 insert_anchored_textbox(p2, "መረጃ(ው)ን የሞላው ባለሞያ ስም", 0.5, SECTION_DATA_COLLECTOR_Y, 4.0, 0.5, font_size_pt=9, bold=True)
