@@ -12,11 +12,34 @@
     "registerProfile": "ፕሮፍይል ይመዝገቡ",
     "generateReport": "ሪፖርት ያውጡ",
     "stats": {
-      "totalProfiles": "ጠቅላላ ፕሮፋይሎች",
+      "totalProfiles": "ጠቅላላ መገለጫዎች",
       "supportServices": "የድጋፍ አገልግሎቶች",
-      "activeInterventions": "ንቁ ጣሪያዎች",
+      "activeInterventions": "ንቁ ጣልቃገብነቶች",
       "monthlyReports": "ወርሃዊ ሪፖርቶች",
-      "associations": "ማህበራት"
+      "associations": "ማህበራት",
+      "total": "ጠቅላላ ማህበራት",
+      "draft": "ረቂቅ",
+      "submitted": "የጸደቀ",
+      "approved": "የተጸደቀ",
+      "rejected": "ውድቅ የተደረገ",
+      "incomplete": "ያልተጠናቀቀ"
+    },
+    "bySubCity": {
+      "title": "ማህበራት በክፍለ ከተማ",
+      "subCity": "ክፍለ ከተማ",
+      "total": "ጠቅላላ",
+      "approved": "የተጸደቀ",
+      "members": "አባላት",
+      "loading": "በመጫን ላይ...",
+      "empty": "እስከ አሁን ምንም የለም።"
+    },
+    "totals": {
+      "title": "የሞጁል ጠቅላላዎች",
+      "declaredMembers": "የተገለጹ አባላት (ድምር)",
+      "registeredMembers": "የተመዘገቡ 1-10 አባላት",
+      "totalGroups": "1-10 ቡድኖች",
+      "approved": "የተጸደቁ ማህበራት",
+      "viewList": "ሁሉንም ማህበራት ይመልከቱ →"
     },
     "activity": {
       "title": "የቅርብ ጊዜ እንቅስቃሴ",
@@ -25,9 +48,11 @@
     },
     "quickActions": {
       "title": "ፈጣን እርምጃዎች",
-      "womenProfiles": "የሴቶች ፕሮፍይሎች",
+      "womenProfiles": "የሴቶች መገለጫዎች",
       "supportServices": "የድጋፍ አገልግሎቶች",
-      "caseManagement": "የጉዳይ አስተዳደር"
+      "caseManagement": "የጉዳይ አስተዳደር",
+      "associations": "ማህበራት",
+      "members": "የ1-10 አባላት"
     }
   },
   "womenList": {
@@ -197,6 +222,8 @@
     "associationStatus": "ሁኔታ",
     "format": "ፎርማት",
     "columns": "የሚካተቱ አምዶች",
+    "includeMembers": "1-10 አባላትን ያካት (ስምና ስልክ)",
+    "includeMembersHint": "ለእያንዳንዱ አባል ስሙንና ስልክ ቁጥሩን ወደ ሪፖርቱ ያክላል። ለ Excel እና PDF ይተገበራል።",
     "buttons": {
       "generate": "ሪፖርት ያውጡ",
       "download": "ሪፖርት ያውርዱ"
@@ -334,7 +361,9 @@
         "establishmentDate": "የተቋቋመበት ቀን",
         "objective": "ዓላማ",
         "leaderFullName": "ሙሉ ስም",
-        "leaderPhone": "ስልክ ቁጥር"
+        "leaderPhone": "ስልክ ቁጥር",
+        "memberFullName": "ሙሉ ስም",
+        "memberPhone": "ስልክ ቁጥር"
       },
       "placeholders": {
         "name": "የማህበሩን ስም ያስገቡ...",
@@ -346,7 +375,9 @@
         "totalMembers": "0",
         "objective": "የማህበሩ ዓላማ...",
         "leaderFullName": "ሙሉ ስም...",
-        "leaderPhone": "09..."
+        "leaderPhone": "09...",
+        "memberFullName": "ሙሉ ስም...",
+        "memberPhone": "09..."
       },
       "types": {
         "ASSOCIATION": "ማህበር",
@@ -361,15 +392,7 @@
         "success": "ማህበሩ በተሳካ ሁኔታ ተቀምጧል",
         "error": "ማህበሩን ማስቀመጥ አልተቻለም"
       },
-      "lockedNotice": "ይህ መዝገብ የታሸገ ነው — ረቂቆች ብቻ ሊስተካከሉ ይችላሉ።",
-      "fields": {
-        "memberFullName": "ሙሉ ስም",
-        "memberPhone": "ስልክ ቁጥር"
-      },
-      "placeholders": {
-        "memberFullName": "ሙሉ ስም...",
-        "memberPhone": "09..."
-      }
+      "lockedNotice": "ይህ መዝገብ የታሸገ ነው — ረቂቆች ብቻ ሊስተካከሉ ይችላሉ።"
     },
     "members": {
       "title": "\"የ1-10\" የቡድን አባላት",
@@ -385,6 +408,29 @@
       "messages": {
         "success": "አባላት በተሳካ ሁኔታ ተቀምጠዋል",
         "error": "አባላትን ማስቀመጥ አልተቻለም"
+      }
+    },
+    "groups": {
+      "count": "ከ {max} ቡድኖች {count}",
+      "empty": "እስከ አሁን ያልተጨመረ 1-10 ቡድን የለም።",
+      "addButton": "ቡድን ጨምር",
+      "addTitle": "1-10 ቡድን ይጨመር",
+      "addDescription": "አዲስ ቡድን (ቁጥር {number}) ለዚህ ማህበር ይጨመራል።",
+      "rename": "እንደገና ይሰይም",
+      "renameTitle": "ቡድን እንደገና ሰይም",
+      "renameDescription": "ለቡድን {number} አዲስ ስም ያቅርቡ።",
+      "delete": "ሰርዝ",
+      "deleteTitle": "ቡድን ሰርዝ",
+      "deleteDescription": "ቡድን {number} መሰረዝ መፈለግዎን እርግጠኛ ነዎት? ይህ እርምጃ አይተካልም።",
+      "deleteBlocked": "ቡድን {number} ላይ {count} አባል አለው። ከመሰረዝዎ በፊት አባላትን ያስወግዱ።",
+      "nameLabel": "የቡድን ስም",
+      "namePlaceholder": "ለምሳሌ ቡድን ሀ",
+      "messages": {
+        "added": "ቡድን ተጨምሯል",
+        "renamed": "የቡድን ስም ተቀይሯል",
+        "deleted": "ቡድን ተሰርዟል",
+        "error": "የቡድን ክንትር አልተሳካም",
+        "deleteError": "ቡድን መሰረዝ አልተቻለም"
       }
     },
     "workflow": {
@@ -433,6 +479,7 @@
       "error": "መዝገብ አልተገኘም",
       "goBack": "ተመለስ",
       "edit": "አርም",
+      "auditTrail": "የኦዲት ቅርጸ-ታሪክ ይመልከቱ",
       "generalInfo": "አጠቃላይ መረጃ",
       "location": "አድራሻ",
       "leader": "አመራር",
@@ -441,9 +488,99 @@
       "totalMembersDeclared": "የተገለጸ ጠቅላላ",
       "supportRecords": "የድጋፍ መዝገቦች"
     },
+    "filteredBySubCity": "በክፍለ ከተማ ተመርቷል: {subCity}",
+    "clearFilter": "ማጣሪያ አጽዳ",
+    "report": {
+      "button": "ሪፖርቶች",
+      "menuLabel": "ይህንን ማህበር ያውርዱ ወይም ያትሙ",
+      "printableForm": "ሊታተም የሚችል ቅጽ (PDF)",
+      "detailedReport": "ዝርዝር ሪፖርት (PDF)",
+      "pdf": "ዝርዝር PDF",
+      "excel": "የ Excel ዎርክቡክ",
+      "messages": {
+        "excel": "የ Excel አውርዷል",
+        "pdf": "የ PDF አውርዷል",
+        "printable_form": "ሊታተም የሚችል ቅጽ ተከፍቷል",
+        "detailed_report": "ዝርዝር ሪፖርት አውርዷል",
+        "error": "ሪፖርት ማመንጨት አልተቻለም"
+      }
+    },
     "stats": {
       "total": "ጠቅላላ ማህበራት",
       "declaredMembers": "የተገለጹ አባላት"
+    }
+  },
+  "members": {
+    "title": "የ1-10 አባላት",
+    "subtitle": "በማህበራት መካከል ያሉ የ1-10 ቡድን አባላትን ይፈልጉ እና ያስተዳድሩ",
+    "cardTitle": "የአባላት መዝገቦች",
+    "searchPlaceholder": "በስም፣ በስልክ ወይም በማህበር ይፈልጉ...",
+    "showing": "ከ {total} ውስጥ {from}-{to} እያሳየ ነው",
+    "filters": {
+      "allSubCities": "ሁሉም ክፍለ ከተሞች",
+      "allWoredas": "ሁሉም ወረዳዎች"
+    },
+    "table": {
+      "fullName": "ሙሉ ስም",
+      "phone": "ስልክ",
+      "association": "ማህበር",
+      "location": "አድራሻ",
+      "group": "ቡድን / ተ.ቁ",
+      "groupCell": "ቡድን {group} / {serial}",
+      "actions": "እርምጃዎች",
+      "loading": "በመጫን ላይ...",
+      "noRecords": "ምንም የአባል መዝገብ አልተገኘም።"
+    },
+    "actions": {
+      "edit": "አባል አርም",
+      "delete": "አባል ሰርዝ",
+      "viewAssociation": "ማህበር ይመልከቱ"
+    },
+    "delete": {
+      "title": "አባል ሰርዝ",
+      "description": "እርግጠኛ ነዎት {name}ን መሰረዝ ይፈልጋሉ? ይህ እርምጃ አይተካልም።",
+      "cancel": "ይሰረዝ",
+      "confirm": "ሰርዝ"
+    },
+    "messages": {
+      "deleted": "አባል ተሰርዟል",
+      "deleteError": "አባል መሰረዝ አልተቻለም"
+    },
+    "form": {
+      "title": "አባል አርም",
+      "description": "የአባሉን ዝርዝሮች ያዘምኑ ወይም ወደ ሌላ ቡድን ይውሰዱ።",
+      "fields": {
+        "fullName": "ሙሉ ስም",
+        "phone": "ስልክ ቁጥር",
+        "group": "ቡድን",
+        "serial": "ተ.ቁ"
+      },
+      "placeholders": {
+        "fullName": "ሙሉ ስም...",
+        "phone": "09...",
+        "group": "ቡድን ይምረጡ",
+        "serial": "ቦታ ይምረጡ"
+      },
+      "groupOption": "ቡድን {number}",
+      "errors": {
+        "nameRequired": "ሙሉ ስም ያስፈልጋል",
+        "groupRequired": "ቡድን እና ተ.ቁ ያስፈልጋሉ",
+        "duplicateCheckFailed": "የስልክ ቁጥር ማደግን ማረጋገጥ አልተቻለም"
+      },
+      "buttons": {
+        "cancel": "ይሰረዝ",
+        "save": "አስቀምጥ"
+      },
+      "messages": {
+        "saved": "አባል ተዘምኗል",
+        "error": "አባል ማዘመን አልተቻለም"
+      }
+    },
+    "duplicate": {
+      "title": "ሊሆን የሚችል የተባዛ አባል",
+      "description": "በዚህ ማህበር ውስጥ በዚህ የስልክ ቁጥር ያለው አባል አስቀድሞ አለ። ሁለት ሰዎች በአንድ የቤት ስልክ ሊጋሩ ይችላሉ። ሆኖም ቢሆን ማስገባት ይፈልጋሉ?",
+      "cancel": "ይሰረዝ",
+      "confirm": "ሁሉም እንደሆነ ጨምር"
     }
   },
   "technologySupport": {

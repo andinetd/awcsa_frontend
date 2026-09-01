@@ -16,7 +16,30 @@
       "supportServices": "Support Services",
       "activeInterventions": "Active Interventions",
       "monthlyReports": "Monthly Reports",
-      "associations": "Associations"
+      "associations": "Associations",
+      "total": "Total Associations",
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "incomplete": "Incomplete"
+    },
+    "bySubCity": {
+      "title": "Associations by Sub-city",
+      "subCity": "Sub-city",
+      "total": "Total",
+      "approved": "Approved",
+      "members": "Members",
+      "loading": "Loading...",
+      "empty": "No data yet."
+    },
+    "totals": {
+      "title": "Module Totals",
+      "declaredMembers": "Declared members (sum)",
+      "registeredMembers": "Registered 1-to-10 members",
+      "totalGroups": "1-to-10 groups",
+      "approved": "Approved associations",
+      "viewList": "View all associations →"
     },
     "activity": {
       "title": "Recent Activity",
@@ -27,7 +50,9 @@
       "title": "Quick Actions",
       "womenProfiles": "Women Profiles",
       "supportServices": "Support Services",
-      "caseManagement": "Case Management"
+      "caseManagement": "Case Management",
+      "associations": "Associations",
+      "members": "1-to-10 Members"
     }
   },
   "womenList": {
@@ -197,6 +222,8 @@
     "associationStatus": "Status",
     "format": "Format",
     "columns": "Columns to Include",
+    "includeMembers": "Include 1-to-10 members (name & phone)",
+    "includeMembersHint": "Adds each member with their phone number to the report. Applies to both Excel and PDF.",
     "buttons": {
       "generate": "Generate Report",
       "download": "Download Report"
@@ -334,7 +361,9 @@
         "establishmentDate": "Establishment Date",
         "objective": "Objective",
         "leaderFullName": "Full Name",
-        "leaderPhone": "Phone Number"
+        "leaderPhone": "Phone Number",
+        "memberFullName": "Full Name",
+        "memberPhone": "Phone Number"
       },
       "placeholders": {
         "name": "Enter association name...",
@@ -346,7 +375,9 @@
         "totalMembers": "0",
         "objective": "Association objective...",
         "leaderFullName": "Full name...",
-        "leaderPhone": "09..."
+        "leaderPhone": "09...",
+        "memberFullName": "Full name...",
+        "memberPhone": "09..."
       },
       "types": {
         "ASSOCIATION": "Association",
@@ -361,15 +392,7 @@
         "success": "Association saved successfully",
         "error": "Failed to save association"
       },
-      "lockedNotice": "This record is locked — only drafts can be edited.",
-      "fields": {
-        "memberFullName": "Full Name",
-        "memberPhone": "Phone Number"
-      },
-      "placeholders": {
-        "memberFullName": "Full name...",
-        "memberPhone": "09..."
-      }
+      "lockedNotice": "This record is locked — only drafts can be edited."
     },
     "members": {
       "title": "\"1-to-10\" Group Members",
@@ -385,6 +408,29 @@
       "messages": {
         "success": "Members saved successfully",
         "error": "Failed to save members"
+      }
+    },
+    "groups": {
+      "count": "{count} of {max} groups",
+      "empty": "No 1-to-10 groups have been added yet.",
+      "addButton": "Add Group",
+      "addTitle": "Add a 1-to-10 group",
+      "addDescription": "A new group (number {number}) will be added to this association.",
+      "rename": "Rename",
+      "renameTitle": "Rename group",
+      "renameDescription": "Provide a new label for group {number}.",
+      "delete": "Delete",
+      "deleteTitle": "Delete group",
+      "deleteDescription": "Are you sure you want to delete group {number}? This action cannot be undone.",
+      "deleteBlocked": "Group {number} has {count} member(s) assigned. Remove all members from this group before deleting it.",
+      "nameLabel": "Group name",
+      "namePlaceholder": "e.g. Group A",
+      "messages": {
+        "added": "Group added",
+        "renamed": "Group renamed",
+        "deleted": "Group deleted",
+        "error": "Group operation failed",
+        "deleteError": "Failed to delete group"
       }
     },
     "workflow": {
@@ -433,6 +479,7 @@
       "error": "Record not found",
       "goBack": "Go Back",
       "edit": "Edit",
+      "auditTrail": "View audit trail",
       "generalInfo": "General Information",
       "location": "Location",
       "leader": "Leadership",
@@ -441,9 +488,99 @@
       "totalMembersDeclared": "Declared Total",
       "supportRecords": "Support Records"
     },
+    "filteredBySubCity": "Filtered by sub-city: {subCity}",
+    "clearFilter": "Clear filter",
+    "report": {
+      "button": "Reports",
+      "menuLabel": "Download or print this association",
+      "printableForm": "Printable Form (PDF)",
+      "detailedReport": "Detailed Report (PDF)",
+      "pdf": "Detailed PDF",
+      "excel": "Excel Workbook",
+      "messages": {
+        "excel": "Excel download started",
+        "pdf": "PDF download started",
+        "printable_form": "Printable form opened",
+        "detailed_report": "Detailed report downloaded",
+        "error": "Failed to generate report"
+      }
+    },
     "stats": {
       "total": "Total Associations",
       "declaredMembers": "Declared Members"
+    }
+  },
+  "members": {
+    "title": "1-to-10 Members",
+    "subtitle": "Search and manage 1-to-10 group members across associations",
+    "cardTitle": "Member Records",
+    "searchPlaceholder": "Search by name, phone, or association...",
+    "showing": "Showing {from}-{to} of {total}",
+    "filters": {
+      "allSubCities": "All Sub-cities",
+      "allWoredas": "All Woredas"
+    },
+    "table": {
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "association": "Association",
+      "location": "Location",
+      "group": "Group / Serial",
+      "groupCell": "Group {group} / {serial}",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "noRecords": "No member records found."
+    },
+    "actions": {
+      "edit": "Edit member",
+      "delete": "Delete member",
+      "viewAssociation": "View association"
+    },
+    "delete": {
+      "title": "Delete member",
+      "description": "Are you sure you want to delete {name}? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "messages": {
+      "deleted": "Member deleted",
+      "deleteError": "Failed to delete member"
+    },
+    "form": {
+      "title": "Edit member",
+      "description": "Update the member's details or move them to another group slot.",
+      "fields": {
+        "fullName": "Full Name",
+        "phone": "Phone Number",
+        "group": "Group",
+        "serial": "Serial No."
+      },
+      "placeholders": {
+        "fullName": "Full name...",
+        "phone": "09...",
+        "group": "Select a group",
+        "serial": "Select a slot"
+      },
+      "groupOption": "Group {number}",
+      "errors": {
+        "nameRequired": "Full name is required",
+        "groupRequired": "Group and serial number are required",
+        "duplicateCheckFailed": "Failed to check for duplicate phone numbers"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "messages": {
+        "saved": "Member updated",
+        "error": "Failed to update member"
+      }
+    },
+    "duplicate": {
+      "title": "Possible duplicate member",
+      "description": "A member with this phone number already exists in this association. Two people may legitimately share a phone number (for example a household phone). Do you want to add this member anyway?",
+      "cancel": "Cancel",
+      "confirm": "Add anyway"
     }
   },
   "technologySupport": {

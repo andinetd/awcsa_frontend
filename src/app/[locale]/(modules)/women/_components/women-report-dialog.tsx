@@ -142,6 +142,7 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
   const [associationStatus, setAssociationStatus] = useState("all");
   const [associationTypeFilter, setAssociationTypeFilter] = useState("all");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
+  const [includeMembers, setIncludeMembers] = useState(false);
 
   const availableColumns = COLUMNS_BY_CATEGORY[category];
   const [selectedColumns, setSelectedColumns] = useState<string[] | null>(null);
@@ -149,8 +150,7 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
 
   const handleColumnToggle = (columnId: string) => {
     setSelectedColumns(() => {
-      const current =
-        selectedColumns ?? availableColumns;
+      const current = selectedColumns ?? availableColumns;
       return current.includes(columnId)
         ? current.filter((id) => id !== columnId)
         : [...current, columnId];
@@ -541,6 +541,29 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
                 </Select>
               </div>
             </>
+          )}
+
+          {category === "ASSOCIATION" && (
+            <div className="flex items-start space-x-2 rounded-md border p-3 bg-slate-50/40">
+              <Checkbox
+                id="include-members"
+                checked={includeMembers}
+                onCheckedChange={(checked) =>
+                  setIncludeMembers(checked === true)
+                }
+              />
+              <div className="space-y-1 leading-none">
+                <Label
+                  htmlFor="include-members"
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  {t("report.includeMembers")}
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  {t("report.includeMembersHint")}
+                </p>
+              </div>
+            </div>
           )}
 
           <div className="space-y-2">
