@@ -22,8 +22,7 @@
     "quickActions": {
       "title": "Quick Actions",
       "registerBeneficiary": "Register Beneficiary",
-      "viewElderly": "View Elderly",
-      "viewDisabled": "View Disabled",
+      "viewBeneficiaries": "View Beneficiaries",
       "viewWomen": "View Women",
       "manageEdirs": "Manage Edirs",
       "viewTrainings": "View Trainings",

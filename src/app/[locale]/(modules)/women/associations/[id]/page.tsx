@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useGetWomenAssociationByIdQuery } from "@/hooks/womens";
+import { useAuthStore } from "@/stores/auth-store";
 import WomenAssociationForm from "../_components/women-association-form";
 import AssociationMembersManager from "../_components/association-members-manager";
 import { AssociationWorkflowPanel } from "../_components/association-workflow";
+import AssociationReportMenu from "../_components/association-report-menu";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ChevronLeft, Pencil, Users } from "lucide-react";
+import { Loader2, ChevronLeft, Pencil, Users, ClipboardList } from "lucide-react";
 
 const STATUS_STYLES: Record<string, string> = {
   DRAFT: "bg-slate-100 text-slate-700",
@@ -29,11 +31,21 @@ export default function AssociationDetailPage() {
   const router = useRouter();
   const params = useParams();
   const recordId = Number(params?.id);
+  const userRole = useAuthStore((s) => s.userRole);
 
   const { data: response, isLoading } = useGetWomenAssociationByIdQuery(recordId);
   const record = response?.data;
 
   const [editOpen, setEditOpen] = useState(false);
+
+  const openAuditTrail = () => {
+    if (!record) return;
+    const params = new URLSearchParams({
+      entityType: "WomenAssociation",
+      entityId: String(record.id),
+    });
+    router.push(`/super-admin/audit-logs?${params.toString()}`);
+  };
 
   useEffect(() => {
     if (!isLoading && record) {
@@ -88,12 +100,25 @@ export default function AssociationDetailPage() {
             </p>
           </div>
         </div>
-        {record.approvalStatus === "DRAFT" && (
-          <Button className="gap-2" onClick={() => setEditOpen(true)}>
-            <Pencil className="w-4 h-4" />
-            {t("detail.edit")}
-          </Button>
-        )}
+        <div className="flex items-center gap-2 flex-wrap">
+          {record.approvalStatus === "DRAFT" && (
+            <Button className="gap-2" onClick={() => setEditOpen(true)}>
+              <Pencil className="w-4 h-4" />
+              {t("detail.edit")}
+            </Button>
+          )}
+          {userRole === "Super_Admin" && (
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={openAuditTrail}
+            >
+              <ClipboardList className="w-4 h-4" />
+              {t("detail.auditTrail")}
+            </Button>
+          )}
+          <AssociationReportMenu associationId={record.id} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -175,6 +200,8 @@ export default function AssociationDetailPage() {
         <AssociationMembersManager
           associationId={record.id}
           members={record.oneToTenMembers}
+          groups={record.groups}
+          approvalStatus={record.approvalStatus}
         />
 
         <AssociationWorkflowPanel record={record} />

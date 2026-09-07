@@ -68,7 +68,6 @@ import { useTranslations } from "next-intl";
 
 export default function BeneficiaryReportDialog() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.reports");
-  const commonT = useTranslations("components.DataTableColumnHeader");
   const [open, setOpen] = useState(false);
   const { mutate: generateReport, isPending } =
     useGenerateBeneficiaryReportMutation();

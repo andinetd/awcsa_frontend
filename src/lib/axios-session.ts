@@ -4,6 +4,7 @@ import {
   refreshAccessToken,
 } from "@/api/auth/auth";
 import type { ClientSignInResponse } from "@/types/api/auth";
+import { isPublicAuthPath } from "@/lib/auth-routes";
 
 let interceptorId: number | null = null;
 let refreshPromise: Promise<ClientSignInResponse | null> | null = null;
@@ -82,7 +83,10 @@ export function setupAuthInterceptor(): void {
 
       useAuthStore.getState().logout();
 
-      if (!window.location.pathname.endsWith("/login")) {
+      // `pathname` is locale-prefixed (e.g. "/en/women/associations/8"), so a
+      // naive `endsWith("/login")` check would always be false. Use the
+      // shared isPublicAuthPath helper which strips the locale internally.
+      if (!isPublicAuthPath(window.location.pathname)) {
         window.location.assign("/login");
       }
 

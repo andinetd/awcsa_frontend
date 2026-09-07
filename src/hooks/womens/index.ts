@@ -15,6 +15,10 @@ import {
   GenerateWomenReportPayload,
 } from "@/api/womens/generateWomenReport";
 import {
+  generateAssociationReport,
+  AssociationReportFormat,
+} from "@/api/womens/associationReport";
+import {
   getTechnologySupport,
   getTechnologySupportById,
   registerTechnologySupport,
@@ -56,10 +60,21 @@ import {
   uploadAssociationDocument,
   submitAssociation,
   reviewAssociation,
+  getAssociationGroups,
+  addAssociationGroup,
+  renameAssociationGroup,
+  deleteAssociationGroup,
+  listMembers,
+  updateMember,
+  moveMember,
+  deleteMember,
+  checkMemberDuplicate,
+  getAssociationDashboard,
   CreateWomenAssociationPayload,
   UpdateWomenAssociationPayload,
   WomenAssociationMember,
   WomenAssociationDocumentType,
+  WomenAssociationGroup,
 } from "@/api/womens/associations";
 
 // ─── Profiles ──────────────────────────────────────────────────
@@ -116,6 +131,15 @@ export const useUpdateWomenProfileStatusMutation = () => {
 export const useGenerateWomenReportMutation = () => {
   return useMutation({
     mutationFn: (payload: GenerateWomenReportPayload) => generateWomenReport(payload),
+  });
+};
+
+export const useGenerateAssociationReportMutation = () => {
+  return useMutation({
+    mutationFn: (payload: {
+      associationId: number;
+      format: AssociationReportFormat;
+    }) => generateAssociationReport(payload),
   });
 };
 
@@ -432,5 +456,147 @@ export const useReviewAssociationMutation = () => {
         queryKey: ["women-association", variables.id],
       });
     },
+  });
+};
+
+// ─── Groups ────────────────────────────────────────────────────
+
+export const useGetAssociationGroupsQuery = (associationId: number) => {
+  return useQuery({
+    queryKey: ["women-association-groups", associationId],
+    queryFn: () => getAssociationGroups(associationId),
+    enabled: !!associationId,
+  });
+};
+
+export const useAddAssociationGroupMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { id: number; groupNumber: number; name?: string }) =>
+      addAssociationGroup(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["women-association-groups", variables.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["women-association", variables.id],
+      });
+    },
+  });
+};
+
+export const useRenameAssociationGroupMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: {
+      id: number;
+      groupId: number;
+      name: string | null;
+    }) => renameAssociationGroup(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["women-association-groups", variables.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["women-association", variables.id],
+      });
+    },
+  });
+};
+
+export const useDeleteAssociationGroupMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { id: number; groupId: number }) =>
+      deleteAssociationGroup(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["women-association-groups", variables.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["women-association", variables.id],
+      });
+    },
+  });
+};
+
+// ─── Members (cross-association) ───────────────────────────────
+
+export const useListMembersQuery = (params?: {
+  search?: string;
+  phone?: string;
+  associationId?: number;
+  groupId?: number;
+  subCity?: string;
+  woreda?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: ["women-members", params],
+    queryFn: () => listMembers(params),
+  });
+};
+
+export const useUpdateMemberMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { id: number; fullName: string; phoneNumber?: string }) =>
+      updateMember(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["women-members"] });
+      queryClient.invalidateQueries({
+        queryKey: ["women-association-members", variables.id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["women-association"] });
+    },
+  });
+};
+
+export const useMoveMemberMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: {
+      id: number;
+      toGroupId: number;
+      toSerialNumber: number;
+    }) => moveMember(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["women-members"] });
+      queryClient.invalidateQueries({ queryKey: ["women-association"] });
+    },
+  });
+};
+
+export const useDeleteMemberMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => deleteMember(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["women-members"] });
+      queryClient.invalidateQueries({ queryKey: ["women-association"] });
+    },
+  });
+};
+
+export const useCheckMemberDuplicateMutation = () => {
+  return useMutation({
+    mutationFn: (payload: {
+      phone: string;
+      associationId: number;
+      excludeMemberId?: number;
+    }) => checkMemberDuplicate(payload),
+  });
+};
+
+// ─── Dashboard & Audit (FR-12 / FR-16) ─────────────────────────
+
+export const useGetAssociationDashboardQuery = (params?: {
+  subCity?: string;
+  woreda?: string;
+}) => {
+  return useQuery({
+    queryKey: ["women-association-dashboard", params],
+    queryFn: () => getAssociationDashboard(params),
   });
 };

@@ -17,6 +17,7 @@ import { useGetWomenProfilesQuery, useGetTechnologySupportQuery, useGetWomenTrai
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import WomenAssociationDashboard from "../_components/women-association-dashboard";
 
 const chartData = [
   { day: 1, value: 10 },
@@ -139,19 +140,7 @@ const WomenDashboard = () => {
           <h2 className="text-xl font-semibold text-zinc-900">
             {t("dashboard.activity.title")}
           </h2>
-          <div className="min-h-[400px] rounded-xl border border-zinc-200 bg-white p-6 flex flex-col items-center justify-center text-center space-y-3">
-            <div className="p-4 bg-zinc-50 rounded-full">
-              <Users className="w-8 h-8 text-zinc-400" />
-            </div>
-            <div>
-              <p className="text-zinc-900 font-medium">
-                {t("dashboard.activity.communityRegistry")}
-              </p>
-              <p className="text-sm text-zinc-500">
-                {t("dashboard.activity.description")}
-              </p>
-            </div>
-          </div>
+          <WomenAssociationDashboard />
         </div>
 
         <div className="space-y-4">
@@ -166,6 +155,24 @@ const WomenDashboard = () => {
               >
                 <Users className="w-4 h-4 text-zinc-500" />
                 {t("dashboard.quickActions.womenProfiles")}
+              </Button>
+            </Link>
+            <Link href="/women/associations" className="block">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3 h-12 text-zinc-700"
+              >
+                <Landmark className="w-4 h-4 text-zinc-500" />
+                {t("dashboard.quickActions.associations")}
+              </Button>
+            </Link>
+            <Link href="/women/members" className="block">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3 h-12 text-zinc-700"
+              >
+                <Users className="w-4 h-4 text-zinc-500" />
+                {t("dashboard.quickActions.members")}
               </Button>
             </Link>
             <Link href="/women/services" className="block">

@@ -27,6 +27,8 @@ export const getAuditLogs = async (
     if (filters.userId) queryParams.append("userId", filters.userId.toString());
     if (filters.entityType)
       queryParams.append("entityType", filters.entityType);
+    if (filters.entityId !== undefined)
+      queryParams.append("entityId", filters.entityId.toString());
     if (filters.action) queryParams.append("action", filters.action);
     if (filters.startDate) queryParams.append("startDate", filters.startDate);
     if (filters.endDate) queryParams.append("endDate", filters.endDate);

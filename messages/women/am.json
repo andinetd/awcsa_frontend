@@ -493,15 +493,11 @@
     "report": {
       "button": "ሪፖርቶች",
       "menuLabel": "ይህንን ማህበር ያውርዱ ወይም ያትሙ",
-      "printableForm": "ሊታተም የሚችል ቅጽ (PDF)",
-      "detailedReport": "ዝርዝር ሪፖርት (PDF)",
       "pdf": "ዝርዝር PDF",
       "excel": "የ Excel ዎርክቡክ",
       "messages": {
         "excel": "የ Excel አውርዷል",
         "pdf": "የ PDF አውርዷል",
-        "printable_form": "ሊታተም የሚችል ቅጽ ተከፍቷል",
-        "detailed_report": "ዝርዝር ሪፖርት አውርዷል",
         "error": "ሪፖርት ማመንጨት አልተቻለም"
       }
     },

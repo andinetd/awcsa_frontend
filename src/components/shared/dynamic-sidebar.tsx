@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
+import { LOGIN_ROUTE } from "@/lib/auth-routes";
 import { getSidebarItems } from "@/utils/sidebar-helpers";
 import { NavigationItem, NavigationSection } from "@/utils/sidebar-config";
 import {
@@ -36,6 +37,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { BeneficiaryRegisterTrigger } from "./beneficiary-register-trigger";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -242,13 +244,22 @@ function SidebarSection({ section, pathname, t }: SidebarSectionProps) {
     });
   };
 
+  const labelText = t.has(`sections.${section.title}`)
+    ? t(`sections.${section.title}`)
+    : section.title;
+
+  const showRegisterTrigger = (section.items || []).some(
+    (item) => item.showRegisterTrigger,
+  );
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="px-3 pt-3 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/45">
-        {t.has(`sections.${section.title}`)
-          ? t(`sections.${section.title}`)
-          : section.title}
-      </SidebarGroupLabel>
+      <div className="flex items-center justify-between px-3 pt-3">
+        <SidebarGroupLabel className="px-0 pt-0 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/45">
+          {labelText}
+        </SidebarGroupLabel>
+        {showRegisterTrigger && <BeneficiaryRegisterTrigger />}
+      </div>
       <SidebarGroupContent>
         <SidebarMenu>
           {(section.items || []).map((item, index) => (
@@ -286,7 +297,7 @@ export function DynamicSidebar() {
   const handleLogout = async () => {
     try {
       logout({ notifyServer: true });
-      router.push("/login");
+      router.replace(LOGIN_ROUTE);
     } catch (error) {
       console.error("Logout failed:", error);
     }

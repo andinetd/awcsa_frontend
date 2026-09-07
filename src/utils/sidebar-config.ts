@@ -1,5 +1,4 @@
 import {
-  Accessibility,
   Baby,
   Briefcase,
   Building,
@@ -12,6 +11,7 @@ import {
   LayoutDashboard,
   LucideIcon,
   MessageSquareText,
+  Search,
   Settings2,
   ShieldCheck,
   UserRoundCog,
@@ -25,6 +25,7 @@ export interface NavigationItem {
   icon: LucideIcon;
   orgType?: string[];
   children?: NavigationItem[];
+  showRegisterTrigger?: boolean;
 }
 
 export interface NavigationSection {
@@ -113,19 +114,9 @@ export const sidebarConfig: Record<
       items: [
         {
           title: "Beneficiaries",
+          url: "/social-affairs/elderly-and-disabled/beneficiaries",
           icon: Users,
-          children: [
-            {
-              title: "Disabled Persons",
-              url: "/social-affairs/elderly-and-disabled/beneficiaries/disabled",
-              icon: Accessibility,
-            },
-            {
-              title: "Elderly Persons",
-              url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
-              icon: Users,
-            },
-          ],
+          showRegisterTrigger: true,
         },
         {
           title: "Support Services",
@@ -157,6 +148,7 @@ export const sidebarConfig: Record<
         { title: "Training", url: "/women/training", icon: GraduationCap },
         { title: "Employment", url: "/women/employment", icon: Briefcase },
         { title: "Associations", url: "/women/associations", icon: Users },
+        { title: "1-to-10 Members", url: "/women/members", icon: Users },
       ],
     },
   ],
@@ -251,7 +243,7 @@ export const sidebarConfig: Record<
             },
             {
               title: "Elderly & Disabled",
-              url: "/social-affairs/elderly-and-disabled/beneficiaries/elderly",
+              url: "/social-affairs/elderly-and-disabled/beneficiaries",
               icon: Users,
             },
           ],
@@ -267,6 +259,7 @@ export const sidebarConfig: Record<
             { title: "Training", url: "/women/training", icon: GraduationCap },
             { title: "Employment", url: "/women/employment", icon: Briefcase },
             { title: "Associations", url: "/women/associations", icon: Users },
+            { title: "1-to-10 Members", url: "/women/members", icon: Users },
           ],
         },
         {

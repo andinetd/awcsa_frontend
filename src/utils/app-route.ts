@@ -9,7 +9,7 @@ export const moduleAndRouteMap = (deputyBureau: DeputyBureau): string => {
       // return "/adoption/dashboard";
       return "/care-centers-portal";
     case "SOCIAL_AFFAIRS":
-      return "/social-affairs/socials/dashboard";
+      return "/social-affairs/dashboard";
     case "EDIR":
       return "/social-affairs/edir/dashboard";
     case "SUPER_ADMIN":

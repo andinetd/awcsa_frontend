@@ -2,16 +2,18 @@
 
 import { useCallback, useRef, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { refreshAccessToken } from "@/api/auth/auth";
+import { LOGIN_ROUTE } from "@/lib/auth-routes";
 
 export type WarningReason = "token" | "inactivity";
 
 export function useSessionWarning() {
   const t = useTranslations("components.session");
   const router = useRouter();
+  const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState<WarningReason>("token");
@@ -40,9 +42,12 @@ export function useSessionWarning() {
       if (message) {
         toast.error(message, { duration: 5000 });
       }
-      router.replace("/login");
+      // Avoid a self-redirect if the user is already on the login page.
+      if (pathname !== LOGIN_ROUTE) {
+        router.replace(LOGIN_ROUTE);
+      }
     },
-    [clearCountdown, router],
+    [clearCountdown, router, pathname],
   );
 
   const attemptRefresh = useCallback(async (): Promise<boolean> => {
@@ -95,6 +100,10 @@ export function useSessionWarning() {
   /** Start the warning countdown. Called by the session monitor. */
   const startWarning = useCallback(
     (warnReason: WarningReason, seconds: number) => {
+      // Don't open the warning modal on the login page — the user is already
+      // logging in or just logged out, and re-redirecting would loop.
+      if (pathname === LOGIN_ROUTE) return;
+
       clearCountdown();
       setReason(warnReason);
       setSecondsLeft(seconds);
@@ -117,7 +126,7 @@ export function useSessionWarning() {
         });
       }, 1000);
     },
-    [clearCountdown, logout, t],
+    [clearCountdown, logout, t, pathname],
   );
 
   // Cleanup on unmount

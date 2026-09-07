@@ -2,6 +2,12 @@
   "auditLogs": {
     "title": "የኦዲት መዝገቦች",
     "description": "የስርዓት እንቅስቃሴዎችን እና የተጠቃሚ እርምጃዎችን ይቆጣጠሩ።",
+    "filterBanner": {
+      "label": "ተመርቷል በሚከተለው፡",
+      "entityType": "የአካል ዓይነት፡ {value}",
+      "entityId": "የአካል መታወቂያ፡ {value}",
+      "clear": "ማጣሪያ አጽዳ"
+    },
     "table": {
       "time": "ጊዜ",
       "level": "ደረጃ",

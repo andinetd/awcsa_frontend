@@ -22,8 +22,7 @@
     "quickActions": {
       "title": "ፈጣን እርምጃዎች",
       "registerBeneficiary": "ተጠቃሚ ምዝገባ",
-      "viewElderly": "አረጋውያንን ይመልከቱ",
-      "viewDisabled": "የአካል ጉዳተኞችን ይመልከቱ",
+      "viewBeneficiaries": "ተጠቃሚዎችን ይመልከቱ",
       "viewWomen": "ሴቶችን ይመልከቱ",
       "manageEdirs": "እድሮችን ያስተዳድሩ",
       "viewTrainings": "ስልጠናዎችን ይመልከቱ",

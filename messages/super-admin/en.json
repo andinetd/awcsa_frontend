@@ -2,6 +2,12 @@
   "auditLogs": {
     "title": "Audit Logs",
     "description": "Monitor system activities and user actions.",
+    "filterBanner": {
+      "label": "Filtered by:",
+      "entityType": "Entity type: {value}",
+      "entityId": "Entity ID: {value}",
+      "clear": "Clear filter"
+    },
     "table": {
       "time": "Time",
       "level": "Level",

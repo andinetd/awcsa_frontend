@@ -1,9 +1,10 @@
 "use client";
 import { useAuthStore } from "@/stores/auth-store";
 import { DeputyBureau } from "@/types/api/auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import CheckingAccess from "./shared/access-check-ui";
+import { LOGIN_ROUTE, isPublicAuthPath } from "@/lib/auth-routes";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -13,6 +14,8 @@ interface AuthProviderProps {
 const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
   const { user, department, hydrated, orgUnit } = useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
+  const isPublic = isPublicAuthPath(pathname);
 
   useEffect(() => {
     if (!hydrated) {
@@ -20,20 +23,16 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
       return;
     }
 
-    console.log(
-      "Hydrated:",
-      hydrated,
-      "User:",
-      user?.email,
-      "OrgUnit:",
-      orgUnit?.deputyBureau,
-      "Allowed:",
-      allowedRoles,
-    );
+    // Skip the auth gate on public auth pages — calling `router.replace` from
+    // the login page back to the login page would otherwise cause a render
+    // loop and prevent the form from ever showing.
+    if (isPublic) {
+      return;
+    }
 
     if (!user) {
       useAuthStore.getState().logout();
-      router.replace("/login");
+      router.replace(LOGIN_ROUTE);
       return;
     }
 
@@ -55,18 +54,12 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
         router.replace("/unauthorized");
       }
     }
-  }, [hydrated, user, department, allowedRoles, router]);
-
-  console.log(
-    "AuthProvider Rendering - Hydrated:",
-    hydrated,
-    "User:",
-    user?.email,
-    "Allowed:",
-    allowedRoles,
-  );
+  }, [hydrated, user, department, allowedRoles, router, isPublic]);
 
   if (!hydrated) {
+    // Public auth pages should render immediately, even before hydration, so
+    // the user never sees a blank/loading screen when they click "Login".
+    if (isPublic) return <>{children}</>;
     return <CheckingAccess />;
   }
 

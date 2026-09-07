@@ -187,7 +187,11 @@ export const useAuthStore = create<AuthState>()(
         if (opts?.notifyServer && token) {
           logoutApi(token);
         }
-        Cookies.remove("wcasf_auth_token");
+        // `js-cookie` v3 defaults the removal path to the current page path
+        // rather than the cookie's original `path: "/"`, so a bare
+        // `Cookies.remove(name)` silently fails for cookies set at "/". Pass
+        // the matching `path` to actually clear the token from the browser.
+        Cookies.remove("wcasf_auth_token", { path: "/" });
         set({
           user: null,
           token: null,

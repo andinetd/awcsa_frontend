@@ -493,15 +493,11 @@
     "report": {
       "button": "Reports",
       "menuLabel": "Download or print this association",
-      "printableForm": "Printable Form (PDF)",
-      "detailedReport": "Detailed Report (PDF)",
       "pdf": "Detailed PDF",
       "excel": "Excel Workbook",
       "messages": {
         "excel": "Excel download started",
         "pdf": "PDF download started",
-        "printable_form": "Printable form opened",
-        "detailed_report": "Detailed report downloaded",
         "error": "Failed to generate report"
       }
     },

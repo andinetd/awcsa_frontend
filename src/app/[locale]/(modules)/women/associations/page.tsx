@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import {
   useGetWomenAssociationsQuery,
   useDeleteWomenAssociationMutation,
 } from "@/hooks/womens";
 import WomenAssociationForm from "./_components/women-association-form";
+import RowReportButton from "./_components/row-report-button";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,7 +78,18 @@ export default function AssociationsPage() {
   const [page, setPage] = useState(1);
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [subCityFilter, setSubCityFilter] = useState<string>("");
   const limit = 10;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const sub = params.get("subCity");
+    if (sub) {
+      setSubCityFilter(sub);
+      setSearch(sub);
+    }
+  }, []);
 
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -91,12 +103,17 @@ export default function AssociationsPage() {
           .filter(Boolean)
           .some((val) => val?.toLowerCase().includes(q)),
     );
+    if (subCityFilter) {
+      data = data.filter(
+        (rec) => rec.subCity?.toLowerCase() === subCityFilter.toLowerCase()
+      );
+    }
     if (filterType !== "all")
       data = data.filter((rec) => rec.type === filterType);
     if (filterStatus !== "all")
       data = data.filter((rec) => rec.approvalStatus === filterStatus);
     return data;
-  }, [records, search, filterType, filterStatus]);
+  }, [records, search, subCityFilter, filterType, filterStatus]);
 
   const totalItems = filteredData.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / limit));
@@ -141,6 +158,24 @@ export default function AssociationsPage() {
         <WomenReportDialog category="ASSOCIATION" />
         <WomenAssociationForm />
       </div>
+
+      {subCityFilter && (
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <span>
+            {t("filteredBySubCity", { subCity: subCityFilter })}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSubCityFilter("");
+              setSearch("");
+            }}
+          >
+            {t("clearFilter")}
+          </Button>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <StatChip label={t("stats.total")} value={records.length} tone="text-slate-900" />
@@ -245,6 +280,7 @@ export default function AssociationsPage() {
                           <Button variant="ghost" size="icon" onClick={() => router.push(`/women/associations/${rec.id}?edit=1`)}>
                             <Pencil className="w-4 h-4" />
                           </Button>
+                          <RowReportButton associationId={rec.id} />
                           <Button variant="ghost" size="icon" className="text-destructive"
                             onClick={() => { setDeleteId(rec.id); setDeleteOpen(true); }}>
                             <Trash2 className="w-4 h-4" />

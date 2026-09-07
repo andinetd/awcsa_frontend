@@ -145,27 +145,15 @@ export default function SocialRehabDashboard() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <Link
-              href="/social-affairs/elderly-and-disabled/beneficiaries/elderly"
+              href="/social-affairs/elderly-and-disabled/beneficiaries"
               className="block"
             >
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 h-12"
               >
-                <User className="w-4 h-4 text-zinc-500" />
-                {t("quickActions.viewElderly")}
-              </Button>
-            </Link>
-            <Link
-              href="/social-affairs/elderly-and-disabled/beneficiaries/disabled"
-              className="block"
-            >
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-3 h-12"
-              >
-                <Activity className="w-4 h-4 text-zinc-500" />
-                {t("quickActions.viewDisabled")}
+                <Users className="w-4 h-4 text-zinc-500" />
+                {t("quickActions.viewBeneficiaries")}
               </Button>
             </Link>
             <Link href="/women/profiles" className="block">
@@ -187,7 +175,7 @@ export default function SocialRehabDashboard() {
               </Button>
             </Link>
             <Link
-              href="/social-affairs/elderly-and-disabled/trainings"
+              href="/social-affairs/elderly-and-disabled/training"
               className="block"
             >
               <Button

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/auth-store";
+import { LOGIN_ROUTE } from "@/lib/auth-routes";
 import { Loader2, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -37,7 +38,7 @@ export default function UserInfoAndLogout() {
 
       toast.success(t("success"), { duration: 2000 });
 
-      router.replace(`/`);
+      router.replace(LOGIN_ROUTE);
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error(t("failed"), { duration: 4000 });

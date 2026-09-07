@@ -196,6 +196,7 @@ export interface AuditLogFilters {
   limit?: number;
   userId?: number;
   entityType?: string;
+  entityId?: number;
   action?: string;
   startDate?: string;
   endDate?: string;

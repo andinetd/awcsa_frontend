@@ -1,14 +1,32 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/shared/language-switcher";
-import { ShieldAlert, Home, ArrowLeft } from "lucide-react";
+import { ShieldAlert, Home, LogIn } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
+import { LOGIN_ROUTE } from "@/lib/auth-routes";
 
 export default function UnauthorizedPage() {
   const router = useRouter();
   const t = useTranslations("unauthorized");
+  const user = useAuthStore((s) => s.user);
+
+  // If the user landed here while unauthenticated (e.g., an expired
+  // session, or following a stale cookie), there's no useful information
+  // to display — bounce straight to the login form so they can recover.
+  useEffect(() => {
+    if (!user) {
+      router.replace(LOGIN_ROUTE);
+    }
+  }, [user, router]);
+
+  const handleSignIn = () => {
+    useAuthStore.getState().logout();
+    router.replace(LOGIN_ROUTE);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 relative px-4">
@@ -39,14 +57,14 @@ export default function UnauthorizedPage() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-8">
           <Button
-            variant="outline"
-            onClick={() => router.back()}
+            onClick={handleSignIn}
             className="w-full sm:w-44 h-11 hover:cursor-pointer"
           >
-            <ArrowLeft className="size-4" />
-            {t("goBack")}
+            <LogIn className="size-4" />
+            {t("signIn")}
           </Button>
           <Button
+            variant="outline"
             onClick={() => router.push("/")}
             className="w-full sm:w-44 h-11 hover:cursor-pointer"
           >
