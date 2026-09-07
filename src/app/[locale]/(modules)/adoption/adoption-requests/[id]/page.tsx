@@ -322,9 +322,7 @@ export default function AdoptionRequestReviewPage() {
       status: "RETURNED",
       comment: returnComment,
       fieldComments: fieldComments,
-      subCity: "Bole",
-      woreda: "01",
-    } as any;
+    };
 
     try {
       const res = await fetch(
@@ -448,9 +446,7 @@ export default function AdoptionRequestReviewPage() {
       status,
       comment: returnComment,
       fieldComments,
-      subCity: "Bole",
-      woreda: "01",
-    } as any;
+    };
 
     try {
       const res = await fetch(
@@ -497,8 +493,6 @@ export default function AdoptionRequestReviewPage() {
               },
               reviewInfo: {
                 remark: respBody.remark ?? prev.reviewInfo?.remark ?? null,
-                subCity: respBody.subCity ?? prev.reviewInfo?.subCity ?? null,
-                woreda: respBody.woreda ?? prev.reviewInfo?.woreda ?? null,
                 createdAt:
                   respBody.createdAt ?? prev.reviewInfo?.createdAt ?? null,
                 updatedAt: respBody.updatedAt ?? new Date().toISOString(),
@@ -528,6 +522,7 @@ export default function AdoptionRequestReviewPage() {
             );
           }
         } catch (e) {
+          // ignore update errors
           console.error("Error updating local application after submit:", e);
         }
       }
