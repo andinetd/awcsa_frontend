@@ -120,6 +120,17 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
     console.log("Submitting match:", payload);
 
     try {
+      await axios.put(
+        `${BASE_URL}/adoption/applications/${applicationIdNum}/approve`,
+        { status: "APPROVED" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
       const res = await axios.post(`${BASE_URL}/adoption/matches`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
