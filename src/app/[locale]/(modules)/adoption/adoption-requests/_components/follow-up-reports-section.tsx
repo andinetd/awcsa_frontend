@@ -15,6 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ClipboardList,
   CheckCircle2,
   Clock,
@@ -81,6 +88,17 @@ const FILTER_STATUSES: Array<FollowUpReportStatus | "ALL"> = [
   "UNDER_REVIEW",
   "REVIEWED",
   "REQUIRES_ACTION",
+];
+
+const REPORT_PERIOD_PRESETS = [
+  "Month 1 (1 Month Post-Placement)",
+  "Month 3 (3 Months Post-Placement)",
+  "Month 6 (6 Months Post-Placement)",
+  "Month 9 (9 Months Post-Placement)",
+  "Month 12 (1 Year Post-Placement)",
+  "Month 18 (1.5 Years Post-Placement)",
+  "Month 24 (2 Years Post-Placement)",
+  "Annual Review (Post-2 Years)",
 ];
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
@@ -379,8 +397,8 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
             </span>
           )}
         </div>
-        {/* Submit button — visible for non-completed matches */}
-        {matchStatus !== "COMPLETED" && matchStatus !== "TERMINATED" && (
+        {/* Submit button — visible only for client/parent, NOT officer */}
+        {!isOfficer && matchStatus !== "COMPLETED" && matchStatus !== "TERMINATED" && (
           <Button
             size="sm"
             onClick={() => setIsSubmitOpen(true)}
@@ -392,23 +410,50 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
         )}
       </div>
 
-      {/* Status filter pills */}
-      <div className="flex flex-wrap gap-1.5">
-        {FILTER_STATUSES.map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
-              statusFilter === s
-                ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
-            }`}
+      {/* Status filter dropdown */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
+            Filter:
+          </span>
+          <Select
+            value={statusFilter}
+            onValueChange={(val) =>
+              setStatusFilter(val as FollowUpReportStatus | "ALL")
+            }
           >
-            {s === "ALL"
-              ? "All"
-              : STATUS_CONFIG[s as FollowUpReportStatus].label}
-          </button>
-        ))}
+            <SelectTrigger className="h-8 w-52 text-xs bg-white border-slate-200">
+              <SelectValue placeholder="All Statuses" />
+            </SelectTrigger>
+            <SelectContent>
+              {FILTER_STATUSES.map((s) => {
+                const cfg =
+                  s === "ALL" ? null : STATUS_CONFIG[s as FollowUpReportStatus];
+                const Icon = cfg?.icon;
+                return (
+                  <SelectItem key={s} value={s} className="text-xs">
+                    <div className="flex items-center gap-2">
+                      {Icon && <Icon className="w-3.5 h-3.5 text-slate-500" />}
+                      <span>
+                        {s === "ALL" ? "All Reports" : cfg?.label}
+                      </span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        {statusFilter !== "ALL" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setStatusFilter("ALL")}
+            className="h-7 text-xs text-slate-500 hover:text-slate-900 cursor-pointer"
+          >
+            Reset filter
+          </Button>
+        )}
       </div>
 
       {/* Report list */}
@@ -450,16 +495,53 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
 
           <div className="space-y-4 py-2">
             <div>
-              <Label className="text-xs font-semibold text-slate-700 mb-1 block">
+              <Label htmlFor="report-period" className="text-xs font-semibold text-slate-700 mb-1 block">
                 Report Period <span className="text-rose-500">*</span>
               </Label>
-              <Input
-                placeholder="e.g. Q1 2026, January–March 2026, Month 6"
-                value={form.reportPeriod}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, reportPeriod: e.target.value }))
+              <Select
+                value={
+                  REPORT_PERIOD_PRESETS.includes(form.reportPeriod)
+                    ? form.reportPeriod
+                    : form.reportPeriod
+                    ? "CUSTOM"
+                    : undefined
                 }
-              />
+                onValueChange={(val) => {
+                  if (val === "CUSTOM") {
+                    setForm((f) => ({ ...f, reportPeriod: "" }));
+                  } else {
+                    setForm((f) => ({ ...f, reportPeriod: val }));
+                  }
+                }}
+              >
+                <SelectTrigger
+                  id="report-period"
+                  className="w-full bg-white border-slate-300 h-9 text-sm"
+                >
+                  <SelectValue placeholder="Select reporting period" />
+                </SelectTrigger>
+                <SelectContent>
+                  {REPORT_PERIOD_PRESETS.map((period) => (
+                    <SelectItem key={period} value={period} className="text-xs">
+                      {period}
+                    </SelectItem>
+                  ))}
+                  <SelectItem value="CUSTOM" className="text-xs">
+                    Other / Custom Period...
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {(!REPORT_PERIOD_PRESETS.includes(form.reportPeriod) ||
+                form.reportPeriod === "") && (
+                <Input
+                  className="mt-2"
+                  placeholder="e.g. Month 18, Mid-year update 2026..."
+                  value={form.reportPeriod}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, reportPeriod: e.target.value }))
+                  }
+                />
+              )}
             </div>
 
             {(
@@ -600,32 +682,48 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
 
               {/* Officer review fields */}
               <div>
-                <Label className="text-xs font-semibold text-slate-700 mb-1 block">
+                <Label
+                  htmlFor="review-status"
+                  className="text-xs font-semibold text-slate-700 mb-1.5 block"
+                >
                   Review Status
                 </Label>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    [
-                      "UNDER_REVIEW",
-                      "REVIEWED",
-                      "REQUIRES_ACTION",
-                    ] as FollowUpReportStatus[]
-                  ).map((s) => (
-                    <button
-                      key={s}
-                      onClick={() =>
-                        setReviewForm((f) => ({ ...f, status: s }))
-                      }
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-                        reviewForm.status === s
-                          ? STATUS_CONFIG[s].color + " border-current"
-                          : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-                      }`}
-                    >
-                      {STATUS_CONFIG[s].label}
-                    </button>
-                  ))}
-                </div>
+                <Select
+                  value={reviewForm.status}
+                  onValueChange={(val) =>
+                    setReviewForm((f) => ({
+                      ...f,
+                      status: val as FollowUpReportStatus,
+                    }))
+                  }
+                >
+                  <SelectTrigger
+                    id="review-status"
+                    className="w-full bg-white border-slate-300 h-9 text-sm"
+                  >
+                    <SelectValue placeholder="Select review status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(
+                      [
+                        "UNDER_REVIEW",
+                        "REVIEWED",
+                        "REQUIRES_ACTION",
+                      ] as FollowUpReportStatus[]
+                    ).map((s) => {
+                      const cfg = STATUS_CONFIG[s];
+                      const Icon = cfg.icon;
+                      return (
+                        <SelectItem key={s} value={s} className="text-xs">
+                          <div className="flex items-center gap-2">
+                            <Icon className="w-3.5 h-3.5 text-slate-500" />
+                            <span>{cfg.label}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>

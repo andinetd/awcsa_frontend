@@ -15,6 +15,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Plus,
   FileText,
   CheckCircle,
@@ -238,21 +245,53 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
           </div>
         </div>
 
-        {/* Category Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pt-4 mt-4 border-t border-slate-100 scrollbar-thin">
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => setSelectedCategory(cat.value)}
-              className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
-                selectedCategory === cat.value
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
+        {/* Category Filter Dropdown */}
+        <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-slate-100 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
+              Filter:
+            </span>
+            <Select
+              value={selectedCategory}
+              onValueChange={(val) => setSelectedCategory(val)}
             >
-              {cat.label}
-            </button>
-          ))}
+              <SelectTrigger className="h-8 w-56 text-xs bg-white border-slate-200">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => {
+                  const Icon =
+                    cat.value === "ALL"
+                      ? FileText
+                      : CATEGORY_ICONS[cat.value as PostMatchNoteCategory];
+                  return (
+                    <SelectItem
+                      key={cat.value}
+                      value={cat.value}
+                      className="text-xs"
+                    >
+                      <div className="flex items-center gap-2">
+                        {Icon && (
+                          <Icon className="w-3.5 h-3.5 text-slate-500" />
+                        )}
+                        <span>{cat.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+          {selectedCategory !== "ALL" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSelectedCategory("ALL")}
+              className="h-7 text-xs text-slate-500 hover:text-slate-900 cursor-pointer"
+            >
+              Reset filter
+            </Button>
+          )}
         </div>
       </div>
 
@@ -349,39 +388,47 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
             <div className="space-y-4 py-4">
               {/* Category Selector */}
               <div>
-                <Label htmlFor="category">
+                <Label
+                  htmlFor="category"
+                  className="text-xs font-semibold text-slate-700 mb-1.5 block"
+                >
                   {t("adoptionDetail.postMatch.category")}
                 </Label>
-                <select
-                  id="category"
+                <Select
                   value={noteCategory}
-                  onChange={(e) =>
-                    setNoteCategory(e.target.value as PostMatchNoteCategory)
+                  onValueChange={(val) =>
+                    setNoteCategory(val as PostMatchNoteCategory)
                   }
-                  className="w-full mt-1.5 px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 >
-                  <option value="GENERAL">
-                    {t("adoptionDetail.postMatch.categories.GENERAL")}
-                  </option>
-                  <option value="PLACEMENT_PROGRESS">
-                    {t("adoptionDetail.postMatch.categories.PLACEMENT_PROGRESS")}
-                  </option>
-                  <option value="HEALTH">
-                    {t("adoptionDetail.postMatch.categories.HEALTH")}
-                  </option>
-                  <option value="EDUCATION">
-                    {t("adoptionDetail.postMatch.categories.EDUCATION")}
-                  </option>
-                  <option value="LEGAL_NOTE">
-                    {t("adoptionDetail.postMatch.categories.LEGAL_NOTE")}
-                  </option>
-                  <option value="CONCERN_OR_INCIDENT">
-                    {t("adoptionDetail.postMatch.categories.CONCERN_OR_INCIDENT")}
-                  </option>
-                  <option value="OFFICIAL_REMARK">
-                    {t("adoptionDetail.postMatch.categories.OFFICIAL_REMARK")}
-                  </option>
-                </select>
+                  <SelectTrigger
+                    id="category"
+                    className="w-full bg-white border-slate-300 h-9 text-sm"
+                  >
+                    <SelectValue placeholder="Select note category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories
+                      .filter((c) => c.value !== "ALL")
+                      .map((cat) => {
+                        const Icon =
+                          CATEGORY_ICONS[cat.value as PostMatchNoteCategory];
+                        return (
+                          <SelectItem
+                            key={cat.value}
+                            value={cat.value}
+                            className="text-xs"
+                          >
+                            <div className="flex items-center gap-2">
+                              {Icon && (
+                                <Icon className="w-4 h-4 text-slate-500" />
+                              )}
+                              <span>{cat.label}</span>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Title Input */}
