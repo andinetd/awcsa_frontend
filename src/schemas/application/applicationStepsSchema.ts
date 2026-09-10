@@ -1,5 +1,18 @@
 import z from "zod";
 
+export function calculateApplicantAge(dobString?: string | null): number | null {
+  if (!dobString) return null;
+  const birthDate = new Date(dobString);
+  if (isNaN(birthDate.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
 export const ApplicationStepOneSchema = z.object({
   id: z.custom<File>((file) => file != null, {
     message: "Please select your ID document",
@@ -19,7 +32,17 @@ export const ApplicationStepOneSchema = z.object({
     .min(1, { message: "Date of birth is required" })
     .regex(/^\d{4}-\d{2}-\d{2}$/, {
       message: "Date of birth must be in YYYY-MM-DD format",
-    }),
+    })
+    .refine(
+      (val) => {
+        const age = calculateApplicantAge(val);
+        return age !== null && age >= 21 && age <= 60;
+      },
+      {
+        message:
+          "Applicant's age must be between 21 and 60 years old to apply for adoption.",
+      }
+    ),
   address: z.string().min(1, { message: "Address is required" }),
   educationLevel: z
     .string()
