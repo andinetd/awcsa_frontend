@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { Link } from "@/i18n/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -72,11 +73,78 @@ export type BackendAdoptionApplication = {
   hasHomeVisitForm?: boolean;
 };
 
-const AdoptionRequests = () => {
-  const [tab, setTab] = useState("pending");
+const VALID_ADOPTION_TABS = [
+  "pending",
+  "returned",
+  "pending_home_visit",
+  "pending_approval",
+  "matched",
+  "denied",
+];
+
+const TAB_STORAGE_KEY = "adoption_requests_active_tab";
+
+// Map backend statuses to tab values used in the UI
+const mapStatusToTab = (status: string) => {
+  switch ((status || "").toUpperCase()) {
+    case "PENDING_REVIEW":
+      return "pending";
+    case "PENDING_HOME_VISIT":
+      return "pending_home_visit";
+    case "PENDING_APPROVAL":
+      return "pending_approval";
+    case "MATCHED":
+      return "matched";
+    case "REJECTED":
+      return "denied";
+    case "RETURNED":
+      return "returned";
+    default:
+      return status?.toLowerCase() || "pending";
+  }
+};
+
+const AdoptionRequestsContent = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryTab = searchParams.get("tab");
+
+  const [tab, setTab] = useState(() => {
+    if (queryTab && VALID_ADOPTION_TABS.includes(queryTab)) {
+      return queryTab;
+    }
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem(TAB_STORAGE_KEY);
+      if (saved && VALID_ADOPTION_TABS.includes(saved)) {
+        return saved;
+      }
+    }
+    return "pending";
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const token = useAuthStore((s) => s.token);
   const t = useTranslations("adoption");
+
+  // Keep tab in sync if URL query parameter changes
+  useEffect(() => {
+    if (queryTab && VALID_ADOPTION_TABS.includes(queryTab) && queryTab !== tab) {
+      setTab(queryTab);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(TAB_STORAGE_KEY, queryTab);
+      }
+    }
+  }, [queryTab, tab]);
+
+  const handleTabChange = (newTab: string) => {
+    setTab(newTab);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(TAB_STORAGE_KEY, newTab);
+    }
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.set("tab", newTab);
+    router.replace(`?${currentParams.toString()}`, { scroll: false });
+  };
 
   const TABS = [
     { value: "pending", label: t("adoptionRequests.tabs.pending") },
@@ -145,26 +213,6 @@ const AdoptionRequests = () => {
       mounted = false;
     };
   }, [token, t]);
-
-  // Map backend statuses to tab values used in the UI
-  const mapStatusToTab = (status: string) => {
-    switch ((status || "").toUpperCase()) {
-      case "PENDING_REVIEW":
-        return "pending";
-      case "PENDING_HOME_VISIT":
-        return "pending_home_visit";
-      case "PENDING_APPROVAL":
-        return "pending_approval";
-      case "MATCHED":
-        return "matched";
-      case "REJECTED":
-        return "denied";
-      case "RETURNED":
-        return "returned";
-      default:
-        return status?.toLowerCase() || "pending";
-    }
-  };
 
   const getStatusBadge = (status: string) => {
     switch ((status || "").toUpperCase()) {
@@ -309,7 +357,7 @@ const AdoptionRequests = () => {
       </div>
 
       {/* Tabs navigation */}
-      <Tabs value={tab} onValueChange={setTab} className="w-full">
+      <Tabs value={tab} onValueChange={handleTabChange} className="w-full">
         <div className="overflow-x-auto pb-2 mb-4">
           <TabsList className="inline-flex h-auto gap-1 bg-muted/60 p-1 rounded-lg">
             {TABS.map((tItem) => {
@@ -460,7 +508,7 @@ const AdoptionRequests = () => {
                                 <Link
                                   href={`/adoption/adoption-requests/${String(
                                     app.applicationId,
-                                  )}`}
+                                  )}?fromTab=${tab}`}
                                 >
                                   <Button
                                     size="sm"
@@ -490,4 +538,18 @@ const AdoptionRequests = () => {
   );
 };
 
-export default AdoptionRequests;
+export default function AdoptionRequests() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-6 max-w-7xl mx-auto space-y-6">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      }
+    >
+      <AdoptionRequestsContent />
+    </Suspense>
+  );
+}

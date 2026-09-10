@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ApplicantInfoSection } from "../_components/applicant-info-section";
 import { ApplicationFieldsSection } from "../_components/application-fields-section";
 import { ApplicationAttachmentsSection } from "../_components/application-attachments-section";
-import { useRouter, useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { formatAge } from "@/lib/utils";
@@ -17,6 +17,28 @@ import LanguageSwitcher from "@/components/shared/language-switcher";
 
 // we'll fetch applications from backend instead of using mockApplications
 import type { BackendAdoptionApplication } from "../page";
+
+const TAB_STORAGE_KEY = "adoption_requests_active_tab";
+
+const mapStatusToTab = (status: string) => {
+  switch ((status || "").toUpperCase()) {
+    case "PENDING_REVIEW":
+      return "pending";
+    case "PENDING_HOME_VISIT":
+      return "pending_home_visit";
+    case "PENDING_APPROVAL":
+      return "pending_approval";
+    case "MATCHED":
+      return "matched";
+    case "REJECTED":
+      return "denied";
+    case "RETURNED":
+      return "returned";
+    default:
+      return status?.toLowerCase() || "pending";
+  }
+};
+
 import { AttachmentDialog } from "../_components/attachment-dialog";
 import { BASE_URL } from "@/lib/base-url";
 import { useHomeVisitFormStore } from "@/stores/home-visit-store";
@@ -30,9 +52,11 @@ import {
 import { Baby, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useGetMatchedChildDetails } from "@/hooks/adoption/adoption-requests";
 
-export default function AdoptionRequestReviewPage() {
+function AdoptionRequestReviewPageContent() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const fromTab = searchParams.get("fromTab");
   const t = useTranslations("adoption");
 
   const setServiceDataId = useHomeVisitFormStore(
@@ -572,6 +596,25 @@ export default function AdoptionRequestReviewPage() {
     );
   }
 
+  const handleBack = () => {
+    if (fromTab) {
+      router.push(`/adoption/adoption-requests?tab=${fromTab}`);
+    } else if (application?.status) {
+      const targetTab = mapStatusToTab(application.status);
+      router.push(`/adoption/adoption-requests?tab=${targetTab}`);
+    } else {
+      let savedTab: string | null = null;
+      if (typeof window !== "undefined") {
+        savedTab = sessionStorage.getItem(TAB_STORAGE_KEY);
+      }
+      if (savedTab) {
+        router.push(`/adoption/adoption-requests?tab=${savedTab}`);
+      } else {
+        router.push("/adoption/adoption-requests");
+      }
+    }
+  };
+
   return (
     <div title={t("adoptionDetail.title")}>
       {selectedFile && (
@@ -588,7 +631,7 @@ export default function AdoptionRequestReviewPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => router.push("/adoption/adoption-requests")}
+              onClick={handleBack}
               className="rounded-full"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -740,5 +783,20 @@ export default function AdoptionRequestReviewPage() {
         data={data}
       />
     </div>
+  );
+}
+
+export default function AdoptionRequestReviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto px-4 py-8 max-w-7xl animate-pulse space-y-4">
+          <div className="h-8 w-48 bg-slate-200 rounded" />
+          <div className="h-48 w-full bg-slate-100 rounded-xl" />
+        </div>
+      }
+    >
+      <AdoptionRequestReviewPageContent />
+    </Suspense>
   );
 }
