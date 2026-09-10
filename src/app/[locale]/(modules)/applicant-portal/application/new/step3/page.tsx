@@ -86,18 +86,18 @@ export default function Step3Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[18px] font-lexend">
-                    {t("stepthree.form.marital")}*
+                    {t("stepthree.form.marital")} ({t("form.optional") || "Optional"})
                   </FormLabel>
                   <FormControl>
                     <FileDragAndDrop
-                      value={[field.value]}
+                      value={field.value ? [field.value] : []}
                       onChange={(files) => {
-                        field.onChange(files[0]);
+                        field.onChange(files[0] || null);
                       }}
                       maxFiles={1}
                       acceptedFileTypes={[".pdf", ".png", ".jpg", ".jpeg"]}
                       maxSize={10 * 1024 * 1024} // 10MB
-                      error={form.formState.errors.maritalStatus?.message}
+                      error={form.formState.errors.maritalStatus?.message as string | undefined}
                     />
                   </FormControl>
                 </FormItem>
