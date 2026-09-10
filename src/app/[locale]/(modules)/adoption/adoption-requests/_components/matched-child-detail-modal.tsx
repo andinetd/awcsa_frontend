@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Card,
@@ -19,7 +19,13 @@ import {
   DollarSign,
   Phone,
   Mail,
+  AlertCircle,
+  Loader2,
+  RotateCcw,
 } from "lucide-react";
+import { PostMatchNotesSection } from "./post-match-notes-section";
+import { FollowUpReportsSection } from "./follow-up-reports-section";
+import { PostPlacementVisitsSection } from "./post-placement-visits-section";
 
 export interface MatchedChildInfo {
   child: {
@@ -36,10 +42,10 @@ export interface MatchedChildInfo {
     monthlyIncome: number | null;
     spouseCityIdNumber: string | null;
     familyMembersCount: number | null;
-    contactInfo: {
-      sex: string;
-      additionalInfo: string;
-    };
+    contactInfo?: {
+      sex?: string;
+      additionalInfo?: string;
+    } | null;
     activeStatus: boolean;
     isDeleted: boolean;
     createdAt: string;
@@ -59,10 +65,10 @@ export interface MatchedChildInfo {
     monthlyIncome: number;
     spouseCityIdNumber: string;
     familyMembersCount: number | null;
-    contactInfo: {
-      email: string;
-      phoneNumber: string;
-    };
+    contactInfo?: {
+      email?: string;
+      phoneNumber?: string;
+    } | null;
     activeStatus: boolean;
     isDeleted: boolean;
     createdAt: string;
@@ -71,12 +77,15 @@ export interface MatchedChildInfo {
   matchedAt: string;
   facilityChildId: string;
   status: string;
+  matchId?: number | null;
+  matchStatus?: string;
 }
 
 interface MatchedChildModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: MatchedChildInfo;
+  data?: MatchedChildInfo | null;
+  isLoading?: boolean;
 }
 
 const DetailRow = ({
@@ -85,7 +94,7 @@ const DetailRow = ({
   icon: Icon,
 }: {
   label: string;
-  value: string | null;
+  value?: string | null;
   icon?: any;
 }) => (
   <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
@@ -103,12 +112,74 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
   isOpen,
   onClose,
   data,
+  isLoading = false,
 }) => {
   const t = useTranslations("adoption");
+  const [activeTab, setActiveTab] = useState<"notes" | "followup" | "visits">("notes");
+
   if (!isOpen) return null;
 
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center space-y-4">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-600" />
+          <p className="text-slate-600 font-medium text-sm">
+            {t("adoptionDetail.status.loading") || "Loading matched child details..."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data || !data.child) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mx-auto text-amber-600">
+            <AlertCircle className="w-6 h-6" />
+          </div>
+          <h3 className="text-base font-bold text-slate-900">
+            No Matched Child Details Found
+          </h3>
+          <p className="text-slate-500 text-sm">
+            There is no active child matched with this application yet, or the matching details could not be retrieved.
+          </p>
+          <Button onClick={onClose} variant="outline" className="w-full">
+            Close
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const childDob = data.child.dateOfBirth ? new Date(data.child.dateOfBirth) : null;
   const childAge =
-    new Date().getFullYear() - new Date(data.child.dateOfBirth).getFullYear();
+    childDob && !isNaN(childDob.getTime())
+      ? new Date().getFullYear() - childDob.getFullYear()
+      : "—";
+
+  const formatDate = (d?: string | null) => {
+    if (!d) return "—";
+    const date = new Date(d);
+    return isNaN(date.getTime()) ? "—" : date.toLocaleDateString();
+  };
+
+  const adopterPhone =
+    data.adopter?.phoneNumber ||
+    (typeof data.adopter?.contactInfo === "object" && data.adopter?.contactInfo
+      ? (data.adopter.contactInfo as any)?.phoneNumber
+      : null) ||
+    "—";
+
+  const adopterEmail =
+    (typeof data.adopter?.contactInfo === "object" && data.adopter?.contactInfo
+      ? (data.adopter.contactInfo as any)?.email
+      : null) ||
+    "—";
+
+  const childSex =
+    data.child?.contactInfo?.sex || (data.child as any)?.sex || null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
@@ -148,24 +219,43 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   {t("adoptionDetail.matched.officialMatch")}
                 </div>
                 <h2 className="text-3xl font-bold mb-1">
-                  {data.child.firstName} {data.child.lastName}
+                  {data.child?.firstName} {data.child?.lastName}
                 </h2>
                 <p className="text-blue-100 text-sm opacity-90 mt-1">
                   {t("adoptionDetail.matched.matchedOn", {
-                    date: new Date(data.matchedAt).toLocaleDateString(),
+                    date: formatDate(data.matchedAt),
                   })}{" "}
                   • {t("adoptionDetail.matched.facilityId")}:{" "}
-                  {data.facilityChildId}
+                  {data.facilityChildId || "—"}
                 </p>
               </div>
               <div className="text-center bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 min-w-[120px]">
                 <span className="block text-3xl font-bold">{childAge}</span>
                 <span className="text-[10px] uppercase font-medium opacity-80">
-                  {t("adoptionDetail.matching.yearsOld", { count: childAge })}
+                  {childAge !== "—"
+                    ? t("adoptionDetail.matching.yearsOld", { count: Number(childAge) })
+                    : "Age Unknown"}
                 </span>
               </div>
             </div>
           </div>
+
+          {/* Terminated / Returned Banner */}
+          {(data.matchStatus === "TERMINATED" || data.status === "RETURNED") && (
+            <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-start gap-3 text-amber-900 shadow-sm">
+              <div className="p-2 bg-amber-100 rounded-lg shrink-0">
+                <RotateCcw className="w-5 h-5 text-amber-700" />
+              </div>
+              <div className="min-w-0 flex-1 text-sm">
+                <h4 className="font-bold text-amber-950 text-base mb-1">
+                  Match Terminated — Biological Family Reunification
+                </h4>
+                <p className="text-amber-800 text-xs leading-relaxed">
+                  This adoption placement was formally terminated following reunification with the child's biological family. Custody has been returned and the child record status is <strong>RETURNED</strong>. The adoptive parent application has been restored to <strong>APPROVED</strong> for new matching.
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Child Details */}
@@ -179,45 +269,45 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               <CardContent className="pt-3">
                 <DetailRow
                   label={t("adoptionDetail.fields.firstName")}
-                  value={data.child.firstName}
+                  value={data.child?.firstName}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.lastName")}
-                  value={data.child.lastName}
+                  value={data.child?.lastName}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.sex")}
                   value={
-                    data.child.contactInfo.sex
-                      ? t(`enums.sex.${data.child.contactInfo.sex}`)
+                    childSex
+                      ? t(`enums.sex.${childSex}`)
                       : null
                   }
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.dateOfBirth")}
-                  value={new Date(data.child.dateOfBirth).toLocaleDateString()}
+                  value={formatDate(data.child?.dateOfBirth)}
                   icon={Calendar}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.idNumber")}
-                  value={data.child.cityIdNumber}
+                  value={data.child?.cityIdNumber}
                   icon={Tag}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.category")}
                   value={
-                    data.child.clientCategory
+                    data.child?.clientCategory
                       ? t(`enums.category.${data.child.clientCategory}`)
                       : null
                   }
                 />
                 <DetailRow
                   label={t("adoptionDetail.matching.additionalInfo")}
-                  value={data.child.contactInfo.additionalInfo}
+                  value={data.child?.contactInfo?.additionalInfo}
                 />
                 <DetailRow
                   label={t("adoptionDetail.matched.recordCreated")}
-                  value={new Date(data.child.createdAt).toLocaleDateString()}
+                  value={formatDate(data.child?.createdAt)}
                 />
               </CardContent>
             </Card>
@@ -233,59 +323,117 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               <CardContent className="pt-3">
                 <DetailRow
                   label={t("adoptionDetail.matched.fullName")}
-                  value={`${data.adopter.firstName} ${data.adopter.lastName}`}
+                  value={`${data.adopter?.firstName || ""} ${data.adopter?.lastName || ""}`.trim() || "—"}
                 />
                 <DetailRow
                   label={t("adoptionDetail.matched.adopterId")}
-                  value={data.adopter.id.toString()}
+                  value={data.adopter?.id ? String(data.adopter.id) : "—"}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.idNumber")}
-                  value={data.adopter.cityIdNumber}
+                  value={data.adopter?.cityIdNumber}
                   icon={Tag}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.phoneNumber")}
-                  value={data.adopter.contactInfo.phoneNumber}
+                  value={adopterPhone}
                   icon={Phone}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.email")}
-                  value={data.adopter.contactInfo.email}
+                  value={adopterEmail}
                   icon={Mail}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.address")}
-                  value={data.adopter.address}
+                  value={data.adopter?.address}
                   icon={MapPin}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.occupation")}
-                  value={data.adopter.occupation}
+                  value={data.adopter?.occupation}
                   icon={Briefcase}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.monthlyIncome")}
-                  value={t("adoptionDetail.matched.etb", {
-                    amount: data.adopter.monthlyIncome?.toLocaleString(),
-                  })}
+                  value={
+                    data.adopter?.monthlyIncome
+                      ? t("adoptionDetail.matched.etb", {
+                          amount: data.adopter.monthlyIncome?.toLocaleString(),
+                        })
+                      : "—"
+                  }
                   icon={DollarSign}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.education")}
-                  value={data.adopter.educationLevel}
+                  value={data.adopter?.educationLevel}
                   icon={GraduationCap}
                 />
                 <DetailRow
                   label={t("adoptionDetail.fields.dateOfBirth")}
-                  value={new Date(
-                    data.adopter.dateOfBirth,
-                  ).toLocaleDateString()}
+                  value={formatDate(data.adopter?.dateOfBirth)}
                   icon={Calendar}
                 />
               </CardContent>
             </Card>
           </div>
+
+          {/* Tab bar */}
+          <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+            <button
+              onClick={() => setActiveTab("notes")}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all duration-150 ${
+                activeTab === "notes"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Case Notes
+            </button>
+            <button
+              onClick={() => setActiveTab("followup")}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all duration-150 ${
+                activeTab === "followup"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Follow-Up Reports
+            </button>
+            <button
+              onClick={() => setActiveTab("visits")}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all duration-150 ${
+                activeTab === "visits"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Home Visits
+            </button>
+          </div>
+
+          {/* Tab content */}
+          {activeTab === "notes" && (
+            <PostMatchNotesSection
+              matchId={data?.matchId}
+              currentStatus={data?.matchStatus || data?.status}
+            />
+          )}
+          {activeTab === "followup" && (
+            <FollowUpReportsSection
+              matchId={data?.matchId}
+              matchStatus={data?.matchStatus || data?.status}
+              isOfficer={true}
+            />
+          )}
+          {activeTab === "visits" && (
+            <PostPlacementVisitsSection
+              matchId={data?.matchId}
+              matchStatus={data?.matchStatus || data?.status}
+              isOfficer={true}
+            />
+          )}
         </div>
       </div>
     </div>

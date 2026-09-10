@@ -9,7 +9,7 @@ export const useGetMatchedChildDetails = (id: number) => {
   return useQuery({
     queryKey: ["application", "child-details", id],
     queryFn: getMatchedChildDetails.bind(null, id),
-    enabled: !!token,
+    enabled: !!token && !!id && id > 0,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: true,
   });
