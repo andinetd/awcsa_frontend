@@ -35,9 +35,18 @@ export const Field: React.FC<{
 
 export const ApplicantCard: React.FC<{
   title: string;
-  data: ApplicantProfile;
+  data?: Partial<ApplicantProfile> | null;
 }> = ({ title, data }) => {
   const t = useTranslations("adoption");
+
+  const formattedIncome =
+    data?.monthlyIncome !== undefined &&
+    data?.monthlyIncome !== null &&
+    !isNaN(Number(data.monthlyIncome))
+      ? t("homeVisit.fields.etbValue", {
+          amount: Number(data.monthlyIncome).toLocaleString(),
+        })
+      : "—";
 
   return (
     <Card>
@@ -45,7 +54,7 @@ export const ApplicantCard: React.FC<{
         <div className="flex justify-between items-start">
           <CardTitle>{title}</CardTitle>
           <span className="px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100">
-            {data.maritalStatus}
+            {data?.maritalStatus || "—"}
           </span>
         </div>
       </CardHeader>
@@ -53,34 +62,32 @@ export const ApplicantCard: React.FC<{
         <div className="col-span-2 pb-2 mb-2 border-b border-slate-100">
           <Field
             label={t("homeVisit.fields.fullName")}
-            value={data.fullName}
+            value={data?.fullName}
             className="text-lg"
           />
         </div>
-        <Field label={t("homeVisit.fields.age")} value={data.birthDateOrAge} />
+        <Field label={t("homeVisit.fields.age")} value={data?.birthDateOrAge} />
         <Field
           label={t("homeVisit.fields.nationality")}
-          value={data.nationality}
+          value={data?.nationality}
         />
-        <Field label={t("homeVisit.fields.religion")} value={data.religion} />
+        <Field label={t("homeVisit.fields.religion")} value={data?.religion} />
         <Field
           label={t("homeVisit.fields.education")}
-          value={data.educationLevel}
+          value={data?.educationLevel}
         />
         <Field
           label={t("homeVisit.fields.occupation")}
-          value={data.occupation}
+          value={data?.occupation}
         />
         <Field
           label={t("homeVisit.fields.monthlyIncome")}
-          value={t("homeVisit.fields.etbValue", {
-            amount: data.monthlyIncome.toLocaleString(),
-          })}
+          value={formattedIncome}
         />
-        <Field label={t("homeVisit.fields.phone")} value={data.phoneMobile} />
+        <Field label={t("homeVisit.fields.phone")} value={data?.phoneMobile || data?.phoneHome} />
         <Field
           label={t("homeVisit.fields.birthPlace")}
-          value={data.birthPlace}
+          value={data?.birthPlace}
         />
       </CardContent>
     </Card>

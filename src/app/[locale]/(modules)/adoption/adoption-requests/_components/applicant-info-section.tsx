@@ -16,6 +16,7 @@ interface ApplicantInfoSectionProps {
     applicantName: string;
     status: string;
     submittedDate: string | number | Date;
+    hasHomeVisitForm?: boolean;
   };
   photoUrl?: string;
   setServiceDataId: (id: string) => void;

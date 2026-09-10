@@ -10,6 +10,24 @@
       "matched": "የተዛመደ",
       "denied": "ውድቅ የተደረገ"
     },
+    "searchPlaceholder": "በአመልካች ስም፣ ስልክ ወይም ቁጥር ፈልግ...",
+    "table": {
+      "applicationId": "የማመልከቻ ቁጥር",
+      "applicant": "አመልካች",
+      "contact": "ስልክ/ሙያ",
+      "location": "አካባቢ",
+      "submitted": "የተላከበት",
+      "status": "ሁኔታ",
+      "actions": "ተግባራት"
+    },
+    "statuses": {
+      "pending_review": "ግምገማ የሚጠበቅ",
+      "pending_home_visit": "የመስክ ጉብኝት የሚጠበቅ",
+      "pending_approval": "ይሁንታ የሚጠበቅ",
+      "matched": "የተዛመደ",
+      "returned": "የተመለሰ",
+      "denied": "ውድቅ የተደረገ"
+    },
     "noApplications": "በዚህ ምድብ ውስጥ የተገኘ ምንም ማመልከቻ የለም።",
     "applicationId": "የማመልከቻ መታወቂያ",
     "submitted": "የተላከበት",
@@ -85,6 +103,154 @@
       "fullName": "ሙሉ ስም",
       "etb": "{amount} ብር"
     },
+    "postMatch": {
+      "title": "ከማዛመድ በኋላ ተጨማሪ መረጃ እና ማስታወሻዎች",
+      "subtitle": "የልጁን እድገት፣ የፍርድ ቤት ውሳኔዎችን፣ የጤና እና የደህንነት መረጃዎችን ይከታተሉ",
+      "addNote": "ተጨማሪ መረጃ መዝግብ",
+      "addNoteTitle": "ከማዛመድ በኋላ ተጨማሪ መረጃ መመዝገቢያ",
+      "addNoteDescription": "የጉዳይ ክትትል ማስታወሻዎችን፣ የሕግ ወይም የጤና መረጃዎችን እዚህ ይመዝግቡ።",
+      "category": "ምድብ",
+      "noteTitle": "የማስታወሻ ርዕስ",
+      "noteTitlePlaceholder": "ምሳሌ: የጤና ምርመራ ክትትል፣ የፍርድ ቤት ውሳኔ...",
+      "content": "የማስታወሻ ይዘት",
+      "contentPlaceholder": "ዝርዝር የጉዳይ ማስታወሻዎችን ወይም ትዕዛዞችን እዚህ ያስገቡ...",
+      "saveNote": "መረጃውን መዝግብ",
+      "saving": "በመመዝገብ ላይ...",
+      "cancel": "ተመለስ",
+      "noNotes": "እስካሁን የተመዘገበ ተጨማሪ መረጃ የለም።",
+      "filterAll": "ሁሉም ምድቦች",
+      "categories": {
+        "GENERAL": "አጠቃላይ ማስታወሻ",
+        "PLACEMENT_PROGRESS": "የማላመድ ሂደት",
+        "HEALTH": "ጤና እና ህክምና",
+        "EDUCATION": "ትምህርት",
+        "LEGAL_NOTE": "የሕግ / የፍርድ ቤት ማስታወሻ",
+        "CONCERN_OR_INCIDENT": "አሳሳቢ ሁኔታ / ክስተት",
+        "OFFICIAL_REMARK": "የኃላፊ አስተያየት"
+      },
+      "statuses": {
+        "ACTIVE": "ንቁ ማዛመድ",
+        "COMPLETED": "የተጠናቀቀ ጉዲፈቻ",
+        "TERMINATED": "የተቋረጠ ማዛመድ"
+      },
+      "markCompleted": "ጉዲፈቻውን አጠናቅቅ",
+      "completeTitle": "የጉዲፈቻ ሂደቱን ማጠናቀቂያ",
+      "completeDescription": "ይፋዊ የፍርድ ቤት ውሳኔ ተሰጥቶ የጉዲፈቻ ሂደቱ መጠናቀቁን ያረጋግጡ።",
+      "remarkPlaceholder": "የማጠናቀቂያ አስተያየት ወይም የሰርተፍኬት ቁጥር ያስገቡ...",
+      "confirmComplete": "ማጠናቀቁን አረጋግጥ"
+    },
+    "followUpReports": {
+      "title": "ክትትል ሪፖርቶች",
+      "subtitle": "ከጉዲፈቻ ቤተሰብ የሚቀርቡ ወቅታዊ ሪፖርቶች፣ በኃላፊ የሚጸድቁ",
+      "submitReport": "ሪፖርት አቅርብ",
+      "submitTitle": "የክትትል ሪፖርት አቅርብ",
+      "submitDescription": "ስለ ልጁ ጤና፣ ስሜታዊ ሁኔታ፣ ትምህርት እና የቤተሰብ ውህደት ወቅታዊ ዝርዝር ያቅርቡ።",
+      "reviewTitle": "ሪፖርቱን ይገምግሙ",
+      "reviewDescription": "የቀረበውን ሪፖርት ይመልከቱ እና ሙያዊ አስተያየት ያስገቡ።",
+      "noReports": "እስካሁን ምንም ሪፖርት አልቀረበም።",
+      "filterAll": "ሁሉም",
+      "reportPeriod": "የሪፖርት ጊዜ",
+      "reportPeriodPlaceholder": "ምሳሌ: Q1 2026፣ ጥር–መጋቢት 2026",
+      "childHealthStatus": "የልጁ የጤና ሁኔታ",
+      "childHealthPlaceholder": "ስለ ልጁ ወቅታዊ ጤና፣ የህክምና ምርመራዎች ወዘተ ይግለጹ...",
+      "emotionalWellbeing": "ስሜታዊ ደህንነት",
+      "emotionalPlaceholder": "ስሜታዊ መረጋጋት፣ ስብዕና፣ ከቤተሰብ ጋር ያለ ግንኙነት...",
+      "educationProgress": "የትምህርት ሁኔታ",
+      "educationPlaceholder": "ትምህርት ቤት ክትትል፣ ደረጃ፣ ልዩ ትምህርት ወዘተ...",
+      "familyIntegration": "ከቤተሰብ ጋር ውህደት",
+      "familyPlaceholder": "ልጁ ከቤተሰቡ፣ ወንድሞቹና እህቶቹ ጋር እንዴት እየዋሃደ እንደሆነ...",
+      "additionalNotes": "ተጨማሪ ማስታወሻ",
+      "additionalNotesPlaceholder": "ሌላ ወቅታዊ መረጃ ወይም ማስታወሻ...",
+      "officerFeedback": "የኃላፊ አስተያየት",
+      "officerFeedbackPlaceholder": "ሙያዊ ምዘና እና ለቤተሰቡ ምክር...",
+      "officerConcerns": "አሳሳቢ ሁኔታዎች (ካለ)",
+      "officerConcernsPlaceholder": "ክትትል የሚሹ አሳሳቢ ሁኔታዎችን ያስተውሉ...",
+      "reviewStatus": "የምርመራ ሁኔታ",
+      "statuses": {
+        "SUBMITTED": "ቀርቧል",
+        "UNDER_REVIEW": "በምርመራ ላይ",
+        "REVIEWED": "ተገምግሟል",
+        "REQUIRES_ACTION": "ክትትል ያስፈልጋል"
+      },
+      "actions": {
+        "submit": "ሪፖርት አቅርብ",
+        "submitting": "በማቅረብ ላይ...",
+        "saveReview": "ምርመራ አስቀምጥ",
+        "savingReview": "በማስቀመጥ ላይ...",
+        "cancel": "ተመለስ"
+      },
+      "toasts": {
+        "submitSuccess": "ሪፖርቱ በተሳካ ሁኔታ ቀርቧል",
+        "submitError": "ሪፖርቱን ማቅረብ አልተቻለም",
+        "reviewSuccess": "ምርመራው በተሳካ ሁኔታ ተመዝግቧል",
+        "reviewError": "ምርመራውን ማስቀመጥ አልተቻለም"
+      }
+    },
+    "homeVisits": {
+      "title": "ከማዛመድ በኋላ የቤት ጉብኝት ምዘና",
+      "subtitle": "በማህበራዊ ጉዳይ ሠራተኞች የሚደረጉ ወቅታዊ የአካል የቤት ጉብኝት ምልከታዎች",
+      "recordVisit": "የቤት ጉብኝት መዝግብ",
+      "recordTitle": "ከማዛመድ በኋላ የተደረገ የቤት ጉብኝት መመዝገቢያ",
+      "recordDescription": "ስለ ልጁ የመኖሪያ ሁኔታ፣ ደህንነት፣ ከቤተሰብ ጋር ውህደት እና ትምህርት የተደረጉ ምልከታዎችን ይመዝግቡ።",
+      "noVisits": "እስካሁን የተመዘገበ የቤት ጉብኝት የለም።",
+      "livingConditions": "የመኖሪያ ሁኔታ እና አካባቢ",
+      "childHealthStatus": "የልጁ ጤና እና አመጋገብ",
+      "bondingObservation": "ከቤተሰብ ጋር ውህደት እና ፍቅር",
+      "schoolingStatus": "የትምህርት ሁኔታ እና እድገት",
+      "safetyAssessment": "የደህንነት ምዘና",
+      "overallRating": "አጠቃላይ ደረጃ",
+      "concerns": "የታዩ አሳሳቢ ሁኔታዎች",
+      "recommendations": "የባለሙያ ምክር እና የድርጊት መርሃግብር",
+      "nextVisitDue": "ቀጣይ የታቀደ ጉብኝት",
+      "safetyRatings": {
+        "SAFE": "አስተማማኝ እና ደህንነቱ የተጠበቀ",
+        "MINOR_CONCERNS": "አነስተኛ አሳሳቢ ሁኔታዎች",
+        "MAJOR_CONCERNS": "ከፍተኛ አሳሳቢ ሁኔታዎች",
+        "UNSAFE": "አደገኛ አካባቢ"
+      },
+      "overallRatings": {
+        "EXCELLENT": "እጅግ በጣም ጥሩ",
+        "GOOD": "ጥሩ",
+        "SATISFACTORY": "አጥጋቢ",
+        "NEEDS_IMPROVEMENT": "መሻሻል የሚሻ",
+        "CRITICAL": "አስቸኳይ ክትትል የሚሻ"
+      },
+      "toasts": {
+        "recordSuccess": "የቤት ጉብኝት ምዘና በተሳካ ሁኔታ ተመዝግቧል",
+        "recordError": "የቤት ጉብኝት ምዘና መመዝገብ አልተቻለም"
+      }
+    },
+    "reunification": {
+      "button": "ከወላጆች ጋር መልሶ ማገናኘት",
+      "title": "ከእውነተኛ ወላጆች ጋር መልሶ ማገናኘት እና ልጁን መመለስ",
+      "description": "ልጁን ለእውነተኛ ወላጆቹ ማስረከብን ይመዝግቡ። ይህ ማዛመዱን በቋሚነት ያቋርጣል፤ የልጁንም ሁኔታ 'ተመልሷል' ያደርገዋል።",
+      "warning": "አስፈላጊ የሕግ ማስረከቢያ ሥርዓት: ይህን ከማጠናቀቅዎ በፊት ሁሉም የፍርድ ቤት ውሳኔዎች እና የወላጆች ማንነት ማረጋገጫዎች መጠናቀቃቸውን ያረጋግጡ።",
+      "fatherName": "የአባት ሙሉ ስም",
+      "motherName": "የእናት ሙሉ ስም",
+      "contactPhoneNumber": "የስልክ ቁጥር",
+      "nationalIdNumber": "የመታወቂያ / የፋይዳ ቁጥር",
+      "currentAddress": "የአሁን የመኖሪያ አድራሻ",
+      "courtOrderNumber": "የፍርድ ቤት ውሳኔ ቁጥር",
+      "reunificationReason": "የመመለሱ ምክንያት እና ሁኔታዎች",
+      "socialWorkerNotes": "የማህበራዊ ጉዳይ ሠራተኛ ምልከታዎች",
+      "reopenForRematch": "የአሳዳጊውን ማመልከቻ ለአዲስ ማዛመድ እንደገና ክፈት",
+      "reopenDescription": "የአሳዳጊው ማመልከቻ ሁኔታ በራስ-ሰር 'ጸድቋል' ተብሎ ይመለሳል፤ ይህም ከሌላ ልጅ ጋር ወዲያውኑ እንዲዛመዱ ያደርጋል።",
+      "adopterSupportNotes": "ለአሳዳጊው ቤተሰብ የተደረገ የስነ-ልቦና ድጋፍ ማስታወሻ",
+      "confirm": "መልሶ ማገናኘቱን እና ማስረከቡን አረጋግጥ",
+      "processing": "በማስኬድ ላይ...",
+      "cancel": "ተመለስ",
+      "bannerTitle": "ማዛመዱ ተቋርጧል — ከእውነተኛ ወላጆች ጋር ተገናኝቷል",
+      "bannerText": "ይህ የጉዲፈቻ ማዛመድ ልጁ ከእውነተኛ ወላጆቹ ጋር በመገናኘቱ ምክንያት በይፋ ተቋርጧል። ልጁ የተመለሰ ሲሆን የአሳዳጊው ማመልከቻ ለአዲስ ማዛመድ ዝግጁ ሆኗል።",
+      "toasts": {
+        "success": "ከወላጆች ጋር መልሶ ማገናኘት በተሳካ ሁኔታ ተጠናቋል። ማዛመዱ ተቋርጧል፣ ማመልከቻውም ተዘምኗል።",
+        "error": "ከወላጆች ጋር መልሶ ማገናኘት አልተሳካም"
+      }
+    },
+    "tabs": {
+      "caseNotes": "የጉዳይ ማስታወሻዎች",
+      "followUpReports": "ክትትል ሪፖርቶች",
+      "homeVisits": "የቤት ጉብኝቶች"
+    },
     "toasts": {
       "returned": "ማመልከቻው ለአመልካች ተመልሷል",
       "returnError": "ማመልከቻውን በመመለስ ላይ ችግር አጋጥሟል",
@@ -156,6 +322,10 @@
     "errors": {
       "loadFailed": "የመስክ ጉብኝት መረጃ መጫን አልተቻለም"
     },
+    "noDataTitle": "ምንም የመስክ ጉብኝት ግምገማ አልተገኘም",
+    "noDataDescription": "ለዚህ የጉዲፈቻ ማመልከቻ #{id} እስካሁን ምንም የመስክ ጉብኝት ግምገማ አልተመዘገበም።",
+    "backToApplication": "ወደ ማመልከቻው ተመለስ",
+    "submitHomeVisit": "የመስክ ጉብኝት ግምገማ አስገባ",
     "fields": {
       "socialWorker": "የማህበራዊ ሰራተኛ",
       "placeOfVisit": "የጉብኝት ቦታ",

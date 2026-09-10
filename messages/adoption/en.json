@@ -10,6 +10,24 @@
       "matched": "Matched",
       "denied": "Denied"
     },
+    "searchPlaceholder": "Search by applicant name, phone, or ID...",
+    "table": {
+      "applicationId": "App ID",
+      "applicant": "Applicant",
+      "contact": "Contact",
+      "location": "Location",
+      "submitted": "Submitted",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "statuses": {
+      "pending_review": "Pending Review",
+      "pending_home_visit": "Home Visit Due",
+      "pending_approval": "Pending Approval",
+      "matched": "Matched",
+      "returned": "Returned",
+      "denied": "Denied"
+    },
     "noApplications": "No applications found in this category.",
     "applicationId": "Application ID",
     "submitted": "Submitted",
@@ -85,6 +103,154 @@
       "fullName": "Full Name",
       "etb": "{amount} ETB"
     },
+    "postMatch": {
+      "title": "Post-Match Information & Case Notes",
+      "subtitle": "Track ongoing placement progress, legal decrees, health, and welfare notes",
+      "addNote": "Add Information",
+      "addNoteTitle": "Record Additional Information",
+      "addNoteDescription": "Add post-match observations, legal updates, or welfare notes to this case.",
+      "category": "Category",
+      "noteTitle": "Note Title",
+      "noteTitlePlaceholder": "e.g. Post-placement checkup, Court decree granted...",
+      "content": "Note Content",
+      "contentPlaceholder": "Enter detailed case notes, observations, or directives...",
+      "saveNote": "Save Information",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "noNotes": "No post-match notes recorded yet.",
+      "filterAll": "All Categories",
+      "categories": {
+        "GENERAL": "General Note",
+        "PLACEMENT_PROGRESS": "Placement Progress",
+        "HEALTH": "Health & Medical",
+        "EDUCATION": "Education & Schooling",
+        "LEGAL_NOTE": "Legal / Decree Note",
+        "CONCERN_OR_INCIDENT": "Concern / Incident",
+        "OFFICIAL_REMARK": "Official Remark"
+      },
+      "statuses": {
+        "ACTIVE": "Active Match",
+        "COMPLETED": "Completed Adoption",
+        "TERMINATED": "Terminated Match"
+      },
+      "markCompleted": "Mark as Completed",
+      "completeTitle": "Complete Adoption Case",
+      "completeDescription": "Confirm that the legal adoption process is completed and finalize this case record.",
+      "remarkPlaceholder": "Add optional closing remarks or certificate references...",
+      "confirmComplete": "Confirm Completion"
+    },
+    "followUpReports": {
+      "title": "Follow-Up Reports",
+      "subtitle": "Periodic progress reports from the adoptive family, reviewed by officers",
+      "submitReport": "Submit Report",
+      "submitTitle": "Submit Follow-Up Report",
+      "submitDescription": "Provide an update on the child's wellbeing, health, education, and family integration.",
+      "reviewTitle": "Review Follow-Up Report",
+      "reviewDescription": "Review the submitted report and provide professional feedback.",
+      "noReports": "No follow-up reports submitted yet.",
+      "filterAll": "All",
+      "reportPeriod": "Report Period",
+      "reportPeriodPlaceholder": "e.g. Q1 2026, January–March 2026",
+      "childHealthStatus": "Child Health Status",
+      "childHealthPlaceholder": "Describe the child's current health condition, medical visits, etc.",
+      "emotionalWellbeing": "Emotional Wellbeing",
+      "emotionalPlaceholder": "Describe emotional stability, mood, relationships with family members...",
+      "educationProgress": "Education Progress",
+      "educationPlaceholder": "Describe school attendance, grade performance, extracurricular activities...",
+      "familyIntegration": "Family Integration",
+      "familyPlaceholder": "Describe how the child is integrating with the family, siblings, etc.",
+      "additionalNotes": "Additional Notes",
+      "additionalNotesPlaceholder": "Any other relevant observations or updates...",
+      "officerFeedback": "Officer Feedback",
+      "officerFeedbackPlaceholder": "Professional assessment and feedback on this report...",
+      "officerConcerns": "Concerns (if any)",
+      "officerConcernsPlaceholder": "Flag any specific concerns that require action...",
+      "reviewStatus": "Review Status",
+      "statuses": {
+        "SUBMITTED": "Submitted",
+        "UNDER_REVIEW": "Under Review",
+        "REVIEWED": "Reviewed",
+        "REQUIRES_ACTION": "Requires Action"
+      },
+      "actions": {
+        "submit": "Submit Report",
+        "submitting": "Submitting...",
+        "saveReview": "Submit Review",
+        "savingReview": "Saving...",
+        "cancel": "Cancel"
+      },
+      "toasts": {
+        "submitSuccess": "Follow-up report submitted successfully",
+        "submitError": "Failed to submit report",
+        "reviewSuccess": "Review submitted successfully",
+        "reviewError": "Failed to submit review"
+      }
+    },
+    "homeVisits": {
+      "title": "Post-Placement Home Visits",
+      "subtitle": "Periodic in-person home evaluations by social welfare officers",
+      "recordVisit": "Record Home Visit",
+      "recordTitle": "Record Post-Placement Home Visit",
+      "recordDescription": "Document in-person observations regarding the child's living conditions, safety, bonding, and schooling.",
+      "noVisits": "No post-placement visits recorded yet.",
+      "livingConditions": "Living Conditions & Environment",
+      "childHealthStatus": "Child Health & Nutrition",
+      "bondingObservation": "Bonding & Family Attachment",
+      "schoolingStatus": "Schooling & Education Progress",
+      "safetyAssessment": "Safety Assessment",
+      "overallRating": "Overall Placement Rating",
+      "concerns": "Concerns & Red Flags Observed",
+      "recommendations": "Officer Recommendations & Action Plan",
+      "nextVisitDue": "Next Scheduled Visit",
+      "safetyRatings": {
+        "SAFE": "Safe & Secure",
+        "MINOR_CONCERNS": "Minor Concerns",
+        "MAJOR_CONCERNS": "Major Concerns",
+        "UNSAFE": "Unsafe Environment"
+      },
+      "overallRatings": {
+        "EXCELLENT": "Excellent",
+        "GOOD": "Good",
+        "SATISFACTORY": "Satisfactory",
+        "NEEDS_IMPROVEMENT": "Needs Improvement",
+        "CRITICAL": "Critical Attention"
+      },
+      "toasts": {
+        "recordSuccess": "Home visit evaluation recorded successfully",
+        "recordError": "Failed to record home visit"
+      }
+    },
+    "reunification": {
+      "button": "Biological Parents Reunification",
+      "title": "Biological Parents Reunification & Child Return",
+      "description": "Record the handover of the child to their biological parents. This permanently terminates the match and sets the child status to RETURNED.",
+      "warning": "Important Legal Handover Procedure: Ensure all legal court decrees and identity checks have been verified before finalizing this return.",
+      "fatherName": "Father's Full Name",
+      "motherName": "Mother's Full Name",
+      "contactPhoneNumber": "Contact Phone Number",
+      "nationalIdNumber": "National / Fayda ID Number",
+      "currentAddress": "Current Residential Address",
+      "courtOrderNumber": "Court Decree / Legal Order Ref Number",
+      "reunificationReason": "Circumstances & Reason for Return",
+      "socialWorkerNotes": "Social Worker Observations & Notes",
+      "reopenForRematch": "Re-open Adoptive Parent's Application for Rematching",
+      "reopenDescription": "Automatically return the adopter's application status to APPROVED so they are immediately eligible to be matched with a new child.",
+      "adopterSupportNotes": "Adopter Counseling & Support Notes",
+      "confirm": "Confirm Reunification & Handover",
+      "processing": "Processing Return...",
+      "cancel": "Cancel",
+      "bannerTitle": "Match Terminated — Biological Family Reunification",
+      "bannerText": "This adoption placement was formally terminated following reunification with the child's biological family. Custody has been returned and the child record status is RETURNED. The adoptive parent application has been restored for new matching.",
+      "toasts": {
+        "success": "Biological parent reunification processed. Match terminated and application updated.",
+        "error": "Failed to process biological parent reunification"
+      }
+    },
+    "tabs": {
+      "caseNotes": "Case Notes",
+      "followUpReports": "Follow-Up Reports",
+      "homeVisits": "Home Visits"
+    },
     "toasts": {
       "returned": "Application returned to applicant",
       "returnError": "Network error while returning application",
@@ -156,6 +322,10 @@
     "errors": {
       "loadFailed": "Failed to load home visit data"
     },
+    "noDataTitle": "No Home Visit Assessment Found",
+    "noDataDescription": "A home visit assessment has not been recorded yet for adoption application #{id}.",
+    "backToApplication": "Back to Application",
+    "submitHomeVisit": "Submit Home Visit Assessment",
     "fields": {
       "socialWorker": "Social Worker",
       "placeOfVisit": "Place of Visit",

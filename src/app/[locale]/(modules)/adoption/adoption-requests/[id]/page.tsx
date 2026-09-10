@@ -609,6 +609,7 @@ export default function AdoptionRequestReviewPage() {
               applicantName: `${application.applicantInfo.firstName} ${application.applicantInfo.lastName}`,
               status: (application.status || "").toLowerCase(),
               submittedDate: application.reviewInfo?.createdAt ?? "",
+              hasHomeVisitForm: application.hasHomeVisitForm,
             }}
             setServiceDataId={setServiceDataId}
             handleAction={handleAction}

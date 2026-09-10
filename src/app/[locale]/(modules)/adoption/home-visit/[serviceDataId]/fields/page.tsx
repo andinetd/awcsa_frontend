@@ -14,7 +14,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { BASE_URL } from "@/lib/base-url";
 import { useAuthStore } from "@/stores/auth-store";
-import { ArrowLeft, FileCheck } from "lucide-react";
+import { useHomeVisitFormStore } from "@/stores/home-visit-store";
+import {
+  ArrowLeft,
+  FileCheck,
+  FileQuestion,
+  Loader2,
+  PlusCircle,
+} from "lucide-react";
 import { PersonTable } from "../../_components/person-table";
 import { ApplicantCard, Field } from "../../_components/applicant-card";
 
@@ -33,11 +40,11 @@ export default function HomeVisitFieldsPage() {
   const params = useParams();
   const serviceDataId = (params as any)?.serviceDataId ?? "";
   const token = useAuthStore((s) => s.token);
+  const setServiceDataId = useHomeVisitFormStore((s) => s.setServiceDataId);
   const t = useTranslations("adoption");
 
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<any>(null);
-  const [meta, setMeta] = useState<any>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -54,59 +61,82 @@ export default function HomeVisitFieldsPage() {
           },
         );
         if (!mounted) return;
-        // API returns { message, data: { id, formData, ... } } - extract formData when present
         const raw = res.data;
-        const form = raw?.data?.formData ?? raw?.formData ?? raw;
+        const form = raw?.data?.formData ?? raw?.formData ?? raw?.data ?? raw;
         setFormData(form ?? null);
-        setMeta(raw?.data ?? raw ?? null);
-      } catch (err) {
-        console.error("Error fetching home visit data:", err);
-        toast.error(t("homeVisit.errors.loadFailed"));
-        setFormData(null);
+      } catch (err: any) {
+        if (!mounted) return;
+        if (err?.response?.status === 404) {
+          // No home visit form found for this application
+          setFormData(null);
+        } else {
+          console.error("Error fetching home visit data:", err);
+          toast.error(t("homeVisit.errors.loadFailed"));
+          setFormData(null);
+        }
       } finally {
         if (mounted) setLoading(false);
       }
     }
 
-    if (serviceDataId) fetchData();
-    else setLoading(false);
+    if (serviceDataId) {
+      fetchData();
+    } else {
+      setLoading(false);
+    }
 
     return () => {
       mounted = false;
     };
-  }, [serviceDataId, token]);
+  }, [serviceDataId, token, t]);
 
-  // A simple fallback/shape so we can render fields even when no backend data exists.
-  const fallback = {
-    generalInfo: {
-      socialWorkerName: "",
-      placeOfVisit: "",
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      address: {
-        region: "",
-        subCity: "",
-        woreda: "",
-        kebele: "",
-        houseNumber: "",
-        neighborhoodName: "",
-      },
-    },
-    applicantFather: {},
-    applicantMother: {},
-    witnesses: [],
-    socialWorkerEvaluation: {},
-  };
+  const general = formData?.generalInfo || {};
+  const address = general?.address || {};
+  const interest = formData?.adoptionInterest || {};
+  const preferredChild = interest?.preferredChild || {};
+  const applicantFather = formData?.applicantFather || {};
+  const applicantMother = formData?.applicantMother || {};
+  const marriageInfo = formData?.marriageInfo || {};
+  const homeEnv = formData?.homeAndEnvironment || {};
+  const existingChildren = Array.isArray(formData?.existingChildren)
+    ? formData.existingChildren
+    : [];
+  const householdMembers = Array.isArray(formData?.householdMembers)
+    ? formData.householdMembers
+    : [];
+  const witnesses = Array.isArray(formData?.witnesses)
+    ? formData.witnesses
+    : [];
+  const familyBg = formData?.familyBackground || {};
+  const fatherSide = familyBg?.fatherSide || {};
+  const motherSide = familyBg?.motherSide || {};
+  const evaluation = formData?.socialWorkerEvaluation || {};
 
-  const payload = formData ?? fallback;
-  const metaInfo = meta ?? {};
+  const dateValue =
+    general?.startDate && general?.endDate
+      ? t("homeVisit.fields.dateRange", {
+          start: general.startDate,
+          end: general.endDate,
+        })
+      : general?.startDate || general?.endDate || "—";
+
+  const timeValue =
+    general?.startTime && general?.endTime
+      ? t("homeVisit.fields.timeRange", {
+          start: general.startTime,
+          end: general.endTime,
+        })
+      : general?.startTime || general?.endTime || "—";
+
+  const signatureDisplay =
+    evaluation?.signature && typeof evaluation.signature === "object"
+      ? evaluation.signature.path || evaluation.signature.name || "Attached"
+      : evaluation?.signature || "Signed electronically";
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Button
             variant="ghost"
             onClick={() =>
@@ -121,7 +151,48 @@ export default function HomeVisitFieldsPage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8">{t("homeVisit.loading")}</div>
+        <div className="flex flex-col items-center justify-center py-24 space-y-4">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <p className="text-slate-600 font-medium">{t("homeVisit.loading")}</p>
+        </div>
+      ) : !formData ? (
+        <div className="max-w-2xl mx-auto mt-8">
+          <Card className="border-dashed border-2 border-slate-200">
+            <CardContent className="flex flex-col items-center justify-center text-center p-8 space-y-4">
+              <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                <FileQuestion className="w-8 h-8" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-semibold text-slate-900">
+                  {t("homeVisit.noDataTitle")}
+                </h3>
+                <p className="text-sm text-slate-500 max-w-md">
+                  {t("homeVisit.noDataDescription", { id: serviceDataId })}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 pt-2 justify-center">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    router.push(`/adoption/adoption-requests/${serviceDataId}`)
+                  }
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  {t("homeVisit.backToApplication")}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setServiceDataId(String(serviceDataId));
+                    router.push("/adoption/home-visit/Registration/step1");
+                  }}
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  {t("homeVisit.submitHomeVisit")}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
         <div>
           <div className="max-w-7xl mx-auto p-8 space-y-8">
@@ -137,41 +208,35 @@ export default function HomeVisitFieldsPage() {
                 <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   <Field
                     label={t("homeVisit.fields.socialWorker")}
-                    value={formData.generalInfo.socialWorkerName}
+                    value={general?.socialWorkerName}
                   />
                   <Field
                     label={t("homeVisit.fields.placeOfVisit")}
-                    value={formData.generalInfo.placeOfVisit}
+                    value={general?.placeOfVisit}
                   />
                   <Field
                     label={t("homeVisit.fields.date")}
-                    value={t("homeVisit.fields.dateRange", {
-                      start: formData.generalInfo.startDate,
-                      end: formData.generalInfo.endDate,
-                    })}
+                    value={dateValue}
                   />
                   <Field
                     label={t("homeVisit.fields.time")}
-                    value={t("homeVisit.fields.timeRange", {
-                      start: formData.generalInfo.startTime,
-                      end: formData.generalInfo.endTime,
-                    })}
+                    value={timeValue}
                   />
                   <Field
                     label={t("homeVisit.fields.kebele")}
-                    value={formData.generalInfo.address.kebele}
+                    value={address?.kebele}
                   />
                   <Field
                     label={t("homeVisit.fields.woreda")}
-                    value={formData.generalInfo.address.woreda}
+                    value={address?.woreda}
                   />
                   <Field
                     label={t("homeVisit.fields.subCity")}
-                    value={formData.generalInfo.address.subCity}
+                    value={address?.subCity}
                   />
                   <Field
                     label={t("homeVisit.fields.houseNo")}
-                    value={formData.generalInfo.address.houseNumber}
+                    value={address?.houseNumber}
                   />
                 </CardContent>
               </Card>
@@ -188,22 +253,31 @@ export default function HomeVisitFieldsPage() {
                       {t("homeVisit.fields.preference")}
                     </span>
                     <span className="text-sm font-bold text-blue-700">
-                      {formData.adoptionInterest.preferredChild.quantity}{" "}
-                      {t("homeVisit.fields.child", {
-                        count:
-                          formData.adoptionInterest.preferredChild.quantity,
-                      })}{" "}
-                      ({formData.adoptionInterest.preferredChild.sex})
+                      {preferredChild?.quantity ? (
+                        <>
+                          {preferredChild.quantity}{" "}
+                          {t("homeVisit.fields.child", {
+                            count: preferredChild.quantity,
+                          })}{" "}
+                          {preferredChild.sex ? `(${preferredChild.sex})` : ""}
+                        </>
+                      ) : (
+                        "—"
+                      )}
                     </span>
                   </div>
                   <div className="space-y-2">
                     <Field
                       label={t("homeVisit.fields.ageRange")}
-                      value={`${formData.adoptionInterest.preferredChild.ageRange} ${t("homeVisit.fields.years")}`}
+                      value={
+                        preferredChild?.ageRange
+                          ? `${preferredChild.ageRange} ${t("homeVisit.fields.years")}`
+                          : "—"
+                      }
                     />
                     <Field
                       label={t("homeVisit.fields.reason")}
-                      value={formData.adoptionInterest.reasonForAdoption}
+                      value={interest?.reasonForAdoption}
                     />
                   </div>
                 </CardContent>
@@ -218,11 +292,11 @@ export default function HomeVisitFieldsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ApplicantCard
                   title={t("homeVisit.fields.father")}
-                  data={formData.applicantFather}
+                  data={applicantFather}
                 />
                 <ApplicantCard
                   title={t("homeVisit.fields.mother")}
-                  data={formData.applicantMother}
+                  data={applicantMother}
                 />
               </div>
             </div>
@@ -239,25 +313,25 @@ export default function HomeVisitFieldsPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <Field
                       label={t("homeVisit.fields.duration")}
-                      value={formData.marriageInfo.marriageDuration}
+                      value={marriageInfo?.marriageDuration}
                     />
                     <Field
                       label={t("homeVisit.fields.datePlace")}
-                      value={formData.marriageInfo.marriageDateAndPlace}
+                      value={marriageInfo?.marriageDateAndPlace}
                     />
                   </div>
                   <div className="space-y-4">
                     <Field
                       label={t("homeVisit.fields.description")}
-                      value={formData.marriageInfo.relationshipDescription}
+                      value={marriageInfo?.relationshipDescription}
                     />
                     <Field
                       label={t("homeVisit.fields.conflictResolution")}
-                      value={formData.marriageInfo.conflictResolution}
+                      value={marriageInfo?.conflictResolution}
                     />
                     <Field
                       label={t("homeVisit.fields.financialManagement")}
-                      value={formData.marriageInfo.financialManagement}
+                      value={marriageInfo?.financialManagement}
                     />
                   </div>
                 </CardContent>
@@ -273,33 +347,33 @@ export default function HomeVisitFieldsPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <Field
                       label={t("homeVisit.fields.houseType")}
-                      value={formData.homeAndEnvironment.houseType}
+                      value={homeEnv?.houseType}
                     />
                     <Field
                       label={t("homeVisit.fields.ownership")}
-                      value={formData.homeAndEnvironment.ownershipStatus}
+                      value={homeEnv?.ownershipStatus}
                     />
                     <Field
                       label={t("homeVisit.fields.size")}
-                      value={formData.homeAndEnvironment.roomsAndSize}
+                      value={homeEnv?.roomsAndSize}
                     />
                     <Field
                       label={t("homeVisit.fields.livingDuration")}
-                      value={formData.homeAndEnvironment.livingDuration}
+                      value={homeEnv?.livingDuration}
                     />
                   </div>
                   <div className="pt-4 border-t border-slate-100 space-y-3">
                     <Field
                       label={t("homeVisit.fields.compoundCondition")}
-                      value={formData.homeAndEnvironment.compoundCondition}
+                      value={homeEnv?.compoundCondition}
                     />
                     <Field
                       label={t("homeVisit.fields.childSuitability")}
-                      value={formData.homeAndEnvironment.suitabilityForChild}
+                      value={homeEnv?.suitabilityForChild}
                     />
                     <Field
                       label={t("homeVisit.fields.neighborhood")}
-                      value={formData.homeAndEnvironment.neighborhoodCondition}
+                      value={homeEnv?.neighborhoodCondition}
                     />
                   </div>
                 </CardContent>
@@ -314,13 +388,13 @@ export default function HomeVisitFieldsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
-                {formData.existingChildren.length > 0 && (
+                {existingChildren.length > 0 && (
                   <div>
                     <SectionHeading
                       title={t("homeVisit.sections.existingChildren")}
                     />
                     <PersonTable
-                      data={formData.existingChildren}
+                      data={existingChildren}
                       columns={[
                         "fullName",
                         "age",
@@ -332,13 +406,13 @@ export default function HomeVisitFieldsPage() {
                   </div>
                 )}
 
-                {formData.householdMembers.length > 0 && (
+                {householdMembers.length > 0 && (
                   <div>
                     <SectionHeading
                       title={t("homeVisit.sections.otherHouseholdMembers")}
                     />
                     <PersonTable
-                      data={formData.householdMembers}
+                      data={householdMembers}
                       columns={[
                         "fullName",
                         "age",
@@ -350,11 +424,11 @@ export default function HomeVisitFieldsPage() {
                   </div>
                 )}
 
-                {formData.witnesses.length > 0 && (
+                {witnesses.length > 0 && (
                   <div>
                     <SectionHeading title={t("homeVisit.sections.witnesses")} />
                     <PersonTable
-                      data={formData.witnesses}
+                      data={witnesses}
                       columns={[
                         "fullName",
                         "phoneNumber",
@@ -363,6 +437,14 @@ export default function HomeVisitFieldsPage() {
                     />
                   </div>
                 )}
+
+                {existingChildren.length === 0 &&
+                  householdMembers.length === 0 &&
+                  witnesses.length === 0 && (
+                    <p className="text-sm text-slate-500 italic">
+                      No additional household members or witnesses recorded.
+                    </p>
+                  )}
               </CardContent>
             </Card>
 
@@ -377,21 +459,19 @@ export default function HomeVisitFieldsPage() {
                 <CardContent className="space-y-4">
                   <Field
                     label={t("homeVisit.fields.parents")}
-                    value={formData.familyBackground.fatherSide.parentsNames}
+                    value={fatherSide?.parentsNames}
                   />
                   <Field
                     label={t("homeVisit.fields.siblings")}
-                    value={formData.familyBackground.fatherSide.siblingsCount}
+                    value={fatherSide?.siblingsCount}
                   />
                   <Field
                     label={t("homeVisit.fields.upbringing")}
-                    value={
-                      formData.familyBackground.fatherSide.childhoodExperience
-                    }
+                    value={fatherSide?.childhoodExperience}
                   />
                   <Field
                     label={t("homeVisit.fields.workHistory")}
-                    value={formData.familyBackground.fatherSide.workExperience}
+                    value={fatherSide?.workExperience}
                   />
                 </CardContent>
               </Card>
@@ -404,21 +484,19 @@ export default function HomeVisitFieldsPage() {
                 <CardContent className="space-y-4">
                   <Field
                     label={t("homeVisit.fields.parents")}
-                    value={formData.familyBackground.motherSide.parentsNames}
+                    value={motherSide?.parentsNames}
                   />
                   <Field
                     label={t("homeVisit.fields.siblings")}
-                    value={formData.familyBackground.motherSide.siblingsCount}
+                    value={motherSide?.siblingsCount}
                   />
                   <Field
                     label={t("homeVisit.fields.upbringing")}
-                    value={
-                      formData.familyBackground.motherSide.childhoodExperience
-                    }
+                    value={motherSide?.childhoodExperience}
                   />
                   <Field
                     label={t("homeVisit.fields.workHistory")}
-                    value={formData.familyBackground.motherSide.workExperience}
+                    value={motherSide?.workExperience}
                   />
                 </CardContent>
               </Card>
@@ -434,7 +512,7 @@ export default function HomeVisitFieldsPage() {
               </div>
               <CardContent className="space-y-6">
                 <div className="bg-slate-50 p-6 rounded-lg border border-slate-200 italic text-slate-700 leading-relaxed">
-                  "{formData.socialWorkerEvaluation.comment}"
+                  "{evaluation?.comment || "No comment provided."}"
                 </div>
 
                 <div className="flex flex-wrap gap-8 pt-4">
@@ -443,10 +521,10 @@ export default function HomeVisitFieldsPage() {
                       {t("homeVisit.fields.preparedBy")}
                     </dt>
                     <dd className="font-semibold">
-                      {formData.socialWorkerEvaluation.preparedBy}
+                      {evaluation?.preparedBy || "—"}
                     </dd>
                     <dd className="text-xs text-slate-400">
-                      {formData.socialWorkerEvaluation.preparedDate}
+                      {evaluation?.preparedDate || ""}
                     </dd>
                   </div>
                   <div className="flex-1 min-w-[200px]">
@@ -454,10 +532,10 @@ export default function HomeVisitFieldsPage() {
                       {t("homeVisit.fields.approvedBy")}
                     </dt>
                     <dd className="font-semibold">
-                      {formData.socialWorkerEvaluation.approvedBy}
+                      {evaluation?.approvedBy || "—"}
                     </dd>
                     <dd className="text-xs text-slate-400">
-                      {formData.socialWorkerEvaluation.approvedDate}
+                      {evaluation?.approvedDate || ""}
                     </dd>
                   </div>
                   <div className="flex-1 min-w-[200px]">
@@ -465,7 +543,7 @@ export default function HomeVisitFieldsPage() {
                       {t("homeVisit.fields.digitalSignature")}
                     </dt>
                     <dd className="font-mono text-xs bg-slate-100 px-2 py-1 rounded inline-block">
-                      {formData.socialWorkerEvaluation.signature.path}
+                      {signatureDisplay}
                     </dd>
                   </div>
                 </div>
