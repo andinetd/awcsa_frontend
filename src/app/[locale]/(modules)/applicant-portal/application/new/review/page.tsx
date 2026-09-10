@@ -183,8 +183,7 @@ export default function ReviewPage() {
 
     // Check applicant age
     if (!isAgeEligible) {
-      const msg =
-        "Applicant's age must be between 21 and 60 years old to apply for adoption. Please return to Step 1 to correct your date of birth.";
+      const msg = t("review.ageEligibilityError");
       setError(msg);
       toast.error(msg, { duration: 6000 });
       return;

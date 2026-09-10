@@ -88,11 +88,11 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
             </div>
           </div>
 
-          <div className="flex gap-3 w-full md:w-auto">
+          <div className="w-full md:w-auto">
             {(application.status || "").toUpperCase() ===
               "PENDING_APPROVAL" && (
-              <div className="mt-6 flex justify-end">
-                <div className="space-x-2">
+              <div className="w-full md:w-auto flex justify-stretch sm:justify-end mt-4 md:mt-0">
+                <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
                   <Button
                     onClick={() => {
                       router.push(
@@ -101,12 +101,13 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                         )}/fields`,
                       );
                     }}
+                    className="w-full sm:w-auto"
                   >
                     {t("adoptionDetail.actions.viewHomeVisit")}
                   </Button>
                   <Button
                     onClick={() => setIsMatchModalOpen(true)}
-                    className="flex-1 lg:flex-none"
+                    className="w-full sm:w-auto"
                   >
                     {t("adoptionDetail.actions.approveAndMatch")}
                   </Button>
@@ -114,8 +115,8 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
               </div>
             )}
             {(application.status || "").toUpperCase() === "MATCHED" && (
-              <div className="mt-6 flex justify-end">
-                <div className="space-x-2">
+              <div className="w-full md:w-auto flex justify-stretch sm:justify-end mt-4 md:mt-0">
+                <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
                   <Button
                     onClick={() => {
                       router.push(
@@ -124,12 +125,13 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
                         )}/fields`,
                       );
                     }}
+                    className="w-full sm:w-auto"
                   >
                     {t("adoptionDetail.actions.viewHomeVisit")}
                   </Button>
                   <Button
                     onClick={() => setIsMatchedChildDetailOpen(true)}
-                    className="flex-1 lg:flex-none"
+                    className="w-full sm:w-auto"
                   >
                     {t("adoptionDetail.actions.viewMatchedChild")}
                   </Button>
@@ -138,35 +140,36 @@ export const ApplicantInfoSection: React.FC<ApplicantInfoSectionProps> = ({
             )}
             {(application.status || "").toUpperCase() ===
               "PENDING_HOME_VISIT" && (
-              <div className="mt-6 flex justify-end">
+              <div className="w-full md:w-auto flex justify-stretch sm:justify-end mt-4 md:mt-0">
                 <Button
                   onClick={() => {
                     setServiceDataId(String(application.applicationId));
                     router.push("../home-visit/Registration/step1");
                   }}
+                  className="w-full sm:w-auto"
                 >
                   {t("adoptionDetail.actions.submitHomeVisit")}
                 </Button>
               </div>
             )}
             {(application.status || "").toUpperCase() === "PENDING_REVIEW" && (
-              <div className="flex gap-2 mt-2">
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto mt-4 md:mt-0">
                 <Button
                   variant="destructive"
                   onClick={() => handleAction("deny")}
-                  className="cursor-pointer"
+                  className="w-full sm:w-auto cursor-pointer"
                 >
                   {t("adoptionDetail.actions.reject")}
                 </Button>
                 <Button
                   onClick={() => handleReturnToApplicant()}
-                  className="cursor-pointer"
+                  className="w-full sm:w-auto cursor-pointer"
                 >
                   {t("adoptionDetail.actions.returnToApplicant")}
                 </Button>
                 <Button
                   onClick={() => handleAction("approve")}
-                  className="cursor-pointer"
+                  className="w-full sm:w-auto cursor-pointer"
                 >
                   {t("adoptionDetail.actions.approve")}
                 </Button>

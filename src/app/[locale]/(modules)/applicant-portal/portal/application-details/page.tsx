@@ -14,9 +14,26 @@ import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
 import { ArrowLeft } from "lucide-react";
 import router from "next/router";
+import { useFetchApplicationQuery } from "@/hooks/applicants-portal";
+import { FollowUpReportsSection } from "@/app/[locale]/(modules)/adoption/adoption-requests/_components/follow-up-reports-section";
 
 export default function Details() {
-  const { application } = useFetchedAdoptionApplicationStore();
+  const { application: storedApp, setApplication } = useFetchedAdoptionApplicationStore();
+  const { data: fetchedApps, isLoading: isFetching } = useFetchApplicationQuery();
+  const application =
+    storedApp ??
+    (fetchedApps && fetchedApps.length > 0 ? fetchedApps[0] : null);
+
+  useEffect(() => {
+    if (
+      fetchedApps &&
+      fetchedApps.length > 0 &&
+      (!storedApp || (!storedApp.matchId && fetchedApps[0].matchId))
+    ) {
+      setApplication(fetchedApps[0]);
+    }
+  }, [fetchedApps, storedApp, setApplication]);
+
   const { token } = useAuthStore();
   const [objectUrls, setObjectUrls] = useState<string[]>([]);
   const t = useTranslations("applicants-portal");
@@ -415,6 +432,33 @@ export default function Details() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Post-Match Follow-Up Reports Section */}
+      {(application.status || "").toUpperCase() === "MATCHED" && (
+        <div id="follow-up-reports" className="space-y-4">
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5 shrink-0" />
+              <div>
+                <h3 className="font-semibold text-emerald-900">
+                  {t("applicationDetails.matchedBannerTitle")}
+                </h3>
+                <p className="text-sm text-emerald-800 mt-1">
+                  {t("applicationDetails.matchedBannerDesc")}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <FollowUpReportsSection
+              matchId={application.matchId ?? application.adoptionMatches?.[0]?.id}
+              matchStatus={application.matchStatus ?? application.adoptionMatches?.[0]?.status ?? "ACTIVE"}
+              isOfficer={false}
+            />
+          </div>
+        </div>
+      )}
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">

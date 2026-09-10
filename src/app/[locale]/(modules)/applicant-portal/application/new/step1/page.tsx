@@ -89,18 +89,12 @@ export default function Step1Page() {
       <div className="p-3.5 bg-blue-50/90 border border-blue-200 rounded-xl space-y-2">
         <h4 className="text-xs font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
-          Adoption Eligibility Criteria
+          {t("stepone.eligibility.title")}
         </h4>
         <ul className="text-xs text-blue-900 space-y-1.5 list-disc pl-4 font-lexend">
-          <li>
-            <strong>Age requirement:</strong> You must be between <strong>21 and 60 years old</strong> to apply for adoption.
-          </li>
-          <li>
-            <strong>Identification:</strong> Official Kebele/City ID & Birth Certificate.
-          </li>
-          <li>
-            <strong>Income:</strong> Verifiable monthly or annual income statement.
-          </li>
+          <li>{t("stepone.eligibility.age")}</li>
+          <li>{t("stepone.eligibility.id")}</li>
+          <li>{t("stepone.eligibility.income")}</li>
         </ul>
       </div>
 
@@ -182,7 +176,7 @@ export default function Step1Page() {
                         {t("stepone.form.dateOfBirth")}
                       </FormLabel>
                       <span className="text-xs text-muted-foreground font-lexend">
-                        Age 21 – 60
+                        {t("stepone.eligibility.ageRange")}
                       </span>
                     </div>
                     <FormControl>
@@ -198,8 +192,8 @@ export default function Step1Page() {
                         <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
                         <span>
                           {age < 21
-                            ? `Age: ${age} years old — Ineligible: Applicant must be at least 21 years old.`
-                            : `Age: ${age} years old — Ineligible: Applicant must be 60 years old or younger.`}
+                            ? t("stepone.eligibility.ageUnder", { age })
+                            : t("stepone.eligibility.ageOver", { age })}
                         </span>
                       </div>
                     )}

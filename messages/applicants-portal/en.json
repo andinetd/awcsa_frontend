@@ -70,7 +70,8 @@
       "returned": "Your application has been returned by the expert with comments. Please review the feedback provided and resubmit your application after addressing the comments.",
       "rejected": "We regret to inform you that your adoption application has been rejected. For more information, please contact our support team.",
       "matched": "Congratulations! Your adoption application has been matched. Our team will reach out to you with the next steps."
-    }
+    },
+    "submitFollowUpReports": "Submit / View Follow-Up Reports"
   },
   "userInfo": {
     "userInfo": "User Information",
@@ -88,6 +89,15 @@
       "two": "Your birth certificate",
       "three": "Monthly or Annual icome verification document",
       "note": "All documents must be accurate and will be reviewed by the authorities."
+    },
+    "eligibility": {
+      "title": "Adoption Eligibility Criteria",
+      "age": "Age requirement: You must be between 21 and 60 years old to apply for adoption.",
+      "id": "Identification: Official Kebele/City ID & Birth Certificate.",
+      "income": "Income: Verifiable monthly or annual income statement.",
+      "ageRange": "Age 21 – 60",
+      "ageUnder": "Age: {age} years old — Ineligible: Applicant must be at least 21 years old.",
+      "ageOver": "Age: {age} years old — Ineligible: Applicant must be 60 years old or younger."
     },
     "form": {
       "cityId": "City ID Number",
@@ -168,6 +178,8 @@
     "reviewerComment": "Reviewer Comment",
     "submitted": "Submitted",
     "submittedOn": "This application was submitted on",
+    "matchedBannerTitle": "Child Matched & Post-Placement Monitoring",
+    "matchedBannerDesc": "Congratulations on your match! As part of the post-placement care process, please submit periodic follow-up progress reports regarding the child’s health, education, emotional well-being, and family integration.",
     "back": "Back",
     "noApplication": "No application found.",
     "noFile": "No file",
@@ -214,7 +226,8 @@
     "signInRequired": "You must be signed in to submit the application.",
     "submissionSuccess": "Application submitted successfully!",
     "submissionFailed": "Submission failed",
-    "unableToPreview": "Unable to preview file"
+    "unableToPreview": "Unable to preview file",
+    "ageEligibilityError": "Applicant's age must be between 21 and 60 years old to apply for adoption. Please return to Step 1 to correct your date of birth."
   },
   "applicationLayout": {
     "title": "Adoption Application",

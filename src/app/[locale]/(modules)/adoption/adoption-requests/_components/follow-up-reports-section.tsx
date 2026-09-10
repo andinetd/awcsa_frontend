@@ -36,6 +36,11 @@ import {
   BookOpen,
   Users,
   Smile,
+  Paperclip,
+  Upload,
+  FileText,
+  X,
+  Download,
 } from "lucide-react";
 import {
   useListFollowUpReports,
@@ -49,6 +54,20 @@ import {
   ReviewFollowUpReportPayload,
 } from "@/api/adoption/matches";
 
+export interface FollowUpAttachment {
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize?: number;
+}
+
+export const formatFileSize = (bytes?: number) => {
+  if (!bytes) return "";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
 interface FollowUpReportsSectionProps {
   matchId?: number | null;
   matchStatus?: string;
@@ -58,25 +77,25 @@ interface FollowUpReportsSectionProps {
 // ─── Status config ─────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<
   FollowUpReportStatus,
-  { label: string; color: string; icon: React.ElementType }
+  { key: string; color: string; icon: React.ElementType }
 > = {
   SUBMITTED: {
-    label: "Submitted",
+    key: "SUBMITTED",
     color: "bg-blue-100 text-blue-800 border-blue-200",
     icon: Clock,
   },
   UNDER_REVIEW: {
-    label: "Under Review",
+    key: "UNDER_REVIEW",
     color: "bg-amber-100 text-amber-800 border-amber-200",
     icon: Eye,
   },
   REVIEWED: {
-    label: "Reviewed",
+    key: "REVIEWED",
     color: "bg-emerald-100 text-emerald-800 border-emerald-200",
     icon: CheckCircle2,
   },
   REQUIRES_ACTION: {
-    label: "Requires Action",
+    key: "REQUIRES_ACTION",
     color: "bg-rose-100 text-rose-800 border-rose-200",
     icon: AlertTriangle,
   },
@@ -90,15 +109,15 @@ const FILTER_STATUSES: Array<FollowUpReportStatus | "ALL"> = [
   "REQUIRES_ACTION",
 ];
 
-const REPORT_PERIOD_PRESETS = [
-  "Month 1 (1 Month Post-Placement)",
-  "Month 3 (3 Months Post-Placement)",
-  "Month 6 (6 Months Post-Placement)",
-  "Month 9 (9 Months Post-Placement)",
-  "Month 12 (1 Year Post-Placement)",
-  "Month 18 (1.5 Years Post-Placement)",
-  "Month 24 (2 Years Post-Placement)",
-  "Annual Review (Post-2 Years)",
+const REPORT_PERIOD_PRESETS: { key: string; fallback: string }[] = [
+  { key: "month1", fallback: "Month 1 (1 Month Post-Placement)" },
+  { key: "month3", fallback: "Month 3 (3 Months Post-Placement)" },
+  { key: "month6", fallback: "Month 6 (6 Months Post-Placement)" },
+  { key: "month9", fallback: "Month 9 (9 Months Post-Placement)" },
+  { key: "month12", fallback: "Month 12 (1 Year Post-Placement)" },
+  { key: "month18", fallback: "Month 18 (1.5 Years Post-Placement)" },
+  { key: "month24", fallback: "Month 24 (2 Years Post-Placement)" },
+  { key: "annual", fallback: "Annual Review (Post-2 Years)" },
 ];
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
@@ -125,7 +144,13 @@ const WellbeingField = ({
   </div>
 );
 
-const StatusBadge = ({ status }: { status: FollowUpReportStatus }) => {
+const StatusBadge = ({
+  status,
+  t,
+}: {
+  status: FollowUpReportStatus;
+  t: (key: string) => string;
+}) => {
   const cfg = STATUS_CONFIG[status];
   const Icon = cfg.icon;
   return (
@@ -133,7 +158,7 @@ const StatusBadge = ({ status }: { status: FollowUpReportStatus }) => {
       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border ${cfg.color}`}
     >
       <Icon className="w-3 h-3" />
-      {cfg.label}
+      {t(`followUpReports.statuses.${cfg.key}`)}
     </span>
   );
 };
@@ -144,10 +169,12 @@ const ReportCard = ({
   report,
   isOfficer,
   onReview,
+  t,
 }: {
   report: FollowUpReport;
   isOfficer: boolean;
   onReview: (report: FollowUpReport) => void;
+  t: any;
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -160,7 +187,7 @@ const ReportCard = ({
             <span className="text-sm font-bold text-slate-900">
               {report.reportPeriod}
             </span>
-            <StatusBadge status={report.status} />
+            <StatusBadge status={report.status} t={t} />
           </div>
           <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
             <span className="flex items-center gap-1">
@@ -184,7 +211,7 @@ const ReportCard = ({
                 onClick={() => onReview(report)}
               >
                 <MessageSquare className="w-3 h-3 mr-1" />
-                Review
+                {t("followUpReports.review")}
               </Button>
             )}
           <button
@@ -206,31 +233,90 @@ const ReportCard = ({
           <div className="space-y-0">
             <WellbeingField
               icon={Heart}
-              label="Child Health Status"
+              label={t("followUpReports.childHealthStatus")}
               value={report.childHealthStatus}
             />
             <WellbeingField
               icon={Smile}
-              label="Emotional Wellbeing"
+              label={t("followUpReports.emotionalWellbeing")}
               value={report.emotionalWellbeing}
             />
             <WellbeingField
               icon={BookOpen}
-              label="Education Progress"
+              label={t("followUpReports.educationProgress")}
               value={report.educationProgress}
             />
             <WellbeingField
               icon={Users}
-              label="Family Integration"
+              label={t("followUpReports.familyIntegration")}
               value={report.familyIntegration}
             />
             {report.additionalNotes && (
               <WellbeingField
                 icon={ClipboardList}
-                label="Additional Notes"
+                label={t("followUpReports.additionalNotes")}
                 value={report.additionalNotes}
               />
             )}
+            {report.attachments &&
+              Array.isArray(report.attachments) &&
+              report.attachments.length > 0 && (
+                <div className="mt-3 border-t border-slate-100 pt-3">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5 text-indigo-600" />
+                    {t("followUpReports.attachedFiles")} ({report.attachments.length})
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {report.attachments.map((att: any, idx: number) => {
+                      const isImg =
+                        att.fileType && att.fileType.startsWith("image/");
+                      return (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs hover:bg-slate-100 transition-colors"
+                        >
+                          <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
+                            {isImg ? (
+                              <img
+                                src={att.fileUrl}
+                                alt={att.fileName || "attachment"}
+                                className="w-7 h-7 rounded object-cover border border-slate-200 shrink-0"
+                              />
+                            ) : (
+                              <div className="w-7 h-7 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                                <FileText className="w-3.5 h-3.5" />
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <p
+                                className="font-medium text-slate-800 truncate"
+                                title={att.fileName}
+                              >
+                                {att.fileName || `Attachment #${idx + 1}`}
+                              </p>
+                              {att.fileSize && (
+                                <p className="text-[10px] text-slate-400">
+                                  {formatFileSize(att.fileSize)}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <a
+                            href={att.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={att.fileName || `attachment-${idx + 1}`}
+                            className="inline-flex items-center gap-1 px-2 py-1 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 rounded text-[11px] font-medium text-slate-600 transition-colors shrink-0"
+                          >
+                            <Download className="w-3 h-3" />
+                            {t("followUpReports.view")}
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
           </div>
 
           {/* Officer review block */}
@@ -238,20 +324,20 @@ const ReportCard = ({
             <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-lg p-3">
               <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                Officer Review
+                {t("followUpReports.officerReview")}
               </p>
               <p className="text-xs text-emerald-600 mb-2">
-                Reviewed by{" "}
+                {t("followUpReports.reviewedBy")}{" "}
                 <strong>
                   {report.reviewedBy.firstName} {report.reviewedBy.lastName}
                 </strong>{" "}
-                ({report.reviewedBy.employeeRole}) on{" "}
+                ({report.reviewedBy.employeeRole}) {t("followUpReports.on")}{" "}
                 {new Date(report.reviewedAt!).toLocaleDateString()}
               </p>
               {report.officerFeedback && (
                 <div className="mb-2">
                   <p className="text-xs font-semibold text-emerald-700 mb-0.5">
-                    Feedback:
+                    {t("followUpReports.feedbackLabel")}
                   </p>
                   <p className="text-sm text-slate-700">{report.officerFeedback}</p>
                 </div>
@@ -260,7 +346,7 @@ const ReportCard = ({
                 <div className="bg-rose-50 border border-rose-200 rounded-md p-2 mt-2">
                   <p className="text-xs font-semibold text-rose-700 mb-0.5 flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
-                    Concerns:
+                    {t("followUpReports.concernsLabel")}
                   </p>
                   <p className="text-sm text-rose-800">{report.officerConcerns}</p>
                 </div>
@@ -304,6 +390,9 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
     additionalNotes: "",
   });
 
+  const [attachments, setAttachments] = useState<FollowUpAttachment[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
   // Review form state
   const [reviewForm, setReviewForm] = useState<ReviewFollowUpReportPayload>({
     status: "REVIEWED",
@@ -321,20 +410,64 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
   const reviewMutation = useReviewFollowUpReport(matchId);
 
   // Handlers
-  const handleSubmitReport = () => {
-    submitMutation.mutate(form, {
-      onSuccess: () => {
-        setIsSubmitOpen(false);
-        setForm({
-          reportPeriod: "",
-          childHealthStatus: "",
-          emotionalWellbeing: "",
-          educationProgress: "",
-          familyIntegration: "",
-          additionalNotes: "",
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const newAttachments: FollowUpAttachment[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
         });
+
+        newAttachments.push({
+          fileName: file.name,
+          fileUrl: dataUrl,
+          fileType: file.type || "application/octet-stream",
+          fileSize: file.size,
+        });
+      }
+
+      setAttachments((prev) => [...prev, ...newAttachments]);
+    } catch (err) {
+      console.error("Error reading attached file:", err);
+    } finally {
+      setIsUploading(false);
+      if (e.target) e.target.value = "";
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmitReport = () => {
+    submitMutation.mutate(
+      {
+        ...form,
+        attachments: attachments.length > 0 ? attachments : undefined,
       },
-    });
+      {
+        onSuccess: () => {
+          setIsSubmitOpen(false);
+          setAttachments([]);
+          setForm({
+            reportPeriod: "",
+            childHealthStatus: "",
+            emotionalWellbeing: "",
+            educationProgress: "",
+            familyIntegration: "",
+            additionalNotes: "",
+          });
+        },
+      }
+    );
   };
 
   const handleOpenReview = (report: FollowUpReport) => {
@@ -370,7 +503,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
   if (!matchId) {
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-slate-400 text-sm">
-        Match details unavailable
+        {t("followUpReports.matchDetailsUnavailable")}
       </div>
     );
   }
@@ -385,10 +518,10 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">
-              Follow-Up Reports
+              {t("followUpReports.title")}
             </h3>
             <p className="text-xs text-slate-500">
-              Periodic progress reports from the adoptive family
+              {t("followUpReports.subtitle")}
             </p>
           </div>
           {reports.length > 0 && (
@@ -405,7 +538,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
             className="text-xs h-8 bg-indigo-600 hover:bg-indigo-700 text-white"
           >
             <ClipboardList className="w-3.5 h-3.5 mr-1.5" />
-            Submit Report
+            {t("followUpReports.submitReport")}
           </Button>
         )}
       </div>
@@ -414,7 +547,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
-            Filter:
+            {t("followUpReports.filterLabel")}
           </span>
           <Select
             value={statusFilter}
@@ -423,7 +556,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
             }
           >
             <SelectTrigger className="h-8 w-52 text-xs bg-white border-slate-200">
-              <SelectValue placeholder="All Statuses" />
+              <SelectValue placeholder={t("followUpReports.allStatuses")} />
             </SelectTrigger>
             <SelectContent>
               {FILTER_STATUSES.map((s) => {
@@ -435,7 +568,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                     <div className="flex items-center gap-2">
                       {Icon && <Icon className="w-3.5 h-3.5 text-slate-500" />}
                       <span>
-                        {s === "ALL" ? "All Reports" : cfg?.label}
+                        {s === "ALL" ? t("followUpReports.allReports") : t(`followUpReports.statuses.${cfg?.key}`)}
                       </span>
                     </div>
                   </SelectItem>
@@ -451,7 +584,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
             onClick={() => setStatusFilter("ALL")}
             className="h-7 text-xs text-slate-500 hover:text-slate-900 cursor-pointer"
           >
-            Reset filter
+            {t("followUpReports.resetFilter")}
           </Button>
         )}
       </div>
@@ -459,14 +592,14 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
       {/* Report list */}
       {isLoading ? (
         <div className="py-8 text-center text-slate-400 text-sm">
-          Loading reports...
+          {t("followUpReports.loadingReports")}
         </div>
       ) : reports.length === 0 ? (
         <div className="py-10 text-center bg-white rounded-xl border border-dashed border-slate-200">
           <ClipboardList className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No follow-up reports yet.</p>
+          <p className="text-sm text-slate-500">{t("followUpReports.noReports")}</p>
           <p className="text-xs text-slate-400 mt-1">
-            The adoptive parent can submit periodic updates here.
+            {t("followUpReports.noReportsSubtitle")}
           </p>
         </div>
       ) : (
@@ -477,6 +610,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               report={report}
               isOfficer={isOfficer}
               onReview={handleOpenReview}
+              t={t}
             />
           ))}
         </div>
@@ -486,21 +620,24 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
       <Dialog open={isSubmitOpen} onOpenChange={setIsSubmitOpen}>
         <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Submit Follow-Up Report</DialogTitle>
+            <DialogTitle>{t("followUpReports.submitTitle")}</DialogTitle>
             <DialogDescription>
-              Provide a structured update on the child's wellbeing. All fields
-              except Additional Notes are required.
+              {t("followUpReports.submitDescription")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
             <div>
               <Label htmlFor="report-period" className="text-xs font-semibold text-slate-700 mb-1 block">
-                Report Period <span className="text-rose-500">*</span>
+                {t("followUpReports.reportPeriod")} <span className="text-rose-500">*</span>
               </Label>
               <Select
                 value={
-                  REPORT_PERIOD_PRESETS.includes(form.reportPeriod)
+                  REPORT_PERIOD_PRESETS.some(
+                    (p) =>
+                      p.fallback === form.reportPeriod ||
+                      t(`followUpReports.presets.${p.key}`) === form.reportPeriod
+                  )
                     ? form.reportPeriod
                     : form.reportPeriod
                     ? "CUSTOM"
@@ -518,24 +655,31 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                   id="report-period"
                   className="w-full bg-white border-slate-300 h-9 text-sm"
                 >
-                  <SelectValue placeholder="Select reporting period" />
+                  <SelectValue placeholder={t("followUpReports.selectPeriod")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {REPORT_PERIOD_PRESETS.map((period) => (
-                    <SelectItem key={period} value={period} className="text-xs">
-                      {period}
-                    </SelectItem>
-                  ))}
+                  {REPORT_PERIOD_PRESETS.map((preset) => {
+                    const label = t(`followUpReports.presets.${preset.key}`);
+                    return (
+                      <SelectItem key={preset.key} value={label} className="text-xs">
+                        {label}
+                      </SelectItem>
+                    );
+                  })}
                   <SelectItem value="CUSTOM" className="text-xs">
-                    Other / Custom Period...
+                    {t("followUpReports.customPeriod")}
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {(!REPORT_PERIOD_PRESETS.includes(form.reportPeriod) ||
+              {(!REPORT_PERIOD_PRESETS.some(
+                (p) =>
+                  p.fallback === form.reportPeriod ||
+                  t(`followUpReports.presets.${p.key}`) === form.reportPeriod
+              ) ||
                 form.reportPeriod === "") && (
                 <Input
                   className="mt-2"
-                  placeholder="e.g. Month 18, Mid-year update 2026..."
+                  placeholder={t("followUpReports.customPeriodPlaceholder")}
                   value={form.reportPeriod}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, reportPeriod: e.target.value }))
@@ -548,31 +692,27 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               [
                 {
                   key: "childHealthStatus",
-                  label: "Child Health Status",
+                  label: t("followUpReports.childHealthStatus"),
                   icon: Heart,
-                  placeholder:
-                    "Describe the child's current health, any medical visits, vaccinations, or health concerns...",
+                  placeholder: t("followUpReports.childHealthPlaceholder"),
                 },
                 {
                   key: "emotionalWellbeing",
-                  label: "Emotional Wellbeing",
+                  label: t("followUpReports.emotionalWellbeing"),
                   icon: Smile,
-                  placeholder:
-                    "Describe emotional stability, mood, behaviour, relationships with family members...",
+                  placeholder: t("followUpReports.emotionalPlaceholder"),
                 },
                 {
                   key: "educationProgress",
-                  label: "Education Progress",
+                  label: t("followUpReports.educationProgress"),
                   icon: BookOpen,
-                  placeholder:
-                    "Describe school enrollment, attendance, grade performance, extracurricular activities...",
+                  placeholder: t("followUpReports.educationPlaceholder"),
                 },
                 {
                   key: "familyIntegration",
-                  label: "Family Integration",
+                  label: t("followUpReports.familyIntegration"),
                   icon: Users,
-                  placeholder:
-                    "Describe how the child is integrating with the family, siblings, community...",
+                  placeholder: t("followUpReports.familyPlaceholder"),
                 },
               ] as {
                 key: keyof CreateFollowUpReportPayload;
@@ -598,17 +738,109 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Additional Notes{" "}
-                <span className="text-slate-400 font-normal">(optional)</span>
+                {t("followUpReports.additionalNotes")}{" "}
+                <span className="text-slate-400 font-normal">
+                  ({t("followUpReports.optional")})
+                </span>
               </Label>
               <Textarea
-                placeholder="Any other relevant updates, concerns, or observations..."
+                placeholder={t("followUpReports.additionalNotesPlaceholder")}
                 rows={2}
                 value={form.additionalNotes || ""}
                 onChange={(e) =>
                   setForm((f) => ({ ...f, additionalNotes: e.target.value }))
                 }
               />
+            </div>
+
+            {/* Additional Files / Attachments */}
+            <div className="border-t border-slate-100 pt-3">
+              <div className="flex items-center justify-between mb-1.5">
+                <Label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Paperclip className="w-3.5 h-3.5 text-indigo-600" />
+                  {t("followUpReports.attachAdditionalFiles")}
+                  <span className="text-slate-400 font-normal">
+                    {t("followUpReports.attachFilesDesc")}
+                  </span>
+                </Label>
+                {attachments.length > 0 && (
+                  <span className="text-xs text-indigo-600 font-medium">
+                    {t("followUpReports.filesSelected", {
+                      count: attachments.length,
+                    })}
+                  </span>
+                )}
+              </div>
+
+              {/* Upload trigger button / dropzone */}
+              <div className="border-2 border-dashed border-slate-200 hover:border-indigo-400 transition-colors rounded-xl p-4 text-center bg-slate-50/60 hover:bg-indigo-50/20 cursor-pointer relative">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf,.doc,.docx"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  disabled={isUploading}
+                />
+                <div className="flex flex-col items-center justify-center gap-1">
+                  <Upload className="w-5 h-5 text-slate-400" />
+                  <p className="text-xs font-medium text-slate-700">
+                    {isUploading
+                      ? t("followUpReports.readingFiles")
+                      : t("followUpReports.dragOrClick")}
+                  </p>
+                  <p className="text-[11px] text-slate-400">
+                    {t("followUpReports.supportedFormats")}
+                  </p>
+                </div>
+              </div>
+
+              {/* File preview list */}
+              {attachments.length > 0 && (
+                <div className="mt-3 space-y-2 max-h-44 overflow-y-auto pr-1">
+                  {attachments.map((att, idx) => {
+                    const isImg = att.fileType.startsWith("image/");
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-2 bg-white border border-slate-200 rounded-lg text-xs"
+                      >
+                        <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
+                          {isImg ? (
+                            <img
+                              src={att.fileUrl}
+                              alt={att.fileName}
+                              className="w-7 h-7 rounded object-cover border border-slate-200 shrink-0"
+                            />
+                          ) : (
+                            <div className="w-7 h-7 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                              <FileText className="w-3.5 h-3.5" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-slate-800 truncate">
+                              {att.fileName}
+                            </p>
+                            {att.fileSize && (
+                              <p className="text-[10px] text-slate-400">
+                                {formatFileSize(att.fileSize)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeAttachment(idx)}
+                          className="p-1 text-slate-400 hover:text-rose-600 rounded transition-colors"
+                          title={t("followUpReports.removeFile")}
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
@@ -618,14 +850,16 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               onClick={() => setIsSubmitOpen(false)}
               disabled={submitMutation.isPending}
             >
-              Cancel
+              {t("followUpReports.actions.cancel")}
             </Button>
             <Button
               onClick={handleSubmitReport}
               disabled={!isSubmitFormValid || submitMutation.isPending}
               className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              {submitMutation.isPending ? "Submitting..." : "Submit Report"}
+              {submitMutation.isPending
+                ? t("followUpReports.actions.submitting")
+                : t("followUpReports.actions.submit")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -635,10 +869,11 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
       <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
         <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Review Follow-Up Report</DialogTitle>
+            <DialogTitle>{t("followUpReports.reviewTitle")}</DialogTitle>
             <DialogDescription>
-              Period:{" "}
-              <strong>{selectedReport?.reportPeriod}</strong> — Submitted by{" "}
+              {t("followUpReports.periodLabel")}{" "}
+              <strong>{selectedReport?.reportPeriod}</strong> —{" "}
+              {t("followUpReports.submittedBy")}{" "}
               {selectedReport?.submitter.firstName}{" "}
               {selectedReport?.submitter.lastName}
             </DialogDescription>
@@ -649,32 +884,32 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               {/* Read-only report summary */}
               <div className="bg-slate-50 rounded-lg p-3 space-y-0 border border-slate-200">
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
-                  Submitted Report
+                  {t("followUpReports.submittedReport")}
                 </p>
                 <WellbeingField
                   icon={Heart}
-                  label="Health"
+                  label={t("followUpReports.childHealthStatus")}
                   value={selectedReport.childHealthStatus}
                 />
                 <WellbeingField
                   icon={Smile}
-                  label="Emotional"
+                  label={t("followUpReports.emotionalWellbeing")}
                   value={selectedReport.emotionalWellbeing}
                 />
                 <WellbeingField
                   icon={BookOpen}
-                  label="Education"
+                  label={t("followUpReports.educationProgress")}
                   value={selectedReport.educationProgress}
                 />
                 <WellbeingField
                   icon={Users}
-                  label="Family Integration"
+                  label={t("followUpReports.familyIntegration")}
                   value={selectedReport.familyIntegration}
                 />
                 {selectedReport.additionalNotes && (
                   <WellbeingField
                     icon={ClipboardList}
-                    label="Additional Notes"
+                    label={t("followUpReports.additionalNotes")}
                     value={selectedReport.additionalNotes}
                   />
                 )}
@@ -686,7 +921,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                   htmlFor="review-status"
                   className="text-xs font-semibold text-slate-700 mb-1.5 block"
                 >
-                  Review Status
+                  {t("followUpReports.reviewStatus")}
                 </Label>
                 <Select
                   value={reviewForm.status}
@@ -701,7 +936,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                     id="review-status"
                     className="w-full bg-white border-slate-300 h-9 text-sm"
                   >
-                    <SelectValue placeholder="Select review status" />
+                    <SelectValue placeholder={t("followUpReports.selectReviewStatus")} />
                   </SelectTrigger>
                   <SelectContent>
                     {(
@@ -717,7 +952,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                         <SelectItem key={s} value={s} className="text-xs">
                           <div className="flex items-center gap-2">
                             <Icon className="w-3.5 h-3.5 text-slate-500" />
-                            <span>{cfg.label}</span>
+                            <span>{t(`followUpReports.statuses.${cfg.key}`)}</span>
                           </div>
                         </SelectItem>
                       );
@@ -728,10 +963,10 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Officer Feedback
+                  {t("followUpReports.officerFeedback")}
                 </Label>
                 <Textarea
-                  placeholder="Professional assessment, observations, and guidance for the adoptive family..."
+                  placeholder={t("followUpReports.officerFeedbackPlaceholder")}
                   rows={3}
                   value={reviewForm.officerFeedback || ""}
                   onChange={(e) =>
@@ -745,13 +980,13 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Concerns{" "}
+                  {t("followUpReports.officerConcerns")}{" "}
                   <span className="text-slate-400 font-normal">
-                    (optional — required if status is Requires Action)
+                    {t("followUpReports.concernsHint")}
                   </span>
                 </Label>
                 <Textarea
-                  placeholder="Flag any specific concerns that need to be addressed..."
+                  placeholder={t("followUpReports.officerConcernsPlaceholder")}
                   rows={2}
                   value={reviewForm.officerConcerns || ""}
                   onChange={(e) =>
@@ -771,14 +1006,16 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               onClick={() => setIsReviewOpen(false)}
               disabled={reviewMutation.isPending}
             >
-              Cancel
+              {t("followUpReports.actions.cancel")}
             </Button>
             <Button
               onClick={handleSubmitReview}
               disabled={reviewMutation.isPending}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              {reviewMutation.isPending ? "Saving..." : "Submit Review"}
+              {reviewMutation.isPending
+                ? t("followUpReports.actions.savingReview")
+                : t("followUpReports.actions.saveReview")}
             </Button>
           </DialogFooter>
         </DialogContent>

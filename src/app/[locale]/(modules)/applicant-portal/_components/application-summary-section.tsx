@@ -205,10 +205,15 @@ export function ApplicationSummarySection() {
               </div>
             )}
             {application.status === "MATCHED" && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg space-y-3">
                 <p className="text-sm text-green-800">
                   {t("appSummary.statuses.matched")}
                 </p>
+                <Button asChild size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                  <Link href="/applicant-portal/portal/application-details#follow-up-reports">
+                    {t("appSummary.submitFollowUpReports")}
+                  </Link>
+                </Button>
               </div>
             )}
           </div>
