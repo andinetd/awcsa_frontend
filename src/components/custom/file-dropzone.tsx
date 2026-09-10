@@ -145,7 +145,7 @@ export function FileDragAndDrop({
           {files.map((fileItem, index) => (
             <div
               key={index}
-              className="flex items-center space-x-3 p-3 bg-primary/5 border border-primary/20 rounded-lg min-w-0 flex-1 max-w-xs"
+              className="flex items-center space-x-3 p-3 bg-primary/5 border border-primary/20 rounded-lg min-w-0 w-full sm:max-w-xs"
             >
               <FileText className="h-5 w-5 text-primary flex-shrink-0" />
               <div className="min-w-0 flex-1">
@@ -178,8 +178,8 @@ export function FileDragAndDrop({
   const renderUploadArea = () => {
     if (isFileLimitReached) {
       return (
-        <div className="border-2 border-dashed rounded-lg p-8 bg-gray-50 border-gray-200">
-          <div className="flex flex-col items-center space-y-4">
+        <div className="border-2 border-dashed rounded-lg p-4 sm:p-8 bg-gray-50 border-gray-200">
+          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
             <div className="flex items-center justify-center">
               {/* <img src="/icons/images.svg" alt="Images" /> */}
               <Upload className="text-primary" />
@@ -202,7 +202,7 @@ export function FileDragAndDrop({
       <div
         {...getRootProps()}
         className={cn(
-          "border-2 border-dashed rounded-lg p-8 cursor-pointer transition-colors py-10",
+          "border-2 border-dashed rounded-lg p-4 sm:p-8 cursor-pointer transition-colors py-6 sm:py-10",
           isDragActive && !isDragReject
             ? "border-primary bg-primary/5"
             : isDragReject

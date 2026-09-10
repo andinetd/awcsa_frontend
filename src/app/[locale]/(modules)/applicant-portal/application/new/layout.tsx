@@ -24,21 +24,23 @@ export default function ApplicationLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="flex justify-between items-center">
-          <div className="mb-8">
+      <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+          <div>
             {/* <DynamicBreadcrumb /> */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
               {t("applicationLayout.title")}
             </h1>
-            <p className="text-gray-600">{t("applicationLayout.subtitle")}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{t("applicationLayout.subtitle")}</p>
           </div>
-          <LanguageSwitcher />
+          <div className="self-end sm:self-auto">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <StepProgress />
 
-        <div className="mt-8">{children}</div>
+        <div className="mt-6 sm:mt-8">{children}</div>
       </div>
     </div>
   );

@@ -40,12 +40,17 @@ export function StepProgress() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-gray-500">
-          {t("stepProgress.step")} {currentStepId} {t("stepProgress.of")}{" "}
-          {steps.length}
-        </span>
-        <span className="text-sm font-lexend text-gray-500">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <div className="min-w-0">
+          <span className="text-xs sm:text-sm font-medium text-gray-500">
+            {t("stepProgress.step")} {currentStepId} {t("stepProgress.of")}{" "}
+            {steps.length}
+          </span>
+          <span className="md:hidden text-xs font-semibold text-gray-800 ml-2 truncate">
+            • {steps.find((s) => s.id === currentStepId)?.name}
+          </span>
+        </div>
+        <span className="text-xs sm:text-sm font-lexend text-gray-500 shrink-0 ml-2">
           {Math.round((currentStepId / steps.length) * 100)}%{" "}
           {t("stepProgress.complete")}
         </span>
@@ -53,24 +58,24 @@ export function StepProgress() {
 
       <div className="flex items-center">
         {steps.map((step, index) => (
-          <div key={step.id} className="flex items-center flex-1">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center">
+          <div key={step.id} className="flex items-center flex-1 min-w-0">
+            <div className="flex items-center shrink-0">
+              <div className="flex items-center justify-center shrink-0">
                 {step.id < currentStepId ? (
-                  <CheckCircle className="h-6 w-6 text-secondary" />
+                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
                 ) : step.id === currentStepId ? (
-                  <div className="h-6 w-6 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-medium font-lexend">
+                  <div className="h-5 w-5 sm:h-6 sm:w-6 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs sm:text-sm font-medium font-lexend">
                       {step.id}
                     </span>
                   </div>
                 ) : (
-                  <Circle className="h-6 w-6 text-gray-300 font-lexend" />
+                  <Circle className="h-5 w-5 sm:h-6 sm:w-6 text-gray-300 font-lexend" />
                 )}
               </div>
-              <div className="ml-3 hidden sm:block">
+              <div className="ml-2 sm:ml-3 hidden md:block">
                 <p
-                  className={`text-sm font-medium font-lexend ${
+                  className={`text-xs sm:text-sm font-medium font-lexend ${
                     step.id <= currentStepId ? "text-gray-900" : "text-gray-500"
                   }`}
                 >
@@ -80,9 +85,9 @@ export function StepProgress() {
             </div>
 
             {index < steps.length - 1 && (
-              <div className="flex-1 mx-3.5">
+              <div className="flex-1 mx-1.5 sm:mx-3.5">
                 <div
-                  className={`h-[3px] rounded-full ${
+                  className={`h-[2px] sm:h-[3px] rounded-full ${
                     step.id < currentStepId ? "bg-secondary" : "bg-gray-200"
                   }`}
                 />

@@ -24,6 +24,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { formatAge } from "@/lib/utils";
 import { useSubmitApplicationMutation } from "@/hooks/applicants-portal";
 import { useTranslations } from "next-intl";
+import { calculateApplicantAge } from "@/schemas/application/applicationStepsSchema";
 
 const isRealFile = (f: any): f is File => {
   return typeof window !== "undefined" && f instanceof File && f.size > 0;
@@ -148,6 +149,12 @@ export default function ReviewPage() {
     });
   }
 
+  const applicantAge = step1?.dateOfBirth
+    ? calculateApplicantAge(step1.dateOfBirth)
+    : null;
+  const isAgeEligible =
+    applicantAge !== null && applicantAge >= 21 && applicantAge <= 60;
+
   const handleSubmit = async () => {
     setError(null);
 
@@ -175,17 +182,12 @@ export default function ReviewPage() {
     }
 
     // Check applicant age
-    if (step1?.dateOfBirth) {
-      const parsedDate = new Date(step1.dateOfBirth);
-      const now = new Date();
-      const age = now.getFullYear() - parsedDate.getFullYear();
-      if (age < 21 || age > 60) {
-        const msg =
-          "Applicant's age must be between 21 and 60 years old to apply for adoption.";
-        setError(msg);
-        toast.error(msg, { duration: 6000 });
-        return;
-      }
+    if (!isAgeEligible) {
+      const msg =
+        "Applicant's age must be between 21 and 60 years old to apply for adoption. Please return to Step 1 to correct your date of birth.";
+      setError(msg);
+      toast.error(msg, { duration: 6000 });
+      return;
     }
 
     setSubmitting(true);
@@ -390,10 +392,10 @@ export default function ReviewPage() {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-1">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
           {t("review.title")}
         </h2>
-        <p className="text-gray-600 text-sm">{t("review.subtitle")}</p>
+        <p className="text-gray-600 text-xs sm:text-sm">{t("review.subtitle")}</p>
       </div>
 
       {/* Backend / Submission Error Alert */}
@@ -436,6 +438,34 @@ export default function ReviewPage() {
                   </Button>
                 </Link>
               ))}
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Ineligible Age Alert */}
+      {!isAgeEligible && applicantAge !== null && (
+        <Alert className="border-rose-300 bg-rose-50 dark:bg-rose-950/30 text-rose-900 dark:text-rose-200">
+          <AlertTriangle className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+          <AlertTitle className="font-semibold text-rose-900 dark:text-rose-300">
+            Adoption Age Requirement Not Met
+          </AlertTitle>
+          <AlertDescription className="mt-1.5 text-xs text-rose-800 dark:text-rose-300">
+            <p>
+              Your calculated age based on your date of birth ({step1?.dateOfBirth}) is{" "}
+              <strong>{applicantAge} years old</strong>. By regulation, applicants must be between{" "}
+              <strong>21 and 60 years old</strong> to apply for adoption.
+            </p>
+            <div className="mt-2.5">
+              <Link href="/applicant-portal/application/new/step1">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-xs bg-white text-rose-900 border-rose-300 hover:bg-rose-100 font-medium"
+                >
+                  Step 1: Correct Date of Birth →
+                </Button>
+              </Link>
             </div>
           </AlertDescription>
         </Alert>
@@ -515,9 +545,16 @@ export default function ReviewPage() {
                   <span className="font-medium text-gray-500 text-xs">
                     {t("applicationDetails.fields.dateOfBirth")}
                   </span>
-                  <p className="text-gray-900 font-medium">
-                    {step1?.dateOfBirth || "-"}
-                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <p className="text-gray-900 font-medium">
+                      {step1?.dateOfBirth || "-"}
+                    </p>
+                    {applicantAge !== null && !isAgeEligible && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full font-semibold border bg-rose-50 text-rose-700 border-rose-200">
+                        {applicantAge} yrs (Ineligible: 21–60 required)
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -571,7 +608,7 @@ export default function ReviewPage() {
                   <span className="font-medium text-gray-700 text-xs block mb-1">
                     {t("applicationDetails.fields.preferredChildren")}
                   </span>
-                  <div className="grid grid-cols-3 gap-2 mt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1">
                     <div>
                       <p className="text-[11px] text-gray-500">
                         {t("applicationDetails.fields.ageMin")}
@@ -733,17 +770,28 @@ export default function ReviewPage() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center pt-2">
-        <Button variant="outline" onClick={handleBack} disabled={isPending || submitting}>
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-4">
+        <Button
+          variant="outline"
+          className="w-full sm:w-auto"
+          onClick={handleBack}
+          disabled={isPending || submitting}
+        >
           {t("review.previousStep")}
         </Button>
         <Button
           onClick={handleSubmit}
-          className="px-8 bg-green-600 hover:bg-green-700 min-w-[180px]"
-          disabled={isPending || submitting || success || missingDocs.length > 0}
+          className="w-full sm:w-auto px-8 bg-green-600 hover:bg-green-700 min-w-[180px]"
+          disabled={
+            isPending ||
+            submitting ||
+            success ||
+            missingDocs.length > 0 ||
+            !isAgeEligible
+          }
         >
           {isPending || submitting ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               <span>{t("review.submitting") || "Submitting..."}</span>
             </div>

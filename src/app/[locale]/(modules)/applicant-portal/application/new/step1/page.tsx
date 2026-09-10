@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { User, ShieldCheck, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { StepFormWrapper } from "../../../_components/step-form-wrapper";
 
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import {
   ApplicationStepOneSchema,
   ApplicationStepOneType,
+  calculateApplicantAge,
 } from "@/schemas/application/applicationStepsSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -60,6 +61,23 @@ export default function Step1Page() {
   const { displayValue: maxValue, displayUnit: maxUnit } =
     normalizeAgeDisplay(storedMaxAge);
 
+  // Applicant must be between 21 and 60 years old
+  const today = new Date();
+  const maxDate = new Date(
+    today.getFullYear() - 21,
+    today.getMonth(),
+    today.getDate(),
+  )
+    .toISOString()
+    .split("T")[0];
+  const minDate = new Date(
+    today.getFullYear() - 60,
+    today.getMonth(),
+    today.getDate(),
+  )
+    .toISOString()
+    .split("T")[0];
+
   async function onSubmit(values: ApplicationStepOneType) {
     setStep1(values);
     router.push("/applicant-portal/application/new/step2");
@@ -67,6 +85,25 @@ export default function Step1Page() {
 
   const instructions = (
     <div className="space-y-4">
+      {/* Prominent Eligibility Criteria Callout */}
+      <div className="p-3.5 bg-blue-50/90 border border-blue-200 rounded-xl space-y-2">
+        <h4 className="text-xs font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+          Adoption Eligibility Criteria
+        </h4>
+        <ul className="text-xs text-blue-900 space-y-1.5 list-disc pl-4 font-lexend">
+          <li>
+            <strong>Age requirement:</strong> You must be between <strong>21 and 60 years old</strong> to apply for adoption.
+          </li>
+          <li>
+            <strong>Identification:</strong> Official Kebele/City ID & Birth Certificate.
+          </li>
+          <li>
+            <strong>Income:</strong> Verifiable monthly or annual income statement.
+          </li>
+        </ul>
+      </div>
+
       <div className="flex items-center gap-2 text-primary">
         <User className="h-5 w-5" />
         <h3 className="font-semibold">{t("stepone.instructions.title")}</h3>
@@ -114,7 +151,7 @@ export default function Step1Page() {
               name="cityIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.cityId")}
                   </FormLabel>
                   <FormControl>
@@ -129,21 +166,47 @@ export default function Step1Page() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
-                    {t("stepone.form.dateOfBirth")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const age = calculateApplicantAge(field.value);
+                const hasValue = !!field.value;
+                const isAgeEligible = age !== null && age >= 21 && age <= 60;
+
+                return (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel className="text-base sm:text-lg font-lexend">
+                        {t("stepone.form.dateOfBirth")}
+                      </FormLabel>
+                      <span className="text-xs text-muted-foreground font-lexend">
+                        Age 21 – 60
+                      </span>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        min={minDate}
+                        max={maxDate}
+                        {...field}
+                      />
+                    </FormControl>
+                    {hasValue && age !== null && !isAgeEligible && (
+                      <div className="text-xs font-medium mt-1.5 flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-rose-50 text-rose-700 border-rose-200">
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                        <span>
+                          {age < 21
+                            ? `Age: ${age} years old — Ineligible: Applicant must be at least 21 years old.`
+                            : `Age: ${age} years old — Ineligible: Applicant must be 60 years old or younger.`}
+                        </span>
+                      </div>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
 
             <FormField
@@ -151,7 +214,7 @@ export default function Step1Page() {
               name="monthlyIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.MonthlyIncome")}
                   </FormLabel>
                   <FormControl>
@@ -175,7 +238,7 @@ export default function Step1Page() {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.Address")}
                   </FormLabel>
                   <FormControl>
@@ -190,19 +253,19 @@ export default function Step1Page() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="educationLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.EducationLevel")}
                   </FormLabel>
                   <FormControl>
                     <select
                       {...field}
-                      className="w-full border px-3 py-2 rounded"
+                      className="w-full border px-3 py-2 rounded text-sm sm:text-base"
                     >
                       <option value="">{t("form.select")}</option>
                       <option value="none">
@@ -238,7 +301,7 @@ export default function Step1Page() {
               name="occupation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.occupation")}
                   </FormLabel>
                   <FormControl>
@@ -253,13 +316,13 @@ export default function Step1Page() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="spouseCityIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.spouseCityIdNumber")}
                   </FormLabel>
                   <FormControl>
@@ -274,13 +337,13 @@ export default function Step1Page() {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FormField
               control={form.control}
               name="preferredChildren.ageRange.min"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[14px] font-lexend">
+                  <FormLabel className="text-xs sm:text-sm font-lexend">
                     {t("stepone.form.preferredChildAgeMin")}
                   </FormLabel>
                   <FormControl>
@@ -300,7 +363,7 @@ export default function Step1Page() {
               name="preferredChildren.ageRange.max"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[14px] font-lexend">
+                  <FormLabel className="text-xs sm:text-sm font-lexend">
                     {t("stepone.form.preferredChildAgeMax")}
                   </FormLabel>
                   <FormControl>
@@ -320,7 +383,7 @@ export default function Step1Page() {
               name="preferredChildren.number"
               render={({ field }) => (
                 <FormItem className="mb-6">
-                  <FormLabel className="text-[14px] font-lexend">
+                  <FormLabel className="text-xs sm:text-sm font-lexend">
                     {t("stepone.form.preferredNumberOfChildren")}
                   </FormLabel>
                   <FormControl>
@@ -344,13 +407,13 @@ export default function Step1Page() {
               name="preferredChildren.sex"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.preferredChildGender")}
                   </FormLabel>
                   <FormControl>
                     <select
                       {...field}
-                      className="w-full border px-3 py-2 rounded"
+                      className="w-full border px-3 py-2 rounded text-sm sm:text-base"
                     >
                       <option value="ANY">
                         {t("stepone.form.GenderOptions.any")}
@@ -368,13 +431,13 @@ export default function Step1Page() {
               )}
             />
           </div>
-          <div className="grid grid-cols-1  gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.id")}*
                   </FormLabel>
                   <FormControl>
@@ -399,7 +462,7 @@ export default function Step1Page() {
               name="birthCertificate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.birthCertificate")}*
                   </FormLabel>
                   <FormControl>
@@ -419,13 +482,13 @@ export default function Step1Page() {
             />
           </div>
 
-          <div className="grid grid-cols-1  gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="income"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("stepone.form.income")}*
                   </FormLabel>
                   <FormControl>
@@ -444,15 +507,16 @@ export default function Step1Page() {
               )}
             />
           </div>
-          <div className="flex justify-between">
+          <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
+              className="w-full sm:w-auto"
               onClick={() => router.push("/applicant-portal/portal")}
             >
               {t("form.backToPortal")}
             </Button>
-            <Button type="submit" className="px-8">
+            <Button type="submit" className="w-full sm:w-auto px-8">
               {t("form.nextStep")}
             </Button>
           </div>

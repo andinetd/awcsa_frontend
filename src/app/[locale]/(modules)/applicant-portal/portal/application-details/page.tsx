@@ -119,24 +119,23 @@ export default function Details() {
   const form = application.formData ?? application.applicationInfo ?? {};
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
-      <div className="absolute top-6 right-6">
-        <LanguageSwitcher />
-      </div>
-
-      <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4 mb-8">
-        <div className="flex items-center gap-4">
+    <div className="space-y-6 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link href="/applicant-portal/portal">
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full shrink-0">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
           <div className="text-left">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               {t("applicationDetails.title")}
             </h2>
-            <p className="text-gray-600">{t("applicationDetails.subtitle")}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{t("applicationDetails.subtitle")}</p>
           </div>
+        </div>
+        <div className="self-end sm:self-auto">
+          <LanguageSwitcher />
         </div>
       </div>
 
@@ -149,7 +148,7 @@ export default function Details() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-500">
                   {t("applicationDetails.fields.id")}
@@ -343,7 +342,7 @@ export default function Details() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-500">
                   {t("applicationDetails.fields.marriageCertificate")}

@@ -85,7 +85,7 @@ export default function Step2Page() {
               name="medical"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("steptwo.form.medical")}*
                   </FormLabel>
                   <FormControl>
@@ -110,7 +110,7 @@ export default function Step2Page() {
               name="criminalClearance"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("steptwo.form.criminal")}*
                   </FormLabel>
                   <FormControl>
@@ -130,13 +130,13 @@ export default function Step2Page() {
             />
           </div>
 
-          <div className="grid grid-cols-1  gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="marriageCertificate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[18px] font-lexend">
+                  <FormLabel className="text-base sm:text-lg font-lexend">
                     {t("steptwo.form.marriageCertificate")} ({t("form.optional") || "Optional"})
                   </FormLabel>
                   <FormControl>
@@ -156,15 +156,16 @@ export default function Step2Page() {
             />
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
+              className="w-full sm:w-auto"
               onClick={() => handleBack(form.getValues())}
             >
               {t("form.previousStep")}
             </Button>
-            <Button type="submit" className="px-8">
+            <Button type="submit" className="w-full sm:w-auto px-8">
               {t("form.nextStep")}
             </Button>
           </div>
