@@ -77,28 +77,46 @@ interface FollowUpReportsSectionProps {
 // ─── Status config ─────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<
   FollowUpReportStatus,
-  { key: string; color: string; icon: React.ElementType }
+  { key: string; label: string; color: string; icon: React.ElementType }
 > = {
   SUBMITTED: {
     key: "SUBMITTED",
+    label: "Submitted",
     color: "bg-blue-100 text-blue-800 border-blue-200",
     icon: Clock,
   },
   UNDER_REVIEW: {
     key: "UNDER_REVIEW",
+    label: "Under Review",
     color: "bg-amber-100 text-amber-800 border-amber-200",
     icon: Eye,
   },
   REVIEWED: {
     key: "REVIEWED",
+    label: "Reviewed",
     color: "bg-emerald-100 text-emerald-800 border-emerald-200",
     icon: CheckCircle2,
   },
   REQUIRES_ACTION: {
     key: "REQUIRES_ACTION",
+    label: "Requires Action",
     color: "bg-rose-100 text-rose-800 border-rose-200",
     icon: AlertTriangle,
   },
+};
+
+const getStatusLabel = (t: any, status: FollowUpReportStatus): string => {
+  const cfg = STATUS_CONFIG[status];
+  if (!cfg) return status;
+  try {
+    const res = t(`followUpReports.statuses.${cfg.key}`);
+    if (res && typeof res === "string" && !res.includes("followUpReports.statuses")) {
+      return res;
+    }
+  } catch {
+    // ignore
+  }
+  return cfg.label;
 };
 
 const FILTER_STATUSES: Array<FollowUpReportStatus | "ALL"> = [
@@ -119,6 +137,21 @@ const REPORT_PERIOD_PRESETS: { key: string; fallback: string }[] = [
   { key: "month24", fallback: "Month 24 (2 Years Post-Placement)" },
   { key: "annual", fallback: "Annual Review (Post-2 Years)" },
 ];
+
+const getPresetLabel = (
+  t: any,
+  preset: { key: string; fallback: string }
+): string => {
+  try {
+    const res = t(`followUpReports.presets.${preset.key}`);
+    if (res && typeof res === "string" && !res.includes("followUpReports.presets")) {
+      return res;
+    }
+  } catch {
+    // ignore
+  }
+  return preset.fallback;
+};
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
@@ -158,7 +191,7 @@ const StatusBadge = ({
       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border ${cfg.color}`}
     >
       <Icon className="w-3 h-3" />
-      {t(`followUpReports.statuses.${cfg.key}`)}
+      {getStatusLabel(t, status)}
     </span>
   );
 };
@@ -568,7 +601,18 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                     <div className="flex items-center gap-2">
                       {Icon && <Icon className="w-3.5 h-3.5 text-slate-500" />}
                       <span>
-                        {s === "ALL" ? t("followUpReports.allReports") : t(`followUpReports.statuses.${cfg?.key}`)}
+                        {s === "ALL"
+                          ? (() => {
+                              try {
+                                const val = t("followUpReports.allReports");
+                                return val && !val.includes("followUpReports.allReports")
+                                  ? val
+                                  : "All Reports";
+                              } catch {
+                                return "All Reports";
+                              }
+                            })()
+                          : getStatusLabel(t, s as FollowUpReportStatus)}
                       </span>
                     </div>
                   </SelectItem>
@@ -659,7 +703,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                 </SelectTrigger>
                 <SelectContent>
                   {REPORT_PERIOD_PRESETS.map((preset) => {
-                    const label = t(`followUpReports.presets.${preset.key}`);
+                    const label = getPresetLabel(t, preset);
                     return (
                       <SelectItem key={preset.key} value={label} className="text-xs">
                         {label}
@@ -674,7 +718,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
               {(!REPORT_PERIOD_PRESETS.some(
                 (p) =>
                   p.fallback === form.reportPeriod ||
-                  t(`followUpReports.presets.${p.key}`) === form.reportPeriod
+                  getPresetLabel(t, p) === form.reportPeriod
               ) ||
                 form.reportPeriod === "") && (
                 <Input
@@ -952,7 +996,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
                         <SelectItem key={s} value={s} className="text-xs">
                           <div className="flex items-center gap-2">
                             <Icon className="w-3.5 h-3.5 text-slate-500" />
-                            <span>{t(`followUpReports.statuses.${cfg.key}`)}</span>
+                            <span>{getStatusLabel(t, s)}</span>
                           </div>
                         </SelectItem>
                       );
