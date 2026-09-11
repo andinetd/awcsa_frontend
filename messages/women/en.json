@@ -254,6 +254,12 @@
     "year": "Year",
     "associationType": "Association Type",
     "associationStatus": "Status",
+    "reportType": "Report Type",
+    "reportTypeOptions": {
+      "summary": "Association Summary Table",
+      "perAssociationForms": "Official Forms (Each Per Page)"
+    },
+    "perAssociationFormsHint": "Generates a multi-page PDF containing the complete official registration form for every matching association, one association per landscape page.",
     "format": "Format",
     "columns": "Columns to Include",
     "includeMembers": "Include 1-to-10 members (name & phone)",

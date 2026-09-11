@@ -143,6 +143,9 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
   const [associationTypeFilter, setAssociationTypeFilter] = useState("all");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
   const [includeMembers, setIncludeMembers] = useState(false);
+  const [associationReportType, setAssociationReportType] = useState<
+    "SUMMARY" | "PER_ASSOCIATION_FORMS"
+  >("SUMMARY");
 
   const availableColumns = COLUMNS_BY_CATEGORY[category];
   const [selectedColumns, setSelectedColumns] = useState<string[] | null>(null);
@@ -209,6 +212,11 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
         associationStatus === "all"
           ? undefined
           : (associationStatus as "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED");
+      payload.reportType = associationReportType;
+      payload.includeMembers = includeMembers;
+      if (associationReportType === "PER_ASSOCIATION_FORMS") {
+        payload.format = "PDF";
+      }
     }
 
     generateReport(payload, {
@@ -544,32 +552,72 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
           )}
 
           {category === "ASSOCIATION" && (
-            <div className="flex items-start space-x-2 rounded-md border p-3 bg-slate-50/40">
-              <Checkbox
-                id="include-members"
-                checked={includeMembers}
-                onCheckedChange={(checked) =>
-                  setIncludeMembers(checked === true)
-                }
-              />
-              <div className="space-y-1 leading-none">
-                <Label
-                  htmlFor="include-members"
-                  className="text-sm font-medium cursor-pointer"
-                >
-                  {t("report.includeMembers")}
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  {t("report.includeMembersHint")}
-                </p>
-              </div>
+            <div className="space-y-2">
+              <Label>{t("report.reportType")}</Label>
+              <Select
+                value={associationReportType}
+                onValueChange={(v) => {
+                  const val = v as "SUMMARY" | "PER_ASSOCIATION_FORMS";
+                  setAssociationReportType(val);
+                  if (val === "PER_ASSOCIATION_FORMS") {
+                    setFormat("PDF");
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="SUMMARY">
+                    {t("report.reportTypeOptions.summary")}
+                  </SelectItem>
+                  <SelectItem value="PER_ASSOCIATION_FORMS">
+                    {t("report.reportTypeOptions.perAssociationForms")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           )}
+
+          {category === "ASSOCIATION" &&
+            associationReportType === "PER_ASSOCIATION_FORMS" && (
+              <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
+                {t("report.perAssociationFormsHint")}
+              </div>
+            )}
+
+          {category === "ASSOCIATION" &&
+            associationReportType === "SUMMARY" && (
+              <div className="flex items-start space-x-2 rounded-md border p-3 bg-slate-50/40">
+                <Checkbox
+                  id="include-members"
+                  checked={includeMembers}
+                  onCheckedChange={(checked) =>
+                    setIncludeMembers(checked === true)
+                  }
+                />
+                <div className="space-y-1 leading-none">
+                  <Label
+                    htmlFor="include-members"
+                    className="text-sm font-medium cursor-pointer"
+                  >
+                    {t("report.includeMembers")}
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    {t("report.includeMembersHint")}
+                  </p>
+                </div>
+              </div>
+            )}
 
           <div className="space-y-2">
             <Label>{t("report.format")}</Label>
             <Select
               value={format}
+              disabled={
+                category === "ASSOCIATION" &&
+                associationReportType === "PER_ASSOCIATION_FORMS"
+              }
               onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
             >
               <SelectTrigger>
@@ -582,23 +630,28 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label>{t("report.columns")}</Label>
-            <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
-              {availableColumns.map((col) => (
-                <div key={col} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`col-${col}`}
-                    checked={columns.includes(col)}
-                    onCheckedChange={() => handleColumnToggle(col)}
-                  />
-                  <Label htmlFor={`col-${col}`} className="text-sm">
-                    {t(`report.columnsList.${col}`)}
-                  </Label>
-                </div>
-              ))}
+          {!(
+            category === "ASSOCIATION" &&
+            associationReportType === "PER_ASSOCIATION_FORMS"
+          ) && (
+            <div className="space-y-2">
+              <Label>{t("report.columns")}</Label>
+              <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
+                {availableColumns.map((col) => (
+                  <div key={col} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`col-${col}`}
+                      checked={columns.includes(col)}
+                      onCheckedChange={() => handleColumnToggle(col)}
+                    />
+                    <Label htmlFor={`col-${col}`} className="text-sm">
+                      {t(`report.columnsList.${col}`)}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-2">

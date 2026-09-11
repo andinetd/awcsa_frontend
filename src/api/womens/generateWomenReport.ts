@@ -27,6 +27,8 @@ export interface GenerateWomenReportPayload {
   sector?: string;
   associationType?: "ASSOCIATION" | "DEVELOPMENT_ASSOCIATION" | "FEDERATION";
   status?: "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
+  reportType?: "SUMMARY" | "PER_ASSOCIATION_FORMS";
+  includeMembers?: boolean;
   selectedColumns?: string[];
   format: "EXCEL" | "PDF";
 }
@@ -63,7 +65,13 @@ export const generateWomenReport = async (
     link.href = url;
 
     const fileExtension = payload.format === "EXCEL" ? "xlsx" : "pdf";
-    const prefix = FILE_PREFIXES[payload.category ?? "SUPPORT_SERVICE"];
+    let prefix = FILE_PREFIXES[payload.category ?? "SUPPORT_SERVICE"];
+    if (
+      payload.category === "ASSOCIATION" &&
+      payload.reportType === "PER_ASSOCIATION_FORMS"
+    ) {
+      prefix = "women_bulk_per_association_forms";
+    }
     const fileName = `${prefix}_${
       new Date().toISOString().split("T")[0]
     }.${fileExtension}`;

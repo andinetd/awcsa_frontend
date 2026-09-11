@@ -254,6 +254,12 @@
     "year": "ዓመት",
     "associationType": "የማህበሩ አይነት",
     "associationStatus": "ሁኔታ",
+    "reportType": "የሪፖርት ዓይነት",
+    "reportTypeOptions": {
+      "summary": "የማህበራት ማጠቃለያ ሠንጠረዥ",
+      "perAssociationForms": "የእያንዳንዱ ማህበር ዝርዝር ፎርም (በገጽ)"
+    },
+    "perAssociationFormsHint": "ለእያንዳንዱ ማህበር የተሟላውን ይፋዊ የምዝገባ ፎርም በአንድ የገጽ አቀማመጥ የያዘ ባለብዙ ገጽ PDF ያዘጋጃል።",
     "format": "ፎርማት",
     "columns": "የሚካተቱ አምዶች",
     "includeMembers": "1-10 አባላትን ያካት (ስምና ስልክ)",
