@@ -24,7 +24,6 @@ import {
 import {
   Plus,
   FileText,
-  CheckCircle,
   Calendar,
   User,
   ShieldCheck,
@@ -39,7 +38,6 @@ import {
 import {
   useGetMatchNotes,
   useAddPostMatchNote,
-  useUpdateMatch,
 } from "@/hooks/adoption/useMatches";
 import { PostMatchNoteCategory, PostMatchNote } from "@/api/adoption/matches";
 import { toast } from "sonner";
@@ -80,7 +78,6 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
 
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
-  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
   const [isReunificationOpen, setIsReunificationOpen] = useState(false);
 
   // Form states for adding note
@@ -89,16 +86,12 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
 
-  // Form state for complete modal
-  const [completionRemark, setCompletionRemark] = useState("");
-
   const { data: notes = [], isLoading } = useGetMatchNotes(
     matchId,
     selectedCategory === "ALL" ? undefined : selectedCategory,
   );
 
   const addNoteMutation = useAddPostMatchNote(matchId);
-  const updateMatchMutation = useUpdateMatch(matchId);
 
   const handleAddNote = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,19 +110,6 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
       setNoteContent("");
       setNoteCategory("GENERAL");
       setIsAddNoteOpen(false);
-    } catch {
-      // Handled by hook toast
-    }
-  };
-
-  const handleCompleteMatch = async () => {
-    try {
-      await updateMatchMutation.mutateAsync({
-        status: "COMPLETED",
-        remark: completionRemark.trim() || undefined,
-      });
-      setIsCompleteModalOpen(false);
-      onStatusUpdated?.();
     } catch {
       // Handled by hook toast
     }
@@ -175,7 +155,6 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
     );
   }
 
-  const isCompleted = currentStatus === "COMPLETED";
   const isTerminated = currentStatus === "TERMINATED";
 
   return (
@@ -194,8 +173,8 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
               {currentStatus && (
                 <span
                   className={`px-2.5 py-0.5 rounded-full text-xs font-bold border uppercase tracking-wider ${
-                    isCompleted
-                      ? "bg-green-100 text-green-800 border-green-200"
+                    isTerminated
+                      ? "bg-rose-100 text-rose-800 border-rose-200"
                       : "bg-blue-100 text-blue-800 border-blue-200"
                   }`}
                 >
@@ -212,27 +191,16 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            {!isCompleted && !isTerminated && (
-              <>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsCompleteModalOpen(true)}
-                  className="text-green-700 border-green-300 hover:bg-green-50 text-xs cursor-pointer"
-                >
-                  <CheckCircle className="w-4 h-4 mr-1 text-green-600" />
-                  {t("adoptionDetail.postMatch.markCompleted")}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsReunificationOpen(true)}
-                  className="text-amber-700 border-amber-300 hover:bg-amber-50 text-xs cursor-pointer"
-                >
-                  <RotateCcw className="w-4 h-4 mr-1 text-amber-600" />
-                  Biological Parents Reunification
-                </Button>
-              </>
+            {!isTerminated && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsReunificationOpen(true)}
+                className="text-amber-700 border-amber-300 hover:bg-amber-50 text-xs cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4 mr-1 text-amber-600" />
+                Biological Parents Reunification
+              </Button>
             )}
             <Button
               size="sm"
@@ -490,57 +458,6 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
         </DialogContent>
       </Dialog>
 
-      {/* Dialog: Complete Adoption Case */}
-      <Dialog
-        open={isCompleteModalOpen}
-        onOpenChange={setIsCompleteModalOpen}
-      >
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-green-700">
-              <CheckCircle className="w-5 h-5" />
-              {t("adoptionDetail.postMatch.completeTitle")}
-            </DialogTitle>
-            <DialogDescription>
-              {t("adoptionDetail.postMatch.completeDescription")}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="py-3">
-            <Label htmlFor="completionRemark">
-              Closing Remarks / Certificate Reference
-            </Label>
-            <Textarea
-              id="completionRemark"
-              placeholder={t("adoptionDetail.postMatch.remarkPlaceholder")}
-              value={completionRemark}
-              onChange={(e) => setCompletionRemark(e.target.value)}
-              rows={3}
-              className="mt-1.5 resize-none"
-            />
-          </div>
-
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setIsCompleteModalOpen(false)}
-              className="cursor-pointer"
-            >
-              {t("adoptionDetail.postMatch.cancel")}
-            </Button>
-            <Button
-              onClick={handleCompleteMatch}
-              disabled={updateMatchMutation.isPending}
-              className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
-            >
-              {updateMatchMutation.isPending
-                ? t("adoptionDetail.postMatch.saving")
-                : t("adoptionDetail.postMatch.confirmComplete")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <ReunificationDialog
         isOpen={isReunificationOpen}

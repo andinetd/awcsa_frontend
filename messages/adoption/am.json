@@ -132,12 +132,7 @@
         "ACTIVE": "ንቁ ማዛመድ",
         "COMPLETED": "የተጠናቀቀ ጉዲፈቻ",
         "TERMINATED": "የተቋረጠ ማዛመድ"
-      },
-      "markCompleted": "ጉዲፈቻውን አጠናቅቅ",
-      "completeTitle": "የጉዲፈቻ ሂደቱን ማጠናቀቂያ",
-      "completeDescription": "ይፋዊ የፍርድ ቤት ውሳኔ ተሰጥቶ የጉዲፈቻ ሂደቱ መጠናቀቁን ያረጋግጡ።",
-      "remarkPlaceholder": "የማጠናቀቂያ አስተያየት ወይም የሰርተፍኬት ቁጥር ያስገቡ...",
-      "confirmComplete": "ማጠናቀቁን አረጋግጥ"
+      }
     },
     "followUpReports": {
       "title": "ክትትል ሪፖርቶች",

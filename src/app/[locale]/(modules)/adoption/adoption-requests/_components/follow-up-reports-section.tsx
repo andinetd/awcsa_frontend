@@ -531,7 +531,7 @@ export const FollowUpReportsSection: React.FC<FollowUpReportsSectionProps> = ({
           )}
         </div>
         {/* Submit button — visible only for client/parent, NOT officer */}
-        {!isOfficer && matchStatus !== "COMPLETED" && matchStatus !== "TERMINATED" && (
+        {!isOfficer && matchStatus !== "TERMINATED" && (
           <Button
             size="sm"
             onClick={() => setIsSubmitOpen(true)}

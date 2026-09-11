@@ -132,12 +132,7 @@
         "ACTIVE": "Active Match",
         "COMPLETED": "Completed Adoption",
         "TERMINATED": "Terminated Match"
-      },
-      "markCompleted": "Mark as Completed",
-      "completeTitle": "Complete Adoption Case",
-      "completeDescription": "Confirm that the legal adoption process is completed and finalize this case record.",
-      "remarkPlaceholder": "Add optional closing remarks or certificate references...",
-      "confirmComplete": "Confirm Completion"
+      }
     },
     "followUpReports": {
       "title": "Follow-Up Reports",
