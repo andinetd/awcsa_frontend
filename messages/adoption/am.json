@@ -506,16 +506,19 @@
   },
   "children": {
     "list": {
-      "title": "የሕፃናት ዝርዝር",
-      "addNew": "አዲስ ልጅ ጨምር",
-      "loading": "በመጫን ላይ..."
+      "title": "የሕፃናት መዝገብ እና ደህንነት ክትትል",
+      "addNew": "አዲስ ሕፃን መዝግብ",
+      "loading": "የተመዘገቡ ሕፃናትን በመጫን ላይ...",
+      "subtitle": "የሕፃናት ምዝገባ፣ የሁኔታ ሽግግር፣ የእንክብካቤ ማዕከላት እና የጉዲፈቻ ብቁነት ክትትል",
+      "searchPlaceholder": "በሕፃኑ ስም፣ በማዕከል መለያ ቁጥር (ምሳሌ፡ FAC-001) ወይም በተገኘበት ቦታ ፈልግ..."
     },
     "columns": {
-      "name": "ሙሉ ስም",
-      "age": "ዕድሜ",
+      "name": "የሕፃኑ ስም",
+      "age": "ዕድሜ እና ጾታ",
       "gender": "ጾታ",
       "placeFound": "የተገኘበት ቦታ",
-      "status": "ሁኔታ"
+      "status": "ሁኔታ",
+      "placement": "የተቋም / የሞግዚት ሁኔታ"
     },
     "registration": {
       "title": "የሕፃን መረጃ",
@@ -569,6 +572,52 @@
         "success": "ሕፃኑ በተሳካ ሁኔታ ተመዝግቧል",
         "error": "ሕፃኑን መመዝገብ አልተቻለም: {message}"
       }
+    },
+    "actions": {
+      "view": "ዝርዝር እይ",
+      "transfer": "ሁኔታ ቀይር"
+    },
+    "transferStatus": {
+      "dialogTitle": "የሕፃኑን ሁኔታ ቀይር / አስተላልፍ",
+      "dialogDesc": "ይህንን የሕፃን መዝገብ በይፋዊው የሥራ ሂደት መሠረት ወደ አዲስ የእንክብካቤ ሁኔታ ያሸጋግሩ።",
+      "childLabel": "የሕፃኑ መዝገብ",
+      "currentStatusLabel": "የአሁኑ ሁኔታ",
+      "terminalTitle": "የመጨረሻ የሥራ ሂደት ደረጃ",
+      "terminalDesc": "ይህ ሕፃን በይፋ ለጉዲፈቻ ቤተሰብ የተሰጠ ነው። ይፋዊ ሁኔታ ማሻሻያ በፍርድ ቤት ውሳኔ ወይም ከሥነ-ሕይወታዊ ቤተሰብ ጋር ሲዋሃድ ብቻ ይከናወናል።",
+      "selectNewStatus": "ቀጣይ ሁኔታን ይምረጡ",
+      "placeholder": "የሚሸጋገሩበትን ሁኔታ ይምረጡ...",
+      "reasonLabel": "የሽግግሩ ምክንያት / የጉዳይ ማስታወሻ",
+      "recommended": "ይመከራል",
+      "reasonPlaceholder": "የሁኔታ ለውጡን ምክንያት ወይም የትዕዛዝ ቁጥር ያስገቡ...",
+      "cancel": "ተመለስ",
+      "confirm": "የሁኔታ ለውጥ አረጋግጥ",
+      "updating": "በማሻሻል ላይ..."
+    },
+    "details": {
+      "loading": "የሕፃኑን ሙሉ መረጃ በመጫን ላይ...",
+      "notFoundTitle": "የሕፃኑ መዝገብ አልተገኘም",
+      "notFoundDesc": "የተጠየቀው የሕፃን መዝገብ አልተገኘም ወይም ለማየት የሚያስችል ፈቃድ የለዎትም።",
+      "backToList": "ወደ ሕፃናት ዝርዝር ተመለስ",
+      "transferStatusBtn": "ሁኔታ ቀይር",
+      "inCareBannerTitle": "ሕፃኑ ለጉዲፈቻ ማዛመድ ብቁ ነው",
+      "inCareBannerDesc": "ይህ ሕፃን በእንክብካቤ ማዕከል ውስጥ ያለ ሲሆን ለጸደቁ የጉዲፈቻ አመልካቾች ለማዛመድ ዝግጁ ነው።",
+      "viewAdoptionRequests": "የጉዲፈቻ ማመልከቻዎችን እይ",
+      "returnedBannerTitle": "ከሥነ-ሕይወታዊ ቤተሰብ ጋር የተዋሃደ",
+      "biodataTitle": "የሕፃኑ ማንነት እና የግል መረጃ",
+      "cityId": "የከተማ / ብሔራዊ መታወቂያ",
+      "facilityChildId": "የተቋም ሕፃን መለያ",
+      "additionalNotes": "ልዩ ምልከታዎች",
+      "placementTitle": "የእንክብካቤ ማዕከል እና የምደባ መረጃ",
+      "careCenter": "የእንክብካቤ ማዕከል",
+      "location": "የማዕከሉ አድራሻ",
+      "facilityContact": "የማዕከሉ ስልክ",
+      "contactPerson": "ተጠሪ ሰው",
+      "custodianTitle": "የተመደበ ሞግዚት / ጠባቂ",
+      "noCustodian": "በአሁኑ ጊዜ የተመደበ ግለሰብ ሞግዚት የለም።",
+      "intakeTitle": "የመግቢያ ታሪክ እና አመጣጥ",
+      "reasonForReturn": "የመመለስ / ድጋሚ የመቀበል ምክንያት",
+      "adoptionHistoryTitle": "የጉዲፈቻ እና የማዛመድ መዝገብ",
+      "noAdoptionMatch": "ይህ ሕፃን እስካሁን ከአሳዳጊ ቤተሰብ ጋር አልተዛመደም።"
     }
   },
   "dashboard": {

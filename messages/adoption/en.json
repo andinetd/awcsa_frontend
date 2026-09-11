@@ -506,16 +506,19 @@
   },
   "children": {
     "list": {
-      "title": "List of Children",
-      "addNew": "Add New Child",
-      "loading": "Loading..."
+      "title": "Children Records & Welfare Registry",
+      "addNew": "Register New Child",
+      "loading": "Loading registered children...",
+      "subtitle": "Track child institutional intake, status transfers, care facilities, and adoption eligibility.",
+      "searchPlaceholder": "Search by child name, facility child code (e.g. FAC-001), or intake location..."
     },
     "columns": {
-      "name": "Name",
-      "age": "Age",
+      "name": "Child Name",
+      "age": "Age & Sex",
       "gender": "Gender",
-      "placeFound": "Place Found",
-      "status": "Status"
+      "placeFound": "Intake Location",
+      "status": "Status",
+      "placement": "Placement / Center"
     },
     "registration": {
       "title": "Child Information",
@@ -569,6 +572,52 @@
         "success": "Child registered successfully",
         "error": "Failed to register child: {message}"
       }
+    },
+    "actions": {
+      "view": "View",
+      "transfer": "Transfer"
+    },
+    "transferStatus": {
+      "dialogTitle": "Transfer Child Status",
+      "dialogDesc": "Transition this child record to a new institutional or care status in the official workflow.",
+      "childLabel": "Child Record",
+      "currentStatusLabel": "Current Status",
+      "terminalTitle": "Terminal Workflow Status",
+      "terminalDesc": "This child has been officially placed in an adoptive family. Formal status updates can only be modified through court decrees or biological family reunification.",
+      "selectNewStatus": "Select Next Status",
+      "placeholder": "Choose target status...",
+      "reasonLabel": "Reason for Transfer / Case Notes",
+      "recommended": "recommended",
+      "reasonPlaceholder": "Enter reason or official order number for this status change...",
+      "cancel": "Cancel",
+      "confirm": "Confirm Status Change",
+      "updating": "Updating Status..."
+    },
+    "details": {
+      "loading": "Loading comprehensive child record...",
+      "notFoundTitle": "Child Record Not Found",
+      "notFoundDesc": "The requested child record does not exist or you do not have permission to view it.",
+      "backToList": "Back to Children List",
+      "transferStatusBtn": "Transfer Status",
+      "inCareBannerTitle": "Child Eligible for Adoption Matching",
+      "inCareBannerDesc": "This child is placed in institutional care and can be selected for matching with approved adoptive parents.",
+      "viewAdoptionRequests": "View Adoption Requests",
+      "returnedBannerTitle": "Reunified with Biological Family",
+      "biodataTitle": "Child Biodata & Identity",
+      "cityId": "City ID / National ID",
+      "facilityChildId": "Facility Child ID",
+      "additionalNotes": "Special Observations",
+      "placementTitle": "Care Facility & Placement",
+      "careCenter": "Care Facility",
+      "location": "Facility Location",
+      "facilityContact": "Facility Contact",
+      "contactPerson": "Contact Person",
+      "custodianTitle": "Assigned Custodian / Guardian",
+      "noCustodian": "No individual custodian currently assigned.",
+      "intakeTitle": "Intake History & Origin",
+      "reasonForReturn": "Return / Re-admission Reason",
+      "adoptionHistoryTitle": "Adoption & Matching Record",
+      "noAdoptionMatch": "This child has not been matched with an adoptive parent yet."
     }
   },
   "dashboard": {

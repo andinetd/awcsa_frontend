@@ -56,6 +56,23 @@ export interface ChildCareFacility {
   contactPerson?: string;
   loginUsername?: string;
 }
+export type ChildStatus =
+  | "FOUND"
+  | "IN_CARE"
+  | "IN_ADERA"
+  | "WITH_BLOOD_RELATIVE"
+  | "ADOPTED"
+  | "RETURNED";
+
+export const ALLOWED_CHILD_TRANSITIONS: Record<ChildStatus, ChildStatus[]> = {
+  FOUND: ["IN_CARE", "IN_ADERA", "WITH_BLOOD_RELATIVE", "RETURNED"],
+  IN_CARE: ["IN_ADERA", "WITH_BLOOD_RELATIVE", "RETURNED"],
+  IN_ADERA: ["IN_CARE", "WITH_BLOOD_RELATIVE", "RETURNED"],
+  WITH_BLOOD_RELATIVE: ["IN_CARE", "RETURNED"],
+  RETURNED: ["IN_CARE", "IN_ADERA"],
+  ADOPTED: [],
+};
+
 // Main Child interface that matches the example payload
 export interface Child {
   id: number;
@@ -67,7 +84,7 @@ export interface Child {
   timeWhenChildFound?: string;
   socialWorkerCityIdNumber?: string;
   additionalInfo?: string;
-  currentStatus?: string;
+  currentStatus?: ChildStatus | string;
   custodianId?: number | null;
   createdAt?: string;
   updatedAt?: string;
@@ -75,7 +92,49 @@ export interface Child {
   childCareFacility?: {
     id: number;
     name: string;
+    place?: string;
+    type?: string;
+    phone?: string | null;
+    email?: string | null;
+    region?: string | null;
+    subCity?: string | null;
+    woreda?: string | null;
+    kebele?: string | null;
+    contactPerson?: string;
   } | null;
+  custodian?: Client | null;
+  adoptionMatches?: Array<{
+    id: number;
+    status: string;
+    matchedAt: string;
+    completedAt?: string | null;
+    terminatedAt?: string | null;
+    adopter?: Client;
+    matchedBy?: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      employeeRole?: string;
+    };
+    application?: ServiceData;
+  }>;
+  reunifications?: Array<{
+    id: number;
+    reunificationDate: string;
+    fatherName?: string | null;
+    motherName?: string | null;
+    contactPhoneNumber?: string | null;
+    nationalIdNumber?: string | null;
+    courtOrderNumber?: string | null;
+    reunificationReason?: string;
+    socialWorkerNotes?: string | null;
+    processedBy?: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      employeeRole?: string;
+    };
+  }>;
 }
 
 export interface MatchRequest {

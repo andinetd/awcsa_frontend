@@ -25,3 +25,35 @@ export const getChildren = async (): Promise<Child[]> => {
 
   return [];
 };
+
+export const getChildById = async (id: number): Promise<Child> => {
+  const { token } = useAuthStore.getState();
+  const res = await axios.get(`${BASE_URL}/adoption/child/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export interface TransferChildStatusPayload {
+  newStatus: string;
+  reasonForTransfer?: string;
+}
+
+export const transferChildStatus = async (
+  childId: number,
+  payload: TransferChildStatusPayload
+) => {
+  const { token } = useAuthStore.getState();
+  const res = await axios.patch(
+    `${BASE_URL}/adoption/child/status/${childId}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
