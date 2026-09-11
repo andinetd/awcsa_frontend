@@ -8,8 +8,10 @@ export interface UpdateWomenProfilePayload {
   lastName?: string;
   phoneNumber?: string;
   dateOfBirth?: string;
+  age?: number;
   address?: string;
   educationLevel?: string;
+  careerStatus?: string;
   occupation?: string;
   monthlyIncome?: number;
   photoUrl?: string;

@@ -89,19 +89,20 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <Briefcase className="w-4 h-4" />
-          <span>{profile.occupation}</span>
+          <span>{profile.careerStatus || profile.occupation || "-"}</span>
         </div>
         <div className="flex items-center gap-2">
           <CalendarDays className="w-4 h-4" />
           <span>
-            {new Date(profile.client.dateOfBirth).toLocaleDateString(
-              undefined,
-              {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              },
-            )}
+            {t("form.age")}:{" "}
+            {profile.client.age ??
+              (profile.client.dateOfBirth
+                ? Math.floor(
+                    (Date.now() -
+                      new Date(profile.client.dateOfBirth).getTime()) /
+                      (365.25 * 24 * 60 * 60 * 1000)
+                  )
+                : "-")}
           </span>
         </div>
       </CardContent>

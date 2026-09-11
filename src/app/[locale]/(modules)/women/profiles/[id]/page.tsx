@@ -140,17 +140,17 @@ const WomenProfileDetail = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
-                {t("form.dateOfBirth")}
+                {t("form.age")}
               </p>
               <p className="font-medium">
-                {new Date(profile.client.dateOfBirth).toLocaleDateString(
-                  undefined,
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  },
-                )}
+                {profile.client.age ??
+                  (profile.client.dateOfBirth
+                    ? Math.floor(
+                        (Date.now() -
+                          new Date(profile.client.dateOfBirth).getTime()) /
+                          (365.25 * 24 * 60 * 60 * 1000)
+                      )
+                    : "-")}
               </p>
             </div>
           </CardContent>
@@ -169,13 +169,13 @@ const WomenProfileDetail = () => {
               <p className="text-sm text-muted-foreground">
                 {t("form.phoneNumber")}
               </p>
-              <p className="font-medium">{profile.client.phoneNumber}</p>
+              <p className="font-medium">{profile.client.phoneNumber || "-"}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
                 {t("form.addressTitle")}
               </p>
-              <p className="font-medium">{profile.client.address}</p>
+              <p className="font-medium">{profile.client.address || "-"}</p>
             </div>
             {profile.client.contactInfo?.email && (
               <div>
@@ -190,7 +190,7 @@ const WomenProfileDetail = () => {
           </CardContent>
         </Card>
 
-        {/* Education & Employment */}
+        {/* Education & Career */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
@@ -203,23 +203,34 @@ const WomenProfileDetail = () => {
               <p className="text-sm text-muted-foreground">
                 {t("form.educationLevel")}
               </p>
-              <p className="font-medium">{profile.educationLevel}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {t("form.occupation")}
+              <p className="font-medium">
+                {(() => {
+                  const level = profile.educationLevel;
+                  if (!level) return "-";
+                  try {
+                    if (t.has(`form.educationOptions.${level}`)) {
+                      return t(`form.educationOptions.${level}`);
+                    }
+                  } catch {}
+                  return level;
+                })()}
               </p>
-              <p className="font-medium">{profile.occupation}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
-                {t("form.monthlyIncome")}
+                {t("form.careerStatus")}
               </p>
               <p className="font-medium">
-                {Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "ETB",
-                }).format(profile.client.monthlyIncome)}
+                {(() => {
+                  const status = profile.careerStatus || profile.occupation;
+                  if (!status) return "-";
+                  try {
+                    if (t.has(`form.careerOptions.${status}`)) {
+                      return t(`form.careerOptions.${status}`);
+                    }
+                  } catch {}
+                  return status;
+                })()}
               </p>
             </div>
           </CardContent>

@@ -18,6 +18,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -27,7 +34,6 @@ import {
   womenProfileSchema,
   WomenProfileSchemaType,
 } from "@/schemas/women-profile";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -43,17 +49,20 @@ export default function NewWomenProfileForm() {
       firstName: "",
       lastName: "",
       phoneNumber: "",
-      dateOfBirth: new Date().toISOString().split("T")[0],
+      age: "" as any,
       address: "",
       educationLevel: "",
-      occupation: "",
-      monthlyIncome: 0,
+      careerStatus: "",
       photoUrl: "",
     },
   });
 
   function onSubmit(values: WomenProfileSchemaType) {
-    registerMutation.mutate(values as any, {
+    const payload = {
+      ...values,
+      occupation: values.careerStatus,
+    };
+    registerMutation.mutate(payload as any, {
       onSuccess: () => {
         setOpen(false);
         form.reset();
@@ -103,12 +112,24 @@ export default function NewWomenProfileForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="dateOfBirth"
+                  name="age"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.dateOfBirth")}</FormLabel>
+                      <FormLabel>{t("form.age")}</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input
+                          type="number"
+                          placeholder={t("form.agePlaceholder")}
+                          {...field}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value === ""
+                                ? ""
+                                : Number(e.target.value)
+                            )
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -144,7 +165,7 @@ export default function NewWomenProfileForm() {
                   control={form.control}
                   name="phoneNumber"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="md:col-span-2">
                       <FormLabel>{t("form.phoneNumber")}</FormLabel>
                       <FormControl>
                         <Input placeholder={t("form.phoneNumber")} {...field} />
@@ -174,7 +195,7 @@ export default function NewWomenProfileForm() {
               />
             </div>
 
-            {/* Education & Employment */}
+            {/* Education & Career */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">
                 {t("form.educationEmployment")}
@@ -186,38 +207,77 @@ export default function NewWomenProfileForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("form.educationLevel")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.educationLevel")}
-                          {...field}
-                        />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t("form.educationLevelPlaceholder")}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="NONE">
+                            {t("form.educationOptions.NONE")}
+                          </SelectItem>
+                          <SelectItem value="PRIMARY">
+                            {t("form.educationOptions.PRIMARY")}
+                          </SelectItem>
+                          <SelectItem value="SECONDARY">
+                            {t("form.educationOptions.SECONDARY")}
+                          </SelectItem>
+                          <SelectItem value="DIPLOMA">
+                            {t("form.educationOptions.DIPLOMA")}
+                          </SelectItem>
+                          <SelectItem value="BACHELOR">
+                            {t("form.educationOptions.BACHELOR")}
+                          </SelectItem>
+                          <SelectItem value="MASTERS">
+                            {t("form.educationOptions.MASTERS")}
+                          </SelectItem>
+                          <SelectItem value="DOCTORATE">
+                            {t("form.educationOptions.DOCTORATE")}
+                          </SelectItem>
+                          <SelectItem value="OTHER">
+                            {t("form.educationOptions.OTHER")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
-                  name="occupation"
+                  name="careerStatus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.occupation")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("form.occupation")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="monthlyIncome"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("form.monthlyIncome")}</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0" {...field} />
-                      </FormControl>
+                      <FormLabel>{t("form.careerStatus")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t("form.careerStatusPlaceholder")}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="EMPLOYED">
+                            {t("form.careerOptions.EMPLOYED")}
+                          </SelectItem>
+                          <SelectItem value="SELF_EMPLOYED">
+                            {t("form.careerOptions.SELF_EMPLOYED")}
+                          </SelectItem>
+                          <SelectItem value="UNEMPLOYED">
+                            {t("form.careerOptions.UNEMPLOYED")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -226,7 +286,7 @@ export default function NewWomenProfileForm() {
                   control={form.control}
                   name="photoUrl"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="md:col-span-2">
                       <FormLabel>{t("form.photoUrl")}</FormLabel>
                       <FormControl>
                         <Input placeholder="https://..." {...field} />

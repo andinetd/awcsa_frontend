@@ -71,6 +71,20 @@
     "card": {
       "viewDetails": "ዝርዝር መረጃ",
       "edit": "ያርሙ"
+    },
+    "table": {
+      "name": "ሙሉ ስም",
+      "cityId": "የከተማ መታወቂያ",
+      "age": "ዕድሜ",
+      "phone": "የስልክ ቁጥር",
+      "address": "አድራሻ",
+      "educationLevel": "የትምህርት ደረጃ",
+      "careerStatus": "የሥራ ሁኔታ",
+      "status": "ሁኔታ",
+      "actions": "ድርጊቶች",
+      "viewDetails": "ዝርዝር ይመልከቱ",
+      "edit": "ያርሙ",
+      "toggleStatus": "ሁኔታን ይቀይሩ"
     }
   },
   "form": {
@@ -80,14 +94,34 @@
     "personalInfo": "የግል መረጃ",
     "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
     "dateOfBirth": "የትውልድ ቀን",
+    "age": "ዕድሜ",
+    "agePlaceholder": "ምሳሌ 28",
     "firstName": "የመጀመሪያ ስም",
     "lastName": "የአያት ስም",
     "phoneNumber": "የስልክ ቁጥር",
     "addressTitle": "አድራሻ",
     "fullAddress": "ሙሉ አድራሻ",
-    "educationEmployment": "ትምህርት እና ስራ",
+    "educationEmployment": "ትምህርት እና ሥራ",
     "educationLevel": "የትምህርት ደረጃ",
+    "educationLevelPlaceholder": "የትምህርት ደረጃ ይምረጡ",
+    "educationOptions": {
+      "NONE": "ያልተማረች / ምንም",
+      "PRIMARY": "የመጀመሪያ ደረጃ (1-8)",
+      "SECONDARY": "ሁለተኛ ደረጃ (9-12)",
+      "DIPLOMA": "ቴክኒክና ሙያ / ዲፕሎማ",
+      "BACHELOR": "የመጀመሪያ ዲግሪ",
+      "MASTERS": "ሁለተኛ ዲግሪ (ማስተርስ)",
+      "DOCTORATE": "ዶክትሬት (ፒኤችዲ)",
+      "OTHER": "ሌላ"
+    },
     "occupation": "ስራ",
+    "careerStatus": "የሥራ ሁኔታ",
+    "careerStatusPlaceholder": "የሥራ ሁኔታ ይምረጡ",
+    "careerOptions": {
+      "EMPLOYED": "ተቀጣሪ (ሥራ አላት)",
+      "UNEMPLOYED": "ሥራ የሌላት (ሥራ የላትም)",
+      "SELF_EMPLOYED": "በግል የምትሰራ"
+    },
     "monthlyIncome": "ወርሃዊ ገቢ",
     "photoUrl": "የፎቶ አድራሻ (አማራጭ)",
     "buttons": {

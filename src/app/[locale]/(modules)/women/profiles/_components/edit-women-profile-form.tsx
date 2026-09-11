@@ -17,6 +17,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
@@ -25,7 +32,6 @@ import {
   womenProfileSchema,
   WomenProfileSchemaType,
 } from "@/schemas/women-profile";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { WomenProfile } from "@/api/womens/women-profile";
 import { useTranslations } from "next-intl";
@@ -51,31 +57,31 @@ export default function EditWomenProfileForm({
       firstName: "",
       lastName: "",
       phoneNumber: "",
-      dateOfBirth: new Date().toISOString().split("T")[0],
+      age: "" as any,
       address: "",
       educationLevel: "",
-      occupation: "",
-      monthlyIncome: 0,
+      careerStatus: "",
       photoUrl: "",
     },
   });
 
   useEffect(() => {
     if (profile) {
-      const dateStr = profile.client.dateOfBirth
-        ? new Date(profile.client.dateOfBirth).toISOString().split("T")[0]
-        : "";
+      let calculatedAge = profile.client.age;
+      if (!calculatedAge && profile.client.dateOfBirth) {
+        const diff = Date.now() - new Date(profile.client.dateOfBirth).getTime();
+        calculatedAge = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+      }
 
       form.reset({
         cityIdNumber: profile.client.cityIdNumber,
         firstName: profile.client.firstName,
         lastName: profile.client.lastName,
         phoneNumber: profile.client.phoneNumber,
-        dateOfBirth: dateStr,
+        age: calculatedAge ?? ("" as any),
         address: profile.client.address,
-        educationLevel: profile.educationLevel,
-        occupation: profile.occupation,
-        monthlyIncome: profile.client.monthlyIncome,
+        educationLevel: profile.educationLevel || "",
+        careerStatus: profile.careerStatus || profile.occupation || "",
         photoUrl: profile.photoUrl || "",
       });
     }
@@ -84,8 +90,13 @@ export default function EditWomenProfileForm({
   function onSubmit(values: WomenProfileSchemaType) {
     if (!profile?.id) return;
 
+    const payload = {
+      ...values,
+      occupation: values.careerStatus,
+    };
+
     updateMutation.mutate(
-      { id: profile.id, data: values as any },
+      { id: profile.id, data: payload as any },
       {
         onSuccess: () => {
           onOpenChange(false);
@@ -130,12 +141,24 @@ export default function EditWomenProfileForm({
                 />
                 <FormField
                   control={form.control}
-                  name="dateOfBirth"
+                  name="age"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.dateOfBirth")}</FormLabel>
+                      <FormLabel>{t("form.age")}</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input
+                          type="number"
+                          placeholder={t("form.agePlaceholder")}
+                          {...field}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value === ""
+                                ? ""
+                                : Number(e.target.value)
+                            )
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -171,7 +194,7 @@ export default function EditWomenProfileForm({
                   control={form.control}
                   name="phoneNumber"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="md:col-span-2">
                       <FormLabel>{t("form.phoneNumber")}</FormLabel>
                       <FormControl>
                         <Input placeholder={t("form.phoneNumber")} {...field} />
@@ -201,7 +224,7 @@ export default function EditWomenProfileForm({
               />
             </div>
 
-            {/* Education & Employment */}
+            {/* Education & Career */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">
                 {t("form.educationEmployment")}
@@ -213,38 +236,77 @@ export default function EditWomenProfileForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("form.educationLevel")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.educationLevel")}
-                          {...field}
-                        />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t("form.educationLevelPlaceholder")}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="NONE">
+                            {t("form.educationOptions.NONE")}
+                          </SelectItem>
+                          <SelectItem value="PRIMARY">
+                            {t("form.educationOptions.PRIMARY")}
+                          </SelectItem>
+                          <SelectItem value="SECONDARY">
+                            {t("form.educationOptions.SECONDARY")}
+                          </SelectItem>
+                          <SelectItem value="DIPLOMA">
+                            {t("form.educationOptions.DIPLOMA")}
+                          </SelectItem>
+                          <SelectItem value="BACHELOR">
+                            {t("form.educationOptions.BACHELOR")}
+                          </SelectItem>
+                          <SelectItem value="MASTERS">
+                            {t("form.educationOptions.MASTERS")}
+                          </SelectItem>
+                          <SelectItem value="DOCTORATE">
+                            {t("form.educationOptions.DOCTORATE")}
+                          </SelectItem>
+                          <SelectItem value="OTHER">
+                            {t("form.educationOptions.OTHER")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
-                  name="occupation"
+                  name="careerStatus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.occupation")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("form.occupation")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="monthlyIncome"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("form.monthlyIncome")}</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="0" {...field} />
-                      </FormControl>
+                      <FormLabel>{t("form.careerStatus")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t("form.careerStatusPlaceholder")}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="EMPLOYED">
+                            {t("form.careerOptions.EMPLOYED")}
+                          </SelectItem>
+                          <SelectItem value="SELF_EMPLOYED">
+                            {t("form.careerOptions.SELF_EMPLOYED")}
+                          </SelectItem>
+                          <SelectItem value="UNEMPLOYED">
+                            {t("form.careerOptions.UNEMPLOYED")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -253,7 +315,7 @@ export default function EditWomenProfileForm({
                   control={form.control}
                   name="photoUrl"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="md:col-span-2">
                       <FormLabel>{t("form.photoUrl")}</FormLabel>
                       <FormControl>
                         <Input placeholder="https://..." {...field} />

@@ -5,11 +5,13 @@ export interface Client {
   lastName: string;
   phoneNumber: string;
   address: string;
-  dateOfBirth: string;
+  dateOfBirth?: string;
+  age?: number;
   clientCategory: string;
   educationLevel: string;
   occupation: string;
-  monthlyIncome: number;
+  careerStatus?: string;
+  monthlyIncome?: number;
   spouseCityIdNumber?: string | null;
   familyMembersCount?: number | null;
   contactInfo: {
@@ -29,6 +31,7 @@ export interface WomenProfile {
   clientId: number;
   educationLevel: string;
   occupation: string;
+  careerStatus?: string;
   photoUrl?: string;
   isActive: boolean;
   isDeleted: boolean;

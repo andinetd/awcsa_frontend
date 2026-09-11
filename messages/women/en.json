@@ -71,6 +71,20 @@
     "card": {
       "viewDetails": "View Details",
       "edit": "Edit"
+    },
+    "table": {
+      "name": "Full Name",
+      "cityId": "City ID",
+      "age": "Age",
+      "phone": "Phone Number",
+      "address": "Address",
+      "educationLevel": "Education Level",
+      "careerStatus": "Career Status",
+      "status": "Status",
+      "actions": "Actions",
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "toggleStatus": "Toggle Status"
     }
   },
   "form": {
@@ -80,14 +94,34 @@
     "personalInfo": "Personal Information",
     "cityIdNumber": "City ID Number",
     "dateOfBirth": "Date of Birth",
+    "age": "Age",
+    "agePlaceholder": "e.g. 28",
     "firstName": "First Name",
     "lastName": "Last Name",
     "phoneNumber": "Phone Number",
     "addressTitle": "Address",
     "fullAddress": "Full Address",
-    "educationEmployment": "Education & Employment",
+    "educationEmployment": "Education & Career",
     "educationLevel": "Education Level",
+    "educationLevelPlaceholder": "Select education level",
+    "educationOptions": {
+      "NONE": "None / Illiterate",
+      "PRIMARY": "Primary (Grade 1-8)",
+      "SECONDARY": "Secondary (Grade 9-12)",
+      "DIPLOMA": "TVET / Diploma",
+      "BACHELOR": "Bachelor's Degree",
+      "MASTERS": "Master's Degree",
+      "DOCTORATE": "Doctorate (PhD)",
+      "OTHER": "Other"
+    },
     "occupation": "Occupation",
+    "careerStatus": "Career Status",
+    "careerStatusPlaceholder": "Select career status",
+    "careerOptions": {
+      "EMPLOYED": "Employed (Has Work)",
+      "UNEMPLOYED": "Unemployed (No Work)",
+      "SELF_EMPLOYED": "Self-Employed"
+    },
     "monthlyIncome": "Monthly Income",
     "photoUrl": "Photo URL (Optional)",
     "buttons": {

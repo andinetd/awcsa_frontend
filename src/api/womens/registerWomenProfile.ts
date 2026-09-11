@@ -7,11 +7,13 @@ export interface RegisterWomenProfilePayload {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  dateOfBirth: string;
+  age?: number;
+  dateOfBirth?: string;
   address: string;
   educationLevel: string;
-  occupation: string;
-  monthlyIncome: number;
+  careerStatus?: string;
+  occupation?: string;
+  monthlyIncome?: number;
   photoUrl?: string;
 }
 
