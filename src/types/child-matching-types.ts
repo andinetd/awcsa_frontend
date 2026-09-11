@@ -135,6 +135,48 @@ export interface Child {
       employeeRole?: string;
     };
   }>;
+  transferHistory?: ChildTransferHistory[];
+}
+
+export interface ChildTransferHistory {
+  id: number;
+  childRegistrationId: number;
+  fromStatus: ChildStatus | string;
+  toStatus: ChildStatus | string;
+  reason?: string | null;
+  transferredById?: number | null;
+  transferredAt: string;
+  childCareFacilityId?: number | null;
+  childIdFromFacility?: string | null;
+  custodianId?: number | null;
+  custodianDetails?: {
+    fullName?: string;
+    phoneNumber?: string;
+    relationship?: string;
+    cityIdNumber?: string;
+    address?: string;
+    notes?: string;
+    [key: string]: any;
+  } | null;
+  additionalNotes?: string | null;
+  createdAt?: string;
+  transferredBy?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    employeeRole?: string;
+  } | null;
+  childCareFacility?: {
+    id: number;
+    name: string;
+    place?: string;
+    type?: string;
+    phone?: string | null;
+    email?: string | null;
+    subCity?: string | null;
+    woreda?: string | null;
+  } | null;
+  custodian?: Client | null;
 }
 
 export interface MatchRequest {

@@ -39,6 +39,11 @@ export const getChildById = async (id: number): Promise<Child> => {
 export interface TransferChildStatusPayload {
   newStatus: string;
   reasonForTransfer?: string;
+  childCareFacilityId?: number;
+  childIdFromFacility?: string;
+  custodianId?: number;
+  custodianDetails?: Record<string, any>;
+  additionalNotes?: string;
 }
 
 export const transferChildStatus = async (
