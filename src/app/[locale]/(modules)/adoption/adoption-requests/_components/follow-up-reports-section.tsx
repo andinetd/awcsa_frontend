@@ -244,7 +244,16 @@ const ReportCard = ({
                 onClick={() => onReview(report)}
               >
                 <MessageSquare className="w-3 h-3 mr-1" />
-                {t("followUpReports.review")}
+                {(() => {
+                  try {
+                    const v = t("followUpReports.review");
+                    return v && !v.includes("followUpReports.review")
+                      ? v
+                      : "Review Report";
+                  } catch {
+                    return "Review Report";
+                  }
+                })()}
               </Button>
             )}
           <button
@@ -370,7 +379,16 @@ const ReportCard = ({
               {report.officerFeedback && (
                 <div className="mb-2">
                   <p className="text-xs font-semibold text-emerald-700 mb-0.5">
-                    {t("followUpReports.feedbackLabel")}
+                    {(() => {
+                      try {
+                        const v = t("followUpReports.feedbackLabel");
+                        return v && !v.includes("followUpReports.feedbackLabel")
+                          ? v
+                          : "Officer Assessment & Feedback";
+                      } catch {
+                        return "Officer Assessment & Feedback";
+                      }
+                    })()}
                   </p>
                   <p className="text-sm text-slate-700">{report.officerFeedback}</p>
                 </div>
@@ -379,7 +397,16 @@ const ReportCard = ({
                 <div className="bg-rose-50 border border-rose-200 rounded-md p-2 mt-2">
                   <p className="text-xs font-semibold text-rose-700 mb-0.5 flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
-                    {t("followUpReports.concernsLabel")}
+                    {(() => {
+                      try {
+                        const v = t("followUpReports.concernsLabel");
+                        return v && !v.includes("followUpReports.concernsLabel")
+                          ? v
+                          : "Actionable Concerns & Red Flags";
+                      } catch {
+                        return "Actionable Concerns & Red Flags";
+                      }
+                    })()}
                   </p>
                   <p className="text-sm text-rose-800">{report.officerConcerns}</p>
                 </div>

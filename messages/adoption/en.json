@@ -218,7 +218,10 @@
         "month18": "Month 18 (1.5 Years Post-Placement)",
         "month24": "Month 24 (2 Years Post-Placement)",
         "annual": "Annual Review (Post-2 Years)"
-      }
+      },
+      "review": "Review Report",
+      "feedbackLabel": "Officer Assessment & Feedback",
+      "concernsLabel": "Actionable Concerns & Red Flags"
     },
     "homeVisits": {
       "title": "Post-Placement Home Visits",
@@ -337,7 +340,10 @@
     "returned": "Returned",
     "denied": "Denied",
     "adopted": "Adopted",
-    "in_care": "In Care"
+    "in_care": "In Care",
+    "active": "Active Placement",
+    "completed": "Completed Adoption",
+    "terminated": "Terminated Match"
   },
   "enums": {
     "sex": {
@@ -955,6 +961,9 @@
       "month18": "Month 18 (1.5 Years Post-Placement)",
       "month24": "Month 24 (2 Years Post-Placement)",
       "annual": "Annual Review (Post-2 Years)"
-    }
+    },
+    "review": "Review Report",
+    "feedbackLabel": "Officer Assessment & Feedback",
+    "concernsLabel": "Actionable Concerns & Red Flags"
   }
 }

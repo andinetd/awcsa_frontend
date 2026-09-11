@@ -384,6 +384,9 @@
       "month18": "Month 18 (1.5 Years Post-Placement)",
       "month24": "Month 24 (2 Years Post-Placement)",
       "annual": "Annual Review (Post-2 Years)"
-    }
+    },
+    "review": "Review Report",
+    "feedbackLabel": "Officer Assessment & Feedback",
+    "concernsLabel": "Actionable Concerns & Red Flags"
   }
 }

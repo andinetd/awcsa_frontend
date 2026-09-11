@@ -192,7 +192,15 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
             </h1>
             <div className="px-2.5 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-bold border border-green-200 uppercase tracking-wide">
               {data.status
-                ? t(`statuses.${data.status.toLowerCase().replace(/ /g, "_")}`)
+                ? (() => {
+                    const key = data.status.toLowerCase().replace(/ /g, "_");
+                    try {
+                      const res = t(`statuses.${key}`);
+                      return res && !res.includes("statuses.") ? res : data.status;
+                    } catch {
+                      return data.status;
+                    }
+                  })()
                 : "—"}
             </div>
           </div>
@@ -279,7 +287,15 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   label={t("adoptionDetail.fields.sex")}
                   value={
                     childSex
-                      ? t(`enums.sex.${childSex}`)
+                      ? (() => {
+                          const key = String(childSex).toUpperCase();
+                          try {
+                            const res = t(`enums.sex.${key}`);
+                            return res && !res.includes("enums.sex.") ? res : childSex;
+                          } catch {
+                            return childSex;
+                          }
+                        })()
                       : null
                   }
                 />
@@ -297,7 +313,17 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   label={t("adoptionDetail.fields.category")}
                   value={
                     data.child?.clientCategory
-                      ? t(`enums.category.${data.child.clientCategory}`)
+                      ? (() => {
+                          const key = String(data.child.clientCategory).toUpperCase();
+                          try {
+                            const res = t(`enums.category.${key}`);
+                            return res && !res.includes("enums.category.")
+                              ? res
+                              : data.child.clientCategory;
+                          } catch {
+                            return data.child.clientCategory;
+                          }
+                        })()
                       : null
                   }
                 />
@@ -389,7 +415,16 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >
-              Case Notes
+              {(() => {
+                try {
+                  const res = t("adoptionDetail.tabs.caseNotes");
+                  return res && !res.includes("adoptionDetail.tabs")
+                    ? res
+                    : "Case Notes";
+                } catch {
+                  return "Case Notes";
+                }
+              })()}
             </button>
             <button
               onClick={() => setActiveTab("followup")}
@@ -399,7 +434,16 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >
-              Follow-Up Reports
+              {(() => {
+                try {
+                  const res = t("adoptionDetail.tabs.followUpReports");
+                  return res && !res.includes("adoptionDetail.tabs")
+                    ? res
+                    : "Follow-Up Reports";
+                } catch {
+                  return "Follow-Up Reports";
+                }
+              })()}
             </button>
             <button
               onClick={() => setActiveTab("visits")}
@@ -409,7 +453,16 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >
-              Home Visits
+              {(() => {
+                try {
+                  const res = t("adoptionDetail.tabs.homeVisits");
+                  return res && !res.includes("adoptionDetail.tabs")
+                    ? res
+                    : "Home Visits";
+                } catch {
+                  return "Home Visits";
+                }
+              })()}
             </button>
           </div>
 
