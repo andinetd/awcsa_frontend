@@ -8,6 +8,7 @@ type RouteGuard = {
     | "CHILD_CARE_FACILITY"
   )[];
   allowedRoles?: DeputyBureau[];
+  requiredPermissions?: string[];
 };
 
 export const routePermissions: Record<string, RouteGuard> = {
@@ -40,5 +41,9 @@ export const routePermissions: Record<string, RouteGuard> = {
   "/complaints": {
     allowedAccountTypes: ["EMPLOYEE"],
     allowedRoles: ["SYSTEM"],
+  },
+  "/persons": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    requiredPermissions: ["view_unified_history"],
   },
 };

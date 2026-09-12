@@ -80,21 +80,43 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }
 
-    // ROLE CHECK FOR EMPLOYEE ONLY
-    if (decodedToken.user.accountType == "EMPLOYEE") {
-      const employeeToken = decodedToken as EmployeeJwtPayload;
-      const department = employeeToken.department;
+    // Super Admin bypass: Super Admin has every permission and full access by default
+    const isSuperAdmin =
+      (decodedToken as EmployeeJwtPayload).entity?.role === "Super_Admin" ||
+      (decodedToken as any).roles?.includes("Super_Admin") ||
+      (decodedToken as any).role === "Super_Admin";
 
-      // Use department directly for matching in routePermissions
-      const effectiveRole = department;
+    if (!isSuperAdmin) {
+      // ROLE CHECK FOR EMPLOYEE ONLY
+      if (decodedToken.user.accountType == "EMPLOYEE") {
+        const employeeToken = decodedToken as EmployeeJwtPayload;
+        const department = employeeToken.department;
 
-      if (
-        guard.allowedRoles &&
-        !guard.allowedRoles.includes(effectiveRole as any)
-      ) {
-        return NextResponse.redirect(
-          new URL(`/${locale}/unauthorized`, req.url),
+        // Use department directly for matching in routePermissions
+        const effectiveRole = department;
+
+        if (
+          guard.allowedRoles &&
+          !guard.allowedRoles.includes(effectiveRole as any)
+        ) {
+          return NextResponse.redirect(
+            new URL(`/${locale}/unauthorized`, req.url),
+          );
+        }
+      }
+
+      // PERMISSION CHECK
+      if (guard.requiredPermissions && guard.requiredPermissions.length > 0) {
+        const userPermissions = decodedToken.auth?.permissions || [];
+        const hasAllRequiredPermissions = guard.requiredPermissions.every(
+          (permission) => userPermissions.includes(permission),
         );
+
+        if (!hasAllRequiredPermissions) {
+          return NextResponse.redirect(
+            new URL(`/${locale}/unauthorized`, req.url),
+          );
+        }
       }
     }
 

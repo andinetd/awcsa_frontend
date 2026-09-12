@@ -9,9 +9,14 @@ import { LOGIN_ROUTE, isPublicAuthPath } from "@/lib/auth-routes";
 interface AuthProviderProps {
   children: ReactNode;
   allowedRoles?: DeputyBureau[];
+  requiredPermissions?: string[];
 }
 
-const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
+const AuthProvider = ({
+  children,
+  allowedRoles,
+  requiredPermissions,
+}: AuthProviderProps) => {
   const { user, department, hydrated, orgUnit } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
@@ -52,9 +57,24 @@ const AuthProvider = ({ children, allowedRoles }: AuthProviderProps) => {
 
       if (!isAuthorized) {
         router.replace("/unauthorized");
+        return;
       }
     }
-  }, [hydrated, user, department, allowedRoles, router, isPublic]);
+
+    if (requiredPermissions && requiredPermissions.length > 0) {
+      const { userRole, userPermissions } = useAuthStore.getState();
+      const isSuperAdmin = userRole === "Super_Admin";
+      if (!isSuperAdmin) {
+        const hasAllPermissions = requiredPermissions.every((perm) =>
+          userPermissions?.includes(perm),
+        );
+        if (!hasAllPermissions) {
+          router.replace("/unauthorized");
+          return;
+        }
+      }
+    }
+  }, [hydrated, user, department, allowedRoles, requiredPermissions, router, isPublic]);
 
   if (!hydrated) {
     // Public auth pages should render immediately, even before hydration, so
