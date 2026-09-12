@@ -7,6 +7,7 @@ import {
   HandHeart,
   HandHelping,
   Heart,
+  History,
   Home,
   LayoutDashboard,
   LucideIcon,
@@ -26,6 +27,7 @@ export interface NavigationItem {
   orgType?: string[];
   children?: NavigationItem[];
   showRegisterTrigger?: boolean;
+  permission?: string;
 }
 
 export interface NavigationSection {
@@ -90,6 +92,17 @@ export const sidebarConfig: Record<
         },
       ],
     },
+    {
+      title: "Cross-Department",
+      items: [
+        {
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
+        },
+      ],
+    },
   ],
 
   SOCIAL_AFFAIRS: [
@@ -135,6 +148,17 @@ export const sidebarConfig: Record<
         },
       ],
     },
+    {
+      title: "Cross-Department",
+      items: [
+        {
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
+        },
+      ],
+    },
   ],
 
   WOMEN: [
@@ -149,6 +173,12 @@ export const sidebarConfig: Record<
         { title: "Employment", url: "/women/employment", icon: Briefcase },
         { title: "Associations", url: "/women/associations", icon: Users },
         { title: "1-to-10 Members", url: "/women/members", icon: Users },
+        {
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
+        },
       ],
     },
   ],
@@ -183,6 +213,17 @@ export const sidebarConfig: Record<
           title: "Landing Page",
           url: "/super-admin/landing-page",
           icon: Settings2,
+        },
+      ],
+    },
+    {
+      title: "Cross-Department",
+      items: [
+        {
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
         },
       ],
     },
@@ -284,6 +325,17 @@ export const sidebarConfig: Record<
               icon: Settings2,
             },
           ],
+        },
+      ],
+    },
+    {
+      title: "Cross-Department",
+      items: [
+        {
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
         },
       ],
     },

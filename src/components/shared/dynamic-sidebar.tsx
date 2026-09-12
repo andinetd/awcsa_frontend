@@ -314,7 +314,7 @@ export function DynamicSidebar() {
       entityRole,
       department,
     );
-  }, [orgUnit, pathname, user, userRole, department]);
+  }, [orgUnit, pathname, user, userRole, department, userPermissions, entity]);
 
   const roleLabel =
     userRole && t.has(`roles.${userRole}`) ? t(`roles.${userRole}`) : userRole;

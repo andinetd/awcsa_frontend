@@ -3,7 +3,7 @@ import {
   OrgType,
   UserRole,
 } from "@/types/api/auth";
-import { sidebarConfig } from "./sidebar-config";
+import { NavigationItem, NavigationSection, sidebarConfig } from "./sidebar-config";
 
 export function getSidebarItems(
   orgUnit: OrgType | null | undefined,
@@ -13,29 +13,25 @@ export function getSidebarItems(
   permissions?: string[],
   entityRole?: string,
   department?: string | null,
-) {
+): NavigationSection[] {
   const accountType = user?.accountType;
+
+  let rawSections: NavigationSection[];
 
   // Priority 1: Care Centers Portal (facility account)
   if (
     accountType === "CHILD_CARE_FACLITY" ||
     accountType === "CHILD_CARE_FACILITY"
   ) {
-    return sidebarConfig.CARE_CENTERS_PORTAL;
-  }
-
-  // Priority 2: SYSTEM users see the unified multi-module sidebar
-  if (department === "SYSTEM") {
-    return sidebarConfig.BUREAU_HEAD;
-  }
-
-  // Priority 3: Super Admin gets the admin management menu
-  if (userRole === "Super_Admin") {
-    return sidebarConfig.SUPER_ADMIN;
-  }
-
-  // Priority 4: Resolve by org unit / deputy bureau
-  if (orgUnit) {
+    rawSections = sidebarConfig.CARE_CENTERS_PORTAL;
+  } else if (department === "SYSTEM") {
+    // Priority 2: SYSTEM users see the unified multi-module sidebar
+    rawSections = sidebarConfig.BUREAU_HEAD;
+  } else if (userRole === "Super_Admin") {
+    // Priority 3: Super Admin gets the admin management menu
+    rawSections = sidebarConfig.SUPER_ADMIN;
+  } else if (orgUnit) {
+    // Priority 4: Resolve by org unit / deputy bureau
     const deputyMap: Record<string, keyof typeof sidebarConfig> = {
       BUREAU_HEAD: "BUREAU_HEAD",
       CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
@@ -46,12 +42,9 @@ export function getSidebarItems(
       CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
     };
 
-    if (orgUnit.deputyBureau) {
-      const deputy = deputyMap[orgUnit.deputyBureau];
-      if (deputy) return sidebarConfig[deputy];
-    }
-
-    if (
+    if (orgUnit.deputyBureau && deputyMap[orgUnit.deputyBureau]) {
+      rawSections = sidebarConfig[deputyMap[orgUnit.deputyBureau]];
+    } else if (
       orgUnit.type === "BUREAU" ||
       orgUnit.type === "OFFICE"
     ) {
@@ -76,14 +69,55 @@ export function getSidebarItems(
           p.toLowerCase().includes("edir"),
       );
 
-      if (isWomensRole || hasWomensPermissions) return sidebarConfig.WOMEN;
-      if (isChildrenRole || hasChildrenPermissions)
-        return sidebarConfig.CHILDREN_AFFAIRS;
-      if (isSocialRole || hasSocialPermissions)
-        return sidebarConfig.SOCIAL_AFFAIRS;
+      if (isWomensRole || hasWomensPermissions) {
+        rawSections = sidebarConfig.WOMEN;
+      } else if (isChildrenRole || hasChildrenPermissions) {
+        rawSections = sidebarConfig.CHILDREN_AFFAIRS;
+      } else if (isSocialRole || hasSocialPermissions) {
+        rawSections = sidebarConfig.SOCIAL_AFFAIRS;
+      } else {
+        rawSections = sidebarConfig.BUREAU_HEAD;
+      }
+    } else {
+      rawSections = sidebarConfig.BUREAU_HEAD;
     }
+  } else {
+    // Fallback: unified sidebar keeps every user able to navigate
+    rawSections = sidebarConfig.BUREAU_HEAD;
   }
 
-  // Fallback: unified sidebar keeps every user able to navigate
-  return sidebarConfig.BUREAU_HEAD;
+  const isSuperAdmin =
+    userRole === "Super_Admin" ||
+    (user as any)?.role === "Super_Admin" ||
+    (user as any)?.roles?.includes("Super_Admin") ||
+    entityRole === "Super_Admin";
+
+  const filterItem = (item: NavigationItem): NavigationItem | null => {
+    const requiredPermission =
+      item.permission || (item.url === "/persons" ? "view_unified_history" : undefined);
+
+    if (requiredPermission && !isSuperAdmin) {
+      if (!permissions?.includes(requiredPermission)) {
+        return null;
+      }
+    }
+
+    if (item.children) {
+      const filteredChildren = item.children
+        .map(filterItem)
+        .filter((child): child is NavigationItem => child !== null);
+      return { ...item, children: filteredChildren };
+    }
+
+    return item;
+  };
+
+  return rawSections
+    .map((section) => ({
+      ...section,
+      items: section.items
+        .map(filterItem)
+        .filter((item): item is NavigationItem => item !== null),
+    }))
+    .filter((section) => section.items.length > 0);
 }
