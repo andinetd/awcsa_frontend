@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useGetWomenAssociationByIdQuery } from "@/hooks/womens";
-import { useAuthStore } from "@/stores/auth-store";
 import WomenAssociationForm from "../_components/women-association-form";
 import AssociationMembersManager from "../_components/association-members-manager";
 import { AssociationWorkflowPanel } from "../_components/association-workflow";
@@ -17,7 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ChevronLeft, Pencil, Users, ClipboardList } from "lucide-react";
+import { Loader2, ChevronLeft, Pencil, Users } from "lucide-react";
 import { uiTokens } from "@/styles/design-system";
 
 const STATUS_TAGS: Record<string, string> = {
@@ -32,21 +31,11 @@ export default function AssociationDetailPage() {
   const router = useRouter();
   const params = useParams();
   const recordId = Number(params?.id);
-  const userRole = useAuthStore((s) => s.userRole);
 
   const { data: response, isLoading } = useGetWomenAssociationByIdQuery(recordId);
   const record = response?.data;
 
   const [editOpen, setEditOpen] = useState(false);
-
-  const openAuditTrail = () => {
-    if (!record) return;
-    const params = new URLSearchParams({
-      entityType: "WomenAssociation",
-      entityId: String(record.id),
-    });
-    router.push(`/super-admin/audit-logs?${params.toString()}`);
-  };
 
   useEffect(() => {
     if (!isLoading && record) {
@@ -120,16 +109,6 @@ export default function AssociationDetailPage() {
               >
                 <Pencil className="w-3.5 h-3.5" />
                 {t("detail.edit")}
-              </Button>
-            )}
-            {userRole === "Super_Admin" && (
-              <Button
-                variant="outline"
-                className="h-8 rounded-xs text-xs font-medium border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] cursor-pointer gap-1.5"
-                onClick={openAuditTrail}
-              >
-                <ClipboardList className="w-3.5 h-3.5 text-[#1769AA]" />
-                {t("detail.auditTrail")}
               </Button>
             )}
             <AssociationReportMenu associationId={record.id} />
