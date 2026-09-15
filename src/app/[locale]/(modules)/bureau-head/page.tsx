@@ -255,8 +255,10 @@ export default function BureauHeadPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F8FA] p-3 sm:p-5 lg:p-6 space-y-4 text-slate-800 max-w-[1600px] mx-auto">
-      {/* 1. Institutional Government Header */}
+      {/* 1. Institutional Government Header & Unified Tab Bar */}
       <ExecutiveHeader
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         timeframe={timeframe}
         setTimeframe={setTimeframe}
         selectedSubCity={selectedSubCity}
@@ -265,6 +267,10 @@ export default function BureauHeadPage() {
         isRefreshing={isRefreshing}
         onExportCSV={handleExportCSV}
         onPrint={handlePrint}
+        actionBacklogCount={6}
+        facilityReportsCount={12}
+        subCitiesCount={11}
+        openComplaintsCount={complaintsList.filter((c: any) => c.status === "PENDING").length || 3}
       />
 
       {/* Active Jurisdiction Filter Banner (if filtering by a sub-city) */}
@@ -286,103 +292,35 @@ export default function BureauHeadPage() {
         </div>
       )}
 
-      {/* 2. Cases Requiring Attention & Action Queue Banner */}
-      <OperationalAlertBanner
-        overdueReportsCount={overdueReportsCount}
-        pendingReportsCount={pendingReports}
-        openComplaintsCount={complaintsList.filter((c: any) => c.status === "PENDING").length || 3}
-        pendingAdoptionReviewsCount={childWelfareData?.adoption?.totalApplicants ? Math.round(childWelfareData.adoption.totalApplicants * 0.25) : 38}
-        onNavigateToTab={(tab) => setActiveTab(tab)}
-      />
-
-      {/* 3. Core Bureau KPI Scorecard Strip */}
-      <KPIScorecardGrid
-        totalBeneficiaries={totalBeneficiaries}
-        totalChildren={totalChildren}
-        totalFacilities={totalFacilities}
-        inCareCount={inCareCount}
-        totalVulnerable={totalVulnerable}
-        elderlyCount={elderlyCount}
-        disabilityCount={disabilityCount}
-        womenProfilesCount={womenProfilesCount}
-        womenAssociationsCount={womenAssociationsCount}
-        submittedReports={submittedReports}
-        pendingReports={pendingReports}
-        complianceRate={complianceRate}
-      />
-
-      {/* 4. Structured Operational Tabs */}
+      {/* Structured Operational Tab Panels */}
       <div className="space-y-4">
-        {/* Flat Underline Navigation Bar */}
-        <div className="border-b border-[#E3E7EB] pt-1 flex flex-wrap gap-2 text-xs">
-          <button
-            onClick={() => setActiveTab("overview")}
-            className={`pb-2.5 pt-1 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "overview"
-                ? "border-b-2 border-[#1769AA] text-slate-900"
-                : "border-b-2 border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <span>Executive overview &amp; performance</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("attention")}
-            className={`pb-2.5 pt-1 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "attention"
-                ? "border-b-2 border-[#1769AA] text-slate-900"
-                : "border-b-2 border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <span>Action backlog</span>
-            <span className="rounded-xs bg-slate-200/70 text-slate-700 px-1.5 py-0.2 font-mono text-[10px]">
-              6
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("reports")}
-            className={`pb-2.5 pt-1 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "reports"
-                ? "border-b-2 border-[#1769AA] text-slate-900"
-                : "border-b-2 border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <span>Care facility reports</span>
-            <span className="rounded-xs bg-slate-200/70 text-slate-700 px-1.5 py-0.2 font-mono text-[10px]">
-              12
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("subcities")}
-            className={`pb-2.5 pt-1 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "subcities"
-                ? "border-b-2 border-[#1769AA] text-slate-900"
-                : "border-b-2 border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <span>Sub-city municipalities</span>
-            <span className="rounded-xs bg-slate-200/70 text-slate-700 px-1.5 py-0.2 font-mono text-[10px]">
-              11
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("complaints")}
-            className={`pb-2.5 pt-1 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "complaints"
-                ? "border-b-2 border-[#1769AA] text-slate-900"
-                : "border-b-2 border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <span>Citizen grievances</span>
-          </button>
-        </div>
-
         {/* Tab 1: Executive Overview & Directorate Performance */}
         {activeTab === "overview" && (
           <div className="space-y-4">
+            {/* Cases Requiring Attention & Action Queue Banner */}
+            <OperationalAlertBanner
+              overdueReportsCount={overdueReportsCount}
+              pendingReportsCount={pendingReports}
+              openComplaintsCount={complaintsList.filter((c: any) => c.status === "PENDING").length || 3}
+              pendingAdoptionReviewsCount={childWelfareData?.adoption?.totalApplicants ? Math.round(childWelfareData.adoption.totalApplicants * 0.25) : 38}
+              onNavigateToTab={(tab) => setActiveTab(tab)}
+            />
+
+            {/* Core Bureau KPI Scorecard Strip */}
+            <KPIScorecardGrid
+              totalBeneficiaries={totalBeneficiaries}
+              totalChildren={totalChildren}
+              totalFacilities={totalFacilities}
+              inCareCount={inCareCount}
+              totalVulnerable={totalVulnerable}
+              elderlyCount={elderlyCount}
+              disabilityCount={disabilityCount}
+              womenProfilesCount={womenProfilesCount}
+              womenAssociationsCount={womenAssociationsCount}
+              submittedReports={submittedReports}
+              pendingReports={pendingReports}
+              complianceRate={complianceRate}
+            />
             <ExecutiveChartsSection data={analyticsData || ({} as any)} />
             <DirectorateDrilldown
               childWelfareData={childWelfareData}
