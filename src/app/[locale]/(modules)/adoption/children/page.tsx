@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import {
   Building2,
@@ -95,82 +95,100 @@ export default function ChildrenPage() {
   );
 
   return (
-    <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 max-w-7xl space-y-6">
-      {/* ── Page Header ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="min-h-screen bg-[#F7F8FA] p-3 sm:p-5 lg:p-6 space-y-4 max-w-7xl mx-auto text-slate-800">
+      {/* ── Institutional Header ────────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E3E7EB]">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 mb-0.5">
+            <span>Addis Ababa City Administration</span>
+            <span>·</span>
+            <span>Women &amp; Social Affairs Bureau</span>
+            <span>·</span>
+            <span className="text-[#1769AA] font-semibold">Child Protection &amp; Care</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1F3A]">
             {t("children.list.title") || "Children Records & Welfare Registry"}
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             {t("children.list.subtitle") ||
-              "Track child institutional intake, status transfers, care facilities, and adoption eligibility."}
+              "Institutional intake tracking, facility transfers, kinship tracing, and adoption eligibility."}
           </p>
         </div>
         <Link href="/adoption/children/child-registration/new">
-          <Button className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shadow-sm text-xs sm:text-sm">
-            <Plus className="w-4 h-4" />
+          <Button className="bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 shadow-2xs text-xs font-semibold rounded-xs h-8 px-3 cursor-pointer">
+            <Plus className="size-3.5" />
             {t("children.list.addNew") || "Register New Child"}
           </Button>
         </Link>
       </div>
 
-      {/* ── Quick Stats Grid ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
-            Total
+      {/* ── Quick Metric Scorecards ─────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#0B1F3A]">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">
+            Total Registry
           </p>
-          <p className="text-xl font-bold text-slate-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-[#0B1F3A] mt-0.5">
             {children.length}
           </p>
+          <span className="text-[10px] text-slate-400">All recorded minors</span>
         </div>
-        <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-blue-700 uppercase tracking-wide">
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#1769AA]">
+          <p className="text-[10px] font-bold text-[#1769AA] uppercase tracking-wider font-mono">
             In Care (Eligible)
           </p>
-          <p className="text-xl font-bold text-blue-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-[#1769AA] mt-0.5">
             {counts["IN_CARE"] || 0}
           </p>
+          <span className="text-[10px] text-slate-400">Institutional centers</span>
         </div>
-        <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">
-            Found
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-amber-500">
+          <p className="text-[10px] font-bold text-amber-800 uppercase tracking-wider font-mono">
+            Found / Intake
           </p>
-          <p className="text-xl font-bold text-amber-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-slate-900 mt-0.5">
             {counts["FOUND"] || 0}
           </p>
+          <span className="text-[10px] text-slate-400">Under initial tracing</span>
         </div>
-        <div className="bg-purple-50/60 border border-purple-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-purple-700 uppercase tracking-wide">
-            In Adera
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-slate-400">
+          <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+            In Adera Custody
           </p>
-          <p className="text-xl font-bold text-purple-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-slate-900 mt-0.5">
             {counts["IN_ADERA"] || 0}
           </p>
+          <span className="text-[10px] text-slate-400">Temporary shelter</span>
         </div>
-        <div className="bg-indigo-50/60 border border-indigo-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-indigo-700 uppercase tracking-wide">
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-blue-400">
+          <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider font-mono">
             Kinship Care
           </p>
-          <p className="text-xl font-bold text-indigo-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-slate-900 mt-0.5">
             {counts["WITH_BLOOD_RELATIVE"] || 0}
           </p>
+          <span className="text-[10px] text-slate-400">Extended family</span>
         </div>
-        <div className="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3 shadow-xs">
-          <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide">
-            Adopted
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-emerald-600">
+          <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider font-mono">
+            Decree Adopted
           </p>
-          <p className="text-xl font-bold text-emerald-900 mt-0.5">
+          <p className="text-xl font-bold font-mono text-emerald-700 mt-0.5">
             {counts["ADOPTED"] || 0}
           </p>
+          <span className="text-[10px] text-slate-400">Finalized decrees</span>
         </div>
       </div>
 
       {/* ── Filters & Search ─────────────────────────────────────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs space-y-3">
         {/* Status Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
           {FILTER_TABS.map((tab) => {
             const count = counts[tab.key] ?? 0;
             const active = selectedStatus === tab.key;
@@ -178,19 +196,19 @@ export default function ChildrenPage() {
               <button
                 key={tab.key}
                 onClick={() => setSelectedStatus(tab.key)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
                   active
-                    ? "bg-indigo-600 text-white shadow-xs"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-[#0B1F3A] text-white border-[#0B1F3A]"
+                    : "bg-slate-50 text-slate-600 hover:bg-slate-100 border-[#E3E7EB]"
                 }`}
               >
-                {tab.icon && <tab.icon className="w-3.5 h-3.5" />}
+                {tab.icon && <tab.icon className="size-3.5" />}
                 <span>{tab.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  className={`text-[10px] font-mono px-1.5 py-0.2 rounded-xs font-bold ${
                     active
                       ? "bg-white/20 text-white"
-                      : "bg-white text-slate-500 border border-slate-200"
+                      : "bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]"
                   }`}
                 >
                   {count}
@@ -202,31 +220,31 @@ export default function ChildrenPage() {
 
         {/* Search bar */}
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="size-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <Input
             placeholder={
               t("children.list.searchPlaceholder") ||
-              "Search by child name, facility child code (e.g. FAC-001), or intake location..."
+              "Search by child name, facility code (e.g. FAC-001), or intake location..."
             }
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 text-xs h-9 bg-slate-50 border-slate-200 focus:bg-white"
+            className="pl-8 text-xs h-8 bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="size-3.5" />
             </button>
           )}
         </div>
       </div>
 
       {/* ── Table / Content ─────────────────────────────────────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs">
         {isLoading ? (
-          <div className="py-16 text-center text-slate-400 text-sm">
+          <div className="py-16 text-center text-slate-400 text-xs font-medium">
             {t("children.list.loading") || "Loading registered children..."}
           </div>
         ) : (

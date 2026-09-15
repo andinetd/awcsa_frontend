@@ -21,6 +21,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { BASE_URL } from "@/lib/base-url";
 import { useTranslations } from "next-intl";
 import { Search, Eye, FileText, X } from "lucide-react";
+import { uiTokens } from "@/styles/design-system";
+import { cn } from "@/lib/utils";
 
 export type BackendDocument = {
   publicId: string;
@@ -214,49 +216,47 @@ const AdoptionRequestsContent = () => {
     };
   }, [token, t]);
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (
+    status: string
+  ): {
+    label: string;
+    statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info";
+  } => {
     switch ((status || "").toUpperCase()) {
       case "PENDING_REVIEW":
         return {
-          label: t("adoptionRequests.statuses.pending_review"),
-          className:
-            "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800",
+          label: t("adoptionRequests.statuses.pending_review") || "Awaiting Review",
+          statusType: "warning",
         };
       case "PENDING_HOME_VISIT":
         return {
-          label: t("adoptionRequests.statuses.pending_home_visit"),
-          className:
-            "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800",
+          label: t("adoptionRequests.statuses.pending_home_visit") || "Home Inspection",
+          statusType: "primary",
         };
       case "PENDING_APPROVAL":
         return {
-          label: t("adoptionRequests.statuses.pending_approval"),
-          className:
-            "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-800",
+          label: t("adoptionRequests.statuses.pending_approval") || "Committee Docket",
+          statusType: "navy",
         };
       case "MATCHED":
         return {
-          label: t("adoptionRequests.statuses.matched"),
-          className:
-            "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800",
+          label: t("adoptionRequests.statuses.matched") || "Matched",
+          statusType: "primary",
         };
       case "RETURNED":
         return {
-          label: t("adoptionRequests.statuses.returned"),
-          className:
-            "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/30 dark:text-orange-400 dark:border-orange-800",
+          label: t("adoptionRequests.statuses.returned") || "Returned for Correction",
+          statusType: "neutral",
         };
       case "REJECTED":
         return {
-          label: t("adoptionRequests.statuses.denied"),
-          className:
-            "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-800",
+          label: t("adoptionRequests.statuses.denied") || "Denied",
+          statusType: "danger",
         };
       default:
         return {
           label: status || "—",
-          className:
-            "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800",
+          statusType: "neutral",
         };
     }
   };
@@ -324,64 +324,141 @@ const AdoptionRequestsContent = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      {/* Header section with search bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="min-h-screen bg-[#F7F8FA] p-3 sm:p-5 lg:p-6 space-y-4 max-w-7xl mx-auto text-slate-800">
+      {/* ── Institutional Header ────────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E3E7EB]">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {t("adoptionRequests.title")}
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 mb-0.5">
+            <span>Addis Ababa City Administration</span>
+            <span>·</span>
+            <span>Women &amp; Social Affairs Bureau</span>
+            <span>·</span>
+            <span className="text-[#1769AA] font-semibold">Child Welfare &amp; Adoption</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1F3A]">
+            {t("adoptionRequests.title") || "Adoption Applications & Vetting Docket"}
           </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {applications.length} total applications
+          <p className="text-xs text-slate-500 mt-0.5">
+            Multi-stage applicant vetting: document intake, home suitability inspection, committee approval, and matching.
           </p>
         </div>
+
         <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 size-3.5 text-slate-400" />
           <Input
             type="text"
-            placeholder={t("adoptionRequests.searchPlaceholder")}
+            placeholder={t("adoptionRequests.searchPlaceholder") || "Search applicant by name, ID, phone, sub-city..."}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-8 h-9 text-sm bg-card"
+            className="pl-8 pr-8 h-8 text-xs bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs shadow-2xs"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
               aria-label="Clear search"
             >
-              <X className="h-4 w-4" />
+              <X className="size-3.5" />
             </button>
           )}
         </div>
       </div>
 
+      {/* ── Quick Pipeline Metric Strip ─────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#0B1F3A]">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">
+            Total Dossiers
+          </p>
+          <p className="text-xl font-bold font-mono text-[#0B1F3A] mt-0.5">
+            {applications.length}
+          </p>
+          <span className="text-[10px] text-slate-400">All registered files</span>
+        </div>
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-amber-500">
+          <p className="text-[10px] font-bold text-amber-800 uppercase tracking-wider font-mono">
+            Initial Review
+          </p>
+          <p className="text-xl font-bold font-mono text-slate-900 mt-0.5">
+            {tabCounts.pending || 0}
+          </p>
+          <span className="text-[10px] text-slate-400">Awaiting clearance</span>
+        </div>
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#1769AA]">
+          <p className="text-[10px] font-bold text-[#1769AA] uppercase tracking-wider font-mono">
+            Home Inspection
+          </p>
+          <p className="text-xl font-bold font-mono text-[#1769AA] mt-0.5">
+            {tabCounts.pending_home_visit || 0}
+          </p>
+          <span className="text-[10px] text-slate-400">Social work visits</span>
+        </div>
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#0B1F3A]">
+          <p className="text-[10px] font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
+            Committee Docket
+          </p>
+          <p className="text-xl font-bold font-mono text-[#0B1F3A] mt-0.5">
+            {tabCounts.pending_approval || 0}
+          </p>
+          <span className="text-[10px] text-slate-400">Ready for decree</span>
+        </div>
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-emerald-600">
+          <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider font-mono">
+            Matched Minors
+          </p>
+          <p className="text-xl font-bold font-mono text-emerald-700 mt-0.5">
+            {tabCounts.matched || 0}
+          </p>
+          <span className="text-[10px] text-slate-400">Trial placement</span>
+        </div>
+
+        <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-slate-400">
+          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider font-mono">
+            Returned / Denied
+          </p>
+          <p className="text-xl font-bold font-mono text-slate-700 mt-0.5">
+            {(tabCounts.returned || 0) + (tabCounts.denied || 0)}
+          </p>
+          <span className="text-[10px] text-slate-400">Action required / closed</span>
+        </div>
+      </div>
+
       {/* Tabs navigation */}
-      <Tabs value={tab} onValueChange={handleTabChange} className="w-full">
-        <div className="overflow-x-auto pb-2 mb-4">
-          <TabsList className="inline-flex h-auto gap-1 bg-muted/60 p-1 rounded-lg">
+      <Tabs value={tab} onValueChange={handleTabChange} className="w-full space-y-3">
+        <div className="overflow-x-auto pb-0.5 bg-white border border-[#E3E7EB] rounded-xs p-1.5 shadow-2xs">
+          <div className="flex items-center gap-1.5">
             {TABS.map((tItem) => {
               const count = tabCounts[tItem.value] ?? 0;
+              const isActive = tab === tItem.value;
               return (
-                <TabsTrigger
+                <button
                   key={tItem.value}
-                  value={tItem.value}
-                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-xs px-3 py-1.5 text-xs font-medium rounded-md gap-1.5 transition-all"
+                  type="button"
+                  onClick={() => handleTabChange(tItem.value)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
+                    isActive
+                      ? "bg-[#0B1F3A] text-white border-[#0B1F3A]"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100 border-[#E3E7EB]"
+                  }`}
                 >
                   <span>{tItem.label}</span>
                   <span
-                    className={`px-1.5 py-0.2 text-[10px] font-semibold rounded-full ${
-                      tab === tItem.value
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted-foreground/15 text-muted-foreground"
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded-xs font-bold ${
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]"
                     }`}
                   >
                     {count}
                   </span>
-                </TabsTrigger>
+                </button>
               );
             })}
-          </TabsList>
+          </div>
         </div>
 
         {/* Tab content rendered as modern List Table */}
@@ -395,57 +472,57 @@ const AdoptionRequestsContent = () => {
               value={tabItem.value}
               className="w-full mt-0"
             >
-              <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
+              <div className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
                 {loading ? (
                   <div className="p-6 space-y-4">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-4 py-2 border-b border-border/40 last:border-0"
+                        className="flex items-center gap-4 py-2 border-b border-[#E3E7EB] last:border-0"
                       >
-                        <Skeleton className="h-6 w-14 rounded" />
-                        <Skeleton className="h-6 flex-1 rounded" />
-                        <Skeleton className="h-6 w-32 rounded" />
-                        <Skeleton className="h-6 w-28 rounded" />
-                        <Skeleton className="h-6 w-24 rounded" />
-                        <Skeleton className="h-6 w-20 rounded" />
+                        <Skeleton className="h-6 w-14 rounded-xs" />
+                        <Skeleton className="h-6 flex-1 rounded-xs" />
+                        <Skeleton className="h-6 w-32 rounded-xs" />
+                        <Skeleton className="h-6 w-28 rounded-xs" />
+                        <Skeleton className="h-6 w-24 rounded-xs" />
+                        <Skeleton className="h-6 w-20 rounded-xs" />
                       </div>
                     ))}
                   </div>
                 ) : list.length === 0 ? (
-                  <div className="py-16 text-center text-muted-foreground">
-                    <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30 stroke-1" />
-                    <p className="font-medium text-sm">
+                  <div className="py-16 text-center text-slate-500">
+                    <FileText className="size-8 mx-auto mb-2 text-slate-300 stroke-1" />
+                    <p className="font-semibold text-xs text-slate-600">
                       {searchQuery
                         ? "No applications match your search query."
-                        : t("adoptionRequests.noApplications")}
+                        : t("adoptionRequests.noApplications") || "No adoption dossiers in this docket."}
                     </p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader className="bg-muted/40">
-                        <TableRow>
-                          <TableHead className="w-[90px] font-semibold text-xs uppercase tracking-wider">
-                            {t("adoptionRequests.table.applicationId")}
+                      <TableHeader className="bg-[#F8FAFC] border-b border-[#E3E7EB]">
+                        <TableRow className="hover:bg-transparent">
+                          <TableHead className="w-[90px] font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono">
+                            {t("adoptionRequests.table.applicationId") || "App ID"}
                           </TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider min-w-[200px]">
-                            {t("adoptionRequests.table.applicant")}
+                          <TableHead className="font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[200px]">
+                            {t("adoptionRequests.table.applicant") || "Applicant Name & ID"}
                           </TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider min-w-[140px]">
-                            {t("adoptionRequests.table.contact")}
+                          <TableHead className="font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[140px]">
+                            {t("adoptionRequests.table.contact") || "Contact"}
                           </TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider min-w-[140px]">
-                            {t("adoptionRequests.table.location")}
+                          <TableHead className="font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[140px]">
+                            {t("adoptionRequests.table.location") || "Jurisdiction"}
                           </TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider min-w-[120px]">
-                            {t("adoptionRequests.table.submitted")}
+                          <TableHead className="font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[120px]">
+                            {t("adoptionRequests.table.submitted") || "Filing Date"}
                           </TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider min-w-[130px]">
-                            {t("adoptionRequests.table.status")}
+                          <TableHead className="font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[130px]">
+                            {t("adoptionRequests.table.status") || "Vetting Stage"}
                           </TableHead>
-                          <TableHead className="text-right font-semibold text-xs uppercase tracking-wider min-w-[100px]">
-                            {t("adoptionRequests.table.actions")}
+                          <TableHead className="text-right font-bold text-[11px] uppercase tracking-wider text-slate-600 font-mono min-w-[100px]">
+                            {t("adoptionRequests.table.actions") || "Action"}
                           </TableHead>
                         </TableRow>
                       </TableHeader>
@@ -455,54 +532,56 @@ const AdoptionRequestsContent = () => {
                           return (
                             <TableRow
                               key={app.applicationId}
-                              className="hover:bg-muted/30 transition-colors"
+                              className="hover:bg-slate-50/80 transition-colors border-b border-[#E3E7EB]"
                             >
-                              <TableCell className="font-mono text-xs font-semibold text-primary">
+                              <TableCell className="font-mono text-xs font-bold text-[#1769AA]">
                                 #{app.applicationId}
                               </TableCell>
                               <TableCell>
-                                <div className="font-medium text-sm text-foreground">
+                                <div className="font-semibold text-xs text-slate-900">
                                   {app.applicantInfo?.firstName}{" "}
                                   {app.applicantInfo?.lastName}
                                 </div>
                                 {app.applicantInfo?.cityIdNumber && (
-                                  <div className="text-[11px] text-muted-foreground mt-0.5">
+                                  <div className="font-mono text-[10.5px] text-slate-500 mt-0.5">
                                     ID: {app.applicantInfo.cityIdNumber}
                                   </div>
                                 )}
                               </TableCell>
                               <TableCell>
-                                <div className="text-xs text-foreground font-medium">
+                                <div className="text-xs text-slate-800 font-mono font-medium">
                                   {app.applicantInfo?.phoneNumber || "—"}
                                 </div>
                                 {app.applicantInfo?.occupation && (
-                                  <div className="text-[11px] text-muted-foreground mt-0.5">
+                                  <div className="text-[11px] text-slate-500 mt-0.5">
                                     {app.applicantInfo.occupation}
                                   </div>
                                 )}
                               </TableCell>
                               <TableCell>
-                                <div className="text-xs text-foreground">
+                                <div className="text-xs text-slate-700">
                                   {app.reviewInfo?.subCity ||
                                     app.applicantInfo?.address ||
                                     "—"}
                                 </div>
                                 {app.reviewInfo?.woreda && (
-                                  <div className="text-[11px] text-muted-foreground mt-0.5">
+                                  <div className="text-[11px] text-slate-500 mt-0.5">
                                     Woreda {app.reviewInfo.woreda}
                                   </div>
                                 )}
                               </TableCell>
-                              <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                              <TableCell className="text-xs text-slate-600 font-mono whitespace-nowrap">
                                 {formatDate(app.reviewInfo?.createdAt)}
                               </TableCell>
                               <TableCell>
-                                <Badge
-                                  variant="outline"
-                                  className={`text-[11px] font-medium px-2 py-0.5 ${badge.className}`}
+                                <span
+                                  className={cn(
+                                    uiTokens.statusTag.base,
+                                    uiTokens.statusTag[badge.statusType]
+                                  )}
                                 >
                                   {badge.label}
-                                </Badge>
+                                </span>
                               </TableCell>
                               <TableCell className="text-right">
                                 <Link
@@ -512,13 +591,19 @@ const AdoptionRequestsContent = () => {
                                 >
                                   <Button
                                     size="sm"
-                                    variant={isPending ? "default" : "outline"}
-                                    className="h-8 px-3 text-xs gap-1.5 font-medium"
+                                    className={cn(
+                                      "h-6.5 px-2.5 text-xs gap-1 font-semibold rounded-xs cursor-pointer shadow-none",
+                                      isPending
+                                        ? "bg-[#1769AA] hover:bg-[#12568E] text-white"
+                                        : "border border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50 hover:text-[#1769AA]"
+                                    )}
                                   >
-                                    <Eye className="w-3.5 h-3.5" />
-                                    {isPending
-                                      ? t("adoptionRequests.actions.review")
-                                      : t("adoptionRequests.actions.view")}
+                                    <Eye className="size-3" />
+                                    <span>
+                                      {isPending
+                                        ? t("adoptionRequests.actions.review") || "Review"
+                                        : t("adoptionRequests.actions.view") || "View"}
+                                    </span>
                                   </Button>
                                 </Link>
                               </TableCell>

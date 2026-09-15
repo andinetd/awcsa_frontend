@@ -7,7 +7,7 @@ import {
 } from "@/schemas/care-centers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Hash, Lock, MapPin, Save } from "lucide-react";
+import { Hash, Lock, MapPin, Plus, Save } from "lucide-react";
 import { toast } from "sonner";
 import AgeInput from "@/components/custom/age-input";
 import { Button } from "@/components/ui/button";
@@ -94,7 +94,10 @@ const NewCareCenterForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{t("careCenters.addNew")}</Button>
+        <Button className="bg-[#1769AA] hover:bg-[#12568E] text-white rounded-xs h-8 text-xs font-semibold px-3 shadow-2xs gap-1.5 cursor-pointer">
+          <Plus className="size-3.5" />
+          <span>{t("careCenters.addNew") || "Register New Center"}</span>
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px] md:max-w-xl lg:max-w-3xl w-full overflow-y-auto max-h-[90vh]">

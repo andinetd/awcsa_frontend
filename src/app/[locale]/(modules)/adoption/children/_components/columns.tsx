@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Button } from "@/components/ui/button";
@@ -17,39 +17,41 @@ import {
   Users,
 } from "lucide-react";
 import { Child, ChildStatus } from "@/types/child-matching-types";
+import { uiTokens } from "@/styles/design-system";
+import { cn } from "@/lib/utils";
 
 const STATUS_BADGE_CONFIG: Record<
   string,
-  { label: string; color: string; icon: React.ElementType }
+  { label: string; statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info"; icon: React.ElementType }
 > = {
   FOUND: {
     label: "Found",
-    color: "bg-amber-100 text-amber-800 border-amber-300",
+    statusType: "warning",
     icon: Clock,
   },
   IN_CARE: {
     label: "In Care",
-    color: "bg-blue-100 text-blue-800 border-blue-300",
+    statusType: "primary",
     icon: Building2,
   },
   IN_ADERA: {
     label: "In Adera",
-    color: "bg-purple-100 text-purple-800 border-purple-300",
+    statusType: "neutral",
     icon: HeartHandshake,
   },
   WITH_BLOOD_RELATIVE: {
     label: "With Relative",
-    color: "bg-indigo-100 text-indigo-800 border-indigo-300",
+    statusType: "subtle",
     icon: Users,
   },
   ADOPTED: {
     label: "Adopted",
-    color: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    statusType: "navy",
     icon: CheckCircle2,
   },
   RETURNED: {
     label: "Returned",
-    color: "bg-rose-100 text-rose-800 border-rose-300",
+    statusType: "danger",
     icon: RotateCcw,
   },
 };
@@ -86,12 +88,12 @@ export const getColumns = (
         <div className="flex flex-col gap-0.5">
           <Link
             href={`/adoption/children/${child.id}`}
-            className="font-bold text-slate-900 hover:text-indigo-600 transition-colors"
+            className="font-semibold text-slate-900 hover:text-[#1769AA] transition-colors"
           >
             {fullName}
           </Link>
           {child.childIdFromFacility && (
-            <span className="text-[11px] font-mono text-indigo-600">
+            <span className="font-mono text-[10.5px] font-semibold text-[#1769AA] bg-[#E8F2FA] px-1.5 py-0.2 rounded-xs border border-[#BCD5EA] w-fit">
               {child.childIdFromFacility}
             </span>
           )}
@@ -217,16 +219,20 @@ export const getColumns = (
       const status = (row.original.currentStatus as string) || "FOUND";
       const cfg = STATUS_BADGE_CONFIG[status] || {
         label: status,
-        color: "bg-slate-100 text-slate-700 border-slate-200",
+        statusType: "neutral" as const,
         icon: Clock,
       };
       const Icon = cfg.icon;
       return (
         <span
-          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${cfg.color}`}
+          className={cn(
+            uiTokens.statusTag.base,
+            uiTokens.statusTag[cfg.statusType],
+            "gap-1"
+          )}
         >
-          <Icon className="w-3 h-3" />
-          {cfg.label}
+          <Icon className="size-3" />
+          <span>{cfg.label}</span>
         </span>
       );
     },
@@ -236,7 +242,7 @@ export const getColumns = (
   },
   {
     id: "actions",
-    header: () => <span className="text-xs font-semibold">Actions</span>,
+    header: () => <span className="text-xs font-semibold text-slate-700">Actions</span>,
     cell: ({ row }) => {
       const child = row.original;
       return (
@@ -245,9 +251,9 @@ export const getColumns = (
             <Button
               variant="outline"
               size="sm"
-              className="h-7 px-2 text-xs text-indigo-700 border-indigo-200 hover:bg-indigo-50 cursor-pointer"
+              className="h-6.5 px-2 text-xs text-slate-700 border-[#E3E7EB] hover:bg-slate-50 hover:text-[#1769AA] rounded-xs cursor-pointer shadow-none"
             >
-              <Eye className="w-3.5 h-3.5 mr-1" />
+              <Eye className="size-3 mr-1 text-slate-500" />
               {t("children.actions.view") || "View"}
             </Button>
           </Link>
@@ -255,11 +261,11 @@ export const getColumns = (
             <Button
               variant="ghost"
               size="sm"
-              className="h-7 px-2 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+              className="h-6.5 px-2 text-xs text-slate-600 hover:text-[#0B1F3A] hover:bg-slate-100 rounded-xs cursor-pointer"
               onClick={() => onTransferStatus(child)}
               title="Transfer child status"
             >
-              <ArrowRightLeft className="w-3.5 h-3.5 mr-1 text-slate-500" />
+              <ArrowRightLeft className="size-3 mr-1 text-slate-500" />
               {t("children.actions.transfer") || "Transfer"}
             </Button>
           )}
