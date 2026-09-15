@@ -44,6 +44,8 @@ import {
 import { useTransferChildStatus } from "@/hooks/adoption/useChildDetails";
 import { useAuthStore } from "@/stores/auth-store";
 import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
+import { uiTokens } from "@/styles/design-system";
+import { cn } from "@/lib/utils";
 
 interface TransferStatusDialogProps {
   child: Child | null;
@@ -57,7 +59,7 @@ const STATUS_META: Record<
   {
     label: string;
     amharicLabel: string;
-    color: string;
+    statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info";
     icon: React.ElementType;
     description: string;
     amharicDescription: string;
@@ -66,7 +68,7 @@ const STATUS_META: Record<
   FOUND: {
     label: "Found / Abandoned",
     amharicLabel: "የተገኘ / የተተወ",
-    color: "bg-amber-100 text-amber-800 border-amber-300",
+    statusType: "warning",
     icon: Clock,
     description: "Child was located or abandoned and awaiting institutional intake.",
     amharicDescription: "ሕፃኑ የተገኘ ወይም የተተወ ሲሆን ወደ ተቋም ለመግባት በመጠባበቅ ላይ ነው።",
@@ -74,7 +76,7 @@ const STATUS_META: Record<
   IN_CARE: {
     label: "In Care (Facility Placement)",
     amharicLabel: "በእንክብካቤ ማዕከል",
-    color: "bg-blue-100 text-blue-800 border-blue-300",
+    statusType: "primary",
     icon: Building2,
     description: "Child is admitted to a licensed care center and eligible for adoption matching.",
     amharicDescription: "ሕፃኑ በሕጋዊ የእንክብካቤ ማዕከል ውስጥ ያለ እና ለማዛመድ ብቁ ነው።",
@@ -82,7 +84,7 @@ const STATUS_META: Record<
   IN_ADERA: {
     label: "In Adera (Foster / Custody)",
     amharicLabel: "በአደራ / በሞግዚት",
-    color: "bg-purple-100 text-purple-800 border-purple-300",
+    statusType: "neutral",
     icon: HeartHandshake,
     description: "Temporary entrustment / foster custody pending case review or tracing.",
     amharicDescription: "ጉዳዩ እስኪጣራ ድረስ በጊዜያዊ አደራ ወይም በሞግዚት ጥበቃ ላይ ያለ።",
@@ -90,7 +92,7 @@ const STATUS_META: Record<
   WITH_BLOOD_RELATIVE: {
     label: "With Blood Relative (Kinship)",
     amharicLabel: "ከደም ዘመድ ጋር",
-    color: "bg-indigo-100 text-indigo-800 border-indigo-300",
+    statusType: "subtle",
     icon: Users,
     description: "Child is placed under the formal care of extended family or blood relatives.",
     amharicDescription: "ሕፃኑ ከቅርብ የደም ዘመዶቹ ወይም ከቤተሰቡ ጋር እንዲኖር የተደረገ።",
@@ -98,7 +100,7 @@ const STATUS_META: Record<
   ADOPTED: {
     label: "Adopted (Legally Placed)",
     amharicLabel: "የተደጎመ / በጉዲፈቻ የተሰጠ",
-    color: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    statusType: "navy",
     icon: CheckCircle2,
     description: "Child is officially matched and placed with approved adoptive parents.",
     amharicDescription: "ሕፃኑ በይፋ ተዛምዶ ለአሳዳጊ ቤተሰብ የተሰጠ።",
@@ -106,7 +108,7 @@ const STATUS_META: Record<
   RETURNED: {
     label: "Returned (Reunified)",
     amharicLabel: "የተመለሰ (ከወላጆች ጋር የተዋሃደ)",
-    color: "bg-rose-100 text-rose-800 border-rose-300",
+    statusType: "danger",
     icon: RotateCcw,
     description: "Child has been reunified with biological parents or family of origin.",
     amharicDescription: "ሕፃኑ ከሥነ-ሕይወታዊ ወላጆቹ ወይም ከቤተሰቡ ጋር የተዋሃደ።",
@@ -151,7 +153,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
   const currentMeta = STATUS_META[currentStatus] || {
     label: currentStatus,
     amharicLabel: currentStatus,
-    color: "bg-slate-100 text-slate-800 border-slate-300",
+    statusType: "neutral" as const,
     icon: Clock,
     description: "",
     amharicDescription: "",
@@ -239,14 +241,14 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto border-[#E3E7EB] rounded-xs shadow-2xs">
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-indigo-50 text-indigo-700 rounded-lg shrink-0">
-              <ArrowRightLeft className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs shrink-0">
+              <ArrowRightLeft className="size-4" />
             </div>
             <div>
-              <DialogTitle className="text-lg font-bold text-slate-900">
+              <DialogTitle className="text-base font-bold text-[#0B1F3A]">
                 {t("children.transferStatus.dialogTitle") ||
                   "Transfer Child Status & Placement"}
               </DialogTitle>
@@ -260,27 +262,31 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
 
         <div className="space-y-4 py-2">
           {/* Child Identity Card */}
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-3.5 flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-500 uppercase tracking-wide font-medium">
+              <p className="text-[10px] text-slate-500 uppercase tracking-wider font-mono font-medium">
                 {t("children.transferStatus.childLabel") || "Child Record"}
               </p>
-              <h4 className="text-sm font-bold text-slate-900">{childName}</h4>
+              <h4 className="text-sm font-bold text-[#0B1F3A]">{childName}</h4>
               {child.childIdFromFacility && (
-                <p className="text-xs text-indigo-600 font-mono font-medium">
+                <p className="text-xs text-[#1769AA] font-mono font-semibold">
                   {child.childIdFromFacility}
                 </p>
               )}
             </div>
             <div className="text-right">
-              <p className="text-[11px] text-slate-400 mb-1">
+              <p className="text-[10px] text-slate-400 mb-1 font-mono uppercase tracking-wider">
                 {t("children.transferStatus.currentStatusLabel") ||
                   "Current Status"}
               </p>
               <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${currentMeta.color}`}
+                className={cn(
+                  uiTokens.statusTag.base,
+                  uiTokens.statusTag[currentMeta.statusType || "neutral"],
+                  "px-2 py-0.5 rounded-xs"
+                )}
               >
-                <currentMeta.icon className="w-3.5 h-3.5" />
+                <currentMeta.icon className="w-3.5 h-3.5 mr-1" />
                 {currentMeta.label}
               </span>
             </div>
@@ -288,13 +294,13 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
 
           {/* If No Transitions Allowed (Terminal state e.g. ADOPTED) */}
           {allowedTransitions.length === 0 ? (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+            <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-4 text-center">
               <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-              <h4 className="text-sm font-bold text-emerald-950">
+              <h4 className="text-sm font-bold text-[#0B1F3A]">
                 {t("children.transferStatus.terminalTitle") ||
                   "Terminal Workflow Status"}
               </h4>
-              <p className="text-xs text-emerald-700 mt-1">
+              <p className="text-xs text-slate-600 mt-1">
                 {t("children.transferStatus.terminalDesc") ||
                   "This child has been officially placed in an adoptive family. Formal status updates can only be modified through court decrees or biological family reunification."}
               </p>
@@ -305,11 +311,11 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
               <div>
                 <Label
                   htmlFor="new-status"
-                  className="text-xs font-semibold text-slate-700 mb-1.5 block"
+                  className="text-xs font-semibold text-[#0B1F3A] mb-1.5 block"
                 >
                   {t("children.transferStatus.selectNewStatus") ||
                     "Select Next Placement / Status"}{" "}
-                  <span className="text-rose-500">*</span>
+                  <span className="text-red-500">*</span>
                 </Label>
                 <Select
                   value={newStatus}
@@ -321,7 +327,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                 >
                   <SelectTrigger
                     id="new-status"
-                    className="w-full bg-white border-slate-300 h-10 text-sm"
+                    className="w-full bg-white border-[#E3E7EB] rounded-xs h-9 text-xs focus:border-[#1769AA]"
                   >
                     <SelectValue
                       placeholder={
@@ -330,7 +336,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                       }
                     />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
                     {allowedTransitions.map((status) => {
                       const meta = STATUS_META[status];
                       const Icon = meta.icon;
@@ -338,7 +344,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         <SelectItem
                           key={status}
                           value={status}
-                          className="py-2"
+                          className="py-2 text-xs"
                         >
                           <div className="flex items-center gap-2">
                             <Icon className="w-4 h-4 text-slate-500" />
@@ -354,9 +360,9 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
 
                 {/* Selected Status Explanation */}
                 {newStatus && STATUS_META[newStatus] && (
-                  <div className="mt-2 bg-indigo-50/70 border border-indigo-200 rounded-lg p-2.5 flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-                    <p className="text-xs text-indigo-900 leading-relaxed">
+                  <div className="mt-2 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-2.5 flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-[#1769AA] shrink-0 mt-0.5" />
+                    <p className="text-xs text-slate-700 leading-relaxed">
                       {STATUS_META[newStatus].description}
                     </p>
                   </div>
@@ -365,9 +371,9 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
 
               {/* Dynamic Placement Section: IN_CARE */}
               {newStatus === "IN_CARE" && (
-                <div className="space-y-3 p-3.5 bg-blue-50/60 border border-blue-200 rounded-xl">
-                  <div className="flex items-center gap-2 text-blue-900 font-semibold text-xs border-b border-blue-200 pb-2">
-                    <Building2 className="w-4 h-4 text-blue-600" />
+                <div className="space-y-3 p-3.5 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs">
+                  <div className="flex items-center gap-2 text-[#0B1F3A] font-bold text-xs border-b border-[#E3E7EB] pb-2 font-mono uppercase tracking-wider">
+                    <Building2 className="w-4 h-4 text-[#1769AA]" />
                     <span>
                       {t("children.transferStatus.careCenterDetails") ||
                         "Care Center Placement Details"}
@@ -375,14 +381,14 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                   </div>
 
                   {!canManageFacilityChildren ? (
-                    <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 flex items-start gap-2.5">
-                      <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                    <div className="bg-red-50 border border-red-200 rounded-xs p-3 flex items-start gap-2.5">
+                      <ShieldAlert className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                       <div className="space-y-1">
-                        <p className="text-xs font-bold text-rose-900">
+                        <p className="text-xs font-bold text-red-900">
                           {t("children.transferStatus.permissionDeniedTitle") ||
                             "Permission Required"}
                         </p>
-                        <p className="text-xs text-rose-700 leading-relaxed">
+                        <p className="text-xs text-red-700 leading-relaxed">
                           {t("children.transferStatus.permissionDeniedDesc") ||
                             "You do not possess the required privilege ('manage_facility_children') to admit or transfer children into Care Centers. Please contact an authorized officer or Super Admin."}
                         </p>
@@ -397,7 +403,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         >
                           {t("children.transferStatus.targetFacilityLabel") ||
                             "Target Care Center"}{" "}
-                          <span className="text-rose-500">*</span>
+                          <span className="text-red-500">*</span>
                         </Label>
                         <Select
                           value={selectedFacilityId}
@@ -406,7 +412,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         >
                           <SelectTrigger
                             id="care-facility"
-                            className="w-full bg-white border-slate-300 h-9 text-xs"
+                            className="w-full bg-white border-[#E3E7EB] rounded-xs h-8 text-xs focus:border-[#1769AA]"
                           >
                             <SelectValue
                               placeholder={
@@ -419,7 +425,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                               }
                             />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="rounded-xs border-[#E3E7EB]">
                             {careCenters.map((facility: any) => (
                               <SelectItem
                                 key={facility.id}
@@ -453,7 +459,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                           placeholder="e.g. FAC-001 or KMC-089"
                           value={facilityChildId}
                           onChange={(e) => setFacilityChildId(e.target.value)}
-                          className="h-9 text-xs bg-white"
+                          className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         />
                       </div>
                     </div>
@@ -464,9 +470,9 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
               {/* Dynamic Placement Section: IN_ADERA or WITH_BLOOD_RELATIVE */}
               {(newStatus === "IN_ADERA" ||
                 newStatus === "WITH_BLOOD_RELATIVE") && (
-                <div className="space-y-3 p-3.5 bg-purple-50/60 border border-purple-200 rounded-xl">
-                  <div className="flex items-center gap-2 text-purple-900 font-semibold text-xs border-b border-purple-200 pb-2">
-                    <UserCheck className="w-4 h-4 text-purple-600" />
+                <div className="space-y-3 p-3.5 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs">
+                  <div className="flex items-center gap-2 text-[#0B1F3A] font-bold text-xs border-b border-[#E3E7EB] pb-2 font-mono uppercase tracking-wider">
+                    <UserCheck className="w-4 h-4 text-[#1769AA]" />
                     <span>
                       {newStatus === "WITH_BLOOD_RELATIVE"
                         ? t("children.transferStatus.relativeDetails") ||
@@ -490,7 +496,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         placeholder="e.g. Abebech Tadesse"
                         value={custodianName}
                         onChange={(e) => setCustodianName(e.target.value)}
-                        className="h-9 text-xs bg-white"
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       />
                     </div>
 
@@ -507,7 +513,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         placeholder="e.g. +251 91 123 4567"
                         value={custodianPhone}
                         onChange={(e) => setCustodianPhone(e.target.value)}
-                        className="h-9 text-xs bg-white"
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       />
                     </div>
 
@@ -530,7 +536,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         onChange={(e) =>
                           setCustodianRelationship(e.target.value)
                         }
-                        className="h-9 text-xs bg-white"
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       />
                     </div>
 
@@ -547,7 +553,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                         placeholder="e.g. AA-04-12984"
                         value={custodianCityId}
                         onChange={(e) => setCustodianCityId(e.target.value)}
-                        className="h-9 text-xs bg-white"
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       />
                     </div>
                   </div>
@@ -565,7 +571,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                       placeholder="e.g. Addis Ababa, Bole Subcity, Woreda 03, House 412"
                       value={custodianAddress}
                       onChange={(e) => setCustodianAddress(e.target.value)}
-                      className="h-9 text-xs bg-white"
+                      className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                     />
                   </div>
                 </div>
@@ -575,7 +581,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
               <div>
                 <Label
                   htmlFor="reason"
-                  className="text-xs font-semibold text-slate-700 mb-1.5 block"
+                  className="text-xs font-semibold text-[#0B1F3A] mb-1.5 block"
                 >
                   {t("children.transferStatus.reasonLabel") ||
                     "Reason for Transfer / Case Notes"}{" "}
@@ -592,18 +598,19 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                   }
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="text-xs bg-white"
+                  className="text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 />
               </div>
             </>
           )}
         </div>
 
-        <DialogFooter className="gap-2 sm:gap-0 pt-2 border-t border-slate-100">
+        <DialogFooter className="gap-2 sm:gap-2 pt-3 border-t border-[#E3E7EB]">
           <Button
             variant="outline"
             onClick={() => handleOpenChange(false)}
             disabled={transferMutation.isPending}
+            className="rounded-xs text-xs font-medium h-8 border-[#E3E7EB]"
           >
             {t("children.transferStatus.cancel") || "Cancel"}
           </Button>
@@ -611,7 +618,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
             <Button
               onClick={handleConfirm}
               disabled={isSubmitDisabled}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+              className="bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold rounded-xs text-xs h-8 px-4 shadow-2xs cursor-pointer"
             >
               {transferMutation.isPending
                 ? t("children.transferStatus.updating") || "Updating Status..."

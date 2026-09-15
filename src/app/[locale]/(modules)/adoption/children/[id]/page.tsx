@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowLeft,
   ArrowRightLeft,
@@ -38,39 +38,45 @@ import {
 import { useChildDetails } from "@/hooks/adoption/useChildDetails";
 import { TransferStatusDialog } from "../_components/transfer-status-dialog";
 import { ChildStatus } from "@/types/child-matching-types";
+import { uiTokens } from "@/styles/design-system";
+import { cn } from "@/lib/utils";
 
 const STATUS_BADGES: Record<
   string,
-  { label: string; color: string; icon: React.ElementType }
+  {
+    label: string;
+    statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info";
+    icon: React.ElementType;
+  }
 > = {
   FOUND: {
     label: "Found / Abandoned",
-    color: "bg-amber-100 text-amber-800 border-amber-300",
+    statusType: "warning",
     icon: Clock,
   },
   IN_CARE: {
     label: "In Care (Eligible for Adoption)",
-    color: "bg-blue-100 text-blue-800 border-blue-300",
+    statusType: "primary",
     icon: Building2,
   },
   IN_ADERA: {
     label: "In Adera (Foster Custody)",
-    color: "bg-purple-100 text-purple-800 border-purple-300",
+    statusType: "neutral",
     icon: HeartHandshake,
   },
   WITH_BLOOD_RELATIVE: {
     label: "With Blood Relative",
-    color: "bg-indigo-100 text-indigo-800 border-indigo-300",
+    statusType: "subtle",
     icon: Users,
   },
   ADOPTED: {
     label: "Adopted (Legally Placed)",
-    color: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    statusType: "navy",
     icon: CheckCircle2,
   },
   RETURNED: {
     label: "Returned (Reunified)",
-    color: "bg-rose-100 text-rose-800 border-rose-300",
+    statusType: "danger",
     icon: RotateCcw,
   },
 };
@@ -86,17 +92,17 @@ const InfoRow = ({
   value?: React.ReactNode;
   subvalue?: string;
 }) => (
-  <div className="flex items-start justify-between py-2.5 border-b border-slate-100 last:border-0 gap-3">
-    <div className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm shrink-0">
-      {Icon && <Icon className="w-4 h-4 text-slate-400" />}
+  <div className="flex items-start justify-between py-2 border-b border-[#E3E7EB]/60 last:border-0 gap-3">
+    <div className="flex items-center gap-2 text-slate-500 text-xs shrink-0">
+      {Icon && <Icon className="w-3.5 h-3.5 text-slate-400" />}
       <span>{label}</span>
     </div>
     <div className="text-right min-w-0">
-      <div className="text-xs sm:text-sm font-semibold text-slate-800 truncate">
+      <div className="text-xs font-semibold text-slate-900 truncate">
         {value || "—"}
       </div>
       {subvalue && (
-        <div className="text-[11px] text-slate-400 mt-0.5">{subvalue}</div>
+        <div className="text-[10.5px] text-slate-400 mt-0.5">{subvalue}</div>
       )}
     </div>
   </div>
@@ -161,7 +167,7 @@ export default function ChildDetailsPage() {
   const currentStatus = (child.currentStatus as ChildStatus) || "FOUND";
   const statusCfg = STATUS_BADGES[currentStatus] || {
     label: currentStatus,
-    color: "bg-slate-100 text-slate-800 border-slate-300",
+    statusType: "neutral" as const,
     icon: Clock,
   };
   const StatusIcon = statusCfg.icon;
@@ -170,73 +176,93 @@ export default function ChildDetailsPage() {
   const latestReunification = child.reunifications?.[0];
 
   return (
-    <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 max-w-7xl space-y-6 animate-fadeIn">
-      {/* ── Header Bar ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 p-4 sm:p-6 rounded-2xl shadow-sm">
-        <div className="flex items-center gap-3">
-          <Link href="/adoption/children">
-            <Button variant="ghost" size="icon" className="rounded-full shrink-0">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-                {fullName}
-              </h1>
-              <span
-                className={`inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-bold border ${statusCfg.color}`}
-              >
-                <StatusIcon className="w-3.5 h-3.5" />
-                {statusCfg.label}
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1">
-              {child.childIdFromFacility && (
-                <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-indigo-700 font-semibold">
-                  {child.childIdFromFacility}
-                </span>
-              )}
-              {child.childCareFacility?.name && (
-                <span className="flex items-center gap-1">
-                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                  {child.childCareFacility.name}
-                </span>
-              )}
-              <span>
-                Registered:{" "}
-                {child.createdAt
-                  ? new Date(child.createdAt).toLocaleDateString()
-                  : "—"}
-              </span>
-            </div>
-          </div>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-5">
+      {/* ── Institutional Header Bar ─────────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-3">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Child Protection &amp; Care
+          </span>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <Button
-            onClick={() => setIsTransferOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shadow-sm text-xs sm:text-sm cursor-pointer"
-          >
-            <ArrowRightLeft className="w-4 h-4" />
-            {t("children.details.transferStatusBtn") || "Transfer Status"}
-          </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <Link href="/adoption/children">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xs size-8 border-[#E3E7EB] hover:bg-slate-50 shrink-0 cursor-pointer"
+              >
+                <ArrowLeft className="size-4 text-slate-600" />
+              </Button>
+            </Link>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1F3A]">
+                  {fullName}
+                </h1>
+                <span
+                  className={cn(
+                    uiTokens.statusTag.base,
+                    uiTokens.statusTag[statusCfg.statusType] || uiTokens.statusTag.neutral,
+                    "px-2 py-0.5 text-xs font-semibold gap-1 rounded-xs"
+                  )}
+                >
+                  <StatusIcon className="w-3.5 h-3.5" />
+                  {statusCfg.label}
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1">
+                {child.childIdFromFacility && (
+                  <span className="font-mono bg-[#E8F2FA] text-[#1769AA] px-2 py-0.5 rounded-xs border border-[#BCD5EA] font-semibold">
+                    {child.childIdFromFacility}
+                  </span>
+                )}
+                {child.childCareFacility?.name && (
+                  <span className="flex items-center gap-1">
+                    <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                    {child.childCareFacility.name}
+                  </span>
+                )}
+                <span>
+                  Registered:{" "}
+                  {child.createdAt
+                    ? new Date(child.createdAt).toLocaleDateString()
+                    : "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <Button
+              onClick={() => setIsTransferOpen(true)}
+              className="bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 shadow-2xs text-xs font-semibold rounded-xs h-8 px-3 cursor-pointer"
+            >
+              <ArrowRightLeft className="w-3.5 h-3.5" />
+              {t("children.details.transferStatusBtn") || "Transfer Status"}
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* ── Status Banners ─────────────────────────────────────────────────── */}
       {currentStatus === "IN_CARE" && (
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white shadow-md flex items-center justify-between flex-wrap gap-4">
+        <div className="bg-[#0B1F3A] text-white rounded-xs p-4 border border-[#0B1F3A] shadow-2xs flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-md">
-              <ShieldCheck className="w-6 h-6 text-white" />
+            <div className="p-2 bg-white/10 rounded-xs border border-white/10 shrink-0">
+              <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-sm sm:text-base">
+              <h3 className="font-bold text-sm tracking-tight">
                 {t("children.details.inCareBannerTitle") ||
                   "Child Eligible for Adoption Matching"}
               </h3>
-              <p className="text-xs text-blue-100 mt-0.5">
+              <p className="text-xs text-slate-300 mt-0.5">
                 {t("children.details.inCareBannerDesc") ||
                   "This child is placed in institutional care and can be selected for matching with approved adoptive parents."}
               </p>
@@ -244,9 +270,8 @@ export default function ChildDetailsPage() {
           </div>
           <Link href="/adoption/adoption-requests">
             <Button
-              variant="secondary"
               size="sm"
-              className="bg-white text-indigo-700 hover:bg-blue-50 text-xs font-bold"
+              className="bg-white text-[#0B1F3A] hover:bg-slate-100 text-xs font-semibold rounded-xs h-8 px-3 shadow-2xs cursor-pointer"
             >
               {t("children.details.viewAdoptionRequests") ||
                 "View Adoption Requests"}
@@ -256,16 +281,16 @@ export default function ChildDetailsPage() {
       )}
 
       {currentStatus === "RETURNED" && (
-        <div className="bg-rose-50 border border-rose-300 rounded-xl p-4 flex items-start gap-3 text-rose-900 shadow-sm">
-          <div className="p-2 bg-rose-100 rounded-lg shrink-0">
-            <RotateCcw className="w-5 h-5 text-rose-700" />
+        <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-4 flex items-start gap-3 text-slate-900 shadow-2xs border-l-3 border-l-red-600">
+          <div className="p-2 bg-red-50 rounded-xs shrink-0 text-red-700">
+            <RotateCcw className="w-4 h-4" />
           </div>
           <div className="text-xs sm:text-sm">
-            <h4 className="font-bold text-rose-950 text-sm mb-0.5">
+            <h4 className="font-bold text-[#0B1F3A] text-sm mb-0.5">
               {t("children.details.returnedBannerTitle") ||
                 "Reunified with Biological Family"}
             </h4>
-            <p className="text-rose-800 leading-relaxed">
+            <p className="text-slate-600 text-xs leading-relaxed">
               {child.reasonForReturn ||
                 latestReunification?.reunificationReason ||
                 "Child was returned to biological family following formal reunification procedures."}
@@ -275,16 +300,16 @@ export default function ChildDetailsPage() {
       )}
 
       {/* ── 2-Column Details Grid ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Profile Card */}
-        <Card className="shadow-sm">
-          <CardHeader className="bg-slate-50/70 border-b border-slate-100 py-3.5">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <User className="w-4 h-4 text-blue-600" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
+              <User className="size-3.5 text-[#1769AA]" />
               {t("children.details.biodataTitle") || "Child Biodata & Identity"}
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-3">
+          <CardContent className="pt-3 px-4 pb-4">
             <InfoRow
               icon={User}
               label={t("children.registration.fields.firstName") || "First Name"}
@@ -316,11 +341,11 @@ export default function ChildDetailsPage() {
               value={child.childIdFromFacility || "—"}
             />
             {child.additionalInfo && (
-              <div className="pt-3 mt-2 border-t border-slate-100">
-                <p className="text-xs font-semibold text-slate-500 mb-1">
+              <div className="pt-3 mt-2 border-t border-[#E3E7EB]">
+                <p className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-500 mb-1">
                   {t("children.details.additionalNotes") || "Special Observations"}
                 </p>
-                <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg leading-relaxed">
+                <p className="text-xs text-slate-700 bg-[#F7F8FA] border border-[#E3E7EB] p-2.5 rounded-xs leading-relaxed">
                   {child.additionalInfo}
                 </p>
               </div>
@@ -329,14 +354,14 @@ export default function ChildDetailsPage() {
         </Card>
 
         {/* Institutional Placement & Care Center Card */}
-        <Card className="shadow-sm">
-          <CardHeader className="bg-slate-50/70 border-b border-slate-100 py-3.5">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-indigo-600" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
+              <Building2 className="size-3.5 text-[#1769AA]" />
               {t("children.details.placementTitle") || "Care Facility & Placement"}
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-3">
+          <CardContent className="pt-3 px-4 pb-4">
             <InfoRow
               icon={Building2}
               label={t("children.details.careCenter") || "Care Facility"}
@@ -367,21 +392,21 @@ export default function ChildDetailsPage() {
             />
 
             {/* Custodian details if under kinship / foster care */}
-            <div className="mt-4 pt-3 border-t border-slate-100">
-              <p className="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                <HeartHandshake className="w-3.5 h-3.5 text-purple-600" />
+            <div className="mt-4 pt-3 border-t border-[#E3E7EB]">
+              <p className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700 mb-2 flex items-center gap-1.5">
+                <HeartHandshake className="size-3.5 text-[#1769AA]" />
                 {t("children.details.custodianTitle") || "Assigned Custodian / Guardian"}
               </p>
               {child.custodian ? (
-                <div className="bg-purple-50/70 border border-purple-200 rounded-lg p-3 space-y-1">
-                  <p className="text-xs font-bold text-purple-900">
+                <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-3 space-y-1">
+                  <p className="text-xs font-bold text-[#0B1F3A]">
                     {child.custodian.firstName} {child.custodian.lastName}
                   </p>
-                  <p className="text-xs text-purple-700">
+                  <p className="text-xs text-slate-600">
                     Phone: {child.custodian.phoneNumber || "—"} | City ID:{" "}
                     {child.custodian.cityIdNumber || "—"}
                   </p>
-                  <p className="text-[11px] text-purple-600">
+                  <p className="text-[11px] text-slate-500">
                     Address: {child.custodian.address || "—"}
                   </p>
                 </div>
@@ -396,14 +421,14 @@ export default function ChildDetailsPage() {
         </Card>
 
         {/* Intake Background & Origin Card */}
-        <Card className="shadow-sm">
-          <CardHeader className="bg-slate-50/70 border-b border-slate-100 py-3.5">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-600" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
+              <Clock className="size-3.5 text-[#1769AA]" />
               {t("children.details.intakeTitle") || "Intake History & Origin"}
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-3">
+          <CardContent className="pt-3 px-4 pb-4">
             <InfoRow
               icon={MapPin}
               label={t("children.registration.fields.addressFound") || "Place Where Child Found"}
@@ -434,22 +459,22 @@ export default function ChildDetailsPage() {
         </Card>
 
         {/* Adoption & Placement Timeline Card */}
-        <Card className="shadow-sm">
-          <CardHeader className="bg-slate-50/70 border-b border-slate-100 py-3.5">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Heart className="w-4 h-4 text-rose-600" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
+              <Heart className="size-3.5 text-[#1769AA]" />
               {t("children.details.adoptionHistoryTitle") || "Adoption & Matching Record"}
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-3">
+          <CardContent className="pt-3 px-4 pb-4">
             {latestMatch ? (
               <div className="space-y-3">
-                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5">
+                <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-3.5">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-emerald-800 uppercase tracking-wide">
+                    <span className="text-xs font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
                       Match #{latestMatch.id}
                     </span>
-                    <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[11px] font-bold border border-emerald-300">
+                    <span className={cn(uiTokens.statusTag.base, uiTokens.statusTag.primary, "px-2 py-0.5 rounded-xs")}>
                       {latestMatch.status}
                     </span>
                   </div>
@@ -482,7 +507,7 @@ export default function ChildDetailsPage() {
                 {latestMatch.application?.id && (
                   <Link
                     href={`/adoption/adoption-requests/${latestMatch.application.id}`}
-                    className="inline-flex items-center gap-1.5 text-xs text-indigo-600 font-semibold hover:text-indigo-800 hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs text-[#1769AA] font-semibold hover:underline"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     View Associated Adoption Application #{latestMatch.application.id}
@@ -497,7 +522,7 @@ export default function ChildDetailsPage() {
                     "This child has not been matched with an adoptive parent yet."}
                 </p>
                 {currentStatus === "IN_CARE" && (
-                  <p className="text-[11px] text-blue-600 mt-1">
+                  <p className="text-[11px] text-[#1769AA] mt-1 font-medium">
                     Eligible for matching when approved applications are reviewed.
                   </p>
                 )}
@@ -506,12 +531,12 @@ export default function ChildDetailsPage() {
 
             {/* Reunification history if any */}
             {latestReunification && (
-              <div className="mt-4 pt-3 border-t border-slate-100">
-                <p className="text-xs font-bold text-rose-700 uppercase tracking-wide mb-2 flex items-center gap-1">
-                  <RotateCcw className="w-3.5 h-3.5" />
+              <div className="mt-4 pt-3 border-t border-[#E3E7EB]">
+                <p className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700 mb-2 flex items-center gap-1">
+                  <RotateCcw className="w-3.5 h-3.5 text-[#1769AA]" />
                   Biological Parent Reunification
                 </p>
-                <div className="bg-rose-50/70 border border-rose-200 rounded-lg p-3 text-xs space-y-1 text-slate-700">
+                <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-3 text-xs space-y-1 text-slate-700">
                   <p>
                     <strong>Parents:</strong> {latestReunification.fatherName || "—"} /{" "}
                     {latestReunification.motherName || "—"}
@@ -538,16 +563,16 @@ export default function ChildDetailsPage() {
       </div>
 
       {/* ── Transfer & Placement History Audit Trail ────────────────────────── */}
-      <Card className="shadow-sm">
-        <CardHeader className="bg-slate-50/70 border-b border-slate-100 py-3.5">
+      <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+        <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <ArrowRightLeft className="w-4 h-4 text-indigo-600" />
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
+              <ArrowRightLeft className="size-3.5 text-[#1769AA]" />
               {t("children.details.transferHistoryTitle") ||
                 "Placement & Status Transfer History"}
             </CardTitle>
             {child.transferHistory && child.transferHistory.length > 0 && (
-              <span className="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
+              <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] rounded-xs border border-[#BCD5EA]">
                 {child.transferHistory.length}{" "}
                 {child.transferHistory.length === 1
                   ? t("children.details.recordSingular") || "record"
@@ -556,18 +581,18 @@ export default function ChildDetailsPage() {
             )}
           </div>
         </CardHeader>
-        <CardContent className="pt-4">
+        <CardContent className="pt-4 px-4 pb-4">
           {child.transferHistory && child.transferHistory.length > 0 ? (
-            <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+            <div className="relative pl-6 space-y-5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E3E7EB]">
               {child.transferHistory.map((item, index) => {
                 const fromMeta = STATUS_BADGES[item.fromStatus] || {
                   label: item.fromStatus,
-                  color: "bg-slate-100 text-slate-700 border-slate-300",
+                  statusType: "neutral" as const,
                   icon: Clock,
                 };
                 const toMeta = STATUS_BADGES[item.toStatus] || {
                   label: item.toStatus,
-                  color: "bg-slate-100 text-slate-700 border-slate-300",
+                  statusType: "neutral" as const,
                   icon: Clock,
                 };
                 const ToIcon = toMeta.icon;
@@ -575,29 +600,37 @@ export default function ChildDetailsPage() {
                 return (
                   <div key={item.id || index} className="relative group">
                     {/* Timeline Node */}
-                    <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-white border-2 border-indigo-600 flex items-center justify-center shrink-0">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+                    <div className="absolute -left-6 top-1.5 w-5 h-5 rounded-full bg-white border-2 border-[#1769AA] flex items-center justify-center shrink-0">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#1769AA]" />
                     </div>
 
-                    <div className="bg-slate-50/80 hover:bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 transition-colors">
+                    <div className="bg-[#F7F8FA] hover:bg-slate-50 border border-[#E3E7EB] hover:border-[#BCD5EA] rounded-xs p-3.5 transition-colors">
                       {/* Transition Header */}
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${fromMeta.color}`}
+                            className={cn(
+                              uiTokens.statusTag.base,
+                              uiTokens.statusTag[fromMeta.statusType] || uiTokens.statusTag.neutral,
+                              "rounded-xs"
+                            )}
                           >
                             {fromMeta.label}
                           </span>
                           <ArrowRightLeft className="w-3.5 h-3.5 text-slate-400" />
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${toMeta.color}`}
+                            className={cn(
+                              uiTokens.statusTag.base,
+                              uiTokens.statusTag[toMeta.statusType] || uiTokens.statusTag.neutral,
+                              "rounded-xs font-bold"
+                            )}
                           >
-                            <ToIcon className="w-3 h-3" />
+                            <ToIcon className="w-3 h-3 mr-1" />
                             {toMeta.label}
                           </span>
                         </div>
                         <div className="text-right">
-                          <span className="text-[11px] text-slate-400 font-medium">
+                          <span className="text-[11px] font-mono text-slate-400">
                             {new Date(item.transferredAt).toLocaleString()}
                           </span>
                         </div>
@@ -605,12 +638,12 @@ export default function ChildDetailsPage() {
 
                       {/* Transferred By */}
                       <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2">
-                        <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#1769AA]" />
                         <span>
                           {t("children.details.authorizedBy") ||
                             "Authorized by"}
                           :{" "}
-                          <strong className="text-slate-700">
+                          <strong className="text-slate-800">
                             {item.transferredBy
                               ? `${item.transferredBy.firstName} ${item.transferredBy.lastName}`
                               : t("children.details.socialWorker") ||
@@ -627,15 +660,15 @@ export default function ChildDetailsPage() {
                       {/* Destination Placement Details */}
                       {item.toStatus === "IN_CARE" &&
                         item.childCareFacility && (
-                          <div className="bg-blue-50/70 border border-blue-200 rounded-lg p-2.5 text-xs text-blue-900 mb-2 flex items-center justify-between flex-wrap gap-2">
+                          <div className="bg-white border border-[#BCD5EA] rounded-xs p-2.5 text-xs text-slate-900 mb-2 flex items-center justify-between flex-wrap gap-2">
                             <div className="flex items-center gap-2">
-                              <Building2 className="w-4 h-4 text-blue-600 shrink-0" />
+                              <Building2 className="w-4 h-4 text-[#1769AA] shrink-0" />
                               <div>
-                                <p className="font-semibold">
+                                <p className="font-semibold text-[#0B1F3A]">
                                   {item.childCareFacility.name}
                                 </p>
                                 {item.childCareFacility.place && (
-                                  <p className="text-[11px] text-blue-700">
+                                  <p className="text-[11px] text-slate-500">
                                     {item.childCareFacility.place}
                                   </p>
                                 )}
@@ -643,11 +676,11 @@ export default function ChildDetailsPage() {
                             </div>
                             {item.childIdFromFacility && (
                               <div className="text-right">
-                                <span className="text-[10px] text-blue-600 block uppercase font-medium">
+                                <span className="text-[10px] text-slate-400 block uppercase font-mono font-medium">
                                   {t("children.details.facilityChildId") ||
                                     "Facility ID"}
                                 </span>
-                                <span className="font-mono font-bold text-xs bg-white px-2 py-0.5 rounded border border-blue-200 text-blue-800">
+                                <span className="font-mono font-bold text-xs bg-[#E8F2FA] px-2 py-0.5 rounded-xs border border-[#BCD5EA] text-[#1769AA]">
                                   {item.childIdFromFacility}
                                 </span>
                               </div>
@@ -659,9 +692,9 @@ export default function ChildDetailsPage() {
                       {(item.toStatus === "IN_ADERA" ||
                         item.toStatus === "WITH_BLOOD_RELATIVE") &&
                         item.custodianDetails && (
-                          <div className="bg-purple-50/70 border border-purple-200 rounded-lg p-2.5 text-xs text-purple-900 mb-2">
-                            <div className="flex items-center gap-1.5 font-semibold mb-1">
-                              <UserCheck className="w-3.5 h-3.5 text-purple-600" />
+                          <div className="bg-white border border-[#E3E7EB] rounded-xs p-2.5 text-xs text-slate-800 mb-2">
+                            <div className="flex items-center gap-1.5 font-semibold mb-1 text-[#0B1F3A]">
+                              <UserCheck className="w-3.5 h-3.5 text-[#1769AA]" />
                               <span>
                                 {item.toStatus === "WITH_BLOOD_RELATIVE"
                                   ? t("children.details.relativeGuardian") ||
@@ -670,13 +703,13 @@ export default function ChildDetailsPage() {
                                     "Foster Custodian"}
                                 : {item.custodianDetails.fullName || "—"}
                                 {item.custodianDetails.relationship && (
-                                  <span className="font-normal text-purple-700 ml-1">
+                                  <span className="font-normal text-slate-500 ml-1">
                                     ({item.custodianDetails.relationship})
                                   </span>
                                 )}
                               </span>
                             </div>
-                            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-purple-700">
+                            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500">
                               {item.custodianDetails.phoneNumber && (
                                 <span>
                                   Phone: {item.custodianDetails.phoneNumber}
@@ -698,7 +731,7 @@ export default function ChildDetailsPage() {
 
                       {/* Transfer Reason / Notes */}
                       {item.reason && (
-                        <div className="text-xs text-slate-600 mt-1 bg-white/70 border border-slate-200/60 rounded-lg p-2">
+                        <div className="text-xs text-slate-600 mt-1 bg-white border border-[#E3E7EB] rounded-xs p-2">
                           <span className="font-semibold text-slate-700">
                             {t("children.details.transferReason") ||
                               "Reason / Notes"}

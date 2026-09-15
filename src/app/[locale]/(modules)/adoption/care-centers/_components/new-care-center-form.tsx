@@ -100,39 +100,40 @@ const NewCareCenterForm = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px] md:max-w-xl lg:max-w-3xl w-full overflow-y-auto max-h-[90vh]">
+      <DialogContent className="sm:max-w-[425px] md:max-w-xl lg:max-w-3xl w-full overflow-y-auto max-h-[90vh] border-[#E3E7EB] rounded-xs shadow-2xs">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">
-            {t("careCenters.form.registerTitle")}
+          <DialogTitle className="text-base font-bold text-[#0B1F3A]">
+            {t("careCenters.form.registerTitle") || "Register New Care Facility"}
           </DialogTitle>
-          <DialogDescription>
-            {t("careCenters.form.registerDescription")}
+          <DialogDescription className="text-xs text-slate-500">
+            {t("careCenters.form.registerDescription") || "Enter the administrative, contact, and regional details of the new care center."}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="max-w-4xl mx-auto space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>
-                    {t("careCenters.form.registerFacility")}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <div className="max-w-4xl mx-auto space-y-4">
+              <Card className="border-[#E3E7EB] rounded-xs shadow-2xs bg-white">
+                <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                    {t("careCenters.form.registerFacility") || "Facility Profile & Specifications"}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4 p-4">
                   {/* Basic Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
                             {t("careCenters.form.facilityName")}
                           </FormLabel>
                           <FormControl>
                             <Input
                               placeholder={t("careCenters.form.facilityName")}
+                              className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                               {...field}
                             />
                           </FormControl>
@@ -146,23 +147,25 @@ const NewCareCenterForm = () => {
                       name="type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("careCenters.form.type")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
+                            {t("careCenters.form.type")}
+                          </FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus:border-[#1769AA]">
                                 <SelectValue
                                   placeholder={t("careCenters.form.selectType")}
                                 />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="NGO">
+                            <SelectContent className="rounded-xs border-[#E3E7EB]">
+                              <SelectItem value="NGO" className="text-xs">
                                 {t("careCenters.form.ngoPrivate")}
                               </SelectItem>
-                              <SelectItem value="GOVERNMENT">
+                              <SelectItem value="GOVERNMENT" className="text-xs">
                                 {t("careCenters.form.government")}
                               </SelectItem>
                             </SelectContent>
@@ -172,9 +175,11 @@ const NewCareCenterForm = () => {
                       )}
                     />
 
-                    <div className="space-y-2 md:col-span-2">
-                      <FormLabel>{t("careCenters.form.ageRange")}</FormLabel>
-                      <div className="flex gap-2">
+                    <div className="space-y-1.5 md:col-span-2">
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("careCenters.form.ageRange")}
+                      </FormLabel>
+                      <div className="flex items-center gap-2">
                         <FormField
                           control={form.control}
                           name="childrenAgeRange.min"
@@ -191,7 +196,7 @@ const NewCareCenterForm = () => {
                             </FormItem>
                           )}
                         />
-                        <span className="self-center text-slate-400">-</span>
+                        <span className="self-center text-slate-400 font-mono">-</span>
                         <FormField
                           control={form.control}
                           name="childrenAgeRange.max"
@@ -213,16 +218,19 @@ const NewCareCenterForm = () => {
                   </div>
 
                   {/* Contact Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("careCenters.form.phone")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
+                            {t("careCenters.form.phone")}
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder={t("careCenters.form.phone")}
+                              className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                               {...field}
                             />
                           </FormControl>
@@ -233,23 +241,24 @@ const NewCareCenterForm = () => {
                   </div>
 
                   {/* Address Section */}
-                  <div className="space-y-4">
-                    <h4 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-blue-600" />
+                  <div className="space-y-3 pt-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2 flex items-center gap-1.5">
+                      <MapPin className="size-3.5 text-[#1769AA]" />
                       {t("careCenters.form.addressDetails")}
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <FormField
                         control={form.control}
                         name="region"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
                               {t("careCenters.form.region")}
                             </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="e.g. Addis Ababa"
+                                className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
                             </FormControl>
@@ -262,7 +271,7 @@ const NewCareCenterForm = () => {
                         name="subCity"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
                               {t("careCenters.form.subCity")}
                             </FormLabel>
                             <Select
@@ -270,7 +279,7 @@ const NewCareCenterForm = () => {
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus:border-[#1769AA]">
                                   <SelectValue
                                     placeholder={t(
                                       "careCenters.form.selectSubCity",
@@ -278,7 +287,7 @@ const NewCareCenterForm = () => {
                                   />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent className="rounded-xs border-[#E3E7EB]">
                                 <SelectItem value="Bole">Bole</SelectItem>
                                 <SelectItem value="Yeka">Yeka</SelectItem>
                                 <SelectItem value="Kirkos">Kirkos</SelectItem>
@@ -308,12 +317,13 @@ const NewCareCenterForm = () => {
                         name="woreda"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
                               {t("careCenters.form.woreda")}
                             </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder={t("careCenters.form.woreda")}
+                                className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
                             </FormControl>
@@ -326,12 +336,13 @@ const NewCareCenterForm = () => {
                         name="kebele"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
                               {t("careCenters.form.kebele")}
                             </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder={t("careCenters.form.kebele")}
+                                className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
                             </FormControl>
@@ -344,12 +355,13 @@ const NewCareCenterForm = () => {
                         name="houseNumber"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
                               {t("careCenters.form.houseNumber")}
                             </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder={t("careCenters.form.houseNumber")}
+                                className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
                             </FormControl>
@@ -362,10 +374,13 @@ const NewCareCenterForm = () => {
                         name="place"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("careCenters.form.place")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">
+                              {t("careCenters.form.place")}
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="e.g. Near Bole Medhanialem"
+                                className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
                             </FormControl>
@@ -381,13 +396,13 @@ const NewCareCenterForm = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">
                           {t("careCenters.form.description")}
                         </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder={t("careCenters.form.description")}
-                            className="min-h-[100px]"
+                            className="min-h-[80px] text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                             {...field}
                           />
                         </FormControl>
@@ -399,25 +414,28 @@ const NewCareCenterForm = () => {
               </Card>
 
               {/* Account & Contact Section */}
-              <Card>
-                <CardHeader className="bg-slate-50 border-b border-slate-100">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Lock className="w-4 h-4 text-blue-600" />
+              <Card className="border-[#E3E7EB] rounded-xs shadow-2xs bg-white">
+                <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
+                  <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-1.5">
+                    <Lock className="size-3.5 text-[#1769AA]" />
                     {t("careCenters.form.accountInfo")}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6 pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CardContent className="space-y-4 p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("careCenters.form.email")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
+                            {t("careCenters.form.email")}
+                          </FormLabel>
                           <FormControl>
                             <Input
                               type="email"
                               placeholder={t("careCenters.form.email")}
+                              className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                               {...field}
                             />
                           </FormControl>
@@ -430,7 +448,7 @@ const NewCareCenterForm = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
                             {t("careCenters.form.password")}
                           </FormLabel>
                           <FormControl>
@@ -439,6 +457,7 @@ const NewCareCenterForm = () => {
                               placeholder={t(
                                 "careCenters.form.initialPassword",
                               )}
+                              className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                               {...field}
                             />
                           </FormControl>
@@ -450,16 +469,20 @@ const NewCareCenterForm = () => {
                 </CardContent>
               </Card>
 
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-2.5 pt-2 border-t border-[#E3E7EB]">
                 <Button
                   type="button"
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => form.reset()}
+                  className="rounded-xs text-xs font-medium h-8 border-[#E3E7EB] px-3"
                 >
                   {t("careCenters.form.reset")}
                 </Button>
-                <Button type="submit">
-                  <Save className="w-4 h-4 mr-2" />
+                <Button
+                  type="submit"
+                  className="bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold rounded-xs text-xs h-8 px-4 shadow-2xs cursor-pointer gap-1.5"
+                >
+                  <Save className="size-3.5" />
                   {t("careCenters.form.submit")}
                 </Button>
               </div>
