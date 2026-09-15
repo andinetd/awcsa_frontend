@@ -18,6 +18,7 @@ import {
 import EditWomenProfileForm from "../_components/edit-women-profile-form";
 import StatusToggleDialog from "../_components/status-toggle-dialog";
 import { useTranslations } from "next-intl";
+import CrossDepartmentHistory from "@/components/shared/cross-department-history";
 
 const WomenProfileDetail = () => {
   const params = useParams();
@@ -299,6 +300,16 @@ const WomenProfileDetail = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Cross-department support history */}
+      {profile.client?.id && (
+        <CrossDepartmentHistory
+          clientId={profile.client.id}
+          personName={`${profile.client.firstName} ${profile.client.lastName}`}
+          cityIdNumber={profile.client.cityIdNumber ?? undefined}
+          defaultExpanded={true}
+        />
+      )}
 
       <EditWomenProfileForm
         profile={profile}

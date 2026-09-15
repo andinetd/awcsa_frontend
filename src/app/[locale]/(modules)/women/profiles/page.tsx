@@ -16,7 +16,9 @@ import {
   Pencil,
   ToggleLeft,
   Users,
+  History,
 } from "lucide-react";
+import PersonHistoryDialog from "@/components/shared/person-history-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -266,6 +268,21 @@ export default function ProfilesPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
+                          <PersonHistoryDialog
+                            clientId={profile.client.id}
+                            personName={`${profile.client.firstName} ${profile.client.lastName}`}
+                            cityIdNumber={profile.client.cityIdNumber ?? undefined}
+                            trigger={
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                title="View cross-department support history"
+                                className="text-slate-600 hover:text-primary"
+                              >
+                                <History className="w-4 h-4" />
+                              </Button>
+                            }
+                          />
                           <Button
                             variant="ghost"
                             size="icon"

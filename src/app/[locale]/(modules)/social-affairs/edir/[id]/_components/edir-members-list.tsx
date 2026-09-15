@@ -10,9 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Loader2 } from "lucide-react";
+import { Edit, Loader2, History } from "lucide-react";
 import EdirMemberForm from "./edir-member-form";
 import ImportEdirMembersDialog from "./import-edir-members-dialog";
+import PersonHistoryDialog from "@/components/shared/person-history-dialog";
 
 interface EdirMembersListProps {
   associationId: number;
@@ -104,16 +105,22 @@ export default function EdirMembersList({
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <EdirMemberForm
-                      associationId={associationId}
-                      initialData={member}
-                      trigger={
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Edit className="w-4 h-4" />
-                          <span className="sr-only">Edit</span>
-                        </Button>
-                      }
-                    />
+                    <div className="flex justify-end items-center gap-1">
+                      <PersonHistoryDialog
+                        cityIdNumber={member.cityIdNumber}
+                        personName={member.fullName}
+                      />
+                      <EdirMemberForm
+                        associationId={associationId}
+                        initialData={member}
+                        trigger={
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Edit className="w-4 h-4" />
+                            <span className="sr-only">Edit</span>
+                          </Button>
+                        }
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

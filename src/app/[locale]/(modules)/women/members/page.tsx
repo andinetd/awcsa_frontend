@@ -51,9 +51,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
+  History,
 } from "lucide-react";
 import { toast } from "sonner";
 import MemberEditDialog from "../associations/_components/member-edit-dialog";
+import PersonHistoryDialog from "@/components/shared/person-history-dialog";
 
 export default function WomenMembersPage() {
   const t = useTranslations("women.members");
@@ -241,6 +243,19 @@ export default function WomenMembersPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
+                          <PersonHistoryDialog
+                            personName={row.fullName}
+                            trigger={
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                title="View cross-department support history"
+                                className="text-slate-600 hover:text-primary"
+                              >
+                                <History className="w-4 h-4" />
+                              </Button>
+                            }
+                          />
                           <Button
                             variant="ghost"
                             size="icon"

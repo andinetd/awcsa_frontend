@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { refreshAccessToken, logoutApi } from "@/api/auth/auth";
@@ -110,6 +110,49 @@ interface AuthState {
   hasPermission: (permission: string) => boolean;
 }
 
+const customAuthStorage: StateStorage = {
+  getItem: (name: string): string | null => {
+    if (typeof window === "undefined") return null;
+    const sessionData = sessionStorage.getItem(name);
+    if (sessionData) return sessionData;
+
+    const localData = localStorage.getItem(name);
+    if (localData) {
+      try {
+        const parsed = JSON.parse(localData);
+        if (parsed?.state?.rememberMe) {
+          return localData;
+        } else {
+          localStorage.removeItem(name);
+        }
+      } catch {
+        localStorage.removeItem(name);
+      }
+    }
+    return null;
+  },
+  setItem: (name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed?.state?.rememberMe) {
+        localStorage.setItem(name, value);
+        sessionStorage.removeItem(name);
+      } else {
+        sessionStorage.setItem(name, value);
+        localStorage.removeItem(name);
+      }
+    } catch {
+      sessionStorage.setItem(name, value);
+    }
+  },
+  removeItem: (name: string): void => {
+    if (typeof window === "undefined") return;
+    sessionStorage.removeItem(name);
+    localStorage.removeItem(name);
+  },
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -147,37 +190,59 @@ export const useAuthStore = create<AuthState>()(
 
       loadTokenFromCookie: async () => {
         const token = Cookies.get("wcasf_auth_token");
-        if (token) {
-          try {
-            const decoded: JwtPayload = jwtDecode(token);
-            const isExpired = decoded.exp
-              ? decoded.exp * 1000 < Date.now()
-              : false;
+        const currentToken = get().token;
+        const rememberMe = get().rememberMe;
 
-            if (isExpired) {
-              // Silent restore: try to refresh before dropping the session.
-              const refreshToken = get().refreshToken;
-              if (refreshToken) {
-                const refreshed = await refreshAccessToken(refreshToken);
-                if (refreshed.access_token && refreshed.refresh_token) {
-                  applyToken(
-                    refreshed.access_token,
-                    get().rememberMe,
-                    refreshed.refresh_token,
-                    set,
-                  );
-                  set({ hydrated: true });
-                  return;
-                }
-              }
-              get().logout();
-            } else {
-              get().setToken(token);
-            }
-          } catch (e) {
-            console.error("Failed to load token from cookie:", e);
+        // If cookie is gone, clean up any lingering memory/storage state
+        if (!token) {
+          if (currentToken) {
             get().logout();
+          } else {
+            set({ hydrated: true });
           }
+          return;
+        }
+
+        // If rememberMe is false and this tab doesn't have session data,
+        // it means the tab was closed and a new one was opened -> end session
+        if (
+          typeof window !== "undefined" &&
+          !rememberMe &&
+          !sessionStorage.getItem("auth-store")
+        ) {
+          get().logout();
+          return;
+        }
+
+        try {
+          const decoded: JwtPayload = jwtDecode(token);
+          const isExpired = decoded.exp
+            ? decoded.exp * 1000 < Date.now()
+            : false;
+
+          if (isExpired) {
+            // Silent restore: try to refresh before dropping the session.
+            const refreshToken = get().refreshToken;
+            if (refreshToken) {
+              const refreshed = await refreshAccessToken(refreshToken);
+              if (refreshed.access_token && refreshed.refresh_token) {
+                applyToken(
+                  refreshed.access_token,
+                  get().rememberMe,
+                  refreshed.refresh_token,
+                  set,
+                );
+                set({ hydrated: true });
+                return;
+              }
+            }
+            get().logout();
+          } else {
+            get().setToken(token);
+          }
+        } catch (e) {
+          console.error("Failed to load token from cookie:", e);
+          get().logout();
         }
         set({ hydrated: true });
       },
@@ -187,11 +252,11 @@ export const useAuthStore = create<AuthState>()(
         if (opts?.notifyServer && token) {
           logoutApi(token);
         }
-        // `js-cookie` v3 defaults the removal path to the current page path
-        // rather than the cookie's original `path: "/"`, so a bare
-        // `Cookies.remove(name)` silently fails for cookies set at "/". Pass
-        // the matching `path` to actually clear the token from the browser.
         Cookies.remove("wcasf_auth_token", { path: "/" });
+        if (typeof window !== "undefined") {
+          sessionStorage.removeItem("auth-store");
+          localStorage.removeItem("auth-store");
+        }
         set({
           user: null,
           token: null,
@@ -214,7 +279,8 @@ export const useAuthStore = create<AuthState>()(
         get().userPermissions?.includes(permission) ?? false,
     }),
     {
-      name: "auth-store", // key in localStorage
+      name: "auth-store",
+      storage: createJSONStorage(() => customAuthStorage),
     },
   ),
 );
