@@ -69,65 +69,86 @@ export default function AddMemberDialog({ council }: Props) {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <UserPlus className="w-4 h-4" />
+        <Button
+          variant="outline"
+          className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+        >
+          <UserPlus className="w-3.5 h-3.5 mr-1.5" />
           {t("buttons.addMember")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>{t("buttons.addMember")}</DialogTitle>
-          <DialogDescription>{council.name}</DialogDescription>
+      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            {t("buttons.addMember")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500 font-mono">
+            {council.name}
+          </DialogDescription>
         </DialogHeader>
 
         {isLoading ? (
-          <div className="text-center text-muted-foreground py-8">
-            {t("list.loading")}
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-pulse text-xs font-mono uppercase tracking-wider text-slate-400">
+              {t("list.loading")}
+            </div>
           </div>
         ) : available.length === 0 ? (
-          <div className="text-center text-gray-500 py-8 text-sm">
+          <div className="rounded-xs border border-dashed border-[#E3E7EB] bg-slate-50/50 p-8 text-center text-slate-400 font-mono text-xs uppercase tracking-wider">
             {t("detail.noMembers")}
           </div>
         ) : (
-          <div className="space-y-2">
-            {available.map((edir) => (
-              <button
-                key={edir.id}
-                type="button"
-                onClick={() => toggle(edir.id as number)}
-                className="w-full flex items-center justify-between border rounded-lg p-3 text-left hover:bg-muted transition-colors"
-              >
-                <div>
-                  <p className="font-medium">{edir.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {edir.registrationNumber || t("detail.notAvailable")}
-                    {" • "}
-                    {edir.subCity}
-                  </p>
-                </div>
-                <span
-                  className={`h-5 w-5 rounded border flex items-center justify-center ${
-                    selected.includes(edir.id as number)
-                      ? "bg-primary border-primary text-white"
-                      : "border-muted-foreground"
+          <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+            {available.map((edir) => {
+              const isSelected = selected.includes(edir.id as number);
+              return (
+                <button
+                  key={edir.id}
+                  type="button"
+                  onClick={() => toggle(edir.id as number)}
+                  className={`w-full flex items-center justify-between border rounded-xs p-3 text-left transition-colors ${
+                    isSelected
+                      ? "border-[#BCD5EA] bg-[#E8F2FA]/50"
+                      : "border-[#E3E7EB] bg-white hover:bg-slate-50/70"
                   }`}
                 >
-                  {selected.includes(edir.id as number) && (
-                    <Check className="h-3.5 w-3.5" />
-                  )}
-                </span>
-              </button>
-            ))}
+                  <div>
+                    <p className="text-xs font-bold text-[#0B1F3A]">{edir.name}</p>
+                    <p className="text-[11px] font-mono text-slate-500 mt-0.5">
+                      {edir.registrationNumber || t("detail.notAvailable")}
+                      {" • "}
+                      {edir.subCity}
+                    </p>
+                  </div>
+                  <span
+                    className={`h-4 w-4 rounded-xs border flex items-center justify-center transition-colors ${
+                      isSelected
+                        ? "bg-[#1769AA] border-[#1769AA] text-white"
+                        : "border-slate-300 bg-white"
+                    }`}
+                  >
+                    {isSelected && (
+                      <Check className="h-3 w-3 stroke-[3]" />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+        <DialogFooter className="pt-3 border-t border-[#E3E7EB]">
+          <Button
+            variant="outline"
+            className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+            onClick={() => setOpen(false)}
+          >
             {t("buttons.dismiss")}
           </Button>
           <Button
             onClick={handleAdd}
             disabled={selected.length === 0 || addMutation.isPending}
+            className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
           >
             {addMutation.isPending
               ? t("buttons.addingMembers")

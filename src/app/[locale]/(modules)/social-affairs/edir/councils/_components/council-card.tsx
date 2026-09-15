@@ -14,16 +14,16 @@ import { MapPin, Users, ShieldCheck } from "lucide-react";
 import { EdirCouncil, EdirStatus } from "@/api/social-affairs/edir";
 
 const statusStyles: Record<EdirStatus, string> = {
-  ACTIVE: "bg-green-100 text-green-700",
-  EXPIRED: "bg-amber-100 text-amber-700",
-  REVOKED: "bg-red-100 text-red-700",
-  CANCELLED: "bg-gray-200 text-gray-700",
+  ACTIVE: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  EXPIRED: "bg-amber-50 text-amber-700 border-amber-200",
+  REVOKED: "bg-rose-50 text-rose-700 border-rose-200",
+  CANCELLED: "bg-slate-100 text-slate-700 border-slate-200",
 };
 
 const levelStyles: Record<string, string> = {
-  WOREDA: "bg-blue-100 text-blue-700",
-  SUB_CITY: "bg-purple-100 text-purple-700",
-  CITY: "bg-teal-100 text-teal-700",
+  WOREDA: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
+  SUB_CITY: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
+  CITY: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
 };
 
 interface CouncilCardProps {
@@ -39,50 +39,61 @@ export default function CouncilCard({
   const memberCount = council._count?.memberEdirs ?? council.memberEdirs.length;
 
   return (
-    <Card className="flex flex-col overflow-hidden hover:shadow-md transition-shadow">
-      <CardHeader className="pb-3">
+    <Card className="flex flex-col overflow-hidden rounded-xs border-[#E3E7EB] bg-white shadow-2xs hover:shadow-md transition-shadow">
+      <CardHeader className="pb-3 border-b border-[#E3E7EB] bg-slate-50/30">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg leading-tight">
+          <CardTitle className="text-base font-bold text-[#0B1F3A] leading-tight">
             {council.name}
           </CardTitle>
-          <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-1" />
+          <ShieldCheck className="w-5 h-5 text-[#1769AA] shrink-0 mt-0.5" />
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge className={statusStyles[council.status] || undefined}>
+        <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+          <Badge
+            variant="outline"
+            className={`font-mono text-[10px] uppercase font-bold rounded-xs px-2 py-0.5 border ${
+              statusStyles[council.status] || "bg-slate-100 text-slate-700 border-slate-200"
+            }`}
+          >
             {t(`status.${council.status}`)}
           </Badge>
           <Badge
-            className={levelStyles[council.level] || undefined}
             variant="outline"
+            className={`font-mono text-[10px] uppercase font-bold rounded-xs px-2 py-0.5 border ${
+              levelStyles[council.level] || "bg-slate-100 text-slate-700 border-slate-200"
+            }`}
           >
             {t(`level.${council.level}`)}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2 text-sm text-muted-foreground flex-1">
+      <CardContent className="space-y-2.5 text-xs text-slate-600 flex-1 pt-4">
         <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4" />
+          <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span>
             {council.subCity}
             {council.woreda ? ` • ${council.woreda}` : ""}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4" />
+          <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span>
             {memberCount}{" "}
             {memberCount === 1 ? "member edir" : "member edirs"}
           </span>
         </div>
         {council.registrationNumber && (
-          <p className="text-xs font-mono">{council.registrationNumber}</p>
+          <div className="pt-1">
+            <span className="font-mono text-[11px] text-slate-600 bg-slate-50 px-2 py-1 rounded-xs border border-slate-200/80">
+              {council.registrationNumber}
+            </span>
+          </div>
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="pt-3 border-t border-[#E3E7EB] bg-slate-50/20">
         <Button
           variant="outline"
           size="sm"
-          className="w-full"
+          className="w-full h-8 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#E8F2FA] hover:text-[#1769AA] hover:border-[#BCD5EA] transition-colors"
           onClick={() => onViewDetails(council)}
         >
           {t("buttons.viewDetails")}

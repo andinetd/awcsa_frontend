@@ -122,48 +122,53 @@ export default function GenerateReportDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <FileDown className="w-4 h-4" />
+        <Button variant="outline" className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5">
+          <FileDown className="w-3.5 h-3.5" />
           {t("buttons.generate")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+            <FileDown className="w-4 h-4 text-[#1769AA]" />
+            {t("title")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>{t("fields.startDate")}</Label>
+        <div className="grid gap-3 py-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.startDate")}</Label>
               <Input
                 type="date"
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label>{t("fields.endDate")}</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.endDate")}</Label>
               <Input
                 type="date"
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>{t("fields.subCity")}</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.subCity")}</Label>
               <SubCitySelect
                 value={subCity}
                 onValueChange={setSubCity}
                 placeholder={t("fields.subCity")}
               />
             </div>
-            <div className="space-y-2">
-              <Label>{t("fields.woreda")}</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.woreda")}</Label>
               <WoredaSelect
                 value={woreda}
                 onValueChange={setWoreda}
@@ -173,33 +178,34 @@ export default function GenerateReportDialog() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>{t("fields.format")}</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">{t("fields.format")}</Label>
             <Select
               value={format}
               onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="EXCEL">{t("formats.excel")}</SelectItem>
-                <SelectItem value="PDF">{t("formats.pdf")}</SelectItem>
+              <SelectContent className="rounded-xs border-[#E3E7EB]">
+                <SelectItem value="EXCEL" className="text-xs rounded-xs">{t("formats.excel")}</SelectItem>
+                <SelectItem value="PDF" className="text-xs rounded-xs">{t("formats.pdf")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label>{t("columns.title")}</Label>
-            <div className="grid grid-cols-2 gap-2 border rounded-md p-4">
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">{t("columns.title")}</Label>
+            <div className="grid grid-cols-2 gap-2 border border-[#E3E7EB] rounded-xs p-3 bg-slate-50/30">
               {AVAILABLE_COLUMNS.map((col) => (
                 <div key={col.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={`col-${col.id}`}
+                    className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
                     checked={selectedColumns.includes(col.id)}
                     onCheckedChange={() => handleColumnToggle(col.id)}
                   />
-                  <Label htmlFor={`col-${col.id}`} className="text-sm">
+                  <Label htmlFor={`col-${col.id}`} className="text-xs text-slate-700 cursor-pointer">
                     {col.label}
                   </Label>
                 </div>
@@ -208,16 +214,21 @@ export default function GenerateReportDialog() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
           <Button
             variant="outline"
+            className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
             onClick={() => setOpen(false)}
             disabled={isPending}
           >
             {t("buttons.cancel")}
           </Button>
-          <Button onClick={handleGenerate} disabled={isPending}>
-            {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          <Button
+            onClick={handleGenerate}
+            disabled={isPending}
+            className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
+          >
+            {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
             {t("buttons.download")}
           </Button>
         </div>

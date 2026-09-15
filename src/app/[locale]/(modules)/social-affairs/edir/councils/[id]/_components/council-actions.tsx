@@ -84,8 +84,9 @@ export default function CouncilActions({ council }: Props) {
         <Button
           onClick={handleRenew}
           disabled={renewMutation.isPending}
+          className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
         >
-          <RefreshCw className="w-4 h-4" />
+          <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
           {renewMutation.isPending ? t("buttons.renaming") : t("buttons.renew")}
         </Button>
       )}
@@ -95,19 +96,24 @@ export default function CouncilActions({ council }: Props) {
           <Button
             variant="destructive"
             disabled={isCancelled || cancelMutation.isPending}
+            className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-rose-600 hover:bg-rose-700 text-white shadow-2xs"
           >
-            <Ban className="w-4 h-4" />
+            <Ban className="w-3.5 h-3.5 mr-1.5" />
             {t("buttons.cancel")}
           </Button>
         </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("buttons.confirmCancel")}</DialogTitle>
-            <DialogDescription>{council.name}</DialogDescription>
+        <DialogContent className="rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg max-w-lg">
+          <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+            <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+              {t("buttons.confirmCancel")}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500 font-mono">
+              {council.name}
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
+          <div className="space-y-4 pt-2">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
                 {t("detail.cancellationReason")}
               </label>
               <Select
@@ -116,27 +122,34 @@ export default function CouncilActions({ council }: Props) {
                   setReason(value as EdirCancellationReason)
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs">
                   <SelectValue placeholder={t("detail.cancellationReason")} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {CANCEL_REASONS.map((reasonKey) => (
-                    <SelectItem key={reasonKey} value={reasonKey}>
+                    <SelectItem key={reasonKey} value={reasonKey} className="text-xs font-mono">
                       {t(`detail.cancellationReasons.${reasonKey}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <Textarea
-              placeholder={t("form.placeholders.address")}
-              value={reasonDescription}
-              onChange={(e) => setReasonDescription(e.target.value)}
-            />
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                {t("form.fields.address")}
+              </label>
+              <Textarea
+                placeholder={t("form.placeholders.address")}
+                value={reasonDescription}
+                onChange={(e) => setReasonDescription(e.target.value)}
+                className="text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+              />
+            </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-3 border-t border-[#E3E7EB]">
             <Button
               variant="outline"
+              className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
               onClick={() => setCancelOpen(false)}
             >
               {t("buttons.dismiss")}
@@ -145,6 +158,7 @@ export default function CouncilActions({ council }: Props) {
               variant="destructive"
               onClick={handleCancel}
               disabled={!reason || cancelMutation.isPending}
+              className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-rose-600 hover:bg-rose-700 text-white shadow-2xs"
             >
               {cancelMutation.isPending
                 ? t("buttons.cancelling")

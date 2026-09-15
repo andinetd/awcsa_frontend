@@ -148,55 +148,57 @@ export default function EdirMemberForm({
         {trigger ? (
           trigger
         ) : (
-          <Button size="sm" className="gap-2">
-            <Plus className="w-4 h-4" />
+          <Button size="sm" className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("buttons.add")}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-[580px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
             {isEditMode ? t("title.update") : t("title.add")}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">
             {isEditMode ? t("description.update") : t("description.add")}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 pt-2">
             <FormField
               control={form.control}
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.fullName")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.fullName")}</FormLabel>
                   <FormControl>
                     <Input
+                      className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                       placeholder={t("placeholders.fullName")}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[11px]" />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.cityId")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.cityId")}</FormLabel>
                     <FormControl>
                       <Input
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                         placeholder={t("placeholders.cityId")}
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
@@ -205,27 +207,27 @@ export default function EdirMemberForm({
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.phone")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.phone")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.phone")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.phone")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="job"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.job")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.job")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.job")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.job")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
@@ -234,48 +236,48 @@ export default function EdirMemberForm({
                 name="position"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.position")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.position")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       value={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                           <SelectValue
                             placeholder={t("placeholders.position")}
                           />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="MEMBER">{tp("MEMBER")}</SelectItem>
-                        <SelectItem value="LEADER">{tp("LEADER")}</SelectItem>
-                        <SelectItem value="COMMITTEE">
+                      <SelectContent className="rounded-xs border-[#E3E7EB]">
+                        <SelectItem value="MEMBER" className="text-xs rounded-xs">{tp("MEMBER")}</SelectItem>
+                        <SelectItem value="LEADER" className="text-xs rounded-xs">{tp("LEADER")}</SelectItem>
+                        <SelectItem value="COMMITTEE" className="text-xs rounded-xs">
                           {tp("COMMITTEE")}
                         </SelectItem>
-                        <SelectItem value="SECRETARY">
+                        <SelectItem value="SECRETARY" className="text-xs rounded-xs">
                           {tp("SECRETARY")}
                         </SelectItem>
-                        <SelectItem value="CASHIER">{tp("CASHIER")}</SelectItem>
+                        <SelectItem value="CASHIER" className="text-xs rounded-xs">{tp("CASHIER")}</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="familyMembersCount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.familyMembers")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.familyMembers")}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
@@ -284,27 +286,27 @@ export default function EdirMemberForm({
                 name="joinedAt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.joinedAt")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.joinedAt")}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="leftAt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.leftAt")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.leftAt")}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
@@ -314,29 +316,35 @@ export default function EdirMemberForm({
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xs border border-[#E3E7EB] bg-slate-50/40 p-3">
                   <FormControl>
                     <Checkbox
+                      className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>{t("fields.isActive")}</FormLabel>
+                  <div className="space-y-0.5 leading-none">
+                    <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.isActive")}</FormLabel>
                   </div>
                 </FormItem>
               )}
             />
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
                 onClick={() => setOpen(false)}
               >
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
+              >
                 {isPending
                   ? isEditMode
                     ? t("buttons.updating")

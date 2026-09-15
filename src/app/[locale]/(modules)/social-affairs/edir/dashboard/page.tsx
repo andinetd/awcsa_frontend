@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import {
   useGetEdirAssociationsQuery,
   useGetEdirCouncilsQuery,
@@ -15,14 +16,17 @@ import {
   Ban,
   RefreshCw,
   Building2,
+  ChevronRight,
+  Home,
+  Users2,
 } from "lucide-react";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 
 const statusStyles: Record<EdirStatus, string> = {
-  ACTIVE: "bg-green-100 text-green-700",
-  EXPIRED: "bg-amber-100 text-amber-700",
-  REVOKED: "bg-red-100 text-red-700",
-  CANCELLED: "bg-gray-200 text-gray-700",
+  ACTIVE: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
+  EXPIRED: "bg-amber-50 text-amber-700 border-amber-200",
+  REVOKED: "bg-rose-50 text-rose-700 border-rose-200",
+  CANCELLED: "bg-slate-100 text-slate-600 border-slate-200",
 };
 
 export default function EdirDashboard() {
@@ -34,7 +38,9 @@ export default function EdirDashboard() {
   if (isLoading || councilsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-pulse text-slate-400">{t("loading")}</div>
+        <div className="animate-pulse text-xs font-mono uppercase tracking-wider text-slate-400">
+          {t("loading")}
+        </div>
       </div>
     );
   }
@@ -50,21 +56,21 @@ export default function EdirDashboard() {
   ).length;
 
   const stats = [
-    { key: "total", icon: HandHelping, value: list.length, color: "text-primary" },
-    { key: "active", icon: ShieldCheck, value: active, color: "text-green-600" },
-    { key: "renewed", icon: RefreshCw, value: renewedThisYear, color: "text-blue-600" },
-    { key: "expired", icon: Clock, value: expired, color: "text-amber-600" },
-    { key: "revoked", icon: FileX2, value: revoked, color: "text-red-600" },
-    { key: "cancelled", icon: Ban, value: cancelled, color: "text-gray-500" },
+    { key: "total", icon: HandHelping, value: list.length, color: "text-[#1769AA]", bg: "bg-[#E8F2FA]" },
+    { key: "active", icon: ShieldCheck, value: active, color: "text-emerald-700", bg: "bg-emerald-50" },
+    { key: "renewed", icon: RefreshCw, value: renewedThisYear, color: "text-[#1769AA]", bg: "bg-blue-50" },
+    { key: "expired", icon: Clock, value: expired, color: "text-amber-700", bg: "bg-amber-50" },
+    { key: "revoked", icon: FileX2, value: revoked, color: "text-rose-700", bg: "bg-rose-50" },
+    { key: "cancelled", icon: Ban, value: cancelled, color: "text-slate-600", bg: "bg-slate-100" },
   ];
 
   const councilList = councils || [];
   const councilStats = [
-    { key: "total", icon: Building2, value: councilList.length, color: "text-primary" },
-    { key: "active", icon: ShieldCheck, value: councilList.filter((c) => c.status === "ACTIVE").length, color: "text-green-600" },
-    { key: "expired", icon: Clock, value: councilList.filter((c) => c.status === "EXPIRED").length, color: "text-amber-600" },
-    { key: "revoked", icon: FileX2, value: councilList.filter((c) => c.status === "REVOKED").length, color: "text-red-600" },
-    { key: "cancelled", icon: Ban, value: councilList.filter((c) => c.status === "CANCELLED").length, color: "text-gray-500" },
+    { key: "total", icon: Building2, value: councilList.length, color: "text-[#1769AA]", bg: "bg-[#E8F2FA]" },
+    { key: "active", icon: ShieldCheck, value: councilList.filter((c) => c.status === "ACTIVE").length, color: "text-emerald-700", bg: "bg-emerald-50" },
+    { key: "expired", icon: Clock, value: councilList.filter((c) => c.status === "EXPIRED").length, color: "text-amber-700", bg: "bg-amber-50" },
+    { key: "revoked", icon: FileX2, value: councilList.filter((c) => c.status === "REVOKED").length, color: "text-rose-700", bg: "bg-rose-50" },
+    { key: "cancelled", icon: Ban, value: councilList.filter((c) => c.status === "CANCELLED").length, color: "text-slate-600", bg: "bg-slate-100" },
   ];
 
   const recent = [...list]
@@ -76,92 +82,137 @@ export default function EdirDashboard() {
     .slice(0, 8);
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto w-full">
-      <div>
-        <h1 className="text-3xl font-bold text-zinc-900">{t("title")}</h1>
-        <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
+    <div className="space-y-6 max-w-7xl mx-auto w-full p-4 md:p-8">
+      {/* Municipal Breadcrumbs */}
+      <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
+        <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
+          <Home className="w-3.5 h-3.5" />
+          <span>Home</span>
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <span className="text-slate-600">Social Affairs</span>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <Link href="/social-affairs/edir/list" className="hover:text-[#1769AA] transition-colors">
+          Edir
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+        <span className="text-[#0B1F3A] font-bold">Dashboard</span>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {stats.map(({ key, icon: Icon, value, color }) => (
-          <Card key={key}>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-full bg-zinc-100/80 ${color}`}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-3xl font-bold text-zinc-900">{value}</p>
-                  <p className="text-sm text-muted-foreground">{t(`stats.${key}`)}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      {/* Page Header */}
+      <div className="border-b border-[#E3E7EB] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            {t("title")}
+          </h1>
+          <p className="text-xs text-slate-500 font-mono mt-1">
+            {t("subtitle")}
+          </p>
+        </div>
       </div>
 
+      {/* Association Stats Grid */}
       <div>
-        <h2 className="text-xl font-semibold text-zinc-900">
-          {t("councilsTitle")}
+        <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] mb-3 flex items-center gap-2">
+          <Users2 className="w-4 h-4 text-[#1769AA]" />
+          <span>Edir Associations Overview</span>
         </h2>
-        <p className="text-muted-foreground mt-1">{t("councilsSubtitle")}</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {stats.map(({ key, icon: Icon, value, color, bg }) => (
+            <Card key={key} className="rounded-xs border border-[#E3E7EB] bg-white p-4 shadow-2xs">
+              <CardContent className="p-0">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-xs ${bg} ${color} border border-black/5`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold font-mono text-[#0B1F3A]">{value}</p>
+                    <p className="text-[11px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                      {t(`stats.${key}`)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {councilStats.map(({ key, icon: Icon, value, color }) => (
-          <Card key={key}>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-full bg-zinc-100/80 ${color}`}>
-                  <Icon className="h-5 w-5" />
+      {/* Council Stats Grid */}
+      <div>
+        <div className="mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#1769AA]" />
+            <span>{t("councilsTitle")}</span>
+          </h2>
+          <p className="text-[11px] text-slate-500 font-mono mt-0.5">{t("councilsSubtitle")}</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {councilStats.map(({ key, icon: Icon, value, color, bg }) => (
+            <Card key={key} className="rounded-xs border border-[#E3E7EB] bg-white p-4 shadow-2xs">
+              <CardContent className="p-0">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-xs ${bg} ${color} border border-black/5`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold font-mono text-[#0B1F3A]">{value}</p>
+                    <p className="text-[11px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                      {t(`stats.${key}`)}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-3xl font-bold text-zinc-900">{value}</p>
-                  <p className="text-sm text-muted-foreground">{t(`stats.${key}`)}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("recent")}</CardTitle>
+      {/* Recent Registrations Card */}
+      <Card className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs">
+        <CardHeader className="border-b border-[#E3E7EB] px-6 py-4">
+          <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            {t("recent")}
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {recent.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-4">{t("noRecords")}</p>
+            <p className="text-slate-500 text-xs font-mono py-8 text-center">{t("noRecords")}</p>
           ) : (
-            <div className="border rounded-md overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50 text-left">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="bg-slate-50 border-b border-[#E3E7EB] text-left">
                   <tr>
-                    <th className="px-4 py-2 font-medium">{t("table.name")}</th>
-                    <th className="px-4 py-2 font-medium">{t("table.registration")}</th>
-                    <th className="px-4 py-2 font-medium">{t("table.location")}</th>
-                    <th className="px-4 py-2 font-medium">{t("table.status")}</th>
+                    <th className="px-5 py-3 font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">{t("table.name")}</th>
+                    <th className="px-5 py-3 font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">{t("table.registration")}</th>
+                    <th className="px-5 py-3 font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">{t("table.location")}</th>
+                    <th className="px-5 py-3 font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">{t("table.status")}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-[#E3E7EB]">
                   {recent.map((e) => (
-                    <tr key={e.id} className="border-t">
-                      <td className="px-4 py-2 font-medium">{e.name}</td>
-                      <td className="px-4 py-2">
+                    <tr key={e.id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="px-5 py-3 font-semibold text-slate-900">
+                        <Link href={`/social-affairs/edir/${e.id}`} className="hover:text-[#1769AA] hover:underline">
+                          {e.name}
+                        </Link>
+                      </td>
+                      <td className="px-5 py-3 font-mono text-slate-600">
                         {e.registrationNumber
                           ? (e.registrationDate
                               ? new Date(e.registrationDate).toLocaleDateString()
                               : "") + ` • ${e.registrationNumber}`
                           : "—"}
                       </td>
-                      <td className="px-4 py-2 text-muted-foreground">
+                      <td className="px-5 py-3 text-slate-600">
                         {e.subCity}, {e.woreda}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-5 py-3">
                         {e.status && (
                           <span
-                            className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                              statusStyles[e.status] || "bg-gray-100 text-gray-700"
+                            className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-mono font-semibold border ${
+                              statusStyles[e.status] || "bg-slate-100 text-slate-700 border-slate-200"
                             }`}
                           >
                             {t(`status.${e.status}`)}

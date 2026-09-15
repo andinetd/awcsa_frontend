@@ -135,24 +135,24 @@ export default function NewCouncilForm({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button>
-            {isEdit ? <Edit /> : <ShieldPlus />}
+          <Button className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs">
+            {isEdit ? <Edit className="w-3.5 h-3.5 mr-1.5" /> : <ShieldPlus className="w-3.5 h-3.5 mr-1.5" />}
             {isEdit ? t("buttons.edit") : t("buttons.add")}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {isEdit ? t("form.updateTitle") : t("form.createTitle")}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono">
             {isEdit ? t("form.updateDesc") : t("form.createDesc")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="text-sm font-semibold text-muted-foreground">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-2">
+            <div className="border-b border-[#E3E7EB] pb-1 text-[11px] font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               {t("form.sections.general")}
             </div>
             <FormField
@@ -160,10 +160,13 @@ export default function NewCouncilForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.name")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                    {t("form.fields.name")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t("form.placeholders.name")}
+                      className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       {...field}
                     />
                   </FormControl>
@@ -177,20 +180,22 @@ export default function NewCouncilForm({
                 name="level"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.level")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                      {t("form.fields.level")}
+                    </FormLabel>
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs">
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-xs border-[#E3E7EB]">
                         {(["WOREDA", "SUB_CITY", "CITY"] as EdirLevel[]).map(
                           (level) => (
-                            <SelectItem key={level} value={level}>
+                            <SelectItem key={level} value={level} className="text-xs font-mono">
                               {t(`level.${level}`)}
                             </SelectItem>
                           )
@@ -206,11 +211,15 @@ export default function NewCouncilForm({
                 name="establishmentDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
                       {t("form.fields.establishmentDate")}
                     </FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,7 +227,7 @@ export default function NewCouncilForm({
               />
             </div>
 
-            <div className="text-sm font-semibold text-muted-foreground pt-2">
+            <div className="border-b border-[#E3E7EB] pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               {t("form.sections.location")}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -227,7 +236,9 @@ export default function NewCouncilForm({
                 name="subCity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.subCity")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                      {t("form.fields.subCity")}
+                    </FormLabel>
                     <FormControl>
                       <SubCitySelect
                         value={field.value}
@@ -246,7 +257,9 @@ export default function NewCouncilForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.fields.woreda")}</FormLabel>
+                      <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                        {t("form.fields.woreda")}
+                      </FormLabel>
                       <FormControl>
                         <WoredaSelect
                           value={field.value}
@@ -265,10 +278,13 @@ export default function NewCouncilForm({
                 name="kebele"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.kebele")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                      {t("form.fields.kebele")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("form.placeholders.kebele")}
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -278,7 +294,7 @@ export default function NewCouncilForm({
               />
             </div>
 
-            <div className="text-sm font-semibold text-muted-foreground pt-2">
+            <div className="border-b border-[#E3E7EB] pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               {t("form.sections.leadership")}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -287,12 +303,13 @@ export default function NewCouncilForm({
                 name="chairpersonName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
                       {t("form.fields.chairpersonName")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("form.placeholders.chairpersonName")}
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -305,12 +322,13 @@ export default function NewCouncilForm({
                 name="chairpersonPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
                       {t("form.fields.chairpersonPhone")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("form.placeholders.chairpersonPhone")}
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -323,10 +341,13 @@ export default function NewCouncilForm({
                 name="contactPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.contactPhone")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                      {t("form.fields.contactPhone")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("form.placeholders.contactPhone")}
+                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -339,10 +360,13 @@ export default function NewCouncilForm({
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.address")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                      {t("form.fields.address")}
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder={t("form.placeholders.address")}
+                        className="text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -352,15 +376,20 @@ export default function NewCouncilForm({
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
+                className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
                 onClick={() => setOpen(false)}
               >
                 {t("buttons.dismiss")}
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
+              >
                 {isSubmitting ? t("buttons.saving") : t("buttons.save")}
               </Button>
             </div>

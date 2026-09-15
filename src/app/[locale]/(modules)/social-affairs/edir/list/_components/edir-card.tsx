@@ -8,26 +8,25 @@ import {
   CardTitle,
 } from "@/components/custom/custom-card";
 import { CardFooter } from "@/components/ui/card";
-import { MapPin, Phone, User, CalendarDays, Users } from "lucide-react";
+import { MapPin, CalendarDays, Users } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
+import { useTranslations } from "next-intl";
 
 interface EdirCardProps {
   edir: Edir;
   onViewDetails?: (edir: Edir) => void;
 }
 
-import { useTranslations } from "next-intl";
-
 const statusStyles: Record<EdirStatus, string> = {
-  ACTIVE: "bg-green-100 text-green-700",
-  EXPIRED: "bg-amber-100 text-amber-700",
-  REVOKED: "bg-red-100 text-red-700",
-  CANCELLED: "bg-gray-200 text-gray-700",
+  ACTIVE: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
+  EXPIRED: "bg-amber-50 text-amber-700 border-amber-200",
+  REVOKED: "bg-rose-50 text-rose-700 border-rose-200",
+  CANCELLED: "bg-slate-100 text-slate-600 border-slate-200",
 };
 
-const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
+const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
   const t = useTranslations("social-affairs.edir.edir.list");
   const router = useRouter();
   const totalMembers =
@@ -41,56 +40,65 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir, onViewDetails }) => {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow max-h-[300px]">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold flex justify-between items-start">
-          <span>{edir.name}</span>
-          {edir.status && (
-            <span
-              className={`text-xs px-2 py-1 rounded-full ${
-                statusStyles[edir.status] || "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {t(`status.${edir.status}`)}
+    <Card className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between">
+      <div>
+        <CardHeader className="p-4 pb-3 border-b border-[#E3E7EB]">
+          <CardTitle className="flex justify-between items-start gap-2">
+            <span className="text-sm font-bold text-[#0B1F3A] leading-tight line-clamp-1">
+              {edir.name}
             </span>
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-3 text-sm text-slate-600">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4" />
-          <span>
-            {edir.subCity}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
-            {edir.kebele}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Users className="w-4 h-4" />
-          <span>
-            {Intl.NumberFormat().format(totalMembers || 0)} {t("members")}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <CalendarDays className="w-4 h-4" />
-          <span>
-            {t("established")}:{" "}
-            {new Date(edir.establishmentDate).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-        {edir.registrationNumber && (
-          <div className="text-xs text-slate-500">
-            <span className="font-medium">{t("registrationNumber")}:</span>{" "}
-            {edir.registrationNumber}
-            {edir.renewedForYear ? ` • ${t("renewedForYear")} ${edir.renewedForYear}` : ""}
+            {edir.status && (
+              <span
+                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded-xs border shrink-0 ${
+                  statusStyles[edir.status] || "bg-slate-100 text-slate-700 border-slate-200"
+                }`}
+              >
+                {t(`status.${edir.status}`)}
+              </span>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 space-y-2 text-xs text-slate-600">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="truncate">
+              {edir.subCity}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
+              {edir.kebele}
+            </span>
           </div>
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-end mb-3">
-        <Button variant="outline" size="sm" onClick={handleViewDetails}>
+          <div className="flex items-center gap-2">
+            <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="font-mono">
+              {Intl.NumberFormat().format(totalMembers || 0)} {t("members")}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CalendarDays className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="font-mono text-slate-500">
+              {t("established")}:{" "}
+              {new Date(edir.establishmentDate).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+          {edir.registrationNumber && (
+            <div className="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-100">
+              <span className="font-semibold text-slate-700">{t("registrationNumber")}:</span>{" "}
+              {edir.registrationNumber}
+              {edir.renewedForYear ? ` • ${t("renewedForYear")} ${edir.renewedForYear}` : ""}
+            </div>
+          )}
+        </CardContent>
+      </div>
+      <CardFooter className="p-4 pt-0 flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 text-xs rounded-xs border-[#E3E7EB] hover:bg-[#E8F2FA] hover:text-[#1769AA] hover:border-[#BCD5EA] transition-colors"
+          onClick={handleViewDetails}
+        >
           {t("buttons.viewDetails")}
         </Button>
       </CardFooter>

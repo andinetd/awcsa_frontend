@@ -91,21 +91,21 @@ export default function EdirAccreditationActions({ edir }: Props) {
       <Button
         size="sm"
         variant="outline"
-        className="gap-2"
+        className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5"
         onClick={handleRenew}
         disabled={pending || isCanceled}
       >
-        <RefreshCw className="w-4 h-4" />
+        <RefreshCw className="w-3.5 h-3.5" />
         {t("renew.label")}
       </Button>
       <Button
         size="sm"
         variant="outline"
-        className="gap-2"
+        className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5"
         onClick={handleReissue}
         disabled={pending || isCanceled}
       >
-        <FileCheck2 className="w-4 h-4" />
+        <FileCheck2 className="w-3.5 h-3.5" />
         {t("reissue.label")}
       </Button>
       <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
@@ -113,30 +113,33 @@ export default function EdirAccreditationActions({ edir }: Props) {
           <Button
             size="sm"
             variant="destructive"
-            className="gap-2"
+            className="h-8 text-xs font-semibold rounded-xs bg-rose-600 hover:bg-rose-700 text-white shadow-2xs gap-1.5"
             disabled={isCanceled}
           >
-            <Ban className="w-4 h-4" />
+            <Ban className="w-3.5 h-3.5" />
             {t("cancel.label")}
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[480px]">
-          <DialogHeader>
-            <DialogTitle>{t("cancel.title")}</DialogTitle>
-            <DialogDescription>{t("cancel.description")}</DialogDescription>
+        <DialogContent className="sm:max-w-[480px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+          <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+            <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+              <Ban className="w-4 h-4 text-rose-600" />
+              {t("cancel.title")}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">{t("cancel.description")}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
+          <div className="space-y-3 py-3">
             <div>
-              <label className="text-sm font-medium block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                 {t("cancel.reasonLabel")}
               </label>
               <Select value={reason || undefined} onValueChange={(v) => setReason(v as EdirCancellationReason)}>
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                   <SelectValue placeholder={t("cancel.reasonPlaceholder")} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {CANCEL_REASONS.map((r) => (
-                    <SelectItem key={r} value={r}>
+                    <SelectItem key={r} value={r} className="text-xs rounded-xs">
                       {t(`cancel.reasons.${r}`)}
                     </SelectItem>
                   ))}
@@ -144,21 +147,32 @@ export default function EdirAccreditationActions({ edir }: Props) {
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                 {t("cancel.descriptionLabel")}
               </label>
               <Textarea
+                className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white min-h-[70px]"
                 value={reasonDescription}
                 onChange={(e) => setReasonDescription(e.target.value)}
                 placeholder={t("cancel.descriptionPlaceholder")}
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCancelOpen(false)} disabled={pending}>
+          <DialogFooter className="pt-3 border-t border-[#E3E7EB]">
+            <Button
+              variant="outline"
+              className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
+              onClick={() => setCancelOpen(false)}
+              disabled={pending}
+            >
               {t("cancel.dismiss")}
             </Button>
-            <Button variant="destructive" onClick={handleCancel} disabled={pending}>
+            <Button
+              variant="destructive"
+              className="h-8 text-xs rounded-xs bg-rose-600 hover:bg-rose-700 text-white font-semibold shadow-2xs"
+              onClick={handleCancel}
+              disabled={pending}
+            >
               {pending ? t("cancel.cancelling") : t("cancel.confirm")}
             </Button>
           </DialogFooter>

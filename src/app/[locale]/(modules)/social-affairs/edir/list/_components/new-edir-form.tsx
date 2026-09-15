@@ -243,38 +243,40 @@ export default function NewEdirForm({
         {trigger ? (
           trigger
         ) : (
-          <Button className="gap-2">
-            <Plus className="w-4 h-4" />
+          <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("buttons.register")}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-[720px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
             {isEditMode ? t("updateTitle") : t("createTitle")}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">
             {isEditMode ? t("updateDesc") : t("createDesc")}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-2">
             {/* Basic Info */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.basic")}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("sections.basic")}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.name")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.name")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("fields.name")} {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.name")} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -283,11 +285,11 @@ export default function NewEdirForm({
                   name="establishmentDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.date")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.date")}</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -296,28 +298,28 @@ export default function NewEdirForm({
                   name="registerLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.registerLevel")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.registerLevel")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                             <SelectValue placeholder="Select level" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="rounded-xs border-[#E3E7EB]">
                           {(["WOREDA", "SUB_CITY", "CITY"] as const).map(
                             (level) => (
-                              <SelectItem key={level} value={level}>
+                              <SelectItem key={level} value={level} className="text-xs rounded-xs">
                                 {t(`levels.${level}`)}
                               </SelectItem>
                             )
                           )}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -325,15 +327,17 @@ export default function NewEdirForm({
             </div>
 
             {/* Address */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.address")}</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("sections.address")}
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <FormField
                   control={form.control}
                   name="subCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.subCity")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.subCity")}</FormLabel>
                       <FormControl>
                         <SubCitySelect
                           value={field.value}
@@ -341,7 +345,7 @@ export default function NewEdirForm({
                           placeholder={t("fields.subCity")}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -350,7 +354,7 @@ export default function NewEdirForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.woreda")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.woreda")}</FormLabel>
                       <FormControl>
                         <WoredaSelect
                           value={field.value}
@@ -359,7 +363,7 @@ export default function NewEdirForm({
                           placeholder={t("fields.woreda")}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -368,11 +372,11 @@ export default function NewEdirForm({
                   name="kebele"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.kebele")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.kebele")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("fields.kebele")} {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.kebele")} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -381,14 +385,15 @@ export default function NewEdirForm({
                   name="houseNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.houseNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.houseNumber")}</FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("fields.houseNumber")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -397,11 +402,11 @@ export default function NewEdirForm({
                   name="specificLocation"
                   render={({ field }) => (
                     <FormItem className="col-span-2">
-                      <FormLabel>{t("fields.location")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.location")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("fields.location")} {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.location")} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -409,23 +414,23 @@ export default function NewEdirForm({
             </div>
 
             {/* Members Stats */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.membership")}
               </h3>
               <div className="space-y-2">
-                <FormLabel>{t("fields.managementMembers")}</FormLabel>
-                <div className="grid grid-cols-3 gap-4">
+                <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.managementMembers")}</FormLabel>
+                <div className="grid grid-cols-3 gap-3">
                   <FormField
                     control={form.control}
                     name="members.management.male"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.male")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -435,11 +440,11 @@ export default function NewEdirForm({
                     name="members.management.female"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.female")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -449,11 +454,11 @@ export default function NewEdirForm({
                     name="members.management.total"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.total")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} disabled readOnly />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-100 font-mono text-slate-600" type="number" {...field} disabled readOnly />
                         </FormControl>
                       </FormItem>
                     )}
@@ -461,18 +466,18 @@ export default function NewEdirForm({
                 </div>
               </div>
               <div className="space-y-2">
-                <FormLabel>{t("fields.generalMembers")}</FormLabel>
-                <div className="grid grid-cols-3 gap-4">
+                <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.generalMembers")}</FormLabel>
+                <div className="grid grid-cols-3 gap-3">
                   <FormField
                     control={form.control}
                     name="members.general.male"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.male")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -482,11 +487,11 @@ export default function NewEdirForm({
                     name="members.general.female"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.female")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -496,11 +501,11 @@ export default function NewEdirForm({
                     name="members.general.total"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">
+                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                           {t("fields.total")}
                         </FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} disabled readOnly />
+                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-100 font-mono text-slate-600" type="number" {...field} disabled readOnly />
                         </FormControl>
                       </FormItem>
                     )}
@@ -510,24 +515,25 @@ export default function NewEdirForm({
             </div>
 
             {/* Financials & Remarks */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.financials")}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="bankAccountNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.bankAccount")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.bankAccount")}</FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white font-mono"
                           placeholder={t("fields.bankAccount")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -536,14 +542,15 @@ export default function NewEdirForm({
                   name="monthlyPaymentDetails"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("fields.contribution")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.contribution")}</FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("fields.contribution")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -553,42 +560,43 @@ export default function NewEdirForm({
                 name="remark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.remarks")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.remarks")}</FormLabel>
                     <FormControl>
-                      <Textarea placeholder={t("fields.remarks")} {...field} />
+                      <Textarea className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white min-h-[70px]" placeholder={t("fields.remarks")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
             </div>
 
             {/* Founding Members (Directive Art 7.a) */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.foundingMembers")}
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {foundingFields.fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-start rounded-md border p-3"
+                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3"
                   >
                     <FormField
                       control={form.control}
                       name={`foundingMembers.${index}.fullName`}
                       render={({ field: f }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                             {t("fields.founderName")}
                           </FormLabel>
                           <FormControl>
                             <Input
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
                               placeholder={t("fields.founderName")}
                               {...f}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -597,16 +605,17 @@ export default function NewEdirForm({
                       name={`foundingMembers.${index}.address`}
                       render={({ field: f }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                             {t("fields.founderAddress")}
                           </FormLabel>
                           <FormControl>
                             <Input
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
                               placeholder={t("fields.founderAddress")}
                               {...f}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -614,10 +623,10 @@ export default function NewEdirForm({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="mt-6"
+                      className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
                       onClick={() => foundingFields.remove(index)}
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3.5 h-3.5" />
                     </Button>
                   </div>
                 ))}
@@ -625,37 +634,39 @@ export default function NewEdirForm({
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="gap-2"
+                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
                   onClick={() =>
                     foundingFields.append({ fullName: "", address: "" })
                   }
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                   {t("buttons.addFounder")}
                 </Button>
               </div>
               {form.formState.errors.foundingMembers?.root && (
-                <p className="text-sm text-red-500">
+                <p className="text-xs text-rose-600 font-mono">
                   {form.formState.errors.foundingMembers.root.message}
                 </p>
               )}
             </div>
 
             {/* Assets at registration (Directive Art 7.b) */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.assets")}</h3>
-              <div className="space-y-3">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("sections.assets")}
+              </h3>
+              <div className="space-y-2">
                 {assetFields.fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-start rounded-md border p-3"
+                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3"
                   >
                     <FormField
                       control={form.control}
                       name={`assets.${index}.type`}
                       render={({ field: f }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                             {t("fields.assetType")}
                           </FormLabel>
                           <Select
@@ -664,20 +675,20 @@ export default function NewEdirForm({
                             value={f.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
                                 <SelectValue placeholder={t("fields.assetType")} />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="CASH">
+                            <SelectContent className="rounded-xs border-[#E3E7EB]">
+                              <SelectItem value="CASH" className="text-xs rounded-xs">
                                 {t("assetTypes.CASH")}
                               </SelectItem>
-                              <SelectItem value="IN_KIND">
+                              <SelectItem value="IN_KIND" className="text-xs rounded-xs">
                                 {t("assetTypes.IN_KIND")}
                               </SelectItem>
                             </SelectContent>
                           </Select>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -686,16 +697,17 @@ export default function NewEdirForm({
                       name={`assets.${index}.description`}
                       render={({ field: f }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                             {t("fields.assetDescription")}
                           </FormLabel>
                           <FormControl>
                             <Input
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
                               placeholder={t("fields.assetDescription")}
                               {...f}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -704,13 +716,13 @@ export default function NewEdirForm({
                       name={`assets.${index}.value`}
                       render={({ field: f }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
                             {t("fields.assetValue")}
                           </FormLabel>
                           <FormControl>
-                            <Input type="number" min="0" step="0.01" {...f} />
+                            <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white font-mono" type="number" min="0" step="0.01" {...f} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -718,10 +730,10 @@ export default function NewEdirForm({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="mt-6"
+                      className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
                       onClick={() => assetFields.remove(index)}
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3.5 h-3.5" />
                     </Button>
                   </div>
                 ))}
@@ -729,34 +741,37 @@ export default function NewEdirForm({
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="gap-2"
+                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
                   onClick={() =>
                     assetFields.append({ type: "CASH", description: "", value: 0 })
                   }
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                   {t("buttons.addAsset")}
                 </Button>
               </div>
             </div>
 
             {/* Audit & Assembly approval (Directive Art 7.b) */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.approvals")}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("sections.approvals")}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="assetsAuditedByAuditCommittee"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xs border border-[#E3E7EB] bg-slate-50/40 p-3">
                       <FormControl>
                         <Checkbox
+                          className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{t("fields.auditCommittee")}</FormLabel>
+                      <div className="space-y-0.5 leading-none">
+                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.auditCommittee")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -765,15 +780,16 @@ export default function NewEdirForm({
                   control={form.control}
                   name="assetsApprovedByGeneralAssembly"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xs border border-[#E3E7EB] bg-slate-50/40 p-3">
                       <FormControl>
                         <Checkbox
+                          className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{t("fields.generalAssembly")}</FormLabel>
+                      <div className="space-y-0.5 leading-none">
+                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.generalAssembly")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -782,39 +798,48 @@ export default function NewEdirForm({
             </div>
 
             {/* By-laws / founding document (Directive Art 7.e) */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("sections.documents")}</h3>
-              <FileDragAndDrop
-                value={byLawsFile}
-                onChange={handleByLawsSelect}
-                maxFiles={1}
-                acceptedFileTypes={[
-                  "application/pdf",
-                  "image/jpeg",
-                  "image/png",
-                ]}
-              />
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("sections.documents")}
+              </h3>
+              <div className="rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/20">
+                <FileDragAndDrop
+                  value={byLawsFile}
+                  onChange={handleByLawsSelect}
+                  maxFiles={1}
+                  acceptedFileTypes={[
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                  ]}
+                />
+              </div>
               {form.watch("byLawsDocId") && byLawsFile.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  {t("messages.byLawsUploaded")}
+                <p className="text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-xs">
+                  ✓ {t("messages.byLawsUploaded")}
                 </p>
               )}
               {uploadDocMutation.isPending && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs font-mono text-[#1769AA]">
                   {t("messages.byLawsUploading")}
                 </p>
               )}
             </div>
 
-            <div className="flex justify-end gap-2 pt-4">
+            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
                 onClick={() => setOpen(false)}
               >
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
+              >
                 {isPending
                   ? isEditMode
                     ? t("buttons.updating")
