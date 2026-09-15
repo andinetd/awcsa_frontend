@@ -3,13 +3,6 @@
 import React, { useState } from "react";
 import { SubCityStat } from "./types";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -19,18 +12,16 @@ import {
   YAxis,
 } from "recharts";
 import {
+  ArrowRight,
   Building,
   CheckCircle2,
   ChevronRight,
   Filter,
-  Heart,
   MapPin,
-  ShieldAlert,
-  Trophy,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 
 interface SubCityAnalyticsProps {
   stats: SubCityStat[];
@@ -43,272 +34,210 @@ export function SubCityAnalytics({
   onSelectSubCity,
   selectedSubCity = "ALL",
 }: SubCityAnalyticsProps) {
-  const [sortBy, setSortBy] = useState<"beneficiaries" | "compliance" | "facilities">("beneficiaries");
+  const [sortKey, setSortKey] = useState<"beneficiaries" | "compliance" | "facilities">("beneficiaries");
 
-  // Sorted list based on chosen criteria
-  const sortedStats = [...stats].sort((a, b) => {
-    if (sortBy === "compliance") return b.complianceRate - a.complianceRate;
-    if (sortBy === "facilities") return b.totalFacilities - a.totalFacilities;
-    return b.vulnerableCitizens + b.totalChildren - (a.vulnerableCitizens + a.totalChildren);
+  // Sorting
+  const sorted = [...stats].sort((a, b) => {
+    if (sortKey === "compliance") return b.complianceRate - a.complianceRate;
+    if (sortKey === "facilities") return b.totalFacilities - a.totalFacilities;
+    return (b.vulnerableCitizens + b.totalChildren) - (a.vulnerableCitizens + a.totalChildren);
   });
 
-  const cityWideTotalBeneficiaries = stats.reduce(
+  const cityWideTotal = stats.reduce(
     (acc, s) => acc + s.vulnerableCitizens + s.totalChildren,
     0
   );
-  const cityWideTotalFacilities = stats.reduce((acc, s) => acc + s.totalFacilities, 0);
-  const cityWideTotalEdirs = stats.reduce((acc, s) => acc + s.activeEdirs, 0);
-  const cityWideAvgCompliance =
-    Math.round(stats.reduce((acc, s) => acc + s.complianceRate, 0) / (stats.length || 1));
+  const cityWideFacilities = stats.reduce((acc, s) => acc + s.totalFacilities, 0);
+  const cityWideEdirs = stats.reduce((acc, s) => acc + s.activeEdirs, 0);
 
   // Chart data
-  const chartData = sortedStats.map((s) => ({
+  const chartData = sorted.map((s) => ({
     name: s.name,
     Vulnerable: s.vulnerableCitizens,
     Children: s.totalChildren,
   }));
 
   return (
-    <div className="space-y-6">
-      {/* City-Wide Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 border-border/80 bg-card/80">
-          <span className="text-xs font-medium text-muted-foreground">Monitored Sub-Cities</span>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">11 Municipalities</h4>
-          <p className="text-xs text-muted-foreground mt-1">Complete municipal coverage</p>
-        </Card>
-
-        <Card className="p-4 border-border/80 bg-card/80">
-          <span className="text-xs font-medium text-muted-foreground">Total Citizens Mapped</span>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {cityWideTotalBeneficiaries.toLocaleString()}
-          </h4>
-          <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">City-wide registry count</p>
-        </Card>
-
-        <Card className="p-4 border-border/80 bg-card/80">
-          <span className="text-xs font-medium text-muted-foreground">Community Edirs Mapped</span>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {cityWideTotalEdirs.toLocaleString()}
-          </h4>
-          <p className="text-xs text-sky-600 dark:text-sky-400 mt-1">Grassroots burial associations</p>
-        </Card>
-
-        <Card className="p-4 border-border/80 bg-card/80">
-          <span className="text-xs font-medium text-muted-foreground">City Avg Compliance</span>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {cityWideAvgCompliance}%
-          </h4>
-          <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">Monthly report timeliness</p>
-        </Card>
-      </div>
-
-      {/* Sub-City Distribution Chart */}
-      <Card className="overflow-hidden rounded-2xl border-border/80 shadow-xs">
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-2 gap-4">
+    <div className="space-y-4">
+      {/* 1. Municipal Summary Banner */}
+      <div className="rounded-md border border-[#E3E7EB] bg-white p-4 shadow-none">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E7EB] pb-3">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-sky-500/10 text-sky-500">
-                <MapPin className="h-4 w-4" />
-              </span>
-              <CardTitle className="text-base sm:text-lg font-bold">
-                Beneficiary Density by Sub-City
-              </CardTitle>
-            </div>
-            <CardDescription className="text-xs mt-1">
-              Distribution of vulnerable citizens and children under active social monitoring
-            </CardDescription>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#123B5D]">
+              Sub-City Municipal Administration & Coverage Matrix
+            </h3>
+            <p className="text-[11px] text-slate-500">
+              Comparative casework density, facility distribution, and monthly reporting compliance across all 11 sub-cities
+            </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-muted-foreground">Sort By:</span>
-            <div className="flex items-center rounded-lg border border-border/80 bg-muted/40 p-0.5 font-medium">
+            <span className="text-slate-500 font-medium">Rank by:</span>
+            <div className="flex items-center rounded-sm border border-[#E3E7EB] bg-[#F7F8FA] p-0.5 text-xs font-medium">
               <button
-                onClick={() => setSortBy("beneficiaries")}
-                className={`rounded-md px-2.5 py-1 transition-all ${
-                  sortBy === "beneficiaries" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground"
+                onClick={() => setSortKey("beneficiaries")}
+                className={`px-2 py-0.5 rounded-xs transition-colors ${
+                  sortKey === "beneficiaries" ? "bg-white text-[#123B5D] font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                Volume
+                Caseload
               </button>
               <button
-                onClick={() => setSortBy("compliance")}
-                className={`rounded-md px-2.5 py-1 transition-all ${
-                  sortBy === "compliance" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground"
+                onClick={() => setSortKey("compliance")}
+                className={`px-2 py-0.5 rounded-xs transition-colors ${
+                  sortKey === "compliance" ? "bg-white text-[#123B5D] font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Compliance
               </button>
               <button
-                onClick={() => setSortBy("facilities")}
-                className={`rounded-md px-2.5 py-1 transition-all ${
-                  sortBy === "facilities" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground"
+                onClick={() => setSortKey("facilities")}
+                className={`px-2 py-0.5 rounded-xs transition-colors ${
+                  sortKey === "facilities" ? "bg-white text-[#123B5D] font-bold shadow-2xs" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Facilities
               </button>
             </div>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="pt-4">
-          <div className="h-[280px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chartData}
-                margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
-                <XAxis
-                  dataKey="name"
-                  tickLine={false}
-                  axisLine={false}
-                  angle={-25}
-                  textAnchor="end"
-                  interval={0}
-                  tickMargin={8}
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                />
-                <Tooltip
-                  content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="rounded-xl border border-border/80 bg-popover/95 p-3 shadow-lg text-xs">
-                          <p className="font-bold text-foreground mb-1">{label} Sub-City</p>
-                          {payload.map((entry: any) => (
-                            <div key={entry.name} className="flex items-center justify-between gap-4 py-0.5">
-                              <span className="text-muted-foreground">{entry.name}:</span>
-                              <span className="font-mono font-bold text-foreground">
-                                {Number(entry.value).toLocaleString()}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Bar dataKey="Vulnerable" name="Vulnerable Adults" stackId="a" fill="#8b5cf6" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Children" name="Children in Care" stackId="a" fill="#0284c7" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* Comparative Chart */}
+        <div className="mt-4 h-[240px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 25 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3E7EB" />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={{ stroke: "#E3E7EB" }}
+                angle={-25}
+                textAnchor="end"
+                interval={0}
+                tickMargin={6}
+                tick={{ fill: "#64748B", fontSize: 10 }}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={{ stroke: "#E3E7EB" }}
+                tickMargin={6}
+                tick={{ fill: "#64748B", fontSize: 11 }}
+              />
+              <Tooltip
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="rounded-sm border border-[#E3E7EB] bg-white p-2.5 text-xs shadow-sm">
+                        <p className="font-bold text-[#123B5D] mb-1">{label} Sub-City</p>
+                        {payload.map((entry: any) => (
+                          <div key={entry.name} className="flex items-center justify-between gap-4 py-0.5">
+                            <span className="text-slate-600">{entry.name}:</span>
+                            <span className="font-mono font-bold text-slate-900">
+                              {Number(entry.value).toLocaleString()}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar dataKey="Vulnerable" name="Elderly & PWD" stackId="a" fill="#168C86" />
+              <Bar dataKey="Children" name="Children in Care" stackId="a" fill="#1769AA" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="mt-2 flex items-center justify-end gap-5 border-t border-[#E3E7EB] pt-2 text-xs text-slate-600">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 bg-[#1769AA] rounded-xs" />
+            <span>Children in Care (Civic Blue)</span>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Sub-City Leaderboard Table */}
-      <Card className="overflow-hidden rounded-2xl border-border/80 shadow-xs">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base font-bold flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-amber-500" />
-                Sub-City Municipal Scorecard & Rankings
-              </CardTitle>
-              <CardDescription className="text-xs mt-1">
-                Comparative metrics and compliance performance across Addis Ababa sub-cities
-              </CardDescription>
-            </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 bg-[#168C86] rounded-xs" />
+            <span>Elderly & PWD Support (Teal)</span>
           </div>
-        </CardHeader>
+        </div>
+      </div>
 
+      {/* 2. Municipal Matrix Table */}
+      <div className="rounded-md border border-[#E3E7EB] bg-white shadow-none overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-border/80 bg-muted/50 font-semibold text-muted-foreground">
+            <thead className="border-b border-[#E3E7EB] bg-[#F7F8FA] font-semibold text-slate-600">
               <tr>
-                <th className="px-4 py-3">Rank & Sub-City</th>
-                <th className="px-4 py-3 text-right">Vulnerable Citizens</th>
+                <th className="px-4 py-3">Sub-City Jurisdiction</th>
+                <th className="px-4 py-3 text-right">Elderly & PWD</th>
                 <th className="px-4 py-3 text-right">Children</th>
+                <th className="px-4 py-3 text-right">Total Caseload</th>
                 <th className="px-4 py-3 text-center">Facilities</th>
                 <th className="px-4 py-3 text-center">Edirs</th>
-                <th className="px-4 py-3 text-right">City Share %</th>
-                <th className="px-4 py-3">Compliance Score</th>
+                <th className="px-4 py-3">Reporting Compliance</th>
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/60 font-medium">
-              {sortedStats.map((sc, index) => {
-                const total = sc.vulnerableCitizens + sc.totalChildren;
-                const sharePct = cityWideTotalBeneficiaries > 0
-                  ? ((total / cityWideTotalBeneficiaries) * 100).toFixed(1)
-                  : "0";
-                const isSelected = selectedSubCity === sc.name;
+            <tbody className="divide-y divide-[#E3E7EB] font-medium text-slate-700">
+              {sorted.map((s, idx) => {
+                const total = s.vulnerableCitizens + s.totalChildren;
+                const isSelected = selectedSubCity === s.name;
 
                 return (
                   <tr
-                    key={sc.name}
-                    className={`hover:bg-muted/40 transition-colors ${
-                      isSelected ? "bg-primary/5 font-bold" : ""
+                    key={s.name}
+                    className={`hover:bg-[#F7F8FA] transition-colors ${
+                      isSelected ? "bg-slate-50 font-bold" : ""
                     }`}
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-2.5">
                       <div className="flex items-center gap-2">
-                        <span
-                          className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-mono font-bold ${
-                            index === 0
-                              ? "bg-amber-500/20 text-amber-600 dark:text-amber-400"
-                              : index === 1
-                              ? "bg-slate-500/20 text-slate-600 dark:text-slate-300"
-                              : index === 2
-                              ? "bg-amber-700/20 text-amber-800 dark:text-amber-500"
-                              : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {index + 1}
+                        <span className="font-mono text-slate-400 w-4 text-right">
+                          {idx + 1}.
                         </span>
-                        <div>
-                          <span className="font-bold text-foreground">{sc.name}</span>
-                          {isSelected && (
-                            <Badge className="ml-2 text-[10px] bg-primary text-primary-foreground py-0 px-1.5">
-                              Active Filter
-                            </Badge>
-                          )}
-                        </div>
+                        <span className="font-bold text-[#123B5D]">{s.name}</span>
+                        {isSelected && (
+                          <span className="text-[10px] rounded-xs bg-[#1769AA] text-white px-1.5 py-0.5">
+                            Selected
+                          </span>
+                        )}
                       </div>
                     </td>
 
-                    <td className="px-4 py-3 text-right font-mono text-foreground font-semibold">
-                      {sc.vulnerableCitizens.toLocaleString()}
+                    <td className="px-4 py-2.5 text-right font-mono text-slate-700">
+                      {s.vulnerableCitizens.toLocaleString()}
                     </td>
 
-                    <td className="px-4 py-3 text-right font-mono text-foreground font-semibold">
-                      {sc.totalChildren.toLocaleString()}
+                    <td className="px-4 py-2.5 text-right font-mono text-slate-700">
+                      {s.totalChildren.toLocaleString()}
                     </td>
 
-                    <td className="px-4 py-3 text-center font-mono text-muted-foreground">
-                      {sc.totalFacilities}
+                    <td className="px-4 py-2.5 text-right font-mono font-bold text-[#123B5D]">
+                      {total.toLocaleString()}
                     </td>
 
-                    <td className="px-4 py-3 text-center font-mono text-muted-foreground">
-                      {sc.activeEdirs}
+                    <td className="px-4 py-2.5 text-center font-mono text-slate-600">
+                      {s.totalFacilities}
                     </td>
 
-                    <td className="px-4 py-3 text-right font-mono font-bold text-foreground">
-                      {sharePct}%
+                    <td className="px-4 py-2.5 text-center font-mono text-slate-600">
+                      {s.activeEdirs}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-2.5">
                       <div className="flex items-center gap-2">
-                        <Progress value={sc.complianceRate} className="h-2 w-20" />
-                        <span className="font-mono text-xs font-bold text-foreground">
-                          {sc.complianceRate}%
+                        <Progress value={s.complianceRate} className="h-1.5 w-16 bg-slate-100" />
+                        <span className="font-mono text-[11px] font-bold text-slate-700">
+                          {s.complianceRate}%
                         </span>
                       </div>
                     </td>
 
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-2.5 text-right">
                       <button
-                        onClick={() => onSelectSubCity?.(sc.name)}
-                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline cursor-pointer"
+                        onClick={() => onSelectSubCity?.(s.name)}
+                        className="text-[11px] font-semibold text-[#1769AA] hover:underline cursor-pointer inline-flex items-center gap-0.5"
                       >
-                        <span>Filter</span>
+                        <span>Filter Registry</span>
                         <ChevronRight className="h-3 w-3" />
                       </button>
                     </td>
@@ -318,7 +247,7 @@ export function SubCityAnalytics({
             </tbody>
           </table>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

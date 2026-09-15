@@ -1,4 +1,4 @@
-export type TimeframeOption = "today" | "7d" | "30d" | "quarter" | "ytd" | "all";
+export type TimeframeOption = "this_month" | "last_month" | "quarter" | "ytd" | "all";
 
 export const ADDIS_ABABA_SUBCITIES = [
   "Bole",
@@ -16,26 +16,6 @@ export const ADDIS_ABABA_SUBCITIES = [
 
 export type SubCityName = (typeof ADDIS_ABABA_SUBCITIES)[number];
 
-export interface SparklinePoint {
-  date: string;
-  value: number;
-}
-
-export interface MetricCardData {
-  id: string;
-  title: string;
-  value: number | string;
-  changePercent?: number; // e.g. +12.4
-  changeType?: "positive" | "negative" | "neutral";
-  subtitle: string;
-  secondaryMetric?: {
-    label: string;
-    value: string | number;
-  };
-  sparkline?: SparklinePoint[];
-  colorTheme: "blue" | "emerald" | "violet" | "amber" | "rose" | "teal";
-}
-
 export interface SubCityStat {
   name: string;
   totalChildren: number;
@@ -46,39 +26,54 @@ export interface SubCityStat {
   recentActivityCount: number;
 }
 
+export interface MetricCardData {
+  id: string;
+  title: string;
+  value: number | string;
+  subtitle: string;
+}
+
 export interface DirectorateSummary {
-  childrenAffairs: {
-    totalChildren: number;
-    inCare: number;
-    found: number;
-    adopted: number;
-    fostered: number;
-    totalApplicants: number;
-    totalFacilities: number;
-    capacityOccupancy: number; // e.g. 78%
-  };
-  socialRehab: {
-    totalVulnerable: number;
-    elderly: number;
-    disability: number;
-    womenVulnerable: number;
-    totalEdirs: number;
-    totalMembers: number;
-    supportServicesDelivered: number;
-  };
-  womenAffairs: {
-    totalProfiles: number;
-    technologyKits: number;
-    vocationalTrainings: number;
-    jobPlacements: number;
-    activeAssociations: number;
-    associationMembers: number;
-  };
-  reportingCompliance: {
-    expectedReports: number;
-    submittedReports: number;
-    pendingApproval: number;
-    complianceRate: number;
-    avgReviewDays: number;
-  };
+  childrenAffairs: any;
+  socialRehab: any;
+  womenAffairs: any;
+  reportingCompliance: any;
+}
+
+export interface OperationalAlertItem {
+  id: string;
+  category: "OVERDUE_REPORT" | "PENDING_APPROVAL" | "OPEN_COMPLAINT" | "INSPECTION_DUE" | "ADOPTION_REVIEW";
+  title: string;
+  source: string;
+  subCity?: string;
+  timestamp: string;
+  severity: "critical" | "warning" | "info";
+  actionLabel?: string;
+  actionUrl?: string;
+}
+
+export interface DirectorateMetricRow {
+  code: string;
+  name: string;
+  amharicName: string;
+  primaryCaseload: number;
+  caseloadLabel: string;
+  monthlyIntake: number;
+  servicesDelivered: number;
+  pendingReviews: number;
+  complianceRate: number; // percentage
+  statusTheme: "blue" | "teal" | "amber" | "plum";
+}
+
+export interface SubCityComparativeRow {
+  name: string;
+  totalBeneficiaries: number;
+  childrenInCare: number;
+  elderlyAndDisabled: number;
+  womenBeneficiaries: number;
+  licensedFacilities: number;
+  registeredEdirs: number;
+  complianceRate: number;
+  pendingReports: number;
+  openComplaints: number;
 }

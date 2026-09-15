@@ -3,13 +3,6 @@
 import React, { useState, useMemo } from "react";
 import { BureauReport, BureauReportFilters } from "@/api/bureau/reports";
 import { ADDIS_ABABA_SUBCITIES } from "./types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,23 +12,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import {
   AlertCircle,
-  ArrowUpDown,
   Building,
   CheckCircle2,
   Clock,
   Download,
   Eye,
-  FileCheck,
-  FileText,
+  FileCheck2,
+  FileSpreadsheet,
   Filter,
   MapPin,
   Search,
-  SlidersHorizontal,
-  TrendingDown,
-  TrendingUp,
 } from "lucide-react";
 import { ReportDetailsModal } from "@/app/[locale]/(modules)/bureau-head/components/report-details-modal";
 
@@ -45,6 +33,7 @@ interface HeavyReportsHubProps {
   isError: boolean;
   onFilterChange?: (filters: BureauReportFilters) => void;
   careCenters?: any[];
+  selectedSubCity?: string;
 }
 
 export function HeavyReportsHub({
@@ -53,10 +42,11 @@ export function HeavyReportsHub({
   isError,
   onFilterChange,
   careCenters = [],
+  selectedSubCity = "ALL",
 }: HeavyReportsHubProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
-  const [subCityFilter, setSubCityFilter] = useState<string>("ALL");
+  const [subCityFilter, setSubCityFilter] = useState<string>(selectedSubCity);
   const [selectedReport, setSelectedReport] = useState<BureauReport | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -68,7 +58,14 @@ export function HeavyReportsHub({
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  // Filtering reports
+  // Keep subCity in sync if passed
+  React.useEffect(() => {
+    if (selectedSubCity) {
+      setSubCityFilter(selectedSubCity);
+    }
+  }, [selectedSubCity]);
+
+  // Filtering
   const filteredReports = useMemo(() => {
     return reports.filter((r) => {
       const matchesSearch =
@@ -96,33 +93,35 @@ export function HeavyReportsHub({
     return filteredReports.slice(start, start + pageSize);
   }, [filteredReports, currentPage, pageSize]);
 
-  // Aggregates for Ribbon
-  const totalReportsCount = reports.length;
+  // Statistics
+  const totalExpected = careCenters.length || 18;
+  const totalSubmitted = reports.length;
   const approvedCount = reports.filter(
     (r) => r.status === "Approved" || r.status === "Submitted"
   ).length;
   const pendingCount = reports.filter(
     (r) => r.status === "Pending" || !r.status
   ).length;
-  const overdueCount = Math.max(0, (careCenters.length || 18) - totalReportsCount);
-  const totalChildrenInReports = reports.reduce(
-    (sum, r) => sum + (r.totalChildren || 0),
+  const overdueCount = Math.max(0, totalExpected - totalSubmitted);
+  const totalChildrenReported = reports.reduce(
+    (acc, r) => acc + (r.totalChildren || 0),
     0
   );
 
-  // CSV Export handler
+  // Export CSV
   const handleExportCSV = () => {
     if (filteredReports.length === 0) return;
     const headers = [
       "Facility Name",
-      "Facility ID",
+      "License ID",
       "Sub-City",
       "Period",
       "Total Children",
-      "Admissions",
+      "New Admissions",
       "Discharges",
-      "Status",
-      "Submitted Date",
+      "Net Movement",
+      "Compliance Status",
+      "Submission Date",
     ];
     const rows = filteredReports.map((r) => [
       `"${r.facility?.name || "Facility #" + r.facilityId}"`,
@@ -132,6 +131,7 @@ export function HeavyReportsHub({
       r.totalChildren || 0,
       r.newAdmissions || 0,
       r.discharges || 0,
+      (r.newAdmissions || 0) - (r.discharges || 0),
       `"${r.status || "Pending"}"`,
       `"${r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : "-"}"`,
     ]);
@@ -143,297 +143,262 @@ export function HeavyReportsHub({
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `bureau-reports-dataset-${Date.now()}.csv`);
+    link.setAttribute("download", `awcsa-facility-census-${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   return (
-    <div className="space-y-6">
-      {/* 1. Compliance Metric Ribbon */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 border-border/80 bg-card/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Total Reported</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600">
-              <FileText className="h-4 w-4" />
-            </div>
+    <div className="space-y-4">
+      {/* 1. Institutional Summary Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="rounded-md border border-[#E3E7EB] bg-white p-3.5 shadow-none">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Total Expected Facilities
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-xl font-bold font-mono text-[#123B5D]">
+              {totalExpected}
+            </span>
+            <span className="text-xs text-slate-500">Accredited Centers</span>
           </div>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {totalReportsCount}
-          </h4>
-          <p className="text-xs text-muted-foreground mt-1">
-            Across {careCenters.length || 18} accredited facilities
+          <p className="mt-1 text-[11px] text-slate-400">
+            Licensed residential child care facilities
           </p>
-        </Card>
+        </div>
 
-        <Card className="p-4 border-border/80 bg-card/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Approved / In Order</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600">
-              <CheckCircle2 className="h-4 w-4" />
-            </div>
+        <div className="rounded-md border border-[#E3E7EB] bg-white p-3.5 shadow-none border-l-4 border-l-[#168C86]">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Submitted & Verified
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-xl font-bold font-mono text-[#168C86]">
+              {approvedCount}
+            </span>
+            <span className="text-xs text-slate-500">Dossiers In Order</span>
           </div>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {approvedCount}
-          </h4>
-          <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
-            {totalReportsCount > 0
-              ? `${Math.round((approvedCount / totalReportsCount) * 100)}% validated`
-              : "100% validated"}
+          <p className="mt-1 text-[11px] text-slate-500">
+            Compliant with monthly census mandate
           </p>
-        </Card>
+        </div>
 
-        <Card className="p-4 border-border/80 bg-card/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Pending Review</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600">
-              <Clock className="h-4 w-4" />
-            </div>
+        <div className="rounded-md border border-[#E3E7EB] bg-white p-3.5 shadow-none border-l-4 border-l-[#C98A16]">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Pending Bureau Clearance
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="text-xl font-bold font-mono text-[#C98A16]">
+              {pendingCount}
+            </span>
+            <span className="text-xs text-slate-500">Under Review</span>
           </div>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {pendingCount}
-          </h4>
-          <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
-            Awaiting executive clearance
+          <p className="mt-1 text-[11px] text-slate-500">
+            Awaiting inspector sign-off
           </p>
-        </Card>
+        </div>
 
-        <Card className="p-4 border-border/80 bg-card/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Reported Children</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600">
-              <Building className="h-4 w-4" />
-            </div>
+        <div className={`rounded-md border border-[#E3E7EB] bg-white p-3.5 shadow-none border-l-4 ${
+          overdueCount > 0 ? "border-l-[#DC2626]" : "border-l-[#168C86]"
+        }`}>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            Overdue Non-Compliant
+          </span>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className={`text-xl font-bold font-mono ${overdueCount > 0 ? "text-[#DC2626]" : "text-slate-700"}`}>
+              {overdueCount}
+            </span>
+            <span className="text-xs text-slate-500">Facilities Due</span>
           </div>
-          <h4 className="text-2xl font-black text-foreground font-mono mt-1">
-            {totalChildrenInReports.toLocaleString()}
-          </h4>
-          <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-            Directly verified in facilities
+          <p className="mt-1 text-[11px] text-slate-500">
+            {overdueCount > 0 ? "Escalation notice required" : "Zero non-compliance"}
           </p>
-        </Card>
+        </div>
       </div>
 
-      {/* 2. Search & Filter Bar */}
-      <Card className="p-4 border-border/80 bg-card/80 shadow-xs">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Search box */}
+      {/* 2. Institutional Search & Filter Bar */}
+      <div className="rounded-md border border-[#E3E7EB] bg-white p-3 shadow-none">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             <Input
               type="text"
-              placeholder="Search facility or sub-city..."
+              placeholder="Search facility name or license ID..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-9 h-9 text-xs"
+              className="pl-8 h-8 text-xs border-[#E3E7EB]"
             />
           </div>
 
-          {/* Filter dropdowns */}
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-            <div className="w-[140px]">
-              <Select
-                value={subCityFilter}
-                onValueChange={(val) => {
-                  setSubCityFilter(val);
-                  setCurrentPage(1);
-                }}
-              >
-                <SelectTrigger className="h-9 text-xs">
-                  <MapPin className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                  <SelectValue placeholder="Sub-City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">All Sub-Cities</SelectItem>
-                  {ADDIS_ABABA_SUBCITIES.map((sc) => (
-                    <SelectItem key={sc} value={sc}>
-                      {sc}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={subCityFilter}
+              onValueChange={(val) => {
+                setSubCityFilter(val);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="h-8 w-[140px] text-xs border-[#E3E7EB]">
+                <MapPin className="mr-1 h-3.5 w-3.5 text-slate-500" />
+                <SelectValue placeholder="All Sub-Cities" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">All Sub-Cities</SelectItem>
+                {ADDIS_ABABA_SUBCITIES.map((sc) => (
+                  <SelectItem key={sc} value={sc}>
+                    {sc}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-            <div className="w-[130px]">
-              <Select
-                value={statusFilter}
-                onValueChange={(val) => {
-                  setStatusFilter(val);
-                  setCurrentPage(1);
-                }}
-              >
-                <SelectTrigger className="h-9 text-xs">
-                  <SlidersHorizontal className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">All Status</SelectItem>
-                  <SelectItem value="Submitted">Submitted</SelectItem>
-                  <SelectItem value="Approved">Approved</SelectItem>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={statusFilter}
+              onValueChange={(val) => {
+                setStatusFilter(val);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="h-8 w-[130px] text-xs border-[#E3E7EB]">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">All Status</SelectItem>
+                <SelectItem value="Submitted">Submitted</SelectItem>
+                <SelectItem value="Approved">Approved</SelectItem>
+                <SelectItem value="Pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
 
             <Button
               variant="outline"
               size="sm"
               onClick={handleExportCSV}
               disabled={filteredReports.length === 0}
-              className="h-9 gap-1.5 text-xs font-medium"
+              className="h-8 border-[#E3E7EB] px-2.5 text-xs text-slate-700 hover:bg-slate-50"
             >
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3.5 w-3.5 mr-1.5 text-[#1769AA]" />
               <span>Export CSV</span>
             </Button>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* 3. High-Density Reports Grid */}
-      <Card className="overflow-hidden border-border/80 shadow-xs">
+      {/* 3. Government Registry Table */}
+      <div className="rounded-md border border-[#E3E7EB] bg-white shadow-none overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-border/80 bg-muted/50 font-semibold text-muted-foreground">
+            <thead className="border-b border-[#E3E7EB] bg-[#F7F8FA] font-semibold text-slate-600">
               <tr>
-                <th className="px-4 py-3">Care Facility</th>
-                <th className="px-4 py-3">Location / Sub-City</th>
-                <th className="px-4 py-3">Period</th>
-                <th className="px-4 py-3 text-right">Total Children</th>
-                <th className="px-4 py-3 text-center">Net Movement</th>
-                <th className="px-4 py-3 text-center">Status</th>
-                <th className="px-4 py-3">Submitted At</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th className="px-4 py-3">Facility Name & Accreditation</th>
+                <th className="px-4 py-3">Sub-City</th>
+                <th className="px-4 py-3">Reporting Period</th>
+                <th className="px-4 py-3 text-right">In-Center Children</th>
+                <th className="px-4 py-3 text-center">Admissions / Discharges</th>
+                <th className="px-4 py-3 text-center">Compliance Status</th>
+                <th className="px-4 py-3">Submission Date</th>
+                <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/60 font-medium">
+            <tbody className="divide-y divide-[#E3E7EB] font-medium text-slate-700">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-muted-foreground">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                      <span>Loading bureau facility reports...</span>
+                  <td colSpan={8} className="py-10 text-center text-slate-500">
+                    <div className="flex flex-col items-center justify-center gap-1.5">
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#1769AA] border-t-transparent" />
+                      <span className="text-xs">Loading facility census registry...</span>
                     </div>
                   </td>
                 </tr>
               ) : isError ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-destructive">
-                    <AlertCircle className="h-8 w-8 mx-auto mb-2 opacity-80" />
-                    <p className="font-semibold">Unable to fetch reports</p>
-                    <p className="text-xs text-muted-foreground">Check connection or parameters</p>
+                  <td colSpan={8} className="py-10 text-center text-[#DC2626]">
+                    <AlertCircle className="h-6 w-6 mx-auto mb-1 opacity-80" />
+                    <p className="font-semibold text-xs">Failed to fetch facility records</p>
                   </td>
                 </tr>
               ) : paginatedReports.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-muted-foreground">
-                    <FileText className="h-8 w-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-semibold text-foreground">No reports match your filters</p>
-                    <p className="text-xs text-muted-foreground">Try clearing search or filters</p>
+                  <td colSpan={8} className="py-10 text-center text-slate-500">
+                    <FileSpreadsheet className="h-6 w-6 mx-auto mb-1 text-slate-400" />
+                    <p className="font-semibold text-xs text-slate-700">No reports found matching filters</p>
                   </td>
                 </tr>
               ) : (
-                paginatedReports.map((report) => {
-                  const facilityName =
-                    report.facility?.name || `Facility #${report.facilityId}`;
-                  const subCity = report.facility?.subCity || "Addis Ababa";
-                  const period = `${months[(report.month || 1) - 1]} ${report.year || 2026}`;
-                  const admissions = report.newAdmissions || 0;
-                  const discharges = report.discharges || 0;
-                  const netDelta = admissions - discharges;
+                paginatedReports.map((r) => {
+                  const facilityName = r.facility?.name || `Residential Care Center #${r.facilityId}`;
+                  const subCity = r.facility?.subCity || "Addis Ababa";
+                  const period = `${months[(r.month || 1) - 1]} ${r.year || 2026}`;
+                  const admissions = r.newAdmissions || 0;
+                  const discharges = r.discharges || 0;
+                  const net = admissions - discharges;
 
-                  const isApproved =
-                    report.status === "Approved" || report.status === "Submitted";
+                  const isApproved = r.status === "Approved" || r.status === "Submitted";
 
                   return (
-                    <tr
-                      key={report.id}
-                      className="hover:bg-muted/40 transition-colors"
-                    >
-                      <td className="px-4 py-3">
-                        <div className="font-bold text-foreground">
-                          {facilityName}
-                        </div>
-                        <div className="text-[11px] text-muted-foreground">
-                          ID: #{report.facilityId}
-                        </div>
+                    <tr key={r.id} className="hover:bg-[#F7F8FA] transition-colors">
+                      <td className="px-4 py-2.5">
+                        <div className="font-bold text-[#123B5D]">{facilityName}</div>
+                        <div className="text-[11px] font-mono text-slate-400">License ID: #{r.facilityId}</div>
                       </td>
 
-                      <td className="px-4 py-3">
-                        <Badge
-                          variant="outline"
-                          className="font-normal text-[11px] bg-background/50 border-border/80"
-                        >
-                          {subCity}
-                        </Badge>
+                      <td className="px-4 py-2.5 text-slate-600">
+                        {subCity}
                       </td>
 
-                      <td className="px-4 py-3 text-muted-foreground font-mono">
+                      <td className="px-4 py-2.5 font-mono text-slate-600">
                         {period}
                       </td>
 
-                      <td className="px-4 py-3 text-right font-mono font-bold text-foreground">
-                        {Number(report.totalChildren || 0).toLocaleString()}
+                      <td className="px-4 py-2.5 text-right font-mono font-bold text-slate-900">
+                        {Number(r.totalChildren || 0).toLocaleString()}
                       </td>
 
-                      <td className="px-4 py-3 text-center">
-                        <div className="inline-flex items-center gap-1.5 font-mono text-[11px]">
-                          <span className="text-emerald-600">+{admissions}</span>
-                          <span className="text-muted-foreground">/</span>
-                          <span className="text-rose-600">-{discharges}</span>
-                          <span
-                            className={`ml-1 font-bold ${
-                              netDelta > 0
-                                ? "text-emerald-600"
-                                : netDelta < 0
-                                ? "text-rose-600"
-                                : "text-muted-foreground"
-                            }`}
-                          >
-                            ({netDelta > 0 ? `+${netDelta}` : netDelta})
-                          </span>
-                        </div>
+                      <td className="px-4 py-2.5 text-center font-mono text-xs">
+                        <span className="text-[#168C86]">+{admissions}</span>
+                        <span className="text-slate-400 mx-1">/</span>
+                        <span className="text-slate-600">-{discharges}</span>
+                        <span className={`ml-1.5 font-bold ${net > 0 ? "text-[#168C86]" : net < 0 ? "text-[#DC2626]" : "text-slate-500"}`}>
+                          ({net > 0 ? `+${net}` : net})
+                        </span>
                       </td>
 
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-4 py-2.5 text-center">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                          className={`inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[11px] font-semibold ${
                             isApproved
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                              : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                              ? "bg-teal-50 text-[#168C86]"
+                              : "bg-amber-50 text-[#C98A16]"
                           }`}
                         >
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
-                              isApproved ? "bg-emerald-500" : "bg-amber-500"
+                              isApproved ? "bg-[#168C86]" : "bg-[#C98A16]"
                             }`}
                           />
-                          {report.status || "Submitted"}
+                          {r.status || "Submitted"}
                         </span>
                       </td>
 
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {report.submittedAt
-                          ? new Date(report.submittedAt).toLocaleDateString()
-                          : "-"}
+                      <td className="px-4 py-2.5 text-slate-500 font-mono text-[11px]">
+                        {r.submittedAt ? new Date(r.submittedAt).toLocaleDateString("en-GB") : "-"}
                       </td>
 
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-4 py-2.5 text-right">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            setSelectedReport(report);
+                            setSelectedReport(r);
                             setIsDetailsOpen(true);
                           }}
-                          className="h-8 gap-1 text-xs hover:bg-primary/10 hover:text-primary"
+                          className="h-7 px-2 text-xs text-[#1769AA] hover:bg-[#1769AA]/10"
                         >
-                          <Eye className="h-3.5 w-3.5" />
-                          <span>View</span>
+                          <Eye className="h-3.5 w-3.5 mr-1" />
+                          <span>Inspect</span>
                         </Button>
                       </td>
                     </tr>
@@ -445,34 +410,24 @@ export function HeavyReportsHub({
         </div>
 
         {/* Table footer with pagination */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-border/80 bg-muted/20 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>Showing</span>
-            <span className="font-semibold text-foreground">
-              {filteredReports.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}
-            </span>
-            <span>to</span>
-            <span className="font-semibold text-foreground">
-              {Math.min(currentPage * pageSize, filteredReports.length)}
-            </span>
-            <span>of</span>
-            <span className="font-semibold text-foreground font-mono">
-              {filteredReports.length}
-            </span>
-            <span>reports</span>
+        <div className="flex items-center justify-between border-t border-[#E3E7EB] bg-[#F7F8FA] px-4 py-2.5 text-xs text-slate-500">
+          <div>
+            Showing <strong className="text-slate-700">{filteredReports.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</strong> to{" "}
+            <strong className="text-slate-700">{Math.min(currentPage * pageSize, filteredReports.length)}</strong> of{" "}
+            <strong className="text-slate-700 font-mono">{filteredReports.length}</strong> reports
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="h-8 text-xs"
+              className="h-7 text-xs border-[#E3E7EB]"
             >
-              Previous
+              Prev
             </Button>
-            <span className="px-2 font-medium">
+            <span className="px-2 text-slate-600 font-medium">
               Page {currentPage} of {totalPages}
             </span>
             <Button
@@ -480,15 +435,14 @@ export function HeavyReportsHub({
               size="sm"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="h-8 text-xs"
+              className="h-7 text-xs border-[#E3E7EB]"
             >
               Next
             </Button>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* Details modal */}
       <ReportDetailsModal
         report={selectedReport}
         isOpen={isDetailsOpen}
