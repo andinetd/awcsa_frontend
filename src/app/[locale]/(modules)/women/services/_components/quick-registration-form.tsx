@@ -69,20 +69,20 @@ export default function QuickRegistrationForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Woman Profile Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
               {t("support.quick.womanInfo")}
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.firstName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.firstName")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.firstName")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -91,11 +91,11 @@ export default function QuickRegistrationForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.lastName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.lastName")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.lastName")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -106,11 +106,11 @@ export default function QuickRegistrationForm() {
               name="cityIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.cityIdNumber")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("form.cityIdNumber")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. AA-12345" {...field} />
+                    <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder="e.g. AA-12345" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -120,29 +120,30 @@ export default function QuickRegistrationForm() {
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.phoneNumber")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("form.phoneNumber")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="09..." {...field} />
+                    <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder="09..." {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="educationLevel"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.educationLevel")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.educationLevel")}</FormLabel>
                     <FormControl>
                       <Input
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                         placeholder={t("form.educationLevel")}
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -151,11 +152,11 @@ export default function QuickRegistrationForm() {
                 name="occupation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.occupation")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.occupation")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.occupation")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.occupation")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -164,7 +165,7 @@ export default function QuickRegistrationForm() {
 
           {/* Support Service Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
               {t("support.quick.supportDetails")}
             </h3>
 
@@ -173,32 +174,33 @@ export default function QuickRegistrationForm() {
               name="serviceTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("support.register.serviceType")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.serviceType")}</FormLabel>
                   <FormControl>
                     <ServiceTypeSelect
                       value={field.value.toString()}
                       onValueChange={(val) => field.onChange(parseInt(val))}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="provider"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("support.register.providerName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.providerName")}</FormLabel>
                     <FormControl>
                       <Input
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                         placeholder={t("support.register.placeholder.provider")}
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -207,32 +209,33 @@ export default function QuickRegistrationForm() {
                 name="amountOrQuantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">
                       {t("support.register.amountOrQuantity")}
                     </FormLabel>
                     <FormControl>
                       <Input
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                         placeholder={t("support.register.placeholder.amount")}
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <FormField
                 control={form.control}
                 name="dateProvided"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("support.register.dateProvided")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.dateProvided")}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -241,11 +244,11 @@ export default function QuickRegistrationForm() {
                 name="subCity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("report.subCity")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("report.subCity")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("report.subCity")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("report.subCity")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -254,11 +257,11 @@ export default function QuickRegistrationForm() {
                 name="woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("report.woreda")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("report.woreda")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("report.woreda")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("report.woreda")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -269,16 +272,17 @@ export default function QuickRegistrationForm() {
               name="facilitatorCityId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">
                     {t("support.register.facilitatorCityId")}
                   </FormLabel>
                   <FormControl>
                     <Input
+                      className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                       placeholder={t("support.register.placeholder.cityId")}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -288,25 +292,25 @@ export default function QuickRegistrationForm() {
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("support.register.remarks")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.remarks")}</FormLabel>
                   <FormControl>
                     <Textarea
+                      className="min-h-[60px] h-auto text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white resize-none"
                       placeholder={t("support.register.placeholder.remarks")}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <div className="flex justify-end border-t pt-6">
+        <div className="flex justify-end border-t border-[#E3E7EB] pt-4">
           <Button
             type="submit"
-            size="lg"
-            className="w-full md:w-auto px-12"
+            className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs px-6"
             disabled={registerCombinedMutation.isPending}
           >
             {registerCombinedMutation.isPending

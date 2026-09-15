@@ -121,32 +121,32 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
     <Dialog open={open} onOpenChange={setOpen}>
       {!isEditing && (
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-primary hover:bg-primary/90">
-            <Plus className="w-4 h-4" />
+          <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("addButton")}
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
-            <Briefcase className="w-6 h-6 text-primary" />
+      <DialogContent className="sm:max-w-[500px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Briefcase className="w-4 h-4 text-[#1769AA]" />
             {isEditing ? "Edit Employment" : t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-3">
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.firstName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.firstName")} {...field} disabled={isEditing} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.firstName")} {...field} disabled={isEditing} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -155,11 +155,11 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.lastName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.lastName")} {...field} disabled={isEditing} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.lastName")} {...field} disabled={isEditing} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -169,17 +169,17 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
               name="employmentType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.employmentType")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.employmentType")}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"><SelectValue /></SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="INDIVIDUAL">{t("employmentTypes.INDIVIDUAL")}</SelectItem>
-                      <SelectItem value="GROUP">{t("employmentTypes.GROUP")}</SelectItem>
+                    <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
+                      <SelectItem value="INDIVIDUAL" className="text-xs">{t("employmentTypes.INDIVIDUAL")}</SelectItem>
+                      <SelectItem value="GROUP" className="text-xs">{t("employmentTypes.GROUP")}</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -188,18 +188,18 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
               name="sector"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.sector")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.sector")}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger><SelectValue placeholder={t("placeholders.selectSector")} /></SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"><SelectValue placeholder={t("placeholders.selectSector")} /></SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
                       {sectors.map((s) => (
-                        <SelectItem key={s} value={s}>{t(`sectors.${s}`)}</SelectItem>
+                        <SelectItem key={s} value={s} className="text-xs">{t(`sectors.${s}`)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -208,9 +208,9 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
               name="year"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.year")}</FormLabel>
-                  <FormControl><Input type="number" min="2000" max="2100" placeholder="2024" {...field} /></FormControl>
-                  <FormMessage />
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.year")}</FormLabel>
+                  <FormControl><Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" min="2000" max="2100" placeholder="2024" {...field} /></FormControl>
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -219,18 +219,18 @@ export default function WomenEmploymentForm({ record, open: controlledOpen, onOp
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.remark")}</FormLabel>
-                  <FormControl><Input placeholder={t("placeholders.remark")} {...field} /></FormControl>
-                  <FormMessage />
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.remark")}</FormLabel>
+                  <FormControl><Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.remark")} {...field} /></FormControl>
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-3 pt-6 border-t">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
+              <Button type="button" variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={() => setOpen(false)}>
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              <Button type="submit" disabled={isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
+                {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
                 {t("buttons.save")}
               </Button>
             </div>

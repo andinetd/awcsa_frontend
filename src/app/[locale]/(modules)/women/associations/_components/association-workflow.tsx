@@ -45,11 +45,11 @@ export function AssociationWorkflowPanel({ record }: WorkflowPanelProps) {
   );
 
   return (
-    <Card className="md:col-span-3">
-      <CardHeader>
-        <CardTitle>{t("title")}</CardTitle>
+    <Card className="md:col-span-3 rounded-xs border border-[#E3E7EB] bg-white shadow-2xs">
+      <CardHeader className="border-b border-[#E3E7EB] pb-3">
+        <CardTitle className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("title")}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InfoBlock
             label={t("enteredBy")}
@@ -66,44 +66,44 @@ export function AssociationWorkflowPanel({ record }: WorkflowPanelProps) {
         </div>
 
         {record.rejectionReason && (
-          <div className="rounded-md border border-destructive/30 bg-red-50 p-3">
-            <p className="text-sm font-medium text-destructive">
+          <div className="rounded-xs border border-red-200 bg-red-50/60 p-3">
+            <p className="text-xs font-semibold text-red-700 uppercase tracking-wider font-mono">
               {t("rejectionReason")}
             </p>
-            <p className="text-sm text-destructive/90">{record.rejectionReason}</p>
+            <p className="text-xs text-red-900 mt-1">{record.rejectionReason}</p>
           </div>
         )}
 
-        <div className="flex items-center gap-3 pt-2 border-t">
+        <div className="flex items-center gap-3 pt-3 border-t border-[#E3E7EB]">
           {record.approvalStatus === "DRAFT" && (
-            <Button onClick={() => setSubmitOpen(true)} className="gap-2">
-              <Send className="w-4 h-4" />
+            <Button onClick={() => setSubmitOpen(true)} className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+              <Send className="w-3.5 h-3.5" />
               {t("submit")}
             </Button>
           )}
           {record.approvalStatus === "SUBMITTED" && (
             <>
-              <span className="text-sm text-muted-foreground">{t("pendingReview")}</span>
+              <span className="text-xs text-slate-500">{t("pendingReview")}</span>
               <div className="flex gap-2 ml-auto">
-                <Button variant="destructive" onClick={() => setReviewMode("REJECTED")} className="gap-2">
-                  <XCircle className="w-4 h-4" />
+                <Button variant="destructive" onClick={() => setReviewMode("REJECTED")} className="h-8 text-xs font-semibold rounded-xs bg-red-600 hover:bg-red-700 text-white shadow-2xs gap-1.5">
+                  <XCircle className="w-3.5 h-3.5" />
                   {t("reject")}
                 </Button>
-                <Button onClick={() => setReviewMode("APPROVED")} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
-                  <CheckCircle2 className="w-4 h-4" />
+                <Button onClick={() => setReviewMode("APPROVED")} className="h-8 text-xs font-semibold rounded-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                   {t("approve")}
                 </Button>
               </div>
             </>
           )}
           {record.approvalStatus === "APPROVED" && (
-            <span className="text-sm text-emerald-700 font-medium flex items-center gap-2">
+            <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
               {t("approvedNotice")}
             </span>
           )}
           {record.approvalStatus === "REJECTED" && (
-            <span className="text-sm text-red-700 font-medium flex items-center gap-2">
+            <span className="text-xs text-red-700 font-semibold flex items-center gap-1.5">
               <XCircle className="w-4 h-4" />
               {t("rejectedNotice")}
             </span>
@@ -130,13 +130,13 @@ function InfoBlock({
 }) {
   const t = useTranslations("women.associations.workflow");
   return (
-    <div className="rounded-xl border bg-muted/20 p-4 space-y-1">
-      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+    <div className="rounded-xs border border-[#E3E7EB] bg-[#F7F8FA] p-3.5 space-y-1">
+      <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
         {label}
       </p>
-      <p className="text-sm font-semibold">{name || "-"}</p>
+      <p className="text-xs font-semibold text-[#0B1F3A]">{name || "-"}</p>
       {date && (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-[11px] text-slate-500">
           {new Date(date).toLocaleString()}
         </p>
       )}
@@ -240,25 +240,26 @@ function SubmitDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-[480px]">
-        <DialogHeader>
-          <DialogTitle>{t("submitTitle")}</DialogTitle>
-          <DialogDescription>{t("submitDescription")}</DialogDescription>
+      <DialogContent className="sm:max-w-[480px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{t("submitTitle")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">{t("submitDescription")}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
-          <div className="space-y-2">
-            <Label>{t("enteredByNameLabel")}</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">{t("enteredByNameLabel")}</Label>
             <Input
+              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t("enteredByNamePlaceholder")}
             />
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && <p className="text-xs text-destructive">{error}</p>}
           </div>
-          <div className="space-y-2">
-            <Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">
               {t("entrySignature")}{" "}
-              <span className="text-muted-foreground font-normal">({t("optional")})</span>
+              <span className="text-slate-500 font-normal">({t("optional")})</span>
             </Label>
             <FileDragAndDrop
               value={file ? [file] : []}
@@ -269,12 +270,12 @@ function SubmitDialog({
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="border-t border-[#E3E7EB] pt-4 gap-2">
+          <Button variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={onClose}>
             {t("cancel")}
           </Button>
-          <Button onClick={handleSubmit} disabled={submitMutation.isPending}>
-            {submitMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          <Button onClick={handleSubmit} disabled={submitMutation.isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
+            {submitMutation.isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
             {t("confirmSubmit")}
           </Button>
         </DialogFooter>
@@ -348,38 +349,40 @@ function ReviewDialog({
 
   return (
     <Dialog open={mode !== null} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-[480px]">
-        <DialogHeader>
-          <DialogTitle>{isReject ? t("rejectTitle") : t("approveTitle")}</DialogTitle>
-          <DialogDescription>{record.name}</DialogDescription>
+      <DialogContent className="sm:max-w-[480px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{isReject ? t("rejectTitle") : t("approveTitle")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">{record.name}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
-          <div className="space-y-2">
-            <Label>{t("approverNameLabel")}</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">{t("approverNameLabel")}</Label>
             <Input
+              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t("approverNamePlaceholder")}
             />
           </div>
           {isReject && (
-            <div className="space-y-2">
-              <Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">
                 {t("rejectionReason")}{" "}
                 <span className="text-destructive">*</span>
               </Label>
               <Textarea
                 rows={3}
+                className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white resize-none"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder={t("rejectionReasonPlaceholder")}
               />
             </div>
           )}
-          <div className="space-y-2">
-            <Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">
               {t("approvalSignature")}{" "}
-              <span className="text-muted-foreground font-normal">({t("optional")})</span>
+              <span className="text-slate-500 font-normal">({t("optional")})</span>
             </Label>
             <FileDragAndDrop
               value={file ? [file] : []}
@@ -389,19 +392,22 @@ function ReviewDialog({
               maxSize={5 * 1024 * 1024}
             />
           </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-xs text-destructive">{error}</p>}
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="border-t border-[#E3E7EB] pt-4 gap-2">
+          <Button variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={onClose}>
             {t("cancel")}
           </Button>
           <Button
             onClick={handleConfirm}
             disabled={reviewMutation.isPending}
-            className={isReject ? "" : "bg-emerald-600 hover:bg-emerald-700"}
-            variant={isReject ? "destructive" : "default"}
+            className={`h-8 text-xs font-semibold rounded-xs shadow-2xs ${
+              isReject
+                ? "bg-red-600 hover:bg-red-700 text-white"
+                : "bg-emerald-600 hover:bg-emerald-700 text-white"
+            }`}
           >
-            {reviewMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {reviewMutation.isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
             {isReject ? t("confirmReject") : t("confirmApprove")}
           </Button>
         </DialogFooter>

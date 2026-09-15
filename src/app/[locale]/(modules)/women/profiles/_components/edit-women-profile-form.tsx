@@ -111,27 +111,34 @@ export default function EditWomenProfileForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("form.editTitle")}</DialogTitle>
-          <DialogDescription>{t("form.description")}</DialogDescription>
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white shadow-lg p-6">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
+            {t("form.editTitle")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
+            {t("form.description")}
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 pt-2">
             {/* Personal Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("form.personalInfo")}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("form.personalInfo")}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="cityIdNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.cityIdNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.cityIdNumber")}</FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.cityIdNumber")}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
                           {...field}
                         />
                       </FormControl>
@@ -144,11 +151,12 @@ export default function EditWomenProfileForm({
                   name="age"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.age")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.age")}</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
                           placeholder={t("form.agePlaceholder")}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) =>
@@ -169,9 +177,13 @@ export default function EditWomenProfileForm({
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.firstName")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.firstName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.firstName")} {...field} />
+                        <Input
+                          placeholder={t("form.firstName")}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -182,9 +194,13 @@ export default function EditWomenProfileForm({
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.lastName")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.lastName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.lastName")} {...field} />
+                        <Input
+                          placeholder={t("form.lastName")}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -195,9 +211,13 @@ export default function EditWomenProfileForm({
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>{t("form.phoneNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.phoneNumber")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.phoneNumber")} {...field} />
+                        <Input
+                          placeholder={t("form.phoneNumber")}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -207,16 +227,22 @@ export default function EditWomenProfileForm({
             </div>
 
             {/* Address */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{t("form.addressTitle")}</h3>
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
+                {t("form.addressTitle")}
+              </h3>
               <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fullAddress")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fullAddress")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.fullAddress")} {...field} />
+                      <Input
+                        placeholder={t("form.fullAddress")}
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -225,51 +251,51 @@ export default function EditWomenProfileForm({
             </div>
 
             {/* Education & Career */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("form.educationEmployment")}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="educationLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.educationLevel")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.educationLevel")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                             <SelectValue
                               placeholder={t("form.educationLevelPlaceholder")}
                             />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="NONE">
+                        <SelectContent className="rounded-xs border-[#E3E7EB]">
+                          <SelectItem value="NONE" className="text-xs">
                             {t("form.educationOptions.NONE")}
                           </SelectItem>
-                          <SelectItem value="PRIMARY">
+                          <SelectItem value="PRIMARY" className="text-xs">
                             {t("form.educationOptions.PRIMARY")}
                           </SelectItem>
-                          <SelectItem value="SECONDARY">
+                          <SelectItem value="SECONDARY" className="text-xs">
                             {t("form.educationOptions.SECONDARY")}
                           </SelectItem>
-                          <SelectItem value="DIPLOMA">
+                          <SelectItem value="DIPLOMA" className="text-xs">
                             {t("form.educationOptions.DIPLOMA")}
                           </SelectItem>
-                          <SelectItem value="BACHELOR">
+                          <SelectItem value="BACHELOR" className="text-xs">
                             {t("form.educationOptions.BACHELOR")}
                           </SelectItem>
-                          <SelectItem value="MASTERS">
+                          <SelectItem value="MASTERS" className="text-xs">
                             {t("form.educationOptions.MASTERS")}
                           </SelectItem>
-                          <SelectItem value="DOCTORATE">
+                          <SelectItem value="DOCTORATE" className="text-xs">
                             {t("form.educationOptions.DOCTORATE")}
                           </SelectItem>
-                          <SelectItem value="OTHER">
+                          <SelectItem value="OTHER" className="text-xs">
                             {t("form.educationOptions.OTHER")}
                           </SelectItem>
                         </SelectContent>
@@ -283,26 +309,26 @@ export default function EditWomenProfileForm({
                   name="careerStatus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.careerStatus")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.careerStatus")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                             <SelectValue
                               placeholder={t("form.careerStatusPlaceholder")}
                             />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="EMPLOYED">
+                        <SelectContent className="rounded-xs border-[#E3E7EB]">
+                          <SelectItem value="EMPLOYED" className="text-xs">
                             {t("form.careerOptions.EMPLOYED")}
                           </SelectItem>
-                          <SelectItem value="SELF_EMPLOYED">
+                          <SelectItem value="SELF_EMPLOYED" className="text-xs">
                             {t("form.careerOptions.SELF_EMPLOYED")}
                           </SelectItem>
-                          <SelectItem value="UNEMPLOYED">
+                          <SelectItem value="UNEMPLOYED" className="text-xs">
                             {t("form.careerOptions.UNEMPLOYED")}
                           </SelectItem>
                         </SelectContent>
@@ -316,9 +342,13 @@ export default function EditWomenProfileForm({
                   name="photoUrl"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>{t("form.photoUrl")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.photoUrl")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="https://..." {...field} />
+                        <Input
+                          placeholder="https://..."
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -327,15 +357,20 @@ export default function EditWomenProfileForm({
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-4">
+            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] cursor-pointer"
               >
                 {t("form.buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={updateMutation.isPending}>
+              <Button
+                type="submit"
+                disabled={updateMutation.isPending}
+                className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs cursor-pointer"
+              >
                 {updateMutation.isPending
                   ? t("form.buttons.saving")
                   : t("form.buttons.save")}

@@ -69,28 +69,31 @@ export default function AddMonitoringDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <ClipboardList className="w-4 h-4" />
+        <Button variant="outline" className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5">
+          <ClipboardList className="w-3.5 h-3.5" />
           {buttonLabel || t("monitoring.addFollowUp")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("monitoring.title")}</DialogTitle>
-          <DialogDescription>{t("monitoring.description")}</DialogDescription>
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+            <ClipboardList className="w-4 h-4 text-[#1769AA]" />
+            {t("monitoring.title")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">{t("monitoring.description")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-3">
             <FormField
               control={form.control}
               name="monitoringDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("monitoring.monitoringDate")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("monitoring.monitoringDate")}</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -99,11 +102,11 @@ export default function AddMonitoringDialog({
               name="assessedBy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("monitoring.assessedBy")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("monitoring.assessedBy")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("monitoring.assessorPlaceholder")} {...field} />
+                    <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("monitoring.assessorPlaceholder")} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -113,11 +116,11 @@ export default function AddMonitoringDialog({
                 name="currentStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("monitoring.currentStatus")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("monitoring.currentStatus")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("monitoring.statusPlaceholder")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("monitoring.statusPlaceholder")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -126,11 +129,11 @@ export default function AddMonitoringDialog({
                 name="score"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("monitoring.score")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("monitoring.score")}</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="0-100" {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" placeholder="0-100" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -140,19 +143,19 @@ export default function AddMonitoringDialog({
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("support.register.remarks")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.remarks")}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder={t("monitoring.remarkPlaceholder")} rows={4} {...field} />
+                    <Textarea className="min-h-[60px] h-auto text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white resize-none" placeholder={t("monitoring.remarkPlaceholder")} rows={3} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
+              <Button type="button" variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={() => setOpen(false)}>
                 {t("form.buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
                 {isPending ? t("monitoring.adding") : t("monitoring.addEntry")}
               </Button>
             </div>

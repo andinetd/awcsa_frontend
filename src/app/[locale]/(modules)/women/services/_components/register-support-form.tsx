@@ -85,24 +85,24 @@ export default function RegisterSupportForm({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
-          <Plus className="w-4 h-4" />
+        <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+          <Plus className="w-3.5 h-3.5" />
           {t("support.register.title")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("support.register.title")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{t("support.register.title")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {t("support.register.description")}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 pt-3">
             {/* Client or Association Selection */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("support.register.beneficiaryInfo")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -111,7 +111,7 @@ export default function RegisterSupportForm({
                   name="clientId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("support.register.womanClient")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.womanClient")}</FormLabel>
                       <FormControl>
                         <WomanSelect
                           value={field.value?.toString()}
@@ -120,7 +120,7 @@ export default function RegisterSupportForm({
                           }
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -130,11 +130,12 @@ export default function RegisterSupportForm({
                   name="womenAssociationId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
                         {t("support.register.associationId")}
                       </FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           type="number"
                           placeholder={t(
                             "support.register.placeholder.associationId",
@@ -149,19 +150,19 @@ export default function RegisterSupportForm({
                           }
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-slate-500">
                 {t("support.register.beneficiaryNote")}
               </p>
             </div>
 
             {/* Service & Provider Information */}
-            <div className="space-y-4 pt-2">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("support.register.serviceInfo")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,7 +171,7 @@ export default function RegisterSupportForm({
                   name="serviceTypeId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("support.register.serviceType")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.serviceType")}</FormLabel>
                       <FormControl>
                         <ServiceTypeSelect
                           value={field.value?.toString()}
@@ -179,7 +180,7 @@ export default function RegisterSupportForm({
                           }
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -189,13 +190,13 @@ export default function RegisterSupportForm({
                   name="dateProvided"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
                         {t("support.register.dateProvided")}
                       </FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -205,18 +206,19 @@ export default function RegisterSupportForm({
                   name="provider"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
                         {t("support.register.providerName")}
                       </FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t(
                             "support.register.placeholder.provider",
                           )}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -226,16 +228,17 @@ export default function RegisterSupportForm({
                   name="amountOrQuantity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
                         {t("support.register.amountOrQuantity")}
                       </FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("support.register.placeholder.amount")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -243,8 +246,8 @@ export default function RegisterSupportForm({
             </div>
 
             {/* Location & Facilitator Information */}
-            <div className="space-y-4 pt-2">
-              <h3 className="text-lg font-medium">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("support.register.locationInfo")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -253,16 +256,17 @@ export default function RegisterSupportForm({
                   name="facilitatorCityId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
                         {t("support.register.facilitatorCityId")}
                       </FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("support.register.placeholder.cityId")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -272,16 +276,17 @@ export default function RegisterSupportForm({
                   name="subCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("support.register.subCity")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.subCity")}</FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t(
                             "support.register.placeholder.subCity",
                           )}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -291,49 +296,52 @@ export default function RegisterSupportForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("support.register.woreda")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.woreda")}</FormLabel>
                       <FormControl>
                         <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("support.register.placeholder.woreda")}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
               </div>
             </div>
 
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3">
               <FormField
                 control={form.control}
                 name="remark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("support.register.remarks")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.remarks")}</FormLabel>
                     <FormControl>
                       <Textarea
+                        className="min-h-[60px] h-auto text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white resize-none"
                         placeholder={t("support.register.placeholder.remarks")}
                         rows={3}
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-4">
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
                 onClick={() => setOpen(false)}
               >
                 {t("form.buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={registerMutation.isPending}>
+              <Button type="submit" disabled={registerMutation.isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
                 {registerMutation.isPending
                   ? t("form.buttons.registering")
                   : t("form.buttons.register")}

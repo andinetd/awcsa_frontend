@@ -193,16 +193,16 @@ export default function WomenAssociationForm({
     <Dialog open={open} onOpenChange={setOpen}>
       {!isEditing && (
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-primary hover:bg-primary/90">
-            <Plus className="w-4 h-4" />
+          <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("form.addButton")}
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
-            <Users className="w-6 h-6 text-primary" />
+      <DialogContent className="sm:max-w-[680px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+            <Users className="w-4 h-4 text-[#1769AA]" />
             {isEditing ? t("form.editTitle") : t("form.title")}
           </DialogTitle>
         </DialogHeader>
@@ -210,7 +210,7 @@ export default function WomenAssociationForm({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 pt-4"
+            className="space-y-4 pt-3"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -218,11 +218,11 @@ export default function WomenAssociationForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.name")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.name")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.placeholders.name")} {...field} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.placeholders.name")} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -231,22 +231,22 @@ export default function WomenAssociationForm({
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.type")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.type")}</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                           <SelectValue placeholder={t("form.placeholders.type")} />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
                         {ASSOCIATION_TYPES.map((type) => (
-                          <SelectItem key={type} value={type}>
+                          <SelectItem key={type} value={type} className="text-xs">
                             {t(`form.types.${type}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -258,7 +258,7 @@ export default function WomenAssociationForm({
                 name="subCity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.subCity")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.subCity")}</FormLabel>
                     <FormControl>
                       <SubCitySelect
                         value={field.value}
@@ -266,7 +266,7 @@ export default function WomenAssociationForm({
                         placeholder={t("form.placeholders.subCity")}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -275,7 +275,7 @@ export default function WomenAssociationForm({
                 name="woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.woreda")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.woreda")}</FormLabel>
                     <FormControl>
                       <WoredaSelect
                         subCity={subCity}
@@ -286,7 +286,7 @@ export default function WomenAssociationForm({
                         placeholder={t("form.placeholders.woreda")}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -298,11 +298,11 @@ export default function WomenAssociationForm({
                 name="block"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.block")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.block")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.placeholders.block")} {...field} value={field.value || ""} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.placeholders.block")} {...field} value={field.value || ""} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -311,11 +311,11 @@ export default function WomenAssociationForm({
                 name="houseNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.houseNumber")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.houseNumber")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("form.placeholders.houseNumber")} {...field} value={field.value || ""} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.placeholders.houseNumber")} {...field} value={field.value || ""} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -324,17 +324,18 @@ export default function WomenAssociationForm({
                 name="totalMembers"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.fields.totalMembers")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.totalMembers")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="0"
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                         placeholder={t("form.placeholders.totalMembers")}
                         {...field}
                         value={field.value ?? ""}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -345,11 +346,11 @@ export default function WomenAssociationForm({
               name="establishmentDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.establishmentDate")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.establishmentDate")}</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input type="date" className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -359,24 +360,25 @@ export default function WomenAssociationForm({
               name="objective"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.objective")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fields.objective")}</FormLabel>
                   <FormControl>
                     <Textarea
                       rows={3}
+                      className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white resize-none"
                       placeholder={t("form.placeholders.objective")}
                       {...field}
                       value={field.value || ""}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
 
-            <div className="space-y-3 rounded-md border p-4">
+            <div className="space-y-3 rounded-xs border border-[#E3E7EB] bg-[#F7F8FA] p-4">
               <div>
-                <FormLabel className="text-base">{t("form.committeeSection")}</FormLabel>
-                <p className="text-xs text-muted-foreground mt-1">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("form.committeeSection")}</FormLabel>
+                <p className="text-xs text-slate-500 mt-0.5">
                   {t("form.committeeHint")}
                 </p>
               </div>
@@ -384,11 +386,11 @@ export default function WomenAssociationForm({
               {WOMEN_LEADER_POSITIONS.map((position, index) => {
                 const rowRequired = index < 3;
                 return (
-                  <div key={position} className="rounded-md border bg-slate-50/50 p-3 space-y-2">
-                    <p className="text-sm font-medium">
+                  <div key={position} className="rounded-xs border border-[#E3E7EB] bg-white p-3 space-y-2">
+                    <p className="text-xs font-semibold text-[#0B1F3A]">
                       {index + 1}. {t(`form.leaderPositions.${position}`)}
                       {!rowRequired && (
-                        <span className="text-xs font-normal text-muted-foreground"> ({t("form.optional")})</span>
+                        <span className="text-[11px] font-normal text-slate-500"> ({t("form.optional")})</span>
                       )}
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -397,11 +399,11 @@ export default function WomenAssociationForm({
                         name={`leaders.${index}.fullName` as any}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-xs">{t("form.fields.leaderFullName")}</FormLabel>
+                            <FormLabel className="text-[11px] font-semibold text-slate-600">{t("form.fields.leaderFullName")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("form.placeholders.leaderFullName")} {...field} />
+                              <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.placeholders.leaderFullName")} {...field} />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-xs" />
                           </FormItem>
                         )}
                       />
@@ -410,11 +412,11 @@ export default function WomenAssociationForm({
                         name={`leaders.${index}.phoneNumber` as any}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-xs">{t("form.fields.leaderPhone")}</FormLabel>
+                            <FormLabel className="text-[11px] font-semibold text-slate-600">{t("form.fields.leaderPhone")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("form.placeholders.leaderPhone")} {...field} />
+                              <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("form.placeholders.leaderPhone")} {...field} />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-xs" />
                           </FormItem>
                         )}
                       />
@@ -423,23 +425,23 @@ export default function WomenAssociationForm({
                 );
               })}
               {leadersErrors?.message && !Array.isArray(leadersErrors) && (
-                <p className="text-sm font-medium text-destructive">
+                <p className="text-xs font-medium text-destructive">
                   {leadersErrors.message}
                 </p>
               )}
             </div>
 
-            <div className="flex justify-end gap-3 pt-6 border-t">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
+              <Button type="button" variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={() => setOpen(false)}>
                 {t("form.buttons.cancel")}
               </Button>
               {isLocked ? (
-                <span className="text-sm text-muted-foreground self-center">
+                <span className="text-xs text-slate-500 self-center">
                   {t("form.lockedNotice")}
                 </span>
               ) : (
-                <Button type="submit" disabled={isPending}>
-                  {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                <Button type="submit" disabled={isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
+                  {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
                   {t("form.buttons.save")}
                 </Button>
               )}

@@ -221,65 +221,65 @@ export default function AssociationMembersManager({
     !isLocked && groups.length < MAX_GROUPS && nextGroupNumber <= MAX_GROUPS;
 
   return (
-    <Card className="md:col-span-3">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+    <Card className="md:col-span-3 rounded-xs border border-[#E3E7EB] bg-white shadow-2xs">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-[#E3E7EB] pb-3">
         <div>
-          <CardTitle>{t("members.title")}</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
+          <CardTitle className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("members.title")}</CardTitle>
+          <p className="text-xs text-slate-500 mt-0.5">
             {t("members.description")}
           </p>
         </div>
         <div className="flex items-center gap-3 flex-wrap justify-end">
           {isDirty && (
-            <span className="text-xs text-amber-600">{t("members.unsaved")}</span>
+            <span className="text-xs font-medium text-amber-600 font-mono">{t("members.unsaved")}</span>
           )}
-          <span className="text-sm text-muted-foreground">
+          <span className="text-xs text-slate-500 font-mono">
             {t("members.filledCount", { count: filledCount })}
           </span>
           <Button
             onClick={handleSave}
             disabled={saveMutation.isPending || isLocked}
-            className="gap-2"
+            className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5"
           >
             {saveMutation.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Save className="w-4 h-4" />
+              <Save className="w-3.5 h-3.5" />
             )}
             {t("members.save")}
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-4">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div className="text-sm text-muted-foreground">
+          <div className="text-xs text-slate-500 font-mono">
             {t("groups.count", { count: groups.length, max: MAX_GROUPS })}
           </div>
           {canAddGroup && (
             <Button
               size="sm"
               variant="outline"
-              className="gap-2"
+              className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
               onClick={() => setAddOpen(true)}
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
               {t("groups.addButton")}
             </Button>
           )}
         </div>
 
         {groups.length === 0 ? (
-          <div className="rounded-xl border bg-slate-50/40 p-6 text-center text-sm text-muted-foreground">
+          <div className="rounded-xs border border-[#E3E7EB] bg-[#F7F8FA] p-6 text-center text-xs text-slate-500">
             {t("groups.empty")}
           </div>
         ) : (
           <Tabs value={activeGroup} onValueChange={setActiveGroup}>
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <TabsList className="flex-wrap h-auto">
+            <div className="flex items-center justify-between gap-2 flex-wrap pb-2">
+              <TabsList className="flex-wrap h-auto bg-slate-100/80 p-1 border border-[#E3E7EB] rounded-xs">
                 {groups.map((g) => (
-                  <TabsTrigger key={g.id} value={String(g.groupNumber)}>
+                  <TabsTrigger key={g.id} value={String(g.groupNumber)} className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-2.5">
                     {t("members.groupTab", { group: g.groupNumber })}
-                    <span className="ml-1 text-xs text-muted-foreground">
+                    <span className="ml-1 text-[11px] text-slate-500 font-mono">
                       ({g._count?.members ?? 0})
                     </span>
                   </TabsTrigger>
@@ -299,33 +299,33 @@ export default function AssociationMembersManager({
 
             {groups.map((g) => (
               <TabsContent key={g.id} value={String(g.groupNumber)}>
-                <div className="border rounded-xl overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead className="bg-slate-50">
+                <div className="border border-[#E3E7EB] rounded-xs overflow-hidden">
+                  <table className="w-full text-xs">
+                    <thead className="bg-[#F7F8FA] border-b border-[#E3E7EB]">
                       <tr>
-                        <th className="w-16 px-3 py-2 text-left font-semibold">
+                        <th className="w-16 px-3 py-2 text-left font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">
                           {t("members.serialNo")}
                         </th>
-                        <th className="px-3 py-2 text-left font-semibold">
+                        <th className="px-3 py-2 text-left font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">
                           {t("form.fields.memberFullName")}
                         </th>
-                        <th className="px-3 py-2 text-left font-semibold">
+                        <th className="px-3 py-2 text-left font-mono font-bold text-slate-600 uppercase tracking-wider text-[11px]">
                           {t("form.fields.memberPhone")}
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-[#E3E7EB]">
                       {Array.from({ length: ROWS_PER_GROUP }, (_, ri) => (
                         <tr
                           key={ri}
-                          className="border-t hover:bg-slate-50/50"
+                          className="hover:bg-slate-50/50"
                         >
-                          <td className="px-3 py-1.5 text-slate-500 font-medium">
+                          <td className="px-3 py-1.5 text-slate-500 font-mono text-xs">
                             {ri + 1}.
                           </td>
                           <td className="px-3 py-1.5">
                             <Input
-                              className="h-8"
+                              className="h-7 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               value={grid[g.groupNumber]?.[ri]?.fullName ?? ""}
                               onChange={(e) =>
                                 updateCell(
@@ -341,7 +341,7 @@ export default function AssociationMembersManager({
                           </td>
                           <td className="px-3 py-1.5">
                             <Input
-                              className="h-8"
+                              className="h-7 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               value={grid[g.groupNumber]?.[ri]?.phoneNumber ?? ""}
                               onChange={(e) =>
                                 updateCell(
@@ -463,31 +463,33 @@ function AddGroupDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-[420px]">
-        <DialogHeader>
-          <DialogTitle>{t("groups.addTitle")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-[420px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{t("groups.addTitle")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {t("groups.addDescription", { number: nextGroupNumber })}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-2 py-2">
-          <Label>{t("groups.nameLabel")}</Label>
+        <div className="space-y-1.5 py-2">
+          <Label className="text-xs font-semibold text-slate-700">{t("groups.nameLabel")}</Label>
           <Input
+            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={t("groups.namePlaceholder")}
           />
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="border-t border-[#E3E7EB] pt-4 gap-2">
+          <Button variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={onClose}>
             {t("form.buttons.cancel")}
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={mutation.isPending}
+            className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
           >
             {mutation.isPending && (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
             )}
             {t("groups.addButton")}
           </Button>
@@ -534,28 +536,29 @@ function RenameGroupDialog({
 
   return (
     <Dialog open={!!group} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-[420px]">
-        <DialogHeader>
-          <DialogTitle>{t("groups.renameTitle")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-[420px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{t("groups.renameTitle")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {t("groups.renameDescription", { number: group.groupNumber })}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-2 py-2">
-          <Label>{t("groups.nameLabel")}</Label>
+        <div className="space-y-1.5 py-2">
+          <Label className="text-xs font-semibold text-slate-700">{t("groups.nameLabel")}</Label>
           <Input
+            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={t("groups.namePlaceholder")}
           />
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="border-t border-[#E3E7EB] pt-4 gap-2">
+          <Button variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={onClose}>
             {t("form.buttons.cancel")}
           </Button>
-          <Button onClick={handleSubmit} disabled={mutation.isPending}>
+          <Button onClick={handleSubmit} disabled={mutation.isPending} className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs">
             {mutation.isPending && (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
             )}
             {t("groups.rename")}
           </Button>
@@ -599,10 +602,10 @@ function DeleteGroupDialog({
 
   return (
     <AlertDialog open={!!group} onOpenChange={(o) => !o && onClose()}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t("groups.deleteTitle")}</AlertDialogTitle>
-          <AlertDialogDescription>
+      <AlertDialogContent className="sm:max-w-[420px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <AlertDialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <AlertDialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">{t("groups.deleteTitle")}</AlertDialogTitle>
+          <AlertDialogDescription className="text-xs text-slate-500">
             {blocked
               ? t("groups.deleteBlocked", {
                   number: group.groupNumber,
@@ -611,15 +614,15 @@ function DeleteGroupDialog({
               : t("groups.deleteDescription", { number: group.groupNumber })}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t("delete.cancel")}</AlertDialogCancel>
+        <AlertDialogFooter className="border-t border-[#E3E7EB] pt-4 gap-2">
+          <AlertDialogCancel className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]">{t("delete.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={blocked || mutation.isPending}
-            className="bg-destructive hover:bg-destructive/90"
+            className="h-8 text-xs font-semibold rounded-xs bg-red-600 hover:bg-red-700 text-white shadow-2xs"
           >
             {mutation.isPending && (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
             )}
             {t("groups.delete")}
           </AlertDialogAction>

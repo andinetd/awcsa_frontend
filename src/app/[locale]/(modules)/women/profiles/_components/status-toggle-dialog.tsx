@@ -54,23 +54,24 @@ export default function StatusToggleDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-xs border border-[#E3E7EB] bg-white shadow-lg p-6">
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("status.title")}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-sm font-bold text-[#0B1F3A]">{t("status.title")}</AlertDialogTitle>
+          <AlertDialogDescription className="text-xs text-slate-500">
             {t("status.description", { status: newStatus })}{" "}
-            <strong>
+            <strong className="text-slate-800 font-semibold">
               {profile?.client.firstName} {profile?.client.lastName}
             </strong>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={statusMutation.isPending}>
+        <AlertDialogFooter className="gap-2">
+          <AlertDialogCancel disabled={statusMutation.isPending} className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]">
             {t("form.buttons.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={statusMutation.isPending}
+            className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
           >
             {statusMutation.isPending
               ? t("form.buttons.saving")

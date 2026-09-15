@@ -126,32 +126,32 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
     <Dialog open={open} onOpenChange={setOpen}>
       {!isEditing && (
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-primary hover:bg-primary/90">
-            <Plus className="w-4 h-4" />
+          <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("addButton")}
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-primary" />
+      <DialogContent className="sm:max-w-[500px] rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-[#1769AA]" />
             {isEditing ? "Edit Training" : t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-3">
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.firstName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.firstName")} {...field} disabled={isEditing} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.firstName")} {...field} disabled={isEditing} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -160,11 +160,11 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.lastName")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t("placeholders.lastName")} {...field} disabled={isEditing} />
+                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.lastName")} {...field} disabled={isEditing} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -174,18 +174,18 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
               name="trainingTopic"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.trainingTopic")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.trainingTopic")}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger><SelectValue placeholder={t("placeholders.selectTrainingTopic")} /></SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"><SelectValue placeholder={t("placeholders.selectTrainingTopic")} /></SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
                       {trainingTopics.map((topic) => (
-                        <SelectItem key={topic} value={topic}>{t(`trainingTopics.${topic}`)}</SelectItem>
+                        <SelectItem key={topic} value={topic} className="text-xs">{t(`trainingTopics.${topic}`)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
@@ -195,9 +195,9 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
                 name="startDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.startDate")}</FormLabel>
-                    <FormControl><Input type="date" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.startDate")}</FormLabel>
+                    <FormControl><Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} /></FormControl>
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -206,9 +206,9 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
                 name="completionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.completionDate")}</FormLabel>
-                    <FormControl><Input type="date" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.completionDate")}</FormLabel>
+                    <FormControl><Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} /></FormControl>
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -217,11 +217,11 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
               control={form.control}
               name="attended"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-center space-x-2 space-y-0 rounded-xs border border-[#E3E7EB] bg-[#F7F8FA] p-3">
                   <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    <Checkbox className="rounded-2xs border-[#BCD5EA] data-[state=checked]:bg-[#1769AA]" checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <div className="space-y-1 leading-none"><FormLabel>{t("fields.attended")}</FormLabel></div>
+                  <div className="space-y-1 leading-none"><FormLabel className="text-xs font-normal text-slate-700">{t("fields.attended")}</FormLabel></div>
                 </FormItem>
               )}
             />
@@ -230,18 +230,18 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.remark")}</FormLabel>
-                  <FormControl><Input placeholder={t("placeholders.remark")} {...field} /></FormControl>
-                  <FormMessage />
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.remark")}</FormLabel>
+                  <FormControl><Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.remark")} {...field} /></FormControl>
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-3 pt-6 border-t">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
+              <Button type="button" variant="outline" className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]" onClick={() => setOpen(false)}>
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              <Button type="submit" disabled={isPending} className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs">
+                {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
                 {t("buttons.save")}
               </Button>
             </div>
