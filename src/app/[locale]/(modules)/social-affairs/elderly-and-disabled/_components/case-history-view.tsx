@@ -37,11 +37,12 @@ import {
   CaseNote,
   BeneficiaryDocument,
 } from "@/api/beneficiaries/types-v2";
-import { FileText, FileCheck, FilePlus, Loader2, Plus } from "lucide-react";
+import { FileText, FileCheck, FilePlus, Loader2, Plus, History } from "lucide-react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { caseNoteSchema, CaseNoteFormValues } from "@/schemas/srs-beneficiaries";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CrossDepartmentHistory from "@/components/shared/cross-department-history";
 
 interface CaseHistoryViewProps {
   clientId: number;
@@ -97,6 +98,10 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
           <TabsTrigger value="documents">{t("documents")}</TabsTrigger>
           <TabsTrigger value="notes">Case Notes</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
+          <TabsTrigger value="cross-department" className="gap-1.5 font-medium text-primary">
+            <History className="w-3.5 h-3.5" />
+            Cross-Department History
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -277,17 +282,25 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
             <Empty message="No timeline events" />
           )}
         </TabsContent>
+
+        <TabsContent value="cross-department" className="pt-2">
+          <CrossDepartmentHistory clientId={clientId} defaultExpanded={true} embedded={true} />
+        </TabsContent>
       </Tabs>
     </div>
   );
 }
 
 function Header({ client }: { client: Beneficiary }) {
+  const fullName = [client.firstName, client.lastName, client.grandfatherName]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-          {client.firstName} {client.lastName}
+          {fullName}
         </h1>
         <p className="text-slate-500 mt-1">
           {client.faydaId ?? client.cityIdNumber ?? "—"} •{" "}
@@ -299,12 +312,17 @@ function Header({ client }: { client: Beneficiary }) {
 }
 
 function Overview({ client }: { client: Beneficiary }) {
+  const fullName = [client.firstName, client.lastName, client.grandfatherName]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Personal Information</CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-2 text-sm">
+      <CardContent className="grid grid-cols-2 gap-3 text-sm">
+        <Field label="Full Name" value={fullName} />
         <Field label="Phone" value={client.phoneNumber ?? "—"} />
         <Field label="Age" value={client.age?.toString() ?? "—"} />
         <Field label="Sex" value={client.sex ?? "—"} />
@@ -315,7 +333,16 @@ function Overview({ client }: { client: Beneficiary }) {
         <Field label="Education" value={client.educationLevel ?? "—"} />
         <Field label="Occupation" value={client.occupation ?? "—"} />
         <Field label="Employment" value={client.employmentStatus ?? "—"} />
-        <Field label="Marital" value={client.maritalStatus ?? "—"} />
+        <Field label="Marital Status" value={client.maritalStatus ?? "—"} />
+        {client.DisabilityProfile?.documentName && (
+          <div className="col-span-2 pt-2 border-t mt-1">
+            <div className="text-xs text-slate-500">Supporting Document / Medical Evidence</div>
+            <div className="font-medium text-slate-800 flex items-center gap-1.5 mt-1 bg-slate-50 px-3 py-2 rounded-md border border-slate-200 w-fit">
+              <FileText className="w-4 h-4 text-primary" />
+              <span>{client.DisabilityProfile.documentName}</span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

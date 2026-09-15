@@ -163,18 +163,19 @@
         "1": "Startup Capital Support",
         "2": "Monthly Financial Subsidy",
         "3": "Emergency Medical Fund",
-        "4": "Food & Nutrition Support",
-        "5": "School Uniform & Material Support",
-        "6": "Sanitary Supplies",
-        "7": "Skill Development Training",
-        "8": "Legal Counseling",
-        "9": "Psychosocial Counseling",
-        "10": "Temporary Shelter",
-        "11": "Medical Checkup & Treatment",
-        "12": "Health Insurance Coverage",
-        "13": "Public Transport Pass",
-        "14": "Disability Financial Grant",
-        "15": "Mobility Device Supply"
+        "4": "Public Transport Pass",
+        "5": "Disability Financial Grant",
+        "6": "Elderly Financial Support",
+        "7": "Food & Nutrition Support",
+        "8": "School Uniform & Material Support",
+        "9": "Sanitary Supplies",
+        "10": "Mobility Device Supply",
+        "11": "Skill Development Training",
+        "12": "Legal Counseling",
+        "13": "Psychosocial Counseling",
+        "14": "Temporary Shelter",
+        "15": "Medical Checkup & Treatment",
+        "16": "Health Insurance Coverage"
       },
       "categories": {
         "FINANCIAL": "Financial",
@@ -183,7 +184,8 @@
         "LEGAL": "Legal",
         "COUNSELING": "Counseling",
         "SHELTER": "Shelter",
-        "MEDICAL": "Medical"
+        "MEDICAL": "Medical",
+        "OTHER": "Other"
       },
       "form": {
         "title": "Register Support Service",

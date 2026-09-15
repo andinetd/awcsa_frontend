@@ -29,6 +29,7 @@ export const baseBeneficiarySchema = z.object({
   cityIdNumber: z.string().optional(),
   firstName: z.string().min(2, "First name is required"),
   lastName: z.string().min(2, "Last name is required"),
+  grandfatherName: z.string().optional(),
   phoneNumber: z.string().optional(),
   age: z.coerce.number().int().min(0).max(150).optional(),
   dateOfBirth: z.string().optional(),
@@ -36,7 +37,9 @@ export const baseBeneficiarySchema = z.object({
   educationLevel: z.string().optional(),
   occupation: z.string().optional(),
   employmentStatus: z.enum(["EMPLOYED", "UNEMPLOYED"]).optional(),
-  maritalStatus: z.enum(["MARRIED", "UNMARRIED"]).optional(),
+  maritalStatus: z
+    .enum(["MARRIED", "UNMARRIED", "DIVORCED", "WIDOWED"])
+    .optional(),
   familyMembersCount: z.coerce.number().int().min(0).optional(),
   address: z.string().optional(),
   subCity: z.string().optional(),
@@ -81,6 +84,9 @@ export const registerDisabledFormSchema = baseBeneficiarySchema
     requiresPhysicalAssistance: z.boolean().optional(),
     requiredAssistiveDevice: z.string().optional(),
     otherSupportRequirements: z.string().optional(),
+    documentName: z.string().optional(),
+    documentUrl: z.string().optional(),
+    documentBase64: z.string().optional(),
   });
 
 export type RegisterElderlyFormValues = z.infer<typeof registerElderlyFormSchema>;

@@ -76,13 +76,16 @@ const TRAINING_OPTIONS: TrainingField[] = [
 const editSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
+  grandfatherName: z.string().optional(),
   phoneNumber: z.string().optional(),
   age: z.coerce.number().int().min(0).max(150).optional(),
   sex: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
   educationLevel: z.string().optional(),
   occupation: z.string().optional(),
   employmentStatus: z.enum(["EMPLOYED", "UNEMPLOYED"]).optional(),
-  maritalStatus: z.enum(["MARRIED", "UNMARRIED"]).optional(),
+  maritalStatus: z
+    .enum(["MARRIED", "UNMARRIED", "DIVORCED", "WIDOWED"])
+    .optional(),
   familyMembersCount: z.coerce.number().int().min(0).optional(),
   subCity: z.string().optional(),
   woreda: z.string().optional(),
@@ -294,6 +297,7 @@ function EditBeneficiaryDialog({
     defaultValues: {
       firstName: beneficiary.firstName ?? "",
       lastName: beneficiary.lastName ?? "",
+      grandfatherName: beneficiary.grandfatherName ?? "",
       phoneNumber: beneficiary.phoneNumber ?? "",
       age: beneficiary.age ?? undefined,
       sex: beneficiary.sex ?? undefined,
@@ -370,6 +374,19 @@ function EditBeneficiaryDialog({
                     <FormLabel>{t("fields.lastName")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="grandfatherName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Grandfather Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} placeholder="Grandfather's name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -580,6 +597,8 @@ function EditBeneficiaryDialog({
                       <SelectContent>
                         <SelectItem value="MARRIED">Married</SelectItem>
                         <SelectItem value="UNMARRIED">Unmarried</SelectItem>
+                        <SelectItem value="DIVORCED">Divorced</SelectItem>
+                        <SelectItem value="WIDOWED">Widowed</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

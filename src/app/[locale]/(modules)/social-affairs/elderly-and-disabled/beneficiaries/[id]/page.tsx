@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import CaseHistoryView from "../../_components/case-history-view";
+import CrossDepartmentHistory from "@/components/shared/cross-department-history";
 
 export default function BeneficiaryProfilePage() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.profile");
@@ -36,6 +37,11 @@ export default function BeneficiaryProfilePage() {
         <span className="text-sm text-slate-500">{t("goBack")}</span>
       </div>
       <CaseHistoryView clientId={id} />
+
+      {/* Cross-department panel — shows support from Women, Edir, etc. */}
+      <div className="px-6 pb-6">
+        <CrossDepartmentHistory clientId={id} />
+      </div>
     </div>
   );
 }

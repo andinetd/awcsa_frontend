@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, CheckCircle2, XCircle, ShieldCheck } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, ShieldCheck, FileUp, X } from "lucide-react";
 import { toast } from "sonner";
 import {
   registerDisabledFormSchema,
@@ -75,6 +75,8 @@ const EMPLOYMENT_OPTIONS = [
 const MARITAL_OPTIONS = [
   { value: "MARRIED", label: "Married" },
   { value: "UNMARRIED", label: "Unmarried" },
+  { value: "DIVORCED", label: "Divorced" },
+  { value: "WIDOWED", label: "Widowed" },
 ];
 
 const WORKPLACE_OPTIONS = [
@@ -95,6 +97,7 @@ const DEFAULT_VALUES: any = {
   cityIdNumber: "",
   firstName: "",
   lastName: "",
+  grandfatherName: "",
   phoneNumber: "",
   age: undefined,
   dateOfBirth: "",
@@ -125,6 +128,8 @@ const DEFAULT_VALUES: any = {
   requiresPhysicalAssistance: false,
   requiredAssistiveDevice: "",
   otherSupportRequirements: "",
+  documentName: "",
+  documentBase64: "",
 };
 
 interface BeneficiaryFormBodyProps {
@@ -158,8 +163,29 @@ export function BeneficiaryFormBody({
   const registerElderly = useRegisterElderly();
   const registerDisabled = useRegisterDisabled();
   const faydaVerify = useFaydaVerify();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const faydaValue = form.watch("faydaId");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSelectedFile(file);
+    form.setValue("documentName", file.name);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = (reader.result as string).split(",")[1];
+      form.setValue("documentBase64", base64String);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleClearFile = () => {
+    setSelectedFile(null);
+    form.setValue("documentName", "");
+    form.setValue("documentBase64", "");
+  };
 
   useEffect(() => {
     if (!faydaValue) {
@@ -199,6 +225,7 @@ export function BeneficiaryFormBody({
       onSuccess: () => {
         toast.success(tSrs("registerSuccess"));
         form.reset(DEFAULT_VALUES);
+        setSelectedFile(null);
         setFaydaStatus("none");
         onSuccess?.();
       },
@@ -298,6 +325,23 @@ export function BeneficiaryFormBody({
                     <Input
                       placeholder={t("placeholders.lastName")}
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="grandfatherName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Grandfather Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Grandfather's name"
+                      {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -715,6 +759,42 @@ export function BeneficiaryFormBody({
                 </FormItem>
               )}
             />
+
+            {/* Supporting Document / File Attachment (Optional) */}
+            <div className="space-y-2 border border-dashed border-slate-300 rounded-lg p-4 bg-slate-50/50">
+              <FormLabel className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                <FileUp className="w-4 h-4 text-primary" />
+                Supporting Document / Medical Evidence (Optional)
+              </FormLabel>
+              <p className="text-xs text-slate-500">
+                Attach medical report, disability certificate, or supporting letter (PDF, PNG, JPG, DOCX - max 10MB)
+              </p>
+              <div className="flex items-center gap-3">
+                <Input
+                  type="file"
+                  accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+                  onChange={handleFileChange}
+                  className="bg-white text-xs file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                />
+                {selectedFile && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClearFile}
+                    className="text-xs text-destructive hover:bg-destructive/10"
+                  >
+                    <X className="w-3.5 h-3.5 mr-1" />
+                    Remove
+                  </Button>
+                )}
+              </div>
+              {selectedFile && (
+                <p className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                  ✓ Ready to upload: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+                </p>
+              )}
+            </div>
           </div>
         )}
 

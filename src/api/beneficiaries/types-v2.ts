@@ -2,7 +2,11 @@ export type BeneficiaryCategory = "ELDERLY" | "DISABLED";
 
 export type Sex = "MALE" | "FEMALE" | "OTHER";
 export type EmploymentStatus = "EMPLOYED" | "UNEMPLOYED";
-export type MaritalStatus = "MARRIED" | "UNMARRIED";
+export type MaritalStatus =
+  | "MARRIED"
+  | "UNMARRIED"
+  | "DIVORCED"
+  | "WIDOWED";
 export type WorkplaceCondition = "OWN_PRIVATE" | "KEBELE_PUBLIC" | "RENTED";
 export type DisabilitySeverity = "MILD" | "MODERATE" | "SEVERE" | "PROFOUND";
 export type VerificationStatus = "PENDING" | "VERIFIED" | "REJECTED";
@@ -136,6 +140,8 @@ export interface DisabilityProfileFull {
   workplaceCondition?: WorkplaceCondition | null;
   previousSupport?: string | null;
   supportConfirmed: boolean;
+  documentName?: string | null;
+  documentUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -268,6 +274,7 @@ export interface Beneficiary {
   cityIdNumber?: string | null;
   firstName: string;
   lastName: string;
+  grandfatherName?: string | null;
   phoneNumber?: string | null;
   age?: number | null;
   dateOfBirth?: string | null;
@@ -328,6 +335,7 @@ export interface CreateElderlyPayload {
   cityIdNumber?: string;
   firstName: string;
   lastName: string;
+  grandfatherName?: string;
   phoneNumber?: string;
   age?: number;
   dateOfBirth?: string;
@@ -363,6 +371,9 @@ export interface CreateDisabledPayload extends CreateElderlyPayload {
   requiresPhysicalAssistance?: boolean;
   requiredAssistiveDevice?: string;
   otherSupportRequirements?: string;
+  documentName?: string;
+  documentUrl?: string;
+  documentBase64?: string;
 }
 
 export interface CreateEligibilityPayload {

@@ -35,75 +35,81 @@ export const SERVICE_TYPES: ServiceTypeDefinition[] = [
   },
   {
     id: 4,
-    name: "Food & Nutrition Support",
-    category: "SUPPLIES",
-    frequency: "RECURRING_MONTHLY",
-  },
-  {
-    id: 5,
-    name: "School Uniform & Material Support",
-    category: "SUPPLIES",
-    frequency: "RECURRING_YEARLY",
-  },
-  {
-    id: 6,
-    name: "Sanitary Supplies",
-    category: "SUPPLIES",
-    frequency: "RECURRING_MONTHLY",
-  },
-  {
-    id: 7,
-    name: "Skill Development Training",
-    category: "TRAINING",
-    frequency: "ONE_TIME",
-  },
-  {
-    id: 8,
-    name: "Legal Counseling",
-    category: "LEGAL",
-    frequency: "AS_NEEDED",
-  },
-  {
-    id: 9,
-    name: "Psychosocial Counseling",
-    category: "COUNSELING",
-    frequency: "AS_NEEDED",
-  },
-  {
-    id: 10,
-    name: "Temporary Shelter",
-    category: "SHELTER",
-    frequency: "AS_NEEDED",
-  },
-  {
-    id: 11,
-    name: "Medical Checkup & Treatment",
-    category: "MEDICAL",
-    frequency: "AS_NEEDED",
-  },
-  {
-    id: 12,
-    name: "Health Insurance Coverage",
-    category: "MEDICAL",
-    frequency: "RECURRING_YEARLY",
-  },
-  {
-    id: 13,
     name: "Public Transport Pass",
     category: "FINANCIAL",
     frequency: "RECURRING_MONTHLY",
   },
   {
-    id: 14,
+    id: 5,
     name: "Disability Financial Grant",
     category: "FINANCIAL",
     frequency: "RECURRING_MONTHLY",
   },
   {
-    id: 15,
+    id: 6,
+    name: "Elderly Financial Support",
+    category: "FINANCIAL",
+    frequency: "RECURRING_MONTHLY",
+  },
+  {
+    id: 7,
+    name: "Food & Nutrition Support",
+    category: "SUPPLIES",
+    frequency: "RECURRING_MONTHLY",
+  },
+  {
+    id: 8,
+    name: "School Uniform & Material Support",
+    category: "SUPPLIES",
+    frequency: "RECURRING_YEARLY",
+  },
+  {
+    id: 9,
+    name: "Sanitary Supplies",
+    category: "SUPPLIES",
+    frequency: "RECURRING_MONTHLY",
+  },
+  {
+    id: 10,
     name: "Mobility Device Supply",
     category: "SUPPLIES",
     frequency: "AS_NEEDED",
+  },
+  {
+    id: 11,
+    name: "Skill Development Training",
+    category: "TRAINING",
+    frequency: "ONE_TIME",
+  },
+  {
+    id: 12,
+    name: "Legal Counseling",
+    category: "LEGAL",
+    frequency: "AS_NEEDED",
+  },
+  {
+    id: 13,
+    name: "Psychosocial Counseling",
+    category: "COUNSELING",
+    frequency: "AS_NEEDED",
+  },
+  {
+    id: 14,
+    name: "Temporary Shelter",
+    category: "SHELTER",
+    frequency: "AS_NEEDED",
+  },
+  {
+    id: 15,
+    name: "Medical Checkup & Treatment",
+    category: "MEDICAL",
+    frequency: "AS_NEEDED",
+  },
+  {
+    id: 16,
+    name: "Health Insurance Coverage",
+    category: "MEDICAL",
+    frequency: "RECURRING_YEARLY",
   },
 ];
 
@@ -119,13 +125,25 @@ export const getSupportServices = async (cityId?: string) => {
       params: cityId ? { cityId } : undefined,
     });
 
-    return response.data.map((item: any) => {
-      const def = SERVICE_TYPES.find((t) => t.id === item.serviceTypeId);
+    return (response.data || []).map((item: any) => {
+      const backendType = item.serviceType;
+      const def =
+        SERVICE_TYPES.find((t) => t.id === item.serviceTypeId) ||
+        SERVICE_TYPES.find(
+          (t) =>
+            t.name.toLowerCase() === backendType?.name?.toLowerCase(),
+        );
+
+      const serviceName =
+        backendType?.name || def?.name || `Service #${item.serviceTypeId}`;
+      const category = backendType?.category || def?.category || "OTHER";
+      const frequency = backendType?.frequency || def?.frequency || "AS_NEEDED";
+
       return {
         ...item,
-        serviceName: def?.name || `Service #${item.serviceTypeId}`,
-        category: def?.category,
-        frequency: def?.frequency,
+        serviceName,
+        category,
+        frequency,
       };
     });
   } catch (error: any) {

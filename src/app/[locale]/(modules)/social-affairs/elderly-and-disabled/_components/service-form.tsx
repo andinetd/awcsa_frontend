@@ -171,8 +171,14 @@ export default function ServiceForm() {
                     <SelectContent className="max-h-[300px]">
                       {SERVICE_TYPES.map((type) => (
                         <SelectItem key={type.id} value={type.id.toString()}>
-                          {tServices(`types.${type.id}`)} (
-                          {tServices(`categories.${type.category}`)})
+                          {tServices.has(`types.${type.id}`)
+                            ? tServices(`types.${type.id}`)
+                            : type.name}{" "}
+                          (
+                          {tServices.has(`categories.${type.category}`)
+                            ? tServices(`categories.${type.category}`)
+                            : type.category}
+                          )
                         </SelectItem>
                       ))}
                     </SelectContent>
