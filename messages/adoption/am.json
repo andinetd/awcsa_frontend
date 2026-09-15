@@ -451,7 +451,8 @@
       "TRANSIT_CENTER": "የጊዜያዊ ማቆያ ማዕከል",
       "ORPHANAGE": "የወላጅ አልባ ሕፃናት ማዕከል",
       "FOSTER_HOME": "የአሳዳጊ ቤት",
-      "SHELTER": "ጊዜያዊ መጠለያ"
+      "SHELTER": "ጊዜያዊ መጠለያ",
+      "MIXED": "የተቀላቀለ"
     },
     "card": {
       "viewDetails": "ዝርዝር መረጃ",
@@ -506,11 +507,6 @@
       "registerSuccess": "ተቋሙ በተሳካ ሁኔታ ተመዝግቧል!",
       "registerError": "ተቋሙን መመዝገብ አልተቻለም: {message}",
       "genericError": "ተቋሙን በመመዝገብ ላይ ስህተት ተከስቷል"
-    },
-    "types": {
-      "GOVERNMENT": "መንግስታዊ",
-      "NGO": "መንግስታዊ ያልሆነ / የግል",
-      "MIXED": "የተቀላቀለ"
     }
   },
   "children": {

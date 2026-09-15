@@ -451,7 +451,8 @@
       "TRANSIT_CENTER": "Transit Center",
       "ORPHANAGE": "Orphanage",
       "FOSTER_HOME": "Foster Home",
-      "SHELTER": "Temporary Shelter"
+      "SHELTER": "Temporary Shelter",
+      "MIXED": "Mixed"
     },
     "card": {
       "viewDetails": "View Details",
@@ -506,11 +507,6 @@
       "registerSuccess": "Care center registered successfully!",
       "registerError": "Failed to register care center: {message}",
       "genericError": "An error occurred while registering the care center."
-    },
-    "types": {
-      "GOVERNMENT": "Government",
-      "NGO": "NGO / Private",
-      "MIXED": "Mixed"
     }
   },
   "children": {

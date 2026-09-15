@@ -26,6 +26,28 @@ export const getChildren = async (): Promise<Child[]> => {
   return [];
 };
 
+export const getChildrenByStatus = async (status: string): Promise<Child[]> => {
+  const { token } = useAuthStore.getState();
+  const res = await axios.get(`${BASE_URL}/adoption/child/status/${status}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const resp = res.data;
+  if (Array.isArray(resp)) {
+    return resp;
+  } else if (resp?.data && Array.isArray(resp.data)) {
+    return resp.data;
+  } else if (resp?.content && Array.isArray(resp.content)) {
+    return resp.content;
+  } else if (resp?.children && Array.isArray(resp.children)) {
+    return resp.children;
+  }
+
+  return [];
+};
+
 export const getChildById = async (id: number): Promise<Child> => {
   const { token } = useAuthStore.getState();
   const res = await axios.get(`${BASE_URL}/adoption/child/${id}`, {

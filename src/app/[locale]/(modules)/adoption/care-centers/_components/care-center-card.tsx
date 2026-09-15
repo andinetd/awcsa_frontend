@@ -25,14 +25,34 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
   const getTypeLabel = (type?: string) => {
     if (!type) return "Care Facility";
     const upper = type.toUpperCase();
-    if (upper === "GOVERNMENT") return t("careCenters.types.GOVERNMENT");
-    if (upper === "NGO") return t("careCenters.types.NGO");
-    if (upper === "ADOPTION_CENTER") return t("careCenters.types.ADOPTION_CENTER");
-    if (upper === "TRANSIT_CENTER") return t("careCenters.types.TRANSIT_CENTER");
-    if (upper === "ORPHANAGE") return t("careCenters.types.ORPHANAGE");
-    if (upper === "FOSTER_HOME") return t("careCenters.types.FOSTER_HOME");
-    if (upper === "SHELTER") return t("careCenters.types.SHELTER");
-    return type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    try {
+      const translated = t(`careCenters.types.${upper}`);
+      if (translated && !translated.includes("careCenters.types")) {
+        return translated;
+      }
+    } catch {
+      // ignore
+    }
+    switch (upper) {
+      case "GOVERNMENT":
+        return "Government";
+      case "NGO":
+        return "NGO / Private";
+      case "ADOPTION_CENTER":
+        return "Adoption Center";
+      case "TRANSIT_CENTER":
+        return "Transit Center";
+      case "ORPHANAGE":
+        return "Orphanage";
+      case "FOSTER_HOME":
+        return "Foster Home";
+      case "SHELTER":
+        return "Temporary Shelter";
+      case "MIXED":
+        return "Mixed";
+      default:
+        return type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    }
   };
 
   return (

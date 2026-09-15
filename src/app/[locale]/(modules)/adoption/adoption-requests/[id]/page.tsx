@@ -50,7 +50,11 @@ import {
   CardTitle,
 } from "@/components/custom/custom-card";
 import { Baby, CheckCircle2, ArrowLeft } from "lucide-react";
-import { useGetMatchedChildDetails } from "@/hooks/adoption/adoption-requests";
+import {
+  useGetMatchedChildDetails,
+  useAdoptionApplicationsQuery,
+} from "@/hooks/adoption/adoption-requests";
+import { useQueryClient } from "@tanstack/react-query";
 
 function AdoptionRequestReviewPageContent() {
   const router = useRouter();
@@ -58,6 +62,7 @@ function AdoptionRequestReviewPageContent() {
   const searchParams = useSearchParams();
   const fromTab = searchParams.get("fromTab");
   const t = useTranslations("adoption");
+  const queryClient = useQueryClient();
 
   const setServiceDataId = useHomeVisitFormStore(
     (state) => state.setServiceDataId,
@@ -66,61 +71,14 @@ function AdoptionRequestReviewPageContent() {
   const [showMatch, setShowMatch] = useState(false);
   const [childId, setChildId] = useState("");
 
-  const [applications, setApplications] = useState<
-    BackendAdoptionApplication[]
-  >([]);
-  const [loadingApps, setLoadingApps] = useState(false);
+  const { data: applications = [], isLoading: loadingApps } =
+    useAdoptionApplicationsQuery("ALL");
 
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
   const [isMatchedChildDetailOpen, setIsMatchedChildDetailOpen] =
     useState(false);
 
   const token = useAuthStore((s) => s.token);
-
-  useEffect(() => {
-    let mounted = true;
-    async function fetchApplications() {
-      setLoadingApps(true);
-      try {
-        const res = await fetch(
-          `${BASE_URL}/adoption/applications?Status=ALL`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          },
-        );
-        if (!res.ok) {
-          const text = await res.text().catch(() => null);
-          toast.error(
-            `Failed to load application: ${res.status} ${res.statusText}` +
-              (text ? ` - ${text}` : ""),
-          );
-          return;
-        }
-        const data = await res.json().catch(() => null);
-        if (!mounted) return;
-        if (Array.isArray(data)) {
-          setApplications(data);
-        } else if (data && Array.isArray(data.items)) {
-          setApplications(data.items);
-        } else {
-          console.warn("Unexpected applications response shape", data);
-        }
-      } catch (err) {
-        console.error(err);
-        toast.error("Network error while loading applications");
-      } finally {
-        if (mounted) setLoadingApps(false);
-      }
-    }
-
-    fetchApplications();
-    return () => {
-      mounted = false;
-    };
-  }, [token]);
 
   const application: BackendAdoptionApplication | undefined = applications.find(
     (app) =>
@@ -406,10 +364,8 @@ function AdoptionRequestReviewPageContent() {
             (updatedApp as any).fieldComments =
               respBody.fieldComments ?? (prev as any).fieldComments;
 
-            setApplications((prevApps) => {
-              const arr = [...prevApps];
-              arr[idx] = updatedApp as any;
-              return arr;
+            queryClient.invalidateQueries({
+              queryKey: ["adoption", "applications"],
             });
 
             // refresh local UI state
@@ -526,10 +482,8 @@ function AdoptionRequestReviewPageContent() {
             (updatedApp as any).fieldComments =
               respBody.fieldComments ?? (prev as any).fieldComments;
 
-            setApplications((prevApps) => {
-              const arr = [...prevApps];
-              arr[idx] = updatedApp as any;
-              return arr;
+            queryClient.invalidateQueries({
+              queryKey: ["adoption", "applications"],
             });
 
             setFields(buildFieldsFromApp(updatedApp as any));
@@ -775,7 +729,7 @@ function AdoptionRequestReviewPageContent() {
         isOpen={isMatchModalOpen}
         onClose={() => setIsMatchModalOpen(false)}
         applicationId={application.applicationId}
-        applicantId={application.applicantInfo.id}
+        applicantId={application.applicantInfo.id ?? application.applicantInfo.applicantId}
       />
       <MatchedChildDetail
         isOpen={isMatchedChildDetailOpen}

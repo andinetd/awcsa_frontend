@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Building2,
   CheckCircle2,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DataTable } from "@/components/ui/data-table";
 import { useChildren } from "@/hooks/adoption/useChildren";
 import { getColumns } from "./_components/columns";
@@ -32,13 +34,60 @@ const FILTER_TABS: { key: ChildStatus | "ALL"; label: string; icon?: React.Eleme
   { key: "RETURNED", label: "Returned", icon: RotateCcw },
 ];
 
-export default function ChildrenPage() {
+const VALID_CHILD_STATUSES: (ChildStatus | "ALL")[] = [
+  "ALL",
+  "IN_CARE",
+  "FOUND",
+  "IN_ADERA",
+  "WITH_BLOOD_RELATIVE",
+  "ADOPTED",
+  "RETURNED",
+];
+
+function ChildrenPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlStatus = searchParams.get("status") as ChildStatus | "ALL" | null;
+  const initialStatus =
+    urlStatus && VALID_CHILD_STATUSES.includes(urlStatus) ? urlStatus : "ALL";
+
   const t = useTranslations("adoption");
   const { data: children = [], isLoading, refetch } = useChildren();
 
-  const [selectedStatus, setSelectedStatus] = useState<ChildStatus | "ALL">("ALL");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<ChildStatus | "ALL">(initialStatus);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [transferChild, setTransferChild] = useState<Child | null>(null);
+
+  // Synchronize status state when URL changes
+  useEffect(() => {
+    if (urlStatus && VALID_CHILD_STATUSES.includes(urlStatus) && urlStatus !== selectedStatus) {
+      setSelectedStatus(urlStatus);
+    } else if (!urlStatus && selectedStatus !== "ALL") {
+      setSelectedStatus("ALL");
+    }
+  }, [urlStatus, selectedStatus]);
+
+  const handleStatusChange = (status: ChildStatus | "ALL") => {
+    setSelectedStatus(status);
+    const params = new URLSearchParams(window.location.search);
+    if (status === "ALL") {
+      params.delete("status");
+    } else {
+      params.set("status", status);
+    }
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    const params = new URLSearchParams(window.location.search);
+    if (val.trim()) {
+      params.set("q", val);
+    } else {
+      params.delete("q");
+    }
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   // Filtered dataset
   const filteredChildren = useMemo(() => {
@@ -195,7 +244,7 @@ export default function ChildrenPage() {
             return (
               <button
                 key={tab.key}
-                onClick={() => setSelectedStatus(tab.key)}
+                onClick={() => handleStatusChange(tab.key)}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
                   active
                     ? "bg-[#0B1F3A] text-white border-[#0B1F3A]"
@@ -227,12 +276,12 @@ export default function ChildrenPage() {
               "Search by child name, facility code (e.g. FAC-001), or intake location..."
             }
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-8 text-xs h-8 bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs"
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={() => handleSearchChange("")}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
             >
               <X className="size-3.5" />
@@ -260,5 +309,21 @@ export default function ChildrenPage() {
         onSuccess={() => refetch()}
       />
     </div>
+  );
+}
+
+export default function ChildrenPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-6 max-w-7xl mx-auto space-y-6">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      }
+    >
+      <ChildrenPageContent />
+    </Suspense>
   );
 }

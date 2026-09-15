@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/custom/custom-card";
@@ -9,12 +9,14 @@ import { BASE_URL } from "@/lib/base-url";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
+import { useChildrenByStatus } from "@/hooks/adoption/useChildren";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ChildMatchingModalProps {
   isOpen: boolean;
   onClose: () => void;
   applicationId: number;
-  applicantId: number;
+  applicantId?: number;
 }
 
 export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
@@ -27,60 +29,14 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [matchNote, setMatchNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [availableChildren, setAvailableChildren] = useState<Child[]>([]);
 
   const t = useTranslations("adoption");
-
+  const queryClient = useQueryClient();
   const { token } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    async function fetchAvailableChildren() {
-      if (!isOpen) return;
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/adoption/child/status/IN_CARE`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const resp = response.data;
-        // Normalize response to an array of Child objects (handle various API shapes)
-        let childrenData: Child[] = [];
-
-        if (Array.isArray(resp)) {
-          childrenData = resp;
-        } else if (resp?.data && Array.isArray(resp.data)) {
-          childrenData = resp.data;
-        } else if (resp?.content && Array.isArray(resp.content)) {
-          childrenData = resp.content;
-        } else if (resp?.children && Array.isArray(resp.children)) {
-          childrenData = resp.children;
-        } else {
-          // attempt to find any array value on the response object as a last resort
-          try {
-            const possibleArray = Object.values(resp || {}).find((v) =>
-              Array.isArray(v),
-            );
-            if (Array.isArray(possibleArray)) {
-              childrenData = possibleArray as Child[];
-            }
-          } catch {
-            childrenData = [];
-          }
-        }
-
-        setAvailableChildren(childrenData);
-      } catch (error) {
-        console.error("Failed to fetch available children:", error);
-        toast.error(t("adoptionDetail.matching.fetchError"));
-      }
-    }
-    fetchAvailableChildren();
-  }, [isOpen, token]);
+  const { data: availableChildren = [], isLoading: loadingChildren } =
+    useChildrenByStatus(isOpen ? "IN_CARE" : "");
 
   if (!isOpen) return null;
 
@@ -137,6 +93,10 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
           "Content-Type": "application/json",
         },
       });
+
+      queryClient.invalidateQueries({ queryKey: ["adoption", "applications"] });
+      queryClient.invalidateQueries({ queryKey: ["adoption-children"] });
+      queryClient.invalidateQueries({ queryKey: ["adoption", "matches"] });
 
       setSelectedChild(null);
       setMatchNote("");

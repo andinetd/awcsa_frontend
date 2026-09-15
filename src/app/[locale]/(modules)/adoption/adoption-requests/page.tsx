@@ -17,12 +17,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth-store";
-import { BASE_URL } from "@/lib/base-url";
 import { useTranslations } from "next-intl";
 import { Search, Eye, FileText, X } from "lucide-react";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
+import { useAdoptionApplicationsQuery } from "@/hooks/adoption/adoption-requests";
+import type { BackendAdoptionApplication } from "@/api/adoption/adoption-requests/getAdoptionApplications";
+export type { BackendAdoptionApplication };
 
 export type BackendDocument = {
   publicId: string;
@@ -38,41 +39,40 @@ export type BackendApplicantInfo = {
   dateOfBirth?: string;
   phoneNumber?: string;
   cityIdNumber?: string;
-  spouseCityIdNumber?: string | null;
-  address?: string;
-  educationLevel?: string;
-  occupation?: string;
-  monthlyIncome?: number | null;
-  familyMembersCount?: number | null;
+  subCity?: string;
+  woreda?: string;
+  houseNumber?: string;
 };
 
 export type BackendApplicationInfo = {
-  eligibleDate?: string | null;
-  spouseAgreement?: boolean;
-  preferredChildren?: {
-    sex?: string;
-    number?: number;
-    ageRange?: { min?: number; max?: number };
-  } | null;
-  documents: BackendDocument[];
+  serviceDataId?: number;
+  submittedAt?: string;
+  status?: string;
+  rejectionReason?: string;
+  submissionDate?: string;
+  applicant?: {
+    applicantId?: number;
+    fullName?: string;
+    nationalId?: string;
+    phoneNumber?: string;
+    email?: string;
+  };
+  attachments?: Array<{
+    fileName?: string;
+    fileUrl?: string;
+    url?: string;
+    fileType?: string;
+  }>;
 };
 
 export type BackendReviewInfo = {
-  remark?: string | null;
-  subCity?: string | null;
-  woreda?: string | null;
+  region?: string;
+  subCity?: string;
+  woreda?: string;
+  kebele?: string;
+  houseNo?: string;
   createdAt?: string;
   updatedAt?: string;
-};
-
-export type BackendAdoptionApplication = {
-  applicationId: number;
-  status: string;
-  applicantInfo: BackendApplicantInfo;
-  applicationInfo: BackendApplicationInfo;
-  reviewInfo?: BackendReviewInfo;
-  matchedChildId?: number | null;
-  hasHomeVisitForm?: boolean;
 };
 
 const VALID_ADOPTION_TABS = [
@@ -125,8 +125,11 @@ const AdoptionRequestsContent = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const token = useAuthStore((s) => s.token);
   const t = useTranslations("adoption");
+  const {
+    data: applications = [],
+    isLoading: loading,
+  } = useAdoptionApplicationsQuery("ALL");
 
   // Keep tab in sync if URL query parameter changes
   useEffect(() => {
@@ -162,59 +165,6 @@ const AdoptionRequestsContent = () => {
     { value: "matched", label: t("adoptionRequests.tabs.matched") },
     { value: "denied", label: t("adoptionRequests.tabs.denied") },
   ];
-
-  const [applications, setApplications] = useState<
-    BackendAdoptionApplication[]
-  >([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    async function fetchApps() {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `${BASE_URL}/adoption/applications?Status=ALL`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
-          },
-        );
-
-        if (!res.ok) {
-          const text = await res.text().catch(() => null);
-          toast.error(
-            `${t("adoptionRequests.errors.loadFailed")}: ${res.status} ${res.statusText}` +
-              (text ? ` - ${text}` : ""),
-          );
-          setLoading(false);
-          return;
-        }
-
-        const data = await res.json().catch(() => null);
-        if (!mounted) return;
-        if (Array.isArray(data)) {
-          setApplications(data);
-        } else if (data && Array.isArray(data.items)) {
-          setApplications(data.items);
-        } else {
-          toast.error(t("adoptionRequests.errors.unexpectedShape"));
-        }
-      } catch (err) {
-        console.error(err);
-        toast.error(t("adoptionRequests.errors.networkError"));
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-
-    fetchApps();
-    return () => {
-      mounted = false;
-    };
-  }, [token, t]);
 
   const getStatusBadge = (
     status: string
