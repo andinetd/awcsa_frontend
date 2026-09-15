@@ -22,6 +22,19 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
   const t = useTranslations("adoption");
   const isGov = careCenter.type === "GOVERNMENT";
 
+  const getTypeLabel = (type?: string) => {
+    if (!type) return "Care Facility";
+    const upper = type.toUpperCase();
+    if (upper === "GOVERNMENT") return t("careCenters.types.GOVERNMENT");
+    if (upper === "NGO") return t("careCenters.types.NGO");
+    if (upper === "ADOPTION_CENTER") return t("careCenters.types.ADOPTION_CENTER");
+    if (upper === "TRANSIT_CENTER") return t("careCenters.types.TRANSIT_CENTER");
+    if (upper === "ORPHANAGE") return t("careCenters.types.ORPHANAGE");
+    if (upper === "FOSTER_HOME") return t("careCenters.types.FOSTER_HOME");
+    if (upper === "SHELTER") return t("careCenters.types.SHELTER");
+    return type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
   return (
     <div className="rounded-sm border border-[#E3E7EB] bg-white hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between border-l-3 border-l-[#1769AA] p-4">
       <div className="space-y-3">
@@ -43,7 +56,7 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
               "shrink-0"
             )}
           >
-            {t(`careCenters.types.${careCenter.type}`) || careCenter.type}
+            {getTypeLabel(careCenter.type)}
           </span>
         </div>
 

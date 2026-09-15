@@ -444,6 +444,15 @@
     "error": "ተቋማቱን በመጫን ላይ ስህተት ተከስቷል",
     "noCareCenters": "ምንም የሕፃናት ማሳደጊያ ተቋማት አልተገኙም",
     "addNew": "አዲስ ተቋም ጨምር",
+    "types": {
+      "GOVERNMENT": "የመንግስት",
+      "NGO": "የግል / መንግስታዊ ያልሆነ",
+      "ADOPTION_CENTER": "የጉዲፈቻ ማዕከል",
+      "TRANSIT_CENTER": "የጊዜያዊ ማቆያ ማዕከል",
+      "ORPHANAGE": "የወላጅ አልባ ሕፃናት ማዕከል",
+      "FOSTER_HOME": "የአሳዳጊ ቤት",
+      "SHELTER": "ጊዜያዊ መጠለያ"
+    },
     "card": {
       "viewDetails": "ዝርዝር መረጃ",
       "age": "ዕድሜ"

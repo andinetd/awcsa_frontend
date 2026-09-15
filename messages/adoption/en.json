@@ -444,6 +444,15 @@
     "error": "Error loading care centers.",
     "noCareCenters": "No care centers found.",
     "addNew": "Add New Care Center",
+    "types": {
+      "GOVERNMENT": "Government",
+      "NGO": "NGO / Private",
+      "ADOPTION_CENTER": "Adoption Center",
+      "TRANSIT_CENTER": "Transit Center",
+      "ORPHANAGE": "Orphanage",
+      "FOSTER_HOME": "Foster Home",
+      "SHELTER": "Temporary Shelter"
+    },
     "card": {
       "viewDetails": "View Details",
       "age": "Age"

@@ -13,6 +13,8 @@ import { Hash, MapPin, Phone, User, Mail, Home } from "lucide-react";
 import React from "react";
 import { formatAge } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { uiTokens } from "@/styles/design-system";
+import { cn } from "@/lib/utils";
 
 interface CareCenterDetailsDialogProps {
   careCenter: NewCareCenterSchemaType | null;
@@ -28,6 +30,21 @@ const CareCenterDetailsDialog: React.FC<CareCenterDetailsDialogProps> = ({
   const t = useTranslations("adoption");
   if (!careCenter) return null;
 
+  const isGov = careCenter.type === "GOVERNMENT";
+
+  const getTypeLabel = (type?: string) => {
+    if (!type) return "Care Facility";
+    const upper = type.toUpperCase();
+    if (upper === "GOVERNMENT") return t("careCenters.types.GOVERNMENT");
+    if (upper === "NGO") return t("careCenters.types.NGO");
+    if (upper === "ADOPTION_CENTER") return t("careCenters.types.ADOPTION_CENTER");
+    if (upper === "TRANSIT_CENTER") return t("careCenters.types.TRANSIT_CENTER");
+    if (upper === "ORPHANAGE") return t("careCenters.types.ORPHANAGE");
+    if (upper === "FOSTER_HOME") return t("careCenters.types.FOSTER_HOME");
+    if (upper === "SHELTER") return t("careCenters.types.SHELTER");
+    return type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
@@ -35,13 +52,12 @@ const CareCenterDetailsDialog: React.FC<CareCenterDetailsDialogProps> = ({
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
             {careCenter.name}
             <span
-              className={`text-xs px-2 py-1 rounded-full font-normal ${
-                careCenter.type === "GOVERNMENT"
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-green-100 text-green-700"
-              }`}
+              className={cn(
+                uiTokens.statusTag.base,
+                isGov ? uiTokens.statusTag.primary : uiTokens.statusTag.neutral
+              )}
             >
-              {t(`careCenters.types.${careCenter.type}`)}
+              {getTypeLabel(careCenter.type)}
             </span>
           </DialogTitle>
           <DialogDescription>{t("careCenters.dialog.title")}</DialogDescription>
