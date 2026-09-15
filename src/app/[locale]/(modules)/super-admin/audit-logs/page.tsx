@@ -45,42 +45,54 @@ export default function AuditLogsPage() {
   };
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+    <div className="h-full flex-1 flex-col space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
+      {/* Header & Breadcrumb */}
+      <div className="flex flex-col gap-1 border-b border-[#E3E7EB] pb-4">
+        <div className="flex items-center gap-2 text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
+          <span>SUPER ADMIN</span>
+          <span>/</span>
+          <span className="text-[#1769AA] font-bold">{t("title")}</span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-1">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A] font-mono uppercase">
+              {t("title")}
+            </h1>
+            <p className="text-xs text-slate-500 font-sans mt-0.5">
+              {t("description")}
+            </p>
+          </div>
         </div>
       </div>
 
       {isFiltered && (
-        <div className="flex flex-wrap items-center gap-2 rounded-md border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-slate-700">
-          <span className="font-medium">{t("filterBanner.label")}</span>
+        <div className="flex flex-wrap items-center gap-2 rounded-xs border border-[#BCD5EA] bg-[#E8F2FA]/60 px-3.5 py-2 text-xs text-slate-700 shadow-2xs">
+          <span className="font-semibold text-[#0B1F3A]">{t("filterBanner.label")}</span>
           {initialEntityType && (
-            <span className="rounded-full bg-white border px-2.5 py-0.5 text-xs font-mono">
+            <span className="rounded-xs bg-white border border-[#BCD5EA] px-2 py-0.5 text-[11px] font-mono text-[#0B1F3A]">
               {t("filterBanner.entityType", { value: initialEntityType })}
             </span>
           )}
           {initialEntityId !== undefined && !Number.isNaN(initialEntityId) && (
-            <span className="rounded-full bg-white border px-2.5 py-0.5 text-xs font-mono">
+            <span className="rounded-xs bg-white border border-[#BCD5EA] px-2 py-0.5 text-[11px] font-mono text-[#0B1F3A]">
               {t("filterBanner.entityId", { value: initialEntityId })}
             </span>
           )}
           <Button
             size="sm"
             variant="ghost"
-            className="ml-auto gap-1"
+            className="ml-auto h-7 px-2.5 text-xs rounded-xs border border-[#BCD5EA] text-[#1769AA] hover:bg-[#E8F2FA] gap-1"
             onClick={clearFilter}
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-3 w-3" />
             {t("filterBanner.clear")}
           </Button>
         </div>
       )}
 
       {loading ? (
-        <div className="flex h-[400px] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin" />
+        <div className="flex h-[350px] items-center justify-center border border-[#E3E7EB] rounded-xs bg-white">
+          <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
         </div>
       ) : (
         <AuditLogTable logs={logs} />

@@ -16,34 +16,82 @@ export default function LandingPageCMS() {
   if (isLoading) {
     return (
       <div className="flex h-[400px] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
       </div>
     );
   }
 
   return (
-    <div className="h-full flex-1 flex-col max-w-7xl mx-auto w-full space-y-8 p-8 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+    <div className="h-full flex-1 flex-col max-w-7xl mx-auto w-full space-y-6 p-6 md:p-8">
+      {/* Header & Breadcrumb */}
+      <div className="flex flex-col gap-1 border-b border-[#E3E7EB] pb-4">
+        <div className="flex items-center gap-2 text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
+          <span>SUPER ADMIN</span>
+          <span>/</span>
+          <span className="text-[#1769AA] font-bold">{t("title")}</span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-1">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A] font-mono uppercase">
+              {t("title")}
+            </h1>
+            <p className="text-xs text-slate-500 font-sans mt-0.5">
+              {t("description")}
+            </p>
+          </div>
         </div>
       </div>
 
       <Tabs defaultValue="hero" className="space-y-4">
-        <TabsList className="bg-muted/50 p-1">
-          <TabsTrigger value="hero">{t("sections.hero")}</TabsTrigger>
-          <TabsTrigger value="services">{t("sections.services")}</TabsTrigger>
-          <TabsTrigger value="testimonials">
+        <TabsList className="bg-slate-100/80 p-1 border border-[#E3E7EB] rounded-xs h-auto flex flex-wrap gap-1">
+          <TabsTrigger
+            value="hero"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.hero")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="services"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.services")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="testimonials"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
             {t("sections.testimonials")}
           </TabsTrigger>
-          <TabsTrigger value="gallery">{t("sections.gallery")}</TabsTrigger>
-          <TabsTrigger value="social">{t("sections.social")}</TabsTrigger>
-          <TabsTrigger value="partners">{t("sections.partners")}</TabsTrigger>
-          <TabsTrigger value="quickLinks">
+          <TabsTrigger
+            value="gallery"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.gallery")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="social"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.social")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="partners"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.partners")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="quickLinks"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
             {t("sections.quickLinks")}
           </TabsTrigger>
-          <TabsTrigger value="contact">{t("sections.contact")}</TabsTrigger>
+          <TabsTrigger
+            value="contact"
+            className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+          >
+            {t("sections.contact")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="hero" className="space-y-4">

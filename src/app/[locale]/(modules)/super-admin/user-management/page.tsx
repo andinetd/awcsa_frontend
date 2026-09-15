@@ -132,31 +132,56 @@ export default function UserManagementPage() {
   });
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+    <div className="h-full flex-1 flex-col space-y-6 p-6 md:p-8 max-w-7xl mx-auto w-full">
+      {/* Header & Breadcrumb */}
+      <div className="flex flex-col gap-1 border-b border-[#E3E7EB] pb-4">
+        <div className="flex items-center gap-2 text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
+          <span>SUPER ADMIN</span>
+          <span>/</span>
+          <span className="text-[#1769AA] font-bold">{t("title")}</span>
         </div>
-      </div>
-
-      <Tabs value={tab} onValueChange={handleTabChange}>
-        <div className="flex items-center justify-between">
-          <TabsList>
-            <TabsTrigger value="users">{t("tabs.users")}</TabsTrigger>
-            <TabsTrigger value="roles">{t("tabs.roles")}</TabsTrigger>
-          </TabsList>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-1">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A] font-mono uppercase">
+              {t("title")}
+            </h1>
+            <p className="text-xs text-slate-500 font-sans mt-0.5">
+              {t("description")}
+            </p>
+          </div>
           {tab === "users" && (
-            <Button onClick={handleAddUser}>
-              <Plus className="mr-2 h-4 w-4" /> {t("addUser")}
+            <Button
+              onClick={handleAddUser}
+              className="h-8 rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white text-xs font-semibold shadow-2xs gap-1.5 px-3 self-start sm:self-auto"
+            >
+              <Plus className="h-3.5 w-3.5" /> {t("addUser")}
             </Button>
           )}
         </div>
+      </div>
 
-        <TabsContent value="users" className="space-y-4">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+      <Tabs value={tab} onValueChange={handleTabChange} className="space-y-4">
+        <div className="flex items-center justify-between">
+          <TabsList className="bg-slate-100/80 p-1 border border-[#E3E7EB] rounded-xs h-9">
+            <TabsTrigger
+              value="users"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+            >
+              {t("tabs.users")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="roles"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+            >
+              {t("tabs.roles")}
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="users" className="space-y-4 mt-0">
+          <div className="flex flex-col gap-2.5 md:flex-row md:items-center p-3 bg-white border border-[#E3E7EB] rounded-xs shadow-2xs">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
               <Input
                 placeholder={ft("searchPlaceholder")}
                 value={searchInput}
@@ -164,7 +189,7 @@ export default function UserManagementPage() {
                   setSearchInput(e.target.value);
                   setPage(1);
                 }}
-                className="pl-9"
+                className="pl-8 h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
               />
             </div>
             <Select
@@ -174,13 +199,13 @@ export default function UserManagementPage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="md:w-[160px]">
+              <SelectTrigger className="md:w-[150px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                 <SelectValue placeholder={ft("status")} />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{ft("allStatuses")}</SelectItem>
+              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                <SelectItem value="all" className="text-xs">{ft("allStatuses")}</SelectItem>
                 {ACTIVE_STATUS.filter((s) => s).map((s) => (
-                  <SelectItem key={s} value={s}>
+                  <SelectItem key={s} value={s} className="text-xs">
                     {ft(`statuses.${s}`)}
                   </SelectItem>
                 ))}
@@ -193,13 +218,13 @@ export default function UserManagementPage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="md:w-[200px]">
+              <SelectTrigger className="md:w-[180px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                 <SelectValue placeholder={ft("role")} />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{ft("allRoles")}</SelectItem>
+              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                <SelectItem value="all" className="text-xs">{ft("allRoles")}</SelectItem>
                 {formData?.roles.map((role) => (
-                  <SelectItem key={role.id} value={String(role.id)}>
+                  <SelectItem key={role.id} value={String(role.id)} className="text-xs">
                     {role.name.replace(/_/g, " ")}
                   </SelectItem>
                 ))}
@@ -212,13 +237,13 @@ export default function UserManagementPage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="md:w-[180px]">
+              <SelectTrigger className="md:w-[170px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                 <SelectValue placeholder={ft("department")} />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{ft("allDepartments")}</SelectItem>
+              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                <SelectItem value="all" className="text-xs">{ft("allDepartments")}</SelectItem>
                 {DEPARTMENTS.filter((d) => d).map((d) => (
-                  <SelectItem key={d} value={d}>
+                  <SelectItem key={d} value={d} className="text-xs">
                     {t(`dialog.departments.${d}`)}
                   </SelectItem>
                 ))}
@@ -228,27 +253,33 @@ export default function UserManagementPage() {
               status !== "all" ||
               roleFilter !== "all" ||
               department !== "all") && (
-              <Button variant="outline" onClick={resetFilters}>
+              <Button
+                variant="outline"
+                onClick={resetFilters}
+                className="h-8 px-3 text-xs rounded-xs border-[#E3E7EB] text-slate-600 hover:bg-slate-50"
+              >
                 {ft("clear")}
               </Button>
             )}
           </div>
 
           {isLoading ? (
-            <div className="flex h-[400px] items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex h-[350px] items-center justify-center border border-[#E3E7EB] rounded-xs bg-white">
+              <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
             </div>
           ) : (
-            <DataTable
-              data={users}
-              columns={columns}
-              manualPagination
-              page={page}
-              onPageChange={setPage}
-              pageSize={pageSize}
-              onPageSizeChange={setPageSize}
-              totalRows={total}
-            />
+            <div className="border border-[#E3E7EB] rounded-xs bg-white shadow-2xs overflow-hidden">
+              <DataTable
+                data={users}
+                columns={columns}
+                manualPagination
+                page={page}
+                onPageChange={setPage}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                totalRows={total}
+              />
+            </div>
           )}
         </TabsContent>
 

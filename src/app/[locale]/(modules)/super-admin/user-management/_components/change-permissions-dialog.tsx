@@ -145,10 +145,10 @@ export function ChangePermissionsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col p-0 rounded-xs border border-[#E3E7EB] bg-white shadow-lg">
+        <DialogHeader className="p-5 pb-3 border-b border-[#E3E7EB]">
+          <DialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">{t("title")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {selectedRoleName
               ? t("descriptionWithRole", {
                   role: selectedRoleName.replace(/_/g, " "),
@@ -164,7 +164,7 @@ export function ChangePermissionsDialog({
           <div className="space-y-6">
             {!roleId && (
               <div className="max-w-md">
-                <Label className="mb-2 block">{t("selectRole")}</Label>
+                <Label className="mb-1.5 block text-xs font-semibold text-slate-700">{t("selectRole")}</Label>
                 <Select
                   value={selectedRoleId}
                   onValueChange={(value) => {
@@ -176,12 +176,12 @@ export function ChangePermissionsDialog({
                   }}
                   disabled={loadingFormData}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                     <SelectValue placeholder={t("chooseRole")} />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                     {formData?.roles.map((role) => (
-                      <SelectItem key={role.id} value={String(role.id)}>
+                      <SelectItem key={role.id} value={String(role.id)} className="text-xs">
                         {role.name.replace(/_/g, " ")}
                       </SelectItem>
                     ))}
@@ -191,10 +191,10 @@ export function ChangePermissionsDialog({
             )}
 
             {selectedRoleId && (
-              <Alert className="bg-amber-50 border-amber-200 text-amber-800">
+              <Alert className="rounded-xs bg-amber-50 border border-amber-200 text-amber-800 p-3">
                 <ShieldAlert className="h-4 w-4 text-amber-800" />
-                <AlertTitle>{t("warningTitle")}</AlertTitle>
-                <AlertDescription>
+                <AlertTitle className="text-xs font-semibold font-mono uppercase tracking-wider">{t("warningTitle")}</AlertTitle>
+                <AlertDescription className="text-xs mt-0.5">
                   {t("warningDesc")}
                   {typeof selectedRole?.userCount === "number" && (
                     <span>
@@ -209,7 +209,7 @@ export function ChangePermissionsDialog({
             {selectedRoleId &&
               (isLoading ? (
                 <div className="flex justify-center p-12">
-                  <Loader2 className="h-8 w-8 animate-spin" />
+                  <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
                 </div>
               ) : (
                 <PermissionsMatrix
@@ -223,16 +223,21 @@ export function ChangePermissionsDialog({
           </div>
         </div>
 
-        <DialogFooter className="p-6 border-t bg-slate-50/50">
+        <DialogFooter className="p-4 border-t border-[#E3E7EB] bg-slate-50/50 flex items-center justify-end gap-2">
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
+            className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
           >
             {t("cancel")}
           </Button>
-          <Button onClick={onSave} disabled={isSaving || !selectedRoleId}>
-            {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button
+            onClick={onSave}
+            disabled={isSaving || !selectedRoleId}
+            className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
+          >
+            {isSaving && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
             {t("save")}
           </Button>
         </DialogFooter>

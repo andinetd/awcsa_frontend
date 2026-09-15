@@ -122,40 +122,45 @@ export function ChangeRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-w-md rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+          <DialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
+            {t("title")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {t.rich("description", {
               email: user.email,
               strong: (chunks: React.ReactNode) => (
-                <strong className="font-bold">{chunks}</strong>
+                <strong className="font-semibold text-slate-800">{chunks}</strong>
               ),
             })}
           </DialogDescription>
         </DialogHeader>
 
         {isSelf && (
-          <Alert className="bg-amber-50 border-amber-200 text-amber-800">
+          <Alert className="rounded-xs bg-amber-50 border border-amber-200 text-amber-800 p-3">
             <ShieldAlert className="h-4 w-4 text-amber-800" />
-            <AlertTitle className="text-sm">{t("selfWarningTitle")}</AlertTitle>
-            <AlertDescription className="text-xs">
+            <AlertTitle className="text-xs font-semibold font-mono uppercase tracking-wider">{t("selfWarningTitle")}</AlertTitle>
+            <AlertDescription className="text-xs mt-0.5">
               {t("selfWarningDesc")}
             </AlertDescription>
           </Alert>
         )}
 
         {loadingFormData ? (
-          <div className="flex justify-center p-4">
-            <Loader2 className="h-8 w-8 animate-spin" />
+          <div className="flex justify-center p-6">
+            <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-slate-500 font-medium">
                 {t("currentRole")}:
               </span>
-              <Badge variant="outline">
+              <Badge
+                variant="outline"
+                className="rounded-xs font-mono text-[11px] font-medium border border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]"
+              >
                 {(currentRole?.name || user.employee.role.name).replace(
                   /_/g,
                   " ",
@@ -170,36 +175,36 @@ export function ChangeRoleDialog({
                   name="roleId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("roleLabel")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("roleLabel")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                             <SelectValue placeholder={t("selectRole")} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                           {formData?.roles.map((role) => (
-                            <SelectItem key={role.id} value={String(role.id)}>
+                            <SelectItem key={role.id} value={String(role.id)} className="text-xs">
                               {role.name.replace(/_/g, " ")}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
 
                 {roleChanged && (
-                  <Alert className="bg-blue-50 border-blue-200 text-blue-800">
-                    <ShieldCheck className="h-4 w-4 text-blue-800" />
-                    <AlertTitle className="text-sm">
+                  <Alert className="rounded-xs bg-[#E8F2FA] border border-[#BCD5EA] text-[#0B1F3A] p-3">
+                    <ShieldCheck className="h-4 w-4 text-[#1769AA]" />
+                    <AlertTitle className="text-xs font-semibold font-mono uppercase tracking-wider text-[#0B1F3A]">
                       {t("targetTitle")}
                     </AlertTitle>
-                    <AlertDescription className="text-xs">
+                    <AlertDescription className="text-xs text-slate-600 mt-0.5">
                       {t("targetPermissions", {
                         count: targetRoleDetails?.assignedPermissions?.length ??
                           0,
@@ -210,10 +215,22 @@ export function ChangeRoleDialog({
                   </Alert>
                 )}
 
-                <DialogFooter>
-                  <Button type="submit" disabled={isSaving}>
+                <DialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onOpenChange(false)}
+                    className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSaving}
+                    className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
+                  >
                     {isSaving && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
                     )}
                     {t("saveChanges")}
                   </Button>

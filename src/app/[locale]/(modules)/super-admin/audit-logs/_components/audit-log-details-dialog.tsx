@@ -32,31 +32,31 @@ export function AuditLogDetailsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+          <DialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">{t("title")}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">{t("description")}</DialogDescription>
         </DialogHeader>
 
         {isLoading ? (
           <div className="flex justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin" />
+            <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
           </div>
         ) : log ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Metadata Grid */}
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-3.5 bg-slate-50 border border-[#E3E7EB] rounded-xs text-xs">
               <div>
-                <span className="font-semibold text-gray-500 block">
+                <span className="font-semibold text-slate-500 text-[11px] uppercase font-mono block">
                   {t("id")}
                 </span>
-                <span>{log.id}</span>
+                <span className="font-mono text-slate-700">{log.id}</span>
               </div>
               <div>
-                <span className="font-semibold text-gray-500 block">
+                <span className="font-semibold text-slate-500 text-[11px] uppercase font-mono block">
                   {t("time")}
                 </span>
-                <span className="font-mono">
+                <span className="font-mono text-slate-700">
                   {format(
                     new Date(log.createdAt),
                     t("formats.dateTime") || "MMM d, yyyy HH:mm:ss",
@@ -64,62 +64,62 @@ export function AuditLogDetailsDialog({
                 </span>
               </div>
               <div>
-                <span className="font-semibold text-gray-500 block">
+                <span className="font-semibold text-slate-500 text-[11px] uppercase font-mono block">
                   {t("action")}
                 </span>
-                <span className="font-mono">{log.action}</span>
+                <span className="font-mono font-semibold text-[#1769AA]">{log.action}</span>
               </div>
               <div>
-                <span className="font-semibold text-gray-500 block">
+                <span className="font-semibold text-slate-500 text-[11px] uppercase font-mono block">
                   {t("entity")}
                 </span>
-                <span>
+                <span className="text-[#0B1F3A] font-medium">
                   {log.entityType}{" "}
                   {t.rich("entityId", {
                     id: log.entityId,
                   })}
                 </span>
               </div>
-              <div>
-                <span className="font-semibold text-gray-500 block">
+              <div className="col-span-2">
+                <span className="font-semibold text-slate-500 text-[11px] uppercase font-mono block">
                   {t("actor")}
                 </span>
-                <span>
+                <span className="text-[#0B1F3A] font-medium">
                   {log.user?.employee?.firstName} {log.user?.employee?.lastName}
-                  <br />
-                  <span className="text-muted-foreground text-xs">
-                    {log.user?.email}
+                  {" "}
+                  <span className="text-slate-500 font-mono text-[11px] font-normal">
+                    ({log.user?.email})
                   </span>
                 </span>
               </div>
             </div>
 
             {/* Remark */}
-            <div className="bg-gray-50 p-3 rounded-md border text-sm">
-              <span className="font-semibold text-gray-700 block mb-1">
+            <div className="bg-slate-50/70 p-3 rounded-xs border border-[#E3E7EB] text-xs">
+              <span className="font-semibold text-xs font-mono uppercase text-[#0B1F3A] block mb-1">
                 {t("remark")}
               </span>
-              <p className="text-gray-600">{log.remark || t("nullValue")}</p>
+              <p className="text-slate-600 font-mono text-xs">{log.remark || t("nullValue")}</p>
             </div>
 
             {/* Changes (Old vs New) */}
             {(log.oldValue || log.newValue) && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium text-sm text-red-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <h4 className="font-semibold text-xs font-mono uppercase text-rose-700">
                     {t("oldValue")}
                   </h4>
-                  <pre className="bg-red-50 text-red-900 p-3 rounded-md text-xs overflow-x-auto border border-red-100 min-h-[100px]">
+                  <pre className="bg-rose-50/60 text-rose-950 p-3 rounded-xs text-xs font-mono overflow-x-auto border border-rose-200 min-h-[100px]">
                     {log.oldValue
                       ? JSON.stringify(log.oldValue, null, 2)
                       : t("nullValue")}
                   </pre>
                 </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium text-sm text-emerald-600">
+                <div className="space-y-1.5">
+                  <h4 className="font-semibold text-xs font-mono uppercase text-emerald-700">
                     {t("newValue")}
                   </h4>
-                  <pre className="bg-emerald-50 text-emerald-900 p-3 rounded-md text-xs overflow-x-auto border border-emerald-100 min-h-[100px]">
+                  <pre className="bg-emerald-50/60 text-emerald-950 p-3 rounded-xs text-xs font-mono overflow-x-auto border border-emerald-200 min-h-[100px]">
                     {log.newValue
                       ? JSON.stringify(log.newValue, null, 2)
                       : t("nullValue")}
@@ -129,7 +129,7 @@ export function AuditLogDetailsDialog({
             )}
           </div>
         ) : (
-          <div className="p-4 text-center text-red-500">{t("error")}</div>
+          <div className="p-4 text-center text-rose-600 text-xs font-mono">{t("error")}</div>
         )}
       </DialogContent>
     </Dialog>

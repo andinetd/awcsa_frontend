@@ -30,9 +30,9 @@ export const getColumns = ({
       const firstName = row.original.employee?.firstName || "";
       const lastName = row.original.employee?.lastName || "";
       return (
-        <div className="flex flex-col">
-          <span className="font-medium">{`${firstName} ${lastName}`}</span>
-          <span className="text-xs text-muted-foreground">
+        <div className="flex flex-col py-0.5">
+          <span className="font-semibold text-xs text-[#0B1F3A]">{`${firstName} ${lastName}`}</span>
+          <span className="text-[11px] font-mono text-slate-500">
             {row.original.email}
           </span>
         </div>
@@ -46,7 +46,14 @@ export const getColumns = ({
     ),
     cell: ({ row }) => {
       const role = row.original.employee?.role?.name || t("na");
-      return <Badge variant="outline">{role.replace(/_/g, " ")}</Badge>;
+      return (
+        <Badge
+          variant="outline"
+          className="rounded-xs font-mono text-[11px] font-medium border border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]"
+        >
+          {role.replace(/_/g, " ")}
+        </Badge>
+      );
     },
   },
   {
@@ -58,12 +65,12 @@ export const getColumns = ({
       const org = row.original.employee?.orgUnit?.name || t("na");
       const type = row.original.employee?.orgUnit?.type || "";
       return (
-        <div className="flex flex-col">
-          <span className="truncate max-w-[200px]" title={org}>
+        <div className="flex flex-col py-0.5">
+          <span className="truncate max-w-[200px] text-xs font-medium text-slate-700" title={org}>
             {org}
           </span>
           {type && (
-            <span className="text-xs text-muted-foreground">{type}</span>
+            <span className="text-[11px] font-mono text-slate-400">{type}</span>
           )}
         </div>
       );
@@ -78,13 +85,14 @@ export const getColumns = ({
       const status = row.original.status;
       return (
         <Badge
-          variant={
+          variant="outline"
+          className={`rounded-xs font-mono text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 ${
             status === "ACTIVE"
-              ? "default"
+              ? "border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]"
               : status === "LOCKED" || status === "INACTIVE"
-                ? "destructive"
-                : "secondary"
-          }
+                ? "border-rose-200 bg-rose-50 text-rose-700"
+                : "border-[#E3E7EB] bg-slate-100 text-slate-700"
+          }`}
         >
           {status}
         </Badge>

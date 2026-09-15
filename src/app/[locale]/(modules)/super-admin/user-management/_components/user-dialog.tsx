@@ -210,39 +210,42 @@ export function UserDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{isEdit ? t("editTitle") : t("addTitle")}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+          <DialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
+            {isEdit ? t("editTitle") : t("addTitle")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500">
             {isEdit ? t("editDescription") : t("addDescription")}
           </DialogDescription>
         </DialogHeader>
 
         {loadingConfig ? (
           <div className="flex justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin" />
+            <Loader2 className="h-7 w-7 animate-spin text-[#1769AA]" />
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-muted-foreground">
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                   {t("section.personal")}
                 </h4>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <FormField
                     control={form.control}
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("firstName")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("firstName")}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder={t("placeholders.firstName")}
                             {...field}
+                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
@@ -251,32 +254,34 @@ export function UserDialog({
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("lastName")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("lastName")}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder={t("placeholders.lastName")}
                             {...field}
+                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <FormField
                     control={form.control}
                     name="phoneNumber"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("phone")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("phone")}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder={t("placeholders.phone")}
                             {...field}
+                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
@@ -285,14 +290,15 @@ export function UserDialog({
                     name="cityIdNumber"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("cityId")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("cityId")}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder={t("placeholders.cityId")}
                             {...field}
+                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
@@ -301,23 +307,24 @@ export function UserDialog({
 
               {!isEdit && (
                 <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-muted-foreground">
+                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                     {t("section.account")}
                   </h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <FormField
                       control={form.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("email")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("email")}</FormLabel>
                           <FormControl>
                             <Input
                               placeholder={t("placeholders.email")}
                               {...field}
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -326,21 +333,22 @@ export function UserDialog({
                       name="roleId"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("role")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("role")}</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                                 <SelectValue placeholder={t("select")} />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
+                            <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                               {formData?.roles.map((role) => (
                                 <SelectItem
                                   key={role.id}
                                   value={String(role.id)}
+                                  className="text-xs"
                                 >
                                   <span
                                     className="truncate max-w-[180px] block"
@@ -352,7 +360,7 @@ export function UserDialog({
                               ))}
                             </SelectContent>
                           </Select>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -362,37 +370,37 @@ export function UserDialog({
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("password")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("password")}</FormLabel>
                         <div className="relative">
                           <FormControl>
                             <Input
                               type={showPassword ? "text" : "password"}
                               placeholder={t("placeholders.password")}
                               {...field}
-                              className="pr-20"
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-20"
                             />
                           </FormControl>
                           <button
                             type="button"
                             onClick={handleGenerate}
-                            className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-xs text-primary hover:underline cursor-pointer"
+                            className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-[11px] font-mono font-medium text-[#1769AA] hover:underline cursor-pointer"
                           >
-                            <RefreshCw className="h-3.5 w-3.5" />
+                            <RefreshCw className="h-3 w-3" />
                             {t("generate")}
                           </button>
                           <button
                             type="button"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                           >
                             {showPassword ? (
-                              <EyeOff className="h-4 w-4" />
+                              <EyeOff className="h-3.5 w-3.5" />
                             ) : (
-                              <Eye className="h-4 w-4" />
+                              <Eye className="h-3.5 w-3.5" />
                             )}
                           </button>
                         </div>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
@@ -400,7 +408,7 @@ export function UserDialog({
               )}
 
               <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-muted-foreground">
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                   {t("section.assignment")}
                 </h4>
                 <FormField
@@ -408,25 +416,25 @@ export function UserDialog({
                   name="department"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("department")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("department")}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                             <SelectValue placeholder={t("select")} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                           {DEPARTMENT_OPTIONS.map((dept) => (
-                            <SelectItem key={dept} value={dept}>
+                            <SelectItem key={dept} value={dept} className="text-xs">
                               {t(`departments.${dept}`)}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
+                      <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}
                 />
@@ -486,21 +494,21 @@ export function UserDialog({
                       : [];
 
                     return (
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         <FormItem>
-                          <FormLabel>{t("org")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("org")}</FormLabel>
                           <Select
                             onValueChange={(val) => field.onChange(val)}
                             value={effectiveBureauId}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                                 <SelectValue placeholder={t("select")} />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
+                            <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                               {bureaus.map((org) => (
-                                <SelectItem key={org.id} value={String(org.id)}>
+                                <SelectItem key={org.id} value={String(org.id)} className="text-xs">
                                   <span
                                     className="truncate max-w-[150px] block"
                                     title={org.name}
@@ -511,27 +519,27 @@ export function UserDialog({
                               ))}
                             </SelectContent>
                           </Select>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
 
                         {(filteredSubCities.length > 0 ||
                           effectiveSubCityId) && (
                           <FormItem>
-                            <FormLabel>{t("subCity")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("subCity")}</FormLabel>
                             <Select
                               onValueChange={(val) => field.onChange(val)}
                               value={effectiveSubCityId}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                                   <SelectValue
                                     placeholder={t("selectSubCity")}
                                   />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                                 {filteredSubCities.map((sc) => (
-                                  <SelectItem key={sc.id} value={String(sc.id)}>
+                                  <SelectItem key={sc.id} value={String(sc.id)} className="text-xs">
                                     <span
                                       className="truncate max-w-[150px] block"
                                       title={sc.name}
@@ -548,19 +556,19 @@ export function UserDialog({
                         {(filteredWoredas.length > 0 ||
                           effectiveWoredaId) && (
                           <FormItem>
-                            <FormLabel>{t("woreda")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("woreda")}</FormLabel>
                             <Select
                               onValueChange={(val) => field.onChange(val)}
                               value={effectiveWoredaId}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                                   <SelectValue placeholder={t("select")} />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                                 {filteredWoredas.map((w) => (
-                                  <SelectItem key={w.id} value={String(w.id)}>
+                                  <SelectItem key={w.id} value={String(w.id)} className="text-xs">
                                     <span
                                       className="truncate max-w-[150px] block"
                                       title={w.name}
@@ -578,25 +586,25 @@ export function UserDialog({
                   }}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <FormField
                     control={form.control}
                     name="directorateId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("directorate")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("directorate")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                               <SelectValue placeholder={t("select")} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                             {formData?.directorates.map((dir) => (
-                              <SelectItem key={dir.id} value={String(dir.id)}>
+                              <SelectItem key={dir.id} value={String(dir.id)} className="text-xs">
                                 <span
                                   className="truncate max-w-[180px] block"
                                   title={dir.name.replace(/_/g, " ")}
@@ -607,7 +615,7 @@ export function UserDialog({
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
@@ -616,19 +624,19 @@ export function UserDialog({
                     name="teamId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("team")}</FormLabel>
+                        <FormLabel className="text-xs font-semibold text-slate-700">{t("team")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                               <SelectValue placeholder={t("select")} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                             {formData?.teams.map((team) => (
-                              <SelectItem key={team.id} value={String(team.id)}>
+                              <SelectItem key={team.id} value={String(team.id)} className="text-xs">
                                 <span
                                   className="truncate max-w-[180px] block"
                                   title={team.name}
@@ -639,17 +647,29 @@ export function UserDialog({
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="text-[11px]" />
                       </FormItem>
                     )}
                   />
                 </div>
               </div>
 
-              <DialogFooter>
-                <Button type="submit" disabled={isSaving}>
+              <DialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                  className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+                >
+                  {t("cancel") || "Cancel"}
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSaving}
+                  className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
+                >
                   {isSaving && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
                   )}
                   {isEdit ? t("save") : t("create")}
                 </Button>

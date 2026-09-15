@@ -255,42 +255,53 @@ export default function ContentDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+          <DialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
             {item ? t("actions.edit") : t("actions.add")}{" "}
             {t(`sections.${type.toLowerCase().replace("_", "") as "hero"}`)}
           </DialogTitle>
         </DialogHeader>
 
-        <div className={labels.showTabs ? "" : "mt-4"}>
+        <div className={labels.showTabs ? "" : "mt-2"}>
           {labels.showTabs ? (
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="">
-                <TabsTrigger value="en">English</TabsTrigger>
-                <TabsTrigger value="am">Amharic (አማርኛ)</TabsTrigger>
+              <TabsList className="bg-slate-100/80 p-1 border border-[#E3E7EB] rounded-xs mb-4 h-9">
+                <TabsTrigger
+                  value="en"
+                  className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+                >
+                  English
+                </TabsTrigger>
+                <TabsTrigger
+                  value="am"
+                  className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+                >
+                  Amharic (አማርኛ)
+                </TabsTrigger>
               </TabsList>
 
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6 mt-4"
+                  className="space-y-4"
                 >
-                  <TabsContent value="en" className="space-y-4 mt-0">
+                  <TabsContent value="en" className="space-y-3 mt-0">
                     {labels.title && (
                       <FormField
                         control={form.control as any}
                         name="title.en"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.title} (EN)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.title} (EN)</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
                                 placeholder="Enter title in English"
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -301,14 +312,15 @@ export default function ContentDialog({
                         name="subtitle.en"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.subtitle} (EN)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.subtitle} (EN)</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
                                 placeholder="Enter subtitle in English"
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -319,50 +331,59 @@ export default function ContentDialog({
                         name="content.en"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.content} (EN)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.content} (EN)</FormLabel>
                             <FormControl>
                               <Textarea
                                 {...field}
                                 placeholder="Enter content in English"
                                 rows={4}
+                                className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
                     )}
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-3">
                       {labels.showLinkText && (
                         <FormField
                           control={form.control}
                           name="linkText.en"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>{t("fields.linkText")} (EN)</FormLabel>
+                              <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.linkText")} (EN)</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Learn More" />
+                                <Input
+                                  {...field}
+                                  placeholder="Learn More"
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                                />
                               </FormControl>
-                              <FormMessage />
+                              <FormMessage className="text-[11px]" />
                             </FormItem>
                           )}
                         />
                       )}
-                    </div>{" "}
+                    </div>
                   </TabsContent>
 
-                  <TabsContent value="am" className="space-y-4 mt-0">
+                  <TabsContent value="am" className="space-y-3 mt-0">
                     {labels.title && (
                       <FormField
                         control={form.control}
                         name="title.am"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.title} (AM)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.title} (AM)</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="ርዕስ በአማርኛ ያስገቡ" />
+                              <Input
+                                {...field}
+                                placeholder="ርዕስ በአማርኛ ያስገቡ"
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                              />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -373,14 +394,15 @@ export default function ContentDialog({
                         name="subtitle.am"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.subtitle} (AM)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.subtitle} (AM)</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
                                 placeholder="ንዑስ ርዕስ በአማርኛ ያስገቡ"
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -391,15 +413,16 @@ export default function ContentDialog({
                         name="content.am"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.content} (AM)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.content} (AM)</FormLabel>
                             <FormControl>
                               <Textarea
                                 {...field}
                                 placeholder="ይዘት በአማርኛ ያስገቡ"
                                 rows={4}
+                                className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -410,32 +433,37 @@ export default function ContentDialog({
                         name="linkText.am"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("fields.linkText")} (AM)</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.linkText")} (AM)</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="ምሳሌ፡ ተጨማሪ ያንብቡ" />
+                              <Input
+                                {...field}
+                                placeholder="ምሳሌ፡ ተጨማሪ ያንብቡ"
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                              />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
                     )}
                   </TabsContent>
 
-                  <div className="space-y-4 border-t pt-4">
+                  <div className="space-y-3 border-t border-[#E3E7EB] pt-3">
                     {labels.showLink && (
                       <FormField
                         control={form.control}
                         name="link"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("fields.link")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.link")}</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="https://example.com"
                                 {...field}
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -446,25 +474,26 @@ export default function ContentDialog({
                         name="imageUrl"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{labels.imageUrl}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{labels.imageUrl}</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
                                 placeholder={labels.imagePlaceholder}
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
                     )}
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-3">
                       <FormField
                         control={form.control}
                         name="order"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("fields.order")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.order")}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"
@@ -472,9 +501,10 @@ export default function ContentDialog({
                                 onChange={(e) =>
                                   field.onChange(parseInt(e.target.value) || 0)
                                 }
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                               />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-[11px]" />
                           </FormItem>
                         )}
                       />
@@ -482,7 +512,7 @@ export default function ContentDialog({
                         control={form.control}
                         name="isVisible"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-2 shadow-sm">
+                          <FormItem className="flex flex-row items-center space-x-2.5 space-y-0 rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/50 h-8 mt-5">
                             <FormControl>
                               <Checkbox
                                 checked={field.value}
@@ -490,7 +520,7 @@ export default function ContentDialog({
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>{t("fields.isVisible")}</FormLabel>
+                              <FormLabel className="text-xs font-semibold text-slate-700 cursor-pointer">{t("fields.isVisible")}</FormLabel>
                             </div>
                           </FormItem>
                         )}
@@ -498,14 +528,22 @@ export default function ContentDialog({
                     </div>
                   </div>
 
-                  <DialogFooter>
+                  <DialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => onOpenChange(false)}
+                      className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+                    >
+                      Cancel
+                    </Button>
                     <Button
                       type="submit"
                       disabled={isPending}
-                      className="w-full sm:w-auto"
+                      className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
                     >
                       {isPending && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
                       )}
                       {t("actions.save")}
                     </Button>
@@ -517,16 +555,16 @@ export default function ContentDialog({
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
+                className="space-y-4"
               >
-                <div className="space-y-4 p-1">
+                <div className="space-y-3">
                   {labels.title && (
                     <FormField
                       control={form.control as any}
                       name="title.en"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{labels.title}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{labels.title}</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -535,9 +573,10 @@ export default function ContentDialog({
                                   ? `Enter ${labels.title.toLowerCase()}`
                                   : ""
                               }
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -549,11 +588,14 @@ export default function ContentDialog({
                       name="subtitle.en"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{labels.subtitle}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{labels.subtitle}</FormLabel>
                           <FormControl>
-                            <Input {...field} />
+                            <Input
+                              {...field}
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                            />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -565,11 +607,15 @@ export default function ContentDialog({
                       name="content.en"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{labels.content}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{labels.content}</FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={4} />
+                            <Textarea
+                              {...field}
+                              rows={4}
+                              className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                            />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -581,14 +627,15 @@ export default function ContentDialog({
                       name="link"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("fields.link")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.link")}</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="https://example.com"
                               {...field}
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -600,25 +647,26 @@ export default function ContentDialog({
                       name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{labels.imageUrl}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{labels.imageUrl}</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
                               placeholder={labels.imagePlaceholder}
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
                   )}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <FormField
                       control={form.control}
                       name="order"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("fields.order")}</FormLabel>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.order")}</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
@@ -626,9 +674,10 @@ export default function ContentDialog({
                               onChange={(e) =>
                                 field.onChange(parseInt(e.target.value) || 0)
                               }
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
                     />
@@ -636,7 +685,7 @@ export default function ContentDialog({
                       control={form.control}
                       name="isVisible"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
+                        <FormItem className="flex flex-row items-center space-x-2.5 space-y-0 rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/50 h-8 mt-5">
                           <FormControl>
                             <Checkbox
                               checked={field.value}
@@ -644,7 +693,7 @@ export default function ContentDialog({
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>{t("fields.isVisible")}</FormLabel>
+                            <FormLabel className="text-xs font-semibold text-slate-700 cursor-pointer">{t("fields.isVisible")}</FormLabel>
                           </div>
                         </FormItem>
                       )}
@@ -652,14 +701,22 @@ export default function ContentDialog({
                   </div>
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onOpenChange(false)}
+                    className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+                  >
+                    Cancel
+                  </Button>
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className="w-full sm:w-auto"
+                    className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
                   >
                     {isPending && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
                     )}
                     {t("actions.save")}
                   </Button>

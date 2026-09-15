@@ -112,20 +112,20 @@ export function ResetPasswordDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <KeyRound className="h-5 w-5 text-primary" />
+      <DialogContent className="max-w-md rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+          <DialogTitle className="flex items-center gap-2 text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
+            <KeyRound className="h-4 w-4 text-[#1769AA]" />
             {t("title")}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs text-slate-500">
             {t.rich("description", {
               email: userEmail,
               strong: (chunks: React.ReactNode) => (
-                <strong className="font-bold">{chunks}</strong>
+                <strong className="font-semibold text-slate-800">{chunks}</strong>
               ),
             })}
-            <span className="mt-2 block text-amber-600">
+            <span className="mt-2 block text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-xs p-2">
               {t("signOutNote")}
             </span>
           </DialogDescription>
@@ -138,26 +138,26 @@ export function ResetPasswordDialog({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("newPassword")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("newPassword")}</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder={t("placeholders.password")}
                         {...field}
-                        className="pr-16"
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-20"
                       />
                     </FormControl>
                     <button
                       type="button"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-xs text-primary hover:underline cursor-pointer"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-[11px] font-mono font-medium text-[#1769AA] hover:underline cursor-pointer"
                       onClick={handleGenerate}
                     >
-                      <RefreshCw className="h-3.5 w-3.5" />
+                      <RefreshCw className="h-3 w-3" />
                       {t("generate")}
                     </button>
                   </div>
-                  <FormMessage>
+                  <FormMessage className="text-[11px]">
                     {form.formState.errors.password &&
                       t("errors.passwordMin")}
                   </FormMessage>
@@ -170,29 +170,29 @@ export function ResetPasswordDialog({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("confirmPassword")}</FormLabel>
+                  <FormLabel className="text-xs font-semibold text-slate-700">{t("confirmPassword")}</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder={t("placeholders.confirm")}
                         {...field}
-                        className="pr-10"
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-10"
                       />
                     </FormControl>
                     <button
                       type="button"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
+                        <EyeOff className="h-3.5 w-3.5" />
                       ) : (
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-3.5 w-3.5" />
                       )}
                     </button>
                   </div>
-                  <FormMessage>
+                  <FormMessage className="text-[11px]">
                     {form.formState.errors.confirmPassword &&
                       t("errors.passwordMismatch")}
                   </FormMessage>
@@ -200,18 +200,23 @@ export function ResetPasswordDialog({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={isSaving}
+                className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
               >
                 {t("cancel")}
               </Button>
-              <Button type="submit" disabled={isSaving}>
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5 px-4"
+              >
                 {isSaving && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
                 )}
                 {t("reset")}
               </Button>

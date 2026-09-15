@@ -64,39 +64,42 @@ export default function ContentListManager({
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button onClick={handleAdd} size="sm" className="gap-2">
-          <Plus className="h-4 w-4" />
+        <Button
+          onClick={handleAdd}
+          className="h-8 rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white text-xs font-semibold shadow-2xs gap-1.5 px-3"
+        >
+          <Plus className="h-3.5 w-3.5" />
           {t("actions.add")}
         </Button>
       </div>
 
-      <div className="rounded-lg border bg-card shadow-sm">
+      <div className="border border-[#E3E7EB] rounded-xs bg-white shadow-2xs overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">{t("fields.order")}</TableHead>
-              <TableHead>{t("fields.title")}</TableHead>
-              <TableHead>{t("actions.visibility")}</TableHead>
-              <TableHead className="text-right">{t("actions.edit")}</TableHead>
+          <TableHeader className="bg-slate-50 border-b border-[#E3E7EB]">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[100px] text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600 h-9">{t("fields.order")}</TableHead>
+              <TableHead className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600 h-9">{t("fields.title")}</TableHead>
+              <TableHead className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600 h-9">{t("actions.visibility")}</TableHead>
+              <TableHead className="text-right text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600 h-9">{t("actions.edit")}</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="divide-y divide-[#E3E7EB]">
             {(Array.isArray(items) ? [...items] : [])
               .sort((a, b) => a.order - b.order)
               .map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.order}</TableCell>
-                  <TableCell className="font-medium">
+                <TableRow key={item.id} className="hover:bg-slate-50/70 transition-colors">
+                  <TableCell className="font-mono text-xs text-slate-500 py-3">{item.order}</TableCell>
+                  <TableCell className="font-semibold text-xs text-[#0B1F3A] py-3">
                     {item.title?.[locale as "en" | "am"] ||
                       item.title?.en ||
                       item.title?.am ||
                       "No Title"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-3">
                     {item.isVisible ? (
                       <Badge
                         variant="outline"
-                        className="gap-1 bg-emerald-50 text-emerald-700 border-emerald-200"
+                        className="gap-1 rounded-xs font-mono text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 border border-emerald-200 bg-emerald-50 text-emerald-700"
                       >
                         <Eye className="h-3 w-3" />
                         Visible
@@ -104,44 +107,49 @@ export default function ContentListManager({
                     ) : (
                       <Badge
                         variant="outline"
-                        className="gap-1 text-muted-foreground"
+                        className="gap-1 rounded-xs font-mono text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 border border-[#E3E7EB] bg-slate-100 text-slate-600"
                       >
                         <EyeOff className="h-3 w-3" />
                         Hidden
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-right space-x-2">
+                  <TableCell className="text-right space-x-1 py-3">
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="sm"
                       onClick={() => handleEdit(item)}
+                      className="h-7 w-7 p-0 rounded-xs border border-transparent hover:border-[#E3E7EB] hover:bg-slate-100"
                     >
-                      <Edit className="h-4 w-4" />
+                      <Edit className="h-3.5 w-3.5 text-slate-500" />
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
                           variant="ghost"
-                          size="icon"
-                          className="text-destructive"
+                          size="sm"
+                          className="h-7 w-7 p-0 rounded-xs border border-transparent hover:border-rose-200 hover:bg-rose-50 text-rose-600"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
+                      <AlertDialogContent className="max-w-md rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+                        <AlertDialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
+                          <AlertDialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
+                            Are you sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription className="text-xs text-slate-500">
                             This action cannot be undone. This will permanently
                             delete the item.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
+                          <AlertDialogCancel className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50">
+                            Cancel
+                          </AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleDelete(item.id!)}
-                            className="bg-destructive text-white hover:bg-destructive/90"
+                            className="h-8 text-xs rounded-xs bg-rose-600 hover:bg-rose-700 text-white font-semibold shadow-2xs gap-1.5 px-3"
                           >
                             Delete
                           </AlertDialogAction>
@@ -155,7 +163,7 @@ export default function ContentListManager({
               <TableRow>
                 <TableCell
                   colSpan={4}
-                  className="text-center py-10 text-muted-foreground"
+                  className="text-center py-10 text-slate-500 text-xs font-mono"
                 >
                   No items found.
                 </TableCell>
