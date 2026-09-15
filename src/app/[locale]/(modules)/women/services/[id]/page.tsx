@@ -24,6 +24,7 @@ import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import MonitoringForm from "../_components/monitoring-form";
 import { useTranslations } from "next-intl";
+import { uiTokens } from "@/styles/design-system";
 
 export default function SupportDetailPage() {
   const { id } = useParams();
@@ -55,84 +56,100 @@ export default function SupportDetailPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => router.back()}
-          className="rounded-full"
-        >
-          <ChevronLeft className="h-5 h-5" />
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold">{t("supportDetail.title")}</h1>
-          <p className="text-muted-foreground">
-            {t("supportDetail.referenceId")}: {support.id}
-          </p>
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
+      {/* ── Institutional Header Banner ──────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Women Development &amp; Support
+          </span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => router.back()}
+              className="h-8 w-8 rounded-xs border-[#E3E7EB] text-slate-600 hover:text-[#1769AA] hover:bg-[#E8F2FA] cursor-pointer"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">{t("supportDetail.title")}</h1>
+                <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
+                  {t("supportDetail.referenceId")}: #{support.id}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {support.serviceType?.name ? t(`serviceTypes.${support.serviceType.name}`) : "Support Intervention"}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Main Service Info */}
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 h-5 text-primary" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs md:col-span-2">
+          <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
+            <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+              <Package className="h-4 w-4 text-[#1769AA]" />
               {t("supportDetail.serviceInfo")}
             </CardTitle>
-            <CardDescription>
-              {t("supportDetail.serviceInfoDesc")}
-            </CardDescription>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
+          <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-medium text-slate-500">
                 {t("support.register.serviceType")}
               </p>
-              <p className="text-lg font-semibold">
+              <p className="font-semibold text-slate-800">
                 {support.serviceType?.name
                   ? t(`serviceTypes.${support.serviceType.name}`)
                   : "N/A"}
               </p>
               {support.serviceType?.category && (
-                <Badge variant="outline" className="mt-1">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-medium border border-[#E3E7EB] bg-slate-50 text-slate-600 mt-1">
                   {support.serviceType.category}
-                </Badge>
+                </span>
               )}
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-medium text-slate-500">
                 {t("support.register.providerName")}
               </p>
-              <p className="text-lg font-semibold">{support.provider}</p>
+              <p className="font-semibold text-slate-800">{support.provider}</p>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-medium text-slate-500">
                 {t("support.register.amountOrQuantity")}
               </p>
-              <p className="text-lg font-semibold">
+              <p className="font-mono font-semibold text-slate-800">
                 {support.amountOrQuantity}
               </p>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-medium text-slate-500">
                 {t("support.register.dateProvided")}
               </p>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 h-4 text-muted-foreground" />
-                <p className="text-lg font-semibold">
+              <div className="flex items-center gap-1.5 text-slate-800 font-mono">
+                <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                <span>
                   {support.dateProvided
                     ? format(new Date(support.dateProvided), "PPP")
                     : "N/A"}
-                </p>
+                </span>
               </div>
             </div>
-            <div className="md:col-span-2 space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
+            <div className="sm:col-span-2 space-y-1 pt-1">
+              <p className="text-[11px] font-medium text-slate-500">
                 {t("support.register.remarks")}
               </p>
-              <p className="p-3 bg-muted/50 rounded-lg text-sm">
+              <p className="p-2.5 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs text-xs text-slate-700">
                 {support.remark || t("supportDetail.noRemarks")}
               </p>
             </div>
@@ -140,48 +157,48 @@ export default function SupportDetailPage() {
         </Card>
 
         {/* Beneficiary & Location */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 h-5 text-primary" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
+            <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+              <User className="h-4 w-4 text-[#1769AA]" />
               {t("supportDetail.beneficiaryLocation")}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-1 text-center bg-primary/5 p-4 rounded-xl border border-primary/10">
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+          <CardContent className="p-4 space-y-4 text-xs">
+            <div className="text-center bg-[#E8F2FA] p-3 rounded-xs border border-[#BCD5EA] space-y-0.5">
+              <p className="text-[10px] font-bold uppercase tracking-wider font-mono text-slate-500">
                 {t("supportDetail.beneficiaryType")}
               </p>
-              <p className="text-xl font-bold text-primary">
+              <p className="text-sm font-bold text-[#1769AA]">
                 {support.clientId
                   ? t("supportDetail.individualWoman")
                   : t("supportDetail.womenAssociation")}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                ID: {support.clientId || support.womenAssociationId}
+              <p className="text-[11px] font-mono text-slate-600">
+                ID: #{support.clientId || support.womenAssociationId}
               </p>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 h-5 text-muted-foreground mt-0.5" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">
+            <div className="space-y-3 pt-1">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="h-4 w-4 text-[#1769AA] mt-0.5 shrink-0" />
+                <div className="space-y-0.5">
+                  <p className="text-[11px] font-medium text-slate-500">
                     {t("report.subCity")}
                   </p>
-                  <p className="font-semibold">{support.subCity}</p>
-                  <p className="text-sm">
+                  <p className="font-semibold text-slate-800">{support.subCity}</p>
+                  <p className="text-slate-600 font-mono text-[11px]">
                     {t("report.woreda")} {support.woreda}
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <ClipboardList className="h-5 h-5 text-muted-foreground mt-0.5" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-muted-foreground">
+              <div className="flex items-start gap-2.5">
+                <ClipboardList className="h-4 w-4 text-[#1769AA] mt-0.5 shrink-0" />
+                <div className="space-y-0.5">
+                  <p className="text-[11px] font-medium text-slate-500">
                     {t("supportDetail.facilitator")}
                   </p>
-                  <p className="font-semibold">{support.facilitatorCityId}</p>
+                  <p className="font-mono font-semibold text-slate-800">{support.facilitatorCityId}</p>
                 </div>
               </div>
             </div>
@@ -189,57 +206,57 @@ export default function SupportDetailPage() {
         </Card>
 
         {/* Monitoring Section */}
-        <Card className="md:col-span-3">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs md:col-span-3">
+          <CardHeader className="py-3 px-4 border-b border-[#E3E7EB] flex flex-row items-center justify-between space-y-0">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <ClipboardList className="h-5 h-5 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                <ClipboardList className="h-4 w-4 text-[#1769AA]" />
                 {t("supportDetail.monitoringHistory")}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs text-slate-500">
                 {t("supportDetail.monitoringHistoryDesc")}
               </CardDescription>
             </div>
             <MonitoringForm supportServiceId={support.id} />
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4">
             {support.monitoringLogs && support.monitoringLogs.length > 0 ? (
-              <div className="max-h-[500px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
-                <div className="relative border-l border-muted-foreground/20 ml-3 pl-8 space-y-8 py-4">
-                  {support.monitoringLogs.map((log, index) => (
-                    <div key={log.id} className="relative">
+              <div className="max-h-[500px] overflow-y-auto pr-2">
+                <div className="relative border-l border-[#BCD5EA] ml-3 pl-6 space-y-6 py-2">
+                  {support.monitoringLogs.map((log) => (
+                    <div key={log.id} className="relative text-xs">
                       {/* Timeline Dot */}
-                      <div className="absolute -left-[44px] top-1 h-6 w-6 rounded-full border-4 border-background bg-primary shadow-sm" />
+                      <div className="absolute -left-[31px] top-1 h-4 w-4 rounded-full border-2 border-white bg-[#1769AA] shadow-xs" />
 
-                      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                         <div>
-                          <p className="font-bold text-lg">
+                          <p className="font-bold text-sm text-[#0B1F3A]">
                             {format(new Date(log.monitoringDate), "PPP")}
                           </p>
-                          <div className="flex gap-2 mt-1">
-                            <Badge variant="secondary">
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]">
                               {log.currentStatus}
-                            </Badge>
-                            <Badge variant="outline">
+                            </span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-mono border border-[#E3E7EB] bg-slate-50 text-slate-700">
                               {t("supportDetail.score", { score: log.score })}
-                            </Badge>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                              <User className="w-3 h-3" />
+                            </span>
+                            <p className="text-[11px] text-slate-500 flex items-center gap-1">
+                              <User className="w-3 h-3 text-slate-400" />
                               {t("supportDetail.assessedBy", {
                                 name: log.assessedBy,
                               })}
                             </p>
                           </div>
                         </div>
-                        <div className="w-full md:w-32 h-2 bg-muted rounded-full overflow-hidden mt-2 md:mt-0">
+                        <div className="w-full sm:w-28 h-2 bg-slate-100 rounded-xs overflow-hidden border border-[#E3E7EB]">
                           <div
-                            className="h-full bg-primary transition-all"
+                            className="h-full bg-[#1769AA] transition-all"
                             style={{ width: `${log.score}%` }}
                           />
                         </div>
                       </div>
-                      <div className="bg-muted/30 p-4 rounded-xl border border-muted-foreground/10">
-                        <p className="text-sm whitespace-pre-wrap">
+                      <div className="bg-[#F7F8FA] p-3 rounded-xs border border-[#E3E7EB]">
+                        <p className="text-xs text-slate-700 whitespace-pre-wrap">
                           {log.remark}
                         </p>
                       </div>
@@ -248,12 +265,12 @@ export default function SupportDetailPage() {
                 </div>
               </div>
             ) : (
-              <div className="text-center py-12 border-2 border-dashed rounded-xl grayscale opacity-60">
-                <ClipboardList className="h-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground font-medium">
+              <div className="text-center py-10 border border-dashed border-[#E3E7EB] rounded-xs bg-[#F7F8FA]">
+                <ClipboardList className="h-8 h-8 mx-auto text-slate-400 mb-2" />
+                <p className="text-xs font-semibold text-slate-700">
                   {t("supportDetail.noLogs")}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] text-slate-500 mt-0.5">
                   {t("supportDetail.addFollowUp")}
                 </p>
               </div>

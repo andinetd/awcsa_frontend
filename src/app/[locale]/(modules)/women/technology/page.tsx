@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { uiTokens } from "@/styles/design-system";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -152,54 +153,66 @@ export default function TechnologySupportPage() {
   const getClientId = (rec: TechnologySupportRecord) => rec.womenProfile?.client?.cityIdNumber || "";
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 font-lexend">{t("title")}</h1>
-          <p className="text-slate-500 mt-1">{t("subtitle")}</p>
+    <div className="p-4 sm:p-6 space-y-4 max-w-7xl mx-auto w-full">
+      {/* ── Institutional Header Banner ──────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Women Development &amp; Support
+          </span>
         </div>
-        <div className="flex gap-2 w-full md:w-auto">
-          <WomenReportDialog category="TECHNOLOGY_SUPPORT" />
-          {editRecord && (
-            <TechnologySupportForm
-              record={editRecord}
-              open={editOpen}
-              onOpenChange={(o) => { setEditOpen(o); if (!o) setEditRecord(null); }}
-            />
-          )}
-          <TechnologySupportForm />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">{t("title")}</h1>
+            <p className="text-xs text-slate-500">{t("subtitle")}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <WomenReportDialog category="TECHNOLOGY_SUPPORT" />
+            {editRecord && (
+              <TechnologySupportForm
+                record={editRecord}
+                open={editOpen}
+                onOpenChange={(o) => { setEditOpen(o); if (!o) setEditRecord(null); }}
+              />
+            )}
+            <TechnologySupportForm />
+          </div>
         </div>
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-primary" />
+      <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3.5 px-5 border-b border-[#E3E7EB]">
+          <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            <Zap className="w-4 h-4 text-[#1769AA]" />
             {t("cardTitle")}
           </CardTitle>
           <div className="flex items-center gap-2">
-            <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 placeholder={t("searchPlaceholder")}
-                className="pl-8 bg-slate-50/50 border-slate-200"
+                className="pl-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               />
             </div>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="icon" className="text-slate-500">
-                  <Filter className="w-4 h-4" />
+                <Button variant="outline" size="icon" className="h-8 w-8 rounded-xs border-[#E3E7EB] text-slate-600 hover:text-[#1769AA] cursor-pointer">
+                  <Filter className="w-3.5 h-3.5" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-72" align="end">
+              <PopoverContent className="w-72 rounded-xs border-[#E3E7EB]" align="end">
                 <div className="space-y-4">
-                  <h4 className="font-medium">{t("filter.allTypes")}</h4>
-                  <div className="space-y-2">
-                    <Label>{t("form.fields.technologyType")}</Label>
+                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("filter.allTypes")}</h4>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-slate-600">{t("form.fields.technologyType")}</Label>
                     <Select value={filterType} onValueChange={(v) => { setFilterType(v); setPage(1); }}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs border-[#E3E7EB] rounded-xs">
                         <SelectValue placeholder={t("filter.allTypes")} />
                       </SelectTrigger>
                       <SelectContent>
@@ -219,7 +232,7 @@ export default function TechnologySupportPage() {
                       checked={filterPoor === true}
                       onCheckedChange={(c) => { setFilterPoor(c ? true : null); setPage(1); }}
                     />
-                    <Label htmlFor="filter-poor">{t("filter.poorStatus")}</Label>
+                    <Label htmlFor="filter-poor" className="text-xs text-slate-700">{t("filter.poorStatus")}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox
@@ -227,29 +240,32 @@ export default function TechnologySupportPage() {
                       checked={filterDisabled === true}
                       onCheckedChange={(c) => { setFilterDisabled(c ? true : null); setPage(1); }}
                     />
-                    <Label htmlFor="filter-disabled">{t("filter.hasDisabilities")}</Label>
+                    <Label htmlFor="filter-disabled" className="text-xs text-slate-700">{t("filter.hasDisabilities")}</Label>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-1">
-                      <Label className="text-xs">{t("filter.dateFrom")}</Label>
+                      <Label className="text-[11px] text-slate-600">{t("filter.dateFrom")}</Label>
                       <Input
                         type="date"
                         value={filterStartDate}
                         onChange={(e) => { setFilterStartDate(e.target.value); setPage(1); }}
+                        className="h-8 text-xs border-[#E3E7EB] rounded-xs"
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label className="text-xs">{t("filter.dateTo")}</Label>
+                      <Label className="text-[11px] text-slate-600">{t("filter.dateTo")}</Label>
                       <Input
                         type="date"
                         value={filterEndDate}
                         onChange={(e) => { setFilterEndDate(e.target.value); setPage(1); }}
+                        className="h-8 text-xs border-[#E3E7EB] rounded-xs"
                       />
                     </div>
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="h-7 text-xs text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs w-full"
                     onClick={() => { setFilterType("all"); setFilterPoor(null); setFilterDisabled(null); setFilterStartDate(""); setFilterEndDate(""); setPage(1); }}
                   >
                     {t("filter.clearFilters")}
@@ -259,74 +275,96 @@ export default function TechnologySupportPage() {
             </Popover>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="border rounded-xl bg-white shadow-sm overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-slate-50/80 border-b border-[#E3E7EB]">
                 <TableRow>
-                  <TableHead className="font-semibold">{t("table.beneficiary")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.technologyType")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.association")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.status")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.health")}</TableHead>
-                  <TableHead className="font-semibold text-right">{t("table.actions")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3 pl-5">{t("table.beneficiary")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.technologyType")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.association")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.status")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.health")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">{t("table.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-10">
+                    <TableCell colSpan={6} className="text-center py-10 text-xs text-slate-500">
                       {t("table.loading")}
                     </TableCell>
                   </TableRow>
                 ) : currentData.length > 0 ? (
                   currentData.map((rec: TechnologySupportRecord) => (
-                    <TableRow key={rec.id} className="hover:bg-slate-50/50 transition-colors">
-                      <TableCell className="font-medium">
-                        {getClientName(rec)}
-                        <p className="text-xs text-slate-400">{getClientId(rec)}</p>
+                    <TableRow key={rec.id} className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0">
+                      <TableCell className="py-3 pl-5">
+                        <div className="font-semibold text-xs text-[#0B1F3A]">{getClientName(rec)}</div>
+                        {getClientId(rec) && (
+                          <span className="font-mono text-[11px] text-slate-500">{getClientId(rec)}</span>
+                        )}
                       </TableCell>
-                      <TableCell>{t(`form.technologyTypes.${rec.technologyType}`) || rec.technologyType}</TableCell>
-                      <TableCell>{rec.associationName || "-"}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-xs font-medium text-slate-800 py-3">
+                        {t(`form.technologyTypes.${rec.technologyType}`) || rec.technologyType}
+                      </TableCell>
+                      <TableCell className="text-xs text-slate-600 py-3">{rec.associationName || "—"}</TableCell>
+                      <TableCell className="py-3">
                         <div className="flex flex-wrap gap-1">
-                          {rec.isPoor && <Badge variant="secondary" className="rounded-full text-xs">{t("poor")}</Badge>}
-                          {rec.isSexWorker && <Badge variant="outline" className="rounded-full text-xs">{t("sexWorker")}</Badge>}
+                          {rec.isPoor && (
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-semibold border ${uiTokens.statusTag.warning}`}>
+                              {t("poor")}
+                            </span>
+                          )}
+                          {rec.isSexWorker && (
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-medium border ${uiTokens.statusTag.neutral}`}>
+                              {t("sexWorker")}
+                            </span>
+                          )}
                           {rec.disabilities?.length > 0 && (
-                            <Badge variant="secondary" className="rounded-full text-xs">
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-semibold border ${uiTokens.statusTag.primary}`}>
                               {t("disabled")} ({rec.disabilities.length})
-                            </Badge>
+                            </span>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-3">
                         {rec.healthConditions?.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
                             {rec.healthConditions.map((c: string) => (
-                              <Badge key={c} variant="destructive" className="rounded-full text-xs">
+                              <span key={c} className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-medium border border-red-200 bg-red-50 text-red-700">
                                 {c}
-                              </Badge>
+                              </span>
                             ))}
                           </div>
                         ) : (
-                          <span className="text-slate-400">-</span>
+                          <span className="text-slate-400 text-xs">—</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right py-3 pr-5">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => router.push(`/women/technology/${rec.id}`)}>
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(rec)}>
-                            <Pencil className="w-4 h-4" />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => router.push(`/women/technology/${rec.id}`)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-destructive"
+                            onClick={() => handleEdit(rec)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xs cursor-pointer"
                             onClick={() => { setDeleteId(rec.id); setDeleteOpen(true); }}
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </Button>
                         </div>
                       </TableCell>
@@ -334,7 +372,7 @@ export default function TechnologySupportPage() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-10 text-slate-400">
+                    <TableCell colSpan={6} className="text-center py-10 text-xs text-slate-500">
                       {t("table.noRecords")}
                     </TableCell>
                   </TableRow>
@@ -344,16 +382,29 @@ export default function TechnologySupportPage() {
           </div>
 
           {totalItems > 0 && (
-            <div className="flex items-center justify-between pt-4 mt-4 border-t">
-              <div className="text-sm text-muted-foreground">
+            <div className="flex items-center justify-between p-4 border-t border-[#E3E7EB]">
+              <div className="text-xs font-mono text-slate-500">
                 {t("form.showing", { from: startIndex + 1, to: Math.min(startIndex + limit, totalItems), total: totalItems })}
               </div>
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
-                  <ChevronLeft className="h-4 w-4" />
+              <div className="flex items-center gap-1.5">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
-                  <ChevronRight className="h-4 w-4" />
+                <span className="text-xs font-mono px-2 text-slate-600">{page} / {totalPages || 1}</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page >= totalPages}
+                  className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </div>
             </div>
@@ -362,16 +413,20 @@ export default function TechnologySupportPage() {
       </Card>
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-xs border-[#E3E7EB]">
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("delete.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-base font-bold text-[#0B1F3A]">{t("delete.title")}</AlertDialogTitle>
+            <AlertDialogDescription className="text-xs text-slate-500">
               {t("delete.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("delete.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={deleteMutation.isPending} className="bg-destructive text-destructive-foreground">
+            <AlertDialogCancel className="rounded-xs text-xs h-8">{t("delete.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="bg-red-600 hover:bg-red-700 rounded-xs text-xs h-8"
+            >
               {deleteMutation.isPending ? t("delete.deleting") : t("delete.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>

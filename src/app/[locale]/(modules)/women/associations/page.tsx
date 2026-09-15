@@ -59,11 +59,13 @@ import {
   WomenAssociationType,
 } from "@/api/womens/associations";
 import WomenReportDialog from "@/app/[locale]/(modules)/women/_components/women-report-dialog";
-const STATUS_STYLES: Record<string, string> = {
-  DRAFT: "bg-slate-100 text-slate-700",
-  SUBMITTED: "bg-amber-100 text-amber-800",
-  APPROVED: "bg-emerald-100 text-emerald-800",
-  REJECTED: "bg-red-100 text-red-800",
+import { uiTokens } from "@/styles/design-system";
+
+const STATUS_TAGS: Record<string, string> = {
+  DRAFT: uiTokens.statusTag.neutral,
+  SUBMITTED: uiTokens.statusTag.warning,
+  APPROVED: uiTokens.statusTag.primary,
+  REJECTED: uiTokens.statusTag.danger,
 };
 
 export default function AssociationsPage() {
@@ -149,24 +151,39 @@ export default function AssociationsPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 font-lexend">{t("title")}</h1>
-          <p className="text-slate-500 mt-1">{t("subtitle")}</p>
+    <div className="p-4 sm:p-6 space-y-4 max-w-7xl mx-auto w-full">
+      {/* ── Institutional Header Banner ──────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Women Development &amp; Support
+          </span>
         </div>
-        <WomenReportDialog category="ASSOCIATION" />
-        <WomenAssociationForm />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">{t("title")}</h1>
+            <p className="text-xs text-slate-500">{t("subtitle")}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <WomenReportDialog category="ASSOCIATION" />
+            <WomenAssociationForm />
+          </div>
+        </div>
       </div>
 
       {subCityFilter && (
-        <div className="flex items-center gap-2 text-sm text-slate-600">
+        <div className="flex items-center gap-2 text-xs text-slate-600 bg-[#E8F2FA] border border-[#BCD5EA] p-2.5 rounded-xs">
           <span>
             {t("filteredBySubCity", { subCity: subCityFilter })}
           </span>
           <Button
             variant="ghost"
             size="sm"
+            className="h-6 text-xs text-[#1769AA] hover:underline cursor-pointer p-0"
             onClick={() => {
               setSubCityFilter("");
               setSearch("");
@@ -177,33 +194,33 @@ export default function AssociationsPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <StatChip label={t("stats.total")} value={records.length} tone="text-slate-900" />
-        <StatChip label={t("status.DRAFT")} value={statusCounts.DRAFT} tone="text-slate-700" />
-        <StatChip label={t("status.SUBMITTED")} value={statusCounts.SUBMITTED} tone="text-amber-600" />
-        <StatChip label={t("status.APPROVED")} value={statusCounts.APPROVED} tone="text-emerald-600" />
-        <StatChip label={t("status.REJECTED")} value={statusCounts.REJECTED} tone="text-red-600" />
-        <StatChip label={t("stats.declaredMembers")} value={totalDeclaredMembers} tone="text-primary" />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <StatChip label={t("stats.total")} value={records.length} tone="text-[#0B1F3A]" />
+        <StatChip label={t("status.DRAFT")} value={statusCounts.DRAFT} tone="text-slate-600" />
+        <StatChip label={t("status.SUBMITTED")} value={statusCounts.SUBMITTED} tone="text-[#D97706]" />
+        <StatChip label={t("status.APPROVED")} value={statusCounts.APPROVED} tone="text-[#1769AA]" />
+        <StatChip label={t("status.REJECTED")} value={statusCounts.REJECTED} tone="text-[#DC2626]" />
+        <StatChip label={t("stats.declaredMembers")} value={totalDeclaredMembers} tone="text-[#1769AA]" />
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-primary" />
+      <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3.5 px-5 border-b border-[#E3E7EB]">
+          <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            <Users className="w-4 h-4 text-[#1769AA]" />
             {t("cardTitle")}
           </CardTitle>
-          <div className="flex items-center gap-2">
-            <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative w-full sm:w-56">
+              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 placeholder={t("searchPlaceholder")}
-                className="pl-8 bg-slate-50/50 border-slate-200"
+                className="pl-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               />
             </div>
             <Select value={filterType} onValueChange={(v) => { setFilterType(v); setPage(1); }}>
-              <SelectTrigger className="w-[170px]">
+              <SelectTrigger className="w-[150px] h-8 text-xs border-[#E3E7EB] rounded-xs">
                 <SelectValue placeholder={t("filters.allTypes")} />
               </SelectTrigger>
               <SelectContent>
@@ -216,7 +233,7 @@ export default function AssociationsPage() {
               </SelectContent>
             </Select>
             <Select value={filterStatus} onValueChange={(v) => { setFilterStatus(v); setPage(1); }}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-[140px] h-8 text-xs border-[#E3E7EB] rounded-xs">
                 <SelectValue placeholder={t("filters.allStatuses")} />
               </SelectTrigger>
               <SelectContent>
@@ -230,60 +247,76 @@ export default function AssociationsPage() {
             </Select>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="border rounded-xl bg-white shadow-sm overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-slate-50/80 border-b border-[#E3E7EB]">
                 <TableRow>
-                  <TableHead className="font-semibold">{t("table.name")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.type")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.location")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.leader")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.totalMembers")}</TableHead>
-                  <TableHead className="font-semibold">{t("table.status")}</TableHead>
-                  <TableHead className="font-semibold text-right">{t("table.actions")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3 pl-5">{t("table.name")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.type")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.location")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.leader")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.totalMembers")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.status")}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">{t("table.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-10">
+                    <TableCell colSpan={7} className="text-center py-10 text-xs text-slate-500">
                       {t("table.loading")}
                     </TableCell>
                   </TableRow>
                 ) : currentData.length > 0 ? (
                   currentData.map((rec) => (
-                    <TableRow key={rec.id} className="hover:bg-slate-50/50 transition-colors">
-                      <TableCell className="font-medium">{rec.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{t(`types.${rec.type}`)}</Badge>
+                    <TableRow key={rec.id} className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0">
+                      <TableCell className="font-semibold text-xs text-[#0B1F3A] py-3 pl-5">{rec.name}</TableCell>
+                      <TableCell className="py-3">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-medium border border-[#E3E7EB] bg-slate-50 text-slate-700">
+                          {t(`types.${rec.type}`)}
+                        </span>
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600">
+                      <TableCell className="text-xs text-slate-600 py-3">
                         {rec.subCity} / {rec.woreda}
                         {rec.block ? `, ${t("table.block")} ${rec.block}` : ""}
                       </TableCell>
-                      <TableCell className="text-sm text-slate-600">
-                        {rec.leaderName}
-                        <p className="text-xs text-slate-400">{rec.leaderPhoneNumber}</p>
+                      <TableCell className="text-xs text-slate-600 py-3">
+                        <span className="font-medium text-slate-800">{rec.leaderName}</span>
+                        <p className="font-mono text-[11px] text-slate-500">{rec.leaderPhoneNumber}</p>
                       </TableCell>
-                      <TableCell>{rec.totalMembers ?? "-"}</TableCell>
-                      <TableCell>
-                        <Badge className={`rounded-full border-transparent ${STATUS_STYLES[rec.approvalStatus] || ""}`}>
+                      <TableCell className="font-mono text-xs py-3">{rec.totalMembers ?? "—"}</TableCell>
+                      <TableCell className="py-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${STATUS_TAGS[rec.approvalStatus] || uiTokens.statusTag.neutral}`}>
                           {t(`status.${rec.approvalStatus}`)}
-                        </Badge>
+                        </span>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right py-3 pr-5">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => router.push(`/women/associations/${rec.id}`)}>
-                            <Eye className="w-4 h-4" />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => router.push(`/women/associations/${rec.id}`)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => router.push(`/women/associations/${rec.id}?edit=1`)}>
-                            <Pencil className="w-4 h-4" />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => router.push(`/women/associations/${rec.id}?edit=1`)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
                           </Button>
                           <RowReportButton associationId={rec.id} />
-                          <Button variant="ghost" size="icon" className="text-destructive"
-                            onClick={() => { setDeleteId(rec.id); setDeleteOpen(true); }}>
-                            <Trash2 className="w-4 h-4" />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xs cursor-pointer"
+                            onClick={() => { setDeleteId(rec.id); setDeleteOpen(true); }}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
                           </Button>
                         </div>
                       </TableCell>
@@ -291,7 +324,7 @@ export default function AssociationsPage() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-10 text-slate-500">
+                    <TableCell colSpan={7} className="text-center py-10 text-xs text-slate-500">
                       {t("table.noRecords")}
                     </TableCell>
                   </TableRow>
@@ -300,17 +333,29 @@ export default function AssociationsPage() {
             </Table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <p className="text-sm text-slate-500">
+          <div className="flex items-center justify-between p-4 border-t border-[#E3E7EB]">
+            <p className="text-xs font-mono text-slate-500">
               {t("showing", { from: totalItems === 0 ? 0 : startIndex + 1, to: Math.min(startIndex + limit, totalItems), total: totalItems })}
             </p>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                <ChevronLeft className="w-4 h-4" />
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={page <= 1}
+                onClick={() => setPage(page - 1)}
+                className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
               </Button>
-              <span className="text-sm font-medium">{page} / {totalPages}</span>
-              <Button variant="outline" size="icon" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
-                <ChevronRight className="w-4 h-4" />
+              <span className="text-xs font-mono px-2 text-slate-600">{page} / {totalPages}</span>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={page >= totalPages}
+                onClick={() => setPage(page + 1)}
+                className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
               </Button>
             </div>
           </div>
@@ -318,17 +363,17 @@ export default function AssociationsPage() {
       </Card>
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-xs border-[#E3E7EB]">
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("delete.title")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("delete.description")}</AlertDialogDescription>
+            <AlertDialogTitle className="text-base font-bold text-[#0B1F3A]">{t("delete.title")}</AlertDialogTitle>
+            <AlertDialogDescription className="text-xs text-slate-500">{t("delete.description")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("delete.cancel")}</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-xs text-xs h-8">{t("delete.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
-              className="bg-destructive hover:bg-destructive/90"
+              className="bg-red-600 hover:bg-red-700 rounded-xs text-xs h-8"
             >
               {t("delete.confirm")}
             </AlertDialogAction>
@@ -349,9 +394,9 @@ function StatChip({
   tone: string;
 }) {
   return (
-    <div className="rounded-xl border bg-white p-3 text-center shadow-sm">
-      <p className={`text-2xl font-bold ${tone}`}>{value}</p>
-      <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+    <div className="rounded-xs border border-[#E3E7EB] bg-white p-3 text-center shadow-2xs">
+      <p className={`text-xl font-bold font-mono ${tone}`}>{value}</p>
+      <p className="text-[11px] font-medium text-slate-500 mt-0.5">{label}</p>
     </div>
   );
 }

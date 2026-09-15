@@ -46,29 +46,39 @@ const WomenDashboard = () => {
   const t = useTranslations("women");
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-zinc-900 font-lexend">
-            {t("dashboard.title")}
-          </h1>
-          <p className="text-zinc-500 mt-1">{t("dashboard.subtitle")}</p>
+    <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+      {/* ── Institutional Header Banner ──────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Women Development &amp; Support
+          </span>
         </div>
-        <div className="flex flex-wrap gap-2 w-full md:w-auto">
-          <Link href="/women/profiles">
-            <Button variant="outline" className="gap-2">
-              <Plus className="w-4 h-4" />
-              {t("dashboard.registerProfile")}
-            </Button>
-          </Link>
-          {/* <Button className="gap-2">
-            <Download className="w-4 h-4" />
-            {t("dashboard.generateReport")}
-          </Button> */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
+              {t("dashboard.title")}
+            </h1>
+            <p className="text-xs text-slate-500">
+              {t("dashboard.subtitle")}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/women/profiles">
+              <Button className="bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold rounded-xs text-xs h-8 px-3 shadow-2xs gap-1.5 cursor-pointer">
+                <Plus className="w-3.5 h-3.5" />
+                {t("dashboard.registerProfile")}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <StatsCard
           title={t("dashboard.stats.totalProfiles")}
           icon={Users}
@@ -110,7 +120,7 @@ const WomenDashboard = () => {
           dataKey="profiles"
         />
         <StatsCard
-          title="Training"
+          title="Training Programs"
           icon={GraduationCap}
           value={trainings?.length || 0}
           chartData={chartData}
@@ -118,7 +128,7 @@ const WomenDashboard = () => {
           dataKey="services"
         />
         <StatsCard
-          title="Employment"
+          title="Employment Placements"
           icon={Briefcase}
           value={employments?.length || 0}
           chartData={chartData}
@@ -136,79 +146,79 @@ const WomenDashboard = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-xl font-semibold text-zinc-900">
+        <div className="lg:col-span-2 space-y-3">
+          <h2 className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {t("dashboard.activity.title")}
           </h2>
           <WomenAssociationDashboard />
         </div>
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-zinc-900">
+        <div className="space-y-3">
+          <h2 className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {t("dashboard.quickActions.title")}
           </h2>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4 space-y-3">
+          <div className="rounded-xs border border-[#E3E7EB] bg-white p-3.5 space-y-2 shadow-2xs">
             <Link href="/women/profiles" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <Users className="w-4 h-4 text-zinc-500" />
+                <Users className="w-3.5 h-3.5 text-[#1769AA]" />
                 {t("dashboard.quickActions.womenProfiles")}
               </Button>
             </Link>
             <Link href="/women/associations" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <Landmark className="w-4 h-4 text-zinc-500" />
+                <Landmark className="w-3.5 h-3.5 text-[#1769AA]" />
                 {t("dashboard.quickActions.associations")}
               </Button>
             </Link>
             <Link href="/women/members" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <Users className="w-4 h-4 text-zinc-500" />
+                <Users className="w-3.5 h-3.5 text-[#1769AA]" />
                 {t("dashboard.quickActions.members")}
               </Button>
             </Link>
             <Link href="/women/services" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <HandHeart className="w-4 h-4 text-zinc-500" />
+                <HandHeart className="w-3.5 h-3.5 text-[#1769AA]" />
                 {t("dashboard.quickActions.supportServices")}
               </Button>
             </Link>
             <Link href="/women/technology" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <Zap className="w-4 h-4 text-zinc-500" />
+                <Zap className="w-3.5 h-3.5 text-[#1769AA]" />
                 Technology Support
               </Button>
             </Link>
             <Link href="/women/training" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <GraduationCap className="w-4 h-4 text-zinc-500" />
-                Training
+                <GraduationCap className="w-3.5 h-3.5 text-[#1769AA]" />
+                Training Programs
               </Button>
             </Link>
             <Link href="/women/employment" className="block">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 h-12 text-zinc-700"
+                className="w-full justify-start gap-2.5 h-9 text-xs font-semibold text-slate-700 border-[#E3E7EB] rounded-xs hover:border-[#BCD5EA] hover:bg-[#E8F2FA]/50 hover:text-[#1769AA] transition-colors"
               >
-                <Briefcase className="w-4 h-4 text-zinc-500" />
-                Employment
+                <Briefcase className="w-3.5 h-3.5 text-[#1769AA]" />
+                Employment Placements
               </Button>
             </Link>
           </div>

@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "next-intl";
+import { uiTokens } from "@/styles/design-system";
 
 export default function ProfilesPage() {
   const router = useRouter();
@@ -123,19 +124,23 @@ export default function ProfilesPage() {
     const s = status.toUpperCase();
     if (s === "EMPLOYED" || s.includes("WORK")) {
       return (
-        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.primary}`}>
           {label}
-        </Badge>
+        </span>
       );
     }
     if (s === "UNEMPLOYED") {
       return (
-        <Badge className="bg-amber-50 text-amber-700 border-amber-200">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.warning}`}>
           {label}
-        </Badge>
+        </span>
       );
     }
-    return <Badge variant="outline">{label}</Badge>;
+    return (
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-medium border ${uiTokens.statusTag.neutral}`}>
+        {label}
+      </span>
+    );
   };
 
   const getEducationLabel = (level?: string) => {
@@ -155,37 +160,49 @@ export default function ProfilesPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 font-lexend">
-            {t("womenList.title")}
-          </h1>
-          <p className="text-slate-500 mt-1">{t("womenList.subtitle")}</p>
+    <div className="p-4 sm:p-6 space-y-4 max-w-7xl mx-auto w-full">
+      {/* ── Institutional Header Banner ──────────────────────────────────────── */}
+      <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
+          <span>Addis Ababa City Administration</span>
+          <span>·</span>
+          <span>Women &amp; Social Affairs Bureau</span>
+          <span>·</span>
+          <span className="text-[#1769AA] font-semibold">
+            Women Development &amp; Support
+          </span>
         </div>
-
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
-            <Input
-              type="search"
-              placeholder={t("womenList.searchPlaceholder")}
-              className="pl-8 bg-slate-50/50 border-slate-200"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
+              {t("womenList.title")}
+            </h1>
+            <p className="text-xs text-slate-500">{t("womenList.subtitle")}</p>
           </div>
-          <NewWomenProfileForm />
+
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+              <Input
+                type="search"
+                placeholder={t("womenList.searchPlaceholder")}
+                className="pl-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <NewWomenProfileForm />
+          </div>
         </div>
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-primary" />
+      <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3.5 px-5 border-b border-[#E3E7EB]">
+          <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            <Users className="w-4 h-4 text-[#1769AA]" />
             {t("womenList.title")}
           </CardTitle>
-          <div className="text-sm text-slate-500">
+          <div className="text-xs font-mono text-slate-500">
             {t("womenList.pagination.showing", {
               start: totalItems === 0 ? 0 : startIndex + 1,
               end: Math.min(startIndex + limit, totalItems),
@@ -193,33 +210,33 @@ export default function ProfilesPage() {
             })}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="border rounded-xl bg-white shadow-sm overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50">
+              <TableHeader className="bg-slate-50/80 border-b border-[#E3E7EB]">
                 <TableRow>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3 pl-5">
                     {t("womenList.table.name")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.cityId")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.age")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.phone")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.address")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.educationLevel")}
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="text-xs font-semibold text-slate-700 py-3">
                     {t("womenList.table.careerStatus")}
                   </TableHead>
-                  <TableHead className="font-semibold text-right">
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">
                     {t("womenList.table.actions")}
                   </TableHead>
                 </TableRow>
@@ -227,7 +244,7 @@ export default function ProfilesPage() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-10">
+                    <TableCell colSpan={8} className="text-center py-10 text-xs text-slate-500">
                       {t("womenList.loading")}
                     </TableCell>
                   </TableRow>
@@ -235,38 +252,40 @@ export default function ProfilesPage() {
                   currentProfiles.map((profile: WomenProfile) => (
                     <TableRow
                       key={profile.id}
-                      className="hover:bg-slate-50/50 transition-colors"
+                      className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
                     >
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs uppercase">
+                      <TableCell className="font-medium py-3 pl-5">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-xs bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] flex items-center justify-center font-bold text-xs uppercase font-mono">
                             {profile.client.firstName?.[0]}
                             {profile.client.lastName?.[0]}
                           </div>
-                          <span>
+                          <span className="text-xs font-semibold text-[#0B1F3A]">
                             {profile.client.firstName} {profile.client.lastName}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-slate-600 font-mono text-xs">
-                        {profile.client.cityIdNumber}
+                      <TableCell className="py-3">
+                        <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
+                          {profile.client.cityIdNumber || "—"}
+                        </span>
                       </TableCell>
-                      <TableCell className="text-slate-600">
+                      <TableCell className="text-slate-600 text-xs font-mono py-3">
                         {getAge(profile)}
                       </TableCell>
-                      <TableCell className="text-slate-600">
-                        {profile.client.phoneNumber || "-"}
+                      <TableCell className="text-slate-600 font-mono text-xs py-3">
+                        {profile.client.phoneNumber || "—"}
                       </TableCell>
-                      <TableCell className="text-slate-600 max-w-[160px] truncate" title={profile.client.address}>
-                        {profile.client.address || "-"}
+                      <TableCell className="text-slate-600 text-xs max-w-[160px] truncate py-3" title={profile.client.address}>
+                        {profile.client.address || "—"}
                       </TableCell>
-                      <TableCell className="text-slate-600">
+                      <TableCell className="text-slate-600 text-xs py-3">
                         {getEducationLabel(profile.educationLevel)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-3">
                         {getCareerStatusLabel(profile)}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right py-3 pr-5">
                         <div className="flex justify-end gap-1">
                           <PersonHistoryDialog
                             clientId={profile.client.id}
@@ -277,9 +296,9 @@ export default function ProfilesPage() {
                                 variant="ghost"
                                 size="icon"
                                 title="View cross-department support history"
-                                className="text-slate-600 hover:text-primary"
+                                className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
                               >
-                                <History className="w-4 h-4" />
+                                <History className="w-3.5 h-3.5" />
                               </Button>
                             }
                           />
@@ -290,24 +309,27 @@ export default function ProfilesPage() {
                             onClick={() =>
                               router.push(`/women/profiles/${profile.id}`)
                             }
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-3.5 h-3.5" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             title={t("womenList.table.edit")}
                             onClick={() => handleEdit(profile)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
                           >
-                            <Pencil className="w-4 h-4" />
+                            <Pencil className="w-3.5 h-3.5" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             title={t("womenList.table.toggleStatus")}
                             onClick={() => handleStatusToggle(profile)}
+                            className="h-7 w-7 text-slate-500 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
                           >
-                            <ToggleLeft className="w-4 h-4" />
+                            <ToggleLeft className="w-3.5 h-3.5" />
                           </Button>
                         </div>
                       </TableCell>
@@ -317,7 +339,7 @@ export default function ProfilesPage() {
                   <TableRow>
                     <TableCell
                       colSpan={8}
-                      className="text-center py-10 text-slate-500"
+                      className="text-center py-10 text-xs text-slate-500"
                     >
                       {t("womenList.noProfiles")}
                     </TableCell>
@@ -328,24 +350,25 @@ export default function ProfilesPage() {
           </div>
 
           {totalItems > 0 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-slate-500">
+            <div className="flex items-center justify-between p-4 border-t border-[#E3E7EB]">
+              <p className="text-xs text-slate-500 font-mono">
                 {t("womenList.pagination.showing", {
                   start: startIndex + 1,
                   end: Math.min(startIndex + limit, totalItems),
                   total: totalItems,
                 })}
               </p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <Button
                   variant="outline"
                   size="icon"
                   disabled={page <= 1}
                   onClick={() => setPage(page - 1)}
+                  className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </Button>
-                <span className="text-sm font-medium">
+                <span className="text-xs font-mono px-2 text-slate-600">
                   {page} / {totalPages}
                 </span>
                 <Button
@@ -353,8 +376,9 @@ export default function ProfilesPage() {
                   size="icon"
                   disabled={page >= totalPages}
                   onClick={() => setPage(page + 1)}
+                  className="h-7 w-7 rounded-xs border-[#E3E7EB] cursor-pointer"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </div>
             </div>

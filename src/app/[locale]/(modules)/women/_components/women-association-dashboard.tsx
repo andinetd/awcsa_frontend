@@ -102,14 +102,14 @@ export default function WomenAssociationDashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Users className="w-4 h-4 text-primary" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="pb-3 border-b border-[#E3E7EB]">
+            <CardTitle className="flex items-center gap-2 text-sm font-bold text-[#0B1F3A]">
+              <Users className="w-4 h-4 text-[#1769AA]" />
               {t("bySubCity.title")}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             <SubCityTable
               rows={stats?.bySubCity ?? []}
               loading={isLoading}
@@ -119,15 +119,15 @@ export default function WomenAssociationDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <ListChecks className="w-4 h-4 text-primary" />
+        <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
+          <CardHeader className="pb-3 border-b border-[#E3E7EB]">
+            <CardTitle className="flex items-center gap-2 text-sm font-bold text-[#0B1F3A]">
+              <ListChecks className="w-4 h-4 text-[#1769AA]" />
               {t("totals.title")}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <dl className="space-y-3 text-sm">
+          <CardContent className="pt-4">
+            <dl className="space-y-3 text-xs">
               <TotalRow
                 label={t("totals.declaredMembers")}
                 value={stats?.declaredMembers ?? 0}
@@ -145,12 +145,12 @@ export default function WomenAssociationDashboard() {
                 value={stats?.byStatus.APPROVED ?? 0}
               />
             </dl>
-            <div className="mt-4 text-xs text-muted-foreground">
+            <div className="mt-4 pt-3 border-t border-[#E3E7EB] text-xs">
               <Link
                 href="/women/associations"
-                className="text-primary hover:underline"
+                className="text-[#1769AA] font-semibold hover:underline inline-flex items-center gap-1"
               >
-                {t("totals.viewList")}
+                {t("totals.viewList")} →
               </Link>
             </div>
           </CardContent>
@@ -173,16 +173,16 @@ function SubCityTable({
 }) {
   const t = useTranslations("women.dashboard.bySubCity");
   return (
-    <div className="border rounded-xl overflow-hidden">
+    <div className="border border-[#E3E7EB] rounded-xs overflow-hidden">
       <Table>
-        <TableHeader className="bg-slate-50">
+        <TableHeader className="bg-slate-50/80 border-b border-[#E3E7EB]">
           <TableRow>
-            <TableHead className="font-semibold">{t("subCity")}</TableHead>
-            <TableHead className="font-semibold text-right">{t("total")}</TableHead>
-            <TableHead className="font-semibold text-right">
+            <TableHead className="font-semibold text-xs text-slate-700">{t("subCity")}</TableHead>
+            <TableHead className="font-semibold text-xs text-slate-700 text-right">{t("total")}</TableHead>
+            <TableHead className="font-semibold text-xs text-slate-700 text-right">
               {t("approved")}
             </TableHead>
-            <TableHead className="font-semibold text-right">
+            <TableHead className="font-semibold text-xs text-slate-700 text-right">
               {t("members")}
             </TableHead>
           </TableRow>
@@ -190,13 +190,13 @@ function SubCityTable({
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-6 text-slate-500">
+              <TableCell colSpan={4} className="text-center py-6 text-slate-500 text-xs">
                 {t("loading")}
               </TableCell>
             </TableRow>
           ) : rows.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-6 text-slate-500">
+              <TableCell colSpan={4} className="text-center py-6 text-slate-500 text-xs">
                 {emptyLabel}
               </TableCell>
             </TableRow>
@@ -204,13 +204,13 @@ function SubCityTable({
             rows.map((row) => (
               <TableRow
                 key={row.subCity}
-                className="hover:bg-slate-50/50 cursor-pointer"
+                className="hover:bg-[#F7F8FA] cursor-pointer transition-colors"
                 onClick={() => onRowClick(row.subCity)}
               >
-                <TableCell className="font-medium">{row.subCity}</TableCell>
-                <TableCell className="text-right">{row.total}</TableCell>
-                <TableCell className="text-right">{row.approved}</TableCell>
-                <TableCell className="text-right">{row.members}</TableCell>
+                <TableCell className="font-medium text-xs text-[#0B1F3A]">{row.subCity}</TableCell>
+                <TableCell className="text-right text-xs font-mono">{row.total}</TableCell>
+                <TableCell className="text-right text-xs font-mono text-[#1769AA] font-semibold">{row.approved}</TableCell>
+                <TableCell className="text-right text-xs font-mono">{row.members}</TableCell>
               </TableRow>
             ))
           )}
@@ -222,9 +222,9 @@ function SubCityTable({
 
 function TotalRow({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex items-center justify-between">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="text-base font-semibold text-slate-900">{value}</dd>
+    <div className="flex items-center justify-between py-1 border-b border-slate-100 last:border-0">
+      <dt className="text-slate-600 font-medium">{label}</dt>
+      <dd className="text-sm font-bold font-mono text-[#0B1F3A]">{value}</dd>
     </div>
   );
 }
