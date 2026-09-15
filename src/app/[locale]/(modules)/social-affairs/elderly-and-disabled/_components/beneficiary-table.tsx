@@ -132,8 +132,8 @@ export default function BeneficiaryTable({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64 border rounded-xl bg-slate-50/50">
-        <div className="animate-pulse text-slate-400 font-medium">
+      <div className="flex items-center justify-center h-48">
+        <div className="animate-pulse font-mono text-xs uppercase tracking-wider text-slate-400">
           {t("loading")}
         </div>
       </div>
@@ -142,40 +142,40 @@ export default function BeneficiaryTable({
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 border rounded-xl bg-slate-50/50 space-y-2">
-        <p className="text-slate-500 font-medium">{t("noRecords")}</p>
-        <p className="text-sm text-slate-400">{t("noRecordsSubtitle")}</p>
+      <div className="flex flex-col items-center justify-center h-48 space-y-1 p-6 text-center">
+        <p className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold">{t("noRecords")}</p>
+        <p className="text-xs text-slate-400 font-mono">{t("noRecordsSubtitle")}</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="border rounded-xl bg-white shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="bg-slate-50">
+          <TableHeader className="bg-slate-50 border-b border-[#E3E7EB]">
             <TableRow>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {t("table.fullName")}
               </TableHead>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {tSrs("faydaId")}
               </TableHead>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {t("table.phone")}
               </TableHead>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {tSrs("subCity")} / {tSrs("woreda")}
               </TableHead>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {type === "DISABLED"
                   ? t("table.disabilityType")
                   : tSrs("workplaceCondition")}
               </TableHead>
-              <TableHead className="font-semibold">
+              <TableHead className="font-mono text-[11px] font-bold uppercase text-slate-600">
                 {tSrs("eligibility")}
               </TableHead>
-              <TableHead className="text-right font-semibold">
+              <TableHead className="text-right font-mono text-[11px] font-bold uppercase text-slate-600">
                 {t("table.actions")}
               </TableHead>
             </TableRow>
@@ -187,26 +187,28 @@ export default function BeneficiaryTable({
               return (
                 <TableRow
                   key={item.id}
-                  className="hover:bg-slate-50/50 transition-colors"
+                  className="border-b border-[#E3E7EB] hover:bg-slate-50/50 transition-colors"
                 >
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium text-xs text-[#0B1F3A]">
                     {item.firstName} {item.lastName}
                     {item.age != null && (
-                      <span className="text-xs text-slate-400 ml-1">
+                      <span className="text-[11px] font-mono text-slate-400 ml-1">
                         ({item.age}
                         {item.sex ? `, ${item.sex.charAt(0)}` : ""})
                       </span>
                     )}
                   </TableCell>
                   <TableCell className="font-mono text-xs">
-                    {item.faydaId ?? item.cityIdNumber ?? "—"}
+                    <span className="bg-slate-50 px-1.5 py-0.5 rounded-xs border border-slate-200/80 text-slate-700">
+                      {item.faydaId ?? item.cityIdNumber ?? "—"}
+                    </span>
                   </TableCell>
-                  <TableCell>{item.phoneNumber ?? "—"}</TableCell>
-                  <TableCell className="text-sm text-slate-600">
+                  <TableCell className="font-mono text-xs text-slate-600">{item.phoneNumber ?? "—"}</TableCell>
+                  <TableCell className="text-xs text-slate-600">
                     {item.subCity ?? "—"}
                     {item.woreda ? ` / ${item.woreda}` : ""}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-xs text-slate-600">
                     {type === "DISABLED"
                       ? (item.DisabilityProfile?.disabilityType ?? "—")
                       : (item.ElderlyProfile?.workplaceCondition ?? "—")}
@@ -214,44 +216,45 @@ export default function BeneficiaryTable({
                   <TableCell>
                     {latestEligibility ? (
                       <Badge
-                        variant={
-                          latestEligibility === "ELIGIBLE"
-                            ? "default"
-                            : latestEligibility === "NOT_ELIGIBLE"
-                              ? "destructive"
-                              : "secondary"
-                        }
+                        variant="outline"
                         className={cn(
-                          "rounded-full",
+                          "font-mono text-[10px] uppercase font-bold rounded-xs px-2 py-0.5 border",
                           latestEligibility === "ELIGIBLE" &&
-                            "bg-green-50 text-green-700 border-green-200",
+                            "bg-emerald-50 text-emerald-700 border-emerald-200",
+                          latestEligibility === "NOT_ELIGIBLE" &&
+                            "bg-rose-50 text-rose-700 border-rose-200",
+                          latestEligibility !== "ELIGIBLE" &&
+                            latestEligibility !== "NOT_ELIGIBLE" &&
+                            "bg-amber-50 text-amber-700 border-amber-200",
                         )}
                       >
                         {latestEligibility}
                       </Badge>
                     ) : (
-                      <span className="text-slate-400 text-xs">—</span>
+                      <span className="text-slate-400 font-mono text-xs">—</span>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="icon"
                         asChild
+                        className="h-7 w-7 rounded-xs border-[#E3E7EB] hover:bg-[#E8F2FA] hover:text-[#1769AA] transition-colors"
                         title="View case history"
                       >
                         <Link href={`${profileHref}/${item.id}`}>
-                          <History className="w-4 h-4 text-slate-600" />
+                          <History className="w-3.5 h-3.5 text-slate-600" />
                         </Link>
                       </Button>
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="icon"
+                        className="h-7 w-7 rounded-xs border-[#E3E7EB] hover:bg-slate-50 transition-colors"
                         onClick={() => setEditing(item)}
                         title="Edit"
                       >
-                        <Edit className="w-4 h-4 text-slate-600" />
+                        <Edit className="w-3.5 h-3.5 text-slate-600" />
                       </Button>
                     </div>
                   </TableCell>
@@ -337,12 +340,12 @@ function EditBeneficiaryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-[750px] max-h-[90vh] overflow-y-auto rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             Edit {beneficiary.firstName} {beneficiary.lastName}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono">
             {beneficiary.faydaId ?? beneficiary.cityIdNumber} •{" "}
             {beneficiary.clientCategory}
           </DialogDescription>
@@ -789,17 +792,22 @@ function EditBeneficiaryDialog({
               )}
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="pt-3 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
+                className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
                 onClick={() => onOpenChange(false)}
               >
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={update.isPending}>
+              <Button
+                type="submit"
+                disabled={update.isPending}
+                className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
+              >
                 {update.isPending && (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                 )}
                 Save
               </Button>
