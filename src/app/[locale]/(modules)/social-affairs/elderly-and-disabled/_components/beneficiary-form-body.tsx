@@ -239,10 +239,10 @@ export function BeneficiaryFormBody({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
               {t("sections.basicInfo")}
             </h3>
             <FormField
@@ -432,7 +432,7 @@ export function BeneficiaryFormBody({
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
               {t("sections.details", {
                 type: type === "DISABLED" ? t("disabled") : t("elderly"),
               })}
@@ -986,16 +986,21 @@ export function BeneficiaryFormBody({
           )}
         </div>
 
-        <div className="flex justify-end gap-3 pt-6 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
           <Button
             type="button"
             variant="outline"
+            className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
             onClick={() => onSuccess?.()}
           >
             {t("buttons.cancel")}
           </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
+          >
+            {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
             {submitLabel ?? t("registerNew")}
           </Button>
         </div>

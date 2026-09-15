@@ -38,33 +38,35 @@ export function BeneficiaryRegisterDialog() {
         if (!next) closeDialog();
       }}
     >
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {t("title", {
               type: category === "DISABLED" ? t("disabled") : t("elderly"),
             })}
           </DialogTitle>
-          <DialogDescription>{tSrs("switchCategoryHint")}</DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono">
+            {tSrs("switchCategoryHint")}
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="flex items-center gap-2 p-1 rounded-lg bg-slate-100 w-fit">
+        <div className="flex items-center gap-1.5 p-0.5 rounded-xs bg-slate-100 border border-[#E3E7EB] w-fit">
           <CategoryPill
             active={category === "DISABLED"}
             onClick={() => handleCategoryChange("DISABLED")}
-            icon={<UserPlus className="size-4" />}
+            icon={<UserPlus className="w-3.5 h-3.5 mr-1" />}
             label={t("disabled")}
           />
           <CategoryPill
             active={category === "ELDERLY"}
             onClick={() => handleCategoryChange("ELDERLY")}
-            icon={<Users className="size-4" />}
+            icon={<Users className="w-3.5 h-3.5 mr-1" />}
             label={t("elderly")}
           />
         </div>
 
-        <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800">
-          <Info className="size-4 mt-0.5 shrink-0" />
+        <div className="flex items-start gap-2 rounded-xs border border-amber-200 bg-amber-50/70 p-2.5 text-xs font-mono text-amber-800">
+          <Info className="w-4 h-4 mt-0.5 shrink-0 text-amber-600" />
           <span>{tSrs("switchResetsForm")}</span>
         </div>
 
@@ -90,20 +92,18 @@ function CategoryPill({
   label: string;
 }) {
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="sm"
       onClick={onClick}
       className={cn(
-        "gap-2 rounded-md transition-colors",
+        "h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs transition-colors flex items-center gap-1.5",
         active
-          ? "bg-white text-slate-900 shadow-sm"
-          : "text-slate-500 hover:text-slate-900",
+          ? "bg-[#1769AA] text-white shadow-2xs font-bold"
+          : "text-slate-600 hover:text-slate-900",
       )}
     >
       {icon}
       {label}
-    </Button>
+    </button>
   );
 }
