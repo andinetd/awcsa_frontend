@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uiTokens } from "@/styles/design-system";
@@ -10,6 +11,7 @@ interface OperationalAlertBannerProps {
   pendingReportsCount: number;
   openComplaintsCount: number;
   pendingAdoptionReviewsCount: number;
+  inCareCount?: number;
   onNavigateToTab?: (tabKey: string) => void;
 }
 
@@ -18,33 +20,34 @@ export function OperationalAlertBanner({
   pendingReportsCount,
   openComplaintsCount,
   pendingAdoptionReviewsCount,
+  inCareCount = 1,
   onNavigateToTab,
 }: OperationalAlertBannerProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const cards = [
     {
+      title: "Child welfare & placement",
+      count: inCareCount,
+      unit: "minors in residential care",
+      badge: inCareCount > 0 ? "IN CARE" : "RESOLVED",
+      statusType: (inCareCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
+      description: "Minors under state custody in residential care centers or awaiting kinship placement.",
+      actionText: "View list of children",
+      href: "/adoption/children",
+    },
+    {
       title: "Facility compliance",
       count: overdueReportsCount,
-      unit: "overdue submissions",
+      unit: overdueReportsCount > 0 ? "overdue submissions" : "care facilities",
       badge: overdueReportsCount > 0 ? "OVERDUE" : "COMPLIANT",
       statusType: (overdueReportsCount > 0 ? "navy" : "neutral") as keyof typeof uiTokens.statusTag,
       description:
         overdueReportsCount > 0
-          ? "Accredited care centers past monthly deadline."
-          : "All care centers current on monthly submissions.",
-      actionText: "Review facility submissions",
-      tabKey: "reports",
-    },
-    {
-      title: "Monthly reports review",
-      count: pendingReportsCount,
-      unit: "awaiting clearance",
-      badge: pendingReportsCount > 0 ? "CLEARANCE" : "RESOLVED",
-      statusType: (pendingReportsCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Submitted facility dossiers awaiting bureau verification.",
-      actionText: "Process pending approvals",
-      tabKey: "reports",
+          ? "Accredited care centers past monthly intake census reporting deadline."
+          : "All accredited residential facilities verified up to date on monthly filings.",
+      actionText: "Inspect care centers",
+      href: "/adoption/care-centers",
     },
     {
       title: "Citizen grievances",
@@ -52,19 +55,19 @@ export function OperationalAlertBanner({
       unit: "unresolved inquiries",
       badge: openComplaintsCount > 0 ? "ATTENTION" : "RESOLVED",
       statusType: (openComplaintsCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Citizen service delivery appeals and neglect reports.",
+      description: "Urgent citizen appeals, child protection reports, and allowance delivery concerns.",
       actionText: "Inspect complaint registry",
-      tabKey: "complaints",
+      href: "/complaints",
     },
     {
       title: "Adoption assessment",
       count: pendingAdoptionReviewsCount,
-      unit: "home visits pending",
+      unit: "home visits & reviews",
       badge: pendingAdoptionReviewsCount > 0 ? "VETTING" : "CURRENT",
       statusType: (pendingAdoptionReviewsCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Applicant screening dossiers awaiting social worker verification.",
-      actionText: "View child welfare funnel",
-      tabKey: "directorates",
+      description: "Applicant screening dossiers awaiting social worker verification and judicial clearance.",
+      actionText: "Review adoption requests",
+      href: "/adoption/adoption-requests",
     },
   ];
 
@@ -75,7 +78,7 @@ export function OperationalAlertBanner({
           CASES REQUIRING BUREAU ATTENTION
         </h2>
         <span className="text-[11px] text-slate-400">
-          Active oversight threshold — 4 items monitored
+          Active oversight threshold — 4 key operational domains
         </span>
       </div>
 
@@ -84,13 +87,13 @@ export function OperationalAlertBanner({
           const isHovered = hoveredIndex === index;
 
           return (
-            <div
+            <Link
               key={card.title}
+              href={card.href}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => onNavigateToTab?.(card.tabKey)}
               className={cn(
-                "rounded-sm border p-3.5 flex flex-col justify-between min-h-[118px] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden group select-none border-l-3",
+                "rounded-sm border p-3.5 flex flex-col justify-between min-h-[118px] transition-all duration-300 ease-out cursor-pointer relative overflow-hidden group select-none border-l-3 block",
                 isHovered
                   ? "bg-[#0B1F3A] text-white border-[#0B1F3A] shadow-lg -translate-y-1 border-l-[#38BDF8]"
                   : "bg-white text-slate-900 border-[#E3E7EB] hover:border-slate-300 shadow-2xs border-l-[#1769AA]"
@@ -153,17 +156,12 @@ export function OperationalAlertBanner({
 
               {/* Action Link with Sliding Arrow */}
               <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onNavigateToTab?.(card.tabKey);
-                  }}
+                <span
                   className={cn(
-                    "inline-flex items-center gap-1 text-[11px] font-medium transition-colors duration-200 cursor-pointer",
+                    "inline-flex items-center gap-1 text-[11px] font-medium transition-colors duration-200",
                     isHovered
-                      ? "text-[#38BDF8] hover:text-white"
-                      : "text-[#1769AA] hover:text-[#12568E]"
+                      ? "text-[#38BDF8] group-hover:text-white"
+                      : "text-[#1769AA] group-hover:text-[#12568E]"
                   )}
                 >
                   <span>{card.actionText}</span>
@@ -173,9 +171,9 @@ export function OperationalAlertBanner({
                       isHovered ? "translate-x-1 text-[#38BDF8]" : "text-slate-400"
                     )}
                   />
-                </button>
+                </span>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

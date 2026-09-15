@@ -303,6 +303,7 @@ export default function BureauHeadPage() {
               pendingReportsCount={pendingReports}
               openComplaintsCount={complaintsList.filter((c: any) => c.status === "PENDING").length || 3}
               pendingAdoptionReviewsCount={childWelfareData?.adoption?.totalApplicants ? Math.round(childWelfareData.adoption.totalApplicants * 0.25) : 38}
+              inCareCount={inCareCount}
               onNavigateToTab={(tab) => setActiveTab(tab)}
             />
 
