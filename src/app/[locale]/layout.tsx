@@ -1,26 +1,11 @@
 import type { Metadata } from "next";
-import { Lexend } from "next/font/google";
+import { fontVariables } from "@/styles/fonts";
 import "./globals.css";
 import Providers from "@/components/providers";
 import { NextIntlClientProvider, hasLocale, useMessages } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Link from "next/link";
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-const lexend = Lexend({
-  variable: "--font-lexend",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "WCSA",
@@ -46,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${lexend.variable} antialiased`}>
+      <body className={`${fontVariables} antialiased`}>
         <NextIntlClientProvider>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
