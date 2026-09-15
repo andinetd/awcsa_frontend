@@ -129,88 +129,90 @@ export default function BeneficiaryReportDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <FileDown className="w-4 h-4" />
+        <Button variant="outline" className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] hover:bg-slate-50 gap-1.5">
+          <FileDown className="w-3.5 h-3.5 text-[#1769AA]" />
           {t("title")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {t("title")}
           </DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogDescription className="text-xs text-slate-500 font-mono">{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 py-4">
+        <div className="grid gap-4 py-3">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Category</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Category</Label>
               <Select value={category} onValueChange={handleCategoryChange}>
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="REGISTRATION">
+                  <SelectItem value="REGISTRATION" className="text-xs font-mono">
                     {t("categories.registration")}
                   </SelectItem>
-                  <SelectItem value="TRAINING">
+                  <SelectItem value="TRAINING" className="text-xs font-mono">
                     {t("categories.training")}
                   </SelectItem>
-                  <SelectItem value="JOBS">{t("categories.jobs")}</SelectItem>
+                  <SelectItem value="JOBS" className="text-xs font-mono">{t("categories.jobs")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label>Beneficiary Type</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Beneficiary Type</Label>
               <Select
                 value={beneficiaryType}
                 onValueChange={(v: any) => setBeneficiaryType(v)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">{t("types.all")}</SelectItem>
-                  <SelectItem value="DISABLED">
+                  <SelectItem value="ALL" className="text-xs font-mono">{t("types.all")}</SelectItem>
+                  <SelectItem value="DISABLED" className="text-xs font-mono">
                     {t("types.disabled")}
                   </SelectItem>
-                  <SelectItem value="ELDERLY">{t("types.elderly")}</SelectItem>
+                  <SelectItem value="ELDERLY" className="text-xs font-mono">{t("types.elderly")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Start Date</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Start Date</Label>
               <Input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
               />
             </div>
-            <div className="space-y-2">
-              <Label>End Date</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">End Date</Label>
               <Input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Sub-city</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Sub-city</Label>
               <SubCitySelect
                 value={subCity}
                 onValueChange={setSubCity}
                 placeholder="Select sub-city"
               />
             </div>
-            <div className="space-y-2">
-              <Label>Woreda</Label>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Woreda</Label>
               <WoredaSelect
                 value={woreda}
                 onValueChange={setWoreda}
@@ -220,30 +222,31 @@ export default function BeneficiaryReportDialog() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Format</Label>
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Format</Label>
             <Select value={format} onValueChange={(v: any) => setFormat(v)}>
-              <SelectTrigger>
+              <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="EXCEL">Excel (.xlsx)</SelectItem>
-                <SelectItem value="PDF">PDF (.pdf)</SelectItem>
+                <SelectItem value="EXCEL" className="text-xs font-mono">Excel (.xlsx)</SelectItem>
+                <SelectItem value="PDF" className="text-xs font-mono">PDF (.pdf)</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label>Columns to Include</Label>
-            <div className="grid grid-cols-2 gap-3 border rounded-xl p-4 bg-slate-50/50 text-sm">
+          <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">Columns to Include</Label>
+            <div className="grid grid-cols-2 gap-2 border border-[#E3E7EB] rounded-xs p-3 bg-slate-50/50 text-xs font-mono max-h-48 overflow-y-auto">
               {availableColumns.map((col) => (
                 <div key={col.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={`col-${col.id}`}
                     checked={selectedColumns.includes(col.id)}
                     onCheckedChange={() => handleColumnToggle(col.id)}
+                    className="rounded-xs border-[#E3E7EB] data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
                   />
-                  <Label htmlFor={`col-${col.id}`} className="cursor-pointer">
+                  <Label htmlFor={`col-${col.id}`} className="cursor-pointer text-xs font-mono text-slate-700 select-none">
                     {col.label}
                   </Label>
                 </div>
@@ -252,19 +255,24 @@ export default function BeneficiaryReportDialog() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-6 border-t">
+        <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
           <Button
             variant="outline"
             onClick={() => setOpen(false)}
             disabled={isPending}
+            className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] hover:bg-slate-50"
           >
             Cancel
           </Button>
-          <Button onClick={handleGenerate} disabled={isPending}>
+          <Button
+            onClick={handleGenerate}
+            disabled={isPending}
+            className="h-8 px-4 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold gap-1.5"
+          >
             {isPending ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
             ) : (
-              <FileDown className="w-4 h-4 mr-2" />
+              <FileDown className="w-3.5 h-3.5" />
             )}
             Download Report
           </Button>
