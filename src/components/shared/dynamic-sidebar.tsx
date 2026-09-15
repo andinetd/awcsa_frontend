@@ -106,9 +106,11 @@ function SidebarNavItem({
           tooltip={itemTitle}
           isActive={hasActiveChild}
           onClick={onToggle}
+          size="sm"
           className={cn(
+            "h-8 text-xs font-medium text-slate-300 hover:text-white hover:bg-[#0E2646] transition-colors rounded-sm",
             hasActiveChild &&
-              "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
+              "bg-[#142A48] text-white font-semibold",
           )}
         >
           {item.icon && (
@@ -116,24 +118,24 @@ function SidebarNavItem({
               className={cn(
                 "size-4 shrink-0",
                 hasActiveChild
-                  ? "text-sidebar-primary"
-                  : "text-sidebar-foreground/50",
+                  ? "text-[#38BDF8]"
+                  : "text-slate-400",
               )}
             />
           )}
-          <span>{itemTitle}</span>
+          <span className="text-xs truncate">{itemTitle}</span>
           <ChevronRight
             className={cn(
-              "ml-auto size-4 shrink-0 transition-transform duration-200",
+              "ml-auto size-3.5 shrink-0 transition-transform duration-200",
               isOpen && "rotate-90",
               hasActiveChild
-                ? "text-sidebar-primary"
-                : "text-sidebar-foreground/40",
+                ? "text-[#38BDF8]"
+                : "text-slate-500",
             )}
           />
         </SidebarMenuButton>
         {isOpen && (
-          <SidebarMenuSub>
+          <SidebarMenuSub className="border-l border-white/10 ml-3.5 pl-2 py-0.5 space-y-0.5">
             {(item.children || []).map((child, index) => {
               const childActive = isItemActive(pathname, child.url);
               return (
@@ -141,22 +143,24 @@ function SidebarNavItem({
                   <SidebarMenuSubButton
                     asChild
                     isActive={childActive}
+                    size="sm"
                     className={cn(
-                      childActive && "font-medium text-sidebar-foreground",
+                      "h-7 text-xs font-normal text-slate-400 hover:text-white hover:bg-[#0E2646] transition-colors rounded-sm",
+                      childActive && "bg-[#142A48] text-white font-semibold",
                     )}
                   >
-                    <Link href={child.url || "#"}>
+                    <Link href={child.url || "#"} className="flex items-center gap-2">
                       {child.icon && (
                         <child.icon
                           className={cn(
-                            "size-4 shrink-0",
+                            "size-3.5 shrink-0",
                             childActive
-                              ? "text-sidebar-primary"
-                              : "text-sidebar-foreground/50",
+                              ? "text-[#38BDF8]"
+                              : "text-slate-500",
                           )}
                         />
                       )}
-                      <span>
+                      <span className="text-xs truncate">
                         {t.has(`items.${child.title}`)
                           ? t(`items.${child.title}`)
                           : child.title}
@@ -178,15 +182,18 @@ function SidebarNavItem({
         asChild
         tooltip={itemTitle}
         isActive={isActive}
-        className={cn(isActive && "font-medium")}
+        size="sm"
+        className={cn(
+          "h-8 text-xs font-medium text-slate-300 hover:text-white hover:bg-[#0E2646] transition-colors rounded-sm",
+          isActive && "bg-[#142A48] text-white font-semibold shadow-2xs",
+        )}
       >
         <Link
           ref={itemRef}
           href={item?.url || "#"}
           className={cn(
-            "relative",
-            isActive &&
-              "bg-sidebar-accent text-sidebar-accent-foreground font-medium after:absolute after:left-0 after:top-1/2 after:h-5 after:w-0.5 after:-translate-y-1/2 after:rounded-full after:bg-sidebar-primary",
+            "flex items-center gap-2 w-full",
+            isActive && "text-white font-semibold",
           )}
         >
           {item?.icon && (
@@ -194,12 +201,12 @@ function SidebarNavItem({
               className={cn(
                 "size-4 shrink-0",
                 isActive
-                  ? "text-sidebar-primary"
-                  : "text-sidebar-foreground/50",
+                  ? "text-[#38BDF8]"
+                  : "text-slate-400",
               )}
             />
           )}
-          <span>{itemTitle}</span>
+          <span className="text-xs truncate">{itemTitle}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -254,8 +261,8 @@ function SidebarSection({ section, pathname, t }: SidebarSectionProps) {
 
   return (
     <SidebarGroup>
-      <div className="flex items-center justify-between px-3 pt-3">
-        <SidebarGroupLabel className="px-0 pt-0 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/45">
+      <div className="flex items-center justify-between px-3 pt-2.5 pb-1">
+        <SidebarGroupLabel className="px-0 pt-0 h-auto text-[10.5px] font-bold uppercase tracking-wider text-slate-400">
           {labelText}
         </SidebarGroupLabel>
         {showRegisterTrigger && <BeneficiaryRegisterTrigger />}
@@ -328,25 +335,23 @@ export function DynamicSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center justify-center px-1 py-2">
-            <Link href={"/"} className="flex w-full items-center gap-2">
+            <Link href={"/"} className="flex w-full items-center gap-2.5 px-2 py-1">
               <img
                 src="/assets/WCSA_logo.jpg"
-                alt="Office logo"
+                alt="WCSA Bureau"
                 className={cn(
-                  "shrink-0 rounded-md",
-                  isCollapsed ? "h-7 w-7" : "h-9 w-9",
+                  "shrink-0 rounded-full border border-white/10",
+                  isCollapsed ? "h-7 w-7" : "h-8 w-8",
                 )}
               />
               {!isCollapsed && (
                 <div className="flex min-w-0 flex-col text-left leading-tight">
-                  <span className="truncate text-sm font-semibold text-sidebar-foreground">
-                    {t("header.systemName")}
+                  <span className="truncate text-sm font-bold text-white tracking-tight">
+                    WCSA Bureau
                   </span>
-                  {accountLabel && (
-                    <span className="truncate text-xs text-sidebar-foreground/60">
-                      {accountLabel}
-                    </span>
-                  )}
+                  <span className="truncate text-[11px] text-slate-400 font-medium">
+                    Addis Ababa City Government
+                  </span>
                 </div>
               )}
             </Link>
@@ -382,10 +387,10 @@ export function DynamicSidebar() {
                   </Avatar>
                   {!isCollapsed && (
                     <div className="flex min-w-0 flex-1 flex-col text-left leading-tight">
-                      <span className="truncate text-sm font-medium text-sidebar-foreground">
+                      <span className="truncate text-xs font-semibold text-slate-200">
                         {user?.email}
                       </span>
-                      <span className="truncate text-xs text-sidebar-foreground/60">
+                      <span className="truncate text-[11px] text-slate-400">
                         {accountLabel}
                       </span>
                     </div>
@@ -399,11 +404,11 @@ export function DynamicSidebar() {
                 className="w-56 rounded-lg"
               >
                 <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex flex-col gap-1 px-2 py-1.5 leading-snug">
-                    <p className="text-sm font-medium text-foreground">
+                  <div className="flex flex-col gap-0.5 px-2 py-1.5 leading-snug">
+                    <p className="text-xs font-semibold text-foreground">
                       {user?.email}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       {accountLabel}
                     </p>
                   </div>

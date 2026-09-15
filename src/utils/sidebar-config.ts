@@ -38,6 +38,7 @@ export interface NavigationSection {
 export const sidebarConfig: Record<
   | "CHILDREN_AFFAIRS"
   | "SOCIAL_AFFAIRS"
+  | "EDIR"
   | "WOMEN"
   | "SUPER_ADMIN"
   | "BUREAU_HEAD"
@@ -114,16 +115,10 @@ export const sidebarConfig: Record<
           url: "/social-affairs/dashboard",
           icon: LayoutDashboard,
         },
-        { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
-        {
-          title: "Idir Councils",
-          url: "/social-affairs/edir/councils",
-          icon: ShieldCheck,
-        },
       ],
     },
     {
-      title: "Elderly & Disabled",
+      title: "Disability and Elderly",
       items: [
         {
           title: "Beneficiaries",
@@ -133,18 +128,59 @@ export const sidebarConfig: Record<
         },
         {
           title: "Support Services",
-          url: "/social-affairs/elderly-and-disabled/services",
           icon: HandHeart,
+          children: [
+            {
+              title: "Support Records",
+              url: "/social-affairs/elderly-and-disabled/services",
+              icon: HandHeart,
+            },
+            {
+              title: "Training Sessions",
+              url: "/social-affairs/elderly-and-disabled/training",
+              icon: GraduationCap,
+            },
+            {
+              title: "Job Placements",
+              url: "/social-affairs/elderly-and-disabled/jobs",
+              icon: Briefcase,
+            },
+          ],
         },
+      ],
+    },
+    {
+      title: "Cross-Department",
+      items: [
         {
-          title: "Training Sessions",
-          url: "/social-affairs/elderly-and-disabled/training",
-          icon: GraduationCap,
+          title: "Unified History",
+          url: "/persons",
+          icon: History,
+          permission: "view_unified_history",
         },
+      ],
+    },
+  ],
+
+  EDIR: [
+    {
+      title: "Overview",
+      items: [
         {
-          title: "Job Placements",
-          url: "/social-affairs/elderly-and-disabled/jobs",
-          icon: Briefcase,
+          title: "Dashboard",
+          url: "/social-affairs/edir/dashboard",
+          icon: LayoutDashboard,
+        },
+      ],
+    },
+    {
+      title: "Edir Management",
+      items: [
+        { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
+        {
+          title: "Idir Councils",
+          url: "/social-affairs/edir/councils",
+          icon: ShieldCheck,
         },
       ],
     },
@@ -264,12 +300,33 @@ export const sidebarConfig: Record<
           ],
         },
         {
-          title: "Social Affairs",
+          title: "Disability and Elderly",
           icon: HandHeart,
           children: [
             {
               title: "Dashboard",
               url: "/social-affairs/dashboard",
+              icon: LayoutDashboard,
+            },
+            {
+              title: "Beneficiaries",
+              url: "/social-affairs/elderly-and-disabled/beneficiaries",
+              icon: Users,
+            },
+            {
+              title: "Support Services",
+              url: "/social-affairs/elderly-and-disabled/services",
+              icon: HandHeart,
+            },
+          ],
+        },
+        {
+          title: "Edir",
+          icon: HandHelping,
+          children: [
+            {
+              title: "Dashboard",
+              url: "/social-affairs/edir/dashboard",
               icon: LayoutDashboard,
             },
             {
@@ -281,11 +338,6 @@ export const sidebarConfig: Record<
               title: "Idir Councils",
               url: "/social-affairs/edir/councils",
               icon: ShieldCheck,
-            },
-            {
-              title: "Elderly & Disabled",
-              url: "/social-affairs/elderly-and-disabled/beneficiaries",
-              icon: Users,
             },
           ],
         },

@@ -36,7 +36,7 @@ export function getSidebarItems(
       BUREAU_HEAD: "BUREAU_HEAD",
       CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
       SOCIAL_AFFAIRS: "SOCIAL_AFFAIRS",
-      EDIR: "SOCIAL_AFFAIRS",
+      EDIR: "EDIR",
       WOMEN_AFFAIRS: "WOMEN",
       SUPER_ADMIN: "SUPER_ADMIN",
       CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
@@ -53,7 +53,11 @@ export function getSidebarItems(
       const isWomensRole = roleStr.includes("women");
       const isChildrenRole =
         roleStr.includes("child") || roleStr.includes("adoption");
-      const isSocialRole = roleStr.includes("social");
+      const isEdirRole = roleStr.includes("edir");
+      const isSocialRole =
+        roleStr.includes("social") ||
+        roleStr.includes("elderly") ||
+        roleStr.includes("disabilit");
 
       const hasWomensPermissions = permissions?.some((p) =>
         p.toLowerCase().includes("women"),
@@ -63,13 +67,19 @@ export function getSidebarItems(
           p.toLowerCase().includes("child") ||
           p.toLowerCase().includes("adoption"),
       );
+      const hasEdirPermissions = permissions?.some((p) =>
+        p.toLowerCase().includes("edir"),
+      );
       const hasSocialPermissions = permissions?.some(
         (p) =>
           p.toLowerCase().includes("social") ||
-          p.toLowerCase().includes("edir"),
+          p.toLowerCase().includes("elderly") ||
+          p.toLowerCase().includes("disabilit"),
       );
 
-      if (isWomensRole || hasWomensPermissions) {
+      if (isEdirRole || hasEdirPermissions) {
+        rawSections = sidebarConfig.EDIR;
+      } else if (isWomensRole || hasWomensPermissions) {
         rawSections = sidebarConfig.WOMEN;
       } else if (isChildrenRole || hasChildrenPermissions) {
         rawSections = sidebarConfig.CHILDREN_AFFAIRS;

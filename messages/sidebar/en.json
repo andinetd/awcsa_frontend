@@ -28,6 +28,10 @@
     "Adoption Management": "Adoption Management",
     "Additional Services": "Additional Services",
     "Elderly & Disabled": "Elderly & Disabled",
+    "Disability and Elderly": "Disability and Elderly",
+    "Edir": "Edir",
+    "Edir Management": "Edir Management",
+    "Cross-Department": "Cross-Department",
     "Women Services": "Women Services",
     "Management": "Management",
     "Settings": "Settings",
@@ -39,7 +43,9 @@
   "items": {
     "Home": "Home",
     "Adoption": "Adoption",
-    "Social Affairs": "Social Affairs",
+    "Social Affairs": "Disability and Elderly",
+    "Disability and Elderly": "Disability and Elderly",
+    "Elderly & Disabled": "Disability and Elderly",
     "Women": "Women",
     "Admin": "Admin",
     "Dashboard": "Dashboard",
@@ -56,6 +62,7 @@
     "Disabled Persons": "Disabled Persons",
     "Elderly Persons": "Elderly Persons",
     "Support Services": "Support Services",
+    "Support Records": "Support Records",
     "Training Sessions": "Training Sessions",
     "Job Placements": "Job Placements",
     "Women List": "Women List",
@@ -71,6 +78,7 @@
     "Subcity Dashboard": "Subcity Dashboard",
     "Add Child": "Add Child",
     "Reports": "Reports",
-    "Monthly Report": "Monthly Report"
+    "Monthly Report": "Monthly Report",
+    "Unified History": "Unified History"
   }
 }

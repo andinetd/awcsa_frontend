@@ -28,6 +28,10 @@
     "Adoption Management": "የጉዲፈቻ አስተዳደር",
     "Additional Services": "ተጨማሪ አገልግሎቶች",
     "Elderly & Disabled": "አረጋውያን እና አካል ጉዳተኞች",
+    "Disability and Elderly": "አካል ጉዳተኞች እና አረጋውያን",
+    "Edir": "እድር",
+    "Edir Management": "የእድር አስተዳደር",
+    "Cross-Department": "የመስሪያ ቤቶች ትስስር",
     "Women Services": "የሴቶች አገልግሎቶች",
     "Management": "አስተዳደር",
     "Settings": "ቅንብሮች",
@@ -39,7 +43,9 @@
   "items": {
     "Home": "ቤት",
     "Adoption": "ጉዲፈቻ",
-    "Social Affairs": "ማህበራዊ ጉዳይ",
+    "Social Affairs": "አካል ጉዳተኞች እና አረጋውያን",
+    "Disability and Elderly": "አካል ጉዳተኞች እና አረጋውያን",
+    "Elderly & Disabled": "አረጋውያን እና አካል ጉዳተኞች",
     "Women": "ሴቶች",
     "Admin": "አስተዳዳሪ",
     "Dashboard": "ዳሽቦርድ",
@@ -56,6 +62,7 @@
     "Disabled Persons": "አካል ጉዳተኞች",
     "Elderly Persons": "አረጋውያን",
     "Support Services": "የድጋፍ አገልግሎቶች",
+    "Support Records": "የድጋፍ መዝገቦች",
     "Training Sessions": "የስልጠና መርሃ ግብሮች",
     "Job Placements": "የስራ ስምሪት",
     "Women List": "የሴቶች ዝርዝር",
@@ -71,6 +78,7 @@
     "Subcity Dashboard": "የክፍለ ከተማ ዳሽቦርድ",
     "Add Child": "ሕፃን መመዝገቢያ",
     "Reports": "ሪፖርቶች",
-    "Monthly Report": "ወርሃዊ ሪፖርት"
+    "Monthly Report": "ወርሃዊ ሪፖርት",
+    "Unified History": "የተጠቃሚዎች ታሪክ"
   }
 }
