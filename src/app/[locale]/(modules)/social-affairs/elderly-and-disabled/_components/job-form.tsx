@@ -81,23 +81,23 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button className="gap-2 bg-primary hover:bg-primary/90">
-            <Plus className="w-4 h-4" />
+          <Button className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("addButton")}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-lexend flex items-center gap-2">
-            <Briefcase className="w-6 h-6 text-primary" />
+      <DialogContent className="sm:max-w-[500px] rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
+            <Briefcase className="w-4 h-4 text-[#1769AA]" />
             {t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 pt-4"
+            className="space-y-4 pt-2"
           >
             {!cityIdNumber && (
               <FormField
@@ -105,13 +105,15 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.beneficiary")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.beneficiary")}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                           <SelectValue
                             placeholder={t("placeholders.selectBeneficiary")}
                           />
@@ -135,10 +137,13 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="companyIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.companyId")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.companyId")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t("placeholders.companyId")}
+                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       {...field}
                     />
                   </FormControl>
@@ -151,10 +156,13 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="jobTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.jobTitle")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.jobTitle")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={t("placeholders.jobTitle")}
+                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       {...field}
                     />
                   </FormControl>
@@ -167,9 +175,15 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="startDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.startDate")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.startDate")}
+                  </FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input
+                      type="date"
+                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,25 +195,36 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.remark")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.remark")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder={t("placeholders.remark")} {...field} />
+                    <Input
+                      placeholder={t("placeholders.remark")}
+                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex justify-end gap-3 pt-6 border-t">
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setOpen(false)}
+                className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] hover:bg-slate-50"
               >
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={registerMutation.isPending}>
+              <Button
+                type="submit"
+                disabled={registerMutation.isPending}
+                className="h-8 px-4 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold"
+              >
                 {registerMutation.isPending && (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
                 )}
                 {t("buttons.save")}
               </Button>

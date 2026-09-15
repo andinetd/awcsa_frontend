@@ -109,30 +109,36 @@ export default function ServiceForm() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90 text-white gap-2">
-          <Plus className="w-4 h-4" />
+        <Button className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold gap-1.5">
+          <Plus className="w-3.5 h-3.5" />
           {t("addButton")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("title")}</DialogDescription>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+        <DialogHeader className="border-b border-[#E3E7EB] pb-3">
+          <DialogTitle className="text-sm font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            {t("title")}
+          </DialogTitle>
+          <DialogDescription className="text-xs text-slate-500 font-mono">
+            {t("title")}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-2">
             <FormField
               control={form.control}
               name="cityIdNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.beneficiary")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.beneficiary")}
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                         <SelectValue
                           placeholder={t("placeholders.selectBeneficiary")}
                         />
@@ -156,13 +162,15 @@ export default function ServiceForm() {
               name="serviceTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.serviceType")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.serviceType")}
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value?.toString()}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                         <SelectValue
                           placeholder={t("placeholders.selectService")}
                         />
@@ -194,10 +202,13 @@ export default function ServiceForm() {
                 name="provider"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.provider")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.provider")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("placeholders.provider")}
+                        className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -211,10 +222,13 @@ export default function ServiceForm() {
                 name="amountOrQuantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.amount")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.amount")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t("placeholders.amount")}
+                        className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                         {...field}
                       />
                     </FormControl>
@@ -230,9 +244,15 @@ export default function ServiceForm() {
                 name="dateProvided"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.dateProvided")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.dateProvided")}
+                    </FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -244,7 +264,9 @@ export default function ServiceForm() {
                 name="subCity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.subCity")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.subCity")}
+                    </FormLabel>
                     <FormControl>
                       <SubCitySelect
                         value={field.value}
@@ -262,7 +284,9 @@ export default function ServiceForm() {
                 name="woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.woreda")}</FormLabel>
+                    <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                      {t("fields.woreda")}
+                    </FormLabel>
                     <FormControl>
                       <WoredaSelect
                         value={field.value}
@@ -282,11 +306,13 @@ export default function ServiceForm() {
               name="remark"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.remark")}</FormLabel>
+                  <FormLabel className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                    {t("fields.remark")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={t("placeholders.remark")}
-                      className="resize-none"
+                      className="resize-none rounded-xs border-[#E3E7EB] text-xs font-mono focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                       {...field}
                     />
                   </FormControl>
@@ -295,17 +321,22 @@ export default function ServiceForm() {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="border-t border-[#E3E7EB] pt-4 mt-6">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setOpen(false)}
+                className="h-8 px-3 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] hover:bg-slate-50"
               >
                 {t("buttons.cancel")}
               </Button>
-              <Button type="submit" disabled={mutation.isPending}>
+              <Button
+                type="submit"
+                disabled={mutation.isPending}
+                className="h-8 px-4 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold"
+              >
                 {mutation.isPending && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
                 )}
                 {t("buttons.save")}
               </Button>
