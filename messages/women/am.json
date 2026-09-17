@@ -100,6 +100,10 @@
     "lastName": "የአያት ስም",
     "phoneNumber": "የስልክ ቁጥር",
     "addressTitle": "አድራሻ",
+    "subCity": "ክፍለ ከተማ",
+    "subCityPlaceholder": "ክፍለ ከተማ ይምረጡ...",
+    "woreda": "ወረዳ",
+    "woredaPlaceholder": "ወረዳ ይምረጡ...",
     "fullAddress": "ሙሉ አድራሻ",
     "educationEmployment": "ትምህርት እና ሥራ",
     "educationLevel": "የትምህርት ደረጃ",
@@ -191,14 +195,14 @@
     },
     "history": {
       "title": "የአገልግሎት ታሪክ",
-      "description": "የድጋፍ አገልግሎት ታሪኳን ለማየት ሴት ይምረጡ",
-      "selectWoman": "ታሪክ ለማየት ሴት ይምረጡ",
+      "description": "የድጋፍ አገልግሎት ታሪኳን ለማየት ሴት ይፈልጉ",
+      "selectWoman": "ታሪክ ለማየት ሴት ይፈልጉ",
       "records": "የድጋፍ መዝገቦች",
       "total": "በጠቅላላ {total}",
       "dateFrom": "ከ",
       "dateTo": "እስከ",
       "loading": "ታሪክ በመጫን ላይ...",
-      "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ይምረጡ።",
+      "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ፈልገው ይምረጡ።",
       "table": {
         "serviceType": "የአገልግሎት ዓይነት",
         "provider": "አቅራቢ",
@@ -224,7 +228,7 @@
     "description": "ለሪፖርትዎ ማጣሪያዎችን እና አምዶችን ይምረጡ።",
     "titles": {
       "SUPPORT_SERVICE": "የሴቶች ድጋፍ አገልግሎቶች ሪፖርት ያውጡ",
-      "TECHNOLOGY_SUPPORT": "የሴቶች ቴክኖሎጂ ድጋፍ ሪፖርት ያውጡ",
+      "TECHNOLOGY_SUPPORT": "የሴቶች ማህበር ድጋፍ ሪፖርት ያውጡ",
       "TRAINING": "የሴቶች ስልጠና ሪፖርት ያውጡ",
       "EMPLOYMENT": "የሴቶች ስራ ፈጠራ ሪፖርት ያውጡ",
       "ASSOCIATION": "የሴቶች ልማት ህብረት ማህበራት ሪፖርት ያውጡ"
@@ -620,10 +624,10 @@
     }
   },
   "technologySupport": {
-    "title": "የቴክኖሎጂ ድጋፍ",
-    "subtitle": "ለሴቶች ተጠቃሚዎች የሚሰጠውን አግባብነት ያለው የቴክኖሎጂ ድጋፍ ያስተዳድሩ",
+    "title": "የማህበር ድጋፍ",
+    "subtitle": "ለሴቶች ተጠቃሚዎች የሚሰጠውን አግባብነት ያለው የማህበር ድጋፍ ያስተዳድሩ",
     "searchPlaceholder": "በስም፣ መለያ ወይም የቴክኖሎጂ አይነት ይፈልጉ...",
-    "cardTitle": "የቴክኖሎጂ ድጋፍ መዝገቦች",
+    "cardTitle": "የማህበር ድጋፍ መዝገቦች",
     "poor": "ድሃ",
     "sexWorker": "የወሲብ ስራ",
     "disabled": "አካል ጉዳተኛ",
@@ -634,12 +638,12 @@
       "status": "ሁኔታ",
       "health": "ጤና",
       "loading": "በመጫን ላይ...",
-      "noRecords": "ምንም የቴክኖሎጂ ድጋፍ መዝገብ አልተገኘም።",
+      "noRecords": "ምንም የማህበር ድጋፍ መዝገብ አልተገኘም።",
       "actions": "እርምጃዎች"
     },
     "form": {
       "addButton": "ድጋፍ ይመዝገቡ",
-      "title": "የቴክኖሎጂ ድጋፍ ይመዝገቡ",
+      "title": "የማህበር ድጋፍ ይመዝገቡ",
       "fields": {
         "firstName": "የመጀመሪያ ስም",
         "lastName": "የአባት ስም",
@@ -683,12 +687,12 @@
         "save": "ያስቀምጡ"
       },
       "messages": {
-        "success": "የቴክኖሎጂ ድጋፍ በተሳካ ሁኔታ ተመዝግቧል",
-        "error": "የቴክኖሎጂ ድጋፍ መመዝገብ አልተቻለም",
-        "updateSuccess": "የቴክኖሎጂ ድጋፍ በተሳካ ሁኔታ ተ䄠ሷል",
-        "updateError": "የቴክኖሎጂ ድጋፍ ማረም አልተቻለም"
+        "success": "የማህበር ድጋፍ በተሳካ ሁኔታ ተመዝግቧል",
+        "error": "የማህበር ድጋፍ መመዝገብ አልተቻለም",
+        "updateSuccess": "የማህበር ድጋፍ በተሳካ ሁኔታ ተሻሽሏል",
+        "updateError": "የማህበር ድጋፍ ማረም አልተቻለም"
       },
-      "editTitle": "የቴክኖሎጂ ድጋፍ ያርሙ",
+      "editTitle": "የማህበር ድጋፍ ያርሙ",
       "showing": "ከ {total} ውስጥ {from}-{to} እያሳየ ነው"
     },
     "filter": {
@@ -707,15 +711,15 @@
     },
     "delete": {
       "title": "ማጥፋት ያረጋግጡ",
-      "description": "እርግጠኛ ነዎት ይህንን የቴክኖሎጂ ድጋፍ መዝገብ ማጥፋት ይፈልጋሉ? ይህ መስራት አይተลาም።",
+      "description": "እርግጠኛ ነዎት ይህንን የማህበር ድጋፍ መዝገብ ማጥፋት ይፈልጋሉ? ይህ መስራት አይቻልም።",
       "cancel": "ይሰረዝ",
       "confirm": "ያጥፉ",
       "deleting": "በማጥፋት ላይ...",
-      "success": "የቴክኖሎጂ ድጋፍ መዝገብ ተጥፍቷል",
+      "success": "የማህበር ድጋፍ መዝገብ ተጥፍቷል",
       "error": "ማጥፋት አልተቻለም"
     },
     "detail": {
-      "title": "የቴክኖሎጂ ድጋፍ ዝርዝሮች",
+      "title": "የማህበር ድጋፍ ዝርዝሮች",
       "technologyType": "የቴክኖሎጂ አይነት",
       "association": "ማህበር",
       "status": "ሁኔታ",

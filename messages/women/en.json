@@ -100,6 +100,10 @@
     "lastName": "Last Name",
     "phoneNumber": "Phone Number",
     "addressTitle": "Address",
+    "subCity": "Sub-city",
+    "subCityPlaceholder": "Select sub-city...",
+    "woreda": "Woreda",
+    "woredaPlaceholder": "Select woreda...",
     "fullAddress": "Full Address",
     "educationEmployment": "Education & Career",
     "educationLevel": "Education Level",
@@ -191,14 +195,14 @@
     },
     "history": {
       "title": "Service History",
-      "description": "Select a woman to view her support service history",
-      "selectWoman": "Select a woman to view history",
+      "description": "Search a woman to view her support service history",
+      "selectWoman": "Search a woman to view history",
       "records": "Support Records",
       "total": "{total} Total",
       "dateFrom": "From",
       "dateTo": "To",
       "loading": "Loading history...",
-      "noSelection": "Please select a woman above to display her support records.",
+      "noSelection": "Please search and select a woman above to display her support records.",
       "table": {
         "serviceType": "Service Type",
         "provider": "Provider",
@@ -224,7 +228,7 @@
     "description": "Select filters and columns for your report.",
     "titles": {
       "SUPPORT_SERVICE": "Generate Women Support Services Report",
-      "TECHNOLOGY_SUPPORT": "Generate Women Technology Support Report",
+      "TECHNOLOGY_SUPPORT": "Generate Women Association Support Report",
       "TRAINING": "Generate Women Training Report",
       "EMPLOYMENT": "Generate Women Employment Report",
       "ASSOCIATION": "Generate Women Associations Report"
@@ -620,10 +624,10 @@
     }
   },
   "technologySupport": {
-    "title": "Technology Support",
-    "subtitle": "Manage appropriate technology support for women beneficiaries",
+    "title": "Association Support",
+    "subtitle": "Manage appropriate association support for women beneficiaries",
     "searchPlaceholder": "Search by name, ID, or technology type...",
-    "cardTitle": "Technology Support Records",
+    "cardTitle": "Association Support Records",
     "poor": "Poor",
     "sexWorker": "Sex Worker",
     "disabled": "Disabled",
@@ -634,12 +638,12 @@
       "status": "Status",
       "health": "Health",
       "loading": "Loading...",
-      "noRecords": "No technology support records found.",
+      "noRecords": "No association support records found.",
       "actions": "Actions"
     },
     "form": {
       "addButton": "Register Support",
-      "title": "Register Technology Support",
+      "title": "Register Association Support",
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -683,12 +687,12 @@
         "save": "Save"
       },
       "messages": {
-        "success": "Technology support registered successfully",
-        "error": "Failed to register technology support",
-        "updateSuccess": "Technology support updated successfully",
-        "updateError": "Failed to update technology support"
+        "success": "Association support registered successfully",
+        "error": "Failed to register association support",
+        "updateSuccess": "Association support updated successfully",
+        "updateError": "Failed to update association support"
       },
-      "editTitle": "Edit Technology Support",
+      "editTitle": "Edit Association Support",
       "showing": "Showing {from}-{to} of {total}"
     },
     "filter": {
@@ -707,15 +711,15 @@
     },
     "delete": {
       "title": "Confirm Delete",
-      "description": "Are you sure you want to delete this technology support record? This action cannot be undone.",
+      "description": "Are you sure you want to delete this association support record? This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Delete",
       "deleting": "Deleting...",
-      "success": "Technology support record deleted",
+      "success": "Association support record deleted",
       "error": "Delete failed"
     },
     "detail": {
-      "title": "Technology Support Details",
+      "title": "Association Support Details",
       "technologyType": "Technology Type",
       "association": "Association",
       "status": "Status",

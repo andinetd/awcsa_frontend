@@ -10,6 +10,8 @@ export interface UpdateWomenProfilePayload {
   dateOfBirth?: string;
   age?: number;
   address?: string;
+  subCity?: string;
+  woreda?: string;
   educationLevel?: string;
   careerStatus?: string;
   occupation?: string;

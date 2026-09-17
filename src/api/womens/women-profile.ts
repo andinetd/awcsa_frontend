@@ -5,6 +5,8 @@ export interface Client {
   lastName: string;
   phoneNumber: string;
   address: string;
+  subCity?: string | null;
+  woreda?: string | null;
   dateOfBirth?: string;
   age?: number;
   clientCategory: string;

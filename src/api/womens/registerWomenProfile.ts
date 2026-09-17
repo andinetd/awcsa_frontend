@@ -10,6 +10,8 @@ export interface RegisterWomenProfilePayload {
   age?: number;
   dateOfBirth?: string;
   address: string;
+  subCity?: string;
+  woreda?: string;
   educationLevel: string;
   careerStatus?: string;
   occupation?: string;

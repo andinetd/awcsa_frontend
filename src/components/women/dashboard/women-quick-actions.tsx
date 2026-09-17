@@ -44,11 +44,11 @@ export function WomenQuickActions() {
       badge: "Interventions",
     },
     {
-      title: "Technology Support",
-      description: "Productive equipment and machinery grants to female entrepreneurs",
+      title: "Association Support",
+      description: "Productive equipment, machinery and organizational grants to female entrepreneurs",
       href: "/women/technology",
       icon: Zap,
-      badge: "Equipment",
+      badge: "Support",
     },
     {
       title: "Vocational Training",

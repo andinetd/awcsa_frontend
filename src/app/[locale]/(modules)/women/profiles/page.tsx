@@ -73,6 +73,8 @@ export default function ProfilesPage() {
         p.client.lastName,
         p.client.cityIdNumber,
         p.client.phoneNumber,
+        p.client.subCity,
+        p.client.woreda,
         p.client.address,
         p.educationLevel,
         p.careerStatus,
@@ -255,15 +257,9 @@ export default function ProfilesPage() {
                       className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
                     >
                       <TableCell className="font-medium py-3 pl-5">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-xs bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] flex items-center justify-center font-bold text-xs uppercase font-mono">
-                            {profile.client.firstName?.[0]}
-                            {profile.client.lastName?.[0]}
-                          </div>
-                          <span className="text-xs font-semibold text-[#0B1F3A]">
-                            {profile.client.firstName} {profile.client.lastName}
-                          </span>
-                        </div>
+                        <span className="text-xs font-semibold text-[#0B1F3A]">
+                          {profile.client.firstName} {profile.client.lastName}
+                        </span>
                       </TableCell>
                       <TableCell className="py-3">
                         <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
@@ -276,8 +272,11 @@ export default function ProfilesPage() {
                       <TableCell className="text-slate-600 font-mono text-xs py-3">
                         {profile.client.phoneNumber || "—"}
                       </TableCell>
-                      <TableCell className="text-slate-600 text-xs max-w-[160px] truncate py-3" title={profile.client.address}>
-                        {profile.client.address || "—"}
+                      <TableCell
+                        className="text-slate-600 text-xs max-w-[200px] truncate py-3"
+                        title={[profile.client.subCity, profile.client.woreda ? `${t("form.woreda")} ${profile.client.woreda}` : null, profile.client.address].filter(Boolean).join(", ")}
+                      >
+                        {[profile.client.subCity, profile.client.woreda ? `${t("form.woreda")} ${profile.client.woreda}` : null, profile.client.address].filter(Boolean).join(", ") || "—"}
                       </TableCell>
                       <TableCell className="text-slate-600 text-xs py-3">
                         {getEducationLabel(profile.educationLevel)}

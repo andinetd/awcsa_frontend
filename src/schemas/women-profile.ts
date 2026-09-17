@@ -8,6 +8,8 @@ export const womenProfileSchema = z.object({
   age: z.coerce.number().int().min(1, "Age must be at least 1").max(130, "Age must be valid"),
   dateOfBirth: z.string().optional(),
   address: z.string().min(5, "Address is required"),
+  subCity: z.string().optional(),
+  woreda: z.string().optional(),
   educationLevel: z.string().min(1, "Education level is required"),
   careerStatus: z.string().min(1, "Career status is required"),
   occupation: z.string().optional(),

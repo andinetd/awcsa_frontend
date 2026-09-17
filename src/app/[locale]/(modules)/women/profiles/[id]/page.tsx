@@ -192,9 +192,25 @@ const WomenProfileDetail = () => {
               </p>
               <p className="font-mono font-semibold text-slate-800 mt-0.5">{profile.client.phoneNumber || "—"}</p>
             </div>
+            {(profile.client.subCity || profile.client.woreda) && (
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <p className="text-slate-500 font-medium">
+                    {t("form.subCity")}
+                  </p>
+                  <p className="font-semibold text-slate-800 mt-0.5">{profile.client.subCity || "—"}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 font-medium">
+                    {t("form.woreda")}
+                  </p>
+                  <p className="font-semibold text-slate-800 mt-0.5">{profile.client.woreda || "—"}</p>
+                </div>
+              </div>
+            )}
             <div>
               <p className="text-slate-500 font-medium">
-                {t("form.addressTitle")}
+                {t("form.fullAddress")}
               </p>
               <p className="font-semibold text-slate-800 mt-0.5">{profile.client.address || "—"}</p>
             </div>

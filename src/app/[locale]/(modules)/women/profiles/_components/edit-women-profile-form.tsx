@@ -34,6 +34,7 @@ import {
 } from "@/schemas/women-profile";
 import { toast } from "sonner";
 import { WomenProfile } from "@/api/womens/women-profile";
+import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 import { useTranslations } from "next-intl";
 
 interface EditWomenProfileFormProps {
@@ -58,12 +59,16 @@ export default function EditWomenProfileForm({
       lastName: "",
       phoneNumber: "",
       age: "" as any,
+      subCity: "",
+      woreda: "",
       address: "",
       educationLevel: "",
       careerStatus: "",
       photoUrl: "",
     },
   });
+
+  const subCity = form.watch("subCity");
 
   useEffect(() => {
     if (profile) {
@@ -80,6 +85,8 @@ export default function EditWomenProfileForm({
         phoneNumber: profile.client.phoneNumber,
         age: calculatedAge ?? ("" as any),
         address: profile.client.address,
+        subCity: profile.client.subCity || "",
+        woreda: profile.client.woreda || "",
         educationLevel: profile.educationLevel || "",
         careerStatus: profile.careerStatus || profile.occupation || "",
         photoUrl: profile.photoUrl || "",
@@ -231,6 +238,47 @@ export default function EditWomenProfileForm({
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("form.addressTitle")}
               </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <FormField
+                  control={form.control}
+                  name="subCity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.subCity")}</FormLabel>
+                      <FormControl>
+                        <SubCitySelect
+                          value={field.value}
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                            form.setValue("woreda", "");
+                          }}
+                          placeholder={t("form.subCityPlaceholder")}
+                          extraOptions={profile?.client?.subCity ? [profile.client.subCity] : []}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="woreda"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.woreda")}</FormLabel>
+                      <FormControl>
+                        <WoredaSelect
+                          subCity={subCity || ""}
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          placeholder={t("form.woredaPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="address"

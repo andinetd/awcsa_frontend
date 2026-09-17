@@ -99,7 +99,7 @@ export default function TechnologyDetailPage() {
             <div>
               <div className="flex items-center gap-2.5">
                 <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
-                  {record.technologyType ? t(`technologySupport.form.technologyTypes.${record.technologyType}`, { defaultValue: record.technologyType }) : "Technology Support"}
+                  {record.technologyType ? t(`technologySupport.form.technologyTypes.${record.technologyType}`, { defaultValue: record.technologyType }) : "Association Support"}
                 </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
                   ID: #{record.id}
@@ -114,7 +114,7 @@ export default function TechnologyDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Main Technology Support Info */}
+        {/* Main Association Support Info */}
         <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs md:col-span-2">
           <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
             <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">

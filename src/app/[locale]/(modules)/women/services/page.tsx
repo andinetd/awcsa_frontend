@@ -104,11 +104,11 @@ export default function ServicesPage() {
                 <CardContent className="p-5 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="sm:col-span-1">
-                      <Label className="text-[11px] font-semibold text-slate-600 block mb-1">Select Beneficiary</Label>
+                      <Label className="text-[11px] font-semibold text-slate-600 block mb-1">Search Beneficiary</Label>
                       <WomanSelect
                         value={selectedClientId?.toString()}
                         onValueChange={(value) =>
-                          setSelectedClientId(parseInt(value))
+                          setSelectedClientId(value ? parseInt(value) : null)
                         }
                         placeholder={t("support.history.selectWoman")}
                       />

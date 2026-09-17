@@ -85,7 +85,15 @@ const WomenProfileCard: React.FC<WomenProfileCardProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4" />
-          <span className="truncate">{profile.client.address}</span>
+          <span className="truncate">
+            {[
+              profile.client.subCity,
+              profile.client.woreda ? `${t("form.woreda")} ${profile.client.woreda}` : null,
+              profile.client.address,
+            ]
+              .filter(Boolean)
+              .join(", ") || "—"}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <Briefcase className="w-4 h-4" />
