@@ -2,7 +2,7 @@ name: Deploy Frontend
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, main ]
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
             cd ~/Desktop/awcsa-frontend
 
             git reset --hard
-            git pull origin dev
+            git pull origin ${{ github.ref_name }}
 
             npm install
 
