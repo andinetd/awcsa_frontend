@@ -526,7 +526,10 @@
       "placement": "Placement / Center"
     },
     "registration": {
-      "title": "Child Information",
+      "title": "Register New Child Record",
+      "subtitle": "Complete institutional intake, identify child placement, and establish legal registry custody.",
+      "badge": "Child Protection & Care",
+      "sectionTitle": "Child Biodata & Placement Details",
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",

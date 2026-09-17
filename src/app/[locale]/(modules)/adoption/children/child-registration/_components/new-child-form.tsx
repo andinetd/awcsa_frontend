@@ -157,7 +157,7 @@ export default function NewChildForm() {
           <span>Women &amp; Social Affairs Bureau</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Child Protection &amp; Care
+            {t("badge") || "Child Protection & Care"}
           </span>
         </div>
         <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
@@ -176,7 +176,7 @@ export default function NewChildForm() {
         >
           <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs p-5 space-y-4">
             <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2">
-              {t("title") || "Child Biodata & Placement Details"}
+              {t("sectionTitle") || "Child Biodata & Placement Details"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
