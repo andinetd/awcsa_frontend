@@ -19,7 +19,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            cd ~/Desktop/awcsa-frontend
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:$HOME/.local/bin:/usr/local/bin:$HOME/.npm-global/bin"
+
+            cd ~/awcsa_frontend
 
             git reset --hard
             git pull origin ${{ github.ref_name }}
