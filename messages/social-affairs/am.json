@@ -453,6 +453,17 @@
         "WOREDA": "ወረዳ",
         "SUB_CITY": "ክፍለ ከተማ",
         "CITY": "ከተማ"
+      },
+      "viewGrid": "ካርድ",
+      "viewList": "ዝርዝር",
+      "table": {
+        "name": "የእድር ስም",
+        "level": "ደረጃ",
+        "location": "አድራሻ",
+        "members": "አባላት",
+        "status": "ሁኔታ",
+        "actions": "እርምጃዎች",
+        "view": "ዝርዝር ይመልከቱ"
       }
     },
     "form": {
@@ -816,9 +827,9 @@
       "subtitle": "የምዝገባ እና የእውቅና አጠቃላይ እይታ",
       "loading": "ዳሽቦርድን በመጫን ላይ...",
       "recent": "የቅርብ ጊዜ ምዝገባዎች",
-      "noRecords": "ምንም የዕድር ማኅበራት አልተገኙም።",
-      "councilsTitle": "የዕድር ካውንስሎች",
-      "councilsSubtitle": "የካውንስል ምዝገባ እና የእውቅና አጠቃላይ እይታ",
+      "noRecords": "ምንም የእድር ማህበራት አልተገኙም።",
+      "councilsTitle": "የእድር ምክር ቤቶች",
+      "councilsSubtitle": "የምክር ቤት ምዝገባ እና የእውቅና አጠቃላይ እይታ",
       "stats": {
         "total": "ጠቅላላ",
         "active": "ንቁ",
@@ -863,6 +874,17 @@
           "EXPIRED": "ጊዜ ያለፈ",
           "REVOKED": "የተሰረዘ",
           "CANCELLED": "የተቋረጠ"
+        },
+        "viewGrid": "ካርድ",
+        "viewList": "ዝርዝር",
+        "table": {
+          "name": "የምክር ቤት ስም",
+          "level": "ደረጃ",
+          "location": "አድራሻ",
+          "contact": "ሰብሳቢ / አድራሻ",
+          "memberEdirs": "አባል እድሮች",
+          "status": "ሁኔታ",
+          "actions": "እርምጃዎች"
         }
       },
       "level": {
@@ -962,6 +984,13 @@
           "LICENSE_MISUSE": "ፍቃዱን ከዓላማው ውጭ መጠቀም",
           "FALSE_DOCUMENTS": "በሐሰተኛ ሰነዶች መመዝገብ"
         }
+      },
+      "cancellationReasons": {
+        "DISSOLVED": "ምክር ቤቱ በህጉ መሰረት ፈርሷል",
+        "MEMBER_MAJORITY_REQUEST": "በአባላቶቹ 2/3 አብላጫ ጥያቄ",
+        "LAWS_VIOLATION": "ደንቦችን ወይም ህጎችን መጣስ",
+        "LICENSE_MISUSE": "ፍቃዱን ከዓላማው ውጭ መጠቀም",
+        "FALSE_DOCUMENTS": "በሐሰተኛ ሰነዶች መመዝገብ"
       }
     },
     "location": {

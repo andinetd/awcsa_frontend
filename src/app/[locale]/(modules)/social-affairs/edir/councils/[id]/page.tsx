@@ -42,11 +42,11 @@ const levelStyles: Record<string, string> = {
 };
 
 const CANCELLATION_REASONS: Record<string, string> = {
-  DISSOLVED: "cancellationReasons.DISSOLVED",
-  MEMBER_MAJORITY_REQUEST: "cancellationReasons.MEMBER_MAJORITY_REQUEST",
-  LAWS_VIOLATION: "cancellationReasons.LAWS_VIOLATION",
-  LICENSE_MISUSE: "cancellationReasons.LICENSE_MISUSE",
-  FALSE_DOCUMENTS: "cancellationReasons.FALSE_DOCUMENTS",
+  DISSOLVED: "detail.cancellationReasons.DISSOLVED",
+  MEMBER_MAJORITY_REQUEST: "detail.cancellationReasons.MEMBER_MAJORITY_REQUEST",
+  LAWS_VIOLATION: "detail.cancellationReasons.LAWS_VIOLATION",
+  LICENSE_MISUSE: "detail.cancellationReasons.LICENSE_MISUSE",
+  FALSE_DOCUMENTS: "detail.cancellationReasons.FALSE_DOCUMENTS",
 };
 
 interface PageProps {
@@ -253,7 +253,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                       <p className="font-mono text-slate-800 mt-0.5">
                         {t(
                           (CANCELLATION_REASONS[typedCouncil.cancellationReason] ||
-                            typedCouncil.cancellationReason) as any
+                            `detail.cancellationReasons.${typedCouncil.cancellationReason}`) as any
                         )}
                       </p>
                     </div>

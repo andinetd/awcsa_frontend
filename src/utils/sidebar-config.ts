@@ -178,7 +178,7 @@ export const sidebarConfig: Record<
       items: [
         { title: "Edir", url: "/social-affairs/edir/list", icon: HandHelping },
         {
-          title: "Idir Councils",
+          title: "Edir Councils",
           url: "/social-affairs/edir/councils",
           icon: ShieldCheck,
         },
@@ -335,7 +335,7 @@ export const sidebarConfig: Record<
               icon: HandHelping,
             },
             {
-              title: "Idir Councils",
+              title: "Edir Councils",
               url: "/social-affairs/edir/councils",
               icon: ShieldCheck,
             },

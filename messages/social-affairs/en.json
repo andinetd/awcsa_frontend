@@ -453,6 +453,17 @@
         "WOREDA": "Woreda",
         "SUB_CITY": "Sub City",
         "CITY": "City"
+      },
+      "viewGrid": "Grid",
+      "viewList": "List",
+      "table": {
+        "name": "Edir Name",
+        "level": "Level",
+        "location": "Location",
+        "members": "Members",
+        "status": "Status",
+        "actions": "Actions",
+        "view": "View Details"
       }
     },
     "form": {
@@ -817,7 +828,7 @@
       "loading": "Loading dashboard...",
       "recent": "Recent Registrations",
       "noRecords": "No Edir associations found.",
-      "councilsTitle": "Idir Councils",
+      "councilsTitle": "Edir Councils",
       "councilsSubtitle": "Council registration and accreditation overview",
       "stats": {
         "total": "Total",
@@ -842,10 +853,10 @@
     },
     "councils": {
       "list": {
-        "title": "Idir Councils",
+        "title": "Edir Councils",
         "subtitle": "Register and manage councils at the woreda, sub-city, and city levels",
         "search": "Search...",
-        "noRecords": "No Idir councils found.",
+        "noRecords": "No Edir councils found.",
         "loading": "Loading councils...",
         "error": "Failed to load councils.",
         "pagination": "Showing {start}–{end} of {total}",
@@ -863,6 +874,17 @@
           "EXPIRED": "Expired",
           "REVOKED": "Revoked",
           "CANCELLED": "Cancelled"
+        },
+        "viewGrid": "Grid",
+        "viewList": "List",
+        "table": {
+          "name": "Council Name",
+          "level": "Level",
+          "location": "Location",
+          "contact": "Chairperson / Contact",
+          "memberEdirs": "Member Edirs",
+          "status": "Status",
+          "actions": "Actions"
         }
       },
       "level": {
@@ -896,8 +918,8 @@
         "goBack": "Back to Councils"
       },
       "form": {
-        "createTitle": "Register Idir Council",
-        "updateTitle": "Edit Idir Council",
+        "createTitle": "Register Edir Council",
+        "updateTitle": "Edit Edir Council",
         "createDesc": "Register a new council at the woreda, sub-city, or city level.",
         "updateDesc": "Update the council's registration details.",
         "sections": {
@@ -918,7 +940,7 @@
           "address": "Address"
         },
         "placeholders": {
-          "name": "e.g. Woreda 5 Idir Council",
+          "name": "e.g. Woreda 5 Edir Council",
           "subCity": "Sub city / city",
           "woreda": "Woreda (optional)",
           "kebele": "Kebele (optional)",
@@ -962,6 +984,13 @@
           "LICENSE_MISUSE": "Use of license outside its purpose",
           "FALSE_DOCUMENTS": "Registered with false documents"
         }
+      },
+      "cancellationReasons": {
+        "DISSOLVED": "Council dissolved per its by-laws",
+        "MEMBER_MAJORITY_REQUEST": "Request by 2/3 majority of members",
+        "LAWS_VIOLATION": "Violation of rules or laws",
+        "LICENSE_MISUSE": "Use of license outside its purpose",
+        "FALSE_DOCUMENTS": "Registered with false documents"
       }
     },
     "location": {
