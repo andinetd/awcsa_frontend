@@ -14,10 +14,29 @@ export const useSignInMutation = () => {
   return useMutation<ClientSignInResponse, Error, ClientSignIn>({
     mutationFn: signIn,
     mutationKey: ["Client Sign In"],
-    onSuccess: (data, variables) => {
+    onSuccess: (data: any, variables) => {
+      console.log("Sign-in response data:", data);
+      const token =
+        data?.access_token ||
+        data?.accessToken ||
+        data?.data?.access_token ||
+        data?.data?.accessToken ||
+        data?.token;
+      const refreshToken =
+        data?.refresh_token ||
+        data?.refreshToken ||
+        data?.data?.refresh_token ||
+        data?.data?.refreshToken ||
+        token;
+
+      if (!token) {
+        console.error("No access token found in response:", data);
+        return;
+      }
+
       setAuthSession(
-        data.access_token,
-        data.refresh_token,
+        token,
+        refreshToken,
         !!variables.rememberMe,
       );
     },

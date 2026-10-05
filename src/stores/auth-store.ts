@@ -20,32 +20,61 @@ function applyToken(
   try {
     Cookies.set("wcasf_auth_token", token, {
       secure: process.env.NEXT_PUBLIC_SECURE_COOKIES === "true",
-      sameSite: "strict",
+      sameSite: "lax",
       ...(rememberMe ? { expires: 7 } : {}),
       path: "/",
     });
 
-    const decodedToken: JwtPayload = jwtDecode(token);
-    const { user, entity, auth } = decodedToken;
+    const decodedToken: any = jwtDecode(token);
+    console.log("Decoded JWT in auth-store:", decodedToken);
+
+    // Normalize user object from JWT
+    const rawUser = decodedToken.user || decodedToken;
+    const accountType =
+      rawUser.accountType ||
+      decodedToken.accountType ||
+      (decodedToken.role === "Super_Admin" || decodedToken.roles?.includes("Super_Admin")
+        ? "EMPLOYEE"
+        : "CLIENT");
+
+    const user: JwtUserType = {
+      id: rawUser.id || decodedToken.sub || 1,
+      email: rawUser.email || decodedToken.email || "",
+      accountType: accountType as AccountType,
+    };
+
+    const entity = decodedToken.entity || {
+      type: accountType === "EMPLOYEE" ? "Employee" : "Client",
+      id: rawUser.id || decodedToken.sub || 1,
+      role: decodedToken.role || decodedToken.userRole || rawUser.role || "Super_Admin",
+    };
+
+    const auth = decodedToken.auth || {
+      permissions: decodedToken.permissions || [],
+    };
 
     const newState: Partial<AuthState> = {
       token,
       refreshToken: refreshToken ?? null,
       rememberMe,
       user,
+      entity,
       auth,
-      userPermissions: auth?.permissions || [],
+      userPermissions: auth?.permissions || decodedToken.permissions || [],
+      userRole: (decodedToken.userRole || decodedToken.role || entity?.role) as UserRole,
+      department: decodedToken.department ?? null,
+      directorateId: decodedToken.directorateId ?? null,
+      teamId: decodedToken.teamId ?? null,
+      orgUnit: decodedToken.orgUnit ?? null,
       hydrated: true,
     };
 
     if (user.accountType === "EMPLOYEE") {
       const employeeToken = decodedToken as EmployeeJwtPayload;
-      newState.entity = employeeToken.entity;
-      newState.orgUnit = employeeToken.orgUnit || null;
-      newState.userRole = employeeToken.entity.role as UserRole;
-      newState.directorateId = employeeToken.directorateId ?? null;
-      newState.teamId = employeeToken.teamId ?? null;
-      newState.department = employeeToken.department ?? null;
+      if (employeeToken.entity) newState.entity = employeeToken.entity;
+      if (employeeToken.orgUnit) newState.orgUnit = employeeToken.orgUnit;
+      if (employeeToken.entity?.role) newState.userRole = employeeToken.entity.role as UserRole;
+      if (employeeToken.department) newState.department = employeeToken.department;
     } else if (
       user.accountType === "CHILD_CARE_FACLITY" ||
       user.accountType === "CHILD_CARE_FACILITY"
@@ -61,6 +90,7 @@ function applyToken(
       newState.userRole = null;
     }
 
+    console.log("Auth state successfully populated:", newState);
     set(newState);
   } catch (error) {
     console.error("Failed to decode or set token:", error);
@@ -181,11 +211,12 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setAuthSession: (token, refreshToken, rememberMe) => {
-        if (!token || !refreshToken) {
+        if (!token) {
+          console.warn("setAuthSession called without token");
           get().logout();
           return;
         }
-        applyToken(token, rememberMe, refreshToken, set);
+        applyToken(token, rememberMe, refreshToken || token, set);
       },
 
       loadTokenFromCookie: async () => {

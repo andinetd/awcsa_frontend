@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
@@ -21,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import {
   getRouteByDirectorate,
   getRouteByDepartment,
@@ -128,6 +127,18 @@ export default function SignInForm() {
     }
 
     const navTimer = setTimeout(() => {
+      const { department, userRole } = useAuthStore.getState();
+      console.log("Navigating authenticated user:", {
+        user,
+        userRole,
+        department,
+      });
+
+      if (userRole === "Super_Admin" || (user as any).role === "Super_Admin") {
+        router.push("/super-admin/dashboard");
+        return;
+      }
+
       if (
         user.accountType === "CLIENT" ||
         (user as any).accountType === "CLIENT"
@@ -139,29 +150,30 @@ export default function SignInForm() {
       ) {
         router.push(`/care-centers-portal`);
       } else if (user.accountType === "EMPLOYEE") {
-        const { department, userRole } = useAuthStore.getState();
+        const route = getRouteByDepartment(department);
 
-        if (userRole === "Super_Admin") {
-          router.push("/super-admin/dashboard");
-        } else {
-          const route = getRouteByDepartment(department);
-
-          const matchedRoute = Object.keys(routePermissions).find(
-            (r) => route === r || route.startsWith(r + "/"),
-          );
-          if (matchedRoute) {
-            const guard = routePermissions[matchedRoute];
-            const accountOk = guard.allowedAccountTypes.includes("EMPLOYEE");
-            const roleOk = !guard.allowedRoles || (department != null && guard.allowedRoles.includes(department as any));
-            if (accountOk && roleOk) {
-              router.push(route);
-            } else {
-              router.push("/unauthorized");
-            }
+        const matchedRoute = Object.keys(routePermissions).find(
+          (r) => route === r || route.startsWith(r + "/"),
+        );
+        if (matchedRoute) {
+          const guard = routePermissions[matchedRoute];
+          const accountOk = guard.allowedAccountTypes.includes("EMPLOYEE");
+          const roleOk =
+            !guard.allowedRoles ||
+            (department != null && guard.allowedRoles.includes(department as any));
+          if (accountOk && roleOk) {
+            router.push(route as any);
           } else {
+            console.warn("Permission check failed, redirecting to /unauthorized");
             router.push("/unauthorized");
           }
+        } else {
+          console.warn("No matched route for department:", department);
+          router.push("/unauthorized");
         }
+      } else {
+        console.warn("Fallback routing to applicant-portal for accountType:", user.accountType);
+        router.push(`/applicant-portal/portal`);
       }
     }, 0);
 
