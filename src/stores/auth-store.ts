@@ -9,6 +9,7 @@ import {
   JwtUserType,
   EmployeeJwtPayload,
   ClientJwtPayload,
+  AccountType,
 } from "@/types/api/auth";
 
 function applyToken(
