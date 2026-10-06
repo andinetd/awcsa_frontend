@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useGetTrainingsQuery, useGetJobsQuery } from "@/hooks/beneficiaries";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,17 @@ import {
   HeartHandshake,
   GraduationCap,
   Briefcase,
+  SlidersHorizontal,
+  X,
+  RotateCcw,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -63,6 +73,21 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
   const [searchTraining, setSearchTraining] = useState("");
   const [searchJobs, setSearchJobs] = useState("");
 
+  // Filters for Support Services
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState("ALL");
+  const [serviceProviderFilter, setServiceProviderFilter] = useState("ALL");
+  const [showServicesFilter, setShowServicesFilter] = useState(false);
+
+  // Filters for Training
+  const [trainingTypeFilter, setTrainingTypeFilter] = useState("ALL");
+  const [trainingProviderFilter, setTrainingProviderFilter] = useState("ALL");
+  const [trainingCocFilter, setTrainingCocFilter] = useState("ALL");
+  const [showTrainingFilter, setShowTrainingFilter] = useState(false);
+
+  // Filters for Jobs
+  const [jobCompanyFilter, setJobCompanyFilter] = useState("ALL");
+  const [showJobsFilter, setShowJobsFilter] = useState(false);
+
   useEffect(() => {
     if (urlTab && ["services", "training", "jobs"].includes(urlTab)) {
       setCurrentTab(urlTab);
@@ -84,44 +109,125 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
     queryFn: () => getSupportServices(),
   });
 
-  const filteredServices =
-    services?.filter(
-      (item: any) =>
-        item.serviceName?.toLowerCase().includes(searchServices.toLowerCase()) ||
-        item.provider?.toLowerCase().includes(searchServices.toLowerCase()) ||
-        `${item.client?.firstName} ${item.client?.lastName}`
-          .toLowerCase()
-          .includes(searchServices.toLowerCase()),
-    ) || [];
+  const serviceCategories = useMemo(() => {
+    if (!services) return [];
+    const set = new Set<string>();
+    services.forEach((s: any) => {
+      if (s.category) set.add(s.category);
+    });
+    return Array.from(set);
+  }, [services]);
+
+  const serviceProviders = useMemo(() => {
+    if (!services) return [];
+    const set = new Set<string>();
+    services.forEach((s: any) => {
+      if (s.provider) set.add(s.provider);
+    });
+    return Array.from(set);
+  }, [services]);
+
+  const filteredServices = useMemo(() => {
+    return (services || []).filter((item: any) => {
+      if (searchServices.trim()) {
+        const q = searchServices.toLowerCase().trim();
+        const matches =
+          item.serviceName?.toLowerCase().includes(q) ||
+          item.provider?.toLowerCase().includes(q) ||
+          `${item.client?.firstName} ${item.client?.lastName}`
+            .toLowerCase()
+            .includes(q) ||
+          item.client?.cityIdNumber?.toLowerCase().includes(q);
+        if (!matches) return false;
+      }
+      if (serviceCategoryFilter !== "ALL" && item.category !== serviceCategoryFilter) {
+        return false;
+      }
+      if (serviceProviderFilter !== "ALL" && item.provider !== serviceProviderFilter) {
+        return false;
+      }
+      return true;
+    });
+  }, [services, searchServices, serviceCategoryFilter, serviceProviderFilter]);
 
   // 2. Training Sessions Data
   const { data: trainings, isLoading: isLoadingTrainings } =
     useGetTrainingsQuery();
 
-  const filteredTrainings =
-    trainings?.filter(
-      (item: any) =>
-        item.trainingType?.toLowerCase().includes(searchTraining.toLowerCase()) ||
-        item.provider?.toLowerCase().includes(searchTraining.toLowerCase()) ||
-        `${item.client?.firstName} ${item.client?.lastName}`
-          .toLowerCase()
-          .includes(searchTraining.toLowerCase()),
-    ) || [];
+  const trainingTypes = useMemo(() => {
+    if (!trainings) return [];
+    const set = new Set<string>();
+    trainings.forEach((t: any) => {
+      if (t.trainingType) set.add(t.trainingType);
+    });
+    return Array.from(set);
+  }, [trainings]);
+
+  const trainingProviders = useMemo(() => {
+    if (!trainings) return [];
+    const set = new Set<string>();
+    trainings.forEach((t: any) => {
+      if (t.provider) set.add(t.provider);
+    });
+    return Array.from(set);
+  }, [trainings]);
+
+  const filteredTrainings = useMemo(() => {
+    return (trainings || []).filter((item: any) => {
+      if (searchTraining.trim()) {
+        const q = searchTraining.toLowerCase().trim();
+        const matches =
+          item.trainingType?.toLowerCase().includes(q) ||
+          item.provider?.toLowerCase().includes(q) ||
+          `${item.client?.firstName} ${item.client?.lastName}`
+            .toLowerCase()
+            .includes(q) ||
+          item.client?.cityIdNumber?.toLowerCase().includes(q);
+        if (!matches) return false;
+      }
+      if (trainingTypeFilter !== "ALL" && item.trainingType !== trainingTypeFilter) {
+        return false;
+      }
+      if (trainingProviderFilter !== "ALL" && item.provider !== trainingProviderFilter) {
+        return false;
+      }
+      if (trainingCocFilter === "YES" && !item.hasCOC) return false;
+      if (trainingCocFilter === "NO" && item.hasCOC) return false;
+      return true;
+    });
+  }, [trainings, searchTraining, trainingTypeFilter, trainingProviderFilter, trainingCocFilter]);
 
   // 3. Job Placements Data
   const { data: jobs, isLoading: isLoadingJobs } = useGetJobsQuery();
 
-  const filteredJobs =
-    jobs?.filter(
-      (item: any) =>
-        item.jobTitle?.toLowerCase().includes(searchJobs.toLowerCase()) ||
-        item.companyIdNumber
-          ?.toLowerCase()
-          .includes(searchJobs.toLowerCase()) ||
-        `${item.client?.firstName} ${item.client?.lastName}`
-          .toLowerCase()
-          .includes(searchJobs.toLowerCase()),
-    ) || [];
+  const jobCompanies = useMemo(() => {
+    if (!jobs) return [];
+    const set = new Set<string>();
+    jobs.forEach((j: any) => {
+      if (j.companyIdNumber) set.add(j.companyIdNumber);
+    });
+    return Array.from(set);
+  }, [jobs]);
+
+  const filteredJobs = useMemo(() => {
+    return (jobs || []).filter((item: any) => {
+      if (searchJobs.trim()) {
+        const q = searchJobs.toLowerCase().trim();
+        const matches =
+          item.jobTitle?.toLowerCase().includes(q) ||
+          item.companyIdNumber?.toLowerCase().includes(q) ||
+          `${item.client?.firstName} ${item.client?.lastName}`
+            .toLowerCase()
+            .includes(q) ||
+          item.client?.cityIdNumber?.toLowerCase().includes(q);
+        if (!matches) return false;
+      }
+      if (jobCompanyFilter !== "ALL" && item.companyIdNumber !== jobCompanyFilter) {
+        return false;
+      }
+      return true;
+    });
+  }, [jobs, searchJobs, jobCompanyFilter]);
 
   const tabTitle =
     currentTab === "services"
@@ -226,24 +332,66 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
         {/* TAB 1: SUPPORT SERVICES */}
         <TabsContent value="services" className="mt-0">
           <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 border-b border-[#E3E7EB]">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-[#E3E7EB]">
               <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
                 <HeartHandshake className="w-4 h-4 text-[#1769AA]" />
                 {t("cardTitle")}
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="relative w-64">
-                  <Search className="absolute left-2.5 top-2 h-4 w-4 text-slate-400" />
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
+                  <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
                   <Input
                     placeholder={t("searchPlaceholder")}
-                    className="h-8 pl-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                    className="h-8 pl-8 pr-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                     value={searchServices}
                     onChange={(e) => setSearchServices(e.target.value)}
                   />
+                  {searchServices && (
+                    <button
+                      onClick={() => setSearchServices("")}
+                      className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-xs border-[#E3E7EB] text-slate-500 hover:bg-slate-50">
-                  <Filter className="w-3.5 h-3.5" />
-                </Button>
+                <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
+                    <SelectValue placeholder="All Categories" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All Categories</SelectItem>
+                    {serviceCategories.map((c) => (
+                      <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={serviceProviderFilter} onValueChange={setServiceProviderFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
+                    <SelectValue placeholder="All Providers" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All Providers</SelectItem>
+                    {serviceProviders.map((p) => (
+                      <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {(searchServices || serviceCategoryFilter !== "ALL" || serviceProviderFilter !== "ALL") && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSearchServices("");
+                      setServiceCategoryFilter("ALL");
+                      setServiceProviderFilter("ALL");
+                    }}
+                    className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 mr-1" />
+                    <span>Clear</span>
+                  </Button>
+                )}
               </div>
             </CardHeader>
             <CardContent className="p-4">
@@ -343,24 +491,77 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
         {/* TAB 2: TRAINING SESSIONS */}
         <TabsContent value="training" className="mt-0">
           <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 border-b border-[#E3E7EB]">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-[#E3E7EB]">
               <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
                 <GraduationCap className="w-4 h-4 text-emerald-600" />
                 {tTraining("cardTitle")}
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="relative w-64">
-                  <Search className="absolute left-2.5 top-2 h-4 w-4 text-slate-400" />
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
+                  <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
                   <Input
                     placeholder={tTraining("searchPlaceholder")}
-                    className="h-8 pl-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                    className="h-8 pl-8 pr-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                     value={searchTraining}
                     onChange={(e) => setSearchTraining(e.target.value)}
                   />
+                  {searchTraining && (
+                    <button
+                      onClick={() => setSearchTraining("")}
+                      className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-xs border-[#E3E7EB] text-slate-500 hover:bg-slate-50">
-                  <Filter className="w-3.5 h-3.5" />
-                </Button>
+                <Select value={trainingTypeFilter} onValueChange={setTrainingTypeFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
+                    <SelectValue placeholder="All Fields" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All Fields</SelectItem>
+                    {trainingTypes.map((type) => (
+                      <SelectItem key={type} value={type} className="text-xs">{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={trainingProviderFilter} onValueChange={setTrainingProviderFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
+                    <SelectValue placeholder="All Providers" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All Providers</SelectItem>
+                    {trainingProviders.map((p) => (
+                      <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={trainingCocFilter} onValueChange={setTrainingCocFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[110px]">
+                    <SelectValue placeholder="All COC" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All COC</SelectItem>
+                    <SelectItem value="YES" className="text-xs">Certified</SelectItem>
+                    <SelectItem value="NO" className="text-xs">Uncertified</SelectItem>
+                  </SelectContent>
+                </Select>
+                {(searchTraining || trainingTypeFilter !== "ALL" || trainingProviderFilter !== "ALL" || trainingCocFilter !== "ALL") && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSearchTraining("");
+                      setTrainingTypeFilter("ALL");
+                      setTrainingProviderFilter("ALL");
+                      setTrainingCocFilter("ALL");
+                    }}
+                    className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 mr-1" />
+                    <span>Clear</span>
+                  </Button>
+                )}
               </div>
             </CardHeader>
             <CardContent className="p-4">
@@ -460,24 +661,54 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
         {/* TAB 3: JOB PLACEMENTS */}
         <TabsContent value="jobs" className="mt-0">
           <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 border-b border-[#E3E7EB]">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-[#E3E7EB]">
               <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
                 <Briefcase className="w-4 h-4 text-blue-600" />
                 {tJobs("cardTitle")}
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="relative w-64">
-                  <Search className="absolute left-2.5 top-2 h-4 w-4 text-slate-400" />
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
+                  <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
                   <Input
                     placeholder={tJobs("searchPlaceholder")}
-                    className="h-8 pl-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                    className="h-8 pl-8 pr-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                     value={searchJobs}
                     onChange={(e) => setSearchJobs(e.target.value)}
                   />
+                  {searchJobs && (
+                    <button
+                      onClick={() => setSearchJobs("")}
+                      className="absolute right-2 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                <Button variant="outline" size="icon" className="h-8 w-8 rounded-xs border-[#E3E7EB] text-slate-500 hover:bg-slate-50">
-                  <Filter className="w-3.5 h-3.5" />
-                </Button>
+                <Select value={jobCompanyFilter} onValueChange={setJobCompanyFilter}>
+                  <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[150px]">
+                    <SelectValue placeholder="All Companies" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL" className="text-xs font-semibold">All Companies</SelectItem>
+                    {jobCompanies.map((c) => (
+                      <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {(searchJobs || jobCompanyFilter !== "ALL") && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSearchJobs("");
+                      setJobCompanyFilter("ALL");
+                    }}
+                    className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 mr-1" />
+                    <span>Clear</span>
+                  </Button>
+                )}
               </div>
             </CardHeader>
             <CardContent className="p-4">
