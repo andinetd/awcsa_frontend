@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useGetWomenProfilesQuery } from "@/hooks/womens";
+import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
 import NewWomenProfileForm from "./_components/new-women-profile-form";
 import EditWomenProfileForm from "./_components/edit-women-profile-form";
 import StatusToggleDialog from "./_components/status-toggle-dialog";
@@ -17,6 +18,12 @@ import {
   ToggleLeft,
   Users,
   History,
+  SlidersHorizontal,
+  X,
+  RotateCcw,
+  GraduationCap,
+  Briefcase,
+  CheckCircle2,
 } from "lucide-react";
 import PersonHistoryDialog from "@/components/shared/person-history-dialog";
 import { Button } from "@/components/ui/button";
@@ -34,19 +41,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "next-intl";
 import { uiTokens } from "@/styles/design-system";
 
+type PresetTab = "ALL" | "UNEMPLOYED" | "EMPLOYED" | "PENDING" | "ACTIVE";
+
+const DEFAULT_SUBCITY_NAMES = [
+  "Bole",
+  "Yeka",
+  "Kirkos",
+  "Arada",
+  "Gulele",
+  "Lideta",
+  "Nifas Silk-Lafto",
+  "Kolfe Keranio",
+  "Akaky Kaliti",
+  "Addis Ketema",
+  "Lemi Kura",
+];
+
+const EDUCATION_OPTIONS = [
+  "NONE",
+  "PRIMARY",
+  "SECONDARY",
+  "DIPLOMA",
+  "BACHELOR",
+  "MASTERS",
+  "DOCTORATE",
+  "OTHER",
+] as const;
+
+const CAREER_OPTIONS = ["EMPLOYED", "SELF_EMPLOYED", "UNEMPLOYED"] as const;
+
 export default function ProfilesPage() {
   const router = useRouter();
   const { data: profiles, isLoading, isError } = useGetWomenProfilesQuery();
+  const { data: subCitiesData } = useGetSubCitiesQuery();
   const t = useTranslations("women");
 
   const [page, setPage] = useState(1);
   const limit = 10;
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Workflow tab & advanced filter states
+  const [presetTab, setPresetTab] = useState<PresetTab>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [educationFilter, setEducationFilter] = useState<string>("ALL");
+  const [careerFilter, setCareerFilter] = useState<string>("ALL");
+  const [approvalFilter, setApprovalFilter] = useState<string>("ALL");
+  const [ageFilter, setAgeFilter] = useState<"ALL" | "YOUTH" | "ADULT" | "SENIOR">("ALL");
+  const [activeStatusFilter, setActiveStatusFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
 
   const [editingProfile, setEditingProfile] = useState<WomenProfile | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -62,28 +117,209 @@ export default function ProfilesPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const filteredProfiles = useMemo(() => {
-    const list = profiles || [];
-    const q = debouncedSearch.trim().toLowerCase();
-    if (!q) return list;
+  // Derived sub-cities and woredas
+  const allSubCityNames = useMemo(() => {
+    const fromApi = (subCitiesData || []).map((s) => s.name);
+    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+  }, [subCitiesData]);
 
-    return list.filter((p: WomenProfile) =>
-      [
-        p.client.firstName,
-        p.client.lastName,
-        p.client.cityIdNumber,
-        p.client.phoneNumber,
-        p.client.subCity,
-        p.client.woreda,
-        p.client.address,
-        p.educationLevel,
-        p.careerStatus,
-        p.occupation,
-      ]
-        .filter(Boolean)
-        .some((val) => val?.toString().toLowerCase().includes(q)),
+  const currentSubCityObj = useMemo(() => {
+    if (selectedSubCity === "ALL") return null;
+    return (subCitiesData || []).find(
+      (s) => s.name.toLowerCase().trim() === selectedSubCity.toLowerCase().trim(),
     );
-  }, [profiles, debouncedSearch]);
+  }, [subCitiesData, selectedSubCity]);
+
+  const availableWoredas = useMemo(() => {
+    return currentSubCityObj?.woredas || [];
+  }, [currentSubCityObj]);
+
+  const getAgeNumber = (profile: WomenProfile): number | null => {
+    if (profile.client.age) return profile.client.age;
+    if (profile.client.dateOfBirth) {
+      const diff = Date.now() - new Date(profile.client.dateOfBirth).getTime();
+      const age = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+      if (!isNaN(age) && age > 0) return age;
+    }
+    return null;
+  };
+
+  // Real-time tab counts
+  const tabCounts = useMemo(() => {
+    const list = profiles || [];
+    return {
+      all: list.length,
+      unemployed: list.filter(
+        (p: WomenProfile) =>
+          (p.careerStatus || p.client.careerStatus || "").toUpperCase() === "UNEMPLOYED",
+      ).length,
+      employed: list.filter((p: WomenProfile) => {
+        const s = (p.careerStatus || p.client.careerStatus || "").toUpperCase();
+        return s === "EMPLOYED" || s === "SELF_EMPLOYED";
+      }).length,
+      pending: list.filter((p: WomenProfile) => p.approvalStatus === "PENDING").length,
+      active: list.filter((p: WomenProfile) => p.isActive).length,
+    };
+  }, [profiles]);
+
+  const filteredProfiles = useMemo(() => {
+    return (profiles || []).filter((p: WomenProfile) => {
+      // 1. Debounced Search
+      if (debouncedSearch.trim()) {
+        const q = debouncedSearch.trim().toLowerCase();
+        const matchesSearch = [
+          p.client.firstName,
+          p.client.lastName,
+          p.client.cityIdNumber,
+          p.client.phoneNumber,
+          p.client.subCity,
+          p.client.woreda,
+          p.client.address,
+          p.educationLevel,
+          p.careerStatus,
+          p.occupation,
+        ]
+          .filter(Boolean)
+          .some((val) => val?.toString().toLowerCase().includes(q));
+
+        if (!matchesSearch) return false;
+      }
+
+      // 2. Preset Tab
+      const careerStatusUpper = (
+        p.careerStatus ||
+        p.client.careerStatus ||
+        p.occupation ||
+        ""
+      ).toUpperCase();
+
+      if (presetTab === "UNEMPLOYED" && careerStatusUpper !== "UNEMPLOYED") {
+        return false;
+      }
+      if (
+        presetTab === "EMPLOYED" &&
+        careerStatusUpper !== "EMPLOYED" &&
+        careerStatusUpper !== "SELF_EMPLOYED"
+      ) {
+        return false;
+      }
+      if (presetTab === "PENDING" && p.approvalStatus !== "PENDING") {
+        return false;
+      }
+      if (presetTab === "ACTIVE" && !p.isActive) {
+        return false;
+      }
+
+      // 3. Location Filters
+      if (selectedSubCity !== "ALL") {
+        if (
+          (p.client.subCity || "").toLowerCase().trim() !==
+          selectedSubCity.toLowerCase().trim()
+        ) {
+          return false;
+        }
+      }
+      if (selectedWoreda !== "ALL") {
+        if (
+          (p.client.woreda || "").toLowerCase().trim() !==
+          selectedWoreda.toLowerCase().trim()
+        ) {
+          return false;
+        }
+      }
+
+      // 4. Education Filter
+      if (educationFilter !== "ALL") {
+        const edu = (
+          p.educationLevel ||
+          p.client.educationLevel ||
+          ""
+        ).toUpperCase();
+        if (edu !== educationFilter.toUpperCase()) return false;
+      }
+
+      // 5. Career Status Filter
+      if (careerFilter !== "ALL") {
+        if (careerStatusUpper !== careerFilter.toUpperCase()) return false;
+      }
+
+      // 6. Approval Status Filter
+      if (approvalFilter !== "ALL" && p.approvalStatus !== approvalFilter) {
+        return false;
+      }
+
+      // 7. Age Filter
+      if (ageFilter !== "ALL") {
+        const ageNum = getAgeNumber(p);
+        if (ageNum === null) return false;
+        if (ageFilter === "YOUTH" && ageNum >= 30) return false;
+        if (ageFilter === "ADULT" && (ageNum < 30 || ageNum > 49)) return false;
+        if (ageFilter === "SENIOR" && ageNum < 50) return false;
+      }
+
+      // 8. Active Status Filter
+      if (activeStatusFilter === "ACTIVE" && !p.isActive) return false;
+      if (activeStatusFilter === "INACTIVE" && p.isActive) return false;
+
+      return true;
+    });
+  }, [
+    profiles,
+    debouncedSearch,
+    presetTab,
+    selectedSubCity,
+    selectedWoreda,
+    educationFilter,
+    careerFilter,
+    approvalFilter,
+    ageFilter,
+    activeStatusFilter,
+  ]);
+
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedSubCity !== "ALL") count++;
+    if (selectedWoreda !== "ALL") count++;
+    if (educationFilter !== "ALL") count++;
+    if (careerFilter !== "ALL") count++;
+    if (approvalFilter !== "ALL") count++;
+    if (ageFilter !== "ALL") count++;
+    if (activeStatusFilter !== "ALL") count++;
+    return count;
+  }, [
+    selectedSubCity,
+    selectedWoreda,
+    educationFilter,
+    careerFilter,
+    approvalFilter,
+    ageFilter,
+    activeStatusFilter,
+  ]);
+
+  const hasActiveFilters =
+    search.length > 0 ||
+    presetTab !== "ALL" ||
+    selectedSubCity !== "ALL" ||
+    selectedWoreda !== "ALL" ||
+    educationFilter !== "ALL" ||
+    careerFilter !== "ALL" ||
+    approvalFilter !== "ALL" ||
+    ageFilter !== "ALL" ||
+    activeStatusFilter !== "ALL";
+
+  const resetAllFilters = () => {
+    setSearch("");
+    setDebouncedSearch("");
+    setPresetTab("ALL");
+    setSelectedSubCity("ALL");
+    setSelectedWoreda("ALL");
+    setEducationFilter("ALL");
+    setCareerFilter("ALL");
+    setApprovalFilter("ALL");
+    setAgeFilter("ALL");
+    setActiveStatusFilter("ALL");
+    setPage(1);
+  };
 
   const totalItems = filteredProfiles.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / limit));
@@ -101,13 +337,8 @@ export default function ProfilesPage() {
   };
 
   const getAge = (profile: WomenProfile) => {
-    if (profile.client.age) return profile.client.age;
-    if (profile.client.dateOfBirth) {
-      const diff = Date.now() - new Date(profile.client.dateOfBirth).getTime();
-      const age = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
-      if (!isNaN(age) && age > 0) return age;
-    }
-    return "-";
+    const age = getAgeNumber(profile);
+    return age !== null ? age : "-";
   };
 
   const getCareerStatusLabel = (profile: WomenProfile) => {
@@ -126,20 +357,26 @@ export default function ProfilesPage() {
     const s = status.toUpperCase();
     if (s === "EMPLOYED" || s.includes("WORK")) {
       return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.primary}`}>
+        <span
+          className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.primary}`}
+        >
           {label}
         </span>
       );
     }
     if (s === "UNEMPLOYED") {
       return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.warning}`}>
+        <span
+          className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${uiTokens.statusTag.warning}`}
+        >
           {label}
         </span>
       );
     }
     return (
-      <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-medium border ${uiTokens.statusTag.neutral}`}>
+      <span
+        className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-medium border ${uiTokens.statusTag.neutral}`}
+      >
         {label}
       </span>
     );
@@ -183,18 +420,461 @@ export default function ProfilesPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-            <div className="relative w-full sm:w-64">
+            <div className="relative w-full sm:w-72">
               <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 type="search"
-                placeholder={t("womenList.searchPlaceholder")}
-                className="pl-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                placeholder="Search name, city ID, phone, address, career..."
+                className="pl-8 pr-7 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-2 top-2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
+            <Button
+              type="button"
+              variant={
+                showAdvancedFilters || activeFiltersCount > 0
+                  ? "default"
+                  : "outline"
+              }
+              size="sm"
+              className={`h-8 text-xs rounded-xs font-mono transition-colors ${
+                showAdvancedFilters || activeFiltersCount > 0
+                  ? "bg-[#1769AA] hover:bg-[#125386] text-white border-[#1769AA]"
+                  : "border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+              }`}
+              onClick={() => setShowAdvancedFilters((prev) => !prev)}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
+              <span>Filters</span>
+              {activeFiltersCount > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </Button>
             <NewWomenProfileForm />
           </div>
+        </div>
+      </div>
+
+      {/* ── Workflow Preset Tabs ────────────────────────────────────────────── */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
+        {[
+          { id: "ALL" as const, label: "All Profiles", count: tabCounts.all },
+          {
+            id: "UNEMPLOYED" as const,
+            label: "Seeking Employment",
+            count: tabCounts.unemployed,
+            color: "text-amber-700 bg-amber-50",
+          },
+          {
+            id: "EMPLOYED" as const,
+            label: "Employed / Self-Employed",
+            count: tabCounts.employed,
+            color: "text-emerald-700 bg-emerald-50",
+          },
+          {
+            id: "PENDING" as const,
+            label: "Pending Approval",
+            count: tabCounts.pending,
+            color: "text-indigo-700 bg-indigo-50",
+          },
+          {
+            id: "ACTIVE" as const,
+            label: "Active Beneficiaries",
+            count: tabCounts.active,
+            color: "text-blue-700 bg-blue-50",
+          },
+        ].map((tab) => {
+          const isActive = presetTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setPresetTab(tab.id);
+                setPage(1);
+              }}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-xs text-xs font-mono font-medium transition-all whitespace-nowrap ${
+                isActive
+                  ? "bg-[#0B1F3A] text-white shadow-2xs font-bold"
+                  : "bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-[#E3E7EB]"
+              }`}
+            >
+              <span>{tab.label}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold tabular-nums ${
+                  isActive
+                    ? "bg-white/20 text-white"
+                    : tab.color || "bg-slate-200 text-slate-700"
+                }`}
+              >
+                {tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Advanced Collapsible Filter Panel ────────────────────────────────── */}
+      {showAdvancedFilters && (
+        <div className="p-4 bg-slate-50/80 rounded-xs border border-[#E3E7EB] space-y-3 animate-in fade-in-50 duration-200">
+          <div className="flex items-center justify-between pb-2 border-b border-[#E3E7EB]">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
+                Advanced Demographic &amp; Location Filters
+              </span>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={resetAllFilters}
+                className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset All Filters</span>
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {/* Sub-City Selector */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Sub-City
+              </label>
+              <Select
+                value={selectedSubCity}
+                onValueChange={(val) => {
+                  setSelectedSubCity(val);
+                  setSelectedWoreda("ALL");
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Sub-Cities" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Sub-Cities
+                  </SelectItem>
+                  {allSubCityNames.map((sc) => (
+                    <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
+                      {sc}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Woreda Selector */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Woreda
+              </label>
+              <Select
+                value={selectedWoreda}
+                onValueChange={(val) => {
+                  setSelectedWoreda(val);
+                  setPage(1);
+                }}
+                disabled={selectedSubCity === "ALL"}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
+                  <SelectValue
+                    placeholder={
+                      selectedSubCity === "ALL"
+                        ? "Select Sub-City first"
+                        : "All Woredas"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Woredas
+                  </SelectItem>
+                  {availableWoredas.map((w) => (
+                    <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
+                      Woreda {w.code}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Career / Employment Status */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Career Status
+              </label>
+              <Select
+                value={careerFilter}
+                onValueChange={(val) => {
+                  setCareerFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Statuses" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Statuses
+                  </SelectItem>
+                  {CAREER_OPTIONS.map((c) => (
+                    <SelectItem key={c} value={c} className="text-xs rounded-xs">
+                      {t.has(`form.careerOptions.${c}`)
+                        ? t(`form.careerOptions.${c}`)
+                        : c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Education Level */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Education Level
+              </label>
+              <Select
+                value={educationFilter}
+                onValueChange={(val) => {
+                  setEducationFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Education" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Education
+                  </SelectItem>
+                  {EDUCATION_OPTIONS.map((edu) => (
+                    <SelectItem key={edu} value={edu} className="text-xs rounded-xs">
+                      {t.has(`form.educationOptions.${edu}`)
+                        ? t(`form.educationOptions.${edu}`)
+                        : edu}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Age Bracket */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Age Bracket
+              </label>
+              <Select
+                value={ageFilter}
+                onValueChange={(val: any) => {
+                  setAgeFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Ages" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Ages
+                  </SelectItem>
+                  <SelectItem value="YOUTH" className="text-xs rounded-xs">
+                    Youth (&lt; 30 yrs)
+                  </SelectItem>
+                  <SelectItem value="ADULT" className="text-xs rounded-xs">
+                    Adult (30 – 49 yrs)
+                  </SelectItem>
+                  <SelectItem value="SENIOR" className="text-xs rounded-xs">
+                    Senior (50+ yrs)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Approval Status */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Approval
+              </label>
+              <Select
+                value={approvalFilter}
+                onValueChange={(val) => {
+                  setApprovalFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Approvals" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Approvals
+                  </SelectItem>
+                  <SelectItem value="PENDING" className="text-xs rounded-xs">
+                    Pending
+                  </SelectItem>
+                  <SelectItem value="APPROVED" className="text-xs rounded-xs">
+                    Approved
+                  </SelectItem>
+                  <SelectItem value="REJECTED" className="text-xs rounded-xs">
+                    Rejected
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Active Filter Chips & Results Count Bar ──────────────────────────── */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-mono font-bold text-slate-500 mr-1">
+            Results ({filteredProfiles.length} of {profiles?.length || 0}):
+          </span>
+
+          {presetTab !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Preset: {presetTab}</span>
+              <button
+                onClick={() => setPresetTab("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {debouncedSearch && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <button
+                onClick={() => setSearch("")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {selectedSubCity !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Sub-City: {selectedSubCity}</span>
+              <button
+                onClick={() => {
+                  setSelectedSubCity("ALL");
+                  setSelectedWoreda("ALL");
+                }}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {selectedWoreda !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Woreda: {selectedWoreda}</span>
+              <button
+                onClick={() => setSelectedWoreda("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {careerFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Career: {careerFilter}</span>
+              <button
+                onClick={() => setCareerFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {educationFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Education: {educationFilter}</span>
+              <button
+                onClick={() => setEducationFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {ageFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Age: {ageFilter}</span>
+              <button
+                onClick={() => setAgeFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {approvalFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Approval: {approvalFilter}</span>
+              <button
+                onClick={() => setApprovalFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {hasActiveFilters && (
+            <button
+              onClick={resetAllFilters}
+              className="text-[11px] font-mono font-semibold text-rose-600 hover:text-rose-800 ml-1 underline underline-offset-2"
+            >
+              Clear All
+            </button>
+          )}
         </div>
       </div>
 
