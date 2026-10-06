@@ -92,6 +92,13 @@ export interface EdirCouncilMember {
   registrationDate: string | null;
 }
 
+export interface CouncilLeadershipMember {
+  fullName: string;
+  role: string;
+  phoneNumber?: string;
+  address?: string;
+}
+
 export interface EdirCouncil {
   id: number;
   name: string;
@@ -104,6 +111,7 @@ export interface EdirCouncil {
   chairpersonPhone: string | null;
   contactPhone: string | null;
   address: string | null;
+  leadershipMembers?: CouncilLeadershipMember[];
   registrationNumber: string | null;
   registrationDate: string | null;
   certificateIssuedAt: string | null;

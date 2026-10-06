@@ -24,9 +24,10 @@ import { toast } from "sonner";
 import NewCouncilForm from "../_components/new-council-form";
 import CouncilActions from "./_components/council-actions";
 import AddMemberDialog from "./_components/add-member-dialog";
+import ManageLeadershipDialog from "./_components/manage-leadership-dialog";
 
 import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight, Home, UserCheck, Plus } from "lucide-react";
 
 const statusStyles: Record<EdirStatus, string> = {
   ACTIVE: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -162,6 +163,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
 
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
           <AddMemberDialog council={typedCouncil} />
+          <ManageLeadershipDialog council={typedCouncil} />
           <CouncilActions council={typedCouncil} />
           <NewCouncilForm
             initialData={typedCouncil}
@@ -325,31 +327,96 @@ export default function CouncilDetailsPage({ params }: PageProps) {
         <div className="space-y-6">
           {/* Leadership Card */}
           <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
-            <CardHeader className="border-b border-[#E3E7EB] bg-slate-50/50 py-3 px-5">
+            <CardHeader className="border-b border-[#E3E7EB] bg-slate-50/50 py-2.5 px-4 flex flex-row items-center justify-between">
               <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#1769AA]" />
-                {t("detail.leader")}
+                <span>{t("detail.leader")}</span>
+                {Array.isArray(typedCouncil.leadershipMembers) && typedCouncil.leadershipMembers.length > 0 && (
+                  <span className="text-[10px] font-mono text-[#1769AA] font-bold bg-[#E8F2FA] px-1.5 py-0.2 rounded-xs border border-[#BCD5EA]">
+                    {typedCouncil.leadershipMembers.length + 1}
+                  </span>
+                )}
               </CardTitle>
+              <ManageLeadershipDialog
+                council={typedCouncil}
+                trigger={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-2 text-[10.5px] font-mono font-bold text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Manage Leaders</span>
+                  </Button>
+                }
+              />
             </CardHeader>
-            <CardContent className="p-5 space-y-3 text-xs">
-              <div className="flex items-center gap-2.5">
-                <Crown className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="font-medium text-slate-800">
-                  {typedCouncil.chairpersonName || t("detail.notAvailable")}
-                </span>
-              </div>
-              {typedCouncil.chairpersonPhone && (
-                <div className="flex items-center gap-2.5 font-mono text-slate-600">
-                  <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span>{typedCouncil.chairpersonPhone}</span>
+            <CardContent className="p-5 space-y-3.5 text-xs">
+              {/* Primary Chairperson */}
+              <div className="rounded-xs border border-[#E3E7EB] bg-slate-50/60 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#0B1F3A] text-white px-1.5 py-0.2 rounded-xs">
+                    Chairperson
+                  </span>
                 </div>
-              )}
+                <div className="flex items-center gap-2.5">
+                  <Crown className="w-4 h-4 text-amber-500 shrink-0" />
+                  <span className="font-semibold text-slate-900">
+                    {typedCouncil.chairpersonName || t("detail.notAvailable")}
+                  </span>
+                </div>
+                {typedCouncil.chairpersonPhone && (
+                  <div className="flex items-center gap-2 font-mono text-slate-600 text-[11px] pl-6">
+                    <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{typedCouncil.chairpersonPhone}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Office Contact Phone */}
               {typedCouncil.contactPhone && (
-                <div className="flex items-center gap-2.5 font-mono text-slate-600">
-                  <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 font-mono text-slate-600 px-1">
+                  <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   <span>
                     {t("detail.contactPhone")}: {typedCouncil.contactPhone}
                   </span>
+                </div>
+              )}
+
+              {/* Additional Leadership Committee Members */}
+              {Array.isArray(typedCouncil.leadershipMembers) && typedCouncil.leadershipMembers.length > 0 && (
+                <div className="pt-2 border-t border-[#E3E7EB] space-y-2">
+                  <p className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                    Executive Committee ({typedCouncil.leadershipMembers.length})
+                  </p>
+                  <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                    {typedCouncil.leadershipMembers.map((member, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 space-y-1 hover:border-[#BCD5EA] transition-colors"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-semibold text-slate-800 text-xs truncate">
+                            {member.fullName}
+                          </span>
+                          <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider bg-[#E8F2FA] text-[#1769AA] px-1.5 py-0.2 rounded-xs border border-[#BCD5EA] shrink-0">
+                            {member.role}
+                          </span>
+                        </div>
+                        {member.phoneNumber && (
+                          <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
+                            <Phone className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span>{member.phoneNumber}</span>
+                          </div>
+                        )}
+                        {member.address && (
+                          <div className="text-[10.5px] text-slate-400 truncate">
+                            {member.address}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </CardContent>

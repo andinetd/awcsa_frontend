@@ -909,7 +909,9 @@
         "confirmCancel": "Confirm Cancellation",
         "cancelling": "Cancelling...",
         "renaming": "Renewing...",
-        "addMember": "Add Members",
+        "addMember": "Add Member Edirs",
+        "addMemberEdir": "Add Member Edirs",
+        "addLeadershipMember": "Add Leadership Member",
         "removeMember": "Remove",
         "removing": "Removing...",
         "addingMembers": "Adding...",
@@ -925,7 +927,11 @@
         "sections": {
           "general": "General Information",
           "location": "Location",
-          "leadership": "Leadership & Contact"
+          "leadership": "Leadership & Contact",
+          "additionalLeadership": "Additional Leadership & Executive Committee"
+        },
+        "buttons": {
+          "addLeader": "Add Member"
         },
         "fields": {
           "name": "Council Name",
@@ -937,7 +943,10 @@
           "chairpersonName": "Chairperson Name",
           "chairpersonPhone": "Chairperson Phone",
           "contactPhone": "Contact Phone",
-          "address": "Address"
+          "address": "Address",
+          "leaderName": "Full Name",
+          "leaderRole": "Role / Position Label",
+          "leaderPhone": "Phone Number"
         },
         "placeholders": {
           "name": "e.g. Woreda 5 Edir Council",

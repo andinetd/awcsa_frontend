@@ -7,6 +7,7 @@ import {
   EdirLevel,
   EdirCancellationReason,
   EdirStatus,
+  CouncilLeadershipMember,
 } from "./edir";
 
 const getAuthHeaders = () => {
@@ -49,6 +50,7 @@ export interface EdirCouncilPayload {
   chairpersonPhone?: string;
   contactPhone?: string;
   address?: string;
+  leadershipMembers?: CouncilLeadershipMember[];
 }
 
 export const registerEdirCouncil = async (

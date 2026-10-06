@@ -909,7 +909,9 @@
         "confirmCancel": "መሰረዙን አረጋግጥ",
         "cancelling": "በመሰረዝ ላይ...",
         "renaming": "በማደስ ላይ...",
-        "addMember": "አባላት ጨምር",
+        "addMember": "የእድር አባላትን ጨምር",
+        "addMemberEdir": "የእድር አባላትን ጨምር",
+        "addLeadershipMember": "የአመራር አባል ጨምር",
         "removeMember": "አስወግድ",
         "removing": "በማስወገድ ላይ...",
         "addingMembers": "በመጨመር ላይ...",
@@ -925,7 +927,11 @@
         "sections": {
           "general": "አጠቃላይ መረጃ",
           "location": "አድራሻ",
-          "leadership": "አመራር እና መገናኛ"
+          "leadership": "አመራር እና መገናኛ",
+          "additionalLeadership": "ተጨማሪ የስራ አስፈፃሚ አመራር አባላት"
+        },
+        "buttons": {
+          "addLeader": "አባል ጨምር"
         },
         "fields": {
           "name": "የምክር ቤት ስም",
@@ -937,7 +943,10 @@
           "chairpersonName": "የሊቀመንበር ስም",
           "chairpersonPhone": "የሊቀመንበር ስልክ",
           "contactPhone": "የመገናኛ ስልክ",
-          "address": "አድራሻ"
+          "address": "አድራሻ",
+          "leaderName": "ሙሉ ስም",
+          "leaderRole": "የስራ ሃላፊነት / ማዕረግ",
+          "leaderPhone": "ስልክ ቁጥር"
         },
         "placeholders": {
           "name": "ለምሳሌ የወረዳ 5 የእድር ምክር ቤት",

@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { UserPlus, Check } from "lucide-react";
+import { Building2, Check } from "lucide-react";
 
 interface Props {
   council: EdirCouncil;
@@ -52,7 +52,7 @@ export default function AddMemberDialog({ council }: Props) {
         councilId: council.id,
         associationIds: selected,
       });
-      toast.success(t("buttons.addMember"));
+      toast.success(t("buttons.addMemberEdir") || t("buttons.addMember"));
       setOpen(false);
       setSelected([]);
     } catch (error) {
@@ -73,14 +73,14 @@ export default function AddMemberDialog({ council }: Props) {
           variant="outline"
           className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
         >
-          <UserPlus className="w-3.5 h-3.5 mr-1.5" />
-          {t("buttons.addMember")}
+          <Building2 className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
+          {t("buttons.addMemberEdir") || t("buttons.addMember")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-            {t("buttons.addMember")}
+            {t("buttons.addMemberEdir") || t("buttons.addMember")}
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500 font-mono">
             {council.name}

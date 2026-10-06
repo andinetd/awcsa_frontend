@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -30,13 +30,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ShieldPlus, Edit } from "lucide-react";
+import { ShieldPlus, Edit, Plus, Trash2, UserPlus, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   useCreateEdirCouncilMutation,
   useUpdateEdirCouncilMutation,
 } from "@/hooks/social-affairs";
-import { newEdirCouncilSchema, NewEdirCouncilSchemaType } from "@/schemas/edir-council";
+import { newEdirCouncilSchema, NewEdirCouncilSchemaType, CouncilLeadershipMember } from "@/schemas/edir-council";
 import { toast } from "sonner";
 import { EdirCouncil, EdirLevel } from "@/api/social-affairs/edir";
 import { EdirCouncilPayload } from "@/api/social-affairs/council-api";
@@ -50,6 +50,18 @@ interface NewCouncilFormProps {
   councilId?: number;
   trigger?: React.ReactNode;
 }
+
+const COMMON_ROLE_SUGGESTIONS = [
+  "Vice Chairperson",
+  "Secretary",
+  "Treasurer",
+  "Auditor / Audit Head",
+  "Public Relations Officer",
+  "Women Affairs Coordinator",
+  "Youth Representative",
+  "Executive Member",
+  "Legal Advisor",
+];
 
 export default function NewCouncilForm({
   initialData,
@@ -72,11 +84,17 @@ export default function NewCouncilForm({
     chairpersonPhone: "",
     contactPhone: "",
     address: "",
+    leadershipMembers: [],
   };
 
   const form = useForm<NewEdirCouncilSchemaType>({
     resolver: zodResolver(newEdirCouncilSchema),
     defaultValues,
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "leadershipMembers",
   });
 
   useEffect(() => {
@@ -92,6 +110,9 @@ export default function NewCouncilForm({
         chairpersonPhone: initialData.chairpersonPhone || "",
         contactPhone: initialData.contactPhone || "",
         address: initialData.address || "",
+        leadershipMembers: Array.isArray(initialData.leadershipMembers)
+          ? initialData.leadershipMembers
+          : [],
       });
     }
     if (open && !initialData) form.reset(defaultValues);
@@ -109,6 +130,7 @@ export default function NewCouncilForm({
       chairpersonPhone: values.chairpersonPhone || undefined,
       contactPhone: values.contactPhone || undefined,
       address: values.address || undefined,
+      leadershipMembers: values.leadershipMembers || [],
     };
 
     try {
@@ -374,6 +396,158 @@ export default function NewCouncilForm({
                   </FormItem>
                 )}
               />
+            </div>
+
+            {/* ── Additional Leadership Members (User-Defined Custom Roles) ──────────────── */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between border-b border-[#E3E7EB] pb-1.5">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                  <Users className="w-3.5 h-3.5 text-[#1769AA]" />
+                  <span>
+                    {t.has("form.sections.additionalLeadership")
+                      ? t("form.sections.additionalLeadership")
+                      : "Additional Council Leadership Members"}
+                  </span>
+                  {fields.length > 0 && (
+                    <span className="ml-1 text-[10px] font-mono font-bold bg-[#E8F2FA] text-[#1769AA] px-1.5 py-0.2 rounded-xs border border-[#BCD5EA]">
+                      {fields.length}
+                    </span>
+                  )}
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    append({
+                      fullName: "",
+                      role: "",
+                      phoneNumber: "",
+                      address: "",
+                    })
+                  }
+                  className="h-7 text-xs font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] hover:bg-[#d6e7f7] hover:text-[#12568E] gap-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>
+                    {t.has("form.buttons.addLeader")
+                      ? t("form.buttons.addLeader")
+                      : "Add Member"}
+                  </span>
+                </Button>
+              </div>
+
+              {/* Datalist for fast role selection or auto-complete */}
+              <datalist id="edir-council-role-suggestions">
+                {COMMON_ROLE_SUGGESTIONS.map((role) => (
+                  <option key={role} value={role} />
+                ))}
+              </datalist>
+
+              {fields.length === 0 ? (
+                <div className="rounded-xs border border-dashed border-[#E3E7EB] bg-slate-50/60 p-4 text-center">
+                  <p className="text-xs text-slate-500">
+                    No additional leadership members added yet. Click &quot;Add Member&quot; to appoint vice-chairs, secretaries, treasurers, auditors, or custom executive roles.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                  {fields.map((fieldItem, index) => (
+                    <div
+                      key={fieldItem.id}
+                      className="rounded-xs border border-[#E3E7EB] bg-slate-50/40 p-3 space-y-2 relative group hover:border-[#BCD5EA] transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                          Leader #{index + 1}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => remove(index)}
+                          className="h-6 px-1.5 text-[11px] font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs gap-1 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>Remove</span>
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        {/* Member Full Name */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.fullName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("form.fields.leaderName")
+                                  ? t("form.fields.leaderName")
+                                  : "Full Name"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="e.g. Abebe Bikila"
+                                  className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Flexible Role / Position (Freeform with Datalist Suggestions) */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.role`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("form.fields.leaderRole")
+                                  ? t("form.fields.leaderRole")
+                                  : "Role / Position Label"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  list="edir-council-role-suggestions"
+                                  placeholder="Type or select role..."
+                                  className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Phone Number */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.phoneNumber`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("form.fields.leaderPhone")
+                                  ? t("form.fields.leaderPhone")
+                                  : "Phone Number"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="e.g. 0911223344"
+                                  className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">

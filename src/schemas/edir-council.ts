@@ -3,6 +3,15 @@ import { EdirLevel } from "@/api/social-affairs/edir";
 
 export const edirCouncilLevelSchema = z.enum(["WOREDA", "SUB_CITY", "CITY"]);
 
+export const councilLeadershipMemberSchema = z.object({
+  fullName: z.string().min(1, "Member full name is required"),
+  role: z.string().min(1, "Role / title label is required"),
+  phoneNumber: z.string().optional(),
+  address: z.string().optional(),
+});
+
+export type CouncilLeadershipMember = z.infer<typeof councilLeadershipMemberSchema>;
+
 export const newEdirCouncilSchema = z
   .object({
     name: z.string().min(2, "Council name is required"),
@@ -17,6 +26,7 @@ export const newEdirCouncilSchema = z
     chairpersonPhone: z.string().optional(),
     contactPhone: z.string().optional(),
     address: z.string().optional(),
+    leadershipMembers: z.array(councilLeadershipMemberSchema).optional(),
   })
   .superRefine((val, ctx) => {
     if (val.level === "WOREDA" && !val.woreda) {
