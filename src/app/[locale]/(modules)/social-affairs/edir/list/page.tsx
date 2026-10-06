@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useGetEdirAssociationsQuery } from "@/hooks/social-affairs";
+import {
+  useGetEdirAssociationsQuery,
+  useGetSubCitiesQuery,
+} from "@/hooks/social-affairs";
 import EdirCard from "./_components/edir-card";
 import NewEdirForm from "./_components/new-edir-form";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
@@ -19,9 +22,25 @@ import {
   Eye,
   MapPin,
   Calendar,
+  SlidersHorizontal,
+  X,
+  RotateCcw,
+  CheckCircle2,
+  AlertTriangle,
+  ShieldAlert,
+  FileText,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -33,6 +52,8 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
+type PresetTab = "ALL" | "ACTIVE" | "RENEWAL" | "AUDIT" | "SANCTIONED";
+
 const STATUS_OPTIONS: (EdirStatus | "ALL")[] = [
   "ALL",
   "ACTIVE",
@@ -42,6 +63,20 @@ const STATUS_OPTIONS: (EdirStatus | "ALL")[] = [
 ];
 
 const LEVEL_OPTIONS = ["ALL", "WOREDA", "SUB_CITY", "CITY"] as const;
+
+const DEFAULT_SUBCITY_NAMES = [
+  "Bole",
+  "Yeka",
+  "Kirkos",
+  "Arada",
+  "Gulele",
+  "Lideta",
+  "Nifas Silk-Lafto",
+  "Kolfe Keranio",
+  "Akaky Kaliti",
+  "Addis Ketema",
+  "Lemi Kura",
+];
 
 const statusStyles: Record<EdirStatus, string> = {
   ACTIVE: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
@@ -54,24 +89,265 @@ const EdirList = () => {
   const t = useTranslations("social-affairs.edir.list");
   const router = useRouter();
   const { data: edirs, isLoading, isError } = useGetEdirAssociationsQuery();
-  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const { data: subCitiesData } = useGetSubCitiesQuery();
+
+  const [viewMode, setViewMode] = useState<"grid" | "table">("table");
+  const [presetTab, setPresetTab] = useState<PresetTab>("ALL");
   const [page, setPage] = useState(1);
   const limit = viewMode === "grid" ? 6 : 10;
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
+
+  // Location & Administrative filters
+  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
   const [levelFilter, setLevelFilter] = useState<string>("ALL");
+  const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
+  const [sizeFilter, setSizeFilter] = useState<"ALL" | "SMALL" | "MEDIUM" | "LARGE">("ALL");
+  const [complianceFilter, setComplianceFilter] = useState<
+    "ALL" | "AUDITED" | "ASSEMBLY_APPROVED" | "HAS_BYLAWS" | "PENALTY_APPLIED"
+  >("ALL");
+  const [femaleLeadershipOnly, setFemaleLeadershipOnly] = useState<boolean>(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
       setPage(1); // Reset to page 1 on search
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [search]);
 
+  // Derived sub-cities and woredas
+  const allSubCityNames = useMemo(() => {
+    const fromApi = (subCitiesData || []).map((s) => s.name);
+    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+  }, [subCitiesData]);
+
+  const currentSubCityObj = useMemo(() => {
+    if (selectedSubCity === "ALL") return null;
+    return (subCitiesData || []).find(
+      (s) => s.name.toLowerCase().trim() === selectedSubCity.toLowerCase().trim(),
+    );
+  }, [subCitiesData, selectedSubCity]);
+
+  const availableWoredas = useMemo(() => {
+    return currentSubCityObj?.woredas || [];
+  }, [currentSubCityObj]);
+
+  // Real-time tab counts across all fetched records
+  const tabCounts = useMemo(() => {
+    const list = edirs || [];
+    return {
+      all: list.length,
+      active: list.filter((e: Edir) => e.status === "ACTIVE").length,
+      renewal: list.filter(
+        (e: Edir) => e.status === "EXPIRED" || Boolean(e.renewalPenaltyApplied),
+      ).length,
+      audit: list.filter(
+        (e: Edir) =>
+          !e.assetsAuditedByAuditCommittee ||
+          !e.assetsApprovedByGeneralAssembly ||
+          !e.byLawsDoc,
+      ).length,
+      sanctioned: list.filter(
+        (e: Edir) => e.status === "REVOKED" || e.status === "CANCELLED",
+      ).length,
+    };
+  }, [edirs]);
+
   // Client-side filtering
+  const filteredEdirs = useMemo(() => {
+    return (edirs || []).filter((edir: Edir) => {
+      // 1. Multi-field search
+      if (debouncedSearch) {
+        const query = debouncedSearch.toLowerCase().trim();
+        const matchesName = edir.name?.toLowerCase().includes(query);
+        const matchesReg = edir.registrationNumber?.toLowerCase().includes(query);
+        const matchesSubCity = edir.subCity?.toLowerCase().includes(query);
+        const matchesWoreda = edir.woreda?.toLowerCase().includes(query);
+        const matchesKebele = edir.kebele?.toLowerCase().includes(query);
+        const matchesLoc = edir.specificLocation?.toLowerCase().includes(query);
+        const matchesBank = edir.bankAccountNumber?.toLowerCase().includes(query);
+        const matchesFounders = (edir.foundingMembers || []).some((fm) =>
+          fm.fullName?.toLowerCase().includes(query),
+        );
+
+        if (
+          !matchesName &&
+          !matchesReg &&
+          !matchesSubCity &&
+          !matchesWoreda &&
+          !matchesKebele &&
+          !matchesLoc &&
+          !matchesBank &&
+          !matchesFounders
+        ) {
+          return false;
+        }
+      }
+
+      // 2. Preset Tab
+      if (presetTab === "ACTIVE" && edir.status !== "ACTIVE") return false;
+      if (
+        presetTab === "RENEWAL" &&
+        edir.status !== "EXPIRED" &&
+        !edir.renewalPenaltyApplied
+      ) {
+        return false;
+      }
+      if (presetTab === "AUDIT") {
+        const isPending =
+          !edir.assetsAuditedByAuditCommittee ||
+          !edir.assetsApprovedByGeneralAssembly ||
+          !edir.byLawsDoc;
+        if (!isPending) return false;
+      }
+      if (
+        presetTab === "SANCTIONED" &&
+        edir.status !== "REVOKED" &&
+        edir.status !== "CANCELLED"
+      ) {
+        return false;
+      }
+
+      // 3. Location Filters
+      if (selectedSubCity !== "ALL") {
+        if (
+          (edir.subCity || "").toLowerCase().trim() !==
+          selectedSubCity.toLowerCase().trim()
+        ) {
+          return false;
+        }
+      }
+      if (selectedWoreda !== "ALL") {
+        if (
+          (edir.woreda || "").toLowerCase().trim() !==
+          selectedWoreda.toLowerCase().trim()
+        ) {
+          return false;
+        }
+      }
+
+      // 4. Register Level
+      if (levelFilter !== "ALL" && edir.registerLevel !== levelFilter) {
+        return false;
+      }
+
+      // 5. Status Filter
+      if (statusFilter !== "ALL" && edir.status !== statusFilter) {
+        return false;
+      }
+
+      // 6. Association Size
+      const totalMembers =
+        (edir.managementMale || 0) +
+        (edir.managementFemale || 0) +
+        (edir.generalMale || 0) +
+        (edir.generalFemale || 0);
+
+      if (sizeFilter === "SMALL" && totalMembers >= 100) return false;
+      if (
+        sizeFilter === "MEDIUM" &&
+        (totalMembers < 100 || totalMembers > 300)
+      ) {
+        return false;
+      }
+      if (sizeFilter === "LARGE" && totalMembers <= 300) return false;
+
+      // 7. Female Leadership
+      if (femaleLeadershipOnly && (edir.managementFemale || 0) <= 0) {
+        return false;
+      }
+
+      // 8. Compliance & Governance
+      if (
+        complianceFilter === "AUDITED" &&
+        !edir.assetsAuditedByAuditCommittee
+      ) {
+        return false;
+      }
+      if (
+        complianceFilter === "ASSEMBLY_APPROVED" &&
+        !edir.assetsApprovedByGeneralAssembly
+      ) {
+        return false;
+      }
+      if (complianceFilter === "HAS_BYLAWS" && !edir.byLawsDoc) return false;
+      if (
+        complianceFilter === "PENALTY_APPLIED" &&
+        !edir.renewalPenaltyApplied
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [
+    edirs,
+    debouncedSearch,
+    presetTab,
+    selectedSubCity,
+    selectedWoreda,
+    levelFilter,
+    statusFilter,
+    sizeFilter,
+    femaleLeadershipOnly,
+    complianceFilter,
+  ]);
+
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedSubCity !== "ALL") count++;
+    if (selectedWoreda !== "ALL") count++;
+    if (levelFilter !== "ALL") count++;
+    if (statusFilter !== "ALL") count++;
+    if (sizeFilter !== "ALL") count++;
+    if (femaleLeadershipOnly) count++;
+    if (complianceFilter !== "ALL") count++;
+    return count;
+  }, [
+    selectedSubCity,
+    selectedWoreda,
+    levelFilter,
+    statusFilter,
+    sizeFilter,
+    femaleLeadershipOnly,
+    complianceFilter,
+  ]);
+
+  const hasActiveFilters =
+    search.length > 0 ||
+    presetTab !== "ALL" ||
+    selectedSubCity !== "ALL" ||
+    selectedWoreda !== "ALL" ||
+    levelFilter !== "ALL" ||
+    statusFilter !== "ALL" ||
+    sizeFilter !== "ALL" ||
+    femaleLeadershipOnly ||
+    complianceFilter !== "ALL";
+
+  const resetAllFilters = () => {
+    setSearch("");
+    setDebouncedSearch("");
+    setPresetTab("ALL");
+    setSelectedSubCity("ALL");
+    setSelectedWoreda("ALL");
+    setLevelFilter("ALL");
+    setStatusFilter("ALL");
+    setSizeFilter("ALL");
+    setFemaleLeadershipOnly(false);
+    setComplianceFilter("ALL");
+    setPage(1);
+  };
+
+  // Pagination calculations
+  const totalItems = filteredEdirs.length;
+  const totalPages = Math.ceil(totalItems / limit) || 1;
+  const startIndex = (page - 1) * limit;
+  const currentEdirs = filteredEdirs.slice(startIndex, startIndex + limit);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -82,26 +358,6 @@ const EdirList = () => {
     );
   }
 
-  const filteredEdirs = (edirs || []).filter((edir: Edir) => {
-    const matchesSearch =
-      edir.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      (edir.registrationNumber || "")
-        .toLowerCase()
-        .includes(debouncedSearch.toLowerCase()) ||
-      edir.subCity.toLowerCase().includes(debouncedSearch.toLowerCase());
-    const matchesStatus =
-      statusFilter === "ALL" || edir.status === statusFilter;
-    const matchesLevel =
-      levelFilter === "ALL" || edir.registerLevel === levelFilter;
-    return matchesSearch && matchesStatus && matchesLevel;
-  });
-
-  // Client-side pagination
-  const totalItems = filteredEdirs.length;
-  const totalPages = Math.ceil(totalItems / limit);
-  const startIndex = (page - 1) * limit;
-  const currentEdirs = filteredEdirs.slice(startIndex, startIndex + limit);
-
   if (isError) {
     return (
       <div className="p-8 text-center text-xs font-mono uppercase text-rose-600">
@@ -111,7 +367,7 @@ const EdirList = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto w-full p-4 md:p-8">
+    <div className="space-y-5 max-w-7xl mx-auto w-full p-4 md:p-8">
       {/* Municipal Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link
@@ -136,17 +392,45 @@ const EdirList = () => {
           <p className="text-xs text-slate-500 font-mono mt-1">{t("subtitle")}</p>
         </div>
 
+        {/* Search input + Filter toggle + Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-          <div className="relative w-full sm:w-64">
+          <div className="relative w-full sm:w-72">
             <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
               type="search"
-              placeholder={t("search")}
-              className="h-8 pl-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+              placeholder="Search name, reg #, bank, location..."
+              className="h-8 pl-8 pr-7 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
+          <Button
+            type="button"
+            variant={showAdvancedFilters || activeFiltersCount > 0 ? "default" : "outline"}
+            size="sm"
+            className={`h-8 text-xs rounded-xs font-mono transition-colors ${
+              showAdvancedFilters || activeFiltersCount > 0
+                ? "bg-[#1769AA] hover:bg-[#125386] text-white border-[#1769AA]"
+                : "border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+            }`}
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
+            <span>Filters</span>
+            {activeFiltersCount > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
           <div className="flex items-center gap-2">
             <GenerateReportDialog />
             <ImportEdirDialog />
@@ -155,64 +439,421 @@ const EdirList = () => {
         </div>
       </div>
 
-      {/* Level & Status Filters + View Mode Switcher */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="space-y-2">
-          {/* Level Filter */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mr-1">
-              Level:
-            </span>
-            {LEVEL_OPTIONS.map((level) => {
-              const isSelected = levelFilter === level;
-              return (
-                <button
-                  key={level}
-                  onClick={() => {
-                    setLevelFilter(level);
-                    setPage(1);
-                  }}
-                  className={`h-7 px-2.5 rounded-xs text-xs font-mono font-medium border transition-colors ${
-                    isSelected
-                      ? "bg-[#1769AA] text-white border-[#1769AA] shadow-2xs"
-                      : "bg-white text-slate-700 border-[#E3E7EB] hover:bg-[#F7F8FA]"
-                  }`}
-                >
-                  {level === "ALL" ? t("levels.all") : t(`levels.${level}`)}
-                </button>
-              );
-            })}
+      {/* Workflow Preset Tabs */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
+        {[
+          { id: "ALL" as const, label: "All Edirs", count: tabCounts.all },
+          {
+            id: "ACTIVE" as const,
+            label: "Active",
+            count: tabCounts.active,
+            color: "text-emerald-700 bg-emerald-50",
+          },
+          {
+            id: "RENEWAL" as const,
+            label: "Needs Renewal",
+            count: tabCounts.renewal,
+            color: "text-amber-700 bg-amber-50",
+          },
+          {
+            id: "AUDIT" as const,
+            label: "Pending Compliance",
+            count: tabCounts.audit,
+            color: "text-indigo-700 bg-indigo-50",
+          },
+          {
+            id: "SANCTIONED" as const,
+            label: "Sanctioned",
+            count: tabCounts.sanctioned,
+            color: "text-rose-700 bg-rose-50",
+          },
+        ].map((tab) => {
+          const isActive = presetTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setPresetTab(tab.id);
+                setPage(1);
+              }}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-xs text-xs font-mono font-medium transition-all whitespace-nowrap ${
+                isActive
+                  ? "bg-[#0B1F3A] text-white shadow-2xs font-bold"
+                  : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-[#E3E7EB]"
+              }`}
+            >
+              <span>{tab.label}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold tabular-nums ${
+                  isActive
+                    ? "bg-white/20 text-white"
+                    : tab.color || "bg-slate-200 text-slate-700"
+                }`}
+              >
+                {tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Advanced Collapsible Filter Panel */}
+      {showAdvancedFilters && (
+        <div className="p-4 bg-slate-50/80 rounded-xs border border-[#E3E7EB] space-y-3 animate-in fade-in-50 duration-200">
+          <div className="flex items-center justify-between pb-2 border-b border-[#E3E7EB]">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
+                Advanced Administrative Filters
+              </span>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={resetAllFilters}
+                className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset All Filters</span>
+              </button>
+            )}
           </div>
 
-          {/* Status Filter */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mr-1">
-              Status:
-            </span>
-            {STATUS_OPTIONS.map((status) => {
-              const isSelected = statusFilter === status;
-              return (
-                <button
-                  key={status}
-                  onClick={() => {
-                    setStatusFilter(status);
-                    setPage(1);
-                  }}
-                  className={`h-7 px-2.5 rounded-xs text-xs font-mono font-medium border transition-colors ${
-                    isSelected
-                      ? "bg-[#1769AA] text-white border-[#1769AA] shadow-2xs"
-                      : "bg-white text-slate-700 border-[#E3E7EB] hover:bg-[#F7F8FA]"
-                  }`}
-                >
-                  {status === "ALL" ? t("status.all") : t(`status.${status}`)}
-                </button>
-              );
-            })}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {/* Sub-City Filter */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Sub-City
+              </label>
+              <Select
+                value={selectedSubCity}
+                onValueChange={(val) => {
+                  setSelectedSubCity(val);
+                  setSelectedWoreda("ALL");
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Sub-Cities" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Sub-Cities
+                  </SelectItem>
+                  {allSubCityNames.map((sc) => (
+                    <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
+                      {sc}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Woreda Filter */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Woreda
+              </label>
+              <Select
+                value={selectedWoreda}
+                onValueChange={(val) => {
+                  setSelectedWoreda(val);
+                  setPage(1);
+                }}
+                disabled={selectedSubCity === "ALL"}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
+                  <SelectValue
+                    placeholder={
+                      selectedSubCity === "ALL"
+                        ? "Select Sub-City first"
+                        : "All Woredas"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Woredas
+                  </SelectItem>
+                  {availableWoredas.map((w) => (
+                    <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
+                      Woreda {w.code}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Register Level */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Registration Level
+              </label>
+              <Select
+                value={levelFilter}
+                onValueChange={(val) => {
+                  setLevelFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Levels" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Levels
+                  </SelectItem>
+                  {LEVEL_OPTIONS.filter((l) => l !== "ALL").map((level) => (
+                    <SelectItem key={level} value={level} className="text-xs rounded-xs">
+                      {t(`levels.${level}`)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Compliance Criteria */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Compliance Status
+              </label>
+              <Select
+                value={complianceFilter}
+                onValueChange={(val: any) => {
+                  setComplianceFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Compliance" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Compliance
+                  </SelectItem>
+                  <SelectItem value="AUDITED" className="text-xs rounded-xs">
+                    Audit Committee Approved
+                  </SelectItem>
+                  <SelectItem value="ASSEMBLY_APPROVED" className="text-xs rounded-xs">
+                    General Assembly Approved
+                  </SelectItem>
+                  <SelectItem value="HAS_BYLAWS" className="text-xs rounded-xs">
+                    Has By-Laws Document
+                  </SelectItem>
+                  <SelectItem value="PENALTY_APPLIED" className="text-xs rounded-xs">
+                    Late Penalty Applied
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Member Size */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Membership Size
+              </label>
+              <Select
+                value={sizeFilter}
+                onValueChange={(val: any) => {
+                  setSizeFilter(val);
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Sizes" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                    All Sizes
+                  </SelectItem>
+                  <SelectItem value="SMALL" className="text-xs rounded-xs">
+                    Small (&lt; 100 members)
+                  </SelectItem>
+                  <SelectItem value="MEDIUM" className="text-xs rounded-xs">
+                    Medium (100 - 300)
+                  </SelectItem>
+                  <SelectItem value="LARGE" className="text-xs rounded-xs">
+                    Large (&gt; 300 members)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          {/* Demographics Checkbox */}
+          <div className="pt-2 flex items-center justify-between border-t border-[#E3E7EB]/70">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <Checkbox
+                checked={femaleLeadershipOnly}
+                onCheckedChange={(checked) => {
+                  setFemaleLeadershipOnly(Boolean(checked));
+                  setPage(1);
+                }}
+              />
+              <span className="text-xs font-mono text-slate-700">
+                Women in Executive Leadership (managementFemale &gt; 0)
+              </span>
+            </label>
+          </div>
+        </div>
+      )}
+
+      {/* Active Filter Chips & View Mode Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-mono font-bold text-slate-500 mr-1">
+            Results ({filteredEdirs.length} of {edirs?.length || 0}):
+          </span>
+
+          {presetTab !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Preset: {presetTab}</span>
+              <button
+                onClick={() => setPresetTab("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {debouncedSearch && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <button
+                onClick={() => setSearch("")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {selectedSubCity !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Sub-City: {selectedSubCity}</span>
+              <button
+                onClick={() => {
+                  setSelectedSubCity("ALL");
+                  setSelectedWoreda("ALL");
+                }}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {selectedWoreda !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Woreda: {selectedWoreda}</span>
+              <button
+                onClick={() => setSelectedWoreda("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {levelFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Level: {levelFilter}</span>
+              <button
+                onClick={() => setLevelFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {statusFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Status: {statusFilter}</span>
+              <button
+                onClick={() => setStatusFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {sizeFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Size: {sizeFilter}</span>
+              <button
+                onClick={() => setSizeFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {complianceFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Compliance: {complianceFilter}</span>
+              <button
+                onClick={() => setComplianceFilter("ALL")}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {femaleLeadershipOnly && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>Female Leadership</span>
+              <button
+                onClick={() => setFemaleLeadershipOnly(false)}
+                className="hover:text-rose-600 ml-0.5"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
+          {hasActiveFilters && (
+            <button
+              onClick={resetAllFilters}
+              className="text-[11px] font-mono font-semibold text-rose-600 hover:text-rose-800 ml-1 underline underline-offset-2"
+            >
+              Clear All
+            </button>
+          )}
         </div>
 
         {/* View Switcher (Grid vs Table List) */}
-        <div className="flex items-center self-start md:self-end border border-[#E3E7EB] rounded-xs p-0.5 bg-slate-50/70">
+        <div className="flex items-center self-start sm:self-auto border border-[#E3E7EB] rounded-xs p-0.5 bg-slate-50/70">
           <Button
             type="button"
             variant="ghost"
@@ -226,7 +867,7 @@ const EdirList = () => {
             title="Card Grid View"
           >
             <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
-            <span>{t.has("viewGrid") ? t("viewGrid") : "Grid"}</span>
+            <span>Grid</span>
           </Button>
           <Button
             type="button"
@@ -241,10 +882,11 @@ const EdirList = () => {
             title="List / Table View"
           >
             <List className="w-3.5 h-3.5 mr-1.5" />
-            <span>{t.has("viewList") ? t("viewList") : "List"}</span>
+            <span>List</span>
           </Button>
         </div>
       </div>
+
 
       {/* Content Rendering: Grid vs List */}
       {viewMode === "grid" ? (

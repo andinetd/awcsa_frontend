@@ -62,7 +62,7 @@ const CouncilsPage = () => {
   const t = useTranslations("social-affairs.edir.councils");
   const router = useRouter();
 
-  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "table">("table");
   const [levelFilter, setLevelFilter] = useState<EdirLevel | "ALL">("ALL");
   const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
   const [page, setPage] = useState(1);
