@@ -16,12 +16,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { Search, Eye, FileText, X } from "lucide-react";
+import { Search, Eye, FileText, X, SlidersHorizontal, RotateCcw } from "lucide-react";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
 import { useAdoptionApplicationsQuery } from "@/hooks/adoption/adoption-requests";
+import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
 import type { BackendAdoptionApplication } from "@/api/adoption/adoption-requests/getAdoptionApplications";
 export type { BackendAdoptionApplication };
 
@@ -42,6 +50,8 @@ export type BackendApplicantInfo = {
   subCity?: string;
   woreda?: string;
   houseNumber?: string;
+  occupation?: string;
+  address?: string;
 };
 
 export type BackendApplicationInfo = {
@@ -75,7 +85,22 @@ export type BackendReviewInfo = {
   updatedAt?: string;
 };
 
+const DEFAULT_SUBCITY_NAMES = [
+  "Bole",
+  "Yeka",
+  "Kirkos",
+  "Arada",
+  "Gulele",
+  "Lideta",
+  "Nifas Silk-Lafto",
+  "Kolfe Keranio",
+  "Akaky Kaliti",
+  "Addis Ketema",
+  "Lemi Kura",
+];
+
 const VALID_ADOPTION_TABS = [
+  "all",
   "pending",
   "returned",
   "pending_home_visit",
@@ -121,15 +146,39 @@ const AdoptionRequestsContent = () => {
         return saved;
       }
     }
-    return "pending";
+    return "all";
   });
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [dateFilter, setDateFilter] = useState<string>("ALL");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
+
   const t = useTranslations("adoption");
   const {
     data: applications = [],
     isLoading: loading,
   } = useAdoptionApplicationsQuery("ALL");
+
+  const { data: subCitiesData } = useGetSubCitiesQuery();
+
+  // Derived sub-cities and woredas
+  const allSubCityNames = useMemo(() => {
+    const fromApi = (subCitiesData || []).map((s) => s.name);
+    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+  }, [subCitiesData]);
+
+  const currentSubCityObj = useMemo(() => {
+    if (selectedSubCity === "ALL" || !selectedSubCity) return null;
+    return (subCitiesData || []).find(
+      (s) => s.name.toLowerCase().trim() === selectedSubCity.toLowerCase().trim(),
+    );
+  }, [subCitiesData, selectedSubCity]);
+
+  const availableWoredas = useMemo(() => {
+    return currentSubCityObj?.woredas || [];
+  }, [currentSubCityObj]);
 
   // Keep tab in sync if URL query parameter changes
   useEffect(() => {
@@ -152,6 +201,7 @@ const AdoptionRequestsContent = () => {
   };
 
   const TABS = [
+    { value: "all", label: "All Dossiers" },
     { value: "pending", label: t("adoptionRequests.tabs.pending") },
     { value: "returned", label: t("adoptionRequests.tabs.returned") },
     {
@@ -229,6 +279,7 @@ const AdoptionRequestsContent = () => {
   // Count applications per tab
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {
+      all: applications.length,
       pending: 0,
       returned: 0,
       pending_home_visit: 0,
@@ -245,11 +296,72 @@ const AdoptionRequestsContent = () => {
     return counts;
   }, [applications]);
 
-  // Filter applications by UI tab value and optional search query
-  const filteredApps = (status: string) => {
+  // Active filter count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedSubCity !== "ALL") count++;
+    if (selectedWoreda !== "ALL") count++;
+    if (dateFilter !== "ALL") count++;
+    return count;
+  }, [selectedSubCity, selectedWoreda, dateFilter]);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    selectedSubCity !== "ALL" ||
+    selectedWoreda !== "ALL" ||
+    dateFilter !== "ALL";
+
+  const resetAllFilters = () => {
+    setSearchQuery("");
+    setSelectedSubCity("ALL");
+    setSelectedWoreda("ALL");
+    setDateFilter("ALL");
+  };
+
+  // Filter applications by UI tab value, search query, location, and date recency
+  const filteredApps = (tabValue: string) => {
+    const now = new Date().getTime();
+
     return applications.filter((app) => {
-      const matchesTab = mapStatusToTab(app.status) === status;
-      if (!matchesTab) return false;
+      if (tabValue !== "all") {
+        const matchesTab = mapStatusToTab(app.status) === tabValue;
+        if (!matchesTab) return false;
+      }
+
+      // Location filters
+      const appSubCity = (app.reviewInfo?.subCity || app.applicantInfo?.subCity || "").trim().toLowerCase();
+      if (selectedSubCity !== "ALL") {
+        if (!appSubCity || appSubCity !== selectedSubCity.toLowerCase().trim()) {
+          return false;
+        }
+      }
+
+      const appWoreda = String(app.reviewInfo?.woreda || app.applicantInfo?.woreda || "").trim().toLowerCase();
+      if (selectedWoreda !== "ALL") {
+        const matchWoreda =
+          appWoreda === selectedWoreda.toLowerCase().trim() ||
+          appWoreda === `woreda ${selectedWoreda}`.toLowerCase().trim() ||
+          appWoreda.includes(selectedWoreda.toLowerCase().trim());
+        if (!matchWoreda) return false;
+      }
+
+      // Date recency filter
+      if (dateFilter !== "ALL") {
+        const dateStr =
+          app.reviewInfo?.createdAt ||
+          app.applicationInfo?.submittedAt ||
+          app.applicationInfo?.submissionDate;
+        if (!dateStr) return false;
+        const filingTime = new Date(dateStr).getTime();
+        if (isNaN(filingTime)) return false;
+
+        const diffDays = (now - filingTime) / (1000 * 60 * 60 * 24);
+        if (dateFilter === "7D" && diffDays > 7) return false;
+        if (dateFilter === "30D" && diffDays > 30) return false;
+        if (dateFilter === "90D" && diffDays > 90) return false;
+        if (dateFilter === "THIS_YEAR" && diffDays > 365) return false;
+      }
+
       if (!searchQuery.trim()) return true;
 
       const q = searchQuery.toLowerCase().trim();
@@ -293,26 +405,223 @@ const AdoptionRequestsContent = () => {
           </p>
         </div>
 
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 size-3.5 text-slate-400" />
-          <Input
-            type="text"
-            placeholder={t("adoptionRequests.searchPlaceholder") || "Search applicant by name, ID, phone, sub-city..."}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 pr-8 h-8 text-xs bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs shadow-2xs"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
-              aria-label="Clear search"
-            >
-              <X className="size-3.5" />
-            </button>
-          )}
+        <div className="flex items-center gap-2">
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-2.5 top-2.5 size-3.5 text-slate-400" />
+            <Input
+              type="text"
+              placeholder={t("adoptionRequests.searchPlaceholder") || "Search applicant by name, ID, phone, sub-city..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 pr-8 h-8 text-xs bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs shadow-2xs"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+
+          <Button
+            type="button"
+            variant={showAdvancedFilters || activeFiltersCount > 0 ? "default" : "outline"}
+            size="sm"
+            className={cn(
+              "h-8 text-xs rounded-xs font-mono transition-colors cursor-pointer shrink-0",
+              showAdvancedFilters || activeFiltersCount > 0
+                ? "bg-[#1769AA] hover:bg-[#125386] text-white border-[#1769AA]"
+                : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+            )}
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
+          >
+            <SlidersHorizontal className="size-3.5 mr-1.5" />
+            <span>Filters</span>
+            {activeFiltersCount > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
         </div>
       </div>
+
+      {/* ── Advanced Collapsible Filter Panel ────────────────────────────────── */}
+      {showAdvancedFilters && (
+        <div className="p-3.5 bg-slate-50/90 rounded-xs border border-[#E3E7EB] space-y-3 animate-in fade-in-50 duration-200">
+          <div className="flex items-center justify-between pb-2 border-b border-[#E3E7EB]">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="size-3.5 text-[#1769AA]" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
+                Municipal Jurisdiction &amp; Filing Filters
+              </span>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={resetAllFilters}
+                className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
+              >
+                <RotateCcw className="size-3" />
+                <span>Reset All Filters</span>
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Sub-City Selector */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Sub-City
+              </label>
+              <Select
+                value={selectedSubCity}
+                onValueChange={(val) => {
+                  setSelectedSubCity(val);
+                  setSelectedWoreda("ALL");
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Sub-Cities" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL">All Sub-Cities</SelectItem>
+                  {allSubCityNames.map((name) => (
+                    <SelectItem key={name} value={name}>
+                      {name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Woreda Cascading Selector */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Woreda
+              </label>
+              <Select
+                value={selectedWoreda}
+                onValueChange={(val) => setSelectedWoreda(val)}
+                disabled={selectedSubCity === "ALL"}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
+                  <SelectValue
+                    placeholder={
+                      selectedSubCity === "ALL"
+                        ? "Select Sub-City First"
+                        : "All Woredas"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL">All Woredas</SelectItem>
+                  {availableWoredas.length > 0 ? (
+                    availableWoredas.map((w) => (
+                      <SelectItem key={w.id} value={w.code}>
+                        Woreda {w.code}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    Array.from({ length: 15 }, (_, i) => String(i + 1)).map((num) => (
+                      <SelectItem key={num} value={num}>
+                        Woreda {num}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Date Recency Filter */}
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Filing Recency
+              </label>
+              <Select value={dateFilter} onValueChange={(val) => setDateFilter(val)}>
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                  <SelectValue placeholder="All Filing Dates" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="ALL">All Dates</SelectItem>
+                  <SelectItem value="7D">Past 7 Days</SelectItem>
+                  <SelectItem value="30D">Past 30 Days</SelectItem>
+                  <SelectItem value="90D">Past 3 Months</SelectItem>
+                  <SelectItem value="THIS_YEAR">Past 12 Months</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Active Filter Badges ─────────────────────────────────────────────── */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap items-center gap-1.5 text-xs bg-slate-100/80 px-2.5 py-1.5 rounded-xs border border-slate-200">
+          <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
+            Active Filters:
+          </span>
+          {searchQuery && (
+            <Badge
+              variant="secondary"
+              className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+            >
+              Search: &quot;{searchQuery}&quot;
+              <X
+                className="size-3 cursor-pointer hover:text-rose-600"
+                onClick={() => setSearchQuery("")}
+              />
+            </Badge>
+          )}
+          {selectedSubCity !== "ALL" && (
+            <Badge
+              variant="secondary"
+              className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+            >
+              Sub-City: {selectedSubCity}
+              <X
+                className="size-3 cursor-pointer hover:text-rose-600"
+                onClick={() => {
+                  setSelectedSubCity("ALL");
+                  setSelectedWoreda("ALL");
+                }}
+              />
+            </Badge>
+          )}
+          {selectedWoreda !== "ALL" && (
+            <Badge
+              variant="secondary"
+              className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+            >
+              Woreda: {selectedWoreda}
+              <X
+                className="size-3 cursor-pointer hover:text-rose-600"
+                onClick={() => setSelectedWoreda("ALL")}
+              />
+            </Badge>
+          )}
+          {dateFilter !== "ALL" && (
+            <Badge
+              variant="secondary"
+              className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+            >
+              Filing: {dateFilter}
+              <X
+                className="size-3 cursor-pointer hover:text-rose-600"
+                onClick={() => setDateFilter("ALL")}
+              />
+            </Badge>
+          )}
+          <button
+            onClick={resetAllFilters}
+            className="text-[11px] font-mono text-rose-600 hover:text-rose-700 ml-auto font-semibold cursor-pointer underline"
+          >
+            Clear All
+          </button>
+        </div>
+      )}
 
       {/* ── Quick Pipeline Metric Strip ─────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">

@@ -12,14 +12,24 @@ import {
   Plus,
   RotateCcw,
   Search,
+  SlidersHorizontal,
   Users,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DataTable } from "@/components/ui/data-table";
 import { useChildren } from "@/hooks/adoption/useChildren";
+import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
 import { getColumns } from "./_components/columns";
 import { TransferStatusDialog } from "./_components/transfer-status-dialog";
 import { Child, ChildStatus } from "@/types/child-matching-types";
@@ -53,9 +63,15 @@ function ChildrenPageContent() {
 
   const t = useTranslations("adoption");
   const { data: children = [], isLoading, refetch } = useChildren();
+  const { data: careCenters = [] } = useGetCareCentersQuery();
 
   const [selectedStatus, setSelectedStatus] = useState<ChildStatus | "ALL">(initialStatus);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const [sexFilter, setSexFilter] = useState<string>("ALL");
+  const [ageCohortFilter, setAgeCohortFilter] = useState<string>("ALL");
+  const [facilityFilter, setFacilityFilter] = useState<string>("ALL");
+  const [locationFilter, setLocationFilter] = useState<string>("");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
   const [transferChild, setTransferChild] = useState<Child | null>(null);
 
   // Synchronize status state when URL changes
@@ -89,12 +105,85 @@ function ChildrenPageContent() {
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (sexFilter !== "ALL") count++;
+    if (ageCohortFilter !== "ALL") count++;
+    if (facilityFilter !== "ALL") count++;
+    if (locationFilter.trim()) count++;
+    return count;
+  }, [sexFilter, ageCohortFilter, facilityFilter, locationFilter]);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    selectedStatus !== "ALL" ||
+    sexFilter !== "ALL" ||
+    ageCohortFilter !== "ALL" ||
+    facilityFilter !== "ALL" ||
+    locationFilter.trim().length > 0;
+
+  const resetAllFilters = () => {
+    handleSearchChange("");
+    setSelectedStatus("ALL");
+    setSexFilter("ALL");
+    setAgeCohortFilter("ALL");
+    setFacilityFilter("ALL");
+    setLocationFilter("");
+  };
+
+  // Helper to calculate age in years from DOB
+  const getChildAge = (child: Child): number | null => {
+    const dob =
+      child.serviceData?.formData?.dateOfBirth ||
+      child.serviceData?.client?.dateOfBirth;
+    if (!dob) return null;
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return null;
+    const diffMs = Date.now() - birthDate.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24 * 365.25));
+  };
+
   // Filtered dataset
   const filteredChildren = useMemo(() => {
     return children.filter((child) => {
       // Status filter
       if (selectedStatus !== "ALL" && child.currentStatus !== selectedStatus) {
         return false;
+      }
+
+      // Sex filter
+      if (sexFilter !== "ALL") {
+        const rawSex = (child.serviceData?.formData?.sex || "").toUpperCase();
+        if (rawSex !== sexFilter) return false;
+      }
+
+      // Age Cohort filter
+      if (ageCohortFilter !== "ALL") {
+        const age = getChildAge(child);
+        if (age === null) return false;
+        if (ageCohortFilter === "INFANT" && age >= 1) return false; // < 1 yr
+        if (ageCohortFilter === "TODDLER" && (age < 1 || age > 4)) return false; // 1-4 yrs
+        if (ageCohortFilter === "CHILD" && (age < 5 || age > 9)) return false; // 5-9 yrs
+        if (ageCohortFilter === "ADOLESCENT" && age < 10) return false; // 10+ yrs
+      }
+
+      // Care Facility filter
+      if (facilityFilter !== "ALL") {
+        const facName = (child.childCareFacility?.name || "").trim().toLowerCase();
+        if (facName !== facilityFilter.toLowerCase().trim()) return false;
+      }
+
+      // Location / Found Place filter
+      if (locationFilter.trim()) {
+        const qLoc = locationFilter.trim().toLowerCase();
+        const facilitySubCity = (child.childCareFacility?.subCity || "").toLowerCase();
+        const facilityWoreda = (child.childCareFacility?.woreda || "").toLowerCase();
+        const placeFound = (child.placeWhereChildFound || "").toLowerCase();
+        const locMatch =
+          facilitySubCity.includes(qLoc) ||
+          facilityWoreda.includes(qLoc) ||
+          placeFound.includes(qLoc);
+        if (!locMatch) return false;
       }
 
       // Search query
@@ -126,7 +215,15 @@ function ChildrenPageContent() {
 
       return true;
     });
-  }, [children, selectedStatus, searchQuery]);
+  }, [
+    children,
+    selectedStatus,
+    sexFilter,
+    ageCohortFilter,
+    facilityFilter,
+    locationFilter,
+    searchQuery,
+  ]);
 
   // Status counts
   const counts = useMemo(() => {
@@ -267,27 +364,240 @@ function ChildrenPageContent() {
           })}
         </div>
 
-        {/* Search bar */}
-        <div className="relative">
-          <Search className="size-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <Input
-            placeholder={
-              t("children.list.searchPlaceholder") ||
-              "Search by child name, facility code (e.g. FAC-001), or intake location..."
-            }
-            value={searchQuery}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-8 text-xs h-8 bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => handleSearchChange("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-            >
-              <X className="size-3.5" />
-            </button>
-          )}
+        {/* Search & Filter Toolbar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="size-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Input
+              placeholder={
+                t("children.list.searchPlaceholder") ||
+                "Search by child name, facility code (e.g. FAC-001), or intake location..."
+              }
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-8 text-xs h-8 bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => handleSearchChange("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+
+          <Button
+            type="button"
+            variant={showAdvancedFilters || activeFiltersCount > 0 ? "default" : "outline"}
+            size="sm"
+            className={`h-8 text-xs rounded-xs font-mono transition-colors cursor-pointer shrink-0 ${
+              showAdvancedFilters || activeFiltersCount > 0
+                ? "bg-[#1769AA] hover:bg-[#125386] text-white border-[#1769AA]"
+                : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+            onClick={() => setShowAdvancedFilters((prev) => !prev)}
+          >
+            <SlidersHorizontal className="size-3.5 mr-1.5" />
+            <span>Filters</span>
+            {activeFiltersCount > 0 && (
+              <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
         </div>
+
+        {/* ── Advanced Collapsible Filter Drawer ── */}
+        {showAdvancedFilters && (
+          <div className="p-3.5 bg-slate-50/90 rounded-xs border border-[#E3E7EB] space-y-3 animate-in fade-in-50 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E3E7EB]">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="size-3.5 text-[#1769AA]" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
+                  Pediatric Demographics &amp; Placement Filters
+                </span>
+              </div>
+              {hasActiveFilters && (
+                <button
+                  onClick={resetAllFilters}
+                  className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
+                >
+                  <RotateCcw className="size-3" />
+                  <span>Reset All Filters</span>
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Biological Sex */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                  Gender / Sex
+                </label>
+                <Select value={sexFilter} onValueChange={(val) => setSexFilter(val)}>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                    <SelectValue placeholder="All Genders" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL">All Genders</SelectItem>
+                    <SelectItem value="MALE">Male Minor</SelectItem>
+                    <SelectItem value="FEMALE">Female Minor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Pediatric Age Bracket */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                  Pediatric Age Bracket
+                </label>
+                <Select value={ageCohortFilter} onValueChange={(val) => setAgeCohortFilter(val)}>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                    <SelectValue placeholder="All Ages" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL">All Age Cohorts</SelectItem>
+                    <SelectItem value="INFANT">Infant (&lt; 1 Year)</SelectItem>
+                    <SelectItem value="TODDLER">Toddler (1 – 4 Years)</SelectItem>
+                    <SelectItem value="CHILD">Young Child (5 – 9 Years)</SelectItem>
+                    <SelectItem value="ADOLESCENT">Adolescent (10+ Years)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Care Center / Facility */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                  Care Facility
+                </label>
+                <Select value={facilityFilter} onValueChange={(val) => setFacilityFilter(val)}>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                    <SelectValue placeholder="All Facilities" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xs border-[#E3E7EB]">
+                    <SelectItem value="ALL">All Care Facilities</SelectItem>
+                    {careCenters.map((cc: any) => (
+                      <SelectItem key={cc.id || cc.name} value={cc.name}>
+                        {cc.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Placement / Intake Location */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                  Jurisdiction / Found Place
+                </label>
+                <div className="relative">
+                  <Input
+                    placeholder="Sub-city, woreda, or place..."
+                    value={locationFilter}
+                    onChange={(e) => setLocationFilter(e.target.value)}
+                    className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white pr-7"
+                  />
+                  {locationFilter && (
+                    <button
+                      onClick={() => setLocationFilter("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X className="size-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Active Filter Badges ── */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-1.5 text-xs bg-slate-100/80 px-2.5 py-1.5 rounded-xs border border-slate-200">
+            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
+              Active Filters:
+            </span>
+            {searchQuery && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Search: &quot;{searchQuery}&quot;
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => handleSearchChange("")}
+                />
+              </Badge>
+            )}
+            {selectedStatus !== "ALL" && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Status: {selectedStatus}
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => handleStatusChange("ALL")}
+                />
+              </Badge>
+            )}
+            {sexFilter !== "ALL" && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Sex: {sexFilter}
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => setSexFilter("ALL")}
+                />
+              </Badge>
+            )}
+            {ageCohortFilter !== "ALL" && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Age: {ageCohortFilter}
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => setAgeCohortFilter("ALL")}
+                />
+              </Badge>
+            )}
+            {facilityFilter !== "ALL" && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Facility: {facilityFilter}
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => setFacilityFilter("ALL")}
+                />
+              </Badge>
+            )}
+            {locationFilter.trim() && (
+              <Badge
+                variant="secondary"
+                className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
+              >
+                Location: &quot;{locationFilter}&quot;
+                <X
+                  className="size-3 cursor-pointer hover:text-rose-600"
+                  onClick={() => setLocationFilter("")}
+                />
+              </Badge>
+            )}
+            <button
+              onClick={resetAllFilters}
+              className="text-[11px] font-mono text-rose-600 hover:text-rose-700 ml-auto font-semibold cursor-pointer underline"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Table / Content ─────────────────────────────────────────────────── */}
