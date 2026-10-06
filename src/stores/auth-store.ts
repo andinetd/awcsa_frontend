@@ -134,9 +134,10 @@ interface AuthState {
     token: string,
     refreshToken: string,
     rememberMe: boolean,
+    opts?: { broadcast?: boolean },
   ) => void;
   loadTokenFromCookie: () => void;
-  logout: (opts?: { notifyServer?: boolean }) => void;
+  logout: (opts?: { notifyServer?: boolean; broadcast?: boolean }) => void;
   hasRole: (role: UserRole) => boolean;
   hasPermission: (permission: string) => boolean;
 }
@@ -184,6 +185,11 @@ const customAuthStorage: StateStorage = {
   },
 };
 
+const authChannel =
+  typeof window !== "undefined" && "BroadcastChannel" in window
+    ? new BroadcastChannel("wcasf_auth_sync")
+    : null;
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -211,13 +217,21 @@ export const useAuthStore = create<AuthState>()(
         applyToken(token, get().rememberMe, get().refreshToken ?? undefined, set);
       },
 
-      setAuthSession: (token, refreshToken, rememberMe) => {
+      setAuthSession: (token, refreshToken, rememberMe, opts) => {
         if (!token) {
           console.warn("setAuthSession called without token");
           get().logout();
           return;
         }
         applyToken(token, rememberMe, refreshToken || token, set);
+        if (opts?.broadcast !== false) {
+          authChannel?.postMessage({
+            type: "SYNC_SESSION",
+            token,
+            refreshToken: refreshToken || token,
+            rememberMe,
+          });
+        }
       },
 
       loadTokenFromCookie: async () => {
@@ -257,11 +271,11 @@ export const useAuthStore = create<AuthState>()(
             const refreshToken = get().refreshToken;
             if (refreshToken) {
               const refreshed = await refreshAccessToken(refreshToken);
-              if (refreshed.access_token && refreshed.refresh_token) {
+              if (refreshed?.access_token) {
                 applyToken(
                   refreshed.access_token,
                   get().rememberMe,
-                  refreshed.refresh_token,
+                  refreshed.refresh_token || refreshToken,
                   set,
                 );
                 set({ hydrated: true });
@@ -283,6 +297,9 @@ export const useAuthStore = create<AuthState>()(
         const { token } = get();
         if (opts?.notifyServer && token) {
           logoutApi(token);
+        }
+        if (opts?.broadcast !== false) {
+          authChannel?.postMessage({ type: "LOGOUT" });
         }
         Cookies.remove("wcasf_auth_token", { path: "/" });
         if (typeof window !== "undefined") {
@@ -316,3 +333,18 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+if (authChannel) {
+  authChannel.onmessage = (event) => {
+    if (event.data?.type === "LOGOUT") {
+      useAuthStore.getState().logout({ notifyServer: false, broadcast: false });
+    } else if (event.data?.type === "SYNC_SESSION") {
+      const { token, refreshToken, rememberMe } = event.data;
+      if (token && token !== useAuthStore.getState().token) {
+        useAuthStore.getState().setAuthSession(token, refreshToken, rememberMe, {
+          broadcast: false,
+        });
+      }
+    }
+  };
+}

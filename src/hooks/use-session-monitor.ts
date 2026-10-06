@@ -8,8 +8,9 @@ import { refreshAccessToken } from "@/api/auth/auth";
 import type { JwtPayload } from "@/types/api/auth";
 import type { WarningReason } from "@/hooks/use-session-warning";
 
-const INACTIVITY_MS = 24 * 60 * 60 * 1000;
-const REFRESH_THRESHOLD_MS = 5 * 60 * 1000;
+const INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes idle timeout
+const SILENT_REFRESH_THRESHOLD_MS = 5 * 60 * 1000; // Try silent refresh 5 minutes before token expires
+const EXPIRY_WARNING_THRESHOLD_MS = 2 * 60 * 1000; // Only warn user if under 2 minutes left
 const WARNING_SECONDS = 120;
 const WATCHDOG_INTERVAL_MS = 30 * 1000;
 
@@ -55,8 +56,8 @@ export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
         const expiresAtMs = decoded.exp ? decoded.exp * 1000 : 0;
         const msUntilExpiry = expiresAtMs - Date.now();
 
-        if (msUntilExpiry < REFRESH_THRESHOLD_MS) {
-          // If active and refresh token exists, silently refresh in background
+        // 1. If nearing expiry, attempt silent background refresh
+        if (msUntilExpiry < SILENT_REFRESH_THRESHOLD_MS) {
           if (
             refreshToken &&
             idleMilliseconds < INACTIVITY_MS &&
@@ -65,28 +66,31 @@ export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
             isRefreshingRef.current = true;
             try {
               const res = await refreshAccessToken(refreshToken);
-              if (res?.access_token && res?.refresh_token) {
+              if (res?.access_token) {
                 useAuthStore
                   .getState()
                   .setAuthSession(
                     res.access_token,
-                    res.refresh_token,
+                    res.refresh_token || refreshToken,
                     rememberMe,
                   );
                 return;
               }
-            } catch {
-              // Silent refresh failed — surface warning modal to user
+            } catch (err) {
+              console.warn("Silent background token refresh failed:", err);
             } finally {
               isRefreshingRef.current = false;
             }
           }
 
-          const secondsUntilExpiry = Math.max(
-            0,
-            Math.floor(msUntilExpiry / 1000),
-          );
-          onWarning("token", Math.min(secondsUntilExpiry, WARNING_SECONDS));
+          // 2. Only show warning modal if token is critically close to expiring (<= 2 minutes)
+          if (msUntilExpiry <= EXPIRY_WARNING_THRESHOLD_MS) {
+            const secondsUntilExpiry = Math.max(
+              0,
+              Math.floor(msUntilExpiry / 1000),
+            );
+            onWarning("token", Math.min(secondsUntilExpiry, WARNING_SECONDS));
+          }
         }
       } catch {
         onWarning("token", WARNING_SECONDS);

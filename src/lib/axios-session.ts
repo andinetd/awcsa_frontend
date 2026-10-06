@@ -28,12 +28,12 @@ function requestRefresh(): Promise<ClientSignInResponse | null> {
     refreshPromise = (async () => {
       try {
         const res = await refreshAccessToken(refreshToken);
-        if (res?.access_token && res?.refresh_token) {
+        if (res?.access_token) {
           useAuthStore
             .getState()
             .setAuthSession(
               res.access_token,
-              res.refresh_token,
+              res.refresh_token || refreshToken,
               useAuthStore.getState().rememberMe,
             );
           return res;

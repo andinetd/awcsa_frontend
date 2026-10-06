@@ -47,27 +47,64 @@ export const signIn = async (data: ClientSignIn): Promise<ClientSignInResponse> 
   }
 };
 
+export const normalizeAuthResponse = (data: any): ClientSignInResponse | null => {
+  if (!data) return null;
+  const payload = data?.data || data;
+  const accessToken =
+    payload?.access_token ||
+    payload?.accessToken ||
+    payload?.token ||
+    data?.access_token ||
+    data?.accessToken ||
+    data?.token;
+
+  const refreshToken =
+    payload?.refresh_token ||
+    payload?.refreshToken ||
+    data?.refresh_token ||
+    data?.refreshToken ||
+    accessToken;
+
+  if (!accessToken) return null;
+
+  return {
+    ...data,
+    ...payload,
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  };
+};
+
 export const refreshAccessToken = async (
   refreshToken: string
 ): Promise<ClientSignInResponse> => {
   try {
-    const sendReq = await axios.post<ClientSignInResponse>(
+    const sendReq = await axios.post(
       `${BASE_URL}/auth/refresh`,
-      { refreshToken },
+      {
+        refreshToken,
+        refresh_token: refreshToken,
+      },
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
-    return sendReq.data;
+    const normalized = normalizeAuthResponse(sendReq.data);
+    if (!normalized) {
+      throw new Error("No access token found in refresh response");
+    }
+    return normalized;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
+      console.warn("Refresh request failed:", error.response?.status, error.response?.data);
       throw new Error(error.response?.data?.message || "Refresh failed");
     }
-    throw new Error("Unexpected error");
+    throw new Error(error?.message || "Unexpected error");
   }
 };
+
 
 export const logoutApi = async (accessToken: string): Promise<void> => {
   try {
