@@ -126,14 +126,26 @@ export interface JobPayload {
 }
 
 export interface BeneficiaryReportPayload {
-  category: "REGISTRATION" | "TRAINING" | "JOBS";
-  beneficiaryType: BeneficiaryType | "ALL";
-  startDate: string;
-  endDate: string;
-  subCity: string;
-  woreda: string;
+  category:
+    | "REGISTRATION"
+    | "BENEFICIARY"
+    | "SERVICE"
+    | "SUPPORT"
+    | "TRAINING"
+    | "JOB"
+    | "JOBS"
+    | "ELIGIBILITY";
+  beneficiaryType?: BeneficiaryType | "ALL";
+  beneficiaryCategory?: BeneficiaryType | "ALL";
+  startDate?: string;
+  endDate?: string;
+  subCity?: string;
+  woreda?: string;
+  serviceType?: string;
+  status?: string;
+  disabilityType?: string;
   format: "EXCEL" | "PDF";
-  selectedColumns: string[];
+  selectedColumns?: string[];
 }
 
 export type ServiceCategory =

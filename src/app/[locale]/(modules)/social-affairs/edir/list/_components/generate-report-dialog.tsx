@@ -10,8 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useGenerateEdirReportMutation } from "@/hooks/social-affairs"; // Make sure this is exported correctly
-import { FileDown, Loader2 } from "lucide-react";
+import { useGenerateEdirReportMutation } from "@/hooks/social-affairs";
+import { FileDown, Loader2, Printer, FileText, FileSpreadsheet } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,18 +28,6 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
-
-const AVAILABLE_COLUMNS = [
-  { id: "name", label: "Association Name" },
-  { id: "id", label: "ID" },
-  { id: "phoneNumber", label: "Phone Number" },
-  { id: "subCity", label: "Sub City" },
-  { id: "woreda", label: "Woreda" },
-  { id: "bankAccountNumber", label: "Bank Account Number" },
-  { id: "establishmentDate", label: "Establishment Date" },
-  { id: "members", label: "Members" },
-];
-
 import { useTranslations } from "next-intl";
 
 export default function GenerateReportDialog() {
@@ -53,15 +41,16 @@ export default function GenerateReportDialog() {
   const [subCity, setSubCity] = useState("");
   const [woreda, setWoreda] = useState("");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
+  const [reportType, setReportType] = useState<"SUMMARY" | "PER_EDIR_DOSSIER">("SUMMARY");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "name",
-    "id",
+    "registrationNumber",
     "phoneNumber",
     "subCity",
     "woreda",
+    "status",
     "bankAccountNumber",
     "establishmentDate",
-    "members",
   ]);
 
   const handleColumnToggle = (columnId: string) => {
@@ -72,7 +61,7 @@ export default function GenerateReportDialog() {
     );
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = (previewInBrowser = false) => {
     const payload: GenerateReportPayload = {
       startDate: startDate || undefined,
       endDate: endDate || undefined,
@@ -84,39 +73,52 @@ export default function GenerateReportDialog() {
 
     generateReport(payload, {
       onSuccess: (data) => {
-        const blob = new Blob([data], {
-          type:
-            format === "EXCEL"
-              ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              : "application/pdf",
-        });
+        const mimeType =
+          format === "EXCEL"
+            ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            : "application/pdf";
+        const blob = new Blob([data], { type: mimeType });
         const url = window.URL.createObjectURL(blob);
+
+        if (previewInBrowser && format === "PDF") {
+          window.open(url, "_blank");
+          toast.success(t("success"));
+          setOpen(false);
+          return;
+        }
+
         const link = document.createElement("a");
         link.href = url;
         const extension = format === "EXCEL" ? "xlsx" : "pdf";
-        link.setAttribute("download", `edir_report.${extension}`);
+        link.setAttribute(
+          "download",
+          `edir_report_${new Date().toISOString().split("T")[0]}.${extension}`
+        );
         document.body.appendChild(link);
         link.click();
         link.parentNode?.removeChild(link);
         toast.success(t("success"));
         setOpen(false);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         console.error(error);
-        toast.error(t("error"));
+        toast.error(error?.message || t("error"));
       },
     });
   };
 
   const AVAILABLE_COLUMNS = [
     { id: "name", label: t("columns.name") },
-    { id: "id", label: t("columns.id") },
+    { id: "registrationNumber", label: t("columns.registrationNumber") },
     { id: "phoneNumber", label: t("columns.phone") },
     { id: "subCity", label: t("columns.subCity") },
     { id: "woreda", label: t("columns.woreda") },
+    { id: "status", label: t("columns.status") },
+    { id: "registerLevel", label: t("columns.registerLevel") },
     { id: "bankAccountNumber", label: t("columns.bankAccount") },
     { id: "establishmentDate", label: t("columns.date") },
-    { id: "members", label: t("columns.members") },
+    { id: "generalMale", label: t("columns.generalMale") },
+    { id: "generalFemale", label: t("columns.generalFemale") },
   ];
 
   return (
@@ -127,7 +129,7 @@ export default function GenerateReportDialog() {
           {t("buttons.generate")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+      <DialogContent className="sm:max-w-[560px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
             <FileDown className="w-4 h-4 text-[#1769AA]" />
@@ -136,7 +138,7 @@ export default function GenerateReportDialog() {
           <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-3 py-3">
+        <div className="grid gap-3.5 py-3">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs font-semibold text-slate-700">{t("fields.startDate")}</Label>
@@ -178,40 +180,79 @@ export default function GenerateReportDialog() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700">{t("fields.format")}</Label>
-            <Select
-              value={format}
-              onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
-            >
-              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="EXCEL" className="text-xs rounded-xs">{t("formats.excel")}</SelectItem>
-                <SelectItem value="PDF" className="text-xs rounded-xs">{t("formats.pdf")}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("reportType")}</Label>
+              <Select
+                value={reportType}
+                onValueChange={(v) => {
+                  const val = v as "SUMMARY" | "PER_EDIR_DOSSIER";
+                  setReportType(val);
+                  if (val === "PER_EDIR_DOSSIER") {
+                    setFormat("PDF");
+                  }
+                }}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="SUMMARY" className="text-xs rounded-xs">
+                    {t("reportTypeOptions.summary")}
+                  </SelectItem>
+                  <SelectItem value="PER_EDIR_DOSSIER" className="text-xs rounded-xs">
+                    {t("reportTypeOptions.perEdirDossier")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700">{t("columns.title")}</Label>
-            <div className="grid grid-cols-2 gap-2 border border-[#E3E7EB] rounded-xs p-3 bg-slate-50/30">
-              {AVAILABLE_COLUMNS.map((col) => (
-                <div key={col.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`col-${col.id}`}
-                    className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
-                    checked={selectedColumns.includes(col.id)}
-                    onCheckedChange={() => handleColumnToggle(col.id)}
-                  />
-                  <Label htmlFor={`col-${col.id}`} className="text-xs text-slate-700 cursor-pointer">
-                    {col.label}
-                  </Label>
-                </div>
-              ))}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.format")}</Label>
+              <Select
+                value={format}
+                disabled={reportType === "PER_EDIR_DOSSIER"}
+                onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="EXCEL" className="text-xs rounded-xs flex items-center gap-1.5">
+                    {t("formats.excel")}
+                  </SelectItem>
+                  <SelectItem value="PDF" className="text-xs rounded-xs flex items-center gap-1.5">
+                    {t("formats.pdf")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
+
+          {reportType === "PER_EDIR_DOSSIER" ? (
+            <div className="rounded-xs border border-[#BCD5EA] bg-[#E8F2FA] p-3 text-xs text-slate-700 font-medium">
+              {t("perEdirDossierHint")}
+            </div>
+          ) : (
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("columns.title")}</Label>
+              <div className="grid grid-cols-2 gap-2 border border-[#E3E7EB] rounded-xs p-3 bg-slate-50/30">
+                {AVAILABLE_COLUMNS.map((col) => (
+                  <div key={col.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`col-${col.id}`}
+                      className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
+                      checked={selectedColumns.includes(col.id)}
+                      onCheckedChange={() => handleColumnToggle(col.id)}
+                    />
+                    <Label htmlFor={`col-${col.id}`} className="text-xs text-slate-700 cursor-pointer">
+                      {col.label}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
@@ -223,12 +264,32 @@ export default function GenerateReportDialog() {
           >
             {t("buttons.cancel")}
           </Button>
+
+          {format === "PDF" && (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending}
+              onClick={() => handleGenerate(true)}
+              className="h-8 text-xs rounded-xs border-[#BCD5EA] text-[#1769AA] hover:bg-[#E8F2FA] font-semibold gap-1.5"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              {t("buttons.printPreview")}
+            </Button>
+          )}
+
           <Button
-            onClick={handleGenerate}
+            onClick={() => handleGenerate(false)}
             disabled={isPending}
-            className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
+            className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs gap-1.5"
           >
-            {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
+            {isPending ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : format === "EXCEL" ? (
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+            ) : (
+              <FileText className="w-3.5 h-3.5" />
+            )}
             {t("buttons.download")}
           </Button>
         </div>

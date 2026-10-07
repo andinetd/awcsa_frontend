@@ -13,6 +13,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 import { useTranslations } from "next-intl";
+import RowReportButton from "./row-report-button";
 
 interface EdirCardProps {
   edir: Edir;
@@ -92,7 +93,7 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
           )}
         </CardContent>
       </div>
-      <CardFooter className="p-4 pt-0 flex justify-end">
+      <CardFooter className="p-4 pt-0 flex justify-end items-center gap-1.5">
         <Button
           variant="outline"
           size="sm"
@@ -101,6 +102,7 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
         >
           {t("buttons.viewDetails")}
         </Button>
+        <RowReportButton edir={edir} />
       </CardFooter>
     </Card>
   );

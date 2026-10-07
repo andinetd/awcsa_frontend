@@ -5,6 +5,7 @@ export interface Employee {
   phoneNumber?: string;
   cityIdNumber?: string;
   department?: string;
+  assignedModules?: Department[];
   role: {
     id?: number;
     name: string;
@@ -77,7 +78,8 @@ export interface CreateUserDto {
   password: string;
   roleId: number;
   orgUnitId: number;
-  department: Department;
+  department?: Department;
+  assignedModules?: Department[];
   directorateId?: number; // Optional based on hierarchy
   teamId?: number; // Optional based on hierarchy
 }

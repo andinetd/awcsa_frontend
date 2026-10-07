@@ -54,6 +54,7 @@ import {
   TrainingField,
 } from "@/api/beneficiaries/types-v2";
 import { useUpdateBeneficiary } from "@/hooks/beneficiaries/srs-hooks";
+import { BeneficiaryRowReportButton } from "./row-report-button";
 
 const TRAINING_OPTIONS: TrainingField[] = [
   "AGRICULTURE",
@@ -247,6 +248,7 @@ export default function BeneficiaryTable({
                           <History className="w-3.5 h-3.5 text-slate-600" />
                         </Link>
                       </Button>
+                      <BeneficiaryRowReportButton beneficiary={item} />
                       <Button
                         variant="outline"
                         size="icon"

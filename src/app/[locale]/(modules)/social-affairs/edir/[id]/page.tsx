@@ -25,6 +25,7 @@ import { downloadEdirDocument } from "@/api/social-affairs/accreditation-api";
 import NewEdirForm from "../list/_components/new-edir-form";
 import EdirMembersList from "./_components/edir-members-list";
 import EdirAccreditationActions from "./_components/edir-accreditation-actions";
+import EdirReportMenu from "./_components/edir-report-menu";
 import { useTranslations } from "next-intl";
 
 const statusStyles: Record<EdirStatus, string> = {
@@ -129,6 +130,7 @@ export default function EdirDetailsPage({ params }: PageProps) {
               </Button>
             }
           />
+          <EdirReportMenu edir={typedEdir} />
         </div>
       </div>
 

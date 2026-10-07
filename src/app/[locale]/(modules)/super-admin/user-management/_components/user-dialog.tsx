@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { User, CreateUserDto } from "@/types/super-admin";
 import {
   useCreateUser,
@@ -91,7 +92,10 @@ export function UserDialog({
       password: z.string().min(6, t("errors.passwordMin")),
       roleId: z.string().min(1, t("errors.roleRequired")),
       orgUnitId: z.string().min(1, t("errors.orgRequired")),
-      department: z.string().min(1, t("errors.departmentRequired")),
+      assignedModules: z
+        .array(z.string())
+        .min(1, t("errors.departmentRequired") || "At least one module is required"),
+      department: z.string().optional(),
       directorateId: z.string().optional(),
       teamId: z.string().optional(),
     });
@@ -108,6 +112,7 @@ export function UserDialog({
       password: "",
       roleId: "",
       orgUnitId: "",
+      assignedModules: [],
       department: "",
       directorateId: "",
       teamId: "",
@@ -121,6 +126,12 @@ export function UserDialog({
     if (open) {
       setShowPassword(false);
       if (user?.employee) {
+        const assigned =
+          user.employee.assignedModules && user.employee.assignedModules.length > 0
+            ? user.employee.assignedModules
+            : user.employee.department
+              ? [user.employee.department]
+              : [];
         form.reset({
           firstName: user.employee.firstName || "",
           lastName: user.employee.lastName || "",
@@ -130,7 +141,8 @@ export function UserDialog({
           password: "123456",
           roleId: String(user.employee.role?.id || ""),
           orgUnitId: String(user.employee.orgUnit?.id || ""),
-          department: user.employee.department || "",
+          assignedModules: assigned,
+          department: user.employee.department || (assigned[0] ?? ""),
           directorateId: user.employee.directorate?.id
             ? String(user.employee.directorate.id)
             : "",
@@ -146,6 +158,7 @@ export function UserDialog({
           password: "",
           roleId: "",
           orgUnitId: "",
+          assignedModules: [],
           department: "",
           directorateId: "",
           teamId: "",
@@ -161,12 +174,15 @@ export function UserDialog({
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const effectiveDepartment = (values.department ||
+      values.assignedModules[0]) as CreateUserDto["department"];
     const base = {
       firstName: values.firstName,
       lastName: values.lastName,
       phoneNumber: values.phoneNumber,
       cityIdNumber: values.cityIdNumber,
-      department: values.department as CreateUserDto["department"],
+      department: effectiveDepartment,
+      assignedModules: values.assignedModules as CreateUserDto["assignedModules"],
       orgUnitId: Number(values.orgUnitId),
       directorateId: values.directorateId
         ? Number(values.directorateId)
@@ -413,27 +429,42 @@ export function UserDialog({
                 </h4>
                 <FormField
                   control={form.control}
-                  name="department"
+                  name="assignedModules"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("department")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                            <SelectValue placeholder={t("select")} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
-                          {DEPARTMENT_OPTIONS.map((dept) => (
-                            <SelectItem key={dept} value={dept} className="text-xs">
-                              {t(`departments.${dept}`)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("assignedModules") || "Assigned Modules"}
+                      </FormLabel>
+                      <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xs border border-[#E3E7EB] bg-slate-50/50">
+                        {DEPARTMENT_OPTIONS.map((dept) => {
+                          const checked = field.value?.includes(dept);
+                          return (
+                            <label
+                              key={dept}
+                              className={`flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
+                                checked
+                                  ? "border-[#1769AA] bg-blue-50/60 font-semibold text-[#0B1F3A]"
+                                  : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+                              }`}
+                            >
+                              <Checkbox
+                                checked={checked}
+                                onCheckedChange={(isChecked) => {
+                                  const current = field.value || [];
+                                  const updated = isChecked
+                                    ? [...current, dept]
+                                    : current.filter((v: string) => v !== dept);
+                                  field.onChange(updated);
+                                  if (updated.length > 0) {
+                                    form.setValue("department", updated[0]);
+                                  }
+                                }}
+                              />
+                              <span className="truncate">{t(`departments.${dept}`)}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
                       <FormMessage className="text-[11px]" />
                     </FormItem>
                   )}

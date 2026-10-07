@@ -609,6 +609,14 @@
         "description": "ለሪፖርትዎ ማጣሪያዎችን እና ዓምዶችን ይምረጡ።",
         "success": "ሪፖርቱ በተሳካ ሁኔታ ተዘጋጅቷል",
         "error": "ሪፖርቱን ማዘጋጀት አልተቻለም",
+        "menuLabel": "ይህንን ዕድር ያውርዱ ወይም ያትሙ",
+        "printDossier": "ይፋዊ ዶሴ አትም",
+        "reportType": "የሪፖርት ዓይነት",
+        "reportTypeOptions": {
+          "summary": "የዕድሮች ማጠቃለያ ሠንጠረዥ",
+          "perEdirDossier": "ይፋዊ ዶሴ (የሚታተም መገለጫ)"
+        },
+        "perEdirDossierHint": "የአመራር አባላትን፣ መስራቾችን እና የዕውቅና መረጃዎችን ያካተተ የተሟላ ይፋዊ ሰነድ ለአስተዳደራዊ ህትመት ያዘጋጃል።",
         "fields": {
           "startDate": "የመጀመሪያ ቀን",
           "endDate": "የመጨረሻ ቀን",
@@ -617,24 +625,35 @@
           "format": "ፎርማት"
         },
         "formats": {
-          "excel": "ኤክሴል",
-          "pdf": "ፒዲኤፍ"
+          "excel": "ኤክሴል ሰነድ",
+          "pdf": "ፒዲኤፍ ሰነድ"
         },
         "columns": {
-          "title": "ዓምዶች",
+          "title": "የሚካተቱ ዓምዶች",
           "name": "የማኅበሩ ስም",
           "id": "መለያ",
+          "registrationNumber": "የምዝገባ ቁጥር",
+          "status": "የዕውቅና ሁኔታ",
+          "registerLevel": "የአስተዳደር እርከን",
           "phone": "የስልክ ቁጥር",
           "subCity": "ክፍለ ከተማ",
           "woreda": "ወረዳ",
           "bankAccount": "የባንክ ሒሳብ ቁጥር",
           "date": "የተመሠረተበት ቀን",
+          "generalMale": "ወንድ አባላት",
+          "generalFemale": "ሴት አባላት",
           "members": "አባላት"
         },
         "buttons": {
           "generate": "ሪፖርት አውጣ",
-          "download": "አውርድ",
+          "download": "ሪፖርት አውርድ",
+          "printPreview": "ህትመት / ቅድመ እይታ",
           "cancel": "ሰርዝ"
+        },
+        "messages": {
+          "excel": "የኤክሴል ማውረድ ተጀምሯል",
+          "pdf": "የህትመት ቅድመ እይታ በተሳካ ሁኔታ ተከፍቷል",
+          "error": "ሪፖርቱን ማዘጋጀት አልተቻለም"
         }
       }
     },
@@ -914,10 +933,18 @@
         "addLeadershipMember": "የአመራር አባል ጨምር",
         "removeMember": "አስወግድ",
         "removing": "በማስወገድ ላይ...",
-        "addingMembers": "በመጨመር ላይ...",
         "save": "አስቀምጥ",
         "saving": "በማስቀመጥ ላይ...",
-        "goBack": "ወደ ምክር ቤቶች ተመለስ"
+        "goBack": "ወደ ምክር ቤቶች ተመለስ",
+        "report": "ሪፖርት",
+        "reportLabel": "የምክር ቤት ሰነዶችን ያውርዱ ወይም ያትሙ",
+        "generateReport": "የምክር ቤቶች ዝርዝር ሪፖርት",
+        "reportDescription": "ይፋዊ የዕድር ምክር ቤቶች ማውጫን ያጣሩ እና ያትሙ።",
+        "printCouncilCharter": "የምክር ቤቱን ቻርተር እና አባላት አትም",
+        "printRoster": "ማውጫ አትም"
+      },
+      "messages": {
+        "printSuccess": "የህትመት ቅድመ እይታ በተሳካ ሁኔታ ተከፍቷል"
       },
       "form": {
         "createTitle": "የእድር ምክር ቤት መዝግብ",

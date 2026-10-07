@@ -25,6 +25,7 @@ import NewCouncilForm from "../_components/new-council-form";
 import CouncilActions from "./_components/council-actions";
 import AddMemberDialog from "./_components/add-member-dialog";
 import ManageLeadershipDialog from "./_components/manage-leadership-dialog";
+import CouncilReportMenu from "./_components/council-report-menu";
 
 import Link from "next/link";
 import { ChevronRight, Home, UserCheck, Plus } from "lucide-react";
@@ -177,6 +178,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
               </Button>
             }
           />
+          <CouncilReportMenu council={typedCouncil} />
         </div>
       </div>
 

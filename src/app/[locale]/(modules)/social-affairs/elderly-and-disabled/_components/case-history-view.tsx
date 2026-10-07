@@ -43,6 +43,7 @@ import { useForm } from "react-hook-form";
 import { caseNoteSchema, CaseNoteFormValues } from "@/schemas/srs-beneficiaries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CrossDepartmentHistory from "@/components/shared/cross-department-history";
+import { BeneficiaryReportMenu } from "./beneficiary-report-menu";
 
 interface CaseHistoryViewProps {
   clientId: number;
@@ -407,6 +408,10 @@ function Header({ client }: { client: Beneficiary }) {
             </span>
           )}
         </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <BeneficiaryReportMenu beneficiary={client} />
       </div>
     </div>
   );

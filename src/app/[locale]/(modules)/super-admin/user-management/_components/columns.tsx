@@ -77,6 +77,40 @@ export const getColumns = ({
     },
   },
   {
+    accessorKey: "employee.assignedModules",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title={t("department") || "Modules"} />
+    ),
+    cell: ({ row }) => {
+      const assigned = row.original.employee?.assignedModules;
+      const dept = row.original.employee?.department;
+      const modules =
+        assigned && assigned.length > 0
+          ? assigned
+          : dept
+            ? [dept]
+            : [];
+
+      if (modules.length === 0) {
+        return <span className="text-xs text-slate-400 font-mono">—</span>;
+      }
+
+      return (
+        <div className="flex flex-wrap gap-1 max-w-[220px]">
+          {modules.map((m) => (
+            <Badge
+              key={m}
+              variant="outline"
+              className="rounded-xs text-[10px] font-mono font-medium px-1.5 py-0 border-blue-200 bg-blue-50/50 text-[#1769AA]"
+            >
+              {m.replace(/_AFFAIRS/g, "").replace(/_/g, " ")}
+            </Badge>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title={t("status")} />

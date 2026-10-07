@@ -11,6 +11,7 @@ import NewEdirForm from "./_components/new-edir-form";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
 import ImportEdirDialog from "./_components/import-edir-dialog";
 import GenerateReportDialog from "./_components/generate-report-dialog";
+import RowReportButton from "./_components/row-report-button";
 import { Input } from "@/components/ui/input";
 import {
   Search,
@@ -1012,18 +1013,21 @@ const EdirList = () => {
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 text-xs rounded-xs border-[#E3E7EB] hover:bg-[#E8F2FA] hover:text-[#1769AA] hover:border-[#BCD5EA] transition-colors"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/social-affairs/edir/${edir.id}`);
-                          }}
-                        >
-                          <Eye className="w-3.5 h-3.5 mr-1" />
-                          <span>{t.has("table.view") ? t("table.view") : "View"}</span>
-                        </Button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs rounded-xs border-[#E3E7EB] hover:bg-[#E8F2FA] hover:text-[#1769AA] hover:border-[#BCD5EA] transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(`/social-affairs/edir/${edir.id}`);
+                            }}
+                          >
+                            <Eye className="w-3.5 h-3.5 mr-1" />
+                            <span>{t.has("table.view") ? t("table.view") : "View"}</span>
+                          </Button>
+                          <RowReportButton edir={edir} />
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

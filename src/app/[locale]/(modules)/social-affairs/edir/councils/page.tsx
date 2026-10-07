@@ -28,6 +28,7 @@ import {
 import { useTranslations } from "next-intl";
 import CouncilCard from "./_components/council-card";
 import NewCouncilForm from "./_components/new-council-form";
+import CouncilReportDialog from "./_components/council-report-dialog";
 import Link from "next/link";
 
 const LEVEL_OPTIONS: (EdirLevel | "ALL")[] = [
@@ -156,7 +157,10 @@ const CouncilsPage = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <NewCouncilForm />
+          <div className="flex items-center gap-2">
+            <CouncilReportDialog councils={councils || []} />
+            <NewCouncilForm />
+          </div>
         </div>
       </div>
 

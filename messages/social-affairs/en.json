@@ -609,6 +609,14 @@
         "description": "Select filters and columns for your report.",
         "success": "Report generated successfully",
         "error": "Failed to generate report",
+        "menuLabel": "Download or print this edir",
+        "printDossier": "Print Official Dossier",
+        "reportType": "Report Type",
+        "reportTypeOptions": {
+          "summary": "Edir Summary Table",
+          "perEdirDossier": "Official Dossier (Printable Profile)"
+        },
+        "perEdirDossierHint": "Generates a complete official registration dossier and accreditation sheet with executive officers, founding members, and certification data ready for municipal printing.",
         "fields": {
           "startDate": "Start Date",
           "endDate": "End Date",
@@ -617,24 +625,35 @@
           "format": "Format"
         },
         "formats": {
-          "excel": "Excel",
-          "pdf": "PDF"
+          "excel": "Excel Workbook",
+          "pdf": "PDF Document"
         },
         "columns": {
-          "title": "Columns",
+          "title": "Columns to Include",
           "name": "Association Name",
           "id": "ID",
+          "registrationNumber": "Registration Number",
+          "status": "Accreditation Status",
+          "registerLevel": "Administrative Level",
           "phone": "Phone Number",
           "subCity": "Sub City",
           "woreda": "Woreda",
           "bankAccount": "Bank Account Number",
           "date": "Establishment Date",
+          "generalMale": "Male Members",
+          "generalFemale": "Female Members",
           "members": "Members"
         },
         "buttons": {
           "generate": "Generate Report",
-          "download": "Download",
+          "download": "Download Report",
+          "printPreview": "Print / Preview",
           "cancel": "Cancel"
+        },
+        "messages": {
+          "excel": "Excel download started",
+          "pdf": "Print preview opened successfully",
+          "error": "Failed to generate report"
         }
       }
     },
@@ -914,10 +933,18 @@
         "addLeadershipMember": "Add Leadership Member",
         "removeMember": "Remove",
         "removing": "Removing...",
-        "addingMembers": "Adding...",
         "save": "Save",
         "saving": "Saving...",
-        "goBack": "Back to Councils"
+        "goBack": "Back to Councils",
+        "report": "Report",
+        "reportLabel": "Download or print council records",
+        "generateReport": "Council Roster Report",
+        "reportDescription": "Filter and print official directory of edir councils.",
+        "printCouncilCharter": "Print Council Charter & Roster",
+        "printRoster": "Print Directory"
+      },
+      "messages": {
+        "printSuccess": "Print preview opened successfully"
       },
       "form": {
         "createTitle": "Register Edir Council",
