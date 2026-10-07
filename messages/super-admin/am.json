@@ -101,6 +101,11 @@
       "team": "ቡድን (አማራጭ)",
       "department": "የስራ ክፍል",
       "assignedModules": "የተፈቀዱ ሞጁሎች",
+      "operationalModules": "የስራ ሞጁሎች",
+      "allModules": "ሁሉንም ሞጁሎች",
+      "selected": "ተመርጠዋል",
+      "systemAccess": "ሲስተም (አስተዳደራዊ / አይቲ)",
+      "systemDescription": "አጠቃላይ የሲስተም አስተዳደር ፍቃድ",
       "departments": {
         "CHILDREN_AFFAIRS": "የህፃናት ጉዳይ",
         "WOMEN_AFFAIRS": "የሴቶች ጉዳይ",

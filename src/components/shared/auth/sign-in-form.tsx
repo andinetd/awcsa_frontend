@@ -24,6 +24,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import {
   getRouteByDirectorate,
   getRouteByDepartment,
+  getDefaultRouteForUser,
 } from "@/utils/directorate-route";
 import { routePermissions } from "@/utils/routePermissions";
 
@@ -127,54 +128,21 @@ export default function SignInForm() {
     }
 
     const navTimer = setTimeout(() => {
-      const { department, userRole } = useAuthStore.getState();
+      const { department, userRole, assignedModules } = useAuthStore.getState();
       console.log("Navigating authenticated user:", {
         user,
         userRole,
         department,
+        assignedModules,
       });
 
-      if (userRole === "Super_Admin" || (user as any).role === "Super_Admin") {
-        router.push("/super-admin/dashboard");
-        return;
-      }
-
-      if (
-        user.accountType === "CLIENT" ||
-        (user as any).accountType === "CLIENT"
-      ) {
-        router.push(`/applicant-portal/portal`);
-      } else if (
-        user.accountType === "CHILD_CARE_FACLITY" ||
-        user.accountType === "CHILD_CARE_FACILITY"
-      ) {
-        router.push(`/care-centers-portal`);
-      } else if (user.accountType === "EMPLOYEE") {
-        const route = getRouteByDepartment(department);
-
-        const matchedRoute = Object.keys(routePermissions).find(
-          (r) => route === r || route.startsWith(r + "/"),
-        );
-        if (matchedRoute) {
-          const guard = routePermissions[matchedRoute];
-          const accountOk = guard.allowedAccountTypes.includes("EMPLOYEE");
-          const roleOk =
-            !guard.allowedRoles ||
-            (department != null && guard.allowedRoles.includes(department as any));
-          if (accountOk && roleOk) {
-            router.push(route as any);
-          } else {
-            console.warn("Permission check failed, redirecting to /unauthorized");
-            router.push("/unauthorized");
-          }
-        } else {
-          console.warn("No matched route for department:", department);
-          router.push("/unauthorized");
-        }
-      } else {
-        console.warn("Fallback routing to applicant-portal for accountType:", user.accountType);
-        router.push(`/applicant-portal/portal`);
-      }
+      const route = getDefaultRouteForUser(
+        user,
+        department,
+        assignedModules,
+        userRole,
+      );
+      router.push(route as any);
     }, 0);
 
     return () => clearTimeout(navTimer);

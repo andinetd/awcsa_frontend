@@ -6,8 +6,8 @@ import React, { ReactNode } from "react";
 const Adoptionlayout = ({ children }: { children: ReactNode }) => {
   const t = useTranslations("adoption");
   return (
-    <AuthProvider>
-      <SidebarLayout title={t("moduleTitle")}>{children}</SidebarLayout>;
+    <AuthProvider allowedRoles={["CHILDREN_AFFAIRS", "SYSTEM"]}>
+      <SidebarLayout title={t("moduleTitle")}>{children}</SidebarLayout>
     </AuthProvider>
   );
 };

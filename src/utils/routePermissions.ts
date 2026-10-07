@@ -14,17 +14,29 @@ type RouteGuard = {
 export const routePermissions: Record<string, RouteGuard> = {
   "/applicant-portal": { allowedAccountTypes: ["CLIENT"] },
   "/care-centers-portal": {
-    allowedAccountTypes: ["CHILD_CARE_FACLITY", "EMPLOYEE"],
-    allowedRoles: ["SYSTEM", "CHILDREN_AFFAIRS"],
+    allowedAccountTypes: ["CHILD_CARE_FACLITY", "CHILD_CARE_FACILITY", "EMPLOYEE"],
+    allowedRoles: ["SYSTEM", "CHILDREN_AFFAIRS", "CARE_CENTERS_PORTAL"],
   },
 
   "/bureau-head": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["SYSTEM"],
+    allowedRoles: ["SYSTEM", "BUREAU_HEAD"],
   },
   "/super-admin": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["SYSTEM"],
+    allowedRoles: ["SYSTEM", "SUPER_ADMIN"],
+  },
+  "/social-affairs/edir": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["SYSTEM", "EDIR"],
+  },
+  "/social-affairs/elderly-and-disabled": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["SYSTEM", "SOCIAL_AFFAIRS"],
+  },
+  "/social-affairs/dashboard": {
+    allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["SYSTEM", "SOCIAL_AFFAIRS"],
   },
   "/social-affairs": {
     allowedAccountTypes: ["EMPLOYEE"],
@@ -40,7 +52,7 @@ export const routePermissions: Record<string, RouteGuard> = {
   },
   "/complaints": {
     allowedAccountTypes: ["EMPLOYEE"],
-    allowedRoles: ["SYSTEM"],
+    allowedRoles: ["SYSTEM", "BUREAU_HEAD"],
   },
   "/persons": {
     allowedAccountTypes: ["EMPLOYEE"],

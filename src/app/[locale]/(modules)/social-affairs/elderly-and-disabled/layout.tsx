@@ -7,7 +7,7 @@ import { BeneficiaryRegisterDialog } from "./_components/beneficiary-register-di
 const ElderlyAndDisabledLayout = ({ children }: { children: ReactNode }) => {
   const t = useTranslations("social-affairs.elderlyAndDisabled.layout");
   return (
-    <AuthProvider allowedRoles={["SOCIAL_AFFAIRS", null]}>
+    <AuthProvider allowedRoles={["SOCIAL_AFFAIRS", "SYSTEM"]}>
       <SidebarLayout title={t("title")}>
         {children}
         <BeneficiaryRegisterDialog />

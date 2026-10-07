@@ -95,6 +95,31 @@ export const getColumns = ({
         return <span className="text-xs text-slate-400 font-mono">—</span>;
       }
 
+      const operational = ["CHILDREN_AFFAIRS", "WOMEN_AFFAIRS", "SOCIAL_AFFAIRS", "EDIR"];
+      const hasAllOperational = operational.every((m) => modules.includes(m));
+      const hasSystem = modules.includes("SYSTEM");
+
+      if (hasAllOperational) {
+        return (
+          <div className="flex flex-wrap gap-1 max-w-[220px]">
+            <Badge
+              variant="outline"
+              className="rounded-xs text-[10px] font-mono font-semibold px-1.5 py-0 border-blue-400 bg-blue-100 text-[#0B1F3A]"
+            >
+              All Modules (4)
+            </Badge>
+            {hasSystem && (
+              <Badge
+                variant="outline"
+                className="rounded-xs text-[10px] font-mono font-semibold px-1.5 py-0 border-slate-300 bg-slate-100 text-slate-800"
+              >
+                System
+              </Badge>
+            )}
+          </div>
+        );
+      }
+
       return (
         <div className="flex flex-wrap gap-1 max-w-[220px]">
           {modules.map((m) => (

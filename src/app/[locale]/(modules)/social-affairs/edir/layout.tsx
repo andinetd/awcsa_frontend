@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 const Edirlayout = ({ children }: { children: ReactNode }) => {
   const t = useTranslations("social-affairs.edir.list");
   return (
-    <AuthProvider>
+    <AuthProvider allowedRoles={["EDIR", "SYSTEM"]}>
       <SidebarLayout title={t("title")}>{children}</SidebarLayout>
     </AuthProvider>
   );

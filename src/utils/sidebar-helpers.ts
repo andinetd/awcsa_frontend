@@ -1,9 +1,30 @@
 import {
+  DeputyBureau,
   JwtUserType,
   OrgType,
   UserRole,
 } from "@/types/api/auth";
 import { NavigationItem, NavigationSection, sidebarConfig } from "./sidebar-config";
+
+const deputyMap: Record<string, keyof typeof sidebarConfig> = {
+  BUREAU_HEAD: "BUREAU_HEAD",
+  CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
+  SOCIAL_AFFAIRS: "SOCIAL_AFFAIRS",
+  EDIR: "EDIR",
+  WOMEN_AFFAIRS: "WOMEN",
+  WOMEN: "WOMEN",
+  SUPER_ADMIN: "SUPER_ADMIN",
+  CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
+};
+
+const moduleKeyToTitleMap: Record<string, string> = {
+  CHILDREN_AFFAIRS: "Adoption",
+  SOCIAL_AFFAIRS: "Disability and Elderly",
+  EDIR: "Edir",
+  WOMEN_AFFAIRS: "Women",
+  WOMEN: "Women",
+  SUPER_ADMIN: "Admin",
+};
 
 export function getSidebarItems(
   orgUnit: OrgType | null | undefined,
@@ -13,6 +34,7 @@ export function getSidebarItems(
   permissions?: string[],
   entityRole?: string,
   department?: string | null,
+  assignedModules?: DeputyBureau[] | null,
 ): NavigationSection[] {
   const accountType = user?.accountType;
 
@@ -24,31 +46,100 @@ export function getSidebarItems(
     accountType === "CHILD_CARE_FACILITY"
   ) {
     rawSections = sidebarConfig.CARE_CENTERS_PORTAL;
-  } else if (department === "SYSTEM") {
-    // Priority 2: SYSTEM users see the unified multi-module sidebar
-    rawSections = sidebarConfig.BUREAU_HEAD;
-  } else if (userRole === "Super_Admin") {
-    // Priority 3: Super Admin gets the admin management menu
-    rawSections = sidebarConfig.SUPER_ADMIN;
-  } else if (orgUnit) {
-    // Priority 4: Resolve by org unit / deputy bureau
-    const deputyMap: Record<string, keyof typeof sidebarConfig> = {
-      BUREAU_HEAD: "BUREAU_HEAD",
-      CHILDREN_AFFAIRS: "CHILDREN_AFFAIRS",
-      SOCIAL_AFFAIRS: "SOCIAL_AFFAIRS",
-      EDIR: "EDIR",
-      WOMEN_AFFAIRS: "WOMEN",
-      SUPER_ADMIN: "SUPER_ADMIN",
-      CARE_CENTERS_PORTAL: "CARE_CENTERS_PORTAL",
-    };
+  } else if (userRole === "Super_Admin" || entityRole === "Super_Admin") {
+    // Priority 2: Super Admin gets the admin management menu PLUS any assigned modules
+    const baseAdminSections = sidebarConfig.SUPER_ADMIN.filter(
+      (s) => s.title !== "Cross-Department",
+    );
+    const crossDepartmentSection = sidebarConfig.SUPER_ADMIN.find(
+      (s) => s.title === "Cross-Department",
+    );
 
-    if (orgUnit.deputyBureau && deputyMap[orgUnit.deputyBureau]) {
-      rawSections = sidebarConfig[deputyMap[orgUnit.deputyBureau]];
-    } else if (
-      orgUnit.type === "BUREAU" ||
-      orgUnit.type === "OFFICE"
-    ) {
-      // Fallback: try to infer the module from role and permissions
+    const effectiveModules: string[] = [
+      ...(assignedModules || []),
+      ...(department && department !== "SYSTEM" ? [department] : []),
+      ...(orgUnit?.deputyBureau ? [orgUnit.deputyBureau] : []),
+    ].filter((m): m is string => Boolean(m));
+
+    const uniqueModules = Array.from(new Set(effectiveModules));
+
+    const bureauModulesSection = sidebarConfig.BUREAU_HEAD.find(
+      (s) => s.title === "Modules",
+    );
+
+    let moduleItems: NavigationItem[] = [];
+    if (uniqueModules.includes("SYSTEM")) {
+      // System scope: show all operational modules
+      moduleItems = (bureauModulesSection?.items || []).filter(
+        (item) => item.title !== "Admin",
+      );
+    } else if (uniqueModules.length > 0) {
+      const allowedTitles = new Set(
+        uniqueModules.map((m) => moduleKeyToTitleMap[m]).filter(Boolean),
+      );
+      moduleItems = (bureauModulesSection?.items || []).filter(
+        (item) => allowedTitles.has(item.title),
+      );
+    }
+
+    rawSections = [
+      ...baseAdminSections,
+      ...(moduleItems.length > 0
+        ? [
+            {
+              title: "Modules",
+              items: moduleItems,
+            },
+          ]
+        : []),
+      ...(crossDepartmentSection ? [crossDepartmentSection] : []),
+    ];
+  } else if (
+    department === "SYSTEM" ||
+    userRole === "Bureau_Manager" ||
+    entityRole === "Bureau_Manager"
+  ) {
+    // Priority 3: Bureau Manager or SYSTEM users see the complete multi-module sidebar
+    rawSections = sidebarConfig.BUREAU_HEAD;
+  } else {
+    // Priority 4: Module-based resolution using assignedModules, department, or orgUnit
+    const effectiveModules: string[] = [
+      ...(assignedModules || []),
+      ...(department && department !== "SYSTEM" ? [department] : []),
+      ...(orgUnit?.deputyBureau ? [orgUnit.deputyBureau] : []),
+    ].filter((m): m is string => Boolean(m));
+
+    const uniqueModules = Array.from(new Set(effectiveModules));
+
+    const crossDepartmentSection = sidebarConfig.BUREAU_HEAD.find(
+      (s) => s.title === "Cross-Department",
+    );
+
+    if (uniqueModules.length === 1 && deputyMap[uniqueModules[0]]) {
+      // Exactly 1 module assigned: dedicated module sidebar (e.g. EDIR)
+      rawSections = sidebarConfig[deputyMap[uniqueModules[0]]];
+    } else if (uniqueModules.length > 1) {
+      // Multiple modules assigned: scoped multi-module sidebar containing ONLY their modules
+      const allowedTitles = new Set(
+        uniqueModules.map((m) => moduleKeyToTitleMap[m]).filter(Boolean),
+      );
+
+      const bureauModulesSection = sidebarConfig.BUREAU_HEAD.find(
+        (s) => s.title === "Modules",
+      );
+      const filteredModuleItems = (bureauModulesSection?.items || []).filter(
+        (item) => allowedTitles.has(item.title),
+      );
+
+      rawSections = [
+        {
+          title: "Modules",
+          items: filteredModuleItems,
+        },
+        ...(crossDepartmentSection ? [crossDepartmentSection] : []),
+      ];
+    } else {
+      // Fallback: Infer from role keywords if no modules assigned
       const roleStr = (entityRole || "").toLowerCase();
       const isWomensRole = roleStr.includes("women");
       const isChildrenRole =
@@ -59,41 +150,19 @@ export function getSidebarItems(
         roleStr.includes("elderly") ||
         roleStr.includes("disabilit");
 
-      const hasWomensPermissions = permissions?.some((p) =>
-        p.toLowerCase().includes("women"),
-      );
-      const hasChildrenPermissions = permissions?.some(
-        (p) =>
-          p.toLowerCase().includes("child") ||
-          p.toLowerCase().includes("adoption"),
-      );
-      const hasEdirPermissions = permissions?.some((p) =>
-        p.toLowerCase().includes("edir"),
-      );
-      const hasSocialPermissions = permissions?.some(
-        (p) =>
-          p.toLowerCase().includes("social") ||
-          p.toLowerCase().includes("elderly") ||
-          p.toLowerCase().includes("disabilit"),
-      );
-
-      if (isEdirRole || hasEdirPermissions) {
+      if (isEdirRole) {
         rawSections = sidebarConfig.EDIR;
-      } else if (isWomensRole || hasWomensPermissions) {
+      } else if (isWomensRole) {
         rawSections = sidebarConfig.WOMEN;
-      } else if (isChildrenRole || hasChildrenPermissions) {
+      } else if (isChildrenRole) {
         rawSections = sidebarConfig.CHILDREN_AFFAIRS;
-      } else if (isSocialRole || hasSocialPermissions) {
+      } else if (isSocialRole) {
         rawSections = sidebarConfig.SOCIAL_AFFAIRS;
       } else {
-        rawSections = sidebarConfig.BUREAU_HEAD;
+        // Restricted fallback: show only Cross-Department if permitted
+        rawSections = crossDepartmentSection ? [crossDepartmentSection] : [];
       }
-    } else {
-      rawSections = sidebarConfig.BUREAU_HEAD;
     }
-  } else {
-    // Fallback: unified sidebar keeps every user able to navigate
-    rawSections = sidebarConfig.BUREAU_HEAD;
   }
 
   const isSuperAdmin =

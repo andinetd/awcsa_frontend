@@ -27,6 +27,7 @@ type EmployeeJwtPayload = {
   directorateId?: number; // Top-level directorate ID (1-4)
   teamId?: number; // Top-level team ID (1-8)
   department?: string; // NEW: Department string for routing
+  assignedModules?: DeputyBureau[];
   iat?: number;
   exp?: number;
 };

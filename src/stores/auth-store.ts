@@ -10,6 +10,7 @@ import {
   EmployeeJwtPayload,
   ClientJwtPayload,
   AccountType,
+  DeputyBureau,
 } from "@/types/api/auth";
 
 function applyToken(
@@ -54,6 +55,13 @@ function applyToken(
       permissions: decodedToken.permissions || [],
     };
 
+    const initialAssignedModules: DeputyBureau[] =
+      decodedToken.assignedModules && decodedToken.assignedModules.length > 0
+        ? decodedToken.assignedModules
+        : decodedToken.department
+          ? [decodedToken.department as DeputyBureau]
+          : [];
+
     const newState: Partial<AuthState> = {
       token,
       refreshToken: refreshToken ?? null,
@@ -64,6 +72,7 @@ function applyToken(
       userPermissions: auth?.permissions || decodedToken.permissions || [],
       userRole: (decodedToken.userRole || decodedToken.role || entity?.role) as UserRole,
       department: decodedToken.department ?? null,
+      assignedModules: initialAssignedModules,
       directorateId: decodedToken.directorateId ?? null,
       teamId: decodedToken.teamId ?? null,
       orgUnit: decodedToken.orgUnit ?? null,
@@ -76,6 +85,9 @@ function applyToken(
       if (employeeToken.orgUnit) newState.orgUnit = employeeToken.orgUnit;
       if (employeeToken.entity?.role) newState.userRole = employeeToken.entity.role as UserRole;
       if (employeeToken.department) newState.department = employeeToken.department;
+      if (employeeToken.assignedModules && employeeToken.assignedModules.length > 0) {
+        newState.assignedModules = employeeToken.assignedModules;
+      }
     } else if (
       user.accountType === "CHILD_CARE_FACLITY" ||
       user.accountType === "CHILD_CARE_FACILITY"
@@ -127,6 +139,7 @@ interface AuthState {
   directorateId: number | null;
   teamId: number | null;
   department: string | null;
+  assignedModules: DeputyBureau[] | null;
   hydrated: boolean;
   setUser: (user: JwtUserType | null) => void;
   setToken: (token: string | null) => void;
@@ -140,6 +153,7 @@ interface AuthState {
   logout: (opts?: { notifyServer?: boolean; broadcast?: boolean }) => void;
   hasRole: (role: UserRole) => boolean;
   hasPermission: (permission: string) => boolean;
+  hasModule: (module: DeputyBureau) => boolean;
 }
 
 const customAuthStorage: StateStorage = {
@@ -205,6 +219,7 @@ export const useAuthStore = create<AuthState>()(
       directorateId: null,
       teamId: null,
       department: null,
+      assignedModules: null,
       hydrated: false,
 
       setUser: (user) => set({ user }),
@@ -319,6 +334,7 @@ export const useAuthStore = create<AuthState>()(
           directorateId: null,
           teamId: null,
           department: null,
+          assignedModules: null,
           hydrated: true,
         });
       },
@@ -326,6 +342,18 @@ export const useAuthStore = create<AuthState>()(
       hasRole: (role) => get().userRole === role,
       hasPermission: (permission) =>
         get().userPermissions?.includes(permission) ?? false,
+      hasModule: (module) => {
+        const state = get();
+        if (!module) return false;
+        if (
+          state.userRole === "Super_Admin" ||
+          state.userRole === "Bureau_Manager" ||
+          state.department === "SYSTEM"
+        ) {
+          return true;
+        }
+        return state.assignedModules?.includes(module) ?? false;
+      },
     }),
     {
       name: "auth-store",

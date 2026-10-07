@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 
 const BureauHeadlayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider>
+    <AuthProvider allowedRoles={["SYSTEM", "BUREAU_HEAD"]}>
       <SidebarLayout>{children}</SidebarLayout>
     </AuthProvider>
   );

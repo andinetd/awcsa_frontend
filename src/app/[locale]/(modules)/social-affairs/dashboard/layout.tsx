@@ -10,7 +10,7 @@ const SocialAffairsDashboardLayout = ({
 }) => {
   const t = useTranslations("social-rehab.dashboard");
   return (
-    <AuthProvider>
+    <AuthProvider allowedRoles={["SOCIAL_AFFAIRS", "SYSTEM"]}>
       <SidebarLayout title={t("title")}>{children}</SidebarLayout>
     </AuthProvider>
   );

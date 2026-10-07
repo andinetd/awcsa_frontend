@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/shared/language-switcher";
-import { ShieldAlert, Home, LogIn } from "lucide-react";
+import { ShieldAlert, Home, LogIn, LayoutDashboard } from "lucide-react";
 import { useAuthStore } from "@/stores/auth-store";
 import { LOGIN_ROUTE } from "@/lib/auth-routes";
+import { getDefaultRouteForUser } from "@/utils/directorate-route";
 
 export default function UnauthorizedPage() {
   const router = useRouter();
   const t = useTranslations("unauthorized");
-  const user = useAuthStore((s) => s.user);
+  const { user, department, userRole, assignedModules } = useAuthStore();
 
   // If the user landed here while unauthenticated (e.g., an expired
   // session, or following a stale cookie), there's no useful information
@@ -22,6 +23,16 @@ export default function UnauthorizedPage() {
       router.replace(LOGIN_ROUTE);
     }
   }, [user, router]);
+
+  const handleGoDashboard = () => {
+    const route = getDefaultRouteForUser(
+      user,
+      department,
+      assignedModules,
+      userRole,
+    );
+    router.push(route as any);
+  };
 
   const handleSignIn = () => {
     useAuthStore.getState().logout();
@@ -56,7 +67,17 @@ export default function UnauthorizedPage() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-8">
+          {user && (
+            <Button
+              onClick={handleGoDashboard}
+              className="w-full sm:w-44 h-11 hover:cursor-pointer"
+            >
+              <LayoutDashboard className="size-4" />
+              <span>Dashboard</span>
+            </Button>
+          )}
           <Button
+            variant={user ? "outline" : "default"}
             onClick={handleSignIn}
             className="w-full sm:w-44 h-11 hover:cursor-pointer"
           >

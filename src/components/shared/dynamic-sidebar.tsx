@@ -294,6 +294,7 @@ export function DynamicSidebar() {
     userPermissions,
     entity,
     department,
+    assignedModules,
   } = useAuthStore();
   const { state } = useSidebar();
   const router = useRouter();
@@ -320,8 +321,18 @@ export function DynamicSidebar() {
       userPermissions,
       entityRole,
       department,
+      assignedModules,
     );
-  }, [orgUnit, pathname, user, userRole, department, userPermissions, entity]);
+  }, [
+    orgUnit,
+    pathname,
+    user,
+    userRole,
+    department,
+    assignedModules,
+    userPermissions,
+    entity,
+  ]);
 
   const roleLabel =
     userRole && t.has(`roles.${userRole}`) ? t(`roles.${userRole}`) : userRole;

@@ -39,6 +39,7 @@ import {
 } from "@/hooks/super-admin";
 import { toast } from "sonner";
 import { Eye, EyeOff, Loader2, RefreshCw } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
 
 const PASSWORD_CHARSET =
   "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -60,13 +61,14 @@ interface UserDialogProps {
   user?: User | null;
 }
 
-const DEPARTMENT_OPTIONS = [
+const OPERATIONAL_MODULES = [
   "CHILDREN_AFFAIRS",
   "WOMEN_AFFAIRS",
   "SOCIAL_AFFAIRS",
-  "SYSTEM",
   "EDIR",
 ] as const;
+
+const SYSTEM_MODULE = "SYSTEM" as const;
 
 export function UserDialog({
   open,
@@ -195,6 +197,13 @@ export function UserDialog({
         { id: user.id, data: base },
         {
           onSuccess: () => {
+            const currentAuthUser = useAuthStore.getState().user;
+            if (currentAuthUser && currentAuthUser.id === user.id) {
+              useAuthStore.setState({
+                assignedModules: (values.assignedModules || []) as any,
+                department: effectiveDepartment || null,
+              });
+            }
             onUserSaved();
             onOpenChange(false);
           },
@@ -430,44 +439,138 @@ export function UserDialog({
                 <FormField
                   control={form.control}
                   name="assignedModules"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("assignedModules") || "Assigned Modules"}
-                      </FormLabel>
-                      <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xs border border-[#E3E7EB] bg-slate-50/50">
-                        {DEPARTMENT_OPTIONS.map((dept) => {
-                          const checked = field.value?.includes(dept);
-                          return (
+                  render={({ field }) => {
+                    const currentValues = field.value || [];
+                    const allOperationalSelected =
+                      OPERATIONAL_MODULES.length > 0 &&
+                      OPERATIONAL_MODULES.every((dept) =>
+                        currentValues.includes(dept),
+                      );
+                    const isSystemSelected = currentValues.includes(SYSTEM_MODULE);
+
+                    const operationalCount = OPERATIONAL_MODULES.filter((m) =>
+                      currentValues.includes(m),
+                    ).length;
+
+                    return (
+                      <FormItem className="space-y-3">
+                        <div>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <FormLabel className="text-xs font-semibold text-slate-700">
+                              {t("operationalModules") || "Operational Modules"}
+                            </FormLabel>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              {operationalCount} / {OPERATIONAL_MODULES.length}{" "}
+                              {t("selected") || "selected"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xs border border-[#E3E7EB] bg-slate-50/50">
+                            {/* Option for ALL operational modules */}
                             <label
-                              key={dept}
-                              className={`flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
-                                checked
-                                  ? "border-[#1769AA] bg-blue-50/60 font-semibold text-[#0B1F3A]"
-                                  : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+                              className={`col-span-2 flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
+                                allOperationalSelected
+                                  ? "border-[#1769AA] bg-blue-50/80 font-bold text-[#0B1F3A]"
+                                  : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50 font-semibold"
                               }`}
                             >
                               <Checkbox
-                                checked={checked}
+                                checked={allOperationalSelected}
                                 onCheckedChange={(isChecked) => {
-                                  const current = field.value || [];
-                                  const updated = isChecked
-                                    ? [...current, dept]
-                                    : current.filter((v: string) => v !== dept);
-                                  field.onChange(updated);
-                                  if (updated.length > 0) {
-                                    form.setValue("department", updated[0]);
+                                  let updated: string[];
+                                  if (isChecked) {
+                                    const nonOperational = currentValues.filter(
+                                      (v: string) =>
+                                        !OPERATIONAL_MODULES.includes(v as any),
+                                    );
+                                    updated = [...OPERATIONAL_MODULES, ...nonOperational];
+                                    form.setValue("department", OPERATIONAL_MODULES[0]);
+                                  } else {
+                                    updated = currentValues.filter(
+                                      (v: string) =>
+                                        !OPERATIONAL_MODULES.includes(v as any),
+                                    );
+                                    if (updated.length > 0) {
+                                      form.setValue("department", updated[0]);
+                                    }
                                   }
+                                  field.onChange(updated);
                                 }}
                               />
-                              <span className="truncate">{t(`departments.${dept}`)}</span>
+                              <span className="truncate">
+                                {t("allModules") || "All Modules (All 4 Modules)"}
+                              </span>
                             </label>
-                          );
-                        })}
-                      </div>
-                      <FormMessage className="text-[11px]" />
-                    </FormItem>
-                  )}
+
+                            {OPERATIONAL_MODULES.map((dept) => {
+                              const checked = currentValues.includes(dept);
+                              return (
+                                <label
+                                  key={dept}
+                                  className={`flex items-center gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
+                                    checked
+                                      ? "border-[#1769AA] bg-blue-50/60 font-semibold text-[#0B1F3A]"
+                                      : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+                                  }`}
+                                >
+                                  <Checkbox
+                                    checked={checked}
+                                    onCheckedChange={(isChecked) => {
+                                      const updated = isChecked
+                                        ? [...currentValues, dept]
+                                        : currentValues.filter((v: string) => v !== dept);
+                                      field.onChange(updated);
+                                      if (updated.length > 0) {
+                                        form.setValue("department", updated[0]);
+                                      }
+                                    }}
+                                  />
+                                  <span className="truncate">{t(`departments.${dept}`)}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Standalone System Scope Control */}
+                        <div>
+                          <FormLabel className="text-xs font-semibold text-slate-700 mb-1.5 block">
+                            {t("systemAccess") || "System Access"}
+                          </FormLabel>
+                          <label
+                            className={`flex items-start gap-2.5 p-2.5 rounded-xs border cursor-pointer transition-colors text-xs ${
+                              isSystemSelected
+                                ? "border-slate-800 bg-slate-100 font-semibold text-[#0B1F3A]"
+                                : "border-[#E3E7EB] bg-white text-slate-700 hover:bg-slate-50"
+                            }`}
+                          >
+                            <Checkbox
+                              checked={isSystemSelected}
+                              className="mt-0.5"
+                              onCheckedChange={(isChecked) => {
+                                const updated = isChecked
+                                  ? [...currentValues, SYSTEM_MODULE]
+                                  : currentValues.filter((v: string) => v !== SYSTEM_MODULE);
+                                field.onChange(updated);
+                                if (updated.length > 0) {
+                                  form.setValue("department", updated[0]);
+                                }
+                              }}
+                            />
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-xs text-[#0B1F3A]">
+                                {t("departments.SYSTEM") || "System"}
+                              </span>
+                              <span className="text-[11px] text-slate-500 font-normal">
+                                {t("systemDescription") || "Full administrative/system-level access"}
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+
+                        <FormMessage className="text-[11px]" />
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 <FormField

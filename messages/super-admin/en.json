@@ -101,6 +101,11 @@
       "team": "Team (Optional)",
       "department": "Department",
       "assignedModules": "Assigned Modules",
+      "operationalModules": "Operational Modules",
+      "allModules": "All Modules",
+      "selected": "selected",
+      "systemAccess": "System (Administrative / IT)",
+      "systemDescription": "Full system-wide administrative access",
       "departments": {
         "CHILDREN_AFFAIRS": "Children Affairs",
         "WOMEN_AFFAIRS": "Women Affairs",

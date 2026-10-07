@@ -7,8 +7,8 @@ const WomenLayout = ({ children }: { children: ReactNode }) => {
   const t = useTranslations("women");
 
   return (
-    <AuthProvider>
-      <SidebarLayout title={t("layout.title")}>{children}</SidebarLayout>;
+    <AuthProvider allowedRoles={["WOMEN_AFFAIRS", "SYSTEM"]}>
+      <SidebarLayout title={t("layout.title")}>{children}</SidebarLayout>
     </AuthProvider>
   );
 };

@@ -61,10 +61,12 @@ export function middleware(req: NextRequest) {
       return response;
     }
 
-    const matchedRoute = Object.keys(routePermissions).find(
-      (route) =>
-        normalizedPath === route || normalizedPath.startsWith(route + "/"),
-    );
+    const matchedRoute = Object.keys(routePermissions)
+      .sort((a, b) => b.length - a.length)
+      .find(
+        (route) =>
+          normalizedPath === route || normalizedPath.startsWith(route + "/"),
+      );
 
     console.log("PATH:", normalizedPath, "MATCHED:", matchedRoute);
 
@@ -88,20 +90,29 @@ export function middleware(req: NextRequest) {
 
     if (!isSuperAdmin) {
       // ROLE CHECK FOR EMPLOYEE ONLY
-      if (decodedToken.user.accountType == "EMPLOYEE") {
+      if (decodedToken.user.accountType === "EMPLOYEE") {
         const employeeToken = decodedToken as EmployeeJwtPayload;
-        const department = employeeToken.department;
+        const employeeRole = employeeToken.entity?.role;
+        const isBureauManager =
+          employeeRole === "Bureau_Manager" ||
+          employeeToken.department === "SYSTEM";
 
-        // Use department directly for matching in routePermissions
-        const effectiveRole = department;
+        // Bureau Manager / SYSTEM department has full bureau-wide access
+        if (!isBureauManager && guard.allowedRoles && guard.allowedRoles.length > 0) {
+          const userModules: string[] = [
+            ...((employeeToken as any).assignedModules || []),
+            employeeToken.department,
+          ].filter(Boolean);
 
-        if (
-          guard.allowedRoles &&
-          !guard.allowedRoles.includes(effectiveRole as any)
-        ) {
-          return NextResponse.redirect(
-            new URL(`/${locale}/unauthorized`, req.url),
+          const hasAccess = guard.allowedRoles.some(
+            (allowed) => Boolean(allowed && userModules.includes(allowed)),
           );
+
+          if (!hasAccess) {
+            return NextResponse.redirect(
+              new URL(`/${locale}/unauthorized`, req.url),
+            );
+          }
         }
       }
 

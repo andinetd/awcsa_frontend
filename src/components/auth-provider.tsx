@@ -42,22 +42,32 @@ const AuthProvider = ({
     }
 
     if (allowedRoles) {
-      const { userRole, department } = useAuthStore.getState();
-      const isAuthorized = allowedRoles.some((role) => {
-        if (role === "CLIENT") return user.accountType === "CLIENT";
-        if (role === "CARE_CENTERS_PORTAL")
-          return (
-            user.accountType === "CHILD_CARE_FACILITY" ||
-            user.accountType === "CHILD_CARE_FACLITY"
-          );
-        // "SYSTEM" department allows everything, or specific role check
-        if (department === "SYSTEM") return true;
-        return department === role;
-      });
+      const { userRole, department, assignedModules } = useAuthStore.getState();
+      const isSuperAdmin = userRole === "Super_Admin";
+      const isBureauManager =
+        userRole === "Bureau_Manager" || department === "SYSTEM";
 
-      if (!isAuthorized) {
-        router.replace("/unauthorized");
-        return;
+      if (!isSuperAdmin && !isBureauManager) {
+        const userModules: (string | null | undefined)[] = [
+          ...(assignedModules || []),
+          department,
+        ].filter(Boolean);
+
+        const isAuthorized = allowedRoles.some((role) => {
+          if (role === "CLIENT") return user.accountType === "CLIENT";
+          if (role === "CARE_CENTERS_PORTAL")
+            return (
+              user.accountType === "CHILD_CARE_FACILITY" ||
+              user.accountType === "CHILD_CARE_FACLITY"
+            );
+          if (role === "SYSTEM") return userModules.includes("SYSTEM");
+          return userModules.includes(role);
+        });
+
+        if (!isAuthorized) {
+          router.replace("/unauthorized");
+          return;
+        }
       }
     }
 
