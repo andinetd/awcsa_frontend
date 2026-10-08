@@ -36,7 +36,17 @@ export default function CouncilCard({
   onViewDetails,
 }: CouncilCardProps) {
   const t = useTranslations("social-affairs.edir.councils");
+  const tSubCities = useTranslations("subCities.names");
   const memberCount = council._count?.memberEdirs ?? council.memberEdirs.length;
+
+  const getSubCityDisplayName = (name?: string) => {
+    if (!name) return "";
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
 
   return (
     <Card className="flex flex-col overflow-hidden rounded-xs border-[#E3E7EB] bg-white shadow-2xs hover:shadow-md transition-shadow">
@@ -70,7 +80,7 @@ export default function CouncilCard({
         <div className="flex items-center gap-2">
           <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span>
-            {council.subCity}
+            {getSubCityDisplayName(council.subCity)}
             {council.woreda ? ` • ${council.woreda}` : ""}
           </span>
         </div>
@@ -78,7 +88,7 @@ export default function CouncilCard({
           <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span>
             {memberCount}{" "}
-            {memberCount === 1 ? "member edir" : "member edirs"}
+            {memberCount === 1 ? t("counts.memberEdirSingle") : t("counts.memberEdirMultiple")}
           </span>
         </div>
         {council.registrationNumber && (

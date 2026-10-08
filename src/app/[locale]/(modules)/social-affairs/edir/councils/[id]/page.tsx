@@ -108,11 +108,11 @@ export default function CouncilDetailsPage({ params }: PageProps) {
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/edir/councils" className="hover:text-[#1769AA] transition-colors">
-          Edir Councils
+          {t("breadcrumbs.councils")}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <span className="text-[#0B1F3A] font-bold truncate max-w-xs">{typedCouncil.name}</span>
@@ -348,7 +348,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                     className="h-6 px-2 text-[10.5px] font-mono font-bold text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs gap-1 cursor-pointer"
                   >
                     <Plus className="w-3 h-3" />
-                    <span>Manage Leaders</span>
+                    <span>{t("manageLeaders")}</span>
                   </Button>
                 }
               />
@@ -358,7 +358,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
               <div className="rounded-xs border border-[#E3E7EB] bg-slate-50/60 p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#0B1F3A] text-white px-1.5 py-0.2 rounded-xs">
-                    Chairperson
+                    {t("chairpersonTitle")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">
@@ -389,7 +389,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
               {Array.isArray(typedCouncil.leadershipMembers) && typedCouncil.leadershipMembers.length > 0 && (
                 <div className="pt-2 border-t border-[#E3E7EB] space-y-2">
                   <p className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-slate-500">
-                    Executive Committee ({typedCouncil.leadershipMembers.length})
+                    {t("executiveCommitteeCount", { count: typedCouncil.leadershipMembers.length })}
                   </p>
                   <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                     {typedCouncil.leadershipMembers.map((member, idx) => (

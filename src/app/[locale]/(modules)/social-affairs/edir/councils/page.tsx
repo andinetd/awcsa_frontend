@@ -117,6 +117,17 @@ const CouncilsPage = () => {
     );
   }
 
+  const tSubCities = useTranslations("subCities.names");
+
+  const getSubCityDisplayName = (name?: string) => {
+    if (!name) return "—";
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full p-4 md:p-8">
       {/* Municipal Breadcrumbs */}
@@ -126,12 +137,12 @@ const CouncilsPage = () => {
           className="hover:text-[#1769AA] flex items-center gap-1 transition-colors"
         >
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-slate-600">Social Affairs</span>
+        <span className="text-slate-600">{t("breadcrumbs.socialAffairs")}</span>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-[#0B1F3A] font-bold">{t("list.title")}</span>
+        <span className="text-[#0B1F3A] font-bold">{t("breadcrumbs.councils")}</span>
       </div>
 
       {/* Header & Primary Actions */}
@@ -170,7 +181,7 @@ const CouncilsPage = () => {
           {/* Level Filter */}
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mr-1">
-              Level:
+              {t("filterLabels.level")}
             </span>
             {LEVEL_OPTIONS.map((level) => {
               const isSelected = levelFilter === level;
@@ -200,7 +211,7 @@ const CouncilsPage = () => {
           {/* Status Filter */}
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mr-1">
-              Status:
+              {t("filterLabels.status")}
             </span>
             {STATUS_OPTIONS.map((status) => {
               const isSelected = statusFilter === status;
@@ -370,12 +381,12 @@ const CouncilsPage = () => {
                       </TableCell>
                       <TableCell className="px-4 py-3 text-xs text-slate-600">
                         <div className="font-medium text-slate-800">
-                          {council.subCity}
+                          {getSubCityDisplayName(council.subCity)}
                         </div>
                         <div className="text-[11px] text-slate-500">
                           {council.woreda
                             ? `Woreda ${council.woreda}`
-                            : "Sub-city wide"}
+                            : t("subCityWide")}
                         </div>
                       </TableCell>
                       <TableCell className="px-4 py-3 text-xs text-slate-600">
@@ -393,7 +404,7 @@ const CouncilsPage = () => {
                           {memberCount}
                         </span>
                         <span className="text-[11px] text-slate-500 ml-1">
-                          {memberCount === 1 ? "edir" : "edirs"}
+                          {memberCount === 1 ? t("counts.edirSingle") : t("counts.edirMultiple")}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-3">

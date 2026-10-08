@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ShieldPlus, Edit, Plus, Trash2, UserPlus, Users } from "lucide-react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useCreateEdirCouncilMutation,
   useUpdateEdirCouncilMutation,
@@ -439,15 +439,25 @@ export default function NewCouncilForm({
 
               {/* Datalist for fast role selection or auto-complete */}
               <datalist id="edir-council-role-suggestions">
-                {COMMON_ROLE_SUGGESTIONS.map((role) => (
-                  <option key={role} value={role} />
-                ))}
+                {COMMON_ROLE_SUGGESTIONS.map((role) => {
+                  const localizedRole = t.has(`commonRoles.${role}` as any)
+                    ? t(`commonRoles.${role}` as any)
+                    : role;
+                  return (
+                    <React.Fragment key={role}>
+                      <option value={localizedRole} />
+                      {localizedRole !== role && <option value={role} />}
+                    </React.Fragment>
+                  );
+                })}
               </datalist>
 
               {fields.length === 0 ? (
                 <div className="rounded-xs border border-dashed border-[#E3E7EB] bg-slate-50/60 p-4 text-center">
                   <p className="text-xs text-slate-500">
-                    No additional leadership members added yet. Click &quot;Add Member&quot; to appoint vice-chairs, secretaries, treasurers, auditors, or custom executive roles.
+                    {t.has("leadershipDialog.emptyDesc")
+                      ? t("leadershipDialog.emptyDesc")
+                      : "No additional leadership members added yet. Click Add Member to appoint executive roles."}
                   </p>
                 </div>
               ) : (
@@ -459,7 +469,9 @@ export default function NewCouncilForm({
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
-                          Leader #{index + 1}
+                          {t.has("leadershipDialog.leaderNumber")
+                            ? t("leadershipDialog.leaderNumber", { index: index + 1 })
+                            : `Leader #${index + 1}`}
                         </span>
                         <Button
                           type="button"
@@ -469,7 +481,7 @@ export default function NewCouncilForm({
                           className="h-6 px-1.5 text-[11px] font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs gap-1 cursor-pointer"
                         >
                           <Trash2 className="w-3 h-3" />
-                          <span>Remove</span>
+                          <span>{t.has("leadershipDialog.remove") ? t("leadershipDialog.remove") : "Remove"}</span>
                         </Button>
                       </div>
 

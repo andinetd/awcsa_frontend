@@ -198,10 +198,10 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="ALL" className="text-xs">All Levels</SelectItem>
-                <SelectItem value="WOREDA" className="text-xs">Woreda Level</SelectItem>
-                <SelectItem value="SUB_CITY" className="text-xs">Sub-City Level</SelectItem>
-                <SelectItem value="CITY" className="text-xs">City Level</SelectItem>
+                <SelectItem value="ALL" className="text-xs">{t("list.levels.all")}</SelectItem>
+                <SelectItem value="WOREDA" className="text-xs">{t("level.WOREDA")}</SelectItem>
+                <SelectItem value="SUB_CITY" className="text-xs">{t("level.SUB_CITY")}</SelectItem>
+                <SelectItem value="CITY" className="text-xs">{t("level.CITY")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -213,11 +213,11 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="ALL" className="text-xs">All Statuses</SelectItem>
-                <SelectItem value="ACTIVE" className="text-xs">Active</SelectItem>
-                <SelectItem value="EXPIRED" className="text-xs">Expired</SelectItem>
-                <SelectItem value="REVOKED" className="text-xs">Revoked</SelectItem>
-                <SelectItem value="CANCELLED" className="text-xs">Cancelled</SelectItem>
+                <SelectItem value="ALL" className="text-xs">{t("list.status.all")}</SelectItem>
+                <SelectItem value="ACTIVE" className="text-xs">{t("status.ACTIVE")}</SelectItem>
+                <SelectItem value="EXPIRED" className="text-xs">{t("status.EXPIRED")}</SelectItem>
+                <SelectItem value="REVOKED" className="text-xs">{t("status.REVOKED")}</SelectItem>
+                <SelectItem value="CANCELLED" className="text-xs">{t("status.CANCELLED")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
