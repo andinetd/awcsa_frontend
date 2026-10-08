@@ -349,7 +349,7 @@ export function DynamicSidebar() {
             <Link href={"/"} className="flex w-full items-center gap-2.5 px-2 py-1">
               <img
                 src="/assets/WCSA_logo.jpg"
-                alt="WCSA Bureau"
+                alt={t.has("header.bureauName") ? t("header.bureauName") : "WCSA Bureau"}
                 className={cn(
                   "shrink-0 rounded-full border border-white/10",
                   isCollapsed ? "h-7 w-7" : "h-8 w-8",
@@ -358,10 +358,10 @@ export function DynamicSidebar() {
               {!isCollapsed && (
                 <div className="flex min-w-0 flex-col text-left leading-tight">
                   <span className="truncate text-sm font-bold text-white tracking-tight">
-                    WCSA Bureau
+                    {t.has("header.bureauName") ? t("header.bureauName") : "WCSA Bureau"}
                   </span>
                   <span className="truncate text-[11px] text-slate-400 font-medium">
-                    Addis Ababa City Government
+                    {t.has("header.government") ? t("header.government") : "Addis Ababa City Government"}
                   </span>
                 </div>
               )}

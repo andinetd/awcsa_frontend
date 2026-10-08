@@ -1,6 +1,8 @@
 {
   "header": {
-    "systemName": "WCSA System"
+    "systemName": "WCSA System",
+    "bureauName": "WCSA Bureau",
+    "government": "Addis Ababa City Government"
   },
   "orgTypes": {
     "BUREAU": "Bureau",
@@ -80,6 +82,11 @@
     "Add Child": "Add Child",
     "Reports": "Reports",
     "Monthly Report": "Monthly Report",
-    "Unified History": "Unified History"
+    "Unified History": "Unified History",
+    "Profiles": "Profiles",
+    "Training": "Training",
+    "Employment": "Employment",
+    "Associations": "Associations",
+    "1-to-10 Members": "1-to-10 Members"
   }
 }

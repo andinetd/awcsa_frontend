@@ -1,6 +1,8 @@
 {
   "header": {
-    "systemName": "WCSA ሲስተም"
+    "systemName": "WCSA ሲስተም",
+    "bureauName": "የሴቶች እና ማህበራዊ ጉዳይ ቢሮ",
+    "government": "የአዲስ አበባ ከተማ አስተዳደር"
   },
   "orgTypes": {
     "BUREAU": "ቢሮ",
@@ -80,6 +82,11 @@
     "Add Child": "ሕፃን መመዝገቢያ",
     "Reports": "ሪፖርቶች",
     "Monthly Report": "ወርሃዊ ሪፖርት",
-    "Unified History": "የተጠቃሚዎች ታሪክ"
+    "Unified History": "የተጠቃሚዎች ታሪክ",
+    "Profiles": "የሴቶች መገለጫ",
+    "Training": "ስልጠና",
+    "Employment": "የስራ እድል",
+    "Associations": "ማህበራት",
+    "1-to-10 Members": "1-ለ-10 አባላት"
   }
 }
