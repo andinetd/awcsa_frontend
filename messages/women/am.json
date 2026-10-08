@@ -53,6 +53,161 @@
       "caseManagement": "የጉዳይ አስተዳደር",
       "associations": "ማህበራት",
       "members": "የ1-10 አባላት"
+    },
+    "header": {
+      "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+      "bureau": "የሴቶች እና ማህበራዊ ጉዳይ ቢሮ",
+      "sector": "የሴቶች ማብቃት እና ልማት ዘርፍ",
+      "refresh": "አድስ",
+      "printBrief": "ሪፖርት አትም",
+      "registerProfile": "አዲስ መዝግብ",
+      "title": "የሴቶች ልማት እና ማብቃት አስተዳደር",
+      "activeRegistryBadge": "ንቁ መዝገብ",
+      "subtitle": "የሴቶች ማህበራት ፌዴሬሽኖች፣ የስራ እድል ፈጠራ ፕሮግራሞች፣ የቴክኖሎጂ አቅርቦት እና የሙያ ስልጠና ስራዎች አመራር እና ክትትል",
+      "nav": {
+        "profiles": "የሴቶች መገለጫ",
+        "associations": "ማህበራት",
+        "members": "አባላት",
+        "employment": "የስራ እድል",
+        "training": "ስልጠና",
+        "technology": "ቴክኖሎጂ",
+        "services": "አገልግሎቶች"
+      }
+    },
+    "kpis": {
+      "registeredWomen": {
+        "title": "የተመዘገቡ ሴቶች",
+        "description": "ንቁ ባዮሜትሪክ እና ዲጂታል መረጃዎች",
+        "badge": "የተረጋገጠ መዝገብ",
+        "action": "ሁሉንም መገለጫዎች ይመልከቱ"
+      },
+      "activeAssociations": {
+        "title": "ንቁ የሴቶች ማህበራት",
+        "description": "በሁሉም 11 ክፍለ ከተሞች",
+        "badge": "የፌዴሬሽን አውታረ መረብ",
+        "action": "ማህበራትን ያስተዳድሩ"
+      },
+      "employedWomen": {
+        "title": "የስራ እድል የተፈጠረላቸው",
+        "description": "ቀጥታ እና የኢንተርፕራይዝ ትስስር",
+        "badge": "ግብ ተሳክቷል",
+        "action": "ምደባዎችን ይከታተሉ"
+      },
+      "techRecipients": {
+        "title": "የቴክኖሎጂ ሽግግሮች",
+        "description": "የቀረቡ የቁሳቁስ እና ቴክኖሎጂ ድጋፎች",
+        "badge": "ዘመናዊ አሰራር",
+        "action": "የቁሳቁስ መዝገብ"
+      },
+      "trainedGraduates": {
+        "title": "የሙያ ስልጠና ተመራቂዎች",
+        "description": "የተረጋገጠ የአቅም ግንባታ ስልጠና",
+        "badge": "የክህሎት ማሳደጊያ",
+        "action": "ፕሮግራሞችን ይገምግሙ"
+      }
+    },
+    "charts": {
+      "enrollmentTrend": {
+        "title": "ወርሃዊ የምዝገባ እና የስራ ስምሪት ሂደት",
+        "subtitle": "የባለፉት 6 ወራት አዲስ ምዝገባ ከኢኮኖሚያዊ ምደባ ጋር ሲነጻጸር",
+        "registrations": "ምዝገባዎች",
+        "placements": "የስራ ምደባዎች",
+        "months": {
+          "may": "ግንቦት",
+          "jun": "ሰኔ",
+          "jul": "ሐምሌ",
+          "aug": "ነሐሴ",
+          "sep": "መስከረም",
+          "oct": "ጥቅምት"
+        }
+      },
+      "supportDistribution": {
+        "title": "የድጋፍ ፕሮግራሞች ስርጭት",
+        "subtitle": "ንቁ ተጠቃሚዎች በቢሮው ዋና ዋና የትኩረት መስኮች ተከፋፍለው",
+        "totalBeneficiaries": "አጠቃላይ ተጠቃሚዎች",
+        "economic": "ኢኮኖሚያዊ ድጋፍ",
+        "legal": "የህግ ድጋፍ",
+        "training": "የሙያ ክህሎት",
+        "tech": "ቴክኖሎጂ እና ቁሳቁስ",
+        "psycho": "ስነ-ልቦናዊ ድጋፍ"
+      }
+    },
+    "matrix": {
+      "title": "የክፍለ ከተሞች ስርጭት ሰንጠረዥ",
+      "subtitle": "የተመዘገቡ ሴቶች፣ ማህበራት፣ የስራ ስምሪት እና የሀብት ድልድል ዝርዝር መረጃ",
+      "searchPlaceholder": "ክፍለ ከተማ ፈልግ...",
+      "statusFilterAll": "ሁሉም ሁኔታዎች",
+      "statusFilterActive": "በጥሩ ሁኔታ ላይ",
+      "statusFilterUnderReview": "ግምገማ የሚያስፈልገው",
+      "statusFilterHighDemand": "ከፍተኛ ፍላጎት ያለበት",
+      "columns": {
+        "subCity": "ክፍለ ከተማ",
+        "registered": "የተመዘገቡ ሴቶች",
+        "associations": "ንቁ ማህበራት",
+        "employmentRate": "የስራ ስምሪት ምጣኔ",
+        "supportCases": "ንቁ ጉዳዮች",
+        "budgetShare": "የሀብት ድርሻ",
+        "status": "ሁኔታ",
+        "actions": "ተግባር"
+      },
+      "status": {
+        "active": "ንቁ",
+        "underReview": "በግምገማ ላይ",
+        "highDemand": "ከፍተኛ ፍላጎት"
+      },
+      "viewSubCity": "{name} ይመልከቱ",
+      "totals": "የከተማ አቀፍ ድምር",
+      "summaryCard": {
+        "title": "የከተማ አቀፍ የአገልግሎት አሰጣጥ ምጣኔ",
+        "metric": "94.2%",
+        "description": "በሁሉም ክፍለ ከተሞች ያለው አማካይ የአገልግሎት አሰጣጥ ውጤታማነት።"
+      }
+    },
+    "quickActionsList": {
+      "title": "ፈጣን ተግባራት እና የስራ ክፍሎች",
+      "subtitle": "ዋና ዋና የአስተዳደር ስራዎችን፣ መረጃዎችን እና የፕሮግራም ክትትል ስርዓቶችን በቀጥታ ይድረሱ",
+      "openModule": "ክፍሉን ክፈት",
+      "actions": {
+        "profiles": {
+          "title": "የሴቶች መገለጫ መዝገብ",
+          "description": "የግል መረጃዎችን፣ የኢኮኖሚ ሁኔታን መፈለግ፣ መመዝገብ እና ማዘመን",
+          "badge": "መዝገብ"
+        },
+        "associations": {
+          "title": "የሴቶች ማህበራት",
+          "description": "የተመዘገቡ ማህበራትን፣ የአመራር አካላትን እና ህጋዊ አቋምን ማስተዳደር",
+          "badge": "ፌዴሬሽን"
+        },
+        "members": {
+          "title": "የማህበራት አባላት",
+          "description": "የአባላት ዝርዝር፣ ማረጋገጫ፣ የክፍያ እና ተሳትፎ መረጃዎችን መከታተል",
+          "badge": "አባላት"
+        },
+        "employment": {
+          "title": "የስራ እድል ትስስር",
+          "description": "የስራ ምደባዎችን፣ የኢንተርፕራይዝ ትስስርን እና የብድር አቅርቦትን ማስተባበር",
+          "badge": "ኢኮኖሚ"
+        },
+        "training": {
+          "title": "የሙያ ስልጠናዎች",
+          "description": "የክህሎት ማጎልበቻ ስልጠናዎችን፣ ሰርተፊኬቶችን እና ተሳትፎን መከታተል",
+          "badge": "አቅም ግንባታ"
+        },
+        "technology": {
+          "title": "የቴክኖሎጂ ሽግግር",
+          "description": "የዘመናዊ መሳሪያዎች አቅርቦት፣ ስርጭት እና የጥገና ድጋፍን መመዝገብ",
+          "badge": "ቁሳቁስ"
+        },
+        "services": {
+          "title": "የድጋፍ እና ህግ አገልግሎቶች",
+          "description": "የምክር አገልግሎት፣ የህግ ድጋፍ እና ማህበራዊ ጥበቃ ስራዎችን ማስተዳደር",
+          "badge": "ጥበቃ"
+        }
+      }
+    },
+    "loading": {
+      "title": "የሴቶች ማብቃት ዳሽቦርድ በመጫን ላይ ነው...",
+      "subtitle": "የክፍለ ከተማ መረጃዎችን እና ጠቋሚዎችን በማጠናቀር ላይ..."
     }
   },
   "womenList": {
@@ -914,5 +1069,20 @@
     "Startup Capital Support": "የመነሻ ካፒታል ድጋፍ",
     "Temporary Shelter": "ጊዜያዊ መጠለያ",
     "Elderly Financial Support": "የአረጋውያን የገንዘብ ድጋፍ"
+  },
+  "subCities": {
+    "names": {
+      "Addis Ketema": "አዲስ ከተማ",
+      "Akaky Kaliti": "አቃቂ ቃሊቲ",
+      "Arada": "አራዳ",
+      "Bole": "ቦሌ",
+      "Gullele": "ጉለሌ",
+      "Kirkos": "ቂርቆስ",
+      "Kolfe Keranio": "ኮልፌ ቀራኒዮ",
+      "Lideta": "ልደታ",
+      "Nifas Silk-Lafto": "ንፋስ ስልክ ላፍቶ",
+      "Yeka": "የካ",
+      "Lemi Kura": "ለሚ ኩራ"
+    }
   }
 }

@@ -53,6 +53,161 @@
       "caseManagement": "Case Management",
       "associations": "Associations",
       "members": "1-to-10 Members"
+    },
+    "header": {
+      "cityAdmin": "ADDIS ABABA CITY ADMINISTRATION",
+      "bureau": "BUREAU OF WOMEN & SOCIAL AFFAIRS",
+      "sector": "WOMEN EMPOWERMENT & DEVELOPMENT",
+      "refresh": "Refresh",
+      "printBrief": "Print Brief",
+      "registerProfile": "Register Profile",
+      "title": "Women Development & Empowerment Administration",
+      "activeRegistryBadge": "Active Registry",
+      "subtitle": "Executive oversight of women association federations, employment programs, technology distribution, and vocational training initiatives",
+      "nav": {
+        "profiles": "Profiles",
+        "associations": "Associations",
+        "members": "Members",
+        "employment": "Employment",
+        "training": "Training",
+        "technology": "Technology",
+        "services": "Services"
+      }
+    },
+    "kpis": {
+      "registeredWomen": {
+        "title": "Registered Women Profiles",
+        "description": "Active biometric & digital records",
+        "badge": "Verified Registry",
+        "action": "View All Profiles"
+      },
+      "activeAssociations": {
+        "title": "Active Women Associations",
+        "description": "Across all 11 sub-cities",
+        "badge": "Federation Network",
+        "action": "Manage Associations"
+      },
+      "employedWomen": {
+        "title": "Employment Facilitated",
+        "description": "Direct & enterprise linkages",
+        "badge": "Target Met",
+        "action": "Track Placements"
+      },
+      "techRecipients": {
+        "title": "Technology Transfers",
+        "description": "Equipment & tech grants delivered",
+        "badge": "Modernization",
+        "action": "Equipment Log"
+      },
+      "trainedGraduates": {
+        "title": "Vocational Graduates",
+        "description": "Certified capacity building",
+        "badge": "Upskilling Cohorts",
+        "action": "Review Programs"
+      }
+    },
+    "charts": {
+      "enrollmentTrend": {
+        "title": "Monthly Enrollment & Placement Trend",
+        "subtitle": "6-Month intake of new profile registrations vs successful economic placements",
+        "registrations": "Registrations",
+        "placements": "Placements",
+        "months": {
+          "may": "May",
+          "jun": "Jun",
+          "jul": "Jul",
+          "aug": "Aug",
+          "sep": "Sep",
+          "oct": "Oct"
+        }
+      },
+      "supportDistribution": {
+        "title": "Support Program Distribution",
+        "subtitle": "Active beneficiaries categorized by core bureau strategic pillars",
+        "totalBeneficiaries": "Total Beneficiaries",
+        "economic": "Economic",
+        "legal": "Legal Support",
+        "training": "Vocational Skills",
+        "tech": "Tech & Equipment",
+        "psycho": "Psychosocial"
+      }
+    },
+    "matrix": {
+      "title": "Sub-City Distribution Matrix",
+      "subtitle": "Real-time disaggregation of registered women, federations, placements, and resource allocations",
+      "searchPlaceholder": "Search sub-cities...",
+      "statusFilterAll": "All Statuses",
+      "statusFilterActive": "Optimal",
+      "statusFilterUnderReview": "Review Needed",
+      "statusFilterHighDemand": "High Demand",
+      "columns": {
+        "subCity": "Sub-City Jurisdiction",
+        "registered": "Registered Women",
+        "associations": "Active Assocs.",
+        "employmentRate": "Placement Rate",
+        "supportCases": "Active Cases",
+        "budgetShare": "Resource Share",
+        "status": "Status",
+        "actions": "Action"
+      },
+      "status": {
+        "active": "Active",
+        "underReview": "Under Review",
+        "highDemand": "High Demand"
+      },
+      "viewSubCity": "View {name}",
+      "totals": "Citywide Totals",
+      "summaryCard": {
+        "title": "Citywide Capacity Index",
+        "metric": "94.2%",
+        "description": "Average service delivery index across all sub-city frontlines."
+      }
+    },
+    "quickActionsList": {
+      "title": "Operational Quick Actions & Modules",
+      "subtitle": "Direct access to key administrative workflows, data registries, and program trackers",
+      "openModule": "Open module",
+      "actions": {
+        "profiles": {
+          "title": "Women Profile Registry",
+          "description": "Search, filter, enroll and update individual women records and economic status",
+          "badge": "Registry"
+        },
+        "associations": {
+          "title": "Women Associations",
+          "description": "Manage registered community associations, executive leadership, and compliance",
+          "badge": "Federation"
+        },
+        "members": {
+          "title": "Association Membership",
+          "description": "Review association members, roster updates, verification status and contributions",
+          "badge": "Roster"
+        },
+        "employment": {
+          "title": "Employment Linkages",
+          "description": "Coordinate job placements, enterprise linkages, and micro-business financing",
+          "badge": "Economic"
+        },
+        "training": {
+          "title": "Vocational Training",
+          "description": "Monitor skill development cohorts, certifications, and attendance records",
+          "badge": "Capacity"
+        },
+        "technology": {
+          "title": "Technology Transfers",
+          "description": "Log equipment delivery, modern tools handover, and maintenance support",
+          "badge": "Equipment"
+        },
+        "services": {
+          "title": "Support & Legal Services",
+          "description": "Manage counseling cases, legal aid, social protection, and welfare support",
+          "badge": "Protection"
+        }
+      }
+    },
+    "loading": {
+      "title": "Loading Women Empowerment Dashboard...",
+      "subtitle": "Aggregating sub-city records and real-time indicators..."
     }
   },
   "womenList": {
@@ -914,5 +1069,20 @@
     "Startup Capital Support": "Startup Capital Support",
     "Temporary Shelter": "Temporary Shelter",
     "Elderly Financial Support": "Elderly Financial Support"
+  },
+  "subCities": {
+    "names": {
+      "Addis Ketema": "Addis Ketema",
+      "Akaky Kaliti": "Akaky Kaliti",
+      "Arada": "Arada",
+      "Bole": "Bole",
+      "Gullele": "Gullele",
+      "Kirkos": "Kirkos",
+      "Kolfe Keranio": "Kolfe Keranio",
+      "Lideta": "Lideta",
+      "Nifas Silk-Lafto": "Nifas Silk-Lafto",
+      "Yeka": "Yeka",
+      "Lemi Kura": "Lemi Kura"
+    }
   }
 }
