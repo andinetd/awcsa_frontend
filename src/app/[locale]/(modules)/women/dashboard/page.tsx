@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations, useLocale } from "next-intl";
 import {
   useGetWomenProfilesQuery,
   useGetTechnologySupportQuery,
@@ -17,6 +18,8 @@ import { WomenSubCityMatrix } from "@/components/women/dashboard/women-subcity-m
 import { WomenQuickActions } from "@/components/women/dashboard/women-quick-actions";
 
 export default function WomenDashboard() {
+  const t = useTranslations("women.dashboard");
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -64,25 +67,25 @@ export default function WomenDashboard() {
   const programBreakdown = [
     {
       category: "EMPLOYMENT",
-      label: "Employment Placements",
+      label: t("charts.supportDistribution.economic"),
       count: totalEmployments,
       color: "#1769AA",
     },
     {
       category: "TECHNOLOGY",
-      label: "Productive Technology",
+      label: t("charts.supportDistribution.tech"),
       count: totalTechSupport,
       color: "#0B1F3A",
     },
     {
       category: "TRAINING",
-      label: "Vocational Skills",
+      label: t("charts.supportDistribution.training"),
       count: totalTrainings,
       color: "#F59E0B",
     },
     {
       category: "ASSOCIATIONS",
-      label: "Grassroots Associations",
+      label: t("kpis.activeAssociations.title"),
       count: totalAssociations,
       color: "#10B981",
     },
@@ -90,14 +93,14 @@ export default function WomenDashboard() {
 
   // Dynamic Trailing 6-Month Velocity Buckets
   const intakeTrends = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const now = new Date();
     const buckets: { month: string; registered: number; supported: number; year: number; monthIdx: number }[] = [];
 
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthLabel = new Intl.DateTimeFormat(locale === "am" ? "am-ET" : "en-US", { month: "short" }).format(d);
       buckets.push({
-        month: months[d.getMonth()],
+        month: monthLabel,
         year: d.getFullYear(),
         monthIdx: d.getMonth(),
         registered: 0,
@@ -136,7 +139,7 @@ export default function WomenDashboard() {
     });
 
     return buckets.map(({ month, registered, supported }) => ({ month, registered, supported }));
-  }, [profiles, employments, techSupport, trainings]);
+  }, [profiles, employments, techSupport, trainings, locale]);
 
   const isLoadingInitial =
     isProfilesLoading &&
@@ -152,7 +155,7 @@ export default function WomenDashboard() {
         <div className="flex flex-col items-center gap-3">
           <div className="size-7 rounded-full border-2 border-[#1769AA] border-t-transparent animate-spin" />
           <span className="text-xs font-medium text-slate-500">
-            Loading Women &amp; Social Affairs executive dashboard...
+            {t("loading.title")}
           </span>
         </div>
       </div>

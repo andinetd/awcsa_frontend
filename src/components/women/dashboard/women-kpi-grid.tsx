@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import {
   Users,
   Landmark,
@@ -40,75 +41,75 @@ export function WomenKpiGrid({
   totalTechSupport = 0,
   totalTrainings = 0,
 }: WomenKpiGridProps) {
+  const t = useTranslations("women.dashboard.kpis");
+  const tMatrix = useTranslations("women.dashboard.matrix");
   const totalInterventions = totalEmployments + totalTechSupport + totalTrainings;
   const isAlert = submittedAssociations > 0;
 
   const cards = [
     {
-      title: "Registered Women Roster",
+      title: t("registeredWomen.title"),
       value: totalProfiles,
-      sub: "Addis Ababa municipal registry • All 11 sub-cities",
+      sub: t("registeredWomen.description"),
       icon: Users,
-      badgeText: "VERIFIED",
+      badgeText: t("registeredWomen.badge"),
       badgeColor: "bg-slate-100 text-slate-700 border-slate-200",
       iconBg: "bg-slate-100 text-slate-700",
       link: "/women/profiles",
       isAlert: false,
-      actionText: "View profiles roster",
+      actionText: t("registeredWomen.action"),
     },
     {
-      title: "Grassroots Associations",
+      title: t("activeAssociations.title"),
       value: totalAssociations,
-      sub: `${approvedAssociations} Approved • ${draftAssociations} Draft • ${submittedAssociations} Under Review`,
+      sub: `${approvedAssociations} • ${draftAssociations} • ${submittedAssociations}`,
       icon: Landmark,
-      badgeText: `${approvedAssociations} APPROVED`,
+      badgeText: t("activeAssociations.badge"),
       badgeColor: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
       iconBg: "bg-[#E8F2FA] text-[#1769AA]",
       link: "/women/associations",
       isAlert: false,
-      actionText: "Browse associations",
+      actionText: t("activeAssociations.action"),
     },
     {
-      title: "Organized Self-Help Members",
-      value: totalMembers,
-      sub: `${totalGroups} Groups active • ${declaredMembers.toLocaleString()} declared capacity target`,
+      title: t("employedWomen.title"),
+      value: totalEmployments,
+      sub: t("employedWomen.description"),
       icon: Layers,
-      badgeText: `${totalGroups} GROUPS`,
+      badgeText: t("employedWomen.badge"),
       badgeColor: "bg-sky-50 text-sky-700 border-sky-200",
       iconBg: "bg-sky-50 text-sky-700",
-      link: "/women/members",
+      link: "/women/employment",
       isAlert: false,
-      actionText: "Membership roster",
+      actionText: t("employedWomen.action"),
     },
     {
-      title: "Livelihood & Skills Aid",
-      value: totalInterventions,
-      sub: `${totalEmployments} Placed • ${totalTechSupport} Technology • ${totalTrainings} Vocational`,
+      title: t("techRecipients.title"),
+      value: totalTechSupport,
+      sub: t("techRecipients.description"),
       icon: Sparkles,
-      badgeText: "DELIVERED",
+      badgeText: t("techRecipients.badge"),
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: "bg-emerald-50 text-emerald-700",
-      link: "/women/services",
+      link: "/women/technology",
       isAlert: false,
-      actionText: "Track interventions",
+      actionText: t("techRecipients.action"),
     },
     {
-      title: "Bureau Action Docket",
-      value: submittedAssociations,
-      sub: isAlert
-        ? `${submittedAssociations} association charters awaiting committee vetting and certification`
-        : "All submitted association dossiers reviewed and certified",
+      title: t("trainedGraduates.title"),
+      value: totalTrainings,
+      sub: t("trainedGraduates.description"),
       icon: isAlert ? AlertTriangle : ShieldCheck,
-      badgeText: isAlert ? "ACTION REQUIRED" : "RESOLVED",
+      badgeText: t("trainedGraduates.badge"),
       badgeColor: isAlert
         ? "bg-rose-50 text-rose-700 border-rose-200 font-bold"
         : "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: isAlert
         ? "bg-rose-500/10 text-rose-600"
         : "bg-emerald-500/10 text-emerald-600",
-      link: "/women/associations",
+      link: "/women/training",
       isAlert: isAlert,
-      actionText: isAlert ? "Review pending charters" : "Inspect approved roster",
+      actionText: t("trainedGraduates.action"),
     },
   ];
 
@@ -116,10 +117,10 @@ export function WomenKpiGrid({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          EXECUTIVE WOMEN DEVELOPMENT &amp; EMPOWERMENT SCORECARD
+          {tMatrix("summaryCard.title")}
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Unified registry, cooperative federations &amp; intervention metrics
+          {tMatrix("summaryCard.description")}
         </span>
       </div>
 

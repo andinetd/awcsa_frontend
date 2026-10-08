@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { Users, ListChecks, ArrowRight } from "lucide-react";
 import {
   Card,
@@ -40,7 +41,7 @@ const ADDIS_ABABA_SUBCITIES = [
   "Akaky Kaliti",
   "Arada",
   "Bole",
-  "Gulele",
+  "Gullele",
   "Kirkos",
   "Kolfe Keranio",
   "Lemi Kura",
@@ -59,17 +60,28 @@ export function WomenSubCityMatrix({
   incompleteCount = 0,
 }: WomenSubCityMatrixProps) {
   const router = useRouter();
+  const t = useTranslations("women.dashboard.matrix");
+  const tSubCity = useTranslations("women.subCities.names");
+  const tBySubCity = useTranslations("women.dashboard.bySubCity");
 
   const handleRowClick = (subCity: string) => {
     router.push(`/women/associations?subCity=${encodeURIComponent(subCity)}`);
+  };
+
+  const getSubCityLabel = (name: string) => {
+    try {
+      return tSubCity(name as any);
+    } catch {
+      return name;
+    }
   };
 
   const displayRows = React.useMemo(() => {
     return ADDIS_ABABA_SUBCITIES.map((name) => {
       const match = rows.find(
         (r) =>
-          r.subCity.toLowerCase() === name.toLowerCase() ||
-          r.subCity.toLowerCase().replace(/[^a-z]/g, "") ===
+          r.subCity?.toLowerCase() === name.toLowerCase() ||
+          r.subCity?.toLowerCase().replace(/[^a-z]/g, "") ===
             name.toLowerCase().replace(/[^a-z]/g, "")
       );
       return {
@@ -94,14 +106,14 @@ export function WomenSubCityMatrix({
             <div>
               <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
                 <Users className="w-4 h-4 text-[#1769AA]" />
-                Sub-City Association Distribution &amp; Coverage
+                {t("title")}
               </CardTitle>
               <p className="text-[11px] text-slate-500 font-sans mt-0.5">
-                Community federations, charter accreditations and active membership across all 11 sub-cities
+                {t("subtitle")}
               </p>
             </div>
             <span className="text-[10.5px] text-slate-400 font-mono hidden sm:inline">
-              Click row to filter
+              {t("columns.actions")}
             </span>
           </CardHeader>
           <CardContent className="p-0">
@@ -109,30 +121,30 @@ export function WomenSubCityMatrix({
               <Table>
                 <TableHeader className="bg-slate-50/80 border-b border-[#E3E7EB]">
                   <TableRow>
-                    <TableHead className="font-semibold text-xs text-slate-700 py-2.5 pl-4">Sub-City</TableHead>
-                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">Associations</TableHead>
-                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">Approved</TableHead>
-                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">Members</TableHead>
-                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5 pr-4">Status</TableHead>
+                    <TableHead className="font-semibold text-xs text-slate-700 py-2.5 pl-4">{t("columns.subCity")}</TableHead>
+                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">{t("columns.associations")}</TableHead>
+                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">{tBySubCity("approved")}</TableHead>
+                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5">{tBySubCity("members")}</TableHead>
+                    <TableHead className="font-semibold text-xs text-slate-700 text-right py-2.5 pr-4">{t("columns.status")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center py-8 text-slate-500 text-xs">
-                        Loading sub-city data...
+                        {tBySubCity("loading")}
                       </TableCell>
                     </TableRow>
                   ) : (
                     displayRows.map((row) => {
                       const statusTag =
                         row.total === 0
-                          ? { label: "NO RECORDS", cls: "bg-slate-100 text-slate-400 border-slate-200" }
+                          ? { label: "-", cls: "bg-slate-100 text-slate-400 border-slate-200" }
                           : row.approved === row.total && row.total > 0
-                          ? { label: "CERTIFIED", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" }
+                          ? { label: t("status.active"), cls: "bg-emerald-50 text-emerald-700 border-emerald-200" }
                           : row.approved > 0
-                          ? { label: "ACTIVE", cls: "bg-sky-50 text-sky-700 border-sky-200" }
-                          : { label: "PENDING", cls: "bg-amber-50 text-amber-700 border-amber-200" };
+                          ? { label: t("status.highDemand"), cls: "bg-sky-50 text-sky-700 border-sky-200" }
+                          : { label: t("status.underReview"), cls: "bg-amber-50 text-amber-700 border-amber-200" };
 
                       return (
                         <TableRow
@@ -140,7 +152,9 @@ export function WomenSubCityMatrix({
                           className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
                           onClick={() => handleRowClick(row.subCity)}
                         >
-                          <TableCell className="font-medium text-xs text-[#0B1F3A] py-2 pl-4">{row.subCity}</TableCell>
+                          <TableCell className="font-medium text-xs text-[#0B1F3A] py-2 pl-4">
+                            {getSubCityLabel(row.subCity)}
+                          </TableCell>
                           <TableCell className="text-right text-xs font-mono py-2">{row.total}</TableCell>
                           <TableCell className="text-right text-xs font-mono text-[#1769AA] font-semibold py-2">{row.approved}</TableCell>
                           <TableCell className="text-right text-xs font-mono py-2">{row.members.toLocaleString()}</TableCell>
@@ -160,9 +174,9 @@ export function WomenSubCityMatrix({
         </div>
 
         <div className="p-3 border-t border-[#E3E7EB] bg-slate-50/70 flex items-center justify-between text-xs text-slate-600 font-mono">
-          <span>Addis Ababa Total ({displayRows.length} Sub-Cities):</span>
+          <span>{t("totals")} ({displayRows.length}):</span>
           <span className="font-bold text-[#0B1F3A]">
-            {totalAssocsInMatrix} Associations ({totalApprovedInMatrix} Approved) • {totalMembersInMatrix.toLocaleString()} Members
+            {totalAssocsInMatrix} ({totalApprovedInMatrix}) • {totalMembersInMatrix.toLocaleString()}
           </span>
         </div>
       </Card>
@@ -172,29 +186,29 @@ export function WomenSubCityMatrix({
         <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
           <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             <ListChecks className="w-4 h-4 text-[#1769AA]" />
-            Federation Capacity Summary
+            {t("summaryCard.title")}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 space-y-3">
           <dl className="space-y-2.5 text-xs">
             <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-              <dt className="text-slate-600 font-medium">Declared Capacity Target</dt>
+              <dt className="text-slate-600 font-medium">{t("columns.budgetShare")}</dt>
               <dd className="text-sm font-bold font-mono text-[#0B1F3A]">{declaredMembers}</dd>
             </div>
             <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-              <dt className="text-slate-600 font-medium">Verified Active Members</dt>
+              <dt className="text-slate-600 font-medium">{t("columns.registered")}</dt>
               <dd className="text-sm font-bold font-mono text-[#1769AA]">{totalMembers}</dd>
             </div>
             <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-              <dt className="text-slate-600 font-medium">Organized Self-Help Groups</dt>
+              <dt className="text-slate-600 font-medium">{t("columns.associations")}</dt>
               <dd className="text-sm font-bold font-mono text-[#0B1F3A]">{totalGroups}</dd>
             </div>
             <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-              <dt className="text-slate-600 font-medium">Approved Associations</dt>
+              <dt className="text-slate-600 font-medium">{tBySubCity("approved")}</dt>
               <dd className="text-sm font-bold font-mono text-emerald-700">{approvedCount}</dd>
             </div>
             <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-              <dt className="text-slate-600 font-medium">Pending / Incomplete</dt>
+              <dt className="text-slate-600 font-medium">{t("status.underReview")}</dt>
               <dd className="text-sm font-bold font-mono text-amber-600">{incompleteCount}</dd>
             </div>
           </dl>
@@ -204,7 +218,7 @@ export function WomenSubCityMatrix({
               href="/women/associations"
               className="text-xs text-[#1769AA] font-semibold hover:underline inline-flex items-center gap-1 group"
             >
-              <span>View all associations roster</span>
+              <span>{t("viewSubCity", { name: "" })}</span>
               <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

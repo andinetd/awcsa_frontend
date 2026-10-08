@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -32,6 +33,7 @@ export function WomenChartsSection({
   intakeTrends = [],
   programBreakdown = [],
 }: WomenChartsSectionProps) {
+  const t = useTranslations("women.dashboard.charts");
   const [activeSegment, setActiveSegment] = useState<number | null>(null);
 
   const totalInterventions = programBreakdown.reduce((acc, curr) => acc + curr.count, 0);
@@ -43,21 +45,21 @@ export function WomenChartsSection({
         <div className="pb-2 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Monthly Beneficiary Inflow vs. Livelihood Placements &amp; Interventions
+              {t("enrollmentTrend.title")}
             </h3>
             <p className="text-[11px] text-slate-500">
-              New profile registrations across all 11 sub-cities compared against wage employment, technology, and training support
+              {t("enrollmentTrend.subtitle")}
             </p>
           </div>
           {/* Legend */}
           <div className="flex items-center gap-3 text-[11px] font-medium text-slate-600">
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#0B1F3A]" />
-              New Registrations
+              {t("enrollmentTrend.registrations")}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#1769AA]" />
-              Interventions Delivered
+              {t("enrollmentTrend.placements")}
             </span>
           </div>
         </div>
@@ -95,17 +97,17 @@ export function WomenChartsSection({
                     if (active && payload && payload.length) {
                       return (
                         <div className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 shadow-md text-xs">
-                          <p className="font-semibold text-slate-900 font-mono mb-1">{label} Cohort</p>
+                          <p className="font-semibold text-slate-900 font-mono mb-1">{label}</p>
                           <div className="space-y-1">
                             <div className="flex items-center justify-between gap-4">
                               <span className="text-slate-500 flex items-center gap-1">
-                                <span className="size-2 rounded-xs bg-[#0B1F3A]" /> Registered:
+                                <span className="size-2 rounded-xs bg-[#0B1F3A]" /> {t("enrollmentTrend.registrations")}:
                               </span>
                               <span className="font-mono font-bold text-slate-900">{payload[0]?.value}</span>
                             </div>
                             <div className="flex items-center justify-between gap-4">
                               <span className="text-slate-500 flex items-center gap-1">
-                                <span className="size-2 rounded-xs bg-[#1769AA]" /> Supported:
+                                <span className="size-2 rounded-xs bg-[#1769AA]" /> {t("enrollmentTrend.placements")}:
                               </span>
                               <span className="font-mono font-bold text-slate-900">{payload[1]?.value}</span>
                             </div>
@@ -129,9 +131,9 @@ export function WomenChartsSection({
         <div>
           <div className="pb-2 border-b border-slate-100 flex items-center justify-between">
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Intervention Breakdown
+              {t("supportDistribution.title")}
             </h3>
-            <span className="text-[10px] text-slate-400 font-mono">All Sectors</span>
+            <span className="text-[10px] text-slate-400 font-mono">{t("supportDistribution.totalBeneficiaries")}</span>
           </div>
 
           {totalInterventions === 0 ? (
@@ -188,7 +190,7 @@ export function WomenChartsSection({
                   {totalInterventions}
                 </span>
                 <span className="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">
-                  Services
+                  {t("supportDistribution.totalBeneficiaries")}
                 </span>
               </div>
             </div>

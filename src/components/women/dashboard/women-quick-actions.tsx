@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import {
   Users,
   Landmark,
@@ -14,55 +15,57 @@ import {
 } from "lucide-react";
 
 export function WomenQuickActions() {
+  const t = useTranslations("women.dashboard.quickActionsList");
+
   const actions = [
     {
-      title: "Women Profiles Directory",
-      description: "Manage individual municipal profiles, career statuses and education records",
+      title: t("actions.profiles.title"),
+      description: t("actions.profiles.description"),
       href: "/women/profiles",
       icon: Users,
-      badge: "Registry",
+      badge: t("actions.profiles.badge"),
     },
     {
-      title: "Women Associations",
-      description: "Chartered grassroots associations, legal documentation and reviews",
+      title: t("actions.associations.title"),
+      description: t("actions.associations.description"),
       href: "/women/associations",
       icon: Landmark,
-      badge: "Cooperatives",
+      badge: t("actions.associations.badge"),
     },
     {
-      title: "Association Members",
-      description: "Cross-department individual membership directory and leadership roles",
+      title: t("actions.members.title"),
+      description: t("actions.members.description"),
       href: "/women/members",
       icon: Users,
-      badge: "Roster",
+      badge: t("actions.members.badge"),
     },
     {
-      title: "Support Interventions",
-      description: "Social and material support delivery logs, monitoring and beneficiary history",
+      title: t("actions.services.title"),
+      description: t("actions.services.description"),
       href: "/women/services",
       icon: HandHeart,
-      badge: "Interventions",
+      badge: t("actions.services.badge"),
     },
     {
-      title: "Association Support",
-      description: "Productive equipment, machinery and organizational grants to female entrepreneurs",
+      title: t("actions.technology.title"),
+      description: t("actions.technology.description"),
       href: "/women/technology",
       icon: Zap,
-      badge: "Support",
+      badge: t("actions.technology.badge"),
     },
     {
-      title: "Vocational Training",
-      description: "Entrepreneurship cohorts, skills certifications and attendance monitoring",
+      title: t("actions.training.title"),
+      description: t("actions.training.description"),
       href: "/women/training",
       icon: GraduationCap,
-      badge: "Capacity",
+      badge: t("actions.training.badge"),
     },
     {
-      title: "Employment Placements",
-      description: "Wage employment and self-employment cooperative linkages",
+      title: t("actions.employment.title"),
+      description: t("actions.employment.description"),
       href: "/women/employment",
       icon: Briefcase,
-      badge: "Economic",
+      badge: t("actions.employment.badge"),
     },
   ];
 
@@ -71,10 +74,10 @@ export function WomenQuickActions() {
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono flex items-center gap-1.5">
           <Layers className="size-3.5 text-[#1769AA]" />
-          PRIMARY MODULE WORKFLOWS &amp; DIRECTORIES
+          {t("title")}
         </h2>
         <span className="text-[11px] text-slate-400">
-          Direct navigation to core operations
+          {t("subtitle")}
         </span>
       </div>
 
@@ -105,7 +108,7 @@ export function WomenQuickActions() {
               </div>
 
               <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium text-[#1769AA]">
-                <span>Open module</span>
+                <span>{t("openModule")}</span>
                 <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
               </div>
             </Link>
