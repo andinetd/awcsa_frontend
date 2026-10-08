@@ -464,7 +464,61 @@
         "status": "ሁኔታ",
         "actions": "እርምጃዎች",
         "view": "ዝርዝር ይመልከቱ"
-      }
+      },
+      "breadcrumbs": {
+        "home": "መነሻ",
+        "socialAffairs": "ማህበራዊ ጉዳይ",
+        "edir": "የእድር ማህበራት"
+      },
+      "searchPlaceholder": "ስም፣ የምዝገባ ቁጥር፣ ባንክ፣ አድራሻ ፈልግ...",
+      "filtersButton": "ማጣሪያዎች",
+      "tabs": {
+        "all": "ሁሉም እድሮች",
+        "active": "ንቁ",
+        "renewal": "እድሳት የሚሹ",
+        "audit": "ተገዢነት የሚጠብቁ",
+        "sanctioned": "የተቀጡ / የታገዱ"
+      },
+      "advanced": {
+        "title": "ዝርዝር የአስተዳደር ማጣሪያዎች",
+        "reset": "ማጣሪያዎችን አጽዳ",
+        "subCity": "ክፍለ ከተማ",
+        "allSubCities": "ሁሉም ክፍለ ከተሞች",
+        "woreda": "ወረዳ",
+        "allWoredas": "ሁሉም ወረዳዎች",
+        "selectSubCityFirst": "መጀመሪያ ክፍለ ከተማ ይምረጡ",
+        "registrationLevel": "የምዝገባ ደረጃ",
+        "allLevels": "ሁሉም ደረጃዎች",
+        "compliance": "የተገዢነት ሁኔታ",
+        "allCompliance": "ሁሉም የተገዢነት ሁኔታዎች",
+        "audited": "በኦዲት ኮሚቴ የጸደቀ",
+        "assemblyApproved": "በጠቅላላ ጉባኤ የጸደቀ",
+        "hasBylaws": "ህገ-ደንብ ሰነድ ያለው",
+        "penaltyApplied": "በቅጣት የታደሰ",
+        "membershipSize": "የአባላት ብዛት",
+        "allSizes": "ሁሉም መጠኖች",
+        "small": "አነስተኛ (< 100 አባላት)",
+        "medium": "መካከለኛ (100 - 300 አባላት)",
+        "large": "ትልቅ (> 300 አባላት)",
+        "femaleLeadership": "ሴቶች በአመራርነት ያሉበት (ሴት አመራር > 0)"
+      },
+      "chips": {
+        "results": "ውጤቶች ({count} ከ {total}):",
+        "preset": "ምድብ: {tab}",
+        "search": "ፍለጋ: \"{query}\"",
+        "subCity": "ክፍለ ከተማ: {val}",
+        "woreda": "ወረዳ: {val}",
+        "level": "ደረጃ: {val}",
+        "status": "ሁኔታ: {val}",
+        "size": "መጠን: {val}",
+        "compliance": "ተገዢነት: {val}",
+        "femaleLeadership": "የሴቶች አመራር",
+        "clearAll": "ሁሉንም አጽዳ"
+      },
+      "genderCounts": "ወ: {male} | ሴ: {female}",
+      "woredaLabel": "ወረዳ {code}",
+      "kebeleLabel": "፣ ቀበሌ {code}",
+      "subCityWoredaKebele": "{subCity}፣ ወረዳ {woreda}{kebele}"
     },
     "form": {
       "createTitle": "አዲስ እድር መዝግብ",
@@ -527,7 +581,9 @@
       "messages": {
         "byLawsUploading": "ሰነድ በመጫን ላይ...",
         "byLawsUploaded": "የምስረታ ሰነድ / ህገ-ደንብ ተያይዟል",
-        "byLawsUploadError": "ሰነድ መጫን አልተሳካም"
+        "byLawsUploadError": "ሰነድ መጫን አልተሳካም",
+        "successCreate": "እድር በተሳካ ሁኔታ ተመዝግቧል",
+        "successUpdate": "የእድር መረጃ በተሳካ ሁኔታ ተዘምኗል"
       }
     },
     "edir": {
@@ -536,7 +592,7 @@
         "subtitle": "ባህላዊ የማኅበረሰብ ማኅበራትን ያስተዳድሩ",
         "search": "ፈልግ...",
         "loading": "የዕድር ማኅበራትን በመጫን ላይ...",
-"error": "የዕድር ማኅበራትን በመጫን ላይ ስህተት ተከስቷል።",
+        "error": "የዕድር ማኅበራትን በመጫን ላይ ስህተት ተከስቷል።",
         "noRecords": "ምንም የዕድር ማኅበራት አልተገኙም።",
         "pagination": "ከ {start} እስከ {end} ከጠቅላላ {total} ግቤቶች በማሳየት ላይ",
         "previous": "ቀዳሚ",
@@ -844,8 +900,21 @@
     "dashboard": {
       "title": "የዕድር ዳሽቦርድ",
       "subtitle": "የምዝገባ እና የእውቅና አጠቃላይ እይታ",
-      "loading": "ዳሽቦርድን በመጫን ላይ...",
-      "recent": "የቅርብ ጊዜ ምዝገባዎች",
+      "loading": "የባህላዊ እድር እና የማህበረሰብ ምክር ቤቶች ዳሽቦርድ በመጫን ላይ...",
+      "recent": {
+        "title": "የቅርብ ጊዜ የእድር ማህበራት እና እውቅናዎች",
+        "subtitle": "የቅርብ ጊዜ የማዘጋጃ ቤት ምዝገባዎች፣ የፈቃድ እድሳቶች እና የሁኔታ ለውጦች",
+        "viewAll": "ሁሉንም እድሮች ይመልከቱ",
+        "noRecords": "ምንም የቅርብ ጊዜ የእድር መረጃዎች አልተገኙም",
+        "name": "የማህበሩ ስም",
+        "regNumber": "የምዝገባ ቁጥር",
+        "subCityWoreda": "ክፍለ ከተማ / ወረዳ",
+        "estYear": "የተመሰረተበት ዓመት",
+        "status": "የእውቅና ሁኔታ",
+        "action": "ተግባር",
+        "dossier": "ዶሴ",
+        "woreda": "ወረዳ {code}"
+      },
       "noRecords": "ምንም የእድር ማህበራት አልተገኙም።",
       "councilsTitle": "የእድር ምክር ቤቶች",
       "councilsSubtitle": "የምክር ቤት ምዝገባ እና የእውቅና አጠቃላይ እይታ",
@@ -868,6 +937,98 @@
         "EXPIRED": "ጊዜ ያለፈ",
         "REVOKED": "የተሰረዘ",
         "CANCELLED": "የተቋረጠ"
+      },
+      "header": {
+        "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+        "bureau": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+        "directorate": "ባህላዊ እድርና ማህበረሰብ ማህበራት",
+        "title": "ባህላዊ የእድር ማህበራት እና የማህበረሰብ ምክር ቤቶች",
+        "subtitle": "በአዲስ አበባ ከተማ ማህበራት የማዘጋጃ ቤት እውቅና፣ ዓመታዊ ህጋዊ እድሳት፣ ተቋማዊ ቁጥጥር እና የተዋሃደ ምክር ቤት ውክልና።",
+        "directorateBadge": "የማዘጋጃ ቤት ዳይሬክቶሬት",
+        "officialRegister": "ይፋዊ የማዘጋጃ ቤት መዝገብ",
+        "directiveBadge": "መመሪያ ቁጥር 151/2016 መሰረት ያደረገ",
+        "refresh": "አድስ",
+        "printBrief": "አጭር መግለጫ አትም",
+        "newCouncil": "አዲስ ምክር ቤት",
+        "registerEdir": "እድር መዝግብ"
+      },
+      "kpis": {
+        "sectionTitle": "የአመራር ማጠቃለያ ውጤት",
+        "sectionSubtitle": "የእውቅና፣ የህብረት እና የተጠቃሚዎች ሽፋን አጠቃላይ ስታቲስቲክስ",
+        "totalEdirsTitle": "ጠቅላላ የተመዘገቡ እድሮች",
+        "totalEdirsSub": "{active} ንቁ • {expired} ጊዜ ያለፈባቸው",
+        "directoryBadge": "ማውጫ",
+        "activeStandingTitle": "ንቁ ህጋዊ አቋም",
+        "activeStandingSub": "{rate}% አጠቃላይ የማዘጋጃ ቤት ተገዢነት ምጣኔ",
+        "accreditedBadge": "{rate}% እውቅና ያለው",
+        "umbrellaCouncilsTitle": "አስተባባሪ ምክር ቤቶች",
+        "umbrellaCouncilsSub": "እድሮችን የሚያስተባብሩ የወረዳ እና የክፍለ ከተማ ምክር ቤቶች",
+        "councilsBadge": "ምክር ቤቶች",
+        "communityReachTitle": "የማህበረሰብ ተደራሽነት",
+        "communityReachSub": "{femalePct}% ሴቶች ({female}) • {malePct}% ወንዶች ({male})",
+        "citizenBaseBadge": "የአባላት ቁጥር",
+        "actionDocketTitle": "ትኩረት የሚሹ (ተገዢነት)",
+        "actionDocketSub": "{expired} እድሳት ያለፈባቸው • {revoked} የተቀጡ",
+        "actionRequiredBadge": "እርምጃ ያስፈልጋል",
+        "compliantBadge": "ተገዢ"
+      },
+      "charts": {
+        "inflowTitle": "ወርሃዊ የእድር ምዝገባ ከአመታዊ የፈቃድ እድሳት አንጻር",
+        "inflowSubtitle": "አዳዲስ የማህበር ምዝገባ ማመልከቻዎች ከአመታዊ የፈቃድ እድሳት ማረጋገጫዎች ጋር ንፅፅር",
+        "newRegistrations": "አዳዲስ ምዝገባዎች",
+        "annualRenewals": "አመታዊ እድሳቶች",
+        "monthSummary": "የ{month} ማጠቃለያ",
+        "newEdirs": "አዳዲስ እድሮች:",
+        "renewals": "እድሳቶች:",
+        "noIntakeData": "እስካሁን ምንም የምዝገባ መረጃ አልተመዘገበም",
+        "noIntakeSub": "የእድር ማህበራት በመዝገቡ ውስጥ ሲመዘገቡ፣ ወርሃዊ የምዝገባ እና የእድሳት አዝማሚያዎች እዚህ ይታያሉ።",
+        "accreditationTitle": "የእውቅና ሁኔታ",
+        "edirsCount": "{count} እድሮች",
+        "accreditationSub": "የህጋዊ እውቅና እና የቁጥጥር ሁኔታ ዝርዝር",
+        "associations": "ማህበራት",
+        "noAssociations": "በመዝገቡ ውስጥ ምንም ማህበራት የሉም",
+        "zeroRecords": "0 መረጃዎች አሉ",
+        "activeAccreditation": "ንቁ እውቅና",
+        "expiredLicenses": "ጊዜ ያለፈባቸው ፈቃዶች",
+        "revokedSanctioned": "የታገዱ / የተቀጡ",
+        "cancelledDissolved": "የተሰረዙ / የፈረሱ"
+      },
+      "matrix": {
+        "title": "የክፍለ ከተማ እድር እና ምክር ቤት ጥምረት ማትሪክስ",
+        "subtitle": "በአዲስ አበባ ከተማ ያሉ የማህበረሰብ እድሮች፣ የተዋቀሩ ምክር ቤቶች እና የተመዘገቡ አባላት ዝርዝር",
+        "subCitiesCount": "11 ክፍለ ከተሞች",
+        "subCityAdmin": "ክፍለ ከተማ አስተዳደር",
+        "registeredEdirs": "የተመዘገቡ እድሮች",
+        "activeStanding": "ንቁ አቋም ያላቸው",
+        "federatedCouncils": "የተዋቀሩ ምክር ቤቶች",
+        "recordedMembers": "የተመዘገቡ አባላት",
+        "accreditationStatus": "የእውቅና ሁኔታ",
+        "totalCensus": "የአዲስ አበባ ከተማ አጠቃላይ ድምር",
+        "compliantRate": "{rate}% ተገዢ",
+        "noRecords": "መረጃ የለም",
+        "ratings": {
+          "COMPLIANT": "ተገዢ",
+          "PARTIAL": "ከፊል",
+          "AUDIT_REQUIRED": "ኦዲት የሚያስፈልገው",
+          "NO_RECORDS": "መረጃ የለም"
+        }
+      },
+      "quickActions": {
+        "sectionTitle": "ዋና ዋና የእድር ሞጁሎች እና የስራ ሂደቶች",
+        "sectionSubtitle": "ወደ ዋና የመረጃ መዝገቦች ቀጥተኛ አቅጣጫ",
+        "openWorkspace": "ሞጁሉን ክፈት",
+        "registryTitle": "የእድር ማህበራት መዝገብ",
+        "registryDesc": "የተረጋገጡ ባህላዊ ማህበራት፣ የምዝገባ ቁጥሮች፣ ህገ-ደንቦች እና የአመራር መገለጫዎች ማውጫ",
+        "registryBadge": "ዋና መዝገብ",
+        "councilsTitle": "የእድር ምክር ቤቶች አስተዳደር",
+        "councilsDesc": "የስር ማህበራትን የሚወክሉ የክፍለ ከተማ እና የወረዳ አስተባባሪ ምክር ቤቶች፣ ቻርተሮች እና የስራ አስፈፃሚ ኮሚቴዎች",
+        "councilsBadge": "ምክር ቤት",
+        "renewalTitle": "የፈቃድ እድሳት መዝገብ",
+        "renewalDesc": "ዓመታዊ የፈቃድ ማረጋገጫ፣ ህጋዊ የምስክር ወረቀት ድጋሚ መስጠት፣ የተገዢነት ኦዲት እና የቅጣት አወሳሰን",
+        "renewalBadge": "የእድሳት ኦዲት",
+        "complianceTitle": "የህግ ተገዢነት እና ቅጣቶች",
+        "complianceDesc": "የታገዱ፣ የተሰረዙ ወይም የፈረሱ ማህበራት ክትትል፣ የሙግት አፈታት እና የህግ ማስከበር ስራዎች",
+        "complianceBadge": "ህግ ማስከበር"
       }
     },
     "councils": {
@@ -1027,11 +1188,93 @@
         "LAWS_VIOLATION": "ደንቦችን ወይም ህጎችን መጣስ",
         "LICENSE_MISUSE": "ፍቃዱን ከዓላማው ውጭ መጠቀም",
         "FALSE_DOCUMENTS": "በሐሰተኛ ሰነዶች መመዝገብ"
+      },
+      "breadcrumbs": {
+        "home": "መነሻ",
+        "socialAffairs": "ማህበራዊ ጉዳይ",
+        "councils": "የእድር ምክር ቤቶች"
+      },
+      "filterLabels": {
+        "level": "ደረጃ:",
+        "status": "ሁኔታ:"
+      },
+      "counts": {
+        "edirSingle": "እድር",
+        "edirMultiple": "እድሮች",
+        "memberEdirSingle": "አባል እድር",
+        "memberEdirMultiple": "አባል እድሮች"
+      },
+      "subCityWide": "በክፍለ ከተማ አቀፍ",
+      "chairpersonTitle": "ሊቀመንበር",
+      "manageLeaders": "አመራር ያስተዳድሩ",
+      "executiveCommitteeCount": "የስራ አስፈፃሚ ኮሚቴ ({count})",
+      "reportModal": {
+        "levelTitle": "የምዝገባ ደረጃ",
+        "statusTitle": "የእውቅና ሁኔታ",
+        "levels": {
+          "all": "ሁሉም ደረጃዎች",
+          "WOREDA": "የወረዳ ደረጃ",
+          "SUB_CITY": "የክፍለ ከተማ ደረጃ",
+          "CITY": "የከተማ ደረጃ"
+        },
+        "statuses": {
+          "all": "ሁሉም ሁኔታዎች",
+          "ACTIVE": "ንቁ",
+          "EXPIRED": "ጊዜ ያለፈበት",
+          "REVOKED": "የተሰረዘ",
+          "CANCELLED": "የተቋረጠ"
+        }
+      },
+      "leadershipDialog": {
+        "title": "የምክር ቤቱ አመራር እና ስራ አስፈፃሚ ኮሚቴ",
+        "description": "የዚህን ምክር ቤት የተመረጡ ሊቀመንበሮች፣ ስራ አስፈፃሚዎች እና የኮሚቴ አባላት ያስተዳድሩ።",
+        "addLeaderButton": "የአመራር አባል ጨምር",
+        "emptyTitle": "እስካሁን የተመዘገበ የስራ አስፈፃሚ አባል የለም",
+        "emptyDesc": "ምክትል ሰብሳቢዎችን፣ ፀሐፊዎችን፣ ገንዘብ ያዦችን እና አስተባባሪዎችን በመሾም የምክር ቤቱን አመራር ያዋቅሩ።",
+        "leaderNumber": "አመራር #{index}",
+        "fullName": "ሙሉ ስም",
+        "role": "የስራ ሃላፊነት / ማዕረግ",
+        "phone": "ስልክ ቁጥር",
+        "address": "የጽህፈት ቤት አድራሻ",
+        "remove": "አስወግድ",
+        "cancel": "ሰርዝ",
+        "save": "አመራሩን መዝግብ",
+        "saving": "በማስቀመጥ ላይ...",
+        "success": "የምክር ቤት አመራር አባላት በተሳካ ሁኔታ ተዘምነዋል",
+        "error": "የምክር ቤት አመራር አባላትን ማስቀመጥ አልተቻለም"
+      },
+      "commonRoles": {
+        "Chairperson": "ሊቀመንበር",
+        "Vice Chairperson": "ምክትል ሊቀመንበር",
+        "Secretary": "ዋና ፀሐፊ",
+        "Treasurer": "ገንዘብ ያዥ",
+        "Auditor": "የሂሳብ ኦዲተር",
+        "Public Relations Officer": "የህዝብ ግንኙነት ሃላፊ",
+        "Discipline & Ethics Committee": "የስነ-ምግባርና ዲሲፕሊን ኮሚቴ",
+        "Women Affairs Coordinator": "የሴቶች ጉዳይ አስተባባሪ",
+        "Youth Representative": "የወጣቶች ተወካይ",
+        "Executive Member": "የስራ አስፈፃሚ አባል",
+        "Legal Advisor": "የህግ አማካሪ"
       }
     },
     "location": {
       "loading": "አማራጮችን በመጫን ላይ...",
       "woredaCode": "ወረዳ {code}"
+    }
+  },
+  "subCities": {
+    "names": {
+      "Bole": "ቦሌ",
+      "Yeka": "የካ",
+      "Kirkos": "ቂርቆስ",
+      "Arada": "አራዳ",
+      "Gulele": "ጉለሌ",
+      "Lideta": "ልደታ",
+      "Nifas Silk-Lafto": "ንፋስ ስልክ ላፍቶ",
+      "Kolfe Keranio": "ኮልፌ ቀራኒዮ",
+      "Akaky Kaliti": "አቃቂ ቃሊቲ",
+      "Addis Ketema": "አዲስ ከተማ",
+      "Lemi Kura": "ለሚ ኩራ"
     }
   }
 }

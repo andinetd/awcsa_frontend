@@ -464,7 +464,61 @@
         "status": "Status",
         "actions": "Actions",
         "view": "View Details"
-      }
+      },
+      "breadcrumbs": {
+        "home": "Home",
+        "socialAffairs": "Social Affairs",
+        "edir": "Edir Associations"
+      },
+      "searchPlaceholder": "Search name, reg #, bank, location...",
+      "filtersButton": "Filters",
+      "tabs": {
+        "all": "All Edirs",
+        "active": "Active",
+        "renewal": "Needs Renewal",
+        "audit": "Pending Compliance",
+        "sanctioned": "Sanctioned"
+      },
+      "advanced": {
+        "title": "Advanced Administrative Filters",
+        "reset": "Reset All Filters",
+        "subCity": "Sub-City",
+        "allSubCities": "All Sub-Cities",
+        "woreda": "Woreda",
+        "allWoredas": "All Woredas",
+        "selectSubCityFirst": "Select Sub-City first",
+        "registrationLevel": "Registration Level",
+        "allLevels": "All Levels",
+        "compliance": "Compliance Status",
+        "allCompliance": "All Compliance",
+        "audited": "Audit Committee Approved",
+        "assemblyApproved": "General Assembly Approved",
+        "hasBylaws": "Has By-Laws Document",
+        "penaltyApplied": "Late Penalty Applied",
+        "membershipSize": "Membership Size",
+        "allSizes": "All Sizes",
+        "small": "Small (< 100 members)",
+        "medium": "Medium (100 - 300)",
+        "large": "Large (> 300 members)",
+        "femaleLeadership": "Women in Executive Leadership (managementFemale > 0)"
+      },
+      "chips": {
+        "results": "Results ({count} of {total}):",
+        "preset": "Preset: {tab}",
+        "search": "Search: \"{query}\"",
+        "subCity": "Sub-City: {val}",
+        "woreda": "Woreda: {val}",
+        "level": "Level: {val}",
+        "status": "Status: {val}",
+        "size": "Size: {val}",
+        "compliance": "Compliance: {val}",
+        "femaleLeadership": "Female Leadership",
+        "clearAll": "Clear All"
+      },
+      "genderCounts": "M: {male} | F: {female}",
+      "woredaLabel": "Woreda {code}",
+      "kebeleLabel": ", Kebele {code}",
+      "subCityWoredaKebele": "{subCity}, Woreda {woreda}{kebele}"
     },
     "form": {
       "createTitle": "Register New Edir",
@@ -527,7 +581,9 @@
       "messages": {
         "byLawsUploading": "Uploading document...",
         "byLawsUploaded": "By-laws / founding document attached",
-        "byLawsUploadError": "Failed to upload document"
+        "byLawsUploadError": "Failed to upload document",
+        "successCreate": "Edir registered successfully",
+        "successUpdate": "Edir updated successfully"
       }
     },
     "edir": {
@@ -536,7 +592,7 @@
         "subtitle": "Manage traditional community associations",
         "search": "Search...",
         "loading": "Loading Edir associations...",
-"error": "Error loading Edir associations.",
+        "error": "Error loading Edir associations.",
         "noRecords": "No Edir associations found.",
         "pagination": "Showing {start} to {end} of {total} entries",
         "previous": "Previous",
@@ -844,8 +900,21 @@
     "dashboard": {
       "title": "Edir Dashboard",
       "subtitle": "Registration and accreditation overview",
-      "loading": "Loading dashboard...",
-      "recent": "Recent Registrations",
+      "loading": "Loading Traditional Edir & Community Councils dashboard...",
+      "recent": {
+        "title": "Recent Edir Associations & Accreditations",
+        "subtitle": "Latest municipal registrations, legal license renewals, and status updates",
+        "viewAll": "View All Edirs",
+        "noRecords": "No recent Edir records found",
+        "name": "Association Name",
+        "regNumber": "Registration & Number",
+        "subCityWoreda": "Sub-City / Woreda",
+        "estYear": "Establishment Year",
+        "status": "Accreditation Status",
+        "action": "Action",
+        "dossier": "Dossier",
+        "woreda": "Woreda {code}"
+      },
       "noRecords": "No Edir associations found.",
       "councilsTitle": "Edir Councils",
       "councilsSubtitle": "Council registration and accreditation overview",
@@ -868,6 +937,98 @@
         "EXPIRED": "Expired",
         "REVOKED": "Revoked",
         "CANCELLED": "Cancelled"
+      },
+      "header": {
+        "cityAdmin": "ADDIS ABABA CITY ADMINISTRATION",
+        "bureau": "BUREAU OF WOMEN & SOCIAL AFFAIRS",
+        "directorate": "TRADITIONAL EDIR & COMMUNITY ASSOCIATIONS",
+        "title": "Traditional Edir Associations & Community Councils",
+        "subtitle": "Municipal accreditation, annual legal renewal, institutional oversight, and federated council representation across Addis Ababa grassroots associations.",
+        "directorateBadge": "Municipal Directorate",
+        "officialRegister": "Official Municipal Register",
+        "directiveBadge": "Directive No. 151/2016 Compliant",
+        "refresh": "Refresh",
+        "printBrief": "Print Brief",
+        "newCouncil": "New Council",
+        "registerEdir": "Register Edir"
+      },
+      "kpis": {
+        "sectionTitle": "EXECUTIVE MUNICIPAL SCORECARD",
+        "sectionSubtitle": "Consolidated accreditation, federation & citizen coverage statistics",
+        "totalEdirsTitle": "Total Registered Edirs",
+        "totalEdirsSub": "{active} Active • {expired} Expired",
+        "directoryBadge": "DIRECTORY",
+        "activeStandingTitle": "Active Legal Standing",
+        "activeStandingSub": "{rate}% overall municipal compliance rate",
+        "accreditedBadge": "{rate}% ACCREDITED",
+        "umbrellaCouncilsTitle": "Umbrella Councils",
+        "umbrellaCouncilsSub": "Woreda & sub-city federated councils coordinating edirs",
+        "councilsBadge": "COUNCILS",
+        "communityReachTitle": "Recorded Community Reach",
+        "communityReachSub": "{femalePct}% Women ({female}) • {malePct}% Men ({male})",
+        "citizenBaseBadge": "CITIZEN BASE",
+        "actionDocketTitle": "Action Docket (Compliance)",
+        "actionDocketSub": "{expired} Overdue Renewal • {revoked} Sanctioned",
+        "actionRequiredBadge": "ACTION REQUIRED",
+        "compliantBadge": "COMPLIANT"
+      },
+      "charts": {
+        "inflowTitle": "Monthly Edir Registration vs. Annual License Renewals",
+        "inflowSubtitle": "New community association charter applications compared against municipal renewal certifications",
+        "newRegistrations": "New Registrations",
+        "annualRenewals": "Annual Renewals",
+        "monthSummary": "{month} Summary",
+        "newEdirs": "New Edirs:",
+        "renewals": "Renewals:",
+        "noIntakeData": "No periodic registration inflow data recorded yet",
+        "noIntakeSub": "As Edir associations are registered in the municipal directory, monthly registration and renewal trends will dynamically appear here.",
+        "accreditationTitle": "Accreditation Status",
+        "edirsCount": "{count} EDIRS",
+        "accreditationSub": "Legal certification & regulatory standing breakdown",
+        "associations": "Associations",
+        "noAssociations": "No associations in registry",
+        "zeroRecords": "0 records available",
+        "activeAccreditation": "Active Accreditation",
+        "expiredLicenses": "Expired Licenses",
+        "revokedSanctioned": "Revoked / Sanctioned",
+        "cancelledDissolved": "Cancelled / Dissolved"
+      },
+      "matrix": {
+        "title": "Municipal Sub-City Edir & Council Federation Matrix",
+        "subtitle": "Grassroots community associations census, federated councils, and recorded membership across Addis Ababa",
+        "subCitiesCount": "11 Municipal Sub-Cities",
+        "subCityAdmin": "Sub-City Administration",
+        "registeredEdirs": "Registered Edirs",
+        "activeStanding": "Active Standing",
+        "federatedCouncils": "Federated Councils",
+        "recordedMembers": "Recorded Members",
+        "accreditationStatus": "Accreditation Status",
+        "totalCensus": "Total Addis Ababa Census",
+        "compliantRate": "{rate}% Compliant",
+        "noRecords": "No Records",
+        "ratings": {
+          "COMPLIANT": "COMPLIANT",
+          "PARTIAL": "PARTIAL",
+          "AUDIT_REQUIRED": "AUDIT REQUIRED",
+          "NO_RECORDS": "NO RECORDS"
+        }
+      },
+      "quickActions": {
+        "sectionTitle": "PRIMARY EDIR MODULES & GOVERNANCE WORKFLOWS",
+        "sectionSubtitle": "Direct navigation to operational registers",
+        "openWorkspace": "Open module workspace",
+        "registryTitle": "Edir Associations Registry",
+        "registryDesc": "Comprehensive directory of verified traditional community associations, registration numbers, bylaws, and leadership profiles",
+        "registryBadge": "PRIMARY REGISTRY",
+        "councilsTitle": "Federated Councils Governance",
+        "councilsDesc": "Sub-city and woreda umbrella councils representing affiliated grassroots edirs, council charters, and executive committees",
+        "councilsBadge": "FEDERATION",
+        "renewalTitle": "Accreditation Renewal Docket",
+        "renewalDesc": "Annual license verification, legal charter reissue, compliance audits, and penalty assessments for expired associations",
+        "renewalBadge": "RENEWAL AUDIT",
+        "complianceTitle": "Regulatory Sanctions & Compliance",
+        "complianceDesc": "Oversight of sanctioned, revoked, or dissolved associations, dispute resolution findings, and regulatory enforcement",
+        "complianceBadge": "ENFORCEMENT"
       }
     },
     "councils": {
@@ -1027,11 +1188,93 @@
         "LAWS_VIOLATION": "Violation of rules or laws",
         "LICENSE_MISUSE": "Use of license outside its purpose",
         "FALSE_DOCUMENTS": "Registered with false documents"
+      },
+      "breadcrumbs": {
+        "home": "Home",
+        "socialAffairs": "Social Affairs",
+        "councils": "Edir Councils"
+      },
+      "filterLabels": {
+        "level": "Level:",
+        "status": "Status:"
+      },
+      "counts": {
+        "edirSingle": "edir",
+        "edirMultiple": "edirs",
+        "memberEdirSingle": "member edir",
+        "memberEdirMultiple": "member edirs"
+      },
+      "subCityWide": "Sub-city wide",
+      "chairpersonTitle": "Chairperson",
+      "manageLeaders": "Manage Leaders",
+      "executiveCommitteeCount": "Executive Committee ({count})",
+      "reportModal": {
+        "levelTitle": "Registration Level",
+        "statusTitle": "Accreditation Status",
+        "levels": {
+          "all": "All Levels",
+          "WOREDA": "Woreda Level",
+          "SUB_CITY": "Sub-City Level",
+          "CITY": "City Level"
+        },
+        "statuses": {
+          "all": "All Statuses",
+          "ACTIVE": "Active",
+          "EXPIRED": "Expired",
+          "REVOKED": "Revoked",
+          "CANCELLED": "Cancelled"
+        }
+      },
+      "leadershipDialog": {
+        "title": "Council Leadership & Executive Committee",
+        "description": "Manage elected chairpersons, executive officers, and committee members for this council.",
+        "addLeaderButton": "Add Leadership Member",
+        "emptyTitle": "No executive committee members registered yet",
+        "emptyDesc": "Appoint vice-chairpersons, secretaries, treasurers, and coordinators to structure this council's leadership.",
+        "leaderNumber": "Leader #{index}",
+        "fullName": "Full Name",
+        "role": "Role / Position",
+        "phone": "Phone Number",
+        "address": "Office / Address",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "save": "Save Leadership",
+        "saving": "Saving...",
+        "success": "Council leadership updated successfully",
+        "error": "Failed to update council leadership"
+      },
+      "commonRoles": {
+        "Chairperson": "Chairperson",
+        "Vice Chairperson": "Vice Chairperson",
+        "Secretary": "Secretary",
+        "Treasurer": "Treasurer",
+        "Auditor": "Auditor",
+        "Public Relations Officer": "Public Relations Officer",
+        "Discipline & Ethics Committee": "Discipline & Ethics Committee",
+        "Women Affairs Coordinator": "Women Affairs Coordinator",
+        "Youth Representative": "Youth Representative",
+        "Executive Member": "Executive Member",
+        "Legal Advisor": "Legal Advisor"
       }
     },
     "location": {
       "loading": "Loading options...",
       "woredaCode": "Woreda {code}"
+    }
+  },
+  "subCities": {
+    "names": {
+      "Bole": "Bole",
+      "Yeka": "Yeka",
+      "Kirkos": "Kirkos",
+      "Arada": "Arada",
+      "Gulele": "Gulele",
+      "Lideta": "Lideta",
+      "Nifas Silk-Lafto": "Nifas Silk-Lafto",
+      "Kolfe Keranio": "Kolfe Keranio",
+      "Akaky Kaliti": "Akaky Kaliti",
+      "Addis Ketema": "Addis Ketema",
+      "Lemi Kura": "Lemi Kura"
     }
   }
 }
