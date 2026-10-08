@@ -280,12 +280,12 @@ export default function AssociationsPage() {
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-3">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("institutionalBanner.cityAdmin")}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("institutionalBanner.bureau")}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Women Development &amp; Support
+            {t("institutionalBanner.sector")}
           </span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -327,7 +327,7 @@ export default function AssociationsPage() {
               onClick={() => setShowAdvancedFilters((prev) => !prev)}
             >
               <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
-              <span>Filters</span>
+              <span>{t("filters.button")}</span>
               {activeFiltersCount > 0 && (
                 <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
                   {activeFiltersCount}
@@ -343,28 +343,28 @@ export default function AssociationsPage() {
       {/* ── Workflow Preset Tabs ────────────────────────────────────────────── */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
         {[
-          { id: "ALL" as const, label: "All Associations", count: tabCounts.ALL },
+          { id: "ALL" as const, label: t("tabs.all"), count: tabCounts.ALL },
           {
             id: "APPROVED" as const,
-            label: "Approved & Active",
+            label: t("tabs.approved"),
             count: tabCounts.APPROVED,
             color: "text-emerald-700 bg-emerald-50",
           },
           {
             id: "SUBMITTED" as const,
-            label: "Under Review",
+            label: t("tabs.submitted"),
             count: tabCounts.SUBMITTED,
             color: "text-amber-700 bg-amber-50",
           },
           {
             id: "DRAFT" as const,
-            label: "Draft Registrations",
+            label: t("tabs.draft"),
             count: tabCounts.DRAFT,
             color: "text-slate-700 bg-slate-100",
           },
           {
             id: "REJECTED" as const,
-            label: "Rejected",
+            label: t("tabs.rejected"),
             count: tabCounts.REJECTED,
             color: "text-rose-700 bg-rose-50",
           },
@@ -405,7 +405,7 @@ export default function AssociationsPage() {
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
-                Advanced Location &amp; Association Filters
+                {t("filters.title")}
               </span>
             </div>
             {hasActiveFilters && (
@@ -414,7 +414,7 @@ export default function AssociationsPage() {
                 className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>Reset All Filters</span>
+                <span>{t("filters.resetAll")}</span>
               </button>
             )}
           </div>
@@ -423,7 +423,7 @@ export default function AssociationsPage() {
             {/* Sub-City Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Sub-City
+                {t("filters.subCity")}
               </label>
               <Select
                 value={subCityFilter}
@@ -434,11 +434,11 @@ export default function AssociationsPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sub-Cities" />
+                  <SelectValue placeholder={t("filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Sub-Cities
+                    {t("filters.allSubCities")}
                   </SelectItem>
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
@@ -452,7 +452,7 @@ export default function AssociationsPage() {
             {/* Woreda Selector (Cascading) */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Woreda
+                {t("filters.woreda")}
               </label>
               <Select
                 value={woredaFilter}
@@ -466,18 +466,18 @@ export default function AssociationsPage() {
                   <SelectValue
                     placeholder={
                       subCityFilter === "ALL" || !subCityFilter
-                        ? "Select Sub-City first"
-                        : "All Woredas"
+                        ? t("filters.selectSubCityFirst")
+                        : t("filters.allWoredas")
                     }
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Woredas
+                    {t("filters.allWoredas")}
                   </SelectItem>
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
-                      Woreda {w.code}
+                      {t("table.woreda", { defaultValue: "Woreda" })} {w.code}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -487,7 +487,7 @@ export default function AssociationsPage() {
             {/* Association Type */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Association Type
+                {t("filters.associationType")}
               </label>
               <Select
                 value={filterType}
@@ -515,7 +515,7 @@ export default function AssociationsPage() {
             {/* Active Status */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Activity Status
+                {t("filters.activityStatus")}
               </label>
               <Select
                 value={activeFilter}
@@ -525,17 +525,17 @@ export default function AssociationsPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Activity Statuses" />
+                  <SelectValue placeholder={t("filters.allStatuses")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Statuses
+                    {t("filters.allStatuses")}
                   </SelectItem>
                   <SelectItem value="ACTIVE" className="text-xs rounded-xs">
-                    Active Records Only
+                    {t("filters.activeOnly")}
                   </SelectItem>
                   <SelectItem value="INACTIVE" className="text-xs rounded-xs">
-                    Inactive Records
+                    {t("filters.inactiveOnly")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -548,7 +548,7 @@ export default function AssociationsPage() {
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs font-mono font-bold text-slate-500 mr-1">
-            Results ({filteredData.length} of {records.length}):
+            {t("filters.resultsCount", { count: filteredData.length, total: records.length })}
           </span>
 
           {presetTab !== "ALL" && (
@@ -556,7 +556,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Status: {presetTab}</span>
+              <span>{t("chips.status", { status: t(`status.${presetTab}`) })}</span>
               <button
                 onClick={() => setPresetTab("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -571,7 +571,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <span>{t("chips.search", { query: debouncedSearch })}</span>
               <button
                 onClick={() => setSearch("")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -586,7 +586,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Sub-City: {subCityFilter}</span>
+              <span>{t("chips.subCity", { name: subCityFilter })}</span>
               <button
                 onClick={() => {
                   setSubCityFilter("ALL");
@@ -604,7 +604,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Woreda: {woredaFilter}</span>
+              <span>{t("chips.woreda", { name: woredaFilter })}</span>
               <button
                 onClick={() => setWoredaFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -619,7 +619,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Type: {t(`types.${filterType}`)}</span>
+              <span>{t("chips.type", { type: t(`types.${filterType}`) })}</span>
               <button
                 onClick={() => setFilterType("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -634,7 +634,7 @@ export default function AssociationsPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>{activeFilter === "ACTIVE" ? "Active Only" : "Inactive Only"}</span>
+              <span>{activeFilter === "ACTIVE" ? t("chips.activeOnly") : t("chips.inactiveOnly")}</span>
               <button
                 onClick={() => setActiveFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -653,7 +653,7 @@ export default function AssociationsPage() {
             className="h-7 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
           >
             <RotateCcw className="w-3 h-3 mr-1" />
-            <span>Clear Filters</span>
+            <span>{t("filters.clearAll")}</span>
           </Button>
         )}
       </div>

@@ -403,12 +403,12 @@ export default function ProfilesPage() {
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("womenList.institutionalBanner.cityAdmin")}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("womenList.institutionalBanner.bureau")}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Women Development &amp; Support
+            {t("womenList.institutionalBanner.sector")}
           </span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -424,7 +424,7 @@ export default function ProfilesPage() {
               <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 type="search"
-                placeholder="Search name, city ID, phone, address, career..."
+                placeholder={t("womenList.searchPlaceholder")}
                 className="pl-8 pr-7 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -454,7 +454,7 @@ export default function ProfilesPage() {
               onClick={() => setShowAdvancedFilters((prev) => !prev)}
             >
               <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
-              <span>Filters</span>
+              <span>{t("womenList.filters.button")}</span>
               {activeFiltersCount > 0 && (
                 <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
                   {activeFiltersCount}
@@ -469,28 +469,28 @@ export default function ProfilesPage() {
       {/* ── Workflow Preset Tabs ────────────────────────────────────────────── */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
         {[
-          { id: "ALL" as const, label: "All Profiles", count: tabCounts.all },
+          { id: "ALL" as const, label: t("womenList.tabs.all"), count: tabCounts.all },
           {
             id: "UNEMPLOYED" as const,
-            label: "Seeking Employment",
+            label: t("womenList.tabs.unemployed"),
             count: tabCounts.unemployed,
             color: "text-amber-700 bg-amber-50",
           },
           {
             id: "EMPLOYED" as const,
-            label: "Employed / Self-Employed",
+            label: t("womenList.tabs.employed"),
             count: tabCounts.employed,
             color: "text-emerald-700 bg-emerald-50",
           },
           {
             id: "PENDING" as const,
-            label: "Pending Approval",
+            label: t("womenList.tabs.pending"),
             count: tabCounts.pending,
             color: "text-indigo-700 bg-indigo-50",
           },
           {
             id: "ACTIVE" as const,
-            label: "Active Beneficiaries",
+            label: t("womenList.tabs.active"),
             count: tabCounts.active,
             color: "text-blue-700 bg-blue-50",
           },
@@ -531,16 +531,16 @@ export default function ProfilesPage() {
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
-                Advanced Demographic &amp; Location Filters
+                {t("womenList.filters.title")}
               </span>
             </div>
             {hasActiveFilters && (
               <button
                 onClick={resetAllFilters}
-                className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
+                className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>Reset All Filters</span>
+                <span>{t("womenList.filters.resetAll")}</span>
               </button>
             )}
           </div>
@@ -549,7 +549,7 @@ export default function ProfilesPage() {
             {/* Sub-City Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Sub-City
+                {t("womenList.filters.subCity")}
               </label>
               <Select
                 value={selectedSubCity}
@@ -560,11 +560,11 @@ export default function ProfilesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sub-Cities" />
+                  <SelectValue placeholder={t("womenList.filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Sub-Cities
+                    {t("womenList.filters.allSubCities")}
                   </SelectItem>
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
@@ -578,7 +578,7 @@ export default function ProfilesPage() {
             {/* Woreda Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Woreda
+                {t("womenList.filters.woreda")}
               </label>
               <Select
                 value={selectedWoreda}
@@ -592,18 +592,18 @@ export default function ProfilesPage() {
                   <SelectValue
                     placeholder={
                       selectedSubCity === "ALL"
-                        ? "Select Sub-City first"
-                        : "All Woredas"
+                        ? t("womenList.filters.selectSubCityFirst")
+                        : t("womenList.filters.allWoredas")
                     }
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Woredas
+                    {t("womenList.filters.allWoredas")}
                   </SelectItem>
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
-                      Woreda {w.code}
+                      {t("form.woreda")} {w.code}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -613,7 +613,7 @@ export default function ProfilesPage() {
             {/* Career / Employment Status */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Career Status
+                {t("womenList.filters.careerStatus")}
               </label>
               <Select
                 value={careerFilter}
@@ -623,11 +623,11 @@ export default function ProfilesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Statuses" />
+                  <SelectValue placeholder={t("womenList.filters.allCareerStatuses")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Statuses
+                    {t("womenList.filters.allCareerStatuses")}
                   </SelectItem>
                   {CAREER_OPTIONS.map((c) => (
                     <SelectItem key={c} value={c} className="text-xs rounded-xs">
@@ -643,7 +643,7 @@ export default function ProfilesPage() {
             {/* Education Level */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Education Level
+                {t("womenList.filters.educationLevel")}
               </label>
               <Select
                 value={educationFilter}
@@ -653,11 +653,11 @@ export default function ProfilesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Education" />
+                  <SelectValue placeholder={t("womenList.filters.allEducationLevels")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Education
+                    {t("womenList.filters.allEducationLevels")}
                   </SelectItem>
                   {EDUCATION_OPTIONS.map((edu) => (
                     <SelectItem key={edu} value={edu} className="text-xs rounded-xs">
@@ -673,7 +673,7 @@ export default function ProfilesPage() {
             {/* Age Bracket */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Age Bracket
+                {t("womenList.filters.ageBracket")}
               </label>
               <Select
                 value={ageFilter}
@@ -683,20 +683,20 @@ export default function ProfilesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Ages" />
+                  <SelectValue placeholder={t("womenList.filters.allAges")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Ages
+                    {t("womenList.filters.allAges")}
                   </SelectItem>
                   <SelectItem value="YOUTH" className="text-xs rounded-xs">
-                    Youth (&lt; 30 yrs)
+                    {t("womenList.filters.youth")}
                   </SelectItem>
                   <SelectItem value="ADULT" className="text-xs rounded-xs">
-                    Adult (30 – 49 yrs)
+                    {t("womenList.filters.adult")}
                   </SelectItem>
                   <SelectItem value="SENIOR" className="text-xs rounded-xs">
-                    Senior (50+ yrs)
+                    {t("womenList.filters.senior")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -705,7 +705,7 @@ export default function ProfilesPage() {
             {/* Approval Status */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Approval
+                {t("womenList.filters.approval")}
               </label>
               <Select
                 value={approvalFilter}
@@ -715,20 +715,20 @@ export default function ProfilesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Approvals" />
+                  <SelectValue placeholder={t("womenList.filters.allApprovals")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Approvals
+                    {t("womenList.filters.allApprovals")}
                   </SelectItem>
                   <SelectItem value="PENDING" className="text-xs rounded-xs">
-                    Pending
+                    {t("womenList.filters.pending")}
                   </SelectItem>
                   <SelectItem value="APPROVED" className="text-xs rounded-xs">
-                    Approved
+                    {t("womenList.filters.approved")}
                   </SelectItem>
                   <SelectItem value="REJECTED" className="text-xs rounded-xs">
-                    Rejected
+                    {t("womenList.filters.rejected")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -741,7 +741,10 @@ export default function ProfilesPage() {
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs font-mono font-bold text-slate-500 mr-1">
-            Results ({filteredProfiles.length} of {profiles?.length || 0}):
+            {t("womenList.filters.resultsCount", {
+              count: filteredProfiles.length,
+              total: profiles?.length || 0,
+            })}
           </span>
 
           {presetTab !== "ALL" && (
@@ -749,10 +752,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Preset: {presetTab}</span>
+              <span>{t("womenList.chips.preset", { tab: presetTab })}</span>
               <button
                 onClick={() => setPresetTab("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -764,10 +767,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <span>{t("womenList.chips.search", { query: debouncedSearch })}</span>
               <button
                 onClick={() => setSearch("")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -779,13 +782,13 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Sub-City: {selectedSubCity}</span>
+              <span>{t("womenList.chips.subCity", { name: selectedSubCity })}</span>
               <button
                 onClick={() => {
                   setSelectedSubCity("ALL");
                   setSelectedWoreda("ALL");
                 }}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -797,10 +800,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Woreda: {selectedWoreda}</span>
+              <span>{t("womenList.chips.woreda", { name: selectedWoreda })}</span>
               <button
                 onClick={() => setSelectedWoreda("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -812,10 +815,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Career: {careerFilter}</span>
+              <span>{t("womenList.chips.career", { status: careerFilter })}</span>
               <button
                 onClick={() => setCareerFilter("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -827,10 +830,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Education: {educationFilter}</span>
+              <span>{t("womenList.chips.education", { level: educationFilter })}</span>
               <button
                 onClick={() => setEducationFilter("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -842,10 +845,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Age: {ageFilter}</span>
+              <span>{t("womenList.chips.age", { age: ageFilter })}</span>
               <button
                 onClick={() => setAgeFilter("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -857,10 +860,10 @@ export default function ProfilesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Approval: {approvalFilter}</span>
+              <span>{t("womenList.chips.approval", { status: approvalFilter })}</span>
               <button
                 onClick={() => setApprovalFilter("ALL")}
-                className="hover:text-rose-600 ml-0.5"
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -870,9 +873,9 @@ export default function ProfilesPage() {
           {hasActiveFilters && (
             <button
               onClick={resetAllFilters}
-              className="text-[11px] font-mono font-semibold text-rose-600 hover:text-rose-800 ml-1 underline underline-offset-2"
+              className="text-[11px] font-mono font-semibold text-rose-600 hover:text-rose-800 ml-1 underline underline-offset-2 cursor-pointer"
             >
-              Clear All
+              {t("womenList.filters.clearAll")}
             </button>
           )}
         </div>
