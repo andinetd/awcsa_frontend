@@ -51,6 +51,8 @@ function requestRefresh(): Promise<ClientSignInResponse | null> {
 }
 
 export function setupAuthInterceptor(): void {
+  axios.defaults.withCredentials = true;
+
   if (interceptorId !== null) {
     return;
   }

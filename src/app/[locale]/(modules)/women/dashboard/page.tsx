@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useGetWomenProfilesQuery,
@@ -11,7 +11,6 @@ import {
   useGetAssociationDashboardQuery,
 } from "@/hooks/womens";
 import { WomenDashboardHeader } from "@/components/women/dashboard/women-dashboard-header";
-import { WomenAttentionCards } from "@/components/women/dashboard/women-attention-cards";
 import { WomenKpiGrid } from "@/components/women/dashboard/women-kpi-grid";
 import { WomenChartsSection } from "@/components/women/dashboard/women-charts-section";
 import { WomenSubCityMatrix } from "@/components/women/dashboard/women-subcity-matrix";
@@ -61,33 +60,83 @@ export default function WomenDashboard() {
   const totalTechSupport = techSupport?.length ?? 0;
   const totalTrainings = trainings?.length ?? 0;
 
-  // Program Breakdown for Donut Chart
+  // Genuine Program Breakdown for Donut Chart
   const programBreakdown = [
     {
       category: "EMPLOYMENT",
       label: "Employment Placements",
-      count: totalEmployments || 18,
+      count: totalEmployments,
       color: "#1769AA",
     },
     {
       category: "TECHNOLOGY",
       label: "Productive Technology",
-      count: totalTechSupport || 14,
+      count: totalTechSupport,
       color: "#0B1F3A",
     },
     {
       category: "TRAINING",
       label: "Vocational Skills",
-      count: totalTrainings || 22,
+      count: totalTrainings,
       color: "#F59E0B",
     },
     {
       category: "ASSOCIATIONS",
       label: "Grassroots Associations",
-      count: totalAssociations || 16,
+      count: totalAssociations,
       color: "#10B981",
     },
   ];
+
+  // Dynamic Trailing 6-Month Velocity Buckets
+  const intakeTrends = useMemo(() => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const now = new Date();
+    const buckets: { month: string; registered: number; supported: number; year: number; monthIdx: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      buckets.push({
+        month: months[d.getMonth()],
+        year: d.getFullYear(),
+        monthIdx: d.getMonth(),
+        registered: 0,
+        supported: 0,
+      });
+    }
+
+    // Tally profile registrations
+    (profiles || []).forEach((p: any) => {
+      const dateStr = p.createdAt || p.created_at;
+      if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          const b = buckets.find((bucket) => bucket.monthIdx === d.getMonth() && bucket.year === d.getFullYear());
+          if (b) b.registered += 1;
+        }
+      }
+    });
+
+    // Tally delivered livelihood interventions
+    const allInterventions = [
+      ...(employments || []),
+      ...(techSupport || []),
+      ...(trainings || []),
+    ];
+
+    allInterventions.forEach((item: any) => {
+      const dateStr = item.createdAt || item.dateProvided || item.startDate;
+      if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          const b = buckets.find((bucket) => bucket.monthIdx === d.getMonth() && bucket.year === d.getFullYear());
+          if (b) b.supported += 1;
+        }
+      }
+    });
+
+    return buckets.map(({ month, registered, supported }) => ({ month, registered, supported }));
+  }, [profiles, employments, techSupport, trainings]);
 
   const isLoadingInitial =
     isProfilesLoading &&
@@ -124,15 +173,7 @@ export default function WomenDashboard() {
         totalTrainings={totalTrainings}
       />
 
-      {/* 2. Operational Attention Alert Cards */}
-      <WomenAttentionCards
-        submittedAssociations={submittedAssociations}
-        totalEmployments={totalEmployments}
-        totalTechSupport={totalTechSupport}
-        totalTrainings={totalTrainings}
-      />
-
-      {/* 3. Master KPI Metric Scorecard Grid (5 Clean Metric Cards) */}
+      {/* 2. Master KPI Metric Scorecard Grid (Unified 5-Card Scorecard with Action Docket) */}
       <WomenKpiGrid
         totalProfiles={totalProfiles}
         totalAssociations={totalAssociations}
@@ -147,12 +188,13 @@ export default function WomenDashboard() {
         totalTrainings={totalTrainings}
       />
 
-      {/* 4. Analytics Visualizations: Dual Bar Trends & Donut Allocation */}
+      {/* 3. Analytics Visualizations: Trailing Velocity Trends & Intervention Donut */}
       <WomenChartsSection
+        intakeTrends={intakeTrends}
         programBreakdown={programBreakdown}
       />
 
-      {/* 5. Sub-City Municipal Coverage Matrix & Federation Summary */}
+      {/* 4. Sub-City Municipal Coverage Matrix (All 11 Sub-Cities) & Federation Summary */}
       <WomenSubCityMatrix
         rows={stats?.bySubCity ?? []}
         loading={isDashboardLoading}
@@ -163,7 +205,7 @@ export default function WomenDashboard() {
         incompleteCount={incompleteCount}
       />
 
-      {/* 6. Primary Module Workflows & Directories Panel */}
+      {/* 5. Primary Module Workflows & Directories Panel */}
       <WomenQuickActions />
     </div>
   );

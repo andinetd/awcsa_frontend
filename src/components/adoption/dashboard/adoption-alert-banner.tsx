@@ -14,10 +14,10 @@ interface AdoptionAlertBannerProps {
 }
 
 export function AdoptionAlertBanner({
-  pendingHomeVisits = 6,
+  pendingHomeVisits = 0,
   pendingReports = 0,
-  pendingApprovals = 2,
-  inCareCount = 1,
+  pendingApprovals = 0,
+  inCareCount = 0,
 }: AdoptionAlertBannerProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -38,7 +38,10 @@ export function AdoptionAlertBanner({
       unit: "overdue reports",
       badge: pendingReports === 0 ? "COMPLIANT" : "OVERDUE",
       statusType: (pendingReports === 0 ? "neutral" : "navy") as keyof typeof uiTokens.statusTag,
-      description: "All 5 licensed residential care centers submitted current child registries on schedule",
+      description:
+        pendingReports === 0
+          ? "All licensed residential care centers submitted current child registries on schedule"
+          : `${pendingReports} facility report(s) pending administrative review and audit`,
       link: "/adoption/care-centers",
       actionText: "Inspect facility registers",
     },

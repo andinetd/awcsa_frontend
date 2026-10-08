@@ -1,12 +1,14 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   HandHelping,
   ShieldCheck,
   Building2,
-  RefreshCw,
+  Users2,
   AlertTriangle,
+  ArrowRight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -18,6 +20,9 @@ interface EdirKpiGridProps {
   cancelledEdirs?: number;
   totalCouncils?: number;
   renewedThisYear?: number;
+  totalMembers?: number;
+  femaleMembers?: number;
+  maleMembers?: number;
 }
 
 export function EdirKpiGrid({
@@ -28,10 +33,19 @@ export function EdirKpiGrid({
   cancelledEdirs = 0,
   totalCouncils = 0,
   renewedThisYear = 0,
+  totalMembers = 0,
+  femaleMembers = 0,
+  maleMembers = 0,
 }: EdirKpiGridProps) {
-  const currentYear = new Date().getFullYear();
   const complianceRate =
     totalEdirs > 0 ? Math.round((activeEdirs / totalEdirs) * 100) : 0;
+
+  const femalePercent =
+    totalMembers > 0 ? Math.round((femaleMembers / totalMembers) * 100) : 0;
+  const malePercent =
+    totalMembers > 0 ? Math.round((maleMembers / totalMembers) * 100) : 0;
+
+  const attentionRequired = expiredEdirs + revokedEdirs;
 
   const cards = [
     {
@@ -42,15 +56,17 @@ export function EdirKpiGrid({
       badgeText: "DIRECTORY",
       badgeColor: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
       iconBg: "bg-[#1769AA]/10 text-[#1769AA]",
+      link: "/social-affairs/edir/list",
     },
     {
       title: "Active Legal Standing",
       value: activeEdirs,
       sub: `${complianceRate}% overall municipal compliance rate`,
       icon: ShieldCheck,
-      badgeText: "ACCREDITED",
+      badgeText: `${complianceRate}% ACCREDITED`,
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: "bg-emerald-500/10 text-emerald-600",
+      link: "/social-affairs/edir/list",
     },
     {
       title: "Umbrella Councils",
@@ -60,24 +76,34 @@ export function EdirKpiGrid({
       badgeText: "COUNCILS",
       badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
       iconBg: "bg-blue-500/10 text-blue-600",
+      link: "/social-affairs/edir/councils",
     },
     {
-      title: "Renewed in Current Term",
-      value: renewedThisYear,
-      sub: `Annual audits completed for ${currentYear}`,
-      icon: RefreshCw,
-      badgeText: "AUDITED",
+      title: "Recorded Community Reach",
+      value: totalMembers,
+      sub: `${femalePercent}% Women (${femaleMembers.toLocaleString()}) • ${malePercent}% Men (${maleMembers.toLocaleString()})`,
+      icon: Users2,
+      badgeText: "CITIZEN BASE",
       badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
       iconBg: "bg-purple-500/10 text-purple-600",
+      link: "/social-affairs/edir/list",
     },
     {
-      title: "Sanctioned & Cancelled",
-      value: revokedEdirs + cancelledEdirs,
-      sub: `${revokedEdirs} Revoked • ${cancelledEdirs} Cancelled / Dissolved`,
+      title: "Action Docket (Compliance)",
+      value: attentionRequired,
+      sub: `${expiredEdirs} Overdue Renewal • ${revokedEdirs} Sanctioned`,
       icon: AlertTriangle,
-      badgeText: "SANCTIONED",
-      badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
-      iconBg: "bg-rose-500/10 text-rose-600",
+      badgeText: attentionRequired > 0 ? "ACTION REQUIRED" : "COMPLIANT",
+      badgeColor:
+        attentionRequired > 0
+          ? "bg-rose-50 text-rose-700 border-rose-200 font-bold"
+          : "bg-emerald-50 text-emerald-700 border-emerald-200",
+      iconBg:
+        attentionRequired > 0
+          ? "bg-rose-500/10 text-rose-600"
+          : "bg-emerald-500/10 text-emerald-600",
+      link: "/social-affairs/edir/list",
+      isAlert: attentionRequired > 0,
     },
   ];
 
@@ -85,10 +111,10 @@ export function EdirKpiGrid({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          MASTER COMMUNITY ASSOCIATIONS SCORECARD
+          EXECUTIVE MUNICIPAL SCORECARD
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Consolidated accreditation &amp; federation statistics
+          Consolidated accreditation, federation &amp; citizen coverage statistics
         </span>
       </div>
 
@@ -96,38 +122,44 @@ export function EdirKpiGrid({
         {cards.map((c) => {
           const Icon = c.icon;
           return (
-            <Card
-              key={c.title}
-              className="rounded-xs border border-[#E3E7EB] bg-white p-4 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between"
-            >
-              <CardContent className="p-0 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-xs ${c.iconBg}`}>
-                    <Icon className="size-4" />
+            <Link key={c.title} href={c.link} className="block group">
+              <Card
+                className={`rounded-xs border bg-white p-4 shadow-2xs hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between h-full ${
+                  c.isAlert
+                    ? "border-rose-300 hover:border-rose-400"
+                    : "border-[#E3E7EB] hover:border-slate-300"
+                }`}
+              >
+                <CardContent className="p-0 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className={`p-2 rounded-xs ${c.iconBg}`}>
+                      <Icon className="size-4" />
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-xs tracking-wider uppercase font-mono border ${c.badgeColor}`}
+                    >
+                      {c.badgeText}
+                    </span>
                   </div>
-                  <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-xs tracking-wider uppercase font-mono border ${c.badgeColor}`}
-                  >
-                    {c.badgeText}
-                  </span>
-                </div>
 
-                <div>
-                  <p className="text-2xl font-bold font-mono tracking-tight text-[#0B1F3A]">
-                    {c.value.toLocaleString()}
-                  </p>
-                  <p className="text-xs font-semibold text-slate-800 mt-0.5">
-                    {c.title}
-                  </p>
-                </div>
+                  <div>
+                    <p className="text-2xl font-bold font-mono tracking-tight text-[#0B1F3A]">
+                      {c.value.toLocaleString()}
+                    </p>
+                    <p className="text-xs font-semibold text-slate-800 mt-0.5 group-hover:text-[#1769AA] transition-colors">
+                      {c.title}
+                    </p>
+                  </div>
 
-                <div className="pt-2 border-t border-slate-100">
-                  <p className="text-[11px] text-slate-500 line-clamp-1 font-mono">
-                    {c.sub}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                    <p className="text-slate-500 line-clamp-1 font-mono">
+                      {c.sub}
+                    </p>
+                    <ArrowRight className="size-3 text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           );
         })}
       </div>

@@ -24,9 +24,9 @@ interface AdoptionHeaderProps {
 export function AdoptionHeader({
   onRefresh,
   isRefreshing = false,
-  totalChildren = 8,
-  totalApplicants = 6,
-  totalFacilities = 5,
+  totalChildren = 0,
+  totalApplicants = 0,
+  totalFacilities = 0,
 }: AdoptionHeaderProps) {
   const currentDate = new Date().toLocaleDateString("en-US", {
     month: "short",

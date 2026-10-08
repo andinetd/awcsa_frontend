@@ -24,35 +24,26 @@ export function EdirQuickActions() {
       bg: "bg-[#E8F2FA]",
     },
     {
-      title: "Federated Councils Directory",
+      title: "Federated Councils Governance",
       desc: "Sub-city and woreda umbrella councils representing affiliated grassroots edirs, council charters, and executive committees",
       icon: Building2,
       href: "/social-affairs/edir/councils",
-      badge: "GOVERNANCE",
+      badge: "FEDERATION",
       color: "text-blue-700",
       bg: "bg-blue-50",
     },
     {
-      title: "Accreditation & Renewals",
+      title: "Accreditation Renewal Docket",
       desc: "Annual license verification, legal charter reissue, compliance audits, and penalty assessments for expired associations",
       icon: FileCheck2,
       href: "/social-affairs/edir/list",
-      badge: "LEGAL ACCREDITATION",
+      badge: "RENEWAL AUDIT",
       color: "text-emerald-700",
       bg: "bg-emerald-50",
     },
     {
-      title: "Household Membership",
-      desc: "Census of participating community households, emergency mutual funds, burial assistance, and neighborhood social welfare",
-      icon: Users2,
-      href: "/social-affairs/edir/list",
-      badge: "COMMUNITY REACH",
-      color: "text-amber-700",
-      bg: "bg-amber-50",
-    },
-    {
-      title: "Regulatory Compliance & Disputes",
-      desc: "Oversight of sanctioned, revoked, or dissolved associations, dispute resolutions, and legal audit investigations",
+      title: "Regulatory Sanctions & Compliance",
+      desc: "Oversight of sanctioned, revoked, or dissolved associations, dispute resolution findings, and regulatory enforcement",
       icon: ShieldAlert,
       href: "/social-affairs/edir/list",
       badge: "ENFORCEMENT",
@@ -72,7 +63,7 @@ export function EdirQuickActions() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {actions.map((act) => {
           const Icon = act.icon;
           return (

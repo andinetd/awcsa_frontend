@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useGetEdirAssociationsQuery,
@@ -8,7 +8,6 @@ import {
 } from "@/hooks/social-affairs";
 import { Edir } from "@/api/social-affairs/edir";
 import { EdirDashboardHeader } from "./_components/edir-dashboard-header";
-import { EdirAttentionCards } from "./_components/edir-attention-cards";
 import { EdirKpiGrid } from "./_components/edir-kpi-grid";
 import { EdirChartsSection } from "./_components/edir-charts-section";
 import { EdirSubCityMatrix } from "./_components/edir-subcity-matrix";
@@ -46,32 +45,115 @@ export default function EdirDashboard() {
     (e) => e.lastRenewedAt && new Date(e.lastRenewedAt).getFullYear() === currentYear
   ).length;
 
+  // Real membership aggregations
+  const totalManagementMale = list.reduce(
+    (acc, e) => acc + (Number(e.managementMale) || 0),
+    0
+  );
+  const totalManagementFemale = list.reduce(
+    (acc, e) => acc + (Number(e.managementFemale) || 0),
+    0
+  );
+  const totalGeneralMale = list.reduce(
+    (acc, e) => acc + (Number(e.generalMale) || 0),
+    0
+  );
+  const totalGeneralFemale = list.reduce(
+    (acc, e) => acc + (Number(e.generalFemale) || 0),
+    0
+  );
+
+  const maleMembers = totalManagementMale + totalGeneralMale;
+  const femaleMembers = totalManagementFemale + totalGeneralFemale;
+  const totalMembers = maleMembers + femaleMembers;
+
+  // Genuine status distribution without mock fallbacks
   const statusBreakdown = [
     {
       status: "ACTIVE",
       label: "Active Accreditation",
-      count: activeEdirs || (list.length > 0 ? activeEdirs : 85),
+      count: activeEdirs,
       color: "#10B981",
     },
     {
       status: "EXPIRED",
       label: "Expired Licenses",
-      count: expiredEdirs || (list.length > 0 ? expiredEdirs : 24),
+      count: expiredEdirs,
       color: "#F59E0B",
     },
     {
       status: "REVOKED",
       label: "Revoked / Sanctioned",
-      count: revokedEdirs || (list.length > 0 ? revokedEdirs : 8),
+      count: revokedEdirs,
       color: "#EF4444",
     },
     {
       status: "CANCELLED",
       label: "Cancelled / Dissolved",
-      count: cancelledEdirs || (list.length > 0 ? cancelledEdirs : 5),
+      count: cancelledEdirs,
       color: "#64748B",
     },
   ];
+
+  // Dynamically compute monthly trends from actual dates
+  const intakeTrends = useMemo(() => {
+    if (list.length === 0) return [];
+
+    // Find the reference date (latest date present or current date)
+    let latestTimestamp = Date.now();
+    const timestamps = list
+      .map((e) => new Date(e.registrationDate || e.createdAt || 0).getTime())
+      .filter((t) => t > 0);
+
+    if (timestamps.length > 0) {
+      const maxTime = Math.max(...timestamps);
+      // If the latest record is within reasonable future/past, anchor there
+      if (maxTime > 0) {
+        latestTimestamp = maxTime;
+      }
+    }
+
+    const refDate = new Date(latestTimestamp);
+    const buckets: { key: string; month: string; registered: number; renewed: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const month = d.toLocaleDateString("en-US", { month: "short" });
+      buckets.push({ key, month, registered: 0, renewed: 0 });
+    }
+
+    list.forEach((e) => {
+      const regStr = e.registrationDate || e.createdAt;
+      if (regStr) {
+        const d = new Date(regStr);
+        if (!isNaN(d.getTime())) {
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          const b = buckets.find((item) => item.key === key);
+          if (b) {
+            b.registered += 1;
+          }
+        }
+      }
+
+      if (e.lastRenewedAt) {
+        const d = new Date(e.lastRenewedAt);
+        if (!isNaN(d.getTime())) {
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          const b = buckets.find((item) => item.key === key);
+          if (b) {
+            b.renewed += 1;
+          }
+        }
+      }
+    });
+
+    return buckets.map(({ month, registered, renewed }) => ({
+      month,
+      registered,
+      renewed,
+    }));
+  }, [list]);
 
   const recent = [...list]
     .sort(
@@ -100,21 +182,9 @@ export default function EdirDashboard() {
       <EdirDashboardHeader
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
-        totalEdirs={list.length}
-        activeEdirs={activeEdirs}
-        totalCouncils={councilList.length}
-        renewedThisYear={renewedThisYear}
       />
 
-      {/* 2. Operational Attention Alert Cards */}
-      <EdirAttentionCards
-        expiredEdirs={expiredEdirs}
-        revokedEdirs={revokedEdirs}
-        totalCouncils={councilList.length}
-        renewedThisYear={renewedThisYear}
-      />
-
-      {/* 3. Master Community Scorecard Grid */}
+      {/* 2. Consolidated Master Scorecard Grid */}
       <EdirKpiGrid
         totalEdirs={list.length}
         activeEdirs={activeEdirs}
@@ -123,23 +193,27 @@ export default function EdirDashboard() {
         cancelledEdirs={cancelledEdirs}
         totalCouncils={councilList.length}
         renewedThisYear={renewedThisYear}
+        totalMembers={totalMembers}
+        femaleMembers={femaleMembers}
+        maleMembers={maleMembers}
       />
 
-      {/* 4. Analytics Visualizations: Inflow vs Renewals & Status Donut */}
+      {/* 3. Analytics Visualizations: Inflow Trends & Status Donut */}
       <EdirChartsSection
+        intakeTrends={intakeTrends}
         statusBreakdown={statusBreakdown}
       />
 
-      {/* 5. Sub-City Municipal Coverage Matrix */}
+      {/* 4. Sub-City Municipal Coverage & Federation Matrix */}
       <EdirSubCityMatrix
         edirList={list}
         councilList={councilList}
       />
 
-      {/* 6. Recent Registrations & Accreditations Roster */}
+      {/* 5. Recent Registrations & Accreditations Roster */}
       <EdirRecentRegistrations recentList={recent} />
 
-      {/* 7. Primary Workflows & Directory Shortcuts */}
+      {/* 6. Primary Governance Workflows & Shortcuts */}
       <EdirQuickActions />
     </div>
   );

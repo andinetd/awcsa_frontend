@@ -7,8 +7,21 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  // Forward the Authorization header if present
-  const incomingAuth = req.headers.get("authorization") || "";
+  // Resolve authentication from incoming header or session cookie
+  const cookieToken = req.cookies.get("wcasf_auth_token")?.value;
+  const incomingAuth =
+    req.headers.get("authorization") ||
+    (cookieToken ? `Bearer ${cookieToken}` : "");
+
+  if (!incomingAuth) {
+    return new Response(
+      JSON.stringify({ message: "Unauthorized: Authentication required" }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }
 
   const backendUrl = `${BASE_URL}/adoption/files/${id}`;
 
@@ -16,7 +29,7 @@ export async function GET(
     const res = await fetch(backendUrl, {
       method: "GET",
       headers: {
-        ...(incomingAuth ? { Authorization: incomingAuth } : {}),
+        Authorization: incomingAuth,
       },
     });
 

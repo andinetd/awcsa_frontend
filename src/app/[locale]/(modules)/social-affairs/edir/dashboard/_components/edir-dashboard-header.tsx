@@ -1,15 +1,10 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import {
-  HandHelping,
   RefreshCw,
   Printer,
   Plus,
-  ShieldCheck,
-  Building2,
-  Users2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewEdirForm from "../../list/_components/new-edir-form";
@@ -19,19 +14,11 @@ import GenerateReportDialog from "../../list/_components/generate-report-dialog"
 interface EdirDashboardHeaderProps {
   onRefresh?: () => void;
   isRefreshing?: boolean;
-  totalEdirs?: number;
-  activeEdirs?: number;
-  totalCouncils?: number;
-  renewedThisYear?: number;
 }
 
 export function EdirDashboardHeader({
   onRefresh,
   isRefreshing = false,
-  totalEdirs = 0,
-  activeEdirs = 0,
-  totalCouncils = 0,
-  renewedThisYear = 0,
 }: EdirDashboardHeaderProps) {
   return (
     <div className="space-y-3">
@@ -99,14 +86,14 @@ export function EdirDashboardHeader({
       </div>
 
       {/* Main Title & Executive Metadata */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pt-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
               Traditional Edir Associations &amp; Community Councils
             </h1>
             <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]">
-              Active Accreditation
+              Municipal Directorate
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1 max-w-3xl">
@@ -114,36 +101,13 @@ export function EdirDashboardHeader({
           </p>
         </div>
 
-        {/* Quick summary badges */}
-        <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <HandHelping className="size-3.5 text-[#1769AA]" />
-            <span className="text-slate-500 font-mono text-[11px]">Edir Total:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalEdirs.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <ShieldCheck className="size-3.5 text-emerald-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Active:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {activeEdirs.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <Building2 className="size-3.5 text-blue-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Councils:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalCouncils.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <Users2 className="size-3.5 text-amber-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Renewed {new Date().getFullYear()}:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {renewedThisYear.toLocaleString()}
-            </span>
-          </div>
+        <div className="text-right shrink-0">
+          <span className="text-[11px] font-mono text-slate-400 block">
+            Official Municipal Register
+          </span>
+          <span className="text-xs font-mono font-medium text-slate-600">
+            Directive No. 151/2016 Compliant
+          </span>
         </div>
       </div>
     </div>

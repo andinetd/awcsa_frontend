@@ -28,7 +28,6 @@ function applyToken(
     });
 
     const decodedToken: any = jwtDecode(token);
-    console.log("Decoded JWT in auth-store:", decodedToken);
 
     // Normalize user object from JWT
     const rawUser = decodedToken.user || decodedToken;
@@ -103,7 +102,6 @@ function applyToken(
       newState.userRole = null;
     }
 
-    console.log("Auth state successfully populated:", newState);
     set(newState);
   } catch (error) {
     console.error("Failed to decode or set token:", error);

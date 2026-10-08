@@ -15,7 +15,7 @@ export const useCareCenterChildFormStore = create<CareCenterChildFormState>()(
     }),
     {
       name: "care-center-child-info-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

@@ -68,9 +68,15 @@ export default function SignInForm() {
     if (executeRecaptcha) {
       try {
         setRecaptchaLoading(true);
-        recaptchaToken = await executeRecaptcha("signin");
+        const tokenPromise = executeRecaptcha("signin");
+        const timeoutPromise = new Promise<string>((resolve) =>
+          setTimeout(() => resolve(""), 2000),
+        );
+        recaptchaToken =
+          (await Promise.race([tokenPromise, timeoutPromise])) || "";
       } catch (err) {
-        console.error("Recaptcha execution failed:", err);
+        console.warn("Recaptcha execution failed or was bypassed:", err);
+        recaptchaToken = "";
       } finally {
         setRecaptchaLoading(false);
       }
@@ -83,8 +89,26 @@ export default function SignInForm() {
       rememberMe: values.rememberMe,
     };
 
-    mutate(payload);
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success("Signed in successfully!");
+      },
+      onError: (err) => {
+        toast.error(
+          t("errors.signInFailed", { message: err?.message || "Sign-in failed" }),
+        );
+      },
+    });
   }
+
+  const onInvalid = (errors: any) => {
+    const firstError = Object.values(errors)[0] as any;
+    const msg =
+      firstError?.message ||
+      firstError?.root?.message ||
+      "Please check your email and password";
+    toast.error(msg);
+  };
 
   // Reset form state on mount to ensure clean state after logout/redirect
   useEffect(() => {
@@ -129,12 +153,6 @@ export default function SignInForm() {
 
     const navTimer = setTimeout(() => {
       const { department, userRole, assignedModules } = useAuthStore.getState();
-      console.log("Navigating authenticated user:", {
-        user,
-        userRole,
-        department,
-        assignedModules,
-      });
 
       const route = getDefaultRouteForUser(
         user,
@@ -158,7 +176,10 @@ export default function SignInForm() {
   return (
     <div className="mx-auto w-full mt-5 max-w-md">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit, onInvalid)}
+          className="space-y-4"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -244,6 +265,7 @@ export default function SignInForm() {
           />
 
           <Button
+            type="submit"
             className="w-full"
             disabled={
               form.formState.isSubmitting || isRecaptchaLoading || isPending

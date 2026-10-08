@@ -10,7 +10,7 @@ interface SubCityRow {
   disabledCount: number;
   totalBeneficiaries: number;
   servicesProvided: number;
-  coverageStatus: "COMPREHENSIVE" | "ACTIVE" | "EXPANDING";
+  coverageStatus: "COMPREHENSIVE" | "ACTIVE" | "PENDING AID" | "NO RECORDS";
 }
 
 interface ElderlyDisabledSubCityMatrixProps {
@@ -18,66 +18,107 @@ interface ElderlyDisabledSubCityMatrixProps {
   servicesList?: any[];
 }
 
-const DEFAULT_SUBCITIES: SubCityRow[] = [
-  { name: "Bole", elderlyCount: 142, disabledCount: 184, totalBeneficiaries: 326, servicesProvided: 210, coverageStatus: "COMPREHENSIVE" },
-  { name: "Yeka", elderlyCount: 118, disabledCount: 149, totalBeneficiaries: 267, servicesProvided: 178, coverageStatus: "COMPREHENSIVE" },
-  { name: "Kirkos", elderlyCount: 96, disabledCount: 122, totalBeneficiaries: 218, servicesProvided: 154, coverageStatus: "ACTIVE" },
-  { name: "Arada", elderlyCount: 88, disabledCount: 110, totalBeneficiaries: 198, servicesProvided: 132, coverageStatus: "ACTIVE" },
-  { name: "Gulele", elderlyCount: 104, disabledCount: 136, totalBeneficiaries: 240, servicesProvided: 165, coverageStatus: "COMPREHENSIVE" },
-  { name: "Lideta", elderlyCount: 72, disabledCount: 94, totalBeneficiaries: 166, servicesProvided: 114, coverageStatus: "ACTIVE" },
-  { name: "Nifas Silk-Lafto", elderlyCount: 132, disabledCount: 165, totalBeneficiaries: 297, servicesProvided: 195, coverageStatus: "COMPREHENSIVE" },
-  { name: "Kolfe Keranio", elderlyCount: 150, disabledCount: 192, totalBeneficiaries: 342, servicesProvided: 228, coverageStatus: "COMPREHENSIVE" },
-  { name: "Akaky Kaliti", elderlyCount: 85, disabledCount: 108, totalBeneficiaries: 193, servicesProvided: 122, coverageStatus: "EXPANDING" },
-  { name: "Addis Ketema", elderlyCount: 112, disabledCount: 140, totalBeneficiaries: 252, servicesProvided: 168, coverageStatus: "ACTIVE" },
-  { name: "Lemi Kura", elderlyCount: 95, disabledCount: 128, totalBeneficiaries: 223, servicesProvided: 140, coverageStatus: "EXPANDING" },
+const ADDIS_ABABA_SUBCITIES = [
+  "Bole",
+  "Yeka",
+  "Kirkos",
+  "Arada",
+  "Gulele",
+  "Lideta",
+  "Nifas Silk-Lafto",
+  "Kolfe Keranio",
+  "Akaky Kaliti",
+  "Addis Ketema",
+  "Lemi Kura",
 ];
 
 export function ElderlyDisabledSubCityMatrix({
-  beneficiariesList,
-  servicesList,
+  beneficiariesList = [],
+  servicesList = [],
 }: ElderlyDisabledSubCityMatrixProps) {
-  // If beneficiaries list has real items with subCity, calculate actual counts per sub-city
   const subCities: SubCityRow[] = React.useMemo(() => {
-    if (!beneficiariesList || beneficiariesList.length === 0) {
-      return DEFAULT_SUBCITIES;
-    }
+    const map: Record<
+      string,
+      {
+        name: string;
+        elderly: number;
+        disabled: number;
+        services: number;
+      }
+    > = {};
 
-    const counts: Record<string, { elderly: number; disabled: number; services: number }> = {};
-    DEFAULT_SUBCITIES.forEach((sc) => {
-      counts[sc.name.toLowerCase()] = { elderly: 0, disabled: 0, services: 0 };
+    ADDIS_ABABA_SUBCITIES.forEach((name) => {
+      map[name.toLowerCase()] = {
+        name,
+        elderly: 0,
+        disabled: 0,
+        services: 0,
+      };
     });
 
     beneficiariesList.forEach((b) => {
-      const scKey = (b.subCity || "").toLowerCase().trim();
-      if (counts[scKey]) {
-        if (b.clientCategory === "ELDERLY") counts[scKey].elderly += 1;
-        else counts[scKey].disabled += 1;
+      const rawSc = (b.subCity || b.address || "").trim();
+      const scKey = rawSc.toLowerCase();
+      if (!scKey) return;
+
+      if (!map[scKey]) {
+        map[scKey] = {
+          name: rawSc,
+          elderly: 0,
+          disabled: 0,
+          services: 0,
+        };
+      }
+
+      if (b.clientCategory === "ELDERLY") {
+        map[scKey].elderly += 1;
+      } else {
+        map[scKey].disabled += 1;
       }
     });
 
-    servicesList?.forEach((s) => {
-      const scKey = (s.subCity || "").toLowerCase().trim();
-      if (counts[scKey]) {
-        counts[scKey].services += 1;
+    servicesList.forEach((s) => {
+      const rawSc = (s.subCity || "").trim();
+      const scKey = rawSc.toLowerCase();
+      if (!scKey) return;
+
+      if (!map[scKey]) {
+        map[scKey] = {
+          name: rawSc,
+          elderly: 0,
+          disabled: 0,
+          services: 0,
+        };
       }
+
+      map[scKey].services += 1;
     });
 
-    return DEFAULT_SUBCITIES.map((sc) => {
-      const k = sc.name.toLowerCase();
-      const realElderly = counts[k]?.elderly || sc.elderlyCount;
-      const realDisabled = counts[k]?.disabled || sc.disabledCount;
-      const realServices = counts[k]?.services || sc.servicesProvided;
-      const total = realElderly + realDisabled;
+    return Object.values(map).map((sc) => {
+      const total = sc.elderly + sc.disabled;
+      let status: SubCityRow["coverageStatus"] = "NO RECORDS";
+
+      if (total > 0) {
+        if (sc.services >= total) status = "COMPREHENSIVE";
+        else if (sc.services > 0) status = "ACTIVE";
+        else status = "PENDING AID";
+      }
 
       return {
-        ...sc,
-        elderlyCount: realElderly,
-        disabledCount: realDisabled,
+        name: sc.name,
+        elderlyCount: sc.elderly,
+        disabledCount: sc.disabled,
         totalBeneficiaries: total,
-        servicesProvided: realServices,
+        servicesProvided: sc.services,
+        coverageStatus: status,
       };
     });
   }, [beneficiariesList, servicesList]);
+
+  const totalElderly = subCities.reduce((a, b) => a + b.elderlyCount, 0);
+  const totalDisabled = subCities.reduce((a, b) => a + b.disabledCount, 0);
+  const totalCensus = subCities.reduce((a, b) => a + b.totalBeneficiaries, 0);
+  const totalServices = subCities.reduce((a, b) => a + b.servicesProvided, 0);
 
   return (
     <div className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
@@ -96,7 +137,7 @@ export function ElderlyDisabledSubCityMatrix({
         <div className="flex items-center gap-2 text-xs font-mono">
           <span className="flex items-center gap-1 text-slate-600">
             <span className="size-2 rounded-full bg-emerald-500" />
-            11 Sub-Cities Active
+            11 Municipal Sub-Cities
           </span>
         </div>
       </div>
@@ -140,7 +181,9 @@ export function ElderlyDisabledSubCityMatrix({
                         ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                         : row.coverageStatus === "ACTIVE"
                         ? "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]"
-                        : "bg-amber-50 text-amber-700 border-amber-200"
+                        : row.coverageStatus === "PENDING AID"
+                        ? "bg-amber-50 text-amber-700 border-amber-200"
+                        : "bg-slate-50 text-slate-400 border-slate-200"
                     }`}
                   >
                     {row.coverageStatus}
@@ -149,6 +192,20 @@ export function ElderlyDisabledSubCityMatrix({
               </tr>
             ))}
           </tbody>
+          <tfoot className="bg-slate-50/80 border-t-2 border-[#E3E7EB] font-bold text-slate-900">
+            <tr>
+              <td className="py-2.5 px-3 uppercase text-[11px]">Total Addis Ababa Census</td>
+              <td className="py-2.5 px-3 text-right text-slate-800">{totalElderly.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-right text-slate-800">{totalDisabled.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-right text-[#0B1F3A]">{totalCensus.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-right text-emerald-700">{totalServices.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-center text-[10px] text-slate-500 font-normal">
+                {totalCensus > 0
+                  ? `${Math.round((totalServices / totalCensus) * 100)}% Coverage Ratio`
+                  : "No Records"}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

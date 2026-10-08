@@ -115,6 +115,8 @@
       },
       "select": "ይምረጡ...",
       "selectSubCity": "ክፍለ ከተማ ይምረጡ",
+      "bureauLevel": "የቢሮ ደረጃ (ዋና መ/ቤት)",
+      "subCityLevel": "የክፍለ ከተማ ደረጃ",
       "create": "ተጠቃሚ ፍጠር",
       "cancel": "ሰርዝ",
       "placeholders": {

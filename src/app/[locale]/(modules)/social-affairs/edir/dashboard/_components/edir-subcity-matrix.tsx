@@ -7,9 +7,10 @@ import { Badge } from "@/components/ui/badge";
 interface EdirSubCityRow {
   name: string;
   edirCount: number;
+  activeEdirs: number;
   councilCount: number;
-  estimatedHouseholds: number;
-  complianceRating: "EXCELLENT" | "GOOD" | "AUDIT REQUIRED";
+  recordedMembers: number;
+  complianceRating: "COMPLIANT" | "PARTIAL" | "AUDIT REQUIRED" | "NO RECORDS";
 }
 
 interface EdirSubCityMatrixProps {
@@ -17,63 +18,116 @@ interface EdirSubCityMatrixProps {
   councilList?: any[];
 }
 
-const DEFAULT_EDIR_SUBCITIES: EdirSubCityRow[] = [
-  { name: "Bole", edirCount: 124, councilCount: 8, estimatedHouseholds: 24800, complianceRating: "EXCELLENT" },
-  { name: "Yeka", edirCount: 112, councilCount: 7, estimatedHouseholds: 22400, complianceRating: "EXCELLENT" },
-  { name: "Kirkos", edirCount: 86, councilCount: 5, estimatedHouseholds: 17200, complianceRating: "GOOD" },
-  { name: "Arada", edirCount: 78, councilCount: 5, estimatedHouseholds: 15600, complianceRating: "GOOD" },
-  { name: "Gulele", edirCount: 94, councilCount: 6, estimatedHouseholds: 18800, complianceRating: "EXCELLENT" },
-  { name: "Lideta", edirCount: 68, councilCount: 4, estimatedHouseholds: 13600, complianceRating: "GOOD" },
-  { name: "Nifas Silk-Lafto", edirCount: 118, councilCount: 7, estimatedHouseholds: 23600, complianceRating: "EXCELLENT" },
-  { name: "Kolfe Keranio", edirCount: 136, councilCount: 9, estimatedHouseholds: 27200, complianceRating: "EXCELLENT" },
-  { name: "Akaky Kaliti", edirCount: 74, councilCount: 4, estimatedHouseholds: 14800, complianceRating: "AUDIT REQUIRED" },
-  { name: "Addis Ketema", edirCount: 102, councilCount: 6, estimatedHouseholds: 20400, complianceRating: "GOOD" },
-  { name: "Lemi Kura", edirCount: 82, councilCount: 5, estimatedHouseholds: 16400, complianceRating: "AUDIT REQUIRED" },
+const ADDIS_ABABA_SUBCITIES = [
+  "Bole",
+  "Yeka",
+  "Kirkos",
+  "Arada",
+  "Gulele",
+  "Lideta",
+  "Nifas Silk-Lafto",
+  "Kolfe Keranio",
+  "Akaky Kaliti",
+  "Addis Ketema",
+  "Lemi Kura",
 ];
 
 export function EdirSubCityMatrix({
-  edirList,
-  councilList,
+  edirList = [],
+  councilList = [],
 }: EdirSubCityMatrixProps) {
-  // If lists have actual items with subCity, compute real distribution
   const subCities: EdirSubCityRow[] = React.useMemo(() => {
-    if (!edirList || edirList.length === 0) {
-      return DEFAULT_EDIR_SUBCITIES;
-    }
+    const map: Record<
+      string,
+      {
+        name: string;
+        edirs: number;
+        active: number;
+        councils: number;
+        members: number;
+      }
+    > = {};
 
-    const counts: Record<string, { edirs: number; councils: number }> = {};
-    DEFAULT_EDIR_SUBCITIES.forEach((sc) => {
-      counts[sc.name.toLowerCase()] = { edirs: 0, councils: 0 };
+    ADDIS_ABABA_SUBCITIES.forEach((name) => {
+      map[name.toLowerCase()] = {
+        name,
+        edirs: 0,
+        active: 0,
+        councils: 0,
+        members: 0,
+      };
     });
 
     edirList.forEach((e) => {
-      const scKey = (e.subCity || "").toLowerCase().trim();
-      if (counts[scKey]) {
-        counts[scKey].edirs += 1;
+      const rawSc = (e.subCity || "").trim();
+      const scKey = rawSc.toLowerCase();
+      if (!scKey) return;
+
+      if (!map[scKey]) {
+        map[scKey] = {
+          name: rawSc,
+          edirs: 0,
+          active: 0,
+          councils: 0,
+          members: 0,
+        };
       }
+
+      map[scKey].edirs += 1;
+      if (e.status === "ACTIVE") {
+        map[scKey].active += 1;
+      }
+
+      const totalEdirMembers =
+        (Number(e.managementMale) || 0) +
+        (Number(e.managementFemale) || 0) +
+        (Number(e.generalMale) || 0) +
+        (Number(e.generalFemale) || 0);
+
+      map[scKey].members += totalEdirMembers;
     });
 
-    councilList?.forEach((c) => {
-      const scKey = (c.subCity || "").toLowerCase().trim();
-      if (counts[scKey]) {
-        counts[scKey].councils += 1;
+    councilList.forEach((c) => {
+      const rawSc = (c.subCity || "").trim();
+      const scKey = rawSc.toLowerCase();
+      if (!scKey) return;
+
+      if (!map[scKey]) {
+        map[scKey] = {
+          name: rawSc,
+          edirs: 0,
+          active: 0,
+          councils: 0,
+          members: 0,
+        };
       }
+
+      map[scKey].councils += 1;
     });
 
-    return DEFAULT_EDIR_SUBCITIES.map((sc) => {
-      const k = sc.name.toLowerCase();
-      const realEdirs = counts[k]?.edirs || sc.edirCount;
-      const realCouncils = counts[k]?.councils || sc.councilCount;
-      const households = realEdirs * 200; // Average 200 households per traditional edir
+    return Object.values(map).map((sc) => {
+      let rating: EdirSubCityRow["complianceRating"] = "NO RECORDS";
+      if (sc.edirs > 0) {
+        const rate = (sc.active / sc.edirs) * 100;
+        if (rate >= 80) rating = "COMPLIANT";
+        else if (rate >= 50) rating = "PARTIAL";
+        else rating = "AUDIT REQUIRED";
+      }
 
       return {
-        ...sc,
-        edirCount: realEdirs,
-        councilCount: realCouncils,
-        estimatedHouseholds: households,
+        name: sc.name,
+        edirCount: sc.edirs,
+        activeEdirs: sc.active,
+        councilCount: sc.councils,
+        recordedMembers: sc.members,
+        complianceRating: rating,
       };
     });
   }, [edirList, councilList]);
+
+  const totalRegistered = subCities.reduce((a, b) => a + b.edirCount, 0);
+  const totalCouncils = subCities.reduce((a, b) => a + b.councilCount, 0);
+  const totalMembers = subCities.reduce((a, b) => a + b.recordedMembers, 0);
 
   return (
     <div className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
@@ -85,14 +139,14 @@ export function EdirSubCityMatrix({
               Municipal Sub-City Edir &amp; Council Federation Matrix
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              Community associations census, federated councils, and household coverage across 11 sub-cities
+              Grassroots community associations census, federated councils, and recorded membership across Addis Ababa
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono">
+        <div className="flex items-center gap-3 text-xs font-mono">
           <span className="flex items-center gap-1 text-slate-600">
             <span className="size-2 rounded-full bg-emerald-500" />
-            11 Sub-Cities Covered
+            11 Municipal Sub-Cities
           </span>
         </div>
       </div>
@@ -103,9 +157,10 @@ export function EdirSubCityMatrix({
             <tr>
               <th className="py-2.5 px-3">Sub-City Administration</th>
               <th className="py-2.5 px-3 text-right">Registered Edirs</th>
+              <th className="py-2.5 px-3 text-right">Active Standing</th>
               <th className="py-2.5 px-3 text-right">Federated Councils</th>
-              <th className="py-2.5 px-3 text-right">Covered Households</th>
-              <th className="py-2.5 px-3 text-center">Accreditation Standing</th>
+              <th className="py-2.5 px-3 text-right">Recorded Members</th>
+              <th className="py-2.5 px-3 text-center">Accreditation Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E3E7EB]">
@@ -118,21 +173,28 @@ export function EdirSubCityMatrix({
                 <td className="py-2 px-3 text-right font-bold text-[#0B1F3A]">
                   {row.edirCount.toLocaleString()}
                 </td>
+                <td className="py-2 px-3 text-right text-emerald-700 font-medium">
+                  {row.activeEdirs.toLocaleString()}
+                </td>
                 <td className="py-2 px-3 text-right text-[#1769AA] font-bold">
                   {row.councilCount.toLocaleString()}
                 </td>
-                <td className="py-2 px-3 text-right text-slate-700">
-                  ~{row.estimatedHouseholds.toLocaleString()}
+                <td className="py-2 px-3 text-right text-slate-700 font-medium">
+                  {row.recordedMembers > 0
+                    ? row.recordedMembers.toLocaleString()
+                    : "—"}
                 </td>
                 <td className="py-2 px-3 text-center">
                   <Badge
                     variant="outline"
                     className={`rounded-xs text-[10px] uppercase font-bold tracking-wider font-mono border ${
-                      row.complianceRating === "EXCELLENT"
+                      row.complianceRating === "COMPLIANT"
                         ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : row.complianceRating === "GOOD"
+                        : row.complianceRating === "PARTIAL"
                         ? "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]"
-                        : "bg-amber-50 text-amber-700 border-amber-200"
+                        : row.complianceRating === "AUDIT REQUIRED"
+                        ? "bg-rose-50 text-rose-700 border-rose-200"
+                        : "bg-slate-50 text-slate-400 border-slate-200"
                     }`}
                   >
                     {row.complianceRating}
@@ -141,6 +203,27 @@ export function EdirSubCityMatrix({
               </tr>
             ))}
           </tbody>
+          <tfoot className="bg-slate-50/80 border-t-2 border-[#E3E7EB] font-bold text-slate-900">
+            <tr>
+              <td className="py-2.5 px-3 uppercase text-[11px]">Total Addis Ababa Census</td>
+              <td className="py-2.5 px-3 text-right text-[#0B1F3A]">{totalRegistered.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-right text-emerald-700">
+                {subCities.reduce((a, b) => a + b.activeEdirs, 0).toLocaleString()}
+              </td>
+              <td className="py-2.5 px-3 text-right text-[#1769AA]">{totalCouncils.toLocaleString()}</td>
+              <td className="py-2.5 px-3 text-right text-slate-800">
+                {totalMembers > 0 ? totalMembers.toLocaleString() : "—"}
+              </td>
+              <td className="py-2.5 px-3 text-center text-[10px] text-slate-500 font-normal">
+                {totalRegistered > 0
+                  ? `${Math.round(
+                      (subCities.reduce((a, b) => a + b.activeEdirs, 0) / totalRegistered) *
+                        100
+                    )}% Compliant`
+                  : "No Records"}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

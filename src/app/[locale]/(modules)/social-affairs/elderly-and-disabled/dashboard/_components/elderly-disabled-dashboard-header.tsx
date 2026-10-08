@@ -3,14 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Users,
   RefreshCw,
   Printer,
   Plus,
   Search,
-  HeartHandshake,
-  Briefcase,
-  GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BeneficiaryReportDialog from "../../_components/report-dialog";
@@ -18,23 +14,11 @@ import BeneficiaryReportDialog from "../../_components/report-dialog";
 interface ElderlyDisabledDashboardHeaderProps {
   onRefresh?: () => void;
   isRefreshing?: boolean;
-  totalBeneficiaries?: number;
-  elderlyTotal?: number;
-  disabledTotal?: number;
-  totalServices?: number;
-  totalTrainings?: number;
-  totalJobs?: number;
 }
 
 export function ElderlyDisabledDashboardHeader({
   onRefresh,
   isRefreshing = false,
-  totalBeneficiaries = 0,
-  elderlyTotal = 0,
-  disabledTotal = 0,
-  totalServices = 0,
-  totalTrainings = 0,
-  totalJobs = 0,
 }: ElderlyDisabledDashboardHeaderProps) {
   return (
     <div className="space-y-3">
@@ -98,14 +82,14 @@ export function ElderlyDisabledDashboardHeader({
       </div>
 
       {/* Main Title & Executive Metadata */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pt-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
               Disability &amp; Elderly Social Protection Administration
             </h1>
             <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]">
-              Active Registry
+              Municipal Directorate
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1 max-w-3xl">
@@ -113,36 +97,13 @@ export function ElderlyDisabledDashboardHeader({
           </p>
         </div>
 
-        {/* Quick summary badges */}
-        <div className="flex items-center gap-2 flex-wrap text-xs">
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <Users className="size-3.5 text-[#1769AA]" />
-            <span className="text-slate-500 font-mono text-[11px]">Beneficiaries:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalBeneficiaries.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <HeartHandshake className="size-3.5 text-emerald-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Services:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalServices.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <GraduationCap className="size-3.5 text-amber-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Skills:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalTrainings.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white border border-[#E3E7EB] px-2.5 py-1 rounded-xs">
-            <Briefcase className="size-3.5 text-blue-600" />
-            <span className="text-slate-500 font-mono text-[11px]">Jobs:</span>
-            <span className="font-bold text-slate-900 font-mono text-[11px]">
-              {totalJobs.toLocaleString()}
-            </span>
-          </div>
+        <div className="text-right shrink-0">
+          <span className="text-[11px] font-mono text-slate-400 block">
+            Social Safety Net Register
+          </span>
+          <span className="text-xs font-mono font-medium text-slate-600">
+            Fayda &amp; Biometric Integrated
+          </span>
         </div>
       </div>
     </div>

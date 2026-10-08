@@ -65,19 +65,16 @@ export default function AdoptionRegisterPage() {
       email: data.email,
       password: data.password,
     };
-    console.log(newData);
     mutate(newData);
   }
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
-      toast("Signup was successfull");
+      toast("Signup was successful");
       router.push("/applicant-portal/portal");
     }
     if (isError) {
-      console.log(error.message);
-      toast("Sigup Failed", {
+      toast("Signup Failed", {
         description: error.message,
       });
     }

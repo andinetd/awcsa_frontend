@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChildWelfareDashboard } from "@/hooks/dashboard/useChildWelfareDashboard";
 import { useChildren } from "@/hooks/adoption/useChildren";
 import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
+import { useAdoptionApplicationsQuery } from "@/hooks/adoption/adoption-requests";
 import { AdoptionHeader } from "@/components/adoption/dashboard/adoption-header";
 import { AdoptionAlertBanner } from "@/components/adoption/dashboard/adoption-alert-banner";
 import { AdoptionKpiGrid } from "@/components/adoption/dashboard/adoption-kpi-grid";
 import { AdoptionChartsSection } from "@/components/adoption/dashboard/adoption-charts-section";
 import { AdoptionPipelineFunnel } from "@/components/adoption/dashboard/adoption-pipeline-funnel";
-import { AdoptionRecentCasesTable } from "@/components/adoption/dashboard/adoption-recent-cases-table";
+import { AdoptionRecentCasesTable, AdoptionCaseItem } from "@/components/adoption/dashboard/adoption-recent-cases-table";
 
 export default function ChildWelfareDashboard() {
   const t = useTranslations("child-welfare.dashboard");
@@ -27,39 +28,262 @@ export default function ChildWelfareDashboard() {
   // 3. Fetch care centers
   const { data: careCentersData } = useGetCareCentersQuery();
 
+  // 4. Fetch adoption applications
+  const { data: applications = [] } = useAdoptionApplicationsQuery("ALL");
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await Promise.allSettled([
       queryClient.invalidateQueries({ queryKey: ["dashboard", "child-welfare"] }),
       queryClient.invalidateQueries({ queryKey: ["adoption-children"] }),
       queryClient.invalidateQueries({ queryKey: ["Get All Centers"] }),
+      queryClient.invalidateQueries({ queryKey: ["adoption", "applications"] }),
     ]);
     setTimeout(() => {
       setIsRefreshing(false);
     }, 500);
   };
 
-  // Derive metrics
-  const totalChildren = dashboardData?.children?.total ?? (childrenData?.length || 8);
-  const inCareCount = dashboardData?.children?.inCare ?? 1;
-  const foundCount = dashboardData?.children?.found ?? 2;
-  const adoptedCount = dashboardData?.children?.adopted ?? 1;
-  const fosteredCount = dashboardData?.children?.fostered ?? 2;
-  const kinshipOrAdera = fosteredCount + 2; // e.g. 4
-  const totalApplicants = dashboardData?.adoption?.totalApplicants ?? 6;
-  const totalFacilities = dashboardData?.infrastructure?.totalFacilities ?? (careCentersData?.length || 5);
-  
+  // Derived counts
+  const totalChildren = dashboardData?.children?.total ?? (childrenData?.length ?? 0);
+
+  const foundCount = childrenData
+    ? childrenData.filter((c) => c.currentStatus === "FOUND").length
+    : (dashboardData?.children?.found ?? 0);
+
+  const inCareCount = childrenData
+    ? childrenData.filter((c) => c.currentStatus === "IN_CARE").length
+    : (dashboardData?.children?.inCare ?? 0);
+
+  const adoptedCount = childrenData
+    ? childrenData.filter((c) => c.currentStatus === "ADOPTED").length
+    : (dashboardData?.children?.adopted ?? 0);
+
+  const inAderaCount = childrenData
+    ? childrenData.filter((c) => c.currentStatus === "IN_ADERA").length
+    : Math.floor((dashboardData?.children?.fostered ?? 0) / 2);
+
+  const kinshipCount = childrenData
+    ? childrenData.filter((c) => c.currentStatus === "WITH_BLOOD_RELATIVE").length
+    : Math.ceil((dashboardData?.children?.fostered ?? 0) / 2);
+
+  const fosteredOrKinship = inAderaCount + kinshipCount;
+
+  const totalApplicants = dashboardData?.adoption?.totalApplicants ?? applications.length;
+  const totalFacilities = dashboardData?.infrastructure?.totalFacilities ?? (careCentersData?.length ?? 0);
+
   const pendingReports =
     dashboardData?.infrastructure?.reports?.find((r) => r.status === "PENDING")?._count ?? 0;
 
-  // Derive status distribution for donut chart
+  // Pipeline status breakdown for applications
+  const pendingHomeVisits = applications.filter(
+    (a) => (a.applicationInfo?.status || a.status) === "PENDING_HOME_VISIT"
+  ).length;
+
+  const pendingApprovals = applications.filter(
+    (a) => (a.applicationInfo?.status || a.status) === "PENDING_APPROVAL"
+  ).length;
+
+  const matchedApps = applications.filter(
+    (a) => (a.applicationInfo?.status || a.status) === "MATCHED"
+  ).length;
+
+  const finalizedApps = applications.filter(
+    (a) => (a.applicationInfo?.status || a.status) === "FINALIZED" || (a.applicationInfo?.status || a.status) === "APPROVED"
+  ).length;
+
+  // Status breakdown for Donut chart
   const statusBreakdown = [
-    { status: "FOUND", label: "Found / In-Processing", count: foundCount || 2, color: "#F59E0B" },
-    { status: "IN_CARE", label: "Residential Care Centers", count: inCareCount || 1, color: "#0B1F3A" },
-    { status: "IN_ADERA", label: "Adera Custody Placements", count: 2, color: "#1769AA" },
-    { status: "WITH_BLOOD_RELATIVE", label: "Kinship / Relatives", count: 2, color: "#38BDF8" },
-    { status: "ADOPTED", label: "Domestic Adoption Finalized", count: adoptedCount || 1, color: "#10B981" },
+    { status: "FOUND", label: "Found / In-Processing", count: foundCount, color: "#F59E0B" },
+    { status: "IN_CARE", label: "Residential Care Centers", count: inCareCount, color: "#0B1F3A" },
+    { status: "IN_ADERA", label: "Adera Custody Placements", count: inAderaCount, color: "#1769AA" },
+    { status: "WITH_BLOOD_RELATIVE", label: "Kinship / Relatives", count: kinshipCount, color: "#38BDF8" },
+    { status: "ADOPTED", label: "Domestic Adoption Finalized", count: adoptedCount, color: "#10B981" },
   ];
+
+  // Pipeline stages calculation
+  const totalAppsCount = applications.length;
+  const pipelineData = [
+    {
+      stage: 1,
+      title: "Formal applications registered",
+      description: "Prospective adoptive parents initial dossier intake",
+      count: totalAppsCount,
+      unit: "applicants",
+      percentage: totalAppsCount > 0 ? 100 : 0,
+      color: "#0B1F3A",
+      tabKey: "pending",
+    },
+    {
+      stage: 2,
+      title: "Social worker home inspection",
+      description: "Domestic background vetting & home suitability assessment",
+      count: pendingHomeVisits,
+      unit: "scheduled",
+      percentage: totalAppsCount > 0 ? Math.round((pendingHomeVisits / totalAppsCount) * 100) : 0,
+      color: "#1769AA",
+      tabKey: "pending_home_visit",
+    },
+    {
+      stage: 3,
+      title: "Case matching committee review",
+      description: "Multi-disciplinary child placement committee evaluation",
+      count: pendingApprovals,
+      unit: "in review",
+      percentage: totalAppsCount > 0 ? Math.round((pendingApprovals / totalAppsCount) * 100) : 0,
+      color: "#38BDF8",
+      tabKey: "pending_approval",
+    },
+    {
+      stage: 4,
+      title: "Trial custody & bonding period",
+      description: "Supervised family bonding and follow-up",
+      count: matchedApps,
+      unit: "active bonding",
+      percentage: totalAppsCount > 0 ? Math.round((matchedApps / totalAppsCount) * 100) : 0,
+      color: "#8B5CF6",
+      tabKey: "matched",
+    },
+    {
+      stage: 5,
+      title: "Court decrees finalized",
+      description: "Permanent judicial adoption orders and civil registry sync",
+      count: finalizedApps || adoptedCount,
+      unit: "decreed",
+      percentage: totalAppsCount > 0 ? Math.round(((finalizedApps || adoptedCount) / totalAppsCount) * 100) : 0,
+      color: "#10B981",
+      tabKey: "matched",
+    },
+  ];
+
+  // Care facilities mapping
+  const facilities = (careCentersData || []).map((center: any, idx: number) => {
+    const occ = (childrenData || []).filter(
+      (c) => c.childCareFacilityId === center.id || c.childCareFacility?.name === center.name
+    ).length;
+    const cap = Number(center.capacity) || 25;
+    return {
+      id: center.id || idx + 1,
+      name: center.name || `Facility ${idx + 1}`,
+      type: center.type
+        ? center.type.toUpperCase() === "GOVERNMENT"
+          ? "Government / Municipal"
+          : "Licensed NGO / Private"
+        : "Care Facility",
+      capacity: cap,
+      occupancy: occ,
+      status: "Active",
+    };
+  });
+
+  // Recent cases table mapping
+  const recentCases: AdoptionCaseItem[] = (applications || []).map((app) => {
+    const applicantName =
+      app.applicantInfo?.fullName ||
+      `${app.applicantInfo?.firstName || ""} ${app.applicantInfo?.lastName || ""}`.trim() ||
+      "Applicant";
+
+    const rawStatus = (app.applicationInfo?.status || app.status || "PENDING_REVIEW").toUpperCase();
+
+    let statusLabel = "Review";
+    if (rawStatus === "PENDING_REVIEW") statusLabel = "Document Review";
+    else if (rawStatus === "PENDING_HOME_VISIT") statusLabel = "Home Inspection";
+    else if (rawStatus === "PENDING_APPROVAL") statusLabel = "Committee Review";
+    else if (rawStatus === "MATCHED") statusLabel = "Bonding Trial";
+    else if (rawStatus === "FINALIZED" || rawStatus === "APPROVED") statusLabel = "Court Decreed";
+    else if (rawStatus === "REJECTED") statusLabel = "Rejected";
+    else statusLabel = rawStatus.replace(/_/g, " ");
+
+    const subCity = app.applicantInfo?.subCity || "—";
+    const woreda = app.applicantInfo?.woreda || "—";
+
+    const prefSex = app.applicationInfo?.preferredChildren?.sex;
+    const prefAge = app.applicationInfo?.preferredChildren?.ageRange;
+    let preference = "Standard Placement";
+    if (prefSex && prefAge) {
+      preference = `${prefSex}, ${prefAge.min ?? 0}-${prefAge.max ?? 5} yrs`;
+    } else if (prefSex) {
+      preference = `${prefSex}`;
+    } else if (prefAge) {
+      preference = `${prefAge.min ?? 0}-${prefAge.max ?? 5} yrs`;
+    }
+
+    const dateStr =
+      app.applicationInfo?.submittedAt ||
+      app.applicationInfo?.submissionDate ||
+      app.reviewInfo?.createdAt;
+    const submittedDate = dateStr ? new Date(dateStr) : new Date();
+    const daysInQueue = !isNaN(submittedDate.getTime())
+      ? Math.max(0, Math.floor((Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)))
+      : 0;
+    const year = !isNaN(submittedDate.getFullYear()) ? submittedDate.getFullYear() : new Date().getFullYear();
+    const caseCode = `AD-${year}-${String(app.applicationId).padStart(3, "0")}`;
+
+    return {
+      id: app.applicationId,
+      caseCode,
+      applicantName,
+      subCity,
+      woreda,
+      preference,
+      status: rawStatus,
+      statusLabel,
+      daysInQueue,
+      assignedWorker: app.reviewInfo?.remark ? "Assigned Officer" : "Municipal Intake Team",
+    };
+  });
+
+  // Calculate trailing 6 months intake trends
+  const intakeTrends = useMemo(() => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const now = new Date();
+    const buckets: { month: string; intake: number; placements: number; year: number; monthIdx: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      buckets.push({
+        month: months[d.getMonth()],
+        year: d.getFullYear(),
+        monthIdx: d.getMonth(),
+        intake: 0,
+        placements: 0,
+      });
+    }
+
+    // Tally child intakes
+    (childrenData || []).forEach((c) => {
+      const dateStr = c.createdAt || c.timeWhenChildFound;
+      if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          const b = buckets.find((bucket) => bucket.monthIdx === d.getMonth() && bucket.year === d.getFullYear());
+          if (b) {
+            b.intake += 1;
+            if (c.currentStatus === "ADOPTED" || c.currentStatus === "WITH_BLOOD_RELATIVE") {
+              b.placements += 1;
+            }
+          }
+        }
+      }
+    });
+
+    // Tally application placements
+    (applications || []).forEach((a) => {
+      const dateStr = a.applicationInfo?.submittedAt || a.reviewInfo?.updatedAt;
+      if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          const b = buckets.find((bucket) => bucket.monthIdx === d.getMonth() && bucket.year === d.getFullYear());
+          const status = (a.applicationInfo?.status || a.status || "").toUpperCase();
+          if (b && (status === "FINALIZED" || status === "APPROVED" || status === "MATCHED")) {
+            b.placements += 1;
+          }
+        }
+      }
+    });
+
+    return buckets.map(({ month, intake, placements }) => ({ month, intake, placements }));
+  }, [childrenData, applications]);
 
   if (isDashboardLoading && !dashboardData) {
     return (
@@ -83,11 +307,11 @@ export default function ChildWelfareDashboard() {
         totalFacilities={totalFacilities}
       />
 
-      {/* 2. Operational Attention Alert Cards (with Inverted Navy Card) */}
+      {/* 2. Operational Attention Alert Cards */}
       <AdoptionAlertBanner
-        pendingHomeVisits={6}
+        pendingHomeVisits={pendingHomeVisits}
         pendingReports={pendingReports}
-        pendingApprovals={2}
+        pendingApprovals={pendingApprovals}
         inCareCount={inCareCount}
       />
 
@@ -95,21 +319,28 @@ export default function ChildWelfareDashboard() {
       <AdoptionKpiGrid
         totalChildren={totalChildren}
         inCareCount={inCareCount}
-        fosteredOrKinship={kinshipOrAdera}
+        fosteredOrKinship={fosteredOrKinship}
         totalApplicants={totalApplicants}
         adoptedCount={adoptedCount}
+        facilityCount={totalFacilities}
       />
 
       {/* 4. Analytics Visualizations: Dual Bar Velocity & Donut Distribution */}
       <AdoptionChartsSection
+        intakeTrends={intakeTrends}
         statusBreakdown={statusBreakdown}
       />
 
       {/* 5. 5-Stage Vetting Pipeline Funnel & Care Facilities Matrix */}
-      <AdoptionPipelineFunnel />
+      <AdoptionPipelineFunnel
+        pipelineData={pipelineData}
+        facilities={facilities}
+      />
 
       {/* 6. Active Application Queue & Case Roster Table */}
-      <AdoptionRecentCasesTable />
+      <AdoptionRecentCasesTable
+        cases={recentCases}
+      />
     </div>
   );
 }

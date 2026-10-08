@@ -115,6 +115,8 @@
       },
       "select": "Select...",
       "selectSubCity": "Select Sub-City",
+      "bureauLevel": "Bureau Level (Head Office)",
+      "subCityLevel": "Sub-City Level",
       "create": "Create User",
       "cancel": "Cancel",
       "placeholders": {

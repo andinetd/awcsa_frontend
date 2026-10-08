@@ -9,14 +9,16 @@ interface AdoptionKpiGridProps {
   fosteredOrKinship?: number;
   totalApplicants?: number;
   adoptedCount?: number;
+  facilityCount?: number;
 }
 
 export function AdoptionKpiGrid({
-  totalChildren = 8,
-  inCareCount = 1,
-  fosteredOrKinship = 4,
-  totalApplicants = 6,
-  adoptedCount = 1,
+  totalChildren = 0,
+  inCareCount = 0,
+  fosteredOrKinship = 0,
+  totalApplicants = 0,
+  adoptedCount = 0,
+  facilityCount = 0,
 }: AdoptionKpiGridProps) {
   const kpis = [
     {
@@ -25,31 +27,31 @@ export function AdoptionKpiGrid({
       badge: "Verified",
       detail: "Addis Ababa municipal registry",
       subDetail: "All 11 sub-cities tracked",
-      trend: "+2 this quarter",
+      trend: "Verified records",
     },
     {
       title: "Residential Care Centers",
       value: inCareCount,
       badge: "In-Care",
-      detail: "In 5 licensed municipal facilities",
+      detail: facilityCount > 0 ? `Across ${facilityCount} licensed facilities` : "Licensed municipal facilities",
       subDetail: "Active residential guardianship",
-      trend: "Stable capacity",
+      trend: `${inCareCount} in-care`,
     },
     {
       title: "Adera & Kinship Custody",
       value: fosteredOrKinship,
       badge: "Family Care",
-      detail: "2 Adera custody · 2 Kinship",
+      detail: `${fosteredOrKinship} in family custody placements`,
       subDetail: "Temporary & extended family care",
-      trend: "+1 kinship match",
+      trend: "Family placements",
     },
     {
       title: "Active Adoption Applicants",
       value: totalApplicants,
       badge: "In Pipeline",
       detail: "Pre-screened prospective parents",
-      subDetail: "6 dossiers in procedural vetting",
-      trend: "High intake",
+      subDetail: `${totalApplicants} dossiers in procedural vetting`,
+      trend: "Active pipeline",
     },
     {
       title: "Court Decrees Finalized",

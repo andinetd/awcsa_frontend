@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import {
   ApplicationStepOneType,
   ApplicationStepTwoType,
@@ -34,7 +34,8 @@ export const useApplicationFormStore = create<ApplicationFormState>()(
     }),
     {
       name: "application-form-store",
-      // Exclude File objects from localStorage JSON serialization to prevent them from turning into empty objects {}
+      storage: createJSONStorage(() => sessionStorage),
+      // Exclude File objects from storage JSON serialization to prevent them from turning into empty objects {}
       partialize: (state) => ({
         step1: state.step1
           ? {

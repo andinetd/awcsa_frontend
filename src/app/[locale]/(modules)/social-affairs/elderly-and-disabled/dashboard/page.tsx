@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useBeneficiaryDashboard } from "@/hooks/beneficiaries/srs-hooks";
 import {
@@ -10,10 +10,10 @@ import {
   useGetJobsQuery,
 } from "@/hooks/beneficiaries";
 import { ElderlyDisabledDashboardHeader } from "./_components/elderly-disabled-dashboard-header";
-import { ElderlyDisabledAttentionCards } from "./_components/elderly-disabled-attention-cards";
 import { ElderlyDisabledKpiGrid } from "./_components/elderly-disabled-kpi-grid";
 import { ElderlyDisabledChartsSection } from "./_components/elderly-disabled-charts-section";
 import { ElderlyDisabledSubCityMatrix } from "./_components/elderly-disabled-subcity-matrix";
+import { ElderlyDisabledRecentBeneficiaries } from "./_components/elderly-disabled-recent-beneficiaries";
 import { ElderlyDisabledQuickActions } from "./_components/elderly-disabled-quick-actions";
 
 export default function ElderlyAndDisabledDashboard() {
@@ -53,38 +53,105 @@ export default function ElderlyAndDisabledDashboard() {
   const pendingConfirmation = dashboardCounts?.pendingConfirmation || 0;
   const requestedServices = dashboardCounts?.requestedServices || 0;
 
-  const allBeneficiaries = [
-    ...(disabledList || []),
-    ...(elderlyList || []),
-  ];
+  const allBeneficiaries = useMemo(
+    () => [...(disabledList || []), ...(elderlyList || [])],
+    [disabledList, elderlyList]
+  );
 
-  // Program Breakdown for Donut Chart
-  const programBreakdown = [
-    {
-      category: "DEVICES",
-      label: "Assistive Devices & Mobility",
-      count: totalServices > 0 ? Math.max(Math.round(totalServices * 0.4), 1) : 38,
-      color: "#1769AA",
-    },
-    {
-      category: "GERIATRIC",
-      label: "Geriatric & Health Care",
-      count: totalServices > 0 ? Math.max(Math.round(totalServices * 0.3), 1) : 28,
-      color: "#0B1F3A",
-    },
-    {
-      category: "TRAINING",
-      label: "Vocational Skills Training",
-      count: totalTrainings > 0 ? totalTrainings : 22,
-      color: "#F59E0B",
-    },
-    {
-      category: "EMPLOYMENT",
-      label: "Inclusive Job Placements",
-      count: totalJobs > 0 ? totalJobs : 18,
-      color: "#10B981",
-    },
-  ];
+  const recentBeneficiaries = useMemo(
+    () =>
+      [...allBeneficiaries]
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt || 0).getTime() -
+            new Date(a.createdAt || 0).getTime()
+        )
+        .slice(0, 8),
+    [allBeneficiaries]
+  );
+
+  // Genuine Program Breakdown for Donut Chart without arbitrary formulas
+  const programBreakdown = useMemo(() => {
+    const list = [
+      {
+        category: "SERVICES",
+        label: "Support Services & Assistive Aid",
+        count: totalServices,
+        color: "#1769AA",
+      },
+      {
+        category: "TRAINING",
+        label: "Vocational Skills Training",
+        count: totalTrainings,
+        color: "#F59E0B",
+      },
+      {
+        category: "EMPLOYMENT",
+        label: "Inclusive Job Placements",
+        count: totalJobs,
+        color: "#10B981",
+      },
+    ];
+
+    const activeList = list.filter((item) => item.count > 0);
+    return activeList.length > 0 ? activeList : list;
+  }, [totalServices, totalTrainings, totalJobs]);
+
+  // Dynamically compute monthly trends from actual dates
+  const intakeTrends = useMemo(() => {
+    if (allBeneficiaries.length === 0 && (!services || services.length === 0)) {
+      return [];
+    }
+
+    let latestTimestamp = Date.now();
+    const timestamps = [
+      ...allBeneficiaries.map((b) => new Date(b.createdAt || 0).getTime()),
+      ...(services || []).map((s: any) => new Date(s.dateProvided || s.createdAt || 0).getTime()),
+    ].filter((t) => t > 0);
+
+    if (timestamps.length > 0) {
+      latestTimestamp = Math.max(...timestamps);
+    }
+
+    const refDate = new Date(latestTimestamp);
+    const buckets: { key: string; month: string; registered: number; supported: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const month = d.toLocaleDateString("en-US", { month: "short" });
+      buckets.push({ key, month, registered: 0, supported: 0 });
+    }
+
+    allBeneficiaries.forEach((b) => {
+      if (b.createdAt) {
+        const d = new Date(b.createdAt);
+        if (!isNaN(d.getTime())) {
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          const bucket = buckets.find((item) => item.key === key);
+          if (bucket) bucket.registered += 1;
+        }
+      }
+    });
+
+    (services || []).forEach((s: any) => {
+      const dateStr = s.dateProvided || s.createdAt;
+      if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          const bucket = buckets.find((item) => item.key === key);
+          if (bucket) bucket.supported += 1;
+        }
+      }
+    });
+
+    return buckets.map(({ month, registered, supported }) => ({
+      month,
+      registered,
+      supported,
+    }));
+  }, [allBeneficiaries, services]);
 
   const isLoadingInitial =
     isDashboardLoading &&
@@ -113,23 +180,9 @@ export default function ElderlyAndDisabledDashboard() {
       <ElderlyDisabledDashboardHeader
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
-        totalBeneficiaries={totalBeneficiaries}
-        elderlyTotal={elderlyCount}
-        disabledTotal={disabledCount}
-        totalServices={totalServices}
-        totalTrainings={totalTrainings}
-        totalJobs={totalJobs}
       />
 
-      {/* 2. Operational Attention Alert Cards */}
-      <ElderlyDisabledAttentionCards
-        pendingEligibility={pendingEligibility}
-        pendingConfirmation={pendingConfirmation}
-        requestedServices={requestedServices}
-        totalTrainings={totalTrainings}
-      />
-
-      {/* 3. Master KPI Scorecard Grid */}
+      {/* 2. Consolidated Master KPI Scorecard Grid */}
       <ElderlyDisabledKpiGrid
         totalBeneficiaries={totalBeneficiaries}
         elderlyTotal={elderlyCount}
@@ -137,20 +190,29 @@ export default function ElderlyAndDisabledDashboard() {
         totalServices={totalServices}
         totalJobs={totalJobs}
         totalTrainings={totalTrainings}
+        pendingEligibility={pendingEligibility}
+        pendingConfirmation={pendingConfirmation}
+        requestedServices={requestedServices}
       />
 
-      {/* 4. Analytics Visualizations: Inflow vs Resolution & Service Donut */}
+      {/* 3. Analytics Visualizations: Inflow vs Resolution & Service Donut */}
       <ElderlyDisabledChartsSection
+        intakeTrends={intakeTrends}
         programBreakdown={programBreakdown}
       />
 
-      {/* 5. Sub-City Municipal Coverage Matrix */}
+      {/* 4. Sub-City Municipal Coverage Matrix */}
       <ElderlyDisabledSubCityMatrix
         beneficiariesList={allBeneficiaries}
         servicesList={services}
       />
 
-      {/* 6. Primary Workflows & Directory Shortcuts */}
+      {/* 5. Recent Registrations & Beneficiaries Roster */}
+      <ElderlyDisabledRecentBeneficiaries
+        recentList={recentBeneficiaries}
+      />
+
+      {/* 6. Primary Governance Workflows & Shortcuts */}
       <ElderlyDisabledQuickActions />
     </div>
   );

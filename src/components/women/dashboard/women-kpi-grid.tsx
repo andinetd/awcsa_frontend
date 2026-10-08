@@ -1,7 +1,17 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2 } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import {
+  Users,
+  Landmark,
+  Layers,
+  Sparkles,
+  AlertTriangle,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface WomenKpiGridProps {
   totalProfiles?: number;
@@ -30,80 +40,135 @@ export function WomenKpiGrid({
   totalTechSupport = 0,
   totalTrainings = 0,
 }: WomenKpiGridProps) {
-  const kpis = [
+  const totalInterventions = totalEmployments + totalTechSupport + totalTrainings;
+  const isAlert = submittedAssociations > 0;
+
+  const cards = [
     {
-      title: "Total Tracked Women",
+      title: "Registered Women Roster",
       value: totalProfiles,
-      badge: "Verified",
-      detail: "Addis Ababa municipal registry",
-      subDetail: "All 11 sub-cities tracked",
-      trend: "+12% YoY",
+      sub: "Addis Ababa municipal registry • All 11 sub-cities",
+      icon: Users,
+      badgeText: "VERIFIED",
+      badgeColor: "bg-slate-100 text-slate-700 border-slate-200",
+      iconBg: "bg-slate-100 text-slate-700",
+      link: "/women/profiles",
+      isAlert: false,
+      actionText: "View profiles roster",
     },
     {
       title: "Grassroots Associations",
       value: totalAssociations,
-      badge: `${approvedAssociations} Approved`,
-      detail: `${draftAssociations} draft · ${submittedAssociations} submitted`,
-      subDetail: "Certified community federations",
-      trend: "Active federations",
+      sub: `${approvedAssociations} Approved • ${draftAssociations} Draft • ${submittedAssociations} Under Review`,
+      icon: Landmark,
+      badgeText: `${approvedAssociations} APPROVED`,
+      badgeColor: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
+      iconBg: "bg-[#E8F2FA] text-[#1769AA]",
+      link: "/women/associations",
+      isAlert: false,
+      actionText: "Browse associations",
     },
     {
-      title: "Organized Group Members",
+      title: "Organized Self-Help Members",
       value: totalMembers,
-      badge: `${totalGroups} Groups`,
-      detail: "Cooperative self-help groups",
-      subDetail: `${declaredMembers} declared capacity`,
-      trend: "High engagement",
+      sub: `${totalGroups} Groups active • ${declaredMembers.toLocaleString()} declared capacity target`,
+      icon: Layers,
+      badgeText: `${totalGroups} GROUPS`,
+      badgeColor: "bg-sky-50 text-sky-700 border-sky-200",
+      iconBg: "bg-sky-50 text-sky-700",
+      link: "/women/members",
+      isAlert: false,
+      actionText: "Membership roster",
     },
     {
-      title: "Economic Placements",
-      value: totalEmployments,
-      badge: "Employment",
-      detail: "Manufacturing, services & agriculture",
-      subDetail: "Individual & group placements",
-      trend: "Livelihood support",
+      title: "Livelihood & Skills Aid",
+      value: totalInterventions,
+      sub: `${totalEmployments} Placed • ${totalTechSupport} Technology • ${totalTrainings} Vocational`,
+      icon: Sparkles,
+      badgeText: "DELIVERED",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      iconBg: "bg-emerald-50 text-emerald-700",
+      link: "/women/services",
+      isAlert: false,
+      actionText: "Track interventions",
     },
     {
-      title: "Technology & Skills Grants",
-      value: totalTechSupport + totalTrainings,
-      badge: "Capacitated",
-      detail: `${totalTechSupport} Technology · ${totalTrainings} Skills`,
-      subDetail: "Direct productive empowerment",
-      trend: "High impact",
+      title: "Bureau Action Docket",
+      value: submittedAssociations,
+      sub: isAlert
+        ? `${submittedAssociations} association charters awaiting committee vetting and certification`
+        : "All submitted association dossiers reviewed and certified",
+      icon: isAlert ? AlertTriangle : ShieldCheck,
+      badgeText: isAlert ? "ACTION REQUIRED" : "RESOLVED",
+      badgeColor: isAlert
+        ? "bg-rose-50 text-rose-700 border-rose-200 font-bold"
+        : "bg-emerald-50 text-emerald-700 border-emerald-200",
+      iconBg: isAlert
+        ? "bg-rose-500/10 text-rose-600"
+        : "bg-emerald-500/10 text-emerald-600",
+      link: "/women/associations",
+      isAlert: isAlert,
+      actionText: isAlert ? "Review pending charters" : "Inspect approved roster",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-      {kpis.map((kpi, index) => (
-        <div
-          key={index}
-          className="bg-white border border-[#E3E7EB] rounded-xs p-3.5 flex flex-col justify-between hover:border-slate-300 transition-colors shadow-2xs"
-        >
-          <div>
-            <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
-              <span className="font-medium truncate">{kpi.title}</span>
-              <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-xs">
-                <CheckCircle2 className="size-2.5 text-[#15803D]" />
-                {kpi.badge}
-              </span>
-            </div>
-            <div className="text-2xl font-bold tracking-tight text-[#0F172A] font-mono">
-              {kpi.value}
-            </div>
-          </div>
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+          EXECUTIVE WOMEN DEVELOPMENT &amp; EMPOWERMENT SCORECARD
+        </h2>
+        <span className="text-[11px] text-slate-400 font-mono">
+          Unified registry, cooperative federations &amp; intervention metrics
+        </span>
+      </div>
 
-          <div className="mt-2.5 pt-2 border-t border-slate-100 space-y-0.5">
-            <div className="text-[11.5px] font-medium text-slate-700 truncate">
-              {kpi.detail}
-            </div>
-            <div className="flex items-center justify-between text-[10.5px] text-slate-400">
-              <span className="truncate">{kpi.subDetail}</span>
-              <span className="text-[#1769AA] font-medium shrink-0 ml-1">{kpi.trend}</span>
-            </div>
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {cards.map((c) => {
+          const Icon = c.icon;
+          return (
+            <Link key={c.title} href={c.link} className="block group">
+              <Card
+                className={`rounded-xs border bg-white p-3.5 shadow-2xs hover:shadow-md transition-all relative overflow-hidden flex flex-col justify-between h-full ${
+                  c.isAlert
+                    ? "border-rose-300 hover:border-rose-400"
+                    : "border-[#E3E7EB] hover:border-slate-300"
+                }`}
+              >
+                <CardContent className="p-0 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className={`p-2 rounded-xs ${c.iconBg}`}>
+                      <Icon className="size-4" />
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-xs tracking-wider uppercase font-mono border ${c.badgeColor}`}
+                    >
+                      {c.badgeText}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="text-2xl font-bold font-mono tracking-tight text-[#0B1F3A]">
+                      {c.value.toLocaleString()}
+                    </p>
+                    <p className="text-xs font-semibold text-slate-800 mt-0.5 group-hover:text-[#1769AA] transition-colors">
+                      {c.title}
+                    </p>
+                    <p className="text-[11px] text-slate-500 line-clamp-2 mt-1">
+                      {c.sub}
+                    </p>
+                  </div>
+                </CardContent>
+
+                <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium text-[#1769AA]">
+                  <span>{c.actionText}</span>
+                  <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </Card>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

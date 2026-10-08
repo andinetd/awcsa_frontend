@@ -151,6 +151,10 @@ export function UserDialog({
           teamId: user.employee.team?.id ? String(user.employee.team.id) : "",
         });
       } else {
+        const defaultBureauId =
+          formData?.structure?.bureaus?.length === 1
+            ? String(formData.structure.bureaus[0].id)
+            : "";
         form.reset({
           firstName: "",
           lastName: "",
@@ -159,7 +163,7 @@ export function UserDialog({
           cityIdNumber: "",
           password: "",
           roleId: "",
-          orgUnitId: "",
+          orgUnitId: defaultBureauId,
           assignedModules: [],
           department: "",
           directorateId: "",
@@ -167,7 +171,7 @@ export function UserDialog({
         });
       }
     }
-  }, [open, user, form]);
+  }, [open, user, form, formData]);
 
   const handleGenerate = () => {
     const generated = generatePassword();
@@ -251,7 +255,11 @@ export function UserDialog({
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-5"
+              autoComplete="off"
+            >
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                   {t("section.personal")}
@@ -344,6 +352,8 @@ export function UserDialog({
                           <FormLabel className="text-xs font-semibold text-slate-700">{t("email")}</FormLabel>
                           <FormControl>
                             <Input
+                              type="email"
+                              autoComplete="off"
                               placeholder={t("placeholders.email")}
                               {...field}
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
@@ -400,6 +410,7 @@ export function UserDialog({
                           <FormControl>
                             <Input
                               type={showPassword ? "text" : "password"}
+                              autoComplete="new-password"
                               placeholder={t("placeholders.password")}
                               {...field}
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-20"
@@ -601,9 +612,12 @@ export function UserDialog({
                             : field.value),
                     );
 
+                    const defaultBureauId =
+                      bureaus.length > 0 ? String(bureaus[0].id) : "";
+
                     const effectiveBureauId = selectedBureau
                       ? String(selectedBureau.id)
-                      : "";
+                      : defaultBureauId;
                     const effectiveSubCityId = selectedSubCity
                       ? String(selectedSubCity.id)
                       : "";
@@ -611,58 +625,64 @@ export function UserDialog({
                       ? String(selectedWoreda.id)
                       : "";
 
-                    const filteredSubCities = bureaus.find(
-                      (b) => String(b.id) === effectiveBureauId,
-                    )
+                    const filteredSubCities = effectiveBureauId
                       ? subCities.filter(
                           (sc) => String(sc.parentId) === effectiveBureauId,
                         )
-                      : [];
+                      : subCities;
 
-                    const filteredWoredas = subCities.find(
-                      (sc) => String(sc.id) === effectiveSubCityId,
-                    )
+                    const filteredWoredas = effectiveSubCityId
                       ? woredas.filter(
                           (w) => String(w.parentId) === effectiveSubCityId,
                         )
                       : [];
 
+                    const showOrgSelect = bureaus.length > 1;
+
                     return (
                       <div className="space-y-3">
-                        <FormItem>
-                          <FormLabel className="text-xs font-semibold text-slate-700">{t("org")}</FormLabel>
-                          <Select
-                            onValueChange={(val) => field.onChange(val)}
-                            value={effectiveBureauId}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                                <SelectValue placeholder={t("select")} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
-                              {bureaus.map((org) => (
-                                <SelectItem key={org.id} value={String(org.id)} className="text-xs">
-                                  <span
-                                    className="truncate max-w-[150px] block"
-                                    title={org.name}
-                                  >
-                                    {org.name}
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
+                        {showOrgSelect && (
+                          <FormItem>
+                            <FormLabel className="text-xs font-semibold text-slate-700">{t("org")}</FormLabel>
+                            <Select
+                              onValueChange={(val) => field.onChange(val)}
+                              value={effectiveBureauId}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
+                                  <SelectValue placeholder={t("select")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                                {bureaus.map((org) => (
+                                  <SelectItem key={org.id} value={String(org.id)} className="text-xs">
+                                    <span
+                                      className="truncate max-w-[150px] block"
+                                      title={org.name}
+                                    >
+                                      {org.name}
+                                    </span>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage className="text-[11px]" />
+                          </FormItem>
+                        )}
 
                         {(filteredSubCities.length > 0 ||
                           effectiveSubCityId) && (
                           <FormItem>
                             <FormLabel className="text-xs font-semibold text-slate-700">{t("subCity")}</FormLabel>
                             <Select
-                              onValueChange={(val) => field.onChange(val)}
-                              value={effectiveSubCityId}
+                              onValueChange={(val) => {
+                                if (val === "__BUREAU_LEVEL__") {
+                                  field.onChange(effectiveBureauId);
+                                } else {
+                                  field.onChange(val);
+                                }
+                              }}
+                              value={effectiveSubCityId || (effectiveBureauId === field.value ? "__BUREAU_LEVEL__" : "")}
                             >
                               <FormControl>
                                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
@@ -672,6 +692,9 @@ export function UserDialog({
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                                <SelectItem value="__BUREAU_LEVEL__" className="text-xs font-medium text-slate-600">
+                                  {t("bureauLevel")}
+                                </SelectItem>
                                 {filteredSubCities.map((sc) => (
                                   <SelectItem key={sc.id} value={String(sc.id)} className="text-xs">
                                     <span
@@ -684,16 +707,22 @@ export function UserDialog({
                                 ))}
                               </SelectContent>
                             </Select>
+                            {!showOrgSelect && <FormMessage className="text-[11px]" />}
                           </FormItem>
                         )}
 
-                        {(filteredWoredas.length > 0 ||
-                          effectiveWoredaId) && (
+                        {effectiveSubCityId && filteredWoredas.length > 0 && (
                           <FormItem>
                             <FormLabel className="text-xs font-semibold text-slate-700">{t("woreda")}</FormLabel>
                             <Select
-                              onValueChange={(val) => field.onChange(val)}
-                              value={effectiveWoredaId}
+                              onValueChange={(val) => {
+                                if (val === "__SUBCITY_LEVEL__") {
+                                  field.onChange(effectiveSubCityId);
+                                } else {
+                                  field.onChange(val);
+                                }
+                              }}
+                              value={effectiveWoredaId || (effectiveSubCityId === field.value ? "__SUBCITY_LEVEL__" : "")}
                             >
                               <FormControl>
                                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
@@ -701,6 +730,9 @@ export function UserDialog({
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
+                                <SelectItem value="__SUBCITY_LEVEL__" className="text-xs font-medium text-slate-600">
+                                  {t("subCityLevel")}
+                                </SelectItem>
                                 {filteredWoredas.map((w) => (
                                   <SelectItem key={w.id} value={String(w.id)} className="text-xs">
                                     <span

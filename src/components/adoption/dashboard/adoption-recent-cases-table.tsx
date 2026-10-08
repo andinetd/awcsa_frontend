@@ -15,93 +15,18 @@ export interface AdoptionCaseItem {
   subCity: string;
   woreda: string;
   preference: string;
-  status: "PENDING_REVIEW" | "PENDING_HOME_VISIT" | "PENDING_APPROVAL" | "MATCHED" | "FINALIZED";
+  status: string;
   statusLabel: string;
   daysInQueue: number;
   assignedWorker: string;
 }
-
-const DEFAULT_CASES: AdoptionCaseItem[] = [
-  {
-    id: 1,
-    caseCode: "AD-2024-006",
-    applicantName: "Almaz Bekele & Dawit Tadesse",
-    subCity: "Bole",
-    woreda: "Woreda 03",
-    preference: "Female, 0-2 yrs",
-    status: "PENDING_APPROVAL",
-    statusLabel: "Committee Review",
-    daysInQueue: 18,
-    assignedWorker: "Sr. Social Worker Rahel G.",
-  },
-  {
-    id: 2,
-    caseCode: "AD-2024-005",
-    applicantName: "Selamawit Haile & Yohannes K.",
-    subCity: "Yeka",
-    woreda: "Woreda 08",
-    preference: "Male, 1-3 yrs",
-    status: "PENDING_HOME_VISIT",
-    statusLabel: "Home Visit Scheduled",
-    daysInQueue: 12,
-    assignedWorker: "Social Worker Ermias M.",
-  },
-  {
-    id: 3,
-    caseCode: "AD-2024-004",
-    applicantName: "Hanan Mohammed",
-    subCity: "Kirkos",
-    woreda: "Woreda 02",
-    preference: "Either, 0-1 yr",
-    status: "PENDING_HOME_VISIT",
-    statusLabel: "Home Visit Scheduled",
-    daysInQueue: 9,
-    assignedWorker: "Social Worker Tigist B.",
-  },
-  {
-    id: 4,
-    caseCode: "AD-2024-003",
-    applicantName: "Mulugeta Alemu & Aster Mengistu",
-    subCity: "Arada",
-    woreda: "Woreda 05",
-    preference: "Female, 2-4 yrs",
-    status: "PENDING_REVIEW",
-    statusLabel: "Document Review",
-    daysInQueue: 4,
-    assignedWorker: "Intake Officer Daniel T.",
-  },
-  {
-    id: 5,
-    caseCode: "AD-2024-002",
-    applicantName: "Tirhas Gebre & Solomon W.",
-    subCity: "Nifas Silk",
-    woreda: "Woreda 11",
-    preference: "Male, 0-2 yrs",
-    status: "MATCHED",
-    statusLabel: "Bonding Trial",
-    daysInQueue: 45,
-    assignedWorker: "Sr. Social Worker Rahel G.",
-  },
-  {
-    id: 6,
-    caseCode: "AD-2024-001",
-    applicantName: "Bethlehem Tefera",
-    subCity: "Gullele",
-    woreda: "Woreda 07",
-    preference: "Female, 1-3 yrs",
-    status: "FINALIZED",
-    statusLabel: "Court Decreed",
-    daysInQueue: 88,
-    assignedWorker: "Legal Officer Meron S.",
-  },
-];
 
 interface AdoptionRecentCasesTableProps {
   cases?: AdoptionCaseItem[];
 }
 
 export function AdoptionRecentCasesTable({
-  cases = DEFAULT_CASES,
+  cases = [],
 }: AdoptionRecentCasesTableProps) {
   const [filter, setFilter] = useState<string>("ALL");
   const [search, setSearch] = useState<string>("");

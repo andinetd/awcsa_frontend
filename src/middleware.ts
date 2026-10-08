@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 import { DeputyBureau, EmployeeJwtPayload, JwtPayload } from "./types/api/auth";
 import { routePermissions } from "./utils/routePermissions";
+import { verifyJwtSignature } from "./lib/jwt-verify";
 
 const intlMiddleWare = createMiddleware(routing);
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const locale = req.nextUrl.locale || routing.defaultLocale;
 
@@ -51,6 +52,16 @@ export function middleware(req: NextRequest) {
   }
 
   try {
+    // SIGNATURE & INTEGRITY CHECK
+    const isValidSignature = await verifyJwtSignature(token as string);
+    if (!isValidSignature) {
+      console.warn("Middleware rejected JWT signature on path:", req.nextUrl.pathname);
+      const loginUrl = new URL(`/${locale}/login`, req.url);
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete("wcasf_auth_token");
+      return response;
+    }
+
     const decodedToken = jwtDecode<JwtPayload>(token as string);
 
     // EXPIRATION CHECK
@@ -67,8 +78,6 @@ export function middleware(req: NextRequest) {
         (route) =>
           normalizedPath === route || normalizedPath.startsWith(route + "/"),
       );
-
-    console.log("PATH:", normalizedPath, "MATCHED:", matchedRoute);
 
     if (!matchedRoute) {
       // DENY BY DEFAULT for non-public routes

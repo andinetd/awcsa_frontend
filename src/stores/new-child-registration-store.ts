@@ -13,7 +13,7 @@ export const useNewChildFormStore = create<NewChildformState>()(
     }),
     {
       name: "new-child-info-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

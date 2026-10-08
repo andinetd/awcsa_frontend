@@ -50,16 +50,20 @@ export default function LoginPage() {
               <CardTitle className="font-lexend">{t("signInTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <GoogleReCaptchaProvider
-                reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                scriptProps={{
-                  async: true,
-                  defer: true,
-                  appendTo: "head",
-                }}
-              >
+              {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ? (
+                <GoogleReCaptchaProvider
+                  reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                  scriptProps={{
+                    async: true,
+                    defer: true,
+                    appendTo: "head",
+                  }}
+                >
+                  <SignInForm />
+                </GoogleReCaptchaProvider>
+              ) : (
                 <SignInForm />
-              </GoogleReCaptchaProvider>
+              )}
               <Link
                 href="/"
                 className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-lexend mt-4 hover:underline"

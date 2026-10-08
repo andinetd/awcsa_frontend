@@ -18,7 +18,6 @@ export const clientSignup = async (data: ClientSignup) => {
       }
     );
     const reqRes = await sendReq.data;
-    console.log("SIGN IN REQ RES: ", reqRes);
     return reqRes;
   } catch (error) {
     throw new Error(error as any);
@@ -40,10 +39,20 @@ export const signIn = async (data: ClientSignIn): Promise<ClientSignInResponse> 
     return reqRes;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
-      console.error("Login error response:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Login failed");
+      const serverMessage =
+        error.response?.data?.message ||
+        (Array.isArray(error.response?.data?.errors)
+          ? error.response?.data?.errors.join(", ")
+          : null);
+      const fallbackMessage =
+        serverMessage ||
+        (error.response?.status
+          ? `Request failed with status ${error.response.status}`
+          : error.message) ||
+        "Login failed";
+      throw new Error(fallbackMessage);
     }
-    throw new Error("Unexpected error");
+    throw new Error(error?.message || "Unexpected error");
   }
 };
 

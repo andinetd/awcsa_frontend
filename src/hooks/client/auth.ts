@@ -15,7 +15,6 @@ export const useSignInMutation = () => {
     mutationFn: signIn,
     mutationKey: ["Client Sign In"],
     onSuccess: (data: any, variables) => {
-      console.log("Sign-in response data:", data);
       const token =
         data?.access_token ||
         data?.accessToken ||

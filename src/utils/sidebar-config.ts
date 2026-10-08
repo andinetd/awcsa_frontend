@@ -112,7 +112,7 @@ export const sidebarConfig: Record<
       items: [
         {
           title: "Dashboard",
-          url: "/social-affairs/dashboard",
+          url: "/social-affairs/elderly-and-disabled/dashboard",
           icon: LayoutDashboard,
         },
       ],
@@ -305,7 +305,7 @@ export const sidebarConfig: Record<
           children: [
             {
               title: "Dashboard",
-              url: "/social-affairs/dashboard",
+              url: "/social-affairs/elderly-and-disabled/dashboard",
               icon: LayoutDashboard,
             },
             {

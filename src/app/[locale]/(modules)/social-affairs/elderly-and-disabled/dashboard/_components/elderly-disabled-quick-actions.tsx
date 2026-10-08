@@ -9,7 +9,6 @@ import {
   Briefcase,
   Search,
   ArrowRight,
-  ShieldCheck,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -28,7 +27,7 @@ export function ElderlyDisabledQuickActions() {
       title: "Support Services & Aid",
       desc: "Track assistive devices, physical therapy, medical referrals, nutritional rations, and home visits",
       icon: HeartHandshake,
-      href: "/social-affairs/elderly-and-disabled/services?tab=services",
+      href: "/social-affairs/elderly-and-disabled/services",
       badge: "WELFARE DELIVERY",
       color: "text-emerald-700",
       bg: "bg-emerald-50",
@@ -37,7 +36,7 @@ export function ElderlyDisabledQuickActions() {
       title: "Vocational Skills Training",
       desc: "Manage skills training cohorts, accessible artisan workshops, technical skills, and COC certifications",
       icon: GraduationCap,
-      href: "/social-affairs/elderly-and-disabled/services?tab=training",
+      href: "/social-affairs/elderly-and-disabled/training",
       badge: "CAPACITY BUILDING",
       color: "text-amber-700",
       bg: "bg-amber-50",
@@ -46,7 +45,7 @@ export function ElderlyDisabledQuickActions() {
       title: "Inclusive Employment",
       desc: "Liaison with public and private employers to secure wage placements and cooperative micro-enterprises",
       icon: Briefcase,
-      href: "/social-affairs/elderly-and-disabled/services?tab=jobs",
+      href: "/social-affairs/elderly-and-disabled/jobs",
       badge: "LIVELIHOODS",
       color: "text-blue-700",
       bg: "bg-blue-50",
@@ -60,15 +59,6 @@ export function ElderlyDisabledQuickActions() {
       color: "text-indigo-700",
       bg: "bg-indigo-50",
     },
-    {
-      title: "Welfare Dossiers & Audits",
-      desc: "Inspect case notes, eligibility assessments, verification timeline, and municipal protection reports",
-      icon: ShieldCheck,
-      href: "/social-affairs/elderly-and-disabled/beneficiaries",
-      badge: "COMPLIANCE",
-      color: "text-slate-700",
-      bg: "bg-slate-100",
-    },
   ];
 
   return (
@@ -78,11 +68,11 @@ export function ElderlyDisabledQuickActions() {
           PRIMARY SOCIAL PROTECTION MODULES &amp; WORKFLOWS
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Quick access to operational registers
+          Direct navigation to operational registers
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
         {actions.map((act) => {
           const Icon = act.icon;
           return (
