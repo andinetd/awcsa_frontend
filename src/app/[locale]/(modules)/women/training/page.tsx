@@ -290,10 +290,8 @@ export default function WomenTrainingPage() {
           </div>
           {totalItems > 0 && (
             <div className="flex items-center justify-between px-5 py-3 border-t border-[#E3E7EB] bg-slate-50/40">
-              <div className="text-xs text-slate-500">
-                Showing <span className="font-medium text-slate-700">{startIndex + 1}</span>-
-                <span className="font-medium text-slate-700">{Math.min(startIndex + limit, totalItems)}</span> of{" "}
-                <span className="font-medium text-slate-700">{totalItems}</span>
+              <div className="text-xs text-slate-500 font-mono">
+                {t("showing", { from: startIndex + 1, to: Math.min(startIndex + limit, totalItems), total: totalItems, defaultValue: `Showing ${startIndex + 1}-${Math.min(startIndex + limit, totalItems)} of ${totalItems}` })}
               </div>
               <div className="flex items-center gap-1.5">
                 <Button
@@ -304,7 +302,7 @@ export default function WomenTrainingPage() {
                   className="h-7 px-2.5 text-xs rounded-xs border-[#E3E7EB] hover:bg-white cursor-pointer disabled:opacity-40"
                 >
                   <ChevronLeft className="h-3.5 w-3.5 mr-1" />
-                  Prev
+                  {t("pagination.prev", { defaultValue: "Prev" })}
                 </Button>
                 <div className="text-xs font-mono text-slate-600 px-2">
                   {page} / {totalPages}
@@ -316,7 +314,7 @@ export default function WomenTrainingPage() {
                   disabled={page >= totalPages}
                   className="h-7 px-2.5 text-xs rounded-xs border-[#E3E7EB] hover:bg-white cursor-pointer disabled:opacity-40"
                 >
-                  Next
+                  {t("pagination.next", { defaultValue: "Next" })}
                   <ChevronRight className="h-3.5 w-3.5 ml-1" />
                 </Button>
               </div>
@@ -328,17 +326,17 @@ export default function WomenTrainingPage() {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent className="rounded-xs border-[#E3E7EB]">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-sm font-bold text-[#0B1F3A]">Confirm Delete</AlertDialogTitle>
-            <AlertDialogDescription className="text-xs text-slate-500">Are you sure you want to delete this training record?</AlertDialogDescription>
+            <AlertDialogTitle className="text-sm font-bold text-[#0B1F3A]">{t("delete.title", { defaultValue: "Confirm Delete" })}</AlertDialogTitle>
+            <AlertDialogDescription className="text-xs text-slate-500">{t("delete.description", { defaultValue: "Are you sure you want to delete this training record?" })}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="h-8 text-xs rounded-xs border-[#E3E7EB]">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="h-8 text-xs rounded-xs border-[#E3E7EB] cursor-pointer">{t("delete.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
-              className="h-8 text-xs rounded-xs bg-rose-600 hover:bg-rose-700 text-white"
+              className="h-8 text-xs rounded-xs bg-rose-600 hover:bg-rose-700 text-white cursor-pointer"
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("delete.deleting", { defaultValue: "Deleting..." }) : t("delete.confirm", { defaultValue: "Delete" })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

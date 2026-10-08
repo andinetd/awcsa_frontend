@@ -174,15 +174,15 @@ export default function WomenEmploymentPage() {
               </PopoverTrigger>
               <PopoverContent className="w-72 rounded-xs border-[#E3E7EB]" align="end">
                 <div className="space-y-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">Filters</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("filter.title", { defaultValue: "Filters" })}</h4>
                   <div className="space-y-1.5">
-                    <Label className="text-xs text-slate-600">Employment Type</Label>
+                    <Label className="text-xs text-slate-600">{t("form.fields.employmentType")}</Label>
                     <Select value={filterType} onValueChange={(v) => { setFilterType(v); setPage(1); }}>
                       <SelectTrigger className="h-8 text-xs border-[#E3E7EB] rounded-xs"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        <SelectItem value="INDIVIDUAL">Individual</SelectItem>
-                        <SelectItem value="GROUP">Group</SelectItem>
+                        <SelectItem value="all">{t("filter.allTypes", { defaultValue: "All Types" })}</SelectItem>
+                        <SelectItem value="INDIVIDUAL">{t("employmentTypes.INDIVIDUAL")}</SelectItem>
+                        <SelectItem value="GROUP">{t("employmentTypes.GROUP")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -209,10 +209,10 @@ export default function WomenEmploymentPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 text-xs text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs w-full"
+                    className="h-7 text-xs text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs w-full cursor-pointer"
                     onClick={() => { setFilterType("all"); setFilterSector("all"); setFilterStartDate(""); setFilterEndDate(""); setPage(1); }}
                   >
-                    Clear filters
+                    {t("filter.clearFilters", { defaultValue: "Clear filters" })}
                   </Button>
                 </div>
               </PopoverContent>
@@ -229,7 +229,7 @@ export default function WomenEmploymentPage() {
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.sector")}</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.year")}</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.remark")}</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">Actions</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">{t("table.actions", { defaultValue: "Actions" })}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -293,7 +293,7 @@ export default function WomenEmploymentPage() {
           {totalItems > 0 && (
             <div className="flex items-center justify-between p-4 border-t border-[#E3E7EB]">
               <div className="text-xs font-mono text-slate-500">
-                Showing {startIndex + 1}-{Math.min(startIndex + limit, totalItems)} of {totalItems}
+                {t("showing", { from: startIndex + 1, to: Math.min(startIndex + limit, totalItems), total: totalItems, defaultValue: `Showing ${startIndex + 1}-${Math.min(startIndex + limit, totalItems)} of ${totalItems}` })}
               </div>
               <div className="flex items-center gap-1.5">
                 <Button
@@ -324,17 +324,17 @@ export default function WomenEmploymentPage() {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent className="rounded-xs border-[#E3E7EB]">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-base font-bold text-[#0B1F3A]">Confirm Delete</AlertDialogTitle>
-            <AlertDialogDescription className="text-xs text-slate-500">Are you sure you want to delete this employment record?</AlertDialogDescription>
+            <AlertDialogTitle className="text-base font-bold text-[#0B1F3A]">{t("delete.title", { defaultValue: "Confirm Delete" })}</AlertDialogTitle>
+            <AlertDialogDescription className="text-xs text-slate-500">{t("delete.description", { defaultValue: "Are you sure you want to delete this employment record?" })}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xs text-xs h-8">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-xs text-xs h-8 cursor-pointer">{t("delete.cancel", { defaultValue: "Cancel" })}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
-              className="bg-red-600 hover:bg-red-700 rounded-xs text-xs h-8"
+              className="bg-red-600 hover:bg-red-700 rounded-xs text-xs h-8 cursor-pointer"
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? t("delete.deleting", { defaultValue: "Deleting..." }) : t("delete.confirm", { defaultValue: "Delete" })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
