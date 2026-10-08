@@ -222,7 +222,7 @@ export default function NewEdirForm({
         {
           onSuccess: () => {
             setOpen(false);
-            toast.success("Edir updated successfully");
+            toast.success(t("messages.successUpdate"));
           },
         },
       );
@@ -231,7 +231,7 @@ export default function NewEdirForm({
         onSuccess: () => {
           setOpen(false);
           form.reset();
-          toast.success("Edir created successfully");
+          toast.success(t("messages.successCreate"));
         },
       });
     }

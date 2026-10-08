@@ -67,19 +67,21 @@ export default function EdirDetailsPage({ params }: PageProps) {
 
   const typedEdir = edir as Edir;
 
+  const tList = useTranslations("social-affairs.edir.list");
+
   return (
     <div className="space-y-6 max-w-6xl mx-auto w-full p-4 md:p-8">
       {/* Municipal Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{tList("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-slate-600">Social Affairs</span>
+        <span className="text-slate-600">{tList("breadcrumbs.socialAffairs")}</span>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/edir/list" className="hover:text-[#1769AA] transition-colors">
-          Edir Associations
+          {tList("breadcrumbs.edir")}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <span className="text-[#0B1F3A] font-bold truncate max-w-xs">{typedEdir.name}</span>

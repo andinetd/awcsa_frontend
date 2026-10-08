@@ -29,7 +29,18 @@ const statusStyles: Record<EdirStatus, string> = {
 
 const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
   const t = useTranslations("social-affairs.edir.edir.list");
+  const tSubCities = useTranslations("subCities.names");
   const router = useRouter();
+
+  const getSubCityDisplayName = (name?: string) => {
+    if (!name) return "";
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
+
   const totalMembers =
     (edir.managementMale || 0) +
     (edir.managementFemale || 0) +
@@ -63,7 +74,7 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
           <div className="flex items-center gap-2">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">
-              {edir.subCity}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
+              {getSubCityDisplayName(edir.subCity)}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
               {edir.kebele}
             </span>
           </div>

@@ -367,6 +367,16 @@ const EdirList = () => {
     );
   }
 
+  const tSubCities = useTranslations("subCities.names");
+
+  const getSubCityDisplayName = (name: string) => {
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
+
   return (
     <div className="space-y-5 max-w-7xl mx-auto w-full p-4 md:p-8">
       {/* Municipal Breadcrumbs */}
@@ -376,12 +386,12 @@ const EdirList = () => {
           className="hover:text-[#1769AA] flex items-center gap-1 transition-colors"
         >
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-slate-600">Social Affairs</span>
+        <span className="text-slate-600">{t("breadcrumbs.socialAffairs")}</span>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-[#0B1F3A] font-bold">Edir Associations</span>
+        <span className="text-[#0B1F3A] font-bold">{t("breadcrumbs.edir")}</span>
       </div>
 
       {/* Page Header */}
@@ -399,7 +409,7 @@ const EdirList = () => {
             <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
               type="search"
-              placeholder="Search name, reg #, bank, location..."
+              placeholder={t("searchPlaceholder")}
               className="h-8 pl-8 pr-7 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -425,7 +435,7 @@ const EdirList = () => {
             onClick={() => setShowAdvancedFilters((prev) => !prev)}
           >
             <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
-            <span>Filters</span>
+            <span>{t("filtersButton")}</span>
             {activeFiltersCount > 0 && (
               <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
                 {activeFiltersCount}
@@ -443,28 +453,28 @@ const EdirList = () => {
       {/* Workflow Preset Tabs */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
         {[
-          { id: "ALL" as const, label: "All Edirs", count: tabCounts.all },
+          { id: "ALL" as const, label: t("tabs.all"), count: tabCounts.all },
           {
             id: "ACTIVE" as const,
-            label: "Active",
+            label: t("tabs.active"),
             count: tabCounts.active,
             color: "text-emerald-700 bg-emerald-50",
           },
           {
             id: "RENEWAL" as const,
-            label: "Needs Renewal",
+            label: t("tabs.renewal"),
             count: tabCounts.renewal,
             color: "text-amber-700 bg-amber-50",
           },
           {
             id: "AUDIT" as const,
-            label: "Pending Compliance",
+            label: t("tabs.audit"),
             count: tabCounts.audit,
             color: "text-indigo-700 bg-indigo-50",
           },
           {
             id: "SANCTIONED" as const,
-            label: "Sanctioned",
+            label: t("tabs.sanctioned"),
             count: tabCounts.sanctioned,
             color: "text-rose-700 bg-rose-50",
           },
@@ -505,7 +515,7 @@ const EdirList = () => {
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
-                Advanced Administrative Filters
+                {t("advanced.title")}
               </span>
             </div>
             {hasActiveFilters && (
@@ -514,7 +524,7 @@ const EdirList = () => {
                 className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>Reset All Filters</span>
+                <span>{t("advanced.reset")}</span>
               </button>
             )}
           </div>
@@ -523,7 +533,7 @@ const EdirList = () => {
             {/* Sub-City Filter */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Sub-City
+                {t("advanced.subCity")}
               </label>
               <Select
                 value={selectedSubCity}
@@ -534,15 +544,15 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sub-Cities" />
+                  <SelectValue placeholder={t("advanced.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Sub-Cities
+                    {t("advanced.allSubCities")}
                   </SelectItem>
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
-                      {sc}
+                      {getSubCityDisplayName(sc)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -552,7 +562,7 @@ const EdirList = () => {
             {/* Woreda Filter */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Woreda
+                {t("advanced.woreda")}
               </label>
               <Select
                 value={selectedWoreda}
@@ -566,18 +576,18 @@ const EdirList = () => {
                   <SelectValue
                     placeholder={
                       selectedSubCity === "ALL"
-                        ? "Select Sub-City first"
-                        : "All Woredas"
+                        ? t("advanced.selectSubCityFirst")
+                        : t("advanced.allWoredas")
                     }
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Woredas
+                    {t("advanced.allWoredas")}
                   </SelectItem>
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
-                      Woreda {w.code}
+                      {t("woredaLabel", { code: w.code })}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -587,7 +597,7 @@ const EdirList = () => {
             {/* Register Level */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Registration Level
+                {t("advanced.registrationLevel")}
               </label>
               <Select
                 value={levelFilter}
@@ -597,11 +607,11 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Levels" />
+                  <SelectValue placeholder={t("advanced.allLevels")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Levels
+                    {t("advanced.allLevels")}
                   </SelectItem>
                   {LEVEL_OPTIONS.filter((l) => l !== "ALL").map((level) => (
                     <SelectItem key={level} value={level} className="text-xs rounded-xs">
@@ -615,7 +625,7 @@ const EdirList = () => {
             {/* Compliance Criteria */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Compliance Status
+                {t("advanced.compliance")}
               </label>
               <Select
                 value={complianceFilter}
@@ -625,23 +635,23 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Compliance" />
+                  <SelectValue placeholder={t("advanced.allCompliance")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Compliance
+                    {t("advanced.allCompliance")}
                   </SelectItem>
                   <SelectItem value="AUDITED" className="text-xs rounded-xs">
-                    Audit Committee Approved
+                    {t("advanced.audited")}
                   </SelectItem>
                   <SelectItem value="ASSEMBLY_APPROVED" className="text-xs rounded-xs">
-                    General Assembly Approved
+                    {t("advanced.assemblyApproved")}
                   </SelectItem>
                   <SelectItem value="HAS_BYLAWS" className="text-xs rounded-xs">
-                    Has By-Laws Document
+                    {t("advanced.hasBylaws")}
                   </SelectItem>
                   <SelectItem value="PENALTY_APPLIED" className="text-xs rounded-xs">
-                    Late Penalty Applied
+                    {t("advanced.penaltyApplied")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -650,7 +660,7 @@ const EdirList = () => {
             {/* Member Size */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Membership Size
+                {t("advanced.membershipSize")}
               </label>
               <Select
                 value={sizeFilter}
@@ -660,20 +670,20 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sizes" />
+                  <SelectValue placeholder={t("advanced.allSizes")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Sizes
+                    {t("advanced.allSizes")}
                   </SelectItem>
                   <SelectItem value="SMALL" className="text-xs rounded-xs">
-                    Small (&lt; 100 members)
+                    {t("advanced.small")}
                   </SelectItem>
                   <SelectItem value="MEDIUM" className="text-xs rounded-xs">
-                    Medium (100 - 300)
+                    {t("advanced.medium")}
                   </SelectItem>
                   <SelectItem value="LARGE" className="text-xs rounded-xs">
-                    Large (&gt; 300 members)
+                    {t("advanced.large")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -691,7 +701,7 @@ const EdirList = () => {
                 }}
               />
               <span className="text-xs font-mono text-slate-700">
-                Women in Executive Leadership (managementFemale &gt; 0)
+                {t("advanced.femaleLeadership")}
               </span>
             </label>
           </div>
@@ -702,7 +712,10 @@ const EdirList = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs font-mono font-bold text-slate-500 mr-1">
-            Results ({filteredEdirs.length} of {edirs?.length || 0}):
+            {t("chips.results", {
+              count: filteredEdirs.length,
+              total: edirs?.length || 0,
+            })}
           </span>
 
           {presetTab !== "ALL" && (
@@ -710,7 +723,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Preset: {presetTab}</span>
+              <span>{t("chips.preset", { tab: t(`tabs.${presetTab.toLowerCase()}` as any) || presetTab })}</span>
               <button
                 onClick={() => setPresetTab("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -725,7 +738,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <span>{t("chips.search", { query: debouncedSearch })}</span>
               <button
                 onClick={() => setSearch("")}
                 className="hover:text-rose-600 ml-0.5"
@@ -740,7 +753,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Sub-City: {selectedSubCity}</span>
+              <span>{t("chips.subCity", { val: getSubCityDisplayName(selectedSubCity) })}</span>
               <button
                 onClick={() => {
                   setSelectedSubCity("ALL");
@@ -758,7 +771,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Woreda: {selectedWoreda}</span>
+              <span>{t("chips.woreda", { val: t("woredaLabel", { code: selectedWoreda }) })}</span>
               <button
                 onClick={() => setSelectedWoreda("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -773,7 +786,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Level: {levelFilter}</span>
+              <span>{t("chips.level", { val: t(`levels.${levelFilter}`) })}</span>
               <button
                 onClick={() => setLevelFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -788,7 +801,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Status: {statusFilter}</span>
+              <span>{t("chips.status", { val: t(`status.${statusFilter}`) })}</span>
               <button
                 onClick={() => setStatusFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -803,7 +816,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Size: {sizeFilter}</span>
+              <span>{t("chips.size", { val: t(`advanced.${sizeFilter.toLowerCase()}` as any) || sizeFilter })}</span>
               <button
                 onClick={() => setSizeFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -818,7 +831,18 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Compliance: {complianceFilter}</span>
+              <span>
+                {t("chips.compliance", {
+                  val:
+                    complianceFilter === "AUDITED"
+                      ? t("advanced.audited")
+                      : complianceFilter === "ASSEMBLY_APPROVED"
+                      ? t("advanced.assemblyApproved")
+                      : complianceFilter === "HAS_BYLAWS"
+                      ? t("advanced.hasBylaws")
+                      : t("advanced.penaltyApplied"),
+                })}
+              </span>
               <button
                 onClick={() => setComplianceFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5"
@@ -833,7 +857,7 @@ const EdirList = () => {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Female Leadership</span>
+              <span>{t("chips.femaleLeadership")}</span>
               <button
                 onClick={() => setFemaleLeadershipOnly(false)}
                 className="hover:text-rose-600 ml-0.5"
@@ -848,7 +872,7 @@ const EdirList = () => {
               onClick={resetAllFilters}
               className="text-[11px] font-mono font-semibold text-rose-600 hover:text-rose-800 ml-1 underline underline-offset-2"
             >
-              Clear All
+              {t("chips.clearAll")}
             </button>
           )}
         </div>
@@ -980,11 +1004,11 @@ const EdirList = () => {
                       </TableCell>
                       <TableCell className="px-4 py-3 text-xs text-slate-600">
                         <div className="font-medium text-slate-800">
-                          {edir.subCity}
+                          {getSubCityDisplayName(edir.subCity || "")}
                         </div>
                         <div className="text-[11px] text-slate-500">
-                          Woreda {edir.woreda}
-                          {edir.kebele ? `, Kebele ${edir.kebele}` : ""}
+                          {t("woredaLabel", { code: edir.woreda ?? "—" })}
+                          {edir.kebele ? t("kebeleLabel", { code: edir.kebele }) : ""}
                         </div>
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-slate-700">
@@ -992,12 +1016,14 @@ const EdirList = () => {
                           {Intl.NumberFormat().format(totalMembers)}
                         </div>
                         <div className="text-[10px] text-slate-400">
-                          M:{" "}
-                          {(edir.managementMale || 0) +
-                            (edir.generalMale || 0)}{" "}
-                          | F:{" "}
-                          {(edir.managementFemale || 0) +
-                            (edir.generalFemale || 0)}
+                          {t("genderCounts", {
+                            male:
+                              (edir.managementMale || 0) +
+                              (edir.generalMale || 0),
+                            female:
+                              (edir.managementFemale || 0) +
+                              (edir.generalFemale || 0),
+                          })}
                         </div>
                       </TableCell>
                       <TableCell className="px-4 py-3">
