@@ -7,6 +7,7 @@ import {
   useGetEdirCouncilsQuery,
 } from "@/hooks/social-affairs";
 import { Edir } from "@/api/social-affairs/edir";
+import { useTranslations, useLocale } from "next-intl";
 import { EdirDashboardHeader } from "./_components/edir-dashboard-header";
 import { EdirKpiGrid } from "./_components/edir-kpi-grid";
 import { EdirChartsSection } from "./_components/edir-charts-section";
@@ -15,6 +16,8 @@ import { EdirRecentRegistrations } from "./_components/edir-recent-registrations
 import { EdirQuickActions } from "./_components/edir-quick-actions";
 
 export default function EdirDashboard() {
+  const t = useTranslations("social-affairs.edir.dashboard");
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -71,25 +74,25 @@ export default function EdirDashboard() {
   const statusBreakdown = [
     {
       status: "ACTIVE",
-      label: "Active Accreditation",
+      label: t("charts.activeAccreditation"),
       count: activeEdirs,
       color: "#10B981",
     },
     {
       status: "EXPIRED",
-      label: "Expired Licenses",
+      label: t("charts.expiredLicenses"),
       count: expiredEdirs,
       color: "#F59E0B",
     },
     {
       status: "REVOKED",
-      label: "Revoked / Sanctioned",
+      label: t("charts.revokedSanctioned"),
       count: revokedEdirs,
       color: "#EF4444",
     },
     {
       status: "CANCELLED",
-      label: "Cancelled / Dissolved",
+      label: t("charts.cancelledDissolved"),
       count: cancelledEdirs,
       color: "#64748B",
     },
@@ -119,7 +122,7 @@ export default function EdirDashboard() {
     for (let i = 5; i >= 0; i--) {
       const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      const month = d.toLocaleDateString("en-US", { month: "short" });
+      const month = d.toLocaleDateString(locale === "am" ? "am-ET" : "en-US", { month: "short" });
       buckets.push({ key, month, registered: 0, renewed: 0 });
     }
 
@@ -169,7 +172,7 @@ export default function EdirDashboard() {
         <div className="flex flex-col items-center gap-3 font-mono">
           <div className="size-7 rounded-full border-2 border-[#1769AA] border-t-transparent animate-spin" />
           <span className="text-xs text-slate-500">
-            Loading Traditional Edir &amp; Community Councils dashboard...
+            {t("loading")}
           </span>
         </div>
       </div>

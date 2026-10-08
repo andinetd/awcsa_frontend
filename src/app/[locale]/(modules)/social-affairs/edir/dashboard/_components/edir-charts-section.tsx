@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface IntakeTrendPoint {
   month: string;
@@ -34,6 +35,7 @@ export function EdirChartsSection({
   intakeTrends = [],
   statusBreakdown = [],
 }: EdirChartsSectionProps) {
+  const t = useTranslations("social-affairs.edir.dashboard.charts");
   const [activeSegment, setActiveSegment] = useState<number | null>(null);
 
   const breakdown = statusBreakdown;
@@ -47,21 +49,21 @@ export function EdirChartsSection({
         <div className="pb-2 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Monthly Edir Registration vs. Annual License Renewals
+              {t("inflowTitle")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              New community association charter applications compared against municipal renewal certifications
+              {t("inflowSubtitle")}
             </p>
           </div>
           {/* Legend */}
           <div className="flex items-center gap-3 text-[11px] font-medium text-slate-600 font-mono">
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#0B1F3A]" />
-              New Registrations
+              {t("newRegistrations")}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#1769AA]" />
-              Annual Renewals
+              {t("annualRenewals")}
             </span>
           </div>
         </div>
@@ -94,20 +96,20 @@ export function EdirChartsSection({
                       return (
                         <div className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 shadow-md text-xs font-mono">
                           <p className="font-bold text-slate-800 border-b pb-1 mb-1.5">
-                            {payload[0].payload.month} Summary
+                            {t("monthSummary", { month: payload[0].payload.month })}
                           </p>
                           <div className="space-y-1">
                             <p className="text-slate-600 flex items-center justify-between gap-4">
                               <span className="flex items-center gap-1">
                                 <span className="size-2 rounded-full bg-[#0B1F3A]" />
-                                New Edirs:
+                                {t("newEdirs")}
                               </span>
                               <span className="font-bold text-slate-900">{payload[0].value}</span>
                             </p>
                             <p className="text-slate-600 flex items-center justify-between gap-4">
                               <span className="flex items-center gap-1">
                                 <span className="size-2 rounded-full bg-[#1769AA]" />
-                                Renewals:
+                                {t("renewals")}
                               </span>
                               <span className="font-bold text-[#1769AA]">{payload[1].value}</span>
                             </p>
@@ -126,10 +128,10 @@ export function EdirChartsSection({
         ) : (
           <div className="mt-4 h-[220px] w-full flex flex-col items-center justify-center text-center p-4 border border-dashed border-slate-200 rounded-xs bg-slate-50/50">
             <span className="text-xs font-mono text-slate-600 font-medium">
-              No periodic registration inflow data recorded yet
+              {t("noIntakeData")}
             </span>
             <span className="text-[11px] font-mono text-slate-400 mt-1 max-w-sm">
-              As Edir associations are registered in the municipal directory, monthly registration and renewal trends will dynamically appear here.
+              {t("noIntakeSub")}
             </span>
           </div>
         )}
@@ -140,14 +142,14 @@ export function EdirChartsSection({
         <div className="pb-2 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Accreditation Status
+              {t("accreditationTitle")}
             </h3>
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-xs bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] font-mono">
-              {totalEdirs} EDIRS
+              {t("edirsCount", { count: totalEdirs })}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-            Legal certification &amp; regulatory standing breakdown
+            {t("accreditationSub")}
           </p>
         </div>
 
@@ -200,17 +202,17 @@ export function EdirChartsSection({
                 {totalEdirs}
               </span>
               <span className="text-[9px] uppercase tracking-wider text-slate-400 font-mono">
-                Associations
+                {t("associations")}
               </span>
             </div>
           </div>
         ) : (
           <div className="h-[160px] w-full flex flex-col items-center justify-center text-center p-4 border border-dashed border-slate-200 rounded-xs bg-slate-50/50 my-1">
             <span className="text-xs font-mono text-slate-500">
-              No associations in registry
+              {t("noAssociations")}
             </span>
             <span className="text-[11px] font-mono text-slate-400 mt-0.5">
-              0 records available
+              {t("zeroRecords")}
             </span>
           </div>
         )}

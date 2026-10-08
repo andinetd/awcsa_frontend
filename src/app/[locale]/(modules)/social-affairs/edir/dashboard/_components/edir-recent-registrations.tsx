@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
+import { useTranslations } from "next-intl";
 
 const statusStyles: Record<EdirStatus, string> = {
   ACTIVE: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -18,6 +19,19 @@ interface EdirRecentRegistrationsProps {
 }
 
 export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsProps) {
+  const t = useTranslations("social-affairs.edir.dashboard.recent");
+  const tStatus = useTranslations("social-affairs.edir.dashboard.status");
+  const tSubCities = useTranslations("subCities.names");
+
+  const getSubCityDisplayName = (name?: string) => {
+    if (!name) return "—";
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
+
   return (
     <div className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
       <div className="p-4 border-b border-[#E3E7EB] flex items-center justify-between">
@@ -25,10 +39,10 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
           <FileText className="size-4 text-[#1769AA]" />
           <div>
             <h3 className="text-xs font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-              Recent Edir Associations &amp; Accreditations
+              {t("title")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              Latest municipal registrations, legal license renewals, and status updates
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -36,7 +50,7 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
           href="/social-affairs/edir/list"
           className="text-xs font-mono font-semibold text-[#1769AA] hover:text-[#12568E] flex items-center gap-1 transition-colors"
         >
-          <span>View All Edirs</span>
+          <span>{t("viewAll")}</span>
           <ArrowRight className="size-3.5" />
         </Link>
       </div>
@@ -44,18 +58,18 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
       <div className="overflow-x-auto">
         {recentList.length === 0 ? (
           <p className="text-slate-500 text-xs font-mono py-10 text-center">
-            No recent Edir records found
+            {t("noRecords")}
           </p>
         ) : (
           <table className="w-full text-xs font-mono text-left">
             <thead className="bg-slate-50 border-b border-[#E3E7EB] text-slate-600 font-bold uppercase text-[11px]">
               <tr>
-                <th className="px-4 py-2.5">Association Name</th>
-                <th className="px-4 py-2.5">Registration &amp; Number</th>
-                <th className="px-4 py-2.5">Sub-City / Woreda</th>
-                <th className="px-4 py-2.5">Establishment Year</th>
-                <th className="px-4 py-2.5 text-center">Accreditation Status</th>
-                <th className="px-4 py-2.5 text-right">Action</th>
+                <th className="px-4 py-2.5">{t("name")}</th>
+                <th className="px-4 py-2.5">{t("regNumber")}</th>
+                <th className="px-4 py-2.5">{t("subCityWoreda")}</th>
+                <th className="px-4 py-2.5">{t("estYear")}</th>
+                <th className="px-4 py-2.5 text-center">{t("status")}</th>
+                <th className="px-4 py-2.5 text-right">{t("action")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E3E7EB]">
@@ -79,7 +93,7 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
                     )}
                   </td>
                   <td className="px-4 py-2.5 text-slate-600">
-                    {e.subCity}, Woreda {e.woreda}
+                    {getSubCityDisplayName(e.subCity)}, {t("woreda", { code: e.woreda ?? "—" })}
                   </td>
                   <td className="px-4 py-2.5 text-slate-600">
                     {e.establishmentDate
@@ -95,7 +109,7 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
                           "bg-slate-100 text-slate-700 border-slate-200"
                         }`}
                       >
-                        {e.status}
+                        {tStatus(e.status) || e.status}
                       </Badge>
                     )}
                   </td>
@@ -104,7 +118,7 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
                       href={`/social-affairs/edir/${e.id}`}
                       className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1769AA] hover:text-[#12568E] hover:underline"
                     >
-                      <span>Dossier</span>
+                      <span>{t("dossier")}</span>
                       <ArrowRight className="size-3" />
                     </Link>
                   </td>

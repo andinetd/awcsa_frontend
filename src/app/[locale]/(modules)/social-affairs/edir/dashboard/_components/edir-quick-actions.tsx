@@ -11,42 +11,45 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 export function EdirQuickActions() {
+  const t = useTranslations("social-affairs.edir.dashboard.quickActions");
+
   const actions = [
     {
-      title: "Edir Associations Registry",
-      desc: "Comprehensive directory of verified traditional community associations, registration numbers, bylaws, and leadership profiles",
+      title: t("registryTitle"),
+      desc: t("registryDesc"),
       icon: HandHelping,
       href: "/social-affairs/edir/list",
-      badge: "PRIMARY REGISTRY",
+      badge: t("registryBadge"),
       color: "text-[#1769AA]",
       bg: "bg-[#E8F2FA]",
     },
     {
-      title: "Federated Councils Governance",
-      desc: "Sub-city and woreda umbrella councils representing affiliated grassroots edirs, council charters, and executive committees",
+      title: t("councilsTitle"),
+      desc: t("councilsDesc"),
       icon: Building2,
       href: "/social-affairs/edir/councils",
-      badge: "FEDERATION",
+      badge: t("councilsBadge"),
       color: "text-blue-700",
       bg: "bg-blue-50",
     },
     {
-      title: "Accreditation Renewal Docket",
-      desc: "Annual license verification, legal charter reissue, compliance audits, and penalty assessments for expired associations",
+      title: t("renewalTitle"),
+      desc: t("renewalDesc"),
       icon: FileCheck2,
       href: "/social-affairs/edir/list",
-      badge: "RENEWAL AUDIT",
+      badge: t("renewalBadge"),
       color: "text-emerald-700",
       bg: "bg-emerald-50",
     },
     {
-      title: "Regulatory Sanctions & Compliance",
-      desc: "Oversight of sanctioned, revoked, or dissolved associations, dispute resolution findings, and regulatory enforcement",
+      title: t("complianceTitle"),
+      desc: t("complianceDesc"),
       icon: ShieldAlert,
       href: "/social-affairs/edir/list",
-      badge: "ENFORCEMENT",
+      badge: t("complianceBadge"),
       color: "text-rose-700",
       bg: "bg-rose-50",
     },
@@ -56,10 +59,10 @@ export function EdirQuickActions() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          PRIMARY EDIR MODULES &amp; GOVERNANCE WORKFLOWS
+          {t("sectionTitle")}
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Direct navigation to operational registers
+          {t("sectionSubtitle")}
         </span>
       </div>
 
@@ -89,7 +92,7 @@ export function EdirQuickActions() {
                   </div>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#1769AA] group-hover:text-[#12568E]">
-                    <span className="font-mono text-[11px]">Open module workspace</span>
+                    <span className="font-mono text-[11px]">{t("openWorkspace")}</span>
                     <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </div>
                 </CardContent>

@@ -3,6 +3,7 @@
 import React from "react";
 import { Building2, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 interface EdirSubCityRow {
   name: string;
@@ -36,6 +37,31 @@ export function EdirSubCityMatrix({
   edirList = [],
   councilList = [],
 }: EdirSubCityMatrixProps) {
+  const t = useTranslations("social-affairs.edir.dashboard.matrix");
+  const tSubCities = useTranslations("subCities.names");
+
+  const getSubCityDisplayName = (name: string) => {
+    try {
+      return tSubCities(name);
+    } catch {
+      return name;
+    }
+  };
+
+  const getRatingLabel = (rating: EdirSubCityRow["complianceRating"]) => {
+    switch (rating) {
+      case "COMPLIANT":
+        return t("ratings.COMPLIANT");
+      case "PARTIAL":
+        return t("ratings.PARTIAL");
+      case "AUDIT REQUIRED":
+        return t("ratings.AUDIT_REQUIRED");
+      case "NO RECORDS":
+      default:
+        return t("ratings.NO_RECORDS");
+    }
+  };
+
   const subCities: EdirSubCityRow[] = React.useMemo(() => {
     const map: Record<
       string,
@@ -136,17 +162,17 @@ export function EdirSubCityMatrix({
           <Building2 className="size-4 text-[#1769AA]" />
           <div>
             <h3 className="text-xs font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-              Municipal Sub-City Edir &amp; Council Federation Matrix
+              {t("title")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              Grassroots community associations census, federated councils, and recorded membership across Addis Ababa
+              {t("subtitle")}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-xs font-mono">
           <span className="flex items-center gap-1 text-slate-600">
             <span className="size-2 rounded-full bg-emerald-500" />
-            11 Municipal Sub-Cities
+            {t("subCitiesCount")}
           </span>
         </div>
       </div>
@@ -155,12 +181,12 @@ export function EdirSubCityMatrix({
         <table className="w-full text-left text-xs font-mono">
           <thead className="bg-slate-50 border-b border-[#E3E7EB] text-slate-600 font-bold uppercase text-[11px]">
             <tr>
-              <th className="py-2.5 px-3">Sub-City Administration</th>
-              <th className="py-2.5 px-3 text-right">Registered Edirs</th>
-              <th className="py-2.5 px-3 text-right">Active Standing</th>
-              <th className="py-2.5 px-3 text-right">Federated Councils</th>
-              <th className="py-2.5 px-3 text-right">Recorded Members</th>
-              <th className="py-2.5 px-3 text-center">Accreditation Status</th>
+              <th className="py-2.5 px-3">{t("subCityAdmin")}</th>
+              <th className="py-2.5 px-3 text-right">{t("registeredEdirs")}</th>
+              <th className="py-2.5 px-3 text-right">{t("activeStanding")}</th>
+              <th className="py-2.5 px-3 text-right">{t("federatedCouncils")}</th>
+              <th className="py-2.5 px-3 text-right">{t("recordedMembers")}</th>
+              <th className="py-2.5 px-3 text-center">{t("accreditationStatus")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E3E7EB]">
@@ -168,7 +194,7 @@ export function EdirSubCityMatrix({
               <tr key={row.name} className="hover:bg-slate-50/70 transition-colors">
                 <td className="py-2 px-3 font-semibold text-slate-900 flex items-center gap-1.5">
                   <MapPin className="size-3 text-slate-400" />
-                  <span>{row.name}</span>
+                  <span>{getSubCityDisplayName(row.name)}</span>
                 </td>
                 <td className="py-2 px-3 text-right font-bold text-[#0B1F3A]">
                   {row.edirCount.toLocaleString()}
@@ -197,7 +223,7 @@ export function EdirSubCityMatrix({
                         : "bg-slate-50 text-slate-400 border-slate-200"
                     }`}
                   >
-                    {row.complianceRating}
+                    {getRatingLabel(row.complianceRating)}
                   </Badge>
                 </td>
               </tr>
@@ -205,7 +231,7 @@ export function EdirSubCityMatrix({
           </tbody>
           <tfoot className="bg-slate-50/80 border-t-2 border-[#E3E7EB] font-bold text-slate-900">
             <tr>
-              <td className="py-2.5 px-3 uppercase text-[11px]">Total Addis Ababa Census</td>
+              <td className="py-2.5 px-3 uppercase text-[11px]">{t("totalCensus")}</td>
               <td className="py-2.5 px-3 text-right text-[#0B1F3A]">{totalRegistered.toLocaleString()}</td>
               <td className="py-2.5 px-3 text-right text-emerald-700">
                 {subCities.reduce((a, b) => a + b.activeEdirs, 0).toLocaleString()}
@@ -216,11 +242,14 @@ export function EdirSubCityMatrix({
               </td>
               <td className="py-2.5 px-3 text-center text-[10px] text-slate-500 font-normal">
                 {totalRegistered > 0
-                  ? `${Math.round(
-                      (subCities.reduce((a, b) => a + b.activeEdirs, 0) / totalRegistered) *
-                        100
-                    )}% Compliant`
-                  : "No Records"}
+                  ? t("compliantRate", {
+                      rate: Math.round(
+                        (subCities.reduce((a, b) => a + b.activeEdirs, 0) /
+                          totalRegistered) *
+                          100
+                      ),
+                    })
+                  : t("noRecords")}
               </td>
             </tr>
           </tfoot>

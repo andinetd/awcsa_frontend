@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 interface EdirKpiGridProps {
   totalEdirs?: number;
@@ -37,6 +38,8 @@ export function EdirKpiGrid({
   femaleMembers = 0,
   maleMembers = 0,
 }: EdirKpiGridProps) {
+  const t = useTranslations("social-affairs.edir.dashboard.kpis");
+
   const complianceRate =
     totalEdirs > 0 ? Math.round((activeEdirs / totalEdirs) * 100) : 0;
 
@@ -49,51 +52,62 @@ export function EdirKpiGrid({
 
   const cards = [
     {
-      title: "Total Registered Edirs",
+      title: t("totalEdirsTitle"),
       value: totalEdirs,
-      sub: `${activeEdirs.toLocaleString()} Active • ${expiredEdirs.toLocaleString()} Expired`,
+      sub: t("totalEdirsSub", {
+        active: activeEdirs.toLocaleString(),
+        expired: expiredEdirs.toLocaleString(),
+      }),
       icon: HandHelping,
-      badgeText: "DIRECTORY",
+      badgeText: t("directoryBadge"),
       badgeColor: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
       iconBg: "bg-[#1769AA]/10 text-[#1769AA]",
       link: "/social-affairs/edir/list",
     },
     {
-      title: "Active Legal Standing",
+      title: t("activeStandingTitle"),
       value: activeEdirs,
-      sub: `${complianceRate}% overall municipal compliance rate`,
+      sub: t("activeStandingSub", { rate: complianceRate }),
       icon: ShieldCheck,
-      badgeText: `${complianceRate}% ACCREDITED`,
+      badgeText: t("accreditedBadge", { rate: complianceRate }),
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: "bg-emerald-500/10 text-emerald-600",
       link: "/social-affairs/edir/list",
     },
     {
-      title: "Umbrella Councils",
+      title: t("umbrellaCouncilsTitle"),
       value: totalCouncils,
-      sub: "Woreda & sub-city federated councils coordinating edirs",
+      sub: t("umbrellaCouncilsSub"),
       icon: Building2,
-      badgeText: "COUNCILS",
+      badgeText: t("councilsBadge"),
       badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
       iconBg: "bg-blue-500/10 text-blue-600",
       link: "/social-affairs/edir/councils",
     },
     {
-      title: "Recorded Community Reach",
+      title: t("communityReachTitle"),
       value: totalMembers,
-      sub: `${femalePercent}% Women (${femaleMembers.toLocaleString()}) • ${malePercent}% Men (${maleMembers.toLocaleString()})`,
+      sub: t("communityReachSub", {
+        femalePct: femalePercent,
+        female: femaleMembers.toLocaleString(),
+        malePct: malePercent,
+        male: maleMembers.toLocaleString(),
+      }),
       icon: Users2,
-      badgeText: "CITIZEN BASE",
+      badgeText: t("citizenBaseBadge"),
       badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
       iconBg: "bg-purple-500/10 text-purple-600",
       link: "/social-affairs/edir/list",
     },
     {
-      title: "Action Docket (Compliance)",
+      title: t("actionDocketTitle"),
       value: attentionRequired,
-      sub: `${expiredEdirs} Overdue Renewal • ${revokedEdirs} Sanctioned`,
+      sub: t("actionDocketSub", {
+        expired: expiredEdirs,
+        revoked: revokedEdirs,
+      }),
       icon: AlertTriangle,
-      badgeText: attentionRequired > 0 ? "ACTION REQUIRED" : "COMPLIANT",
+      badgeText: attentionRequired > 0 ? t("actionRequiredBadge") : t("compliantBadge"),
       badgeColor:
         attentionRequired > 0
           ? "bg-rose-50 text-rose-700 border-rose-200 font-bold"
@@ -111,10 +125,10 @@ export function EdirKpiGrid({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          EXECUTIVE MUNICIPAL SCORECARD
+          {t("sectionTitle")}
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Consolidated accreditation, federation &amp; citizen coverage statistics
+          {t("sectionSubtitle")}
         </span>
       </div>
 
