@@ -26,6 +26,7 @@ import MonitoringTimeline from "../../_shared/monitoring-timeline";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { uiTokens } from "@/styles/design-system";
+import WomenInstitutionalBanner from "../../_components/women-institutional-banner";
 
 export default function TrainingDetailPage() {
   const { id } = useParams();
@@ -79,15 +80,7 @@ export default function TrainingDetailPage() {
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
-          <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
-          <span>·</span>
-          <span className="text-[#1769AA] font-semibold">
-            Women Development &amp; Support
-          </span>
-        </div>
+        <WomenInstitutionalBanner />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Button

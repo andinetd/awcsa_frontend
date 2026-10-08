@@ -6,6 +6,11 @@
   "layout": {
     "title": "Women's Affairs"
   },
+  "institutionalBanner": {
+    "cityAdmin": "Addis Ababa City Administration",
+    "bureau": "Women & Social Affairs Bureau",
+    "sector": "Women Development & Support"
+  },
   "dashboard": {
     "title": "Women's Affairs Dashboard",
     "subtitle": "Manage women profiles, support services, and community data.",
@@ -406,6 +411,7 @@
       "dateTo": "To",
       "loading": "Loading history...",
       "noSelection": "Please search and select a woman above to display her support records.",
+      "searchBeneficiary": "Search Beneficiary",
       "table": {
         "serviceType": "Service Type",
         "provider": "Provider",
@@ -415,6 +421,15 @@
         "actions": "Actions",
         "noHistory": "No support history found."
       }
+    },
+    "womanSelect": {
+      "placeholder": "Search beneficiary by name or ID...",
+      "clearSelection": "Clear selection",
+      "searchPlaceholder": "Search by name, city ID, phone...",
+      "noResults": "No beneficiaries found",
+      "noMatch": "No match for \"{search}\"",
+      "count": "{filtered} of {total} beneficiaries",
+      "clear": "Clear"
     },
     "quick": {
       "womanInfo": "Woman Information",
@@ -1110,7 +1125,8 @@
     "noLogs": "No monitoring logs recorded yet.",
     "addFollowUp": "Add a new follow-up using the button above.",
     "assessedBy": "By: {name}",
-    "score": "Score: {score}%"
+    "score": "Score: {score}%",
+    "supportIntervention": "Support Intervention"
   },
   "monitoring": {
     "addFollowUp": "Add Follow-up",

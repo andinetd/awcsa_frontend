@@ -118,7 +118,7 @@ export default function RegisterSupportForm({
                           onValueChange={(value: string) =>
                             field.onChange(value ? parseInt(value) : undefined)
                           }
-                          placeholder="Search beneficiary by name or ID..."
+                          placeholder={t("support.womanSelect.placeholder")}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />

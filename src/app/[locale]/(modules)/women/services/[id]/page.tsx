@@ -25,6 +25,7 @@ import { Loader2 } from "lucide-react";
 import MonitoringForm from "../_components/monitoring-form";
 import { useTranslations } from "next-intl";
 import { uiTokens } from "@/styles/design-system";
+import WomenInstitutionalBanner from "../../_components/women-institutional-banner";
 
 export default function SupportDetailPage() {
   const { id } = useParams();
@@ -59,15 +60,7 @@ export default function SupportDetailPage() {
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
-          <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
-          <span>·</span>
-          <span className="text-[#1769AA] font-semibold">
-            Women Development &amp; Support
-          </span>
-        </div>
+        <WomenInstitutionalBanner />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Button
@@ -86,7 +79,7 @@ export default function SupportDetailPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {support.serviceType?.name ? t(`serviceTypes.${support.serviceType.name}`) : "Support Intervention"}
+                {support.serviceType?.name ? t(`serviceTypes.${support.serviceType.name}`) : t("supportDetail.supportIntervention")}
               </p>
             </div>
           </div>

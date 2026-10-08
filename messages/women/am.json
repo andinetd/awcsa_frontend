@@ -6,6 +6,11 @@
   "layout": {
     "title": "የሴቶች ጉዳይ"
   },
+  "institutionalBanner": {
+    "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+    "bureau": "የሴቶች እና ማህበራዊ ጉዳይ ቢሮ",
+    "sector": "የሴቶች ልማት እና ድጋፍ ዘርፍ"
+  },
   "dashboard": {
     "title": "የሴቶች ጉዳይ ዳሽቦርድ",
     "subtitle": "የሴቶችን ፕሮፍይሎች፣ የድጋፍ አገልግሎቶችን እና የማህበረሰብ መረጃዎችን ያስዳድሩ።",
@@ -406,6 +411,7 @@
       "dateTo": "እስከ",
       "loading": "ታሪክ በመጫን ላይ...",
       "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ፈልገው ይምረጡ።",
+      "searchBeneficiary": "ተጠቃሚ ይፈልጉ",
       "table": {
         "serviceType": "የአገልግሎት ዓይነት",
         "provider": "አቅራቢ",
@@ -415,6 +421,15 @@
         "actions": "እርምጃዎች",
         "noHistory": "ምንም የድጋፍ ታሪክ አልተገኘም።"
       }
+    },
+    "womanSelect": {
+      "placeholder": "ተጠቃሚን በስም ወይም በመለያ ይፈልጉ...",
+      "clearSelection": "ምርጫን አጽዳ",
+      "searchPlaceholder": "በስም፣ በከተማ መለያ፣ በስልክ ቁጥር ይፈልጉ...",
+      "noResults": "ምንም ተጠቃሚ አልተገኘም",
+      "noMatch": "ለ\"{search}\" ምንም አልተገኘም",
+      "count": "ከ {total} ተጠቃሚዎች {filtered}",
+      "clear": "አጽዳ"
     },
     "quick": {
       "womanInfo": "የሴቲቱ መረጃ",
@@ -1110,7 +1125,8 @@
     "noLogs": "እስካሁን ምንም የክትትል መዝገብ አልተመዘገበም።",
     "addFollowUp": "ከላይ ያለውን ቁልፍ በመጠቀም አዲስ ክትትል ያክሉ።",
     "assessedBy": "በ: {name}",
-    "score": "ውጤት: {score}%"
+    "score": "ውጤት: {score}%",
+    "supportIntervention": "የድጋፍ ጣልቃገብነት"
   },
   "monitoring": {
     "addFollowUp": "ክትትል ያክሉ",

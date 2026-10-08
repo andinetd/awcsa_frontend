@@ -114,7 +114,7 @@ export default function WomanSelect({
               </span>
             ) : (
               <span className="truncate">
-                {placeholder || "Search beneficiary by name or ID..."}
+                {placeholder || t("support.womanSelect.placeholder")}
               </span>
             )}
           </div>
@@ -131,7 +131,7 @@ export default function WomanSelect({
                   }
                 }}
                 className="rounded-xs hover:bg-slate-200/80 p-0.5 text-slate-400 hover:text-slate-600 transition-colors"
-                title="Clear selection"
+                title={t("support.womanSelect.clearSelection")}
               >
                 <X className="h-3 w-3" />
               </span>
@@ -153,7 +153,7 @@ export default function WomanSelect({
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, city ID, phone..."
+              placeholder={t("support.womanSelect.searchPlaceholder")}
               className="pl-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
               autoFocus
             />
@@ -165,10 +165,10 @@ export default function WomanSelect({
           {filteredProfiles.length === 0 ? (
             <div className="py-6 text-center text-xs text-slate-500">
               <User className="h-6 w-6 mx-auto text-slate-300 mb-1" />
-              <p>No beneficiaries found</p>
+              <p>{t("support.womanSelect.noResults")}</p>
               {search && (
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  No match for &quot;{search}&quot;
+                  {t("support.womanSelect.noMatch", { search })}
                 </p>
               )}
             </div>
@@ -219,7 +219,10 @@ export default function WomanSelect({
         {/* Footer info */}
         <div className="p-2 border-t border-[#E3E7EB] bg-slate-50/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
           <span>
-            {filteredProfiles.length} of {profiles?.length || 0} beneficiaries
+            {t("support.womanSelect.count", {
+              filtered: filteredProfiles.length,
+              total: profiles?.length || 0,
+            })}
           </span>
           {selectedProfile && (
             <button
@@ -227,7 +230,7 @@ export default function WomanSelect({
               onClick={handleClear}
               className="text-[#1769AA] hover:underline cursor-pointer"
             >
-              Clear
+              {t("support.womanSelect.clear")}
             </button>
           )}
         </div>

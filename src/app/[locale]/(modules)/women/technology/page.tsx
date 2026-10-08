@@ -64,6 +64,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TechnologySupportRecord } from "@/api/womens/technologySupport";
 import { isWithinDateRange } from "@/utils/date-range";
+import WomenInstitutionalBanner from "../_components/women-institutional-banner";
 
 export default function TechnologySupportPage() {
   const t = useTranslations("women.technologySupport");
@@ -156,15 +157,7 @@ export default function TechnologySupportPage() {
     <div className="p-4 sm:p-6 space-y-4 max-w-7xl mx-auto w-full">
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
-          <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
-          <span>·</span>
-          <span className="text-[#1769AA] font-semibold">
-            Women Development &amp; Support
-          </span>
-        </div>
+        <WomenInstitutionalBanner />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">{t("title")}</h1>
