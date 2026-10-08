@@ -240,6 +240,54 @@
       "viewDetails": "ዝርዝር ይመልከቱ",
       "edit": "ያርሙ",
       "toggleStatus": "ሁኔታን ይቀይሩ"
+    },
+    "institutionalBanner": {
+      "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+      "bureau": "የሴቶች እና ማህበራዊ ጉዳይ ቢሮ",
+      "sector": "የሴቶች ልማት እና ድጋፍ ዘርፍ"
+    },
+    "filters": {
+      "title": "የላቁ የሥነ-ሕዝብ እና የአካባቢ ማጣሪያዎች",
+      "subCity": "ክፍለ ከተማ",
+      "allSubCities": "ሁሉም ክፍለ ከተሞች",
+      "woreda": "ወረዳ",
+      "allWoredas": "ሁሉም ወረዳዎች",
+      "selectSubCityFirst": "በቅድሚያ ክፍለ ከተማ ይምረጡ",
+      "careerStatus": "የሥራ ሁኔታ",
+      "allCareerStatuses": "ሁሉም ሁኔታዎች",
+      "educationLevel": "የትምህርት ደረጃ",
+      "allEducationLevels": "ሁሉም ደረጃዎች",
+      "ageBracket": "የዕድሜ ክልል",
+      "allAges": "ሁሉም ዕድሜዎች",
+      "youth": "ወጣት (< 30 ዓመት)",
+      "adult": "ጎልማሳ (30 – 49 ዓመት)",
+      "senior": "አረጋዊ (50+ ዓመት)",
+      "approval": "የማረጋገጫ ሁኔታ",
+      "allApprovals": "ሁሉም ማረጋገጫዎች",
+      "pending": "በመጠባበቅ ላይ",
+      "approved": "የጸደቀ",
+      "rejected": "ውድቅ የተደረገ",
+      "button": "ማጣሪያዎች",
+      "resetAll": "ሁሉንም ማጣሪያዎች አጽዳ",
+      "clearAll": "ሁሉንም አጽዳ",
+      "resultsCount": "ውጤቶች ({total} ውስጥ {count}):"
+    },
+    "tabs": {
+      "all": "ሁሉም መገለጫዎች",
+      "unemployed": "ሥራ ፈላጊዎች",
+      "employed": "ተቀጣሪ / የግል ሥራ",
+      "pending": "ማረጋገጫ በመጠባበቅ ላይ",
+      "active": "ንቁ ተጠቃሚዎች"
+    },
+    "chips": {
+      "preset": "ምድብ: {tab}",
+      "search": "ፍለጋ: \"{query}\"",
+      "subCity": "ክፍለ ከተማ: {name}",
+      "woreda": "ወረዳ: {name}",
+      "career": "የሥራ ሁኔታ: {status}",
+      "education": "ትምህርት: {level}",
+      "age": "ዕድሜ: {age}",
+      "approval": "ማረጋገጫ: {status}"
     }
   },
   "form": {
@@ -510,7 +558,21 @@
     },
     "filters": {
       "allTypes": "ሁሉም አይነቶች",
-      "allStatuses": "ሁሉም ሁኔታዎች"
+      "allStatuses": "ሁሉም ሁኔታዎች",
+      "title": "የላቁ የአካባቢ እና የማህበር ማጣሪያዎች",
+      "subCity": "ክፍለ ከተማ",
+      "allSubCities": "ሁሉም ክፍለ ከተሞች",
+      "woreda": "ወረዳ",
+      "allWoredas": "ሁሉም ወረዳዎች",
+      "selectSubCityFirst": "በቅድሚያ ክፍለ ከተማ ይምረጡ",
+      "associationType": "የማህበር አይነት",
+      "activityStatus": "የእንቅስቃሴ ሁኔታ",
+      "activeOnly": "ንቁ የሆኑ ብቻ",
+      "inactiveOnly": "ንቁ ያልሆኑ",
+      "button": "ማጣሪያዎች",
+      "resetAll": "ሁሉንም ማጣሪያዎች አጽዳ",
+      "clearAll": "ማጣሪያዎችን አጽዳ",
+      "resultsCount": "ውጤቶች ({total} ውስጥ {count}):"
     },
     "table": {
       "name": "የማህበሩ ስም",
@@ -703,6 +765,22 @@
     "stats": {
       "total": "ጠቅላላ ማህበራት",
       "declaredMembers": "የተገለጹ አባላት"
+    },
+    "tabs": {
+      "all": "ሁሉም ማህበራት",
+      "approved": "እውቅና ያገኙ / ንቁ",
+      "submitted": "በግምገማ ላይ ያሉ",
+      "draft": "ረቂቅ ምዝገባዎች",
+      "rejected": "ውድቅ የተደረጉ"
+    },
+    "chips": {
+      "status": "ሁኔታ: {status}",
+      "search": "ፍለጋ: \"{query}\"",
+      "subCity": "ክፍለ ከተማ: {name}",
+      "woreda": "ወረዳ: {name}",
+      "type": "አይነት: {type}",
+      "activeOnly": "ንቁ ብቻ",
+      "inactiveOnly": "ንቁ ያልሆኑ ብቻ"
     }
   },
   "members": {

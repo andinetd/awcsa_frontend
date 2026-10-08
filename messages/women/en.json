@@ -240,6 +240,54 @@
       "viewDetails": "View Details",
       "edit": "Edit",
       "toggleStatus": "Toggle Status"
+    },
+    "institutionalBanner": {
+      "cityAdmin": "Addis Ababa City Administration",
+      "bureau": "Women & Social Affairs Bureau",
+      "sector": "Women Development & Support"
+    },
+    "filters": {
+      "title": "Advanced Demographic & Location Filters",
+      "subCity": "Sub-City",
+      "allSubCities": "All Sub-Cities",
+      "woreda": "Woreda",
+      "allWoredas": "All Woredas",
+      "selectSubCityFirst": "Select Sub-City first",
+      "careerStatus": "Career Status",
+      "allCareerStatuses": "All Statuses",
+      "educationLevel": "Education Level",
+      "allEducationLevels": "All Education",
+      "ageBracket": "Age Bracket",
+      "allAges": "All Ages",
+      "youth": "Youth (< 30 yrs)",
+      "adult": "Adult (30 – 49 yrs)",
+      "senior": "Senior (50+ yrs)",
+      "approval": "Approval",
+      "allApprovals": "All Approvals",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "button": "Filters",
+      "resetAll": "Reset All Filters",
+      "clearAll": "Clear All",
+      "resultsCount": "Results ({count} of {total}):"
+    },
+    "tabs": {
+      "all": "All Profiles",
+      "unemployed": "Seeking Employment",
+      "employed": "Employed / Self-Employed",
+      "pending": "Pending Approval",
+      "active": "Active Beneficiaries"
+    },
+    "chips": {
+      "preset": "Preset: {tab}",
+      "search": "Search: \"{query}\"",
+      "subCity": "Sub-City: {name}",
+      "woreda": "Woreda: {name}",
+      "career": "Career: {status}",
+      "education": "Education: {level}",
+      "age": "Age: {age}",
+      "approval": "Approval: {status}"
     }
   },
   "form": {
@@ -510,7 +558,21 @@
     },
     "filters": {
       "allTypes": "All Types",
-      "allStatuses": "All Statuses"
+      "allStatuses": "All Statuses",
+      "title": "Advanced Location & Association Filters",
+      "subCity": "Sub-City",
+      "allSubCities": "All Sub-Cities",
+      "woreda": "Woreda",
+      "allWoredas": "All Woredas",
+      "selectSubCityFirst": "Select Sub-City first",
+      "associationType": "Association Type",
+      "activityStatus": "Activity Status",
+      "activeOnly": "Active Records Only",
+      "inactiveOnly": "Inactive Records",
+      "button": "Filters",
+      "resetAll": "Reset All Filters",
+      "clearAll": "Clear Filters",
+      "resultsCount": "Results ({count} of {total}):"
     },
     "table": {
       "name": "Association Name",
@@ -703,6 +765,22 @@
     "stats": {
       "total": "Total Associations",
       "declaredMembers": "Declared Members"
+    },
+    "tabs": {
+      "all": "All Associations",
+      "approved": "Accredited / Active",
+      "submitted": "Under Review",
+      "draft": "Draft Registrations",
+      "rejected": "Rejected"
+    },
+    "chips": {
+      "status": "Status: {status}",
+      "search": "Search: \"{query}\"",
+      "subCity": "Sub-City: {name}",
+      "woreda": "Woreda: {name}",
+      "type": "Type: {type}",
+      "activeOnly": "Active Only",
+      "inactiveOnly": "Inactive Only"
     }
   },
   "members": {
