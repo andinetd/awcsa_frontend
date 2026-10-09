@@ -43,7 +43,11 @@ export function getSidebarItems(
   // Priority 1: Care Centers Portal (facility account)
   if (
     accountType === "CHILD_CARE_FACLITY" ||
-    accountType === "CHILD_CARE_FACILITY"
+    accountType === "CHILD_CARE_FACILITY" ||
+    userRole === "Facility_Admin" ||
+    entityRole === "Facility_Admin" ||
+    userRole === "FACILITATOR_OFFICER" ||
+    entityRole === "FACILITATOR_OFFICER"
   ) {
     rawSections = sidebarConfig.CARE_CENTERS_PORTAL;
   } else if (userRole === "Super_Admin" || entityRole === "Super_Admin") {

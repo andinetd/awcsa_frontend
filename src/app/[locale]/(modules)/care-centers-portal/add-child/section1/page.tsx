@@ -1,5 +1,6 @@
-import CareCenterChildFormSectionOne from "../_components/care-center-section1-form";
+import { redirect } from "next/navigation";
 
 export default function AddChildSection1Page() {
-  return <CareCenterChildFormSectionOne />;
+  redirect("/care-centers-portal/add-child");
 }
+

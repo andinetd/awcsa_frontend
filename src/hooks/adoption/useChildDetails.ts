@@ -3,6 +3,7 @@ import {
   getChildById,
   transferChildStatus,
   TransferChildStatusPayload,
+  updateChild,
 } from "@/api/adoption/children";
 import { toast } from "sonner";
 
@@ -25,6 +26,7 @@ export const useTransferChildStatus = (childId?: number) => {
       toast.success("Child status updated successfully");
       queryClient.invalidateQueries({ queryKey: ["adoption-child", childId] });
       queryClient.invalidateQueries({ queryKey: ["adoption-children"] });
+      queryClient.invalidateQueries({ queryKey: ["care-center-children"] });
     },
     onError: (err: any) => {
       const msg =
@@ -35,3 +37,28 @@ export const useTransferChildStatus = (childId?: number) => {
     },
   });
 };
+
+export const useUpdateChild = (childId?: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: Record<string, any>) => {
+      if (!childId) throw new Error("Child ID is required to update child");
+      return updateChild(childId, payload);
+    },
+    onSuccess: () => {
+      toast.success("Child information updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["adoption-child", childId] });
+      queryClient.invalidateQueries({ queryKey: ["adoption-children"] });
+      queryClient.invalidateQueries({ queryKey: ["care-center-children"] });
+    },
+    onError: (err: any) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to update child record";
+      toast.error(typeof msg === "string" ? msg : JSON.stringify(msg));
+    },
+  });
+};
+

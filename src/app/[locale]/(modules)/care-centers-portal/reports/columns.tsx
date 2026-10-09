@@ -1,21 +1,23 @@
-"use client";
-
 import { MonthlyReport } from "@/api/adoption/care-center/reports";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export const Columns = () => {
+interface ColumnsProps {
+  onSelectReport?: (report: MonthlyReport) => void;
+}
+
+export const Columns = ({ onSelectReport }: ColumnsProps = {}) => {
   const t = useTranslations("care-centers-portal.monthlyReport");
   const tc = useTranslations("care-centers-portal.dashboard.columns");
 
   const getMonthName = (monthNumber: number) => {
     const date = new Date();
     date.setMonth(monthNumber - 1);
-    // Use the localized month name if possible, or keep it as is for now
-    // Since we are in a hook, we could potentially use next-intl's formatter
     return format(date, "MMMM");
   };
 
@@ -60,12 +62,20 @@ export const Columns = () => {
         <DataTableColumnHeader
           column={column}
           title={tc("status")}
-        /> // Using fallback if status is missing in JSON
+        />
       ),
       cell: ({ row }) => {
         const status = row.getValue("status") as string;
         return (
-          <Badge variant={status === "APPROVED" ? "default" : "secondary"}>
+          <Badge
+            variant={
+              status === "APPROVED"
+                ? "default"
+                : status === "REJECTED"
+                ? "destructive"
+                : "secondary"
+            }
+          >
             {status}
           </Badge>
         );
@@ -85,7 +95,26 @@ export const Columns = () => {
         );
       },
     },
+    {
+      id: "actions",
+      header: () => <span>{tc("actions") || "Actions"}</span>,
+      cell: ({ row }) => {
+        const report = row.original;
+        return (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onSelectReport?.(report)}
+            className="flex items-center gap-1.5 text-xs text-primary hover:text-primary"
+          >
+            <Eye className="size-3.5" />
+            <span>{tc("viewDetails") || "View Details"}</span>
+          </Button>
+        );
+      },
+    },
   ];
 
   return columns;
 };
+

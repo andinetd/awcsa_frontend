@@ -57,7 +57,9 @@ export const getDefaultRouteForUser = (
   if (user.accountType === "CLIENT") return "/applicant-portal/portal";
   if (
     user.accountType === "CHILD_CARE_FACLITY" ||
-    user.accountType === "CHILD_CARE_FACILITY"
+    user.accountType === "CHILD_CARE_FACILITY" ||
+    userRole === "Facility_Admin" ||
+    userRole === "FACILITATOR_OFFICER"
   ) {
     return "/care-centers-portal";
   }

@@ -113,9 +113,16 @@ export async function middleware(req: NextRequest) {
             employeeToken.department,
           ].filter(Boolean);
 
-          const hasAccess = guard.allowedRoles.some(
-            (allowed) => Boolean(allowed && userModules.includes(allowed)),
-          );
+          const isFacilityAdmin =
+            employeeRole === "Facility_Admin" ||
+            (employeeToken as any).roles?.includes("Facility_Admin");
+
+          const hasAccess =
+            (isFacilityAdmin &&
+              guard.allowedRoles.includes("CARE_CENTERS_PORTAL")) ||
+            guard.allowedRoles.some(
+              (allowed) => Boolean(allowed && userModules.includes(allowed)),
+            );
 
           if (!hasAccess) {
             return NextResponse.redirect(

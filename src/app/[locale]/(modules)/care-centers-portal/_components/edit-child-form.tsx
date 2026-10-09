@@ -30,11 +30,13 @@ import {
   type NewChildformSchemaType,
 } from "@/schemas/new-child-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDownIcon, ArrowLeft } from "lucide-react";
+import { ChevronDownIcon, ArrowLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useChildDetails, useUpdateChild } from "@/hooks/adoption/useChildDetails";
+import { differenceInYears, format } from "date-fns";
 
 interface EditChildFormProps {
   childId: string;
@@ -44,75 +46,86 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
+  const numericId = Number(childId);
+
+  const { data: child, isLoading: isFetchingChild } = useChildDetails(numericId);
+  const { mutate: updateChildMutate, isPending: isUpdating } = useUpdateChild(numericId);
 
   const form = useForm<NewChildformSchemaType>({
     resolver: zodResolver(NewChildformSchema),
     defaultValues: {
       age: 0,
+      current_status: "IN_CARE",
     },
   });
 
-  // TODO: Fetch existing child data and populate form
   useEffect(() => {
-    const existingData = {
-      name_by_care_center: decodeURIComponent(childId),
-      name_by_family: "John Smith",
-      father_name: "Michael Smith",
-      age: 8,
-      first_name: "John",
-      last_name: "Smith",
-      sex: "MALE" as const,
-      admitance_reason: "Found abandoned near the market area",
-      found_address: "Central Market",
-      found_subcity: "Addis Ketema",
-      found_woreda: "03",
-      found_date: new Date("2024-01-15"),
-      additional_information: "Child was found in good health condition",
-      child_founder_name: "Ahmed Hassan",
-      child_founder_address: "Merkato Area",
-      child_founder_subcity: "Addis Ketema",
-      child_found_woreda: "03",
-      child_founder_house_no: 123,
-      child_founder_phone: "+251911234567",
-      officer_name: "Officer Bekele Tadesse",
-      officer_responsibility: "Child Protection Officer",
-      officer_address: "Police Station 5",
-      officer_subcity: "Addis Ketema",
-      officer_woreda: "03",
-      officer_phone: "+251911987654",
-      officer_id_no: "ID123456789",
-      care_center_worker_name: "Sister Mary",
-      care_center_worker_responsibility: "Child Care Coordinator",
-      care_center_worker_address: "Hope Care Center",
-      care_center_worker_subcity: "Addis Ketema",
-      care_center_worker_woreda: "03",
-      care_center_worker_phone: "+251911555666",
-      care_center_worker_id_no: "CC987654321",
-      health_officer_1_name: "Dr. Almaz Tesfaye",
-      heallth_officer_2_name: "Dr. Dawit Kebede",
-      child_founder_city_id_number: "CIT-12345",
-      child_id_from_care_center: "CC-990",
-      bale_adera_city_id_number: "BA-887",
-      adopter_city_id_number: "AD-776",
-      blood_relative_city_id_number: "BR-665",
-      previous_adopter_city_id_number: "PA-554",
-      current_status: "IN_CARE" as const,
-      care_center_id: "CC-001",
+    if (!child) return;
+    const fd = (child.serviceData?.formData || {}) as Record<string, any>;
+    const dob = fd.dateOfBirth ? new Date(fd.dateOfBirth) : undefined;
+    const foundDate = child.timeWhenChildFound || fd.timeWhenChildFound;
+    const parsedFoundDate = foundDate ? new Date(foundDate) : undefined;
+
+    const populatedData: Partial<NewChildformSchemaType> = {
+      first_name: fd.firstName || "",
+      last_name: fd.lastName || "",
+      sex: (fd.sex as any) || "MALE",
+      date_of_birth: dob,
+      age: fd.age ?? (dob ? differenceInYears(new Date(), dob) : 0),
+      current_status: (child.currentStatus || fd.currentStatus || "IN_CARE") as any,
+      found_address: child.placeWhereChildFound || fd.placeWhereChildFound || "",
+      found_date: parsedFoundDate,
+      additional_information: child.additionalInfo || fd.additionalInfo || "",
+      child_founder_city_id_number: child.socialWorkerCityIdNumber || fd.socialWorkerCityIdNumber || "",
+      child_id_from_care_center: child.childIdFromFacility || fd.childIdFromFacility || "",
+      care_center_id: String(child.childCareFacilityId || ""),
+      name_by_family: fd.name_by_family || "",
+      father_name: fd.father_name || "",
+      admitance_reason: fd.admitance_reason || "",
+      name_by_care_center: fd.name_by_care_center || `${fd.firstName || ""} ${fd.lastName || ""}`.trim(),
     };
 
-    form.reset(existingData);
-    setDate(existingData.found_date);
-  }, [childId, form]);
+    form.reset(populatedData as NewChildformSchemaType);
+    if (parsedFoundDate) setDate(parsedFoundDate);
+  }, [child, form]);
 
   async function onSubmit(values: NewChildformSchemaType) {
-    console.log("Updating child: ", { values });
-    // TODO: Implement API call to update child
-    // After successful submission, redirect back to view page
-    router.push(`/care-centers-portal/child/${childId}/view`);
+    const payload: Record<string, any> = {
+      firstName: values.first_name,
+      lastName: values.last_name,
+      sex: values.sex,
+      dateOfBirth: values.date_of_birth ? format(values.date_of_birth, "yyyy-MM-dd") : undefined,
+      currentStatus: values.current_status,
+      placeWhereChildFound: values.found_address,
+      timeWhenChildFound: values.found_date ? values.found_date.toISOString() : undefined,
+      socialWorkerCityIdNumber: values.child_founder_city_id_number,
+      childCareFacilityId: values.care_center_id ? Number(values.care_center_id) : undefined,
+      childIdFromFacility: values.child_id_from_care_center,
+      additionalInfo: values.additional_information,
+      formData: {
+        ...values,
+      },
+    };
+
+    updateChildMutate(payload, {
+      onSuccess: () => {
+        router.push(`/care-centers-portal/child/${childId}/view`);
+      },
+    });
+  }
+
+  if (isFetchingChild) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground">Loading child information...</p>
+      </div>
+    );
   }
 
   return (
     <div className="mx-auto max-w-5xl mt-10">
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {/* Basic Information Section */}
@@ -691,9 +704,11 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
               <Button
                 type="submit"
                 className="flex-1"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || isUpdating}
               >
-                {form.formState.isSubmitting ? "Updating..." : "Update Child"}
+                {form.formState.isSubmitting || isUpdating
+                  ? "Updating..."
+                  : "Update Child"}
               </Button>
             </div>
           </Card>

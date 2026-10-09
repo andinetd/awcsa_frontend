@@ -41,15 +41,24 @@ export default function NewChildForm() {
 
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
+  const entity = useAuthStore((state) => state.entity);
+  const facilityId = entity?.id;
 
-  const [status, setStatus] = React.useState<string>("FOUND");
+  const [status, setStatus] = React.useState<string>("IN_CARE");
 
   const form = useForm<NewChildformTypeNew>({
     resolver: zodResolver(NewChildformSchemaNew),
     defaultValues: {
-      current_status: "FOUND",
+      current_status: "IN_CARE",
+      care_center_id: facilityId ? String(facilityId) : undefined,
     },
   });
+
+  React.useEffect(() => {
+    if (facilityId) {
+      form.setValue("care_center_id", String(facilityId));
+    }
+  }, [facilityId, form]);
 
   async function onSubmit(values: NewChildformTypeNew) {
     const formatDateOnly = (d?: Date | string) => {
@@ -74,7 +83,7 @@ export default function NewChildForm() {
       payload.socialWorkerCityIdNumber =
         values?.child_founder_city_id_number ?? undefined;
     } else if (values?.current_status === "IN_CARE") {
-      payload.childCareFacilityId = Number(values?.care_center_id) ?? undefined;
+      payload.childCareFacilityId = facilityId || (values?.care_center_id ? Number(values?.care_center_id) : undefined);
       payload.childIdFromFacility =
         values?.child_id_from_care_center ?? undefined;
     } else if (values?.current_status === "IN_ADERA") {
@@ -101,7 +110,7 @@ export default function NewChildForm() {
       });
 
       toast.success(t("messages.success"));
-      router.push("/adoption/children/");
+      router.push("/care-centers-portal");
     } catch (error) {
       console.error("Error submitting form:", error);
 

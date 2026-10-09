@@ -144,7 +144,8 @@ type UserRole =
   | "TEAM_LEADER"
   | "EXPERT"
   | "SOCIAL_WORKER"
-  | "FACILITATOR_OFFICER";
+  | "FACILITATOR_OFFICER"
+  | "Facility_Admin";
 
 type AccountType =
   | "EMPLOYEE"

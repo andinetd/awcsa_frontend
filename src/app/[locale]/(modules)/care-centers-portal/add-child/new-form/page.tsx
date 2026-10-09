@@ -1,5 +1,6 @@
-import NewChildForm from "../_components/add-child-form";
+import { redirect } from "next/navigation";
 
 export default function NewChildFormPage() {
-  return <NewChildForm />;
+  redirect("/care-centers-portal/add-child");
 }
+

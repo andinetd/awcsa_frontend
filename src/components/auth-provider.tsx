@@ -58,7 +58,9 @@ const AuthProvider = ({
           if (role === "CARE_CENTERS_PORTAL")
             return (
               user.accountType === "CHILD_CARE_FACILITY" ||
-              user.accountType === "CHILD_CARE_FACLITY"
+              user.accountType === "CHILD_CARE_FACLITY" ||
+              userRole === "Facility_Admin" ||
+              userRole === "FACILITATOR_OFFICER"
             );
           if (role === "SYSTEM") return userModules.includes("SYSTEM");
           return userModules.includes(role);

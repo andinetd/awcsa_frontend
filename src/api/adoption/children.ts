@@ -84,3 +84,15 @@ export const transferChildStatus = async (
   );
   return res.data;
 };
+
+export const updateChild = async (id: number, payload: Record<string, any>) => {
+  const { token } = useAuthStore.getState();
+  const res = await axios.patch(`${BASE_URL}/adoption/child/${id}`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
+};
+
