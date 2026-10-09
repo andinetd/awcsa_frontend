@@ -20,36 +20,45 @@ interface ElderlyDisabledSubCityMatrixProps {
   servicesList?: any[];
 }
 
-const ADDIS_ABABA_SUBCITIES = [
-  "Bole",
-  "Yeka",
-  "Kirkos",
-  "Arada",
-  "Gulele",
-  "Lideta",
-  "Nifas Silk-Lafto",
-  "Kolfe Keranio",
-  "Akaky Kaliti",
-  "Addis Ketema",
-  "Lemi Kura",
+const CANONICAL_SUBCITIES: { name: string; key: string }[] = [
+  { name: "Bole", key: "bole" },
+  { name: "Yeka", key: "yeka" },
+  { name: "Kirkos", key: "kirkos" },
+  { name: "Arada", key: "arada" },
+  { name: "Gulele", key: "gulele" },
+  { name: "Lideta", key: "lideta" },
+  { name: "Nifas Silk-Lafto", key: "nifasSilk" },
+  { name: "Kolfe Keranio", key: "kolfeKeranio" },
+  { name: "Akaky Kaliti", key: "akakiKality" },
+  { name: "Addis Ketema", key: "addisKetema" },
+  { name: "Lemi Kura", key: "lemiKura" },
 ];
 
-const SUBCITY_KEY_MAP: Record<string, string> = {
+const SUBCITY_ALIAS_MAP: Record<string, string> = {
   "bole": "bole",
   "yeka": "yeka",
   "kirkos": "kirkos",
   "arada": "arada",
   "gulele": "gulele",
+  "gullele": "gulele",
   "lideta": "lideta",
   "nifas silk-lafto": "nifasSilk",
+  "nifas silk lafto": "nifasSilk",
   "nifassilk": "nifasSilk",
   "nifas silk": "nifasSilk",
+  "nifas-silk": "nifasSilk",
   "kolfe keranio": "kolfeKeranio",
+  "kolfe-keranio": "kolfeKeranio",
   "kolfe": "kolfeKeranio",
   "akaky kaliti": "akakiKality",
   "akaki kality": "akakiKality",
+  "akaki kaliti": "akakiKality",
+  "akaky-kaliti": "akakiKality",
+  "akaki-kality": "akakiKality",
   "addis ketema": "addisKetema",
+  "addis-ketema": "addisKetema",
   "lemi kura": "lemiKura",
+  "lemi-kura": "lemiKura",
 };
 
 export function ElderlyDisabledSubCityMatrix({
@@ -57,7 +66,7 @@ export function ElderlyDisabledSubCityMatrix({
   servicesList = [],
 }: ElderlyDisabledSubCityMatrixProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.matrix");
-  const tSub = useTranslations("social-affairs.subCities");
+  const tSub = useTranslations("subCities");
 
   const subCities: SubCityRow[] = React.useMemo(() => {
     const map: Record<
@@ -71,26 +80,45 @@ export function ElderlyDisabledSubCityMatrix({
       }
     > = {};
 
-    ADDIS_ABABA_SUBCITIES.forEach((name) => {
-      const lower = name.toLowerCase();
-      map[lower] = {
+    CANONICAL_SUBCITIES.forEach(({ name, key }) => {
+      map[key] = {
         name,
-        subCityKey: SUBCITY_KEY_MAP[lower] || lower,
+        subCityKey: key,
         elderly: 0,
         disabled: 0,
         services: 0,
       };
     });
 
+    const resolveKey = (raw: string): string | null => {
+      if (!raw) return null;
+      const clean = raw.toLowerCase().trim();
+      if (!clean) return null;
+
+      // Check direct alias match
+      if (SUBCITY_ALIAS_MAP[clean]) {
+        return SUBCITY_ALIAS_MAP[clean];
+      }
+
+      // Check if any alias substring is present (e.g. "addis ababa, ethiopia" or "Bole Sub City")
+      for (const [alias, canonical] of Object.entries(SUBCITY_ALIAS_MAP)) {
+        if (clean.includes(alias)) {
+          return canonical;
+        }
+      }
+
+      return null;
+    };
+
     beneficiariesList.forEach((b) => {
       const rawSc = (b.subCity || b.address || "").trim();
-      const scKey = rawSc.toLowerCase();
-      if (!scKey) return;
+      const resolvedKey = resolveKey(rawSc);
+      if (!resolvedKey) return;
 
-      if (!map[scKey]) {
-        map[scKey] = {
+      if (!map[resolvedKey]) {
+        map[resolvedKey] = {
           name: rawSc,
-          subCityKey: SUBCITY_KEY_MAP[scKey] || scKey,
+          subCityKey: resolvedKey,
           elderly: 0,
           disabled: 0,
           services: 0,
@@ -98,28 +126,28 @@ export function ElderlyDisabledSubCityMatrix({
       }
 
       if (b.clientCategory === "ELDERLY") {
-        map[scKey].elderly += 1;
+        map[resolvedKey].elderly += 1;
       } else {
-        map[scKey].disabled += 1;
+        map[resolvedKey].disabled += 1;
       }
     });
 
     servicesList.forEach((s) => {
       const rawSc = (s.subCity || "").trim();
-      const scKey = rawSc.toLowerCase();
-      if (!scKey) return;
+      const resolvedKey = resolveKey(rawSc);
+      if (!resolvedKey) return;
 
-      if (!map[scKey]) {
-        map[scKey] = {
+      if (!map[resolvedKey]) {
+        map[resolvedKey] = {
           name: rawSc,
-          subCityKey: SUBCITY_KEY_MAP[scKey] || scKey,
+          subCityKey: resolvedKey,
           elderly: 0,
           disabled: 0,
           services: 0,
         };
       }
 
-      map[scKey].services += 1;
+      map[resolvedKey].services += 1;
     });
 
     return Object.values(map).map((sc) => {
@@ -151,10 +179,22 @@ export function ElderlyDisabledSubCityMatrix({
 
   const getSubCityLabel = (key: string, defaultName: string) => {
     try {
-      return tSub(key as any);
+      const translated = tSub(key as any);
+      if (translated && !translated.startsWith("subCities.")) {
+        return translated;
+      }
     } catch {
-      return defaultName;
+      // ignore
     }
+    try {
+      const translatedName = tSub(`names.${defaultName}` as any);
+      if (translatedName && !translatedName.startsWith("subCities.names.")) {
+        return translatedName;
+      }
+    } catch {
+      // ignore
+    }
+    return defaultName;
   };
 
   const getStatusLabel = (status: SubCityRow["coverageStatus"]) => {

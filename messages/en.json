@@ -81,5 +81,31 @@
   "partners": {
     "title": "Our Partners",
     "description": "Collaborating with leading organizations to drive social impact and empower our community."
+  },
+  "subCities": {
+    "names": {
+      "Bole": "Bole",
+      "Yeka": "Yeka",
+      "Kirkos": "Kirkos",
+      "Arada": "Arada",
+      "Gulele": "Gulele",
+      "Lideta": "Lideta",
+      "Nifas Silk-Lafto": "Nifas Silk-Lafto",
+      "Kolfe Keranio": "Kolfe Keranio",
+      "Akaky Kaliti": "Akaky Kaliti",
+      "Addis Ketema": "Addis Ketema",
+      "Lemi Kura": "Lemi Kura"
+    },
+    "bole": "Bole",
+    "yeka": "Yeka",
+    "kirkos": "Kirkos",
+    "arada": "Arada",
+    "gulele": "Gulele",
+    "lideta": "Lideta",
+    "nifasSilk": "Nifas Silk-Lafto",
+    "kolfeKeranio": "Kolfe Keranio",
+    "akakiKality": "Akaky Kaliti",
+    "addisKetema": "Addis Ketema",
+    "lemiKura": "Lemi Kura"
   }
 }

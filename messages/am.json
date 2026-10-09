@@ -81,5 +81,31 @@
   "partners": {
     "title": "አጋሮቻችን",
     "description": "ማህበራዊ ተፅእኖን ለመፍጠር እና ማህበረሰባችንን ለማብቃት ከታዋቂ ድርጅቶች ጋር በትብብር እንሰራለን።"
+  },
+  "subCities": {
+    "names": {
+      "Bole": "ቦሌ",
+      "Yeka": "የካ",
+      "Kirkos": "ቂርቆስ",
+      "Arada": "አራዳ",
+      "Gulele": "ጉለሌ",
+      "Lideta": "ልደታ",
+      "Nifas Silk-Lafto": "ንፋስ ስልክ ላፍቶ",
+      "Kolfe Keranio": "ኮልፌ ቀራኒዮ",
+      "Akaky Kaliti": "አቃቂ ቃሊቲ",
+      "Addis Ketema": "አዲስ ከተማ",
+      "Lemi Kura": "ለሚ ኩራ"
+    },
+    "bole": "ቦሌ",
+    "yeka": "የካ",
+    "kirkos": "ቂርቆስ",
+    "arada": "አራዳ",
+    "gulele": "ጉለሌ",
+    "lideta": "ልደታ",
+    "nifasSilk": "ንፋስ ስልክ ላፍቶ",
+    "kolfeKeranio": "ኮልፌ ቀራኒዮ",
+    "akakiKality": "አቃቂ ቃሊቲ",
+    "addisKetema": "አዲስ ከተማ",
+    "lemiKura": "ለሚ ኩራ"
   }
 }
