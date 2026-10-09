@@ -19,8 +19,10 @@ import { useNewChildFormStore } from "@/stores/new-child-registration-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 export default function NewChildFormSectionTwo() {
+  const t = useTranslations("adoption");
   const router = useRouter();
   const store = useNewChildFormStore();
 
@@ -45,25 +47,25 @@ export default function NewChildFormSectionTwo() {
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("children.steps.step1.headerAdmin1")}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("children.steps.step1.headerAdmin2")}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Child Protection &amp; Care
+            {t("children.steps.step1.headerAdmin3")}
           </span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
-              Child Registration (Step 2 of 2)
+              {t("children.steps.step2.title")}
             </h1>
             <p className="text-xs text-slate-500">
-              Enter finder identity, reporting officer credentials, care center recipient worker, and attending medical officers.
+              {t("children.steps.step2.subtitle")}
             </p>
           </div>
           <div className="px-2.5 py-1 bg-[#E8F2FA] border border-[#BCD5EA] rounded-xs text-[#1769AA] font-mono text-xs font-semibold w-fit">
-            Step 2 / 2
+            {t("children.steps.step2.stepBadge")}
           </div>
         </div>
       </div>
@@ -74,7 +76,7 @@ export default function NewChildFormSectionTwo() {
             {/* Child Founder Section */}
             <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs p-5 space-y-4">
               <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2">
-                Child Founder Information
+                {t("children.steps.step2.finderSection")}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <FormField
@@ -83,7 +85,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Name
+                        {t("children.steps.step2.finderName")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -102,7 +104,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Phone No
+                        {t("children.steps.step2.finderPhone")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -123,7 +125,7 @@ export default function NewChildFormSectionTwo() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-slate-700">
-                      House No
+                      {t("children.steps.step2.finderHouseNo")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -151,7 +153,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Address
+                        {t("children.steps.step2.finderAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -170,7 +172,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Sub City
+                        {t("children.steps.step2.finderSubCity")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -189,7 +191,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Woreda
+                        {t("children.steps.step2.finderWoreda")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -208,7 +210,7 @@ export default function NewChildFormSectionTwo() {
             {/* Officer Details Section */}
             <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs p-5 space-y-4">
               <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2">
-                Reporting Officer Information
+                {t("children.steps.step2.officerSection")}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <FormField
@@ -217,7 +219,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Officer Name
+                        {t("children.steps.step2.officerName")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -236,7 +238,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Phone No
+                        {t("children.steps.step2.officerPhone")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -255,7 +257,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Badge / ID No
+                        {t("children.steps.step2.officerBadge")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -276,7 +278,7 @@ export default function NewChildFormSectionTwo() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-slate-700">
-                      Responsibility / Role
+                      {t("children.steps.step2.officerRole")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -297,7 +299,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Address
+                        {t("children.steps.step2.officerAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -316,7 +318,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Sub City
+                        {t("children.steps.step2.officerSubCity")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -335,7 +337,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Woreda
+                        {t("children.steps.step2.officerWoreda")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -354,7 +356,7 @@ export default function NewChildFormSectionTwo() {
             {/* Receiving Care Center Worker Section */}
             <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs p-5 space-y-4">
               <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2">
-                Receiving Care Center Worker
+                {t("children.steps.step2.recipientSection")}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <FormField
@@ -363,7 +365,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Worker Name
+                        {t("children.steps.step2.recipientName")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -382,7 +384,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Phone No
+                        {t("children.steps.step2.recipientPhone")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -401,7 +403,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Staff ID No
+                        {t("children.steps.step2.recipientBadge")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -422,7 +424,7 @@ export default function NewChildFormSectionTwo() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-slate-700">
-                      Responsibility / Role
+                      {t("children.steps.step2.recipientRole")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -443,7 +445,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Address
+                        {t("children.steps.step2.recipientAddress")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -462,7 +464,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Sub City
+                        {t("children.steps.step2.recipientSubCity")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -481,7 +483,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Woreda
+                        {t("children.steps.step2.recipientWoreda")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -500,7 +502,7 @@ export default function NewChildFormSectionTwo() {
             {/* Health Officers Section */}
             <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs p-5 space-y-4">
               <h2 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-2">
-                On-Duty Health Officers
+                {t("children.steps.step2.healthSection")}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <FormField
@@ -509,7 +511,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Primary Health Officer Name
+                        {t("children.steps.step2.primaryHealthOfficer")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -528,7 +530,7 @@ export default function NewChildFormSectionTwo() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        Secondary Health Officer Name
+                        {t("children.steps.step2.secondaryHealthOfficer")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -553,13 +555,13 @@ export default function NewChildFormSectionTwo() {
               onClick={() => handleBack(form.getValues())}
               className="rounded-xs text-xs font-medium h-8 border-[#E3E7EB] px-4 cursor-pointer"
             >
-              Back to Step 1
+              {t("children.steps.step2.backToStep1")}
             </Button>
             <Button
               type="submit"
               className="bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold rounded-xs text-xs h-8 px-6 shadow-2xs cursor-pointer"
             >
-              Submit Registration
+              {t("children.steps.step2.submitRegistration")}
             </Button>
           </div>
         </form>

@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, TrendingUp, Users, Baby, Home, Shield, HeartHandshake } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { CheckCircle2 } from "lucide-react";
 
 interface AdoptionKpiGridProps {
   totalChildren?: number;
@@ -20,46 +21,50 @@ export function AdoptionKpiGrid({
   adoptedCount = 0,
   facilityCount = 0,
 }: AdoptionKpiGridProps) {
+  const t = useTranslations("adoption");
+
   const kpis = [
     {
-      title: "Total Tracked Minors",
+      title: t("dashboard.kpi.totalMinors.title"),
       value: totalChildren,
-      badge: "Verified",
-      detail: "Addis Ababa municipal registry",
-      subDetail: "All 11 sub-cities tracked",
-      trend: "Verified records",
+      badge: t("dashboard.kpi.totalMinors.badge"),
+      detail: t("dashboard.kpi.totalMinors.detail"),
+      subDetail: t("dashboard.kpi.totalMinors.subDetail"),
+      trend: t("dashboard.kpi.totalMinors.trend"),
     },
     {
-      title: "Residential Care Centers",
+      title: t("dashboard.kpi.careCenters.title"),
       value: inCareCount,
-      badge: "In-Care",
-      detail: facilityCount > 0 ? `Across ${facilityCount} licensed facilities` : "Licensed municipal facilities",
-      subDetail: "Active residential guardianship",
-      trend: `${inCareCount} in-care`,
+      badge: t("dashboard.kpi.careCenters.badge"),
+      detail: facilityCount > 0 
+        ? t("dashboard.kpi.careCenters.detailWithCount", { count: facilityCount })
+        : t("dashboard.kpi.careCenters.detailDefault"),
+      subDetail: t("dashboard.kpi.careCenters.subDetail"),
+      trend: t("dashboard.kpi.careCenters.trend", { count: inCareCount }),
     },
     {
-      title: "Adera & Kinship Custody",
+      title: t("dashboard.kpi.aderaAndKinship.title"),
       value: fosteredOrKinship,
-      badge: "Family Care",
-      detail: `${fosteredOrKinship} in family custody placements`,
-      subDetail: "Temporary & extended family care",
-      trend: "Family placements",
+      badge: t("dashboard.kpi.aderaAndKinship.badge"),
+      detail: t("dashboard.kpi.aderaAndKinship.detail", { count: fosteredOrKinship }),
+      subDetail: t("dashboard.kpi.aderaAndKinship.subDetail"),
+      trend: t("dashboard.kpi.aderaAndKinship.trend"),
     },
     {
-      title: "Active Adoption Applicants",
+      title: t("dashboard.kpi.activeApplicants.title"),
       value: totalApplicants,
-      badge: "In Pipeline",
-      detail: "Pre-screened prospective parents",
-      subDetail: `${totalApplicants} dossiers in procedural vetting`,
-      trend: "Active pipeline",
+      badge: t("dashboard.kpi.activeApplicants.badge"),
+      detail: t("dashboard.kpi.activeApplicants.detail"),
+      subDetail: t("dashboard.kpi.activeApplicants.subDetail", { count: totalApplicants }),
+      trend: t("dashboard.kpi.activeApplicants.trend"),
     },
     {
-      title: "Court Decrees Finalized",
+      title: t("dashboard.kpi.courtDecrees.title"),
       value: adoptedCount,
-      badge: "Decreed",
-      detail: "Permanently placed & ratified",
-      subDetail: "Full judicial adoption orders",
-      trend: "100% legal compliance",
+      badge: t("dashboard.kpi.courtDecrees.badge"),
+      detail: t("dashboard.kpi.courtDecrees.detail"),
+      subDetail: t("dashboard.kpi.courtDecrees.subDetail"),
+      trend: t("dashboard.kpi.courtDecrees.trend"),
     },
   ];
 

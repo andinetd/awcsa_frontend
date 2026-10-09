@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uiTokens } from "@/styles/design-system";
@@ -19,51 +20,60 @@ export function AdoptionAlertBanner({
   pendingApprovals = 0,
   inCareCount = 0,
 }: AdoptionAlertBannerProps) {
+  const t = useTranslations("adoption");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const cards = [
     {
-      title: "Home Inspections",
+      title: t("dashboard.alerts.homeInspections.title"),
       count: pendingHomeVisits,
-      unit: "visits scheduled",
-      badge: pendingHomeVisits > 0 ? "SCHEDULED" : "COMPLETED",
+      unit: t("dashboard.alerts.homeInspections.unit"),
+      badge: pendingHomeVisits > 0 
+        ? t("dashboard.alerts.homeInspections.scheduledBadge") 
+        : t("dashboard.alerts.homeInspections.completedBadge"),
       statusType: (pendingHomeVisits > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Applicant residences pending social worker suitability and environmental reports",
+      description: t("dashboard.alerts.homeInspections.description"),
       link: "/adoption/adoption-requests?tab=pending_home_visit",
-      actionText: "Review inspection queue",
+      actionText: t("dashboard.alerts.homeInspections.actionText"),
     },
     {
-      title: "Facility Compliance",
+      title: t("dashboard.alerts.facilityCompliance.title"),
       count: pendingReports,
-      unit: "overdue reports",
-      badge: pendingReports === 0 ? "COMPLIANT" : "OVERDUE",
+      unit: t("dashboard.alerts.facilityCompliance.unit"),
+      badge: pendingReports === 0 
+        ? t("dashboard.alerts.facilityCompliance.compliantBadge") 
+        : t("dashboard.alerts.facilityCompliance.overdueBadge"),
       statusType: (pendingReports === 0 ? "neutral" : "navy") as keyof typeof uiTokens.statusTag,
       description:
         pendingReports === 0
-          ? "All licensed residential care centers submitted current child registries on schedule"
-          : `${pendingReports} facility report(s) pending administrative review and audit`,
+          ? t("dashboard.alerts.facilityCompliance.descriptionCompliant")
+          : t("dashboard.alerts.facilityCompliance.descriptionOverdue", { count: pendingReports }),
       link: "/adoption/care-centers",
-      actionText: "Inspect facility registers",
+      actionText: t("dashboard.alerts.facilityCompliance.actionText"),
     },
     {
-      title: "Committee Clearance",
+      title: t("dashboard.alerts.committeeClearance.title"),
       count: pendingApprovals,
-      unit: "awaiting decree",
-      badge: pendingApprovals > 0 ? "DOCKET" : "RESOLVED",
+      unit: t("dashboard.alerts.committeeClearance.unit"),
+      badge: pendingApprovals > 0 
+        ? t("dashboard.alerts.committeeClearance.docketBadge") 
+        : t("dashboard.alerts.committeeClearance.resolvedBadge"),
       statusType: (pendingApprovals > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Matched applicant files ready for legal decree ratification and judicial handover",
+      description: t("dashboard.alerts.committeeClearance.description"),
       link: "/adoption/adoption-requests?tab=pending_approval",
-      actionText: "Clear pending adoptions",
+      actionText: t("dashboard.alerts.committeeClearance.actionText"),
     },
     {
-      title: "Placement Pipeline",
+      title: t("dashboard.alerts.placementPipeline.title"),
       count: inCareCount,
-      unit: "eligible in care",
-      badge: inCareCount > 0 ? "IN CARE" : "PLACED",
+      unit: t("dashboard.alerts.placementPipeline.unit"),
+      badge: inCareCount > 0 
+        ? t("dashboard.alerts.placementPipeline.inCareBadge") 
+        : t("dashboard.alerts.placementPipeline.placedBadge"),
       statusType: (inCareCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Children in institutional care currently undergoing kinship tracing or matching",
+      description: t("dashboard.alerts.placementPipeline.description"),
       link: "/adoption/children",
-      actionText: "Open child placement roster",
+      actionText: t("dashboard.alerts.placementPipeline.actionText"),
     },
   ];
 
@@ -71,10 +81,10 @@ export function AdoptionAlertBanner({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          CASES REQUIRING BUREAU ATTENTION
+          {t("dashboard.alerts.sectionTitle")}
         </h2>
         <span className="text-[11px] text-slate-400">
-          Active oversight threshold — 4 items monitored
+          {t("dashboard.alerts.sectionSubtitle")}
         </span>
       </div>
 

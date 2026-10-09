@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -32,6 +33,7 @@ export function AdoptionChartsSection({
   intakeTrends = [],
   statusBreakdown = [],
 }: AdoptionChartsSectionProps) {
+  const t = useTranslations("adoption");
   const [activeSegment, setActiveSegment] = useState<number | null>(null);
 
   const totalMinors = statusBreakdown.reduce((acc, curr) => acc + curr.count, 0);
@@ -43,21 +45,21 @@ export function AdoptionChartsSection({
         <div className="pb-2 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-              Monthly Minor Inflow vs. Legal Placements & Resolutions
+              {t("dashboard.charts.velocityTitle")}
             </h3>
             <p className="text-[11px] text-slate-500">
-              New child intake across all 11 sub-cities compared against reunifications, kinship custody, and finalized adoptions
+              {t("dashboard.charts.velocitySubtitle")}
             </p>
           </div>
           {/* Legend */}
           <div className="flex items-center gap-3 text-[11px] font-medium text-slate-600">
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#0B1F3A]" />
-              New Minor Intake
+              {t("dashboard.charts.newIntake")}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#1769AA]" />
-              Placements & Decrees
+              {t("dashboard.charts.placementsDecrees")}
             </span>
           </div>
         </div>
@@ -65,7 +67,7 @@ export function AdoptionChartsSection({
         <div className="mt-4 h-[220px] w-full">
           {intakeTrends.length === 0 ? (
             <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 text-xs">
-              <span>No historical intake or placement data available</span>
+              <span>{t("dashboard.charts.noTrendsData")}</span>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
@@ -99,7 +101,7 @@ export function AdoptionChartsSection({
                           <div className="flex items-center justify-between gap-4 text-slate-600 text-[11px]">
                             <span className="flex items-center gap-1">
                               <span className="size-2 rounded-xs bg-[#0B1F3A]" />
-                              New Intake:
+                              {t("dashboard.charts.newIntake")}:
                             </span>
                             <span className="font-mono font-bold text-slate-900">
                               {payload[0]?.value}
@@ -108,7 +110,7 @@ export function AdoptionChartsSection({
                           <div className="flex items-center justify-between gap-4 text-slate-600 text-[11px]">
                             <span className="flex items-center gap-1">
                               <span className="size-2 rounded-xs bg-[#1769AA]" />
-                              Placements:
+                              {t("dashboard.charts.placementsDecrees")}:
                             </span>
                             <span className="font-mono font-bold text-slate-900">
                               {payload[1]?.value}
@@ -132,17 +134,21 @@ export function AdoptionChartsSection({
       <div className="lg:col-span-4 rounded-sm border border-[#E3E7EB] bg-white p-4 flex flex-col justify-between">
         <div className="pb-2 border-b border-slate-100">
           <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-            Child Legal Status & Placement
+            {t("dashboard.charts.donutTitle")}
           </h3>
           <p className="text-[11px] text-slate-500">
-            Distribution across {totalMinors} tracked minors in jurisdiction
+            {t("dashboard.charts.donutSubtitle", { count: totalMinors })}
           </p>
         </div>
 
         {totalMinors === 0 ? (
           <div className="relative my-2 h-[150px] w-full flex flex-col items-center justify-center text-center p-4">
-            <span className="text-xs font-semibold text-slate-700">No active cases registered</span>
-            <span className="text-[11px] text-slate-400 mt-1">Status breakdown will populate as cases are logged</span>
+            <span className="text-xs font-semibold text-slate-700">
+              {t("dashboard.charts.noDonutDataTitle")}
+            </span>
+            <span className="text-[11px] text-slate-400 mt-1">
+              {t("dashboard.charts.noDonutDataSubtitle")}
+            </span>
           </div>
         ) : (
           <div className="relative my-2 h-[150px] w-full flex items-center justify-center">
@@ -157,7 +163,7 @@ export function AdoptionChartsSection({
                         <div className="rounded border border-[#E3E7EB] bg-white px-2.5 py-1.5 shadow-sm text-xs">
                           <div className="font-semibold text-slate-800">{data.label}</div>
                           <div className="text-[11px] text-slate-500 font-mono">
-                            {data.count} children ({percent}%)
+                            {t("dashboard.charts.childrenCountPercent", { count: data.count, percent })}
                           </div>
                         </div>
                       );
@@ -206,7 +212,7 @@ export function AdoptionChartsSection({
         <div className="space-y-1.5 pt-2 border-t border-slate-100">
           {totalMinors === 0 ? (
             <div className="py-2 text-center text-[11px] text-slate-400">
-              No placement records yet
+              {t("dashboard.charts.noDonutDataSubtitle")}
             </div>
           ) : (
             statusBreakdown.map((item, idx) => {

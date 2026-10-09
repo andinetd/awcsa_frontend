@@ -40,7 +40,27 @@
       "loadFailed": "Failed to load applications",
       "networkError": "Network error loading applications",
       "unexpectedShape": "Unexpected applications response shape"
-    }
+    },
+    "headerAdmin1": "Addis Ababa City Administration",
+    "headerAdmin2": "Women & Social Affairs Bureau",
+    "headerAdmin3": "Child Welfare & Adoption",
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset All Filters",
+      "subCity": "Sub-City",
+      "allSubCities": "All Sub-Cities",
+      "woreda": "Woreda",
+      "allWoredas": "All Woredas",
+      "selectSubCityFirst": "Select Sub-City First",
+      "dateRecency": "Date Recency",
+      "allTime": "All Time",
+      "last7Days": "Last 7 Days",
+      "last30Days": "Last 30 Days",
+      "last90Days": "Last 90 Days",
+      "thisYear": "This Year",
+      "activeFiltersCount": "({count})"
+    },
+    "allDossiers": "All Dossiers"
   },
   "adoptionDetail": {
     "title": "Review Adoption Application",
@@ -507,6 +527,30 @@
       "registerSuccess": "Care center registered successfully!",
       "registerError": "Failed to register care center: {message}",
       "genericError": "An error occurred while registering the care center."
+    },
+    "headerAdmin1": "Addis Ababa City Administration",
+    "headerAdmin2": "Women & Social Affairs Bureau",
+    "headerAdmin3": "Child Welfare & Protection",
+    "metrics": {
+      "totalFacilities": "Total Facilities",
+      "totalFacilitiesSub": "Institutional Care Directory",
+      "activeCapacity": "Active Capacity",
+      "activeCapacitySub": "Authorized beds across centers",
+      "totalEnrolled": "Children Enrolled",
+      "totalEnrolledSub": "Supervised facilities",
+      "govMunicipal": "Gov. Municipal",
+      "govMunicipalSub": "Direct municipal administration",
+      "licensedNgo": "Licensed NGO",
+      "licensedNgoSub": "Licensed non-governmental partners"
+    },
+    "table": {
+      "name": "Care Center Name",
+      "location": "Location",
+      "minAge": "Minimum Age",
+      "maxAge": "Maximum Age",
+      "capacity": "Capacity",
+      "type": "Type",
+      "actions": "Actions"
     }
   },
   "children": {
@@ -515,7 +559,57 @@
       "addNew": "Register New Child",
       "loading": "Loading registered children...",
       "subtitle": "Track child institutional intake, status transfers, care facilities, and adoption eligibility.",
-      "searchPlaceholder": "Search by child name, facility child code (e.g. FAC-001), or intake location..."
+      "searchPlaceholder": "Search by child name, facility child code (e.g. FAC-001), or intake location...",
+      "headerAdmin1": "Addis Ababa City Administration",
+      "headerAdmin2": "Women & Social Affairs Bureau",
+      "headerAdmin3": "Child Protection & Care",
+      "metrics": {
+        "totalRegistry": "Total Registry",
+        "totalRegistrySub": "All recorded minors",
+        "inCareEligible": "In Care (Eligible)",
+        "inCareSub": "Institutional centers",
+        "foundIntake": "Found / Intake",
+        "foundSub": "Under initial tracing",
+        "inAderaCustody": "In Adera Custody",
+        "inAderaSub": "Temporary shelter",
+        "kinshipCare": "Kinship Care",
+        "kinshipSub": "Extended family",
+        "decreeAdopted": "Decree Adopted",
+        "decreeSub": "Finalized decrees"
+      },
+      "filterTabs": {
+        "all": "All Minors",
+        "found": "Found",
+        "inCare": "In Care",
+        "inAdera": "In Adera",
+        "kinship": "Kinship Care",
+        "adopted": "Adopted",
+        "returned": "Reunified"
+      },
+      "filters": {
+        "searchPlaceholder": "Search by minor name, facility code, or intake location...",
+        "toggleAdvanced": "Advanced Filters",
+        "activeCount": "Active ({count})",
+        "resetAll": "Reset All",
+        "sexLabel": "Gender / Sex",
+        "allGenders": "All Genders",
+        "male": "Male",
+        "female": "Female",
+        "ageCohortLabel": "Age Cohort",
+        "allAges": "All Ages",
+        "infant": "Infant (0-2 yrs)",
+        "earlyChildhood": "Early Childhood (3-6 yrs)",
+        "primarySchool": "Primary (7-12 yrs)",
+        "adolescent": "Adolescent (13+ yrs)",
+        "facilityLabel": "Care Center / Facility",
+        "allFacilities": "All Care Facilities",
+        "locationLabel": "Location / Found Place",
+        "locationPlaceholder": "e.g. Kirkos, Bole, Piazza..."
+      },
+      "table": {
+        "emptyTitle": "No child records found",
+        "emptyDesc": "No records match your selected status or search query."
+      }
     },
     "columns": {
       "name": "Child Name",
@@ -649,7 +743,88 @@
       "relativeGuardian": "Kinship Guardian",
       "fosterCustodian": "Foster Custodian",
       "transferReason": "Reason / Notes",
-      "noTransferHistory": "Initial intake registration. No subsequent status transfers have been recorded for this child."
+      "noTransferHistory": "Initial intake registration. No subsequent status transfers have been recorded for this child.",
+      "headerAdmin1": "Addis Ababa City Administration",
+      "headerAdmin2": "Women & Social Affairs Bureau",
+      "headerAdmin3": "Child Protection & Care",
+      "registered": "Registered",
+      "biologicalReunification": "Biological Parent Reunification",
+      "parents": "Parents",
+      "contact": "Contact",
+      "courtOrder": "Court Order",
+      "date": "Date",
+      "adoptiveParent": "Adoptive Parent",
+      "matchedOn": "Matched On",
+      "matchedByOfficer": "Matched By Officer",
+      "viewAssociatedApplication": "View Associated Adoption Application #{id}",
+      "eligibleForMatchingNote": "Eligible for matching when approved applications are reviewed.",
+      "phoneLabel": "Phone",
+      "cityIdLabel": "City ID",
+      "addressLabel": "Address"
+    },
+    "steps": {
+      "step1": {
+        "headerAdmin1": "Addis Ababa City Administration",
+        "headerAdmin2": "Women & Social Affairs Bureau",
+        "headerAdmin3": "Child Protection & Care",
+        "title": "Child Registration (Step 1 of 2)",
+        "subtitle": "Enter baseline identity, origin, and admission details for the child.",
+        "stepBadge": "Step 1 / 2",
+        "identitySection": "Child Identity & Origin",
+        "nameByFamily": "Name (Given by Family)",
+        "nameByCareCenter": "Name (Given by Care Center)",
+        "fatherName": "Father's Name",
+        "optional": "(Optional)",
+        "gender": "Gender",
+        "selectGender": "Select gender",
+        "male": "Male",
+        "female": "Female",
+        "estimatedAge": "Estimated Age",
+        "reasonForAdmission": "Reason for Admission",
+        "reasonPlaceholder": "Enter the reason for admission...",
+        "placeFound": "Place Found",
+        "subCity": "Sub City",
+        "woreda": "Woreda",
+        "dateFound": "Date Found",
+        "selectDate": "Select date",
+        "additionalInformation": "Additional Information",
+        "additionalInfoPlaceholder": "Enter any extra information...",
+        "back": "Back",
+        "nextStep": "Next Step"
+      },
+      "step2": {
+        "title": "Child Registration (Step 2 of 2)",
+        "subtitle": "Enter finder identity, reporting officer credentials, care center recipient worker, and attending medical officers.",
+        "stepBadge": "Step 2 / 2",
+        "finderSection": "Child Finder Information",
+        "finderName": "Name",
+        "finderPhone": "Phone No",
+        "finderHouseNo": "House No",
+        "finderAddress": "Address",
+        "finderSubCity": "Sub City",
+        "finderWoreda": "Woreda",
+        "officerSection": "Reporting Officer Information",
+        "officerName": "Officer Name",
+        "officerPhone": "Phone No",
+        "officerBadge": "Badge / ID No",
+        "officerRole": "Responsibility / Role",
+        "officerAddress": "Address",
+        "officerSubCity": "Sub City",
+        "officerWoreda": "Woreda",
+        "recipientSection": "Receiving Care Center Worker",
+        "recipientName": "Worker Name",
+        "recipientPhone": "Phone No",
+        "recipientBadge": "Staff ID No",
+        "recipientRole": "Responsibility / Role",
+        "recipientAddress": "Address",
+        "recipientSubCity": "Sub City",
+        "recipientWoreda": "Woreda",
+        "healthSection": "On-Duty Health Officers",
+        "primaryHealthOfficer": "Primary Health Officer Name",
+        "secondaryHealthOfficer": "Secondary Health Officer Name",
+        "backToStep1": "Back to Step 1",
+        "submitRegistration": "Submit Registration"
+      }
     }
   },
   "dashboard": {
@@ -676,10 +851,198 @@
       "adoptionRequests": "Adoption Requests"
     },
     "charts": {
-      "children": "Children",
-      "centers": "Centers",
-      "requests": "Requests",
-      "benefits": "Benefits"
+      "velocityTitle": "Monthly Minor Inflow vs. Legal Placements & Resolutions",
+      "velocitySubtitle": "New child intake across all 11 sub-cities compared against reunifications, kinship custody, and finalized adoptions",
+      "newIntake": "New Minor Intake",
+      "placementsDecrees": "Placements & Decrees",
+      "noTrendsData": "No historical intake or placement data available",
+      "donutTitle": "Child Legal Status & Placement",
+      "donutSubtitle": "Distribution across {count} tracked minors in jurisdiction",
+      "noDonutDataTitle": "No active cases registered",
+      "noDonutDataSubtitle": "Status breakdown will populate as cases are logged",
+      "childrenCountPercent": "{count} children ({percent}%)",
+      "statusLabels": {
+        "FOUND": "Found / In-Processing",
+        "IN_CARE": "Residential Care Centers",
+        "IN_ADERA": "Adera Custody Placements",
+        "WITH_BLOOD_RELATIVE": "Kinship / Relatives",
+        "ADOPTED": "Domestic Adoption Finalized"
+      }
+    },
+    "header": {
+      "adminLevel1": "ADDIS ABABA CITY ADMINISTRATION",
+      "adminLevel2": "BUREAU OF WOMEN & SOCIAL AFFAIRS",
+      "adminLevel3": "CHILD WELFARE & ADOPTION",
+      "title": "Child Welfare & Adoption Administration",
+      "subtitle": "Executive oversight of minor custody, care facility compliance, kinship placements, and adoption screening funnels",
+      "activeRegistry": "Active Registry",
+      "refresh": "Refresh",
+      "printBrief": "Print Brief",
+      "registerMinor": "Register Minor",
+      "manageApplications": "Manage Applications",
+      "careCenters": "Care Centers",
+      "jurisdiction": "Jurisdiction",
+      "jurisdictionValue": "All 11 Sub-cities & Registered Municipal Centers",
+      "period": "Period",
+      "periodValue": "FY 2018 E.C.",
+      "asOf": "As of",
+      "syncedBadge": "Central Judicial & Welfare Exchange Synced"
+    },
+    "alerts": {
+      "sectionTitle": "CASES REQUIRING BUREAU ATTENTION",
+      "sectionSubtitle": "Active oversight threshold — 4 items monitored",
+      "homeInspections": {
+        "title": "Home Inspections",
+        "unit": "visits scheduled",
+        "scheduledBadge": "SCHEDULED",
+        "completedBadge": "COMPLETED",
+        "description": "Applicant residences pending social worker suitability and environmental reports",
+        "actionText": "Review inspection queue"
+      },
+      "facilityCompliance": {
+        "title": "Facility Compliance",
+        "unit": "overdue reports",
+        "compliantBadge": "COMPLIANT",
+        "overdueBadge": "OVERDUE",
+        "descriptionCompliant": "All licensed residential care centers submitted current child registries on schedule",
+        "descriptionOverdue": "{count} facility report(s) pending administrative review and audit",
+        "actionText": "Inspect facility registers"
+      },
+      "committeeClearance": {
+        "title": "Committee Clearance",
+        "unit": "awaiting decree",
+        "docketBadge": "DOCKET",
+        "resolvedBadge": "RESOLVED",
+        "description": "Matched applicant files ready for legal decree ratification and judicial handover",
+        "actionText": "Clear pending adoptions"
+      },
+      "placementPipeline": {
+        "title": "Placement Pipeline",
+        "unit": "eligible in care",
+        "inCareBadge": "IN CARE",
+        "placedBadge": "PLACED",
+        "description": "Children in institutional care currently undergoing kinship tracing or matching",
+        "actionText": "Open child placement roster"
+      }
+    },
+    "kpi": {
+      "totalMinors": {
+        "title": "Total Tracked Minors",
+        "badge": "Verified",
+        "detail": "Addis Ababa municipal registry",
+        "subDetail": "All 11 sub-cities tracked",
+        "trend": "Verified records"
+      },
+      "careCenters": {
+        "title": "Residential Care Centers",
+        "badge": "In-Care",
+        "detailWithCount": "Across {count} licensed facilities",
+        "detailDefault": "Licensed municipal facilities",
+        "subDetail": "Active residential guardianship",
+        "trend": "{count} in-care"
+      },
+      "aderaAndKinship": {
+        "title": "Adera & Kinship Custody",
+        "badge": "Family Care",
+        "detail": "{count} in family custody placements",
+        "subDetail": "Temporary & extended family care",
+        "trend": "Family placements"
+      },
+      "activeApplicants": {
+        "title": "Active Adoption Applicants",
+        "badge": "In Pipeline",
+        "detail": "Pre-screened prospective parents",
+        "subDetail": "{count} dossiers in procedural vetting",
+        "trend": "Active pipeline"
+      },
+      "courtDecrees": {
+        "title": "Court Decrees Finalized",
+        "badge": "Decreed",
+        "detail": "Permanently placed & ratified",
+        "subDetail": "Full judicial adoption orders",
+        "trend": "100% legal compliance"
+      }
+    },
+    "pipeline": {
+      "title": "Adoption Screening & Procedural Pipeline",
+      "subtitle": "{count} active cases tracked across procedural verification stages",
+      "viewAll": "View all",
+      "empty": "No active applications currently in vetting pipeline.",
+      "stages": {
+        "stage1": {
+          "title": "Formal applications registered",
+          "description": "Prospective adoptive parents initial dossier intake",
+          "unit": "applicants"
+        },
+        "stage2": {
+          "title": "Social worker home inspection",
+          "description": "Domestic background vetting & home suitability assessment",
+          "unit": "scheduled"
+        },
+        "stage3": {
+          "title": "Case matching committee review",
+          "description": "Multi-disciplinary child placement committee evaluation",
+          "unit": "in review"
+        },
+        "stage4": {
+          "title": "Trial custody & bonding period",
+          "description": "Supervised family bonding and follow-up",
+          "unit": "active bonding"
+        },
+        "stage5": {
+          "title": "Court decrees finalized",
+          "description": "Permanent judicial adoption orders and civil registry sync",
+          "unit": "decreed"
+        }
+      },
+      "facilities": {
+        "title": "Accredited Care Facilities Capacity",
+        "subtitle": "{count} registered residential centers",
+        "occupancyRatio": "{occupied} / {capacity} occupied ({percent}%)",
+        "table": {
+          "facilityName": "Care Facility Name",
+          "type": "Type",
+          "capacityOccupancy": "Capacity / Occupancy",
+          "status": "Status"
+        },
+        "types": {
+          "government": "Government / Municipal",
+          "licensedNgo": "Licensed NGO / Private",
+          "general": "Care Facility"
+        },
+        "active": "Active"
+      }
+    },
+    "recentCases": {
+      "title": "Adoption Application Queue & Vetting Roster",
+      "subtitle": "Active prospective applicant cases registered under Addis Ababa jurisdiction",
+      "searchPlaceholder": "Search applicant or case code...",
+      "viewAll": "View all dossiers",
+      "tabs": {
+        "all": "All Active",
+        "pendingReview": "Pending Review",
+        "homeVisit": "Home Inspection",
+        "committee": "Committee",
+        "matched": "Bonding Trial",
+        "decreed": "Decreed"
+      },
+      "table": {
+        "caseDossier": "Case Dossier",
+        "applicantName": "Applicant Name",
+        "location": "Sub-City / Woreda",
+        "preference": "Preferences",
+        "vettingStage": "Vetting Stage",
+        "queueDays": "Queue Time",
+        "assignedOfficer": "Assigned Officer",
+        "actions": "Actions"
+      },
+      "empty": "No applications found matching the selected filter criteria.",
+      "daysCount": "{count} days in queue",
+      "today": "Filed today",
+      "reviewAction": "Review Dossier",
+      "officerDefault": "Municipal Intake Team",
+      "assignedOfficerLabel": "Assigned Officer",
+      "standardPlacement": "Standard Placement"
     }
   },
   "homeVisitRegistration": {
@@ -1046,5 +1409,59 @@
     "review": "Review Report",
     "feedbackLabel": "Officer Assessment & Feedback",
     "concernsLabel": "Actionable Concerns & Red Flags"
+  },
+  "adera": {
+    "title": "List of Adera",
+    "subtitle": "Management of temporary child custody and guardianship placements.",
+    "newAdera": "New Adera",
+    "columns": {
+      "cityIdNumber": "City ID",
+      "educationLevel": "Education Level",
+      "occupation": "Occupation",
+      "monthlyIncome": "Monthly Income",
+      "partnerCityIdNumber": "Partner City ID",
+      "preferredChildGender": "Preferred Gender",
+      "preferredChildMinAge": "Preferred Min Age",
+      "preferredChildMaxAge": "Preferred Max Age"
+    },
+    "registration": {
+      "title": "Register New Adera Custody",
+      "subtitle": "Complete information for guardian custody intake and placement preferences.",
+      "personalInfo": "Personal Information",
+      "spouseInfo": "Spouse Information",
+      "placementPreferences": "Child Placement Preferences",
+      "cityIdNumber": "City ID Number",
+      "educationLevel": "Education Level",
+      "occupation": "Occupation",
+      "monthlyIncome": "Monthly Income (ETB)",
+      "partnerCityIdNumber": "Partner City ID Number",
+      "preferredChildGender": "Preferred Child Gender",
+      "preferredChildMinAge": "Preferred Min Age (Years)",
+      "preferredChildMaxAge": "Preferred Max Age (Years)",
+      "genderPlaceholder": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "any": "Any",
+      "submit": "Register Custodian",
+      "submitting": "Submitting...",
+      "cancel": "Cancel",
+      "successToast": "Adera guardian registered successfully",
+      "errorToast": "Failed to register Adera guardian",
+      "facilitator": "Facilitator Information",
+      "facilitatorCityIdNumber": "Facilitator / Expert City ID Number",
+      "create": "Create",
+      "creating": "Creating..."
+    },
+    "facilitator": "Facilitator"
+  },
+  "assistedHomes": {
+    "title": "Assisted Living & Community Homes",
+    "subtitle": "Alternative family-based care arrangements and monitored foster residential homes.",
+    "empty": "Assisted homes management records and oversight facilities will be listed here."
+  },
+  "benefits": {
+    "title": "Child Welfare Support & Benefits",
+    "subtitle": "Social protection subsidies, educational allowances, and material support for vulnerable children.",
+    "empty": "Child social welfare support programs and subsidy allocations will appear here."
   }
 }

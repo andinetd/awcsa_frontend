@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { 
   Baby, 
   Users, 
@@ -28,7 +29,8 @@ export function AdoptionHeader({
   totalApplicants = 0,
   totalFacilities = 0,
 }: AdoptionHeaderProps) {
-  const currentDate = new Date().toLocaleDateString("en-US", {
+  const t = useTranslations("adoption");
+  const currentDate = new Date().toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -40,11 +42,11 @@ export function AdoptionHeader({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E3E7EB] pb-3">
         <div className="flex items-center gap-2 text-[11px] font-semibold tracking-wider uppercase text-slate-500 font-mono">
           <span className="flex size-2 rounded-full bg-[#1769AA]" />
-          <span>ADDIS ABABA CITY ADMINISTRATION</span>
+          <span>{t("dashboard.header.adminLevel1")}</span>
           <span className="text-slate-300">/</span>
-          <span className="text-slate-700">BUREAU OF WOMEN & SOCIAL AFFAIRS</span>
+          <span className="text-slate-700">{t("dashboard.header.adminLevel2")}</span>
           <span className="text-slate-300">/</span>
-          <span className="text-[#1769AA]">CHILD WELFARE & ADOPTION</span>
+          <span className="text-[#1769AA]">{t("dashboard.header.adminLevel3")}</span>
         </div>
 
         {/* Global Action Buttons */}
@@ -57,7 +59,7 @@ export function AdoptionHeader({
             className="h-8 px-2.5 text-xs text-slate-700 hover:text-slate-900 border-[#E3E7EB] bg-white cursor-pointer"
           >
             <RefreshCw className={`mr-1.5 size-3.5 ${isRefreshing ? "animate-spin text-[#1769AA]" : "text-slate-500"}`} />
-            Refresh
+            {t("dashboard.header.refresh")}
           </Button>
           <Button
             variant="outline"
@@ -66,7 +68,7 @@ export function AdoptionHeader({
             className="h-8 px-2.5 text-xs text-slate-700 hover:text-slate-900 border-[#E3E7EB] bg-white cursor-pointer"
           >
             <Printer className="mr-1.5 size-3.5 text-slate-500" />
-            Print Brief
+            {t("dashboard.header.printBrief")}
           </Button>
           <Link href="/adoption/children/child-registration/new">
             <Button
@@ -74,7 +76,7 @@ export function AdoptionHeader({
               className="h-8 px-3 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white font-medium shadow-2xs cursor-pointer"
             >
               <Baby className="mr-1.5 size-3.5 text-[#38BDF8]" />
-              Register Minor
+              {t("dashboard.header.registerMinor")}
             </Button>
           </Link>
         </div>
@@ -85,14 +87,14 @@ export function AdoptionHeader({
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
-              Child Welfare & Adoption Administration
+              {t("dashboard.header.title")}
             </h1>
             <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]">
-              Active Registry
+              {t("dashboard.header.activeRegistry")}
             </span>
           </div>
           <p className="text-xs text-slate-500 italic mt-0.5">
-            Executive oversight of minor custody, care facility compliance, kinship placements, and adoption screening funnels
+            {t("dashboard.header.subtitle")}
           </p>
         </div>
 
@@ -105,7 +107,7 @@ export function AdoptionHeader({
               className="h-8 px-3 text-xs border-[#E3E7EB] text-[#1769AA] hover:bg-[#E8F2FA] font-medium bg-white cursor-pointer"
             >
               <Users className="mr-1.5 size-3.5 text-[#1769AA]" />
-              Manage Applications ({totalApplicants})
+              {t("dashboard.header.manageApplications")} ({totalApplicants})
             </Button>
           </Link>
           <Link href="/adoption/care-centers">
@@ -115,7 +117,7 @@ export function AdoptionHeader({
               className="h-8 px-3 text-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50 font-medium bg-white cursor-pointer"
             >
               <Building2 className="mr-1.5 size-3.5 text-slate-500" />
-              Care Centers ({totalFacilities})
+              {t("dashboard.header.careCenters")} ({totalFacilities})
             </Button>
           </Link>
         </div>
@@ -125,21 +127,21 @@ export function AdoptionHeader({
       <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-[11.5px] text-slate-600 bg-white border border-[#E3E7EB] px-3.5 py-1.5 rounded-md">
         <span className="flex items-center gap-1.5">
           <MapPin className="size-3 text-slate-400" />
-          <strong className="font-semibold text-slate-800">Jurisdiction:</strong> All 11 Sub-cities & Registered Municipal Centers
+          <strong className="font-semibold text-slate-800">{t("dashboard.header.jurisdiction")}:</strong> {t("dashboard.header.jurisdictionValue")}
         </span>
         <span className="text-slate-300">|</span>
         <span className="flex items-center gap-1.5 font-mono">
           <Calendar className="size-3 text-slate-400" />
-          <strong className="font-semibold text-slate-800 font-sans">Period:</strong> FY 2018 E.C.
+          <strong className="font-semibold text-slate-800 font-sans">{t("dashboard.header.period")}:</strong> {t("dashboard.header.periodValue")}
         </span>
         <span className="text-slate-300">|</span>
         <span className="font-mono">
-          <strong className="font-semibold text-slate-800 font-sans">As of:</strong> {currentDate}
+          <strong className="font-semibold text-slate-800 font-sans">{t("dashboard.header.asOf")}:</strong> {currentDate}
         </span>
         <span className="text-slate-300">|</span>
         <span className="inline-flex items-center gap-1 text-[#15803D] font-medium">
           <span className="size-1.5 rounded-full bg-[#15803D] animate-pulse" />
-          Central Judicial & Welfare Exchange Synced
+          {t("dashboard.header.syncedBadge")}
         </span>
       </div>
     </div>

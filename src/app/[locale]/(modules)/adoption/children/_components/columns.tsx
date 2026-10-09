@@ -20,46 +20,49 @@ import { Child, ChildStatus } from "@/types/child-matching-types";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
 
-const STATUS_BADGE_CONFIG: Record<
+const getStatusBadgeConfig = (t: any): Record<
   string,
   { label: string; statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info"; icon: React.ElementType }
-> = {
+> => ({
   FOUND: {
-    label: "Found",
+    label: t("children.registration.options.found") || "Found",
     statusType: "warning",
     icon: Clock,
   },
   IN_CARE: {
-    label: "In Care",
+    label: t("children.registration.options.inCare") || "In Care",
     statusType: "primary",
     icon: Building2,
   },
   IN_ADERA: {
-    label: "In Adera",
+    label: t("children.registration.options.inAdera") || "In Adera",
     statusType: "neutral",
     icon: HeartHandshake,
   },
   WITH_BLOOD_RELATIVE: {
-    label: "With Relative",
+    label: t("children.registration.options.withBloodRelative") || "With Relative",
     statusType: "subtle",
     icon: Users,
   },
   ADOPTED: {
-    label: "Adopted",
+    label: t("children.registration.options.adopted") || "Adopted",
     statusType: "navy",
     icon: CheckCircle2,
   },
   RETURNED: {
-    label: "Returned",
+    label: t("children.registration.options.returned") || "Returned",
     statusType: "danger",
     icon: RotateCcw,
   },
-};
+});
 
 export const getColumns = (
   t: any,
   onTransferStatus?: (child: Child) => void
-): ColumnDef<Child>[] => [
+): ColumnDef<Child>[] => {
+  const statusBadgeConfig = getStatusBadgeConfig(t);
+
+  return [
   {
     id: "child",
     accessorFn: (row) =>
@@ -217,7 +220,7 @@ export const getColumns = (
     ),
     cell: ({ row }) => {
       const status = (row.original.currentStatus as string) || "FOUND";
-      const cfg = STATUS_BADGE_CONFIG[status] || {
+      const cfg = statusBadgeConfig[status] || {
         label: status,
         statusType: "neutral" as const,
         icon: Clock,
@@ -242,7 +245,7 @@ export const getColumns = (
   },
   {
     id: "actions",
-    header: () => <span className="text-xs font-semibold text-slate-700">Actions</span>,
+    header: () => <span className="text-xs font-semibold text-slate-700">{t("adoptionRequests.table.actions") || "Actions"}</span>,
     cell: ({ row }) => {
       const child = row.original;
       return (
@@ -263,7 +266,7 @@ export const getColumns = (
               size="sm"
               className="h-6.5 px-2 text-xs text-slate-600 hover:text-[#0B1F3A] hover:bg-slate-100 rounded-xs cursor-pointer"
               onClick={() => onTransferStatus(child)}
-              title="Transfer child status"
+              title={t("children.details.transferStatusBtn") || "Transfer status"}
             >
               <ArrowRightLeft className="size-3 mr-1 text-slate-500" />
               {t("children.actions.transfer") || "Transfer"}
@@ -274,3 +277,4 @@ export const getColumns = (
     },
   },
 ];
+};

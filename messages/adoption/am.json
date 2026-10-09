@@ -40,7 +40,27 @@
       "loadFailed": "ማመልከቻዎችን መጫን አልተቻለም",
       "networkError": "የኔትወርክ ስህተት",
       "unexpectedShape": "ያልተጠበቀ የመረጃ ቅርጽ"
-    }
+    },
+    "headerAdmin1": "የአዲስ አበባ ከተማ አስተዳደር",
+    "headerAdmin2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+    "headerAdmin3": "የሕፃናት ደህንነት እና ጉዲፈቻ",
+    "filters": {
+      "title": "ማጣሪያዎች",
+      "reset": "ሁሉንም አጽዳ",
+      "subCity": "ክፍለ ከተማ",
+      "allSubCities": "ሁሉም ክፍለ ከተሞች",
+      "woreda": "ወረዳ",
+      "allWoredas": "ሁሉም ወረዳዎች",
+      "selectSubCityFirst": "መጀመሪያ ክፍለ ከተማ ይምረጡ",
+      "dateRecency": "የቀረበበት ጊዜ",
+      "allTime": "የሁሉም ጊዜ",
+      "last7Days": "ያለፉት 7 ቀናት",
+      "last30Days": "ያለፉት 30 ቀናት",
+      "last90Days": "ያለፉት 90 ቀናት",
+      "thisYear": "የዚህ ዓመት",
+      "activeFiltersCount": "({count})"
+    },
+    "allDossiers": "ሁሉም ማህደሮች"
   },
   "adoptionDetail": {
     "title": "የጉዲፈቻ ማመልከቻ ግምገማ",
@@ -507,6 +527,30 @@
       "registerSuccess": "ተቋሙ በተሳካ ሁኔታ ተመዝግቧል!",
       "registerError": "ተቋሙን መመዝገብ አልተቻለም: {message}",
       "genericError": "ተቋሙን በመመዝገብ ላይ ስህተት ተከስቷል"
+    },
+    "headerAdmin1": "የአዲስ አበባ ከተማ አስተዳደር",
+    "headerAdmin2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+    "headerAdmin3": "የሕፃናት ደህንነትና ጥበቃ",
+    "metrics": {
+      "totalFacilities": "ጠቅላላ ተቋማት",
+      "totalFacilitiesSub": "የተቋማዊ እንክብካቤ ማውጫ",
+      "activeCapacity": "የመያዝ አቅም",
+      "activeCapacitySub": "በተቋማት ውስጥ የተፈቀደ አልጋዎች",
+      "totalEnrolled": "የተመዘገቡ ሕፃናት",
+      "totalEnrolledSub": "በክትትል ስር ያሉ ተቋማት",
+      "govMunicipal": "የመንግስት/ማዘጋጃ ቤት",
+      "govMunicipalSub": "ቀጥታ የከተማው አስተዳደር",
+      "licensedNgo": "ፈቃድ ያለው ግብረ-ሰናይ",
+      "licensedNgoSub": "ፈቃድ ያላቸው መንግስታዊ ያልሆኑ አጋሮች"
+    },
+    "table": {
+      "name": "የተቋሙ ስም",
+      "location": "አድራሻ / አካባቢ",
+      "minAge": "ዝቅተኛ ዕድሜ",
+      "maxAge": "ከፍተኛ ዕድሜ",
+      "capacity": "የመያዝ አቅም",
+      "type": "ዓይነት",
+      "actions": "ተግባራት"
     }
   },
   "children": {
@@ -515,7 +559,57 @@
       "addNew": "አዲስ ሕፃን መዝግብ",
       "loading": "የተመዘገቡ ሕፃናትን በመጫን ላይ...",
       "subtitle": "የሕፃናት ምዝገባ፣ የሁኔታ ሽግግር፣ የእንክብካቤ ማዕከላት እና የጉዲፈቻ ብቁነት ክትትል",
-      "searchPlaceholder": "በሕፃኑ ስም፣ በማዕከል መለያ ቁጥር (ምሳሌ፡ FAC-001) ወይም በተገኘበት ቦታ ፈልግ..."
+      "searchPlaceholder": "በሕፃኑ ስም፣ በማዕከል መለያ ቁጥር (ምሳሌ፡ FAC-001) ወይም በተገኘበት ቦታ ፈልግ...",
+      "headerAdmin1": "የአዲስ አበባ ከተማ አስተዳደር",
+      "headerAdmin2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+      "headerAdmin3": "የሕፃናት ጥበቃና እንክብካቤ",
+      "metrics": {
+        "totalRegistry": "ጠቅላላ መዝገብ",
+        "totalRegistrySub": "ሁሉም የተመዘገቡ ሕፃናት",
+        "inCareEligible": "በተቋም ውስጥ (ብቁ)",
+        "inCareSub": "የእንክብካቤ ማዕከላት",
+        "foundIntake": "የተገኙ / በቅበላ ላይ",
+        "foundSub": "የመጀመሪያ ፍለጋ ላይ",
+        "inAderaCustody": "በአደራ ጥበቃ ላይ",
+        "inAderaSub": "ጊዜያዊ መጠለያ",
+        "kinshipCare": "የቅርብ ዘመድ እንክብካቤ",
+        "kinshipSub": "የተራዘመ ቤተሰብ",
+        "decreeAdopted": "የፀደቀ ጉዲፈቻ",
+        "decreeSub": "የተጠናቀቁ ውሳኔዎች"
+      },
+      "filterTabs": {
+        "all": "ሁሉም ሕፃናት",
+        "found": "የተገኙ",
+        "inCare": "በተቋም ውስጥ",
+        "inAdera": "በአደራ",
+        "kinship": "የዘመድ እንክብካቤ",
+        "adopted": "የተደጎሙ",
+        "returned": "የተቀላቀሉ"
+      },
+      "filters": {
+        "searchPlaceholder": "በሕፃኑ ስም፣ የተቋም መለያ ኮድ ወይም በተገኘበት ቦታ ፈልግ...",
+        "toggleAdvanced": "ተጨማሪ ማጣሪያዎች",
+        "activeCount": "ንቁ ({count})",
+        "resetAll": "ሁሉንም አጽዳ",
+        "sexLabel": "ጾታ",
+        "allGenders": "ሁሉም ጾታዎች",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "ageCohortLabel": "የዕድሜ ክልል",
+        "allAges": "ሁሉም ዕድሜዎች",
+        "infant": "ጨቅላ (0-2 ዓመት)",
+        "earlyChildhood": "ቅድመ-ትምህርት (3-6 ዓመት)",
+        "primarySchool": "የመጀመሪያ ደረጃ (7-12 ዓመት)",
+        "adolescent": "ታዳጊ (13+ ዓመት)",
+        "facilityLabel": "የእንክብካቤ ተቋም",
+        "allFacilities": "ሁሉም የእንክብካቤ ተቋማት",
+        "locationLabel": "የተገኘበት አካባቢ",
+        "locationPlaceholder": "ለምሳሌ፦ ቂርቆስ፣ ቦሌ፣ ፒያሳ..."
+      },
+      "table": {
+        "emptyTitle": "ምንም የሕፃን መዝገብ አልተገኘም",
+        "emptyDesc": "ከተመረጠው ሁኔታ ወይም የፍለጋ ቃል ጋር የሚዛመድ መዝገብ የለም።"
+      }
     },
     "columns": {
       "name": "የሕፃኑ ስም",
@@ -649,7 +743,88 @@
       "relativeGuardian": "የደም ዘመድ ጠባቂ",
       "fosterCustodian": "አደራ ተቀባይ ሞግዚት",
       "transferReason": "ምክንያት / ማስታወሻ",
-      "noTransferHistory": "የመጀመሪያ ቅበላ ምዝገባ። እስካሁን ለዚህ ሕፃን የተመዘገበ ተጨማሪ የሁኔታ ሽግግር የለም።"
+      "noTransferHistory": "የመጀመሪያ ቅበላ ምዝገባ። እስካሁን ለዚህ ሕፃን የተመዘገበ ተጨማሪ የሁኔታ ሽግግር የለም።",
+      "headerAdmin1": "የአዲስ አበባ ከተማ አስተዳደር",
+      "headerAdmin2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+      "headerAdmin3": "የሕፃናት ጥበቃና እንክብካቤ",
+      "registered": "የተመዘገበበት",
+      "biologicalReunification": "ከስነ-ህይወታዊ ቤተሰብ ጋር መልሶ መቀላቀል",
+      "parents": "ወላጆች",
+      "contact": "ስልክ/አድራሻ",
+      "courtOrder": "የፍርድ ቤት ትዕዛዝ",
+      "date": "ቀን",
+      "adoptiveParent": "አሳዳጊ ወላጅ",
+      "matchedOn": "የተዛመደበት ቀን",
+      "matchedByOfficer": "ያዛመደው ባለሙያ",
+      "viewAssociatedApplication": "የተያያዘውን የጉዲፈቻ ማመልከቻ #{id} ተመልከት",
+      "eligibleForMatchingNote": "የፀደቁ ማመልከቻዎች ሲገመገሙ ለማዛመድ ብቁ ነው።",
+      "phoneLabel": "ስልክ",
+      "cityIdLabel": "የከተማ መታወቂያ",
+      "addressLabel": "አድራሻ"
+    },
+    "steps": {
+      "step1": {
+        "headerAdmin1": "የአዲስ አበባ ከተማ አስተዳደር",
+        "headerAdmin2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+        "headerAdmin3": "የሕፃናት ጥበቃና እንክብካቤ",
+        "title": "የሕፃን ምዝገባ (ደረጃ 1 ከ 2)",
+        "subtitle": "የሕፃኑን መሰረታዊ ማንነት፣ መገኛ እና የቅበላ ዝርዝር መረጃዎችን ያስገቡ።",
+        "stepBadge": "ደረጃ 1 / 2",
+        "identitySection": "የሕፃኑ ማንነት እና መገኛ",
+        "nameByFamily": "ስም (በቤተሰብ የተሰጠ)",
+        "nameByCareCenter": "ስም (በተቋሙ የተሰጠ)",
+        "fatherName": "የአባት ስም",
+        "optional": "(አማራጭ)",
+        "gender": "ጾታ",
+        "selectGender": "ጾታ ይምረጡ",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "estimatedAge": "ግምታዊ ዕድሜ",
+        "reasonForAdmission": "የተቀበለበት ምክንያት",
+        "reasonPlaceholder": "ሕፃኑ የተቀበለበትን ምክንያት ያስገቡ...",
+        "placeFound": "የተገኘበት ቦታ",
+        "subCity": "ክፍለ ከተማ",
+        "woreda": "ወረዳ",
+        "dateFound": "የተገኘበት ቀን",
+        "selectDate": "ቀን ይምረጡ",
+        "additionalInformation": "ተጨማሪ መረጃ",
+        "additionalInfoPlaceholder": "ማንኛውንም ተጨማሪ መረጃ እዚህ ያስገቡ...",
+        "back": "ተመለስ",
+        "nextStep": "ቀጣይ ደረጃ"
+      },
+      "step2": {
+        "title": "የሕፃን ምዝገባ (ደረጃ 2 ከ 2)",
+        "subtitle": "የአግኚውን ማንነት፣ የሪፖርት አቅራቢ ፖሊስ መረጃ፣ ተረካቢ ሠራተኛ እና የጤና ባለሙያዎችን ያስገቡ።",
+        "stepBadge": "ደረጃ 2 / 2",
+        "finderSection": "ሕፃኑን ያገኘው ሰው መረጃ",
+        "finderName": "ሙሉ ስም",
+        "finderPhone": "ስልክ ቁጥር",
+        "finderHouseNo": "የቤት ቁጥር",
+        "finderAddress": "አድራሻ",
+        "finderSubCity": "ክፍለ ከተማ",
+        "finderWoreda": "ወረዳ",
+        "officerSection": "ሪፖርት አቅራቢ የፖሊስ አባል መረጃ",
+        "officerName": "የፖሊስ አባል ስም",
+        "officerPhone": "ስልክ ቁጥር",
+        "officerBadge": "የመታወቂያ / ባጅ ቁጥር",
+        "officerRole": "ኃላፊነት / የስራ ድርሻ",
+        "officerAddress": "አድራሻ",
+        "officerSubCity": "ክፍለ ከተማ",
+        "officerWoreda": "ወረዳ",
+        "recipientSection": "ተረካቢ የማዕከሉ ሠራተኛ መረጃ",
+        "recipientName": "የሠራተኛው ስም",
+        "recipientPhone": "ስልክ ቁጥር",
+        "recipientBadge": "የሠራተኛ መታወቂያ ቁጥር",
+        "recipientRole": "ኃላፊነት / የስራ ድርሻ",
+        "recipientAddress": "አድራሻ",
+        "recipientSubCity": "ክፍለ ከተማ",
+        "recipientWoreda": "ወረዳ",
+        "healthSection": "የጤና ምርመራ ያደረጉ ባለሙያዎች",
+        "primaryHealthOfficer": "ዋና የጤና ባለሙያ ስም",
+        "secondaryHealthOfficer": "ረዳት የጤና ባለሙያ ስም",
+        "backToStep1": "ወደ ደረጃ 1 ተመለስ",
+        "submitRegistration": "ምዝገባውን አጠናቅቅ"
+      }
     }
   },
   "dashboard": {
@@ -676,10 +851,198 @@
       "adoptionRequests": "የጉዲፈቻ ጥያቄዎች"
     },
     "charts": {
-      "children": "ሕፃናት",
-      "centers": "የሕፃናት ማሳደጊያ ተቋማት",
-      "requests": "የጉዲፈቻ ጥያቄዎች",
-      "benefits": "የድጋፍ ጥቅማ ጥቅሞች"
+      "velocityTitle": "ወርሃዊ የሕፃናት ቅበላ እና ህጋዊ ምደባዎች/ውሳኔዎች",
+      "velocitySubtitle": "በሁሉም 11 ክፍለ ከተሞች የተመዘገቡ አዳዲስ ሕፃናት ከቤተሰብ መልሶ መቀላቀል፣ የአደራ እና የፀደቁ ጉዲፈቻዎች ንጽጽር",
+      "newIntake": "አዲስ የተመዘገቡ ሕፃናት",
+      "placementsDecrees": "ምደባዎች እና ውሳኔዎች",
+      "noTrendsData": "ምንም የቀደመ የቅበላ ወይም የምደባ መረጃ አልተገኘም",
+      "donutTitle": "የሕፃናት ህጋዊ ሁኔታ እና ምደባ ስርጭት",
+      "donutSubtitle": "በስራ ክልሉ ውስጥ ባሉ {count} የተመዘገቡ ሕፃናት ላይ ያለ ስርጭት",
+      "noDonutDataTitle": "ምንም ንቁ መዝገብ አልተገኘም",
+      "noDonutDataSubtitle": "መረጃዎች ሲመዘገቡ የሁኔታ ዝርዝር እዚህ ይታያል",
+      "childrenCountPercent": "{count} ሕፃናት ({percent}%)",
+      "statusLabels": {
+        "FOUND": "የተገኙ / በሂደት ላይ ያሉ",
+        "IN_CARE": "በሕፃናት ማሳደጊያ ተቋም ውስጥ",
+        "IN_ADERA": "በአደራ ሞግዚትነት ውስጥ",
+        "WITH_BLOOD_RELATIVE": "ከቅርብ ዘመድ ጋር",
+        "ADOPTED": "የፀደቀ የሀገር ውስጥ ጉዲፈቻ"
+      }
+    },
+    "header": {
+      "adminLevel1": "የአዲስ አበባ ከተማ አስተዳደር",
+      "adminLevel2": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+      "adminLevel3": "የሕፃናት ደህንነት እና ጉዲፈቻ ዘርፍ",
+      "title": "የሕፃናት ደህንነት እና ጉዲፈቻ አስተዳደር",
+      "subtitle": "የሕፃናት ጥበቃ፣ የተቋማት ቁጥጥር፣ የቤተሰብ አደራ ምደባ እና የጉዲፈቻ ግምገማ ሂደት አመራርና ክትትል",
+      "activeRegistry": "ንቁ መዝገብ",
+      "refresh": "አድስ",
+      "printBrief": "ሪፖርት አትም",
+      "registerMinor": "አዲስ ሕፃን መዝግብ",
+      "manageApplications": "ማመልከቻዎችን አስተዳድር",
+      "careCenters": "የእንክብካቤ ማዕከላት",
+      "jurisdiction": "የስራ ክልል",
+      "jurisdictionValue": "ሁሉንም 11 ክፍለ ከተሞች እና ማዕከላትን ያካትታል",
+      "period": "የበጀት ዓመት",
+      "periodValue": "2018 ዓ.ም",
+      "asOf": "የተመዘገበበት ቀን",
+      "syncedBadge": "ከማዕከላዊ ፍትህና ደህንነት ጋር የተሳሰረ"
+    },
+    "alerts": {
+      "sectionTitle": "የቢሮውን ልዩ ትኩረት የሚሹ ጉዳዮች",
+      "sectionSubtitle": "የክትትል ገደብ — 4 ዋና ዋና ክንውኖች",
+      "homeInspections": {
+        "title": "የመኖሪያ ቤት ምልከታ",
+        "unit": "የተመደቡ ጉብኝቶች",
+        "scheduledBadge": "ቀጠሮ የተያዘ",
+        "completedBadge": "የተጠናቀቀ",
+        "description": "የማህበራዊ ሰራተኛ የአካባቢ ምልከታ እና የብቃት ሪፖርት የሚጠባበቁ የአመልካች መኖሪያ ቤቶች",
+        "actionText": "የጉብኝት ዝርዝር መርምር"
+      },
+      "facilityCompliance": {
+        "title": "የተቋማት ህጋዊነትና ክትትል",
+        "unit": "የዘገዩ ሪፖርቶች",
+        "compliantBadge": "የተሟላ",
+        "overdueBadge": "የዘገየ",
+        "descriptionCompliant": "ሁሉም ፈቃድ ያላቸው የእንክብካቤ ማዕከላት ወቅታዊ የሕፃናት መዝገባቸውን በወቅቱ አስገብተዋል",
+        "descriptionOverdue": "{count} የተቋም ሪፖርት(ቶች) አስተዳደራዊ ግምገማና ኦዲት ይጠባበቃሉ",
+        "actionText": "የተቋማት መዝገብ መርምር"
+      },
+      "committeeClearance": {
+        "title": "የኮሚቴ ይሁንታ",
+        "unit": "ውሳኔ የሚጠባበቁ",
+        "docketBadge": "በመዝገብ ላይ",
+        "resolvedBadge": "የተጠናቀቀ",
+        "description": "ህጋዊ የፍርድ ቤት ውሳኔና ርክክብ ለማድረግ የተዘጋጁ የተዛመዱ አመልካቾች ማህደሮች",
+        "actionText": "ውሳኔ የሚጠባበቁትን አጽድቅ"
+      },
+      "placementPipeline": {
+        "title": "የምደባ ሂደት",
+        "unit": "ብቁ የሆኑ ሕፃናት",
+        "inCareBadge": "በተቋም ውስጥ",
+        "placedBadge": "የተመደቡ",
+        "description": "በተቋም ውስጥ የሚገኙና የቤተሰብ ፍለጋ ወይም ማዛመድ ሂደት ላይ ያሉ ሕፃናት",
+        "actionText": "የሕፃናት ምደባ መዝገብ ክፈት"
+      }
+    },
+    "kpi": {
+      "totalMinors": {
+        "title": "ጠቅላላ የተመዘገቡ ሕፃናት",
+        "badge": "የተረጋገጠ",
+        "detail": "የአዲስ አበባ ከተማ አስተዳደር መዝገብ",
+        "subDetail": "በሁሉም 11 ክፍለ ከተሞች ክትትል የሚደረግበት",
+        "trend": "የተረጋገጡ መዝገቦች"
+      },
+      "careCenters": {
+        "title": "የሕፃናት ማሳደጊያ ተቋማት",
+        "badge": "በእንክብካቤ ላይ",
+        "detailWithCount": "በ {count} ፈቃድ ባላቸው ተቋማት ውስጥ",
+        "detailDefault": "ፈቃድ ያላቸው የከተማው ተቋማት",
+        "subDetail": "ንቁ የተቋም ሞግዚትነት",
+        "trend": "{count} በእንክብካቤ ላይ"
+      },
+      "aderaAndKinship": {
+        "title": "የአደራ እና የዘመድ ሞግዚትነት",
+        "badge": "የቤተሰብ እንክብካቤ",
+        "detail": "{count} በቤተሰብ ሞግዚትነት ውስጥ ያሉ",
+        "subDetail": "ጊዜያዊ እና የቅርብ ቤተሰብ እንክብካቤ",
+        "trend": "የቤተሰብ ምደባዎች"
+      },
+      "activeApplicants": {
+        "title": "ንቁ የጉዲፈቻ አመልካቾች",
+        "badge": "በሂደት ላይ",
+        "detail": "ቅድመ-ግምገማ ያለፉ የወደፊት አሳዳጊዎች",
+        "subDetail": "{count} ማህደሮች በግምገማ ሂደት ውስጥ ያሉ",
+        "trend": "ንቁ ሂደት"
+      },
+      "courtDecrees": {
+        "title": "የፀደቁ የፍርድ ቤት ውሳኔዎች",
+        "badge": "የፀደቀ",
+        "detail": "በቋሚነት የተመደቡ እና የፀደቁ",
+        "subDetail": "ሙሉ የፍርድ ቤት ጉዲፈቻ ትዕዛዞች",
+        "trend": "100% ህጋዊ ተገዢነት"
+      }
+    },
+    "pipeline": {
+      "title": "የጉዲፈቻ ማጣሪያ እና የአሰራር ሂደት",
+      "subtitle": "{count} ንቁ ጉዳዮች በተለያዩ የደረጃ ማጣሪያዎች ውስጥ ይገኛሉ",
+      "viewAll": "ሁሉንም ተመልከት",
+      "empty": "በአሁኑ ጊዜ በማጣሪያ ሂደት ውስጥ ያለ ንቁ ማመልከቻ የለም።",
+      "stages": {
+        "stage1": {
+          "title": "መደበኛ ማመልከቻዎች ተመዝግበዋል",
+          "description": "የወደፊት አሳዳጊ ወላጆች የመጀመሪያ ማህደር ቅበላ",
+          "unit": "አመልካቾች"
+        },
+        "stage2": {
+          "title": "የማህበራዊ ሰራተኛ የመኖሪያ ቤት ምልከታ",
+          "description": "የአመልካች የጀርባ ታሪክ ማጣራት እና የመኖሪያ ቤት ምቹነት ግምገማ",
+          "unit": "ቀጠሮ የተያዘላቸው"
+        },
+        "stage3": {
+          "title": "የጉዲፈቻ አዛማጅ ኮሚቴ ግምገማ",
+          "description": "በባለብዙ-ሙያ የሕፃናት ምደባ ኮሚቴ የሚደረግ ምዘና",
+          "unit": "በግምገማ ላይ"
+        },
+        "stage4": {
+          "title": "የሙከራ ሞግዚትነት እና የመላመድ ጊዜ",
+          "description": "የክትትል ስር ያለ የቤተሰብ መላመድ ሂደት",
+          "unit": "በመላመድ ሂደት ላይ"
+        },
+        "stage5": {
+          "title": "የፍርድ ቤት ውሳኔዎች ፀድቀዋል",
+          "description": "ቋሚ የፍርድ ቤት ጉዲፈቻ ትዕዛዞች እና የሲቪል ምዝገባ ትስስር",
+          "unit": "የፀደቁ"
+        }
+      },
+      "facilities": {
+        "title": "ፈቃድ ያላቸው የእንክብካቤ ተቋማት የመያዝ አቅም",
+        "subtitle": "{count} የተመዘገቡ የሕፃናት ማሳደጊያ ተቋማት",
+        "occupancyRatio": "{occupied} / {capacity} ተይዟል ({percent}%)",
+        "table": {
+          "facilityName": "የተቋሙ ስም",
+          "type": "ዓይነት",
+          "capacityOccupancy": "አቅም / የተያዘ",
+          "status": "ሁኔታ"
+        },
+        "types": {
+          "government": "የመንግስት / የከተማ አስተዳደር",
+          "licensedNgo": "ፈቃድ ያለው መንግስታዊ ያልሆነ / የግል",
+          "general": "የእንክብካቤ ተቋም"
+        },
+        "active": "ንቁ"
+      }
+    },
+    "recentCases": {
+      "title": "የጉዲፈቻ ማመልከቻዎች ቅደም ተከተል እና ማጣሪያ ዝርዝር",
+      "subtitle": "በአዲስ አበባ ከተማ አስተዳደር ስር የተመዘገቡ የወደፊት አመልካቾች ንቁ ማህደሮች",
+      "searchPlaceholder": "አመልካች ወይም የጉዳይ ቁጥር ፈልግ...",
+      "viewAll": "ሁሉንም ማህደሮች ተመልከት",
+      "tabs": {
+        "all": "ሁሉም ንቁ",
+        "pendingReview": "ግምገማ የሚጠባበቁ",
+        "homeVisit": "የመኖሪያ ቤት ምልከታ",
+        "committee": "ኮሚቴ",
+        "matched": "የመላመድ ሙከራ",
+        "decreed": "የፀደቁ"
+      },
+      "table": {
+        "caseDossier": "የጉዳይ ማህደር",
+        "applicantName": "የአመልካች ስም",
+        "location": "ክፍለ ከተማ / ወረዳ",
+        "preference": "ምርጫዎች",
+        "vettingStage": "የግምገማ ደረጃ",
+        "queueDays": "የቆይታ ጊዜ",
+        "assignedOfficer": "የተመደበው ባለሙያ",
+        "actions": "ተግባራት"
+      },
+      "empty": "በተመረጠው መስፈርት መሰረት የተገኘ ምንም ማመልከቻ የለም።",
+      "daysCount": "{count} ቀናት በሂደት ላይ",
+      "today": "ዛሬ የቀረበ",
+      "reviewAction": "ማህደር መርምር",
+      "officerDefault": "የከተማው ቅበላ ቡድን",
+      "assignedOfficerLabel": "የተመደበ ባለሙያ",
+      "standardPlacement": "መደበኛ ምደባ"
     }
   },
   "homeVisitRegistration": {
@@ -1046,5 +1409,59 @@
     "review": "ሪፖርት መርምር",
     "feedbackLabel": "የባለሙያ ምዘና እና አስተያየት",
     "concernsLabel": "አሳሳቢ ሁኔታዎች"
+  },
+  "adera": {
+    "title": "የአደራ ጥበቃ ዝርዝር",
+    "subtitle": "ጊዜያዊ የሕፃናት አደራ ጥበቃና ሞግዚትነት አስተዳደር እና ክትትል",
+    "newAdera": "አዲስ አደራ መዝግብ",
+    "columns": {
+      "cityIdNumber": "የከተማ መታወቂያ",
+      "educationLevel": "የትምህርት ደረጃ",
+      "occupation": "የስራ ዘርፍ",
+      "monthlyIncome": "ወርሃዊ ገቢ",
+      "partnerCityIdNumber": "የትዳር አጋር መታወቂያ",
+      "preferredChildGender": "የሚፈለግ ጾታ",
+      "preferredChildMinAge": "ዝቅተኛ ዕድሜ",
+      "preferredChildMaxAge": "ከፍተኛ ዕድሜ"
+    },
+    "registration": {
+      "title": "አዲስ የአደራ ሞግዚት መዝግብ",
+      "subtitle": "የአደራ ተቀባይ ሞግዚት መረጃ እና የሕፃን ምርጫዎችን ይመዝግቡ።",
+      "personalInfo": "የግል መረጃ",
+      "spouseInfo": "የትዳር አጋር መረጃ",
+      "placementPreferences": "የሕፃን ምደባ ምርጫዎች",
+      "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+      "educationLevel": "የትምህርት ደረጃ",
+      "occupation": "የስራ ዘርፍ / ሙያ",
+      "monthlyIncome": "ወርሃዊ ገቢ (ብር)",
+      "partnerCityIdNumber": "የትዳር አጋር መታወቂያ ቁጥር",
+      "preferredChildGender": "የሕፃኑ የሚፈለግ ጾታ",
+      "preferredChildMinAge": "ዝቅተኛ ዕድሜ (በዓመት)",
+      "preferredChildMaxAge": "ከፍተኛ ዕድሜ (በዓመት)",
+      "genderPlaceholder": "ጾታ ይምረጡ",
+      "male": "ወንድ",
+      "female": "ሴት",
+      "any": "ማንኛውም",
+      "submit": "ሞግዚቱን መዝግብ",
+      "submitting": "በመመዝገብ ላይ...",
+      "cancel": "ሰርዝ",
+      "successToast": "የአደራ ሞግዚት በተሳካ ሁኔታ ተመዝግቧል",
+      "errorToast": "የአደራ ሞግዚቱን መመዝገብ አልተቻለም",
+      "facilitator": "የመዝጋቢ ባለሙያ መረጃ",
+      "facilitatorCityIdNumber": "የመዝጋቢ ባለሙያ የከተማ መታወቂያ ቁጥር",
+      "create": "መዝግብ",
+      "creating": "በመመዝገብ ላይ..."
+    },
+    "facilitator": "አመቻች / መዝጋቢ ባለሙያ"
+  },
+  "assistedHomes": {
+    "title": "የታገዙ ማህበረሰብ አቀፍ መኖሪያዎች",
+    "subtitle": "አማራጭ በቤተሰብ ላይ የተመሰረቱ የእንክብካቤ ስርዓቶች እና ክትትል የሚደረግባቸው የጉዲፈቻ መኖሪያ ቤቶች።",
+    "empty": "የታገዙ መኖሪያ ቤቶች አስተዳደር እና የቁጥጥር መረጃዎች እዚህ ይዘረዘራሉ።"
+  },
+  "benefits": {
+    "title": "የሕፃናት ማህበራዊ ድጋፍ እና ጥቅማጥቅሞች",
+    "subtitle": "ለተጋላጭ ሕፃናት የሚሰጡ የማህበራዊ ጥበቃ ድጎማዎች፣ የትምህርት አበል እና የቁሳቁስ ድጋፎች።",
+    "empty": "የሕፃናት ማህበራዊ ድጋፍ ፕሮግራሞች እና የድጎማ ክፍፍል መረጃዎች እዚህ ይዘረዘራሉ።"
   }
 }

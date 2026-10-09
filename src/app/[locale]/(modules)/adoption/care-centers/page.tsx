@@ -135,17 +135,17 @@ const CareCenters = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E3E7EB]">
         <div>
           <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 mb-0.5">
-            <span>Addis Ababa City Administration</span>
+            <span>{t("careCenters.headerAdmin1")}</span>
             <span>·</span>
-            <span>Women &amp; Social Affairs Bureau</span>
+            <span>{t("careCenters.headerAdmin2")}</span>
             <span>·</span>
-            <span className="text-[#1769AA] font-semibold">Institutional Care Directory</span>
+            <span className="text-[#1769AA] font-semibold">{t("careCenters.headerAdmin3")}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1F3A]">
-            {t("careCenters.title") || "Accredited Child Care Centers & Shelters"}
+            {t("careCenters.title")}
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Supervision, capacity allocation, regulatory compliance, and resident minor records across all sub-cities.
+            {t("careCenters.metrics.totalFacilitiesSub")}
           </p>
         </div>
 
@@ -158,42 +158,42 @@ const CareCenters = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#0B1F3A]">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">
-            Total Accredited Centers
+            {t("careCenters.metrics.totalFacilities")}
           </p>
           <p className="text-xl font-bold font-mono text-[#0B1F3A] mt-0.5">
             {totalCenters}
           </p>
-          <span className="text-[10px] text-slate-400">Supervised facilities</span>
+          <span className="text-[10px] text-slate-400">{t("careCenters.metrics.totalEnrolledSub")}</span>
         </div>
 
         <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-[#1769AA]">
           <p className="text-[10px] font-bold text-[#1769AA] uppercase tracking-wider font-mono">
-            Government Facilities
+            {t("careCenters.metrics.govMunicipal")}
           </p>
           <p className="text-xl font-bold font-mono text-[#1769AA] mt-0.5">
             {govCenters}
           </p>
-          <span className="text-[10px] text-slate-400">Direct municipal administration</span>
+          <span className="text-[10px] text-slate-400">{t("careCenters.metrics.govMunicipalSub")}</span>
         </div>
 
         <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-slate-400">
           <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-            NGO &amp; Community Centers
+            {t("careCenters.metrics.licensedNgo")}
           </p>
           <p className="text-xl font-bold font-mono text-slate-900 mt-0.5">
             {ngoCenters}
           </p>
-          <span className="text-[10px] text-slate-400">Licensed non-governmental partners</span>
+          <span className="text-[10px] text-slate-400">{t("careCenters.metrics.licensedNgoSub")}</span>
         </div>
 
         <div className="bg-white border border-[#E3E7EB] rounded-xs p-3 shadow-2xs border-l-3 border-l-emerald-600">
           <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider font-mono">
-            Sub-City Jurisdictions
+            {t("adoptionRequests.filters.subCity")}
           </p>
           <p className="text-xl font-bold font-mono text-emerald-700 mt-0.5">
             {subCitiesCount}
           </p>
-          <span className="text-[10px] text-slate-400">Municipal operational spread</span>
+          <span className="text-[10px] text-slate-400">{t("careCenters.table.location")}</span>
         </div>
       </div>
 
@@ -202,9 +202,9 @@ const CareCenters = () => {
         {/* Facility Type Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
           {[
-            { key: "ALL" as const, label: "All Facilities", count: totalCenters, icon: Building2 },
-            { key: "GOVERNMENT" as const, label: "Government Run", count: govCenters, icon: Landmark },
-            { key: "NGO" as const, label: "NGO & Private", count: ngoCenters, icon: HeartHandshake },
+            { key: "ALL" as const, label: t("children.list.filters.allFacilities"), count: totalCenters, icon: Building2 },
+            { key: "GOVERNMENT" as const, label: t("careCenters.metrics.govMunicipal"), count: govCenters, icon: Landmark },
+            { key: "NGO" as const, label: t("careCenters.metrics.licensedNgo"), count: ngoCenters, icon: HeartHandshake },
           ].map((tab) => {
             const active = selectedType === tab.key;
             return (

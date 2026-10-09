@@ -152,20 +152,19 @@ export default function NewChildForm() {
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-2">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("headerAdmin1") || "Addis Ababa City Administration"}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("headerAdmin2") || "Women & Social Affairs Bureau"}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
             {t("badge") || "Child Protection & Care"}
           </span>
         </div>
         <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
-          {t("title") || "Register New Child Record"}
+          {t("title")}
         </h1>
         <p className="text-xs text-slate-500">
-          {t("subtitle") ||
-            "Complete institutional intake, identify child placement, and establish legal registry custody."}
+          {t("subtitle")}
         </p>
       </div>
 

@@ -41,45 +41,45 @@ import { ChildStatus } from "@/types/child-matching-types";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
 
-const STATUS_BADGES: Record<
+const getStatusBadgeConfig = (t: any): Record<
   string,
   {
     label: string;
     statusType: "primary" | "navy" | "neutral" | "subtle" | "warning" | "danger" | "success" | "info";
     icon: React.ElementType;
   }
-> = {
+> => ({
   FOUND: {
-    label: "Found / Abandoned",
+    label: t("children.registration.options.found") || "Found",
     statusType: "warning",
     icon: Clock,
   },
   IN_CARE: {
-    label: "In Care (Eligible for Adoption)",
+    label: t("children.registration.options.inCare") || "In Care",
     statusType: "primary",
     icon: Building2,
   },
   IN_ADERA: {
-    label: "In Adera (Foster Custody)",
+    label: t("children.registration.options.inAdera") || "In Adera",
     statusType: "neutral",
     icon: HeartHandshake,
   },
   WITH_BLOOD_RELATIVE: {
-    label: "With Blood Relative",
+    label: t("children.registration.options.withBloodRelative") || "With Blood Relative",
     statusType: "subtle",
     icon: Users,
   },
   ADOPTED: {
-    label: "Adopted (Legally Placed)",
+    label: t("children.registration.options.adopted") || "Adopted",
     statusType: "navy",
     icon: CheckCircle2,
   },
   RETURNED: {
-    label: "Returned (Reunified)",
+    label: t("children.registration.options.returned") || "Returned",
     statusType: "danger",
     icon: RotateCcw,
   },
-};
+});
 
 const InfoRow = ({
   icon: Icon,
@@ -164,8 +164,9 @@ export default function ChildDetailsPage() {
     : "—";
   const sex = (formData?.sex || client?.contactInfo?.sex || "—").toUpperCase();
 
+  const statusBadges = getStatusBadgeConfig(t);
   const currentStatus = (child.currentStatus as ChildStatus) || "FOUND";
-  const statusCfg = STATUS_BADGES[currentStatus] || {
+  const statusCfg = statusBadges[currentStatus] || {
     label: currentStatus,
     statusType: "neutral" as const,
     icon: Clock,
@@ -180,12 +181,12 @@ export default function ChildDetailsPage() {
       {/* ── Institutional Header Bar ─────────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-3">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("children.details.headerAdmin1")}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("children.details.headerAdmin2")}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Child Protection &amp; Care
+            {t("children.details.headerAdmin3")}
           </span>
         </div>
 
@@ -229,7 +230,7 @@ export default function ChildDetailsPage() {
                   </span>
                 )}
                 <span>
-                  Registered:{" "}
+                  {t("children.details.registered")}:{" "}
                   {child.createdAt
                     ? new Date(child.createdAt).toLocaleDateString()
                     : "—"}
@@ -244,7 +245,7 @@ export default function ChildDetailsPage() {
               className="bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 shadow-2xs text-xs font-semibold rounded-xs h-8 px-3 cursor-pointer"
             >
               <ArrowRightLeft className="w-3.5 h-3.5" />
-              {t("children.details.transferStatusBtn") || "Transfer Status"}
+              {t("children.details.transferStatusBtn")}
             </Button>
           </div>
         </div>
@@ -403,17 +404,16 @@ export default function ChildDetailsPage() {
                     {child.custodian.firstName} {child.custodian.lastName}
                   </p>
                   <p className="text-xs text-slate-600">
-                    Phone: {child.custodian.phoneNumber || "—"} | City ID:{" "}
+                    {t("children.details.phoneLabel")}: {child.custodian.phoneNumber || "—"} | {t("children.details.cityIdLabel")}:{" "}
                     {child.custodian.cityIdNumber || "—"}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    Address: {child.custodian.address || "—"}
+                    {t("children.details.addressLabel")}: {child.custodian.address || "—"}
                   </p>
                 </div>
               ) : (
                 <p className="text-xs text-slate-400 italic">
-                  {t("children.details.noCustodian") ||
-                    "No individual custodian currently assigned."}
+                  {t("children.details.noCustodian")}
                 </p>
               )}
             </div>
@@ -425,18 +425,18 @@ export default function ChildDetailsPage() {
           <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
               <Clock className="size-3.5 text-[#1769AA]" />
-              {t("children.details.intakeTitle") || "Intake History & Origin"}
+              {t("children.details.intakeTitle")}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-3 px-4 pb-4">
             <InfoRow
               icon={MapPin}
-              label={t("children.registration.fields.addressFound") || "Place Where Child Found"}
+              label={t("children.registration.fields.addressFound")}
               value={child.placeWhereChildFound || "—"}
             />
             <InfoRow
               icon={Calendar}
-              label={t("children.registration.fields.foundDate") || "Date & Time Found"}
+              label={t("children.registration.fields.foundDate")}
               value={
                 child.timeWhenChildFound
                   ? new Date(child.timeWhenChildFound).toLocaleString()
@@ -445,13 +445,13 @@ export default function ChildDetailsPage() {
             />
             <InfoRow
               icon={Shield}
-              label={t("children.registration.fields.socialWorkerId") || "Intake Social Worker ID"}
+              label={t("children.registration.fields.socialWorkerId")}
               value={child.socialWorkerCityIdNumber || "—"}
             />
             {child.reasonForReturn && (
               <InfoRow
                 icon={RotateCcw}
-                label={t("children.details.reasonForReturn") || "Return / Re-admission Reason"}
+                label={t("children.details.reasonForReturn")}
                 value={child.reasonForReturn}
               />
             )}
@@ -463,7 +463,7 @@ export default function ChildDetailsPage() {
           <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
               <Heart className="size-3.5 text-[#1769AA]" />
-              {t("children.details.adoptionHistoryTitle") || "Adoption & Matching Record"}
+              {t("children.details.adoptionHistoryTitle")}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-3 px-4 pb-4">
@@ -479,7 +479,7 @@ export default function ChildDetailsPage() {
                     </span>
                   </div>
                   <InfoRow
-                    label="Adoptive Parent"
+                    label={t("children.details.adoptiveParent")}
                     value={
                       latestMatch.adopter
                         ? `${latestMatch.adopter.firstName} ${latestMatch.adopter.lastName}`
@@ -487,17 +487,17 @@ export default function ChildDetailsPage() {
                     }
                     subvalue={
                       latestMatch.adopter?.phoneNumber
-                        ? `Phone: ${latestMatch.adopter.phoneNumber}`
+                        ? `${t("children.details.phoneLabel")}: ${latestMatch.adopter.phoneNumber}`
                         : undefined
                     }
                   />
                   <InfoRow
-                    label="Matched On"
+                    label={t("children.details.matchedOn")}
                     value={new Date(latestMatch.matchedAt).toLocaleDateString()}
                   />
                   {latestMatch.matchedBy && (
                     <InfoRow
-                      label="Matched By Officer"
+                      label={t("children.details.matchedByOfficer")}
                       value={`${latestMatch.matchedBy.firstName} ${latestMatch.matchedBy.lastName}`}
                       subvalue={latestMatch.matchedBy.employeeRole}
                     />
@@ -510,7 +510,7 @@ export default function ChildDetailsPage() {
                     className="inline-flex items-center gap-1.5 text-xs text-[#1769AA] font-semibold hover:underline"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
-                    View Associated Adoption Application #{latestMatch.application.id}
+                    {t("children.details.viewAssociatedApplication", { id: latestMatch.application.id })}
                   </Link>
                 )}
               </div>
@@ -518,12 +518,11 @@ export default function ChildDetailsPage() {
               <div className="text-center py-6 text-slate-400">
                 <Heart className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
                 <p className="text-xs font-medium">
-                  {t("children.details.noAdoptionMatch") ||
-                    "This child has not been matched with an adoptive parent yet."}
+                  {t("children.details.noAdoptionMatch")}
                 </p>
                 {currentStatus === "IN_CARE" && (
                   <p className="text-[11px] text-[#1769AA] mt-1 font-medium">
-                    Eligible for matching when approved applications are reviewed.
+                    {t("children.details.eligibleForMatchingNote")}
                   </p>
                 )}
               </div>
@@ -534,23 +533,23 @@ export default function ChildDetailsPage() {
               <div className="mt-4 pt-3 border-t border-[#E3E7EB]">
                 <p className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700 mb-2 flex items-center gap-1">
                   <RotateCcw className="w-3.5 h-3.5 text-[#1769AA]" />
-                  Biological Parent Reunification
+                  {t("children.details.biologicalReunification")}
                 </p>
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-3 text-xs space-y-1 text-slate-700">
                   <p>
-                    <strong>Parents:</strong> {latestReunification.fatherName || "—"} /{" "}
+                    <strong>{t("children.details.parents")}:</strong> {latestReunification.fatherName || "—"} /{" "}
                     {latestReunification.motherName || "—"}
                   </p>
                   <p>
-                    <strong>Contact:</strong>{" "}
+                    <strong>{t("children.details.contact")}:</strong>{" "}
                     {latestReunification.contactPhoneNumber || "—"}
                   </p>
                   <p>
-                    <strong>Court Order:</strong>{" "}
+                    <strong>{t("children.details.courtOrder")}:</strong>{" "}
                     {latestReunification.courtOrderNumber || "—"}
                   </p>
                   <p>
-                    <strong>Date:</strong>{" "}
+                    <strong>{t("children.details.date")}:</strong>{" "}
                     {new Date(
                       latestReunification.reunificationDate
                     ).toLocaleDateString()}
@@ -568,15 +567,14 @@ export default function ChildDetailsPage() {
           <div className="flex items-center justify-between">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
               <ArrowRightLeft className="size-3.5 text-[#1769AA]" />
-              {t("children.details.transferHistoryTitle") ||
-                "Placement & Status Transfer History"}
+              {t("children.details.transferHistoryTitle")}
             </CardTitle>
             {child.transferHistory && child.transferHistory.length > 0 && (
               <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] rounded-xs border border-[#BCD5EA]">
                 {child.transferHistory.length}{" "}
                 {child.transferHistory.length === 1
-                  ? t("children.details.recordSingular") || "record"
-                  : t("children.details.recordPlural") || "records"}
+                  ? t("children.details.recordSingular")
+                  : t("children.details.recordPlural")}
               </span>
             )}
           </div>
@@ -585,12 +583,12 @@ export default function ChildDetailsPage() {
           {child.transferHistory && child.transferHistory.length > 0 ? (
             <div className="relative pl-6 space-y-5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E3E7EB]">
               {child.transferHistory.map((item, index) => {
-                const fromMeta = STATUS_BADGES[item.fromStatus] || {
+                const fromMeta = statusBadges[item.fromStatus] || {
                   label: item.fromStatus,
                   statusType: "neutral" as const,
                   icon: Clock,
                 };
-                const toMeta = STATUS_BADGES[item.toStatus] || {
+                const toMeta = statusBadges[item.toStatus] || {
                   label: item.toStatus,
                   statusType: "neutral" as const,
                   icon: Clock,

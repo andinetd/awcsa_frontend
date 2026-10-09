@@ -201,7 +201,7 @@ const AdoptionRequestsContent = () => {
   };
 
   const TABS = [
-    { value: "all", label: "All Dossiers" },
+    { value: "all", label: t("adoptionRequests.allDossiers") || "All Dossiers" },
     { value: "pending", label: t("adoptionRequests.tabs.pending") },
     { value: "returned", label: t("adoptionRequests.tabs.returned") },
     {
@@ -391,17 +391,17 @@ const AdoptionRequestsContent = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E3E7EB]">
         <div>
           <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 mb-0.5">
-            <span>Addis Ababa City Administration</span>
+            <span>{t("adoptionRequests.headerAdmin1")}</span>
             <span>·</span>
-            <span>Women &amp; Social Affairs Bureau</span>
+            <span>{t("adoptionRequests.headerAdmin2")}</span>
             <span>·</span>
-            <span className="text-[#1769AA] font-semibold">Child Welfare &amp; Adoption</span>
+            <span className="text-[#1769AA] font-semibold">{t("adoptionRequests.headerAdmin3")}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1F3A]">
-            {t("adoptionRequests.title") || "Adoption Applications & Vetting Docket"}
+            {t("adoptionRequests.title")}
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Multi-stage applicant vetting: document intake, home suitability inspection, committee approval, and matching.
+            {t("adoptionRequests.subtitle") || "Multi-stage applicant vetting: document intake, home suitability inspection, committee approval, and matching."}
           </p>
         </div>
 
@@ -410,7 +410,7 @@ const AdoptionRequestsContent = () => {
             <Search className="absolute left-2.5 top-2.5 size-3.5 text-slate-400" />
             <Input
               type="text"
-              placeholder={t("adoptionRequests.searchPlaceholder") || "Search applicant by name, ID, phone, sub-city..."}
+              placeholder={t("adoptionRequests.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 pr-8 h-8 text-xs bg-white border-[#E3E7EB] focus:border-[#1769AA] rounded-xs shadow-2xs"
@@ -439,7 +439,7 @@ const AdoptionRequestsContent = () => {
             onClick={() => setShowAdvancedFilters((prev) => !prev)}
           >
             <SlidersHorizontal className="size-3.5 mr-1.5" />
-            <span>Filters</span>
+            <span>{t("adoptionRequests.filters.title")}</span>
             {activeFiltersCount > 0 && (
               <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
                 {activeFiltersCount}
@@ -456,7 +456,7 @@ const AdoptionRequestsContent = () => {
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="size-3.5 text-[#1769AA]" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
-                Municipal Jurisdiction &amp; Filing Filters
+                {t("adoptionRequests.filters.title")}
               </span>
             </div>
             {hasActiveFilters && (
@@ -465,7 +465,7 @@ const AdoptionRequestsContent = () => {
                 className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
               >
                 <RotateCcw className="size-3" />
-                <span>Reset All Filters</span>
+                <span>{t("adoptionRequests.filters.reset")}</span>
               </button>
             )}
           </div>
@@ -474,7 +474,7 @@ const AdoptionRequestsContent = () => {
             {/* Sub-City Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Sub-City
+                {t("adoptionRequests.filters.subCity")}
               </label>
               <Select
                 value={selectedSubCity}
@@ -484,10 +484,10 @@ const AdoptionRequestsContent = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sub-Cities" />
+                  <SelectValue placeholder={t("adoptionRequests.filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL">All Sub-Cities</SelectItem>
+                  <SelectItem value="ALL">{t("adoptionRequests.filters.allSubCities")}</SelectItem>
                   {allSubCityNames.map((name) => (
                     <SelectItem key={name} value={name}>
                       {name}
@@ -500,7 +500,7 @@ const AdoptionRequestsContent = () => {
             {/* Woreda Cascading Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Woreda
+                {t("adoptionRequests.filters.woreda")}
               </label>
               <Select
                 value={selectedWoreda}
@@ -511,23 +511,23 @@ const AdoptionRequestsContent = () => {
                   <SelectValue
                     placeholder={
                       selectedSubCity === "ALL"
-                        ? "Select Sub-City First"
-                        : "All Woredas"
+                        ? t("adoptionRequests.filters.selectSubCityFirst")
+                        : t("adoptionRequests.filters.allWoredas")
                     }
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL">All Woredas</SelectItem>
+                  <SelectItem value="ALL">{t("adoptionRequests.filters.allWoredas")}</SelectItem>
                   {availableWoredas.length > 0 ? (
                     availableWoredas.map((w) => (
                       <SelectItem key={w.id} value={w.code}>
-                        Woreda {w.code}
+                        {t("adoptionRequests.filters.woreda")} {w.code}
                       </SelectItem>
                     ))
                   ) : (
                     Array.from({ length: 15 }, (_, i) => String(i + 1)).map((num) => (
                       <SelectItem key={num} value={num}>
-                        Woreda {num}
+                        {t("adoptionRequests.filters.woreda")} {num}
                       </SelectItem>
                     ))
                   )}
@@ -538,18 +538,18 @@ const AdoptionRequestsContent = () => {
             {/* Date Recency Filter */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Filing Recency
+                {t("adoptionRequests.filters.dateRecency")}
               </label>
               <Select value={dateFilter} onValueChange={(val) => setDateFilter(val)}>
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Filing Dates" />
+                  <SelectValue placeholder={t("adoptionRequests.filters.allTime")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL">All Dates</SelectItem>
-                  <SelectItem value="7D">Past 7 Days</SelectItem>
-                  <SelectItem value="30D">Past 30 Days</SelectItem>
-                  <SelectItem value="90D">Past 3 Months</SelectItem>
-                  <SelectItem value="THIS_YEAR">Past 12 Months</SelectItem>
+                  <SelectItem value="ALL">{t("adoptionRequests.filters.allTime")}</SelectItem>
+                  <SelectItem value="7D">{t("adoptionRequests.filters.last7Days")}</SelectItem>
+                  <SelectItem value="30D">{t("adoptionRequests.filters.last30Days")}</SelectItem>
+                  <SelectItem value="90D">{t("adoptionRequests.filters.last90Days")}</SelectItem>
+                  <SelectItem value="THIS_YEAR">{t("adoptionRequests.filters.thisYear")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, Eye, Filter, ArrowRight, CheckCircle2, Clock, FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Search, Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { uiTokens } from "@/styles/design-system";
@@ -28,6 +29,7 @@ interface AdoptionRecentCasesTableProps {
 export function AdoptionRecentCasesTable({
   cases = [],
 }: AdoptionRecentCasesTableProps) {
+  const t = useTranslations("adoption");
   const [filter, setFilter] = useState<string>("ALL");
   const [search, setSearch] = useState<string>("");
 
@@ -67,10 +69,10 @@ export function AdoptionRecentCasesTable({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
           <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-            Adoption Application Queue & Vetting Roster
+            {t("dashboard.recentCases.title")}
           </h3>
           <p className="text-[11px] text-slate-500">
-            Active prospective applicant cases registered under Addis Ababa jurisdiction
+            {t("dashboard.recentCases.subtitle")}
           </p>
         </div>
 
@@ -79,7 +81,7 @@ export function AdoptionRecentCasesTable({
             <Search className="absolute left-2.5 top-2 size-3.5 text-slate-400" />
             <Input
               type="text"
-              placeholder="Search case or applicant..."
+              placeholder={t("dashboard.recentCases.searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="h-7.5 pl-8 text-xs border-[#E3E7EB]"
@@ -91,7 +93,7 @@ export function AdoptionRecentCasesTable({
               size="sm"
               className="h-7.5 px-2.5 text-xs text-[#1769AA] border-[#E3E7EB] hover:bg-[#E8F2FA]"
             >
-              Full Registry
+              {t("dashboard.recentCases.viewAll")}
               <ArrowRight className="ml-1 size-3" />
             </Button>
           </Link>
@@ -101,12 +103,12 @@ export function AdoptionRecentCasesTable({
       {/* Status Filter Pills */}
       <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
         {[
-          { key: "ALL", label: "All Active Cases" },
-          { key: "PENDING_REVIEW", label: "Document Review" },
-          { key: "PENDING_HOME_VISIT", label: "Home Inspections" },
-          { key: "PENDING_APPROVAL", label: "Committee Approvals" },
-          { key: "MATCHED", label: "Trial Bonding" },
-          { key: "FINALIZED", label: "Court Finalized" },
+          { key: "ALL", label: t("dashboard.recentCases.tabs.all") },
+          { key: "PENDING_REVIEW", label: t("dashboard.recentCases.tabs.pendingReview") },
+          { key: "PENDING_HOME_VISIT", label: t("dashboard.recentCases.tabs.homeVisit") },
+          { key: "PENDING_APPROVAL", label: t("dashboard.recentCases.tabs.committee") },
+          { key: "MATCHED", label: t("dashboard.recentCases.tabs.matched") },
+          { key: "FINALIZED", label: t("dashboard.recentCases.tabs.decreed") },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -127,21 +129,21 @@ export function AdoptionRecentCasesTable({
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="border-y border-slate-100 bg-slate-50/70 text-[10.5px] uppercase font-bold text-slate-500 tracking-wider">
-              <th className="py-2.5 px-3">Case ID</th>
-              <th className="py-2.5 px-3">Applicant Name</th>
-              <th className="py-2.5 px-3">Location</th>
-              <th className="py-2.5 px-3">Preference</th>
-              <th className="py-2.5 px-3">Assigned Officer</th>
-              <th className="py-2.5 px-3">Queue Age</th>
-              <th className="py-2.5 px-3">Current Status</th>
-              <th className="py-2.5 px-3 text-right">Action</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.caseDossier")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.applicantName")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.location")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.preference")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.assignedOfficer")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.queueDays")}</th>
+              <th className="py-2.5 px-3">{t("dashboard.recentCases.table.vettingStage")}</th>
+              <th className="py-2.5 px-3 text-right">{t("dashboard.recentCases.table.actions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={8} className="py-6 text-center text-slate-400">
-                  No adoption cases found matching current filters.
+                  {t("dashboard.recentCases.empty")}
                 </td>
               </tr>
             ) : (
@@ -170,7 +172,9 @@ export function AdoptionRecentCasesTable({
                     {item.assignedWorker}
                   </td>
                   <td className="py-2 px-3 font-mono text-slate-500">
-                    {item.daysInQueue} days
+                    {item.daysInQueue > 0
+                      ? t("dashboard.recentCases.daysCount", { count: item.daysInQueue })
+                      : t("dashboard.recentCases.today")}
                   </td>
                   <td className="py-2 px-3">
                     <span
@@ -190,7 +194,7 @@ export function AdoptionRecentCasesTable({
                         className="h-6 px-2 text-xs text-[#1769AA] hover:bg-[#E8F2FA] hover:text-[#12568E]"
                       >
                         <Eye className="size-3 mr-1" />
-                        Inspect
+                        {t("dashboard.recentCases.reviewAction")}
                       </Button>
                     </Link>
                   </td>

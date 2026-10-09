@@ -25,7 +25,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+
 const NewAderaRegistrationForm = () => {
+  const t = useTranslations("adoption");
   const { mutate, isPending, error } = useRegisterAderaMutation();
   const router = useRouter();
 
@@ -35,22 +39,36 @@ const NewAderaRegistrationForm = () => {
   });
 
   async function onSubmit(values: NewAderaSchemaType) {
-    //TODO: handle submission here
     console.log("submitting values: ", JSON.stringify(values));
-    mutate(values);
-    if (isPending) console.log("Pending....");
-    if (error) console.log(error.message);
-    // router.push("/adoption/adera");
+    mutate(values, {
+      onSuccess: () => {
+        toast.success(t("adera.registration.successToast"));
+        router.push("/adoption/adera");
+      },
+      onError: (err) => {
+        toast.error(t("adera.registration.errorToast") + (err?.message ? `: ${err.message}` : ""));
+      },
+    });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <Card className="max-w-6xl mx-auto px-6 py-10 shadow-lg space-y-8">
+          {/* Header Banner */}
+          <div className="border-b border-[#E3E7EB] pb-4">
+            <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
+              {t("adera.registration.title")}
+            </h1>
+            <p className="text-xs text-slate-500">
+              {t("adera.registration.subtitle")}
+            </p>
+          </div>
+
           {/* Personal Information Section */}
           <div className="space-y-2">
             <h2 className="text-lg font-semibold text-gray-800">
-              Personal Information
+              {t("adera.registration.personalInfo")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
@@ -58,7 +76,7 @@ const NewAderaRegistrationForm = () => {
                 name="cityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>የከተማ መታወቂያ ቁጥር (City ID Number)</FormLabel>
+                    <FormLabel>{t("adera.registration.cityIdNumber")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -71,7 +89,7 @@ const NewAderaRegistrationForm = () => {
                 name="partnerCityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>የትዳር አጋር መታወቂያ ቁጥር (Spouse City ID)</FormLabel>
+                    <FormLabel>{t("adera.registration.partnerCityIdNumber")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -84,14 +102,16 @@ const NewAderaRegistrationForm = () => {
 
           {/* Education and Job Info */}
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-gray-800">Background</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {t("adera.registration.spouseInfo")}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="educationLevel"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>የትምህርት ደረጃ (Education Level)</FormLabel>
+                    <FormLabel>{t("adera.registration.educationLevel")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -104,7 +124,7 @@ const NewAderaRegistrationForm = () => {
                 name="occupation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ስራ (Occupation)</FormLabel>
+                    <FormLabel>{t("adera.registration.occupation")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -119,7 +139,7 @@ const NewAderaRegistrationForm = () => {
                 name="monthlyIncome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ወርሃዊ ገቢ (Monthly Income)</FormLabel>
+                    <FormLabel>{t("adera.registration.monthlyIncome")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -143,7 +163,7 @@ const NewAderaRegistrationForm = () => {
           {/* Child Preference Info */}
           <div className="space-y-2">
             <h2 className="text-lg font-semibold text-gray-800">
-              Preferred Child
+              {t("adera.registration.placementPreferences")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
@@ -151,18 +171,22 @@ const NewAderaRegistrationForm = () => {
                 name="preferredChildGender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ተመራጭ ፆታ (Preferred Gender)</FormLabel>
+                    <FormLabel>{t("adera.registration.preferredChildGender")}</FormLabel>
                     <FormControl>
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="ፆታ (Gender)" />
+                          <SelectValue placeholder={t("adera.registration.genderPlaceholder")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="MALE">Male</SelectItem>
-                          <SelectItem value="FEMALE">Female</SelectItem>
+                          <SelectItem value="MALE">
+                            {t("adera.registration.male")}
+                          </SelectItem>
+                          <SelectItem value="FEMALE">
+                            {t("adera.registration.female")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -175,7 +199,7 @@ const NewAderaRegistrationForm = () => {
                 name="preferredChildMinAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ዝቅተኛ አድሜ (Min Age)</FormLabel>
+                    <FormLabel>{t("adera.registration.preferredChildMinAge")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -198,7 +222,7 @@ const NewAderaRegistrationForm = () => {
                 name="preferredChildMaxAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ከፍተኛ አድሜ (Max Age)</FormLabel>
+                    <FormLabel>{t("adera.registration.preferredChildMaxAge")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -221,14 +245,16 @@ const NewAderaRegistrationForm = () => {
 
           {/* Facilitator */}
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-gray-800">Facilitator</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {t("adera.registration.facilitator")}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="facilitatorCityIdNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>መዝጋቢ ባለሞያ መታወቂያ ቁጥር (Expert ID)</FormLabel>
+                    <FormLabel>{t("adera.registration.facilitatorCityIdNumber")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -240,13 +266,23 @@ const NewAderaRegistrationForm = () => {
           </div>
 
           {/* Submit */}
-          <CardFooter className="flex justify-end pt-6">
+          <CardFooter className="flex justify-between items-center pt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push("/adoption/adera")}
+              className="rounded-xs text-xs font-medium h-8 border-[#E3E7EB] px-4 cursor-pointer"
+            >
+              {t("adera.registration.cancel")}
+            </Button>
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
-              className="px-6"
+              disabled={isPending || form.formState.isSubmitting}
+              className="bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold rounded-xs text-xs h-8 px-6 shadow-2xs cursor-pointer"
             >
-              {form.formState.isSubmitting ? "Creating..." : "Create"}
+              {isPending || form.formState.isSubmitting
+                ? t("adera.registration.creating")
+                : t("adera.registration.create")}
             </Button>
           </CardFooter>
         </Card>

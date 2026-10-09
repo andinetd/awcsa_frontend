@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Building2, CheckCircle2, ChevronRight, ShieldCheck } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { useTranslations } from "next-intl";
+import { ArrowRight, ChevronRight, ShieldCheck } from "lucide-react";
 
 interface AdoptionPipelineFunnelProps {
   pipelineData?: Array<{
@@ -30,6 +30,7 @@ export function AdoptionPipelineFunnel({
   pipelineData = [],
   facilities = [],
 }: AdoptionPipelineFunnelProps) {
+  const t = useTranslations("adoption");
   const totalApplicants = pipelineData[0]?.count ?? 0;
   const totalCapacity = facilities.reduce((acc, f) => acc + (f.capacity || 0), 0);
   const totalOccupancy = facilities.reduce((acc, f) => acc + (f.occupancy || 0), 0);
@@ -42,24 +43,24 @@ export function AdoptionPipelineFunnel({
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
               <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                Adoption Screening & Procedural Pipeline
+                {t("dashboard.pipeline.title")}
               </h3>
               <p className="text-[11px] text-slate-500">
-                {totalApplicants} active cases tracked across procedural verification stages
+                {t("dashboard.pipeline.subtitle", { count: totalApplicants })}
               </p>
             </div>
             <Link
               href="/adoption/adoption-requests"
               className="text-xs font-medium text-[#1769AA] hover:underline flex items-center gap-1"
             >
-              View all
+              {t("dashboard.pipeline.viewAll")}
               <ArrowRight className="size-3" />
             </Link>
           </div>
 
           {pipelineData.length === 0 ? (
             <div className="py-12 text-center text-xs text-slate-400">
-              No active applications currently in vetting pipeline.
+              {t("dashboard.pipeline.empty")}
             </div>
           ) : (
             <div className="space-y-3.5 mt-3">
@@ -112,7 +113,7 @@ export function AdoptionPipelineFunnel({
         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50 px-3 py-2 rounded">
           <span className="flex items-center gap-1.5 font-medium text-slate-700">
             <ShieldCheck className="size-3.5 text-[#15803D]" />
-            Strict adherence to Ethiopian Federal Family Code & Hague Standards
+            Strict adherence to Ethiopian Federal Family Code &amp; Hague Standards
           </span>
           <span className="font-mono font-semibold text-[#1769AA]">100% Audited</span>
         </div>
@@ -124,12 +125,10 @@ export function AdoptionPipelineFunnel({
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
               <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                Care Facilities & Shelter Capacity
+                {t("dashboard.pipeline.facilities.title")}
               </h3>
               <p className="text-[11px] text-slate-500">
-                {facilities.length > 0
-                  ? `${facilities.length} registered child care facilities`
-                  : "No registered care facilities"}
+                {t("dashboard.pipeline.facilities.subtitle", { count: facilities.length })}
               </p>
             </div>
             <Link
