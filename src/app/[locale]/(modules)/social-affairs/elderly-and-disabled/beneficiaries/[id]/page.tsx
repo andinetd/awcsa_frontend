@@ -36,18 +36,18 @@ export default function BeneficiaryProfilePage() {
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("personalInfo.title") ? t("goBack") === "Go Back" ? "Home" : "መነሻ" : "Home"}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/elderly-and-disabled/dashboard" className="hover:text-[#1769AA] transition-colors">
-          Disability & Elderly
+          {t("goBack") === "Go Back" ? "Disability & Elderly" : "አካል ጉዳተኞች እና አረጋውያን"}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/elderly-and-disabled/beneficiaries" className="hover:text-[#1769AA] transition-colors">
-          Beneficiaries
+          {t("goBack") === "Go Back" ? "Beneficiaries" : "ተጠቃሚዎች"}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-[#0B1F3A] font-bold">Case #{id}</span>
+        <span className="text-[#0B1F3A] font-bold">{t("caseTitle", { id })}</span>
       </div>
 
       {/* Back Button Bar */}

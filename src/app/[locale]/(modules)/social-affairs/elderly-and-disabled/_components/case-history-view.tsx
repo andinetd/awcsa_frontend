@@ -103,37 +103,37 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
             value="overview"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            Overview
+            {tCase("tabs.overview")}
           </TabsTrigger>
           <TabsTrigger
             value="eligibility"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            {t("eligibility")}
+            {tCase("tabs.eligibility")}
           </TabsTrigger>
           <TabsTrigger
             value="services"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            Services
+            {tCase("tabs.services")}
           </TabsTrigger>
           <TabsTrigger
             value="documents"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            {t("documents")}
+            {tCase("tabs.documents")}
           </TabsTrigger>
           <TabsTrigger
             value="notes"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            Case Notes
+            {tCase("tabs.notes")}
           </TabsTrigger>
           <TabsTrigger
             value="timeline"
             className="h-7 px-3 text-xs font-mono uppercase tracking-wider rounded-xs data-[state=active]:bg-[#1769AA] data-[state=active]:text-white data-[state=active]:shadow-2xs font-bold"
           >
-            Timeline
+            {tCase("tabs.timeline")}
           </TabsTrigger>
         </TabsList>
 
@@ -148,7 +148,7 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                 <CardHeader className="border-b border-[#E3E7EB] bg-slate-50/50 py-3 px-5">
                   <div className="flex justify-between items-center">
                     <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                      Assessment • {new Date(e.assessedAt).toLocaleDateString()}
+                      {tCase("assessment.title", { date: new Date(e.assessedAt).toLocaleDateString() })}
                     </CardTitle>
                     <Badge
                       variant="outline"
@@ -166,30 +166,30 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                 </CardHeader>
                 <CardContent className="p-5 text-xs grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">Residency:</span>{" "}
-                    <span className="font-semibold text-slate-800">{e.residencyVerified ? "✓ Verified" : "✗ Not verified"}</span>
+                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">{tCase("assessment.residency")}</span>{" "}
+                    <span className="font-semibold text-slate-800">{e.residencyVerified ? tCase("assessment.verified") : tCase("assessment.notVerified")}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">Community Confirmation:</span>{" "}
-                    <span className="font-semibold text-slate-800">{e.communityConfirmation ? "✓ Confirmed" : "✗ Pending"}</span>
+                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">{tCase("assessment.communityConfirmation")}</span>{" "}
+                    <span className="font-semibold text-slate-800">{e.communityConfirmation ? tCase("assessment.confirmed") : tCase("assessment.pending")}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">Woreda Confirmation:</span>{" "}
-                    <span className="font-semibold text-slate-800">{e.woredaConfirmation ? "✓ Confirmed" : "✗ Pending"}</span>
+                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">{tCase("assessment.woredaConfirmation")}</span>{" "}
+                    <span className="font-semibold text-slate-800">{e.woredaConfirmation ? tCase("assessment.confirmed") : tCase("assessment.pending")}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">Medical Status:</span>{" "}
+                    <span className="text-[10px] font-mono font-bold uppercase text-slate-500">{tCase("assessment.medicalStatus")}</span>{" "}
                     <span className="font-semibold text-slate-800">{e.medicalVerificationStatus}</span>
                   </div>
                   {e.decisionNotes && (
                     <div className="col-span-full pt-1">
-                      <span className="text-[10px] font-mono font-bold uppercase text-slate-500">Decision Notes:</span>{" "}
+                      <span className="text-[10px] font-mono font-bold uppercase text-slate-500">{tCase("assessment.decisionNotes")}</span>{" "}
                       <span className="text-slate-700">{e.decisionNotes}</span>
                     </div>
                   )}
                   {e.rejectionReason && (
                     <div className="col-span-full pt-1 text-rose-600">
-                      <span className="text-[10px] font-mono font-bold uppercase text-rose-500">Rejection Reason:</span>{" "}
+                      <span className="text-[10px] font-mono font-bold uppercase text-rose-500">{tCase("assessment.rejectionReason")}</span>{" "}
                       <span>{e.rejectionReason}</span>
                     </div>
                   )}
@@ -197,7 +197,7 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
               </Card>
             ))
           ) : (
-            <Empty message="No eligibility assessments yet" />
+            <Empty message={tCase("assessment.noAssessments")} />
           )}
         </TabsContent>
 
@@ -218,37 +218,38 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                     </Badge>
                   </div>
                   <CardDescription className="text-xs text-slate-500 font-mono mt-0.5">
-                    Requested: {new Date(s.requestDate).toLocaleDateString()}
+                    {tCase("serviceRecord.requested", { date: new Date(s.requestDate).toLocaleDateString() })}
                     {s.serviceDate &&
-                      ` • Service: ${new Date(s.serviceDate).toLocaleDateString()}`}
+                      tCase("serviceRecord.serviceDate", { date: new Date(s.serviceDate).toLocaleDateString() })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-5 text-xs space-y-1.5">
-                  {s.responsibleOffice && <div><span className="font-mono text-slate-500 font-bold">Office:</span> {s.responsibleOffice}</div>}
-                  {s.subCity && <div><span className="font-mono text-slate-500 font-bold">Location:</span> {s.subCity} / {s.woreda}</div>}
+                  {s.responsibleOffice && <div><span className="font-mono text-slate-500 font-bold">{tCase("serviceRecord.office")}</span> {s.responsibleOffice}</div>}
+                  {s.subCity && <div><span className="font-mono text-slate-500 font-bold">{tCase("serviceRecord.location")}</span> {s.subCity} / {s.woreda}</div>}
                   {s.allowance && (
                     <div>
-                      <span className="font-mono text-slate-500 font-bold">Allowance:</span> {s.allowance.amount} ETB ({s.allowance.paymentStatus})
+                      <span className="font-mono text-slate-500 font-bold">{tCase("serviceRecord.allowance")}</span> {s.allowance.amount} ETB ({s.allowance.paymentStatus})
                     </div>
                   )}
                   {s.assistiveDevice && (
-                    <div><span className="font-mono text-slate-500 font-bold">Assistive device:</span> {s.assistiveDevice.requestType}</div>
+                    <div><span className="font-mono text-slate-500 font-bold">{tCase("serviceRecord.assistiveDevice")}</span> {s.assistiveDevice.requestType}</div>
                   )}
                   {s.referral && (
-                    <div><span className="font-mono text-slate-500 font-bold">Referral to:</span> {s.referral.destinationInstitution}</div>
+                    <div><span className="font-mono text-slate-500 font-bold">{tCase("serviceRecord.referral")}</span> {s.referral.destinationInstitution}</div>
                   )}
                   {s.confirmationConfirmedAt && (
                     <div>
-                      <span className="font-mono text-slate-500 font-bold">Confirmed:</span>{" "}
-                      {new Date(s.confirmationConfirmedAt).toLocaleDateString()}
-                      {s.confirmationMethod && ` via ${s.confirmationMethod}`}
+                      {tCase("serviceRecord.confirmedVia", {
+                        date: new Date(s.confirmationConfirmedAt).toLocaleDateString(),
+                        method: s.confirmationMethod || "N/A",
+                      })}
                     </div>
                   )}
                 </CardContent>
               </Card>
             ))
           ) : (
-            <Empty message="No services requested" />
+            <Empty message={tCase("serviceRecord.noServices")} />
           )}
         </TabsContent>
 
@@ -270,13 +271,17 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                   </div>
                 </CardHeader>
                 <CardContent className="p-5 text-xs">
-                  <div><span className="font-mono text-slate-500 font-bold">Uploaded:</span> {new Date(d.uploadedAt).toLocaleString()}</div>
+                  <div>
+                    <span className="font-mono text-slate-500 font-bold">
+                      {tCase("documentsSection.uploadedOn", { date: new Date(d.uploadedAt).toLocaleString() })}
+                    </span>
+                  </div>
                   {d.remarks && <div className="mt-1"><span className="font-mono text-slate-500 font-bold">Notes:</span> {d.remarks}</div>}
                 </CardContent>
               </Card>
             ))
           ) : (
-            <Empty message="No documents attached" />
+            <Empty message={tCase("documentsSection.noDocuments")} />
           )}
         </TabsContent>
 
@@ -284,14 +289,14 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
           <div className="flex justify-end">
             <Dialog open={openNote} onOpenChange={setOpenNote}>
               <DialogTrigger asChild>
-                <Button className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
-                  <Plus className="w-3.5 h-3.5" /> Add Note
+                <Button className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5 cursor-pointer">
+                  <Plus className="w-3.5 h-3.5" /> {tCase("notesSection.addNote")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg max-w-md">
                 <DialogHeader className="border-b border-[#E3E7EB] pb-3">
                   <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                    Add Case Note
+                    {tCase("notesSection.addNote")}
                   </DialogTitle>
                 </DialogHeader>
                 <form
@@ -299,7 +304,7 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                   className="space-y-3 pt-2"
                 >
                   <Textarea
-                    placeholder="Enter case note..."
+                    placeholder={tCase("notesSection.notePlaceholder")}
                     className="text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                     {...noteForm.register("note")}
                   />
@@ -308,20 +313,20 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
                     <Button
                       type="button"
                       variant="outline"
-                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+                      className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50 cursor-pointer"
                       onClick={() => setOpenNote(false)}
                     >
-                      Cancel
+                      {tCase("notesSection.cancel")}
                     </Button>
                     <Button
                       type="submit"
                       disabled={addNote.isPending}
-                      className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
+                      className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs cursor-pointer"
                     >
                       {addNote.isPending && (
                         <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                       )}
-                      Save Note
+                      {tCase("notesSection.saveNote")}
                     </Button>
                   </DialogFooter>
                 </form>
@@ -345,7 +350,7 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
               </Card>
             ))
           ) : (
-            <Empty message="No case notes" />
+            <Empty message={tCase("notesSection.noNotes")} />
           )}
         </TabsContent>
 

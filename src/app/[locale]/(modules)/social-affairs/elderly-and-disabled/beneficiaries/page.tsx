@@ -465,30 +465,30 @@ export default function BeneficiariesPage() {
           className="hover:text-[#1769AA] flex items-center gap-1 transition-colors"
         >
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link
           href="/social-affairs/elderly-and-disabled/dashboard"
           className="hover:text-[#1769AA] transition-colors"
         >
-          Disability &amp; Elderly
+          {t("breadcrumbs.module")}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <span className="text-[#0B1F3A] font-bold">
-          {category === "DISABLED" ? t("disabled") : t("elderly")} Beneficiaries
+          {category === "DISABLED" ? t("disabled") : t("elderly")} {t("breadcrumbs.beneficiariesSuffix")}
         </span>
       </div>
 
       {/* ── Institutional Header Banner ──────────────────────────────────────── */}
       <div className="bg-white border border-[#E3E7EB] p-4 sm:p-5 rounded-xs shadow-2xs space-y-3">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500">
-          <span>Addis Ababa City Administration</span>
+          <span>{t("banner.cityAdmin")}</span>
           <span>·</span>
-          <span>Women &amp; Social Affairs Bureau</span>
+          <span>{t("banner.bureau")}</span>
           <span>·</span>
           <span className="text-[#1769AA] font-semibold">
-            Social Rehabilitation &amp; Inclusion
+            {t("banner.directorate")}
           </span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -532,7 +532,7 @@ export default function BeneficiariesPage() {
             <div className="relative w-full sm:w-60">
               <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
-                placeholder="Search Fayda, City ID, name, phone..."
+                placeholder={t("searchPlaceholderDetailed")}
                 className="pl-8 pr-8 h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -563,7 +563,7 @@ export default function BeneficiariesPage() {
               onClick={() => setShowAdvancedFilters((prev) => !prev)}
             >
               <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
-              <span>Filters</span>
+              <span>{t("filtersButton")}</span>
               {activeFiltersCount > 0 && (
                 <span className="ml-1.5 px-1.5 py-0.2 bg-white text-[#1769AA] font-bold rounded-full text-[10px]">
                   {activeFiltersCount}
@@ -588,28 +588,28 @@ export default function BeneficiariesPage() {
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E3E7EB]">
         {category === "DISABLED" ? (
           [
-            { id: "ALL" as const, label: "All Disabled", count: tabCounts.all },
+            { id: "ALL" as const, label: t("tabs.allDisabled"), count: tabCounts.all },
             {
               id: "SEVERE" as const,
-              label: "Severe & Profound",
+              label: t("tabs.severeProfound"),
               count: tabCounts.severe,
               color: "text-rose-700 bg-rose-50",
             },
             {
               id: "ASSISTANCE" as const,
-              label: "Assistance / Device Needed",
+              label: t("tabs.assistanceNeeded"),
               count: tabCounts.assistance,
               color: "text-amber-700 bg-amber-50",
             },
             {
               id: "UNEMPLOYED" as const,
-              label: "Seeking Work (Unemployed)",
+              label: t("tabs.seekingWork"),
               count: tabCounts.unemployed,
               color: "text-indigo-700 bg-indigo-50",
             },
             {
               id: "ACTIVE" as const,
-              label: "Active Beneficiaries",
+              label: t("tabs.activeDisabled"),
               count: tabCounts.active,
               color: "text-emerald-700 bg-emerald-50",
             },
@@ -643,28 +643,28 @@ export default function BeneficiariesPage() {
           })
         ) : (
           [
-            { id: "ALL" as const, label: "All Elderly", count: tabCounts.all },
+            { id: "ALL" as const, label: t("tabs.allElderly"), count: tabCounts.all },
             {
               id: "CONFIRMED" as const,
-              label: "Support Confirmed",
+              label: t("tabs.supportConfirmed"),
               count: tabCounts.confirmed,
               color: "text-emerald-700 bg-emerald-50",
             },
             {
               id: "VULNERABLE" as const,
-              label: "Living Alone / Widowed",
+              label: t("tabs.livingAloneWidowed"),
               count: tabCounts.vulnerable,
               color: "text-amber-700 bg-amber-50",
             },
             {
               id: "OLDEST" as const,
-              label: "Oldest-Old (80+)",
+              label: t("tabs.oldestOld"),
               count: tabCounts.oldest,
               color: "text-purple-700 bg-purple-50",
             },
             {
               id: "ACTIVE" as const,
-              label: "Active Beneficiaries",
+              label: t("tabs.activeElderly"),
               count: tabCounts.active,
               color: "text-blue-700 bg-blue-50",
             },
@@ -706,7 +706,9 @@ export default function BeneficiariesPage() {
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#1769AA]" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#0B1F3A]">
-                Advanced Vulnerability &amp; Location Filters ({category})
+                {t("filterDrawer.title", {
+                  category: category === "DISABLED" ? t("disabled") : t("elderly"),
+                })}
               </span>
             </div>
             {hasActiveFilters && (
@@ -715,7 +717,7 @@ export default function BeneficiariesPage() {
                 className="text-[11px] font-mono text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>Reset All Filters</span>
+                <span>{t("filterDrawer.resetAll")}</span>
               </button>
             )}
           </div>
@@ -724,7 +726,7 @@ export default function BeneficiariesPage() {
             {/* Sub-City Selector */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Sub-City
+                {t("filterDrawer.subCity")}
               </label>
               <Select
                 value={selectedSubCity}
@@ -735,11 +737,11 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Sub-Cities" />
+                  <SelectValue placeholder={t("filterDrawer.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Sub-Cities
+                    {t("filterDrawer.allSubCities")}
                   </SelectItem>
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
@@ -753,7 +755,7 @@ export default function BeneficiariesPage() {
             {/* Woreda Selector (Cascading) */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Woreda
+                {t("filterDrawer.woreda")}
               </label>
               <Select
                 value={selectedWoreda}
@@ -767,18 +769,18 @@ export default function BeneficiariesPage() {
                   <SelectValue
                     placeholder={
                       selectedSubCity === "ALL" || !selectedSubCity
-                        ? "Select Sub-City first"
-                        : "All Woredas"
+                        ? t("filterDrawer.selectSubCityFirst")
+                        : t("filterDrawer.allWoredas")
                     }
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Woredas
+                    {t("filterDrawer.allWoredas")}
                   </SelectItem>
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
-                      Woreda {w.code}
+                      {t("filterDrawer.woredaPrefix", { code: w.code })}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -791,7 +793,7 @@ export default function BeneficiariesPage() {
                 {/* Disability Type */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Disability Type
+                    {t("filterDrawer.disabilityType")}
                   </label>
                   <Select
                     value={disabilityTypeFilter}
@@ -801,11 +803,11 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Types" />
+                      <SelectValue placeholder={t("filterDrawer.allDisabilityTypes")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Disability Types
+                        {t("filterDrawer.allDisabilityTypes")}
                       </SelectItem>
                       {DISABILITY_TYPES.map((dt) => (
                         <SelectItem key={dt} value={dt} className="text-xs rounded-xs capitalize">
@@ -819,7 +821,7 @@ export default function BeneficiariesPage() {
                 {/* Disability Severity */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Severity Grade
+                    {t("filterDrawer.severityGrade")}
                   </label>
                   <Select
                     value={severityFilter}
@@ -829,11 +831,11 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Severities" />
+                      <SelectValue placeholder={t("filterDrawer.allSeverities")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Severities
+                        {t("filterDrawer.allSeverities")}
                       </SelectItem>
                       {SEVERITY_LEVELS.map((sev) => (
                         <SelectItem key={sev} value={sev} className="text-xs rounded-xs">
@@ -847,7 +849,7 @@ export default function BeneficiariesPage() {
                 {/* Physical Assistance */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Physical Assistance
+                    {t("filterDrawer.physicalAssistance")}
                   </label>
                   <Select
                     value={assistanceFilter}
@@ -857,26 +859,26 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Assistance" />
+                      <SelectValue placeholder={t("filterDrawer.allAssistance")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Assistance
+                        {t("filterDrawer.allAssistance")}
                       </SelectItem>
                       <SelectItem value="YES" className="text-xs rounded-xs">
-                        Requires Assistance / Device
+                        {t("filterDrawer.requiresAssistance")}
                       </SelectItem>
                       <SelectItem value="NO" className="text-xs rounded-xs">
-                        Independent
+                        {t("filterDrawer.independent")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Verification Status */}
+                {/* Medical Verification */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Medical Verification
+                    {t("filterDrawer.medicalVerification")}
                   </label>
                   <Select
                     value={verificationFilter}
@@ -886,20 +888,20 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Verifications" />
+                      <SelectValue placeholder={t("filterDrawer.allVerifications")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Statuses
+                        {t("filterDrawer.allVerifications")}
                       </SelectItem>
                       <SelectItem value="VERIFIED" className="text-xs rounded-xs">
-                        Verified
+                        {t("filterDrawer.verified")}
                       </SelectItem>
                       <SelectItem value="PENDING" className="text-xs rounded-xs">
-                        Pending
+                        {t("filterDrawer.pending")}
                       </SelectItem>
                       <SelectItem value="REJECTED" className="text-xs rounded-xs">
-                        Rejected
+                        {t("filterDrawer.rejected")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -910,7 +912,7 @@ export default function BeneficiariesPage() {
                 {/* Elderly Age Bracket */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Age Cohort
+                    {t("filterDrawer.ageCohort")}
                   </label>
                   <Select
                     value={elderlyAgeFilter}
@@ -920,20 +922,20 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Ages" />
+                      <SelectValue placeholder={t("filterDrawer.allAges")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Ages
+                        {t("filterDrawer.allAges")}
                       </SelectItem>
                       <SelectItem value="60_69" className="text-xs rounded-xs">
-                        Young-Old (60–69)
+                        {t("filterDrawer.youngOld")}
                       </SelectItem>
                       <SelectItem value="70_79" className="text-xs rounded-xs">
-                        Middle-Old (70–79)
+                        {t("filterDrawer.middleOld")}
                       </SelectItem>
                       <SelectItem value="80_PLUS" className="text-xs rounded-xs">
-                        Oldest-Old (80+)
+                        {t("filterDrawer.oldestOld")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -942,7 +944,7 @@ export default function BeneficiariesPage() {
                 {/* Support Confirmed */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                    Support Confirmed
+                    {t("filterDrawer.supportConfirmed")}
                   </label>
                   <Select
                     value={supportConfirmedFilter}
@@ -952,17 +954,17 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder="All Statuses" />
+                      <SelectValue placeholder={t("filterDrawer.allRecords")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                        All Records
+                        {t("filterDrawer.allRecords")}
                       </SelectItem>
                       <SelectItem value="YES" className="text-xs rounded-xs">
-                        Confirmed Only
+                        {t("filterDrawer.confirmedOnly")}
                       </SelectItem>
                       <SelectItem value="NO" className="text-xs rounded-xs">
-                        Unconfirmed
+                        {t("filterDrawer.unconfirmed")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -973,7 +975,7 @@ export default function BeneficiariesPage() {
             {/* Employment Status */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Employment
+                {t("filterDrawer.employment")}
               </label>
               <Select
                 value={employmentFilter}
@@ -983,17 +985,17 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Employment" />
+                  <SelectValue placeholder={t("filterDrawer.allEmployment")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Employment
+                    {t("filterDrawer.allEmployment")}
                   </SelectItem>
                   <SelectItem value="EMPLOYED" className="text-xs rounded-xs">
-                    Employed
+                    {t("filterDrawer.employed")}
                   </SelectItem>
                   <SelectItem value="UNEMPLOYED" className="text-xs rounded-xs">
-                    Unemployed
+                    {t("filterDrawer.unemployed")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -1002,7 +1004,7 @@ export default function BeneficiariesPage() {
             {/* Sex / Gender */}
             <div className="space-y-1">
               <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-                Gender
+                {t("filterDrawer.gender")}
               </label>
               <Select
                 value={sexFilter}
@@ -1012,20 +1014,20 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder="All Genders" />
+                  <SelectValue placeholder={t("filterDrawer.allGenders")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    All Genders
+                    {t("filterDrawer.allGenders")}
                   </SelectItem>
                   <SelectItem value="MALE" className="text-xs rounded-xs">
-                    Male
+                    {t("filterDrawer.male")}
                   </SelectItem>
                   <SelectItem value="FEMALE" className="text-xs rounded-xs">
-                    Female
+                    {t("filterDrawer.female")}
                   </SelectItem>
                   <SelectItem value="OTHER" className="text-xs rounded-xs">
-                    Other
+                    {t("filterDrawer.other")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -1038,7 +1040,7 @@ export default function BeneficiariesPage() {
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-xs font-mono font-bold text-slate-500 mr-1">
-            Results ({filteredItems.length} of {rawItems.length}):
+            {t("chips.resultsCount", { filtered: filteredItems.length, total: rawItems.length })}
           </span>
 
           {currentTab !== "ALL" && (
@@ -1046,7 +1048,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Preset: {currentTab}</span>
+              <span>{t("chips.preset", { tab: currentTab })}</span>
               <button
                 onClick={() => {
                   if (category === "DISABLED") setDisabledTab("ALL");
@@ -1064,7 +1066,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-slate-100 text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Search: &ldquo;{debouncedSearch}&rdquo;</span>
+              <span>{t("chips.search", { query: debouncedSearch })}</span>
               <button
                 onClick={() => setSearch("")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1079,7 +1081,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Sub-City: {selectedSubCity}</span>
+              <span>{t("chips.subCity", { name: selectedSubCity })}</span>
               <button
                 onClick={() => {
                   setSelectedSubCity("ALL");
@@ -1097,7 +1099,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Woreda: {selectedWoreda}</span>
+              <span>{t("chips.woreda", { code: selectedWoreda })}</span>
               <button
                 onClick={() => setSelectedWoreda("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1112,7 +1114,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Disability: {disabilityTypeFilter}</span>
+              <span>{t("chips.disabilityType", { type: disabilityTypeFilter })}</span>
               <button
                 onClick={() => setDisabilityTypeFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1127,7 +1129,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Severity: {severityFilter}</span>
+              <span>{t("chips.severity", { sev: severityFilter })}</span>
               <button
                 onClick={() => setSeverityFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1142,7 +1144,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Assistance: {assistanceFilter}</span>
+              <span>{t("chips.assistance", { status: assistanceFilter })}</span>
               <button
                 onClick={() => setAssistanceFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1157,7 +1159,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Age: {elderlyAgeFilter.replace("_", "–")}</span>
+              <span>{t("chips.ageCohort", { cohort: elderlyAgeFilter.replace("_", "–") })}</span>
               <button
                 onClick={() => setElderlyAgeFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1172,7 +1174,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Employment: {employmentFilter}</span>
+              <span>{t("chips.employment", { status: employmentFilter })}</span>
               <button
                 onClick={() => setEmploymentFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1187,7 +1189,7 @@ export default function BeneficiariesPage() {
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
             >
-              <span>Sex: {sexFilter}</span>
+              <span>{t("chips.gender", { gender: sexFilter })}</span>
               <button
                 onClick={() => setSexFilter("ALL")}
                 className="hover:text-rose-600 ml-0.5 cursor-pointer"
@@ -1206,7 +1208,7 @@ export default function BeneficiariesPage() {
             className="h-7 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
           >
             <RotateCcw className="w-3 h-3 mr-1" />
-            <span>Clear Filters</span>
+            <span>{t("chips.clearAll")}</span>
           </Button>
         )}
       </div>
@@ -1217,17 +1219,21 @@ export default function BeneficiariesPage() {
           <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
             <Users className="w-4 h-4 text-[#1769AA]" />
             <span>
-              {category === "DISABLED" ? "Disabled Beneficiary" : "Elderly Beneficiary"} Registry Records
+              {category === "DISABLED" ? t("disabled") : t("elderly")} {t("registeredCard")}
             </span>
           </CardTitle>
           <span className="text-xs font-mono text-slate-500">
-            Showing {totalItems === 0 ? 0 : startIndex + 1} to {Math.min(startIndex + limit, totalItems)} of {totalItems}
+            {t("pagination.showing", {
+              start: totalItems === 0 ? 0 : startIndex + 1,
+              end: Math.min(startIndex + limit, totalItems),
+              total: totalItems,
+            })}
           </span>
         </CardHeader>
         <CardContent className="p-0">
           {isFetching && !isLoading && (
             <div className="px-5 py-2 text-[11px] font-mono text-slate-500 flex items-center gap-2 bg-slate-50/50 border-b border-[#E3E7EB]">
-              <Loader2 className="w-3 h-3 animate-spin text-[#1769AA]" /> Refreshing records...
+              <Loader2 className="w-3 h-3 animate-spin text-[#1769AA]" /> {t("loading")}
             </div>
           )}
           <BeneficiaryTable
@@ -1239,7 +1245,7 @@ export default function BeneficiariesPage() {
           {totalItems > 0 && (
             <div className="flex items-center justify-between px-5 py-3 border-t border-[#E3E7EB]">
               <div className="text-xs font-mono text-slate-500">
-                Page {page} of {totalPages} ({totalItems} total)
+                {t("pagination.pageInfo", { page, pages: totalPages })} ({totalItems})
               </div>
               <div className="flex items-center gap-1.5">
                 <Button
