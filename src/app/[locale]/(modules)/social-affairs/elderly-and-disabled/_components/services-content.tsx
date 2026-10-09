@@ -249,11 +249,11 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("breadcrumbs.home")}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/elderly-and-disabled/dashboard" className="hover:text-[#1769AA] transition-colors">
-          Disability & Elderly
+          {t("breadcrumbs.module")}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <span className="text-[#0B1F3A] font-bold">{tabTitle}</span>
@@ -357,10 +357,10 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder="All Categories" />
+                    <SelectValue placeholder={t("filters.allCategories")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All Categories</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCategories")}</SelectItem>
                     {serviceCategories.map((c) => (
                       <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
                     ))}
@@ -368,10 +368,10 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={serviceProviderFilter} onValueChange={setServiceProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder="All Providers" />
+                    <SelectValue placeholder={t("filters.allProviders")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All Providers</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
                     {serviceProviders.map((p) => (
                       <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
                     ))}
@@ -389,7 +389,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                     className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                    <span>Clear</span>
+                    <span>{t("filters.reset")}</span>
                   </Button>
                 )}
               </div>
@@ -516,10 +516,10 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={trainingTypeFilter} onValueChange={setTrainingTypeFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder="All Fields" />
+                    <SelectValue placeholder={t("filters.allTypes")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All Fields</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allTypes")}</SelectItem>
                     {trainingTypes.map((type) => (
                       <SelectItem key={type} value={type} className="text-xs">{type}</SelectItem>
                     ))}
@@ -527,10 +527,10 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingProviderFilter} onValueChange={setTrainingProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder="All Providers" />
+                    <SelectValue placeholder={t("filters.allProviders")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All Providers</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
                     {trainingProviders.map((p) => (
                       <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
                     ))}
@@ -538,12 +538,12 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingCocFilter} onValueChange={setTrainingCocFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[110px]">
-                    <SelectValue placeholder="All COC" />
+                    <SelectValue placeholder={t("filters.allCoc")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All COC</SelectItem>
-                    <SelectItem value="YES" className="text-xs">Certified</SelectItem>
-                    <SelectItem value="NO" className="text-xs">Uncertified</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCoc")}</SelectItem>
+                    <SelectItem value="YES" className="text-xs">{tTraining("coc.yes")}</SelectItem>
+                    <SelectItem value="NO" className="text-xs">{tTraining("coc.no")}</SelectItem>
                   </SelectContent>
                 </Select>
                 {(searchTraining || trainingTypeFilter !== "ALL" || trainingProviderFilter !== "ALL" || trainingCocFilter !== "ALL") && (
@@ -559,7 +559,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                     className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                    <span>Clear</span>
+                    <span>{t("filters.reset")}</span>
                   </Button>
                 )}
               </div>
@@ -686,10 +686,10 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={jobCompanyFilter} onValueChange={setJobCompanyFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[150px]">
-                    <SelectValue placeholder="All Companies" />
+                    <SelectValue placeholder={t("filters.allCompanies")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
-                    <SelectItem value="ALL" className="text-xs font-semibold">All Companies</SelectItem>
+                    <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCompanies")}</SelectItem>
                     {jobCompanies.map((c) => (
                       <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
                     ))}
@@ -706,7 +706,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                     className="h-8 text-xs font-mono text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xs px-2 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                    <span>Clear</span>
+                    <span>{t("filters.reset")}</span>
                   </Button>
                 )}
               </div>

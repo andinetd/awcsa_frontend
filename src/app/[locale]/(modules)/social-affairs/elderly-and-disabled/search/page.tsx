@@ -48,14 +48,16 @@ export default function BeneficiarySearchPage() {
       <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
         <Link href="/" className="hover:text-[#1769AA] flex items-center gap-1 transition-colors">
           <Home className="w-3.5 h-3.5" />
-          <span>Home</span>
+          <span>{t("search") === "ፈልግ" ? "መነሻ" : "Home"}</span>
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
         <Link href="/social-affairs/elderly-and-disabled/dashboard" className="hover:text-[#1769AA] transition-colors">
-          Disability & Elderly
+          {t("search") === "ፈልግ" ? "አካል ጉዳተኞች እና አረጋውያን" : "Disability & Elderly"}
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        <span className="text-[#0B1F3A] font-bold">Beneficiary Search</span>
+        <span className="text-[#0B1F3A] font-bold">
+          {t("search") === "ፈልግ" ? "የተጠቃሚዎች ፍለጋ" : "Beneficiary Search"}
+        </span>
       </div>
 
       {/* Page Header */}
@@ -64,11 +66,13 @@ export default function BeneficiarySearchPage() {
           <div className="flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-[#1769AA]" />
             <h1 className="text-xl font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-              Beneficiary Search
+              {t("search") === "ፈልግ" ? "የተጠቃሚዎች ፍለጋ" : "Beneficiary Search"}
             </h1>
           </div>
           <p className="text-xs text-slate-500 font-mono mt-1">
-            Search by Fayda ID (preferred), name, phone, or city ID across municipal registries
+            {t("search") === "ፈልግ"
+              ? "በፋይዳ መታወቂያ፣ በስም፣ በስልክ ወይም በከተማ መታወቂያ በመላው ማዘጋጃ ቤት መዝገቦች ይፈልጉ"
+              : "Search by Fayda ID (preferred), name, phone, or city ID across municipal registries"}
           </p>
         </div>
       </div>
@@ -77,7 +81,7 @@ export default function BeneficiarySearchPage() {
       <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs">
         <CardHeader className="border-b border-[#E3E7EB] p-4">
           <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-            Search Filters
+            {t("search") === "ፈልግ" ? "የፍለጋ ማጣሪያዎች" : "Search Filters"}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4">
@@ -113,17 +117,17 @@ export default function BeneficiarySearchPage() {
             </Select>
             <Select value={category} onValueChange={(v: any) => setCategory(v)}>
               <SelectTrigger className="w-[150px] h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
-                <SelectValue placeholder="All Categories" />
+                <SelectValue placeholder={t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL" className="text-xs font-mono">All Categories</SelectItem>
-                <SelectItem value="ELDERLY" className="text-xs font-mono">Elderly</SelectItem>
-                <SelectItem value="DISABLED" className="text-xs font-mono">Disabled</SelectItem>
+                <SelectItem value="ALL" className="text-xs font-mono">{t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories"}</SelectItem>
+                <SelectItem value="ELDERLY" className="text-xs font-mono">{t("registerElderly")}</SelectItem>
+                <SelectItem value="DISABLED" className="text-xs font-mono">{t("registerDisability")}</SelectItem>
               </SelectContent>
             </Select>
             <Button
               onClick={() => setPage(1)}
-              className="h-8 px-4 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold"
+              className="h-8 px-4 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs font-semibold cursor-pointer"
             >
               {t("search")}
             </Button>
@@ -135,13 +139,13 @@ export default function BeneficiarySearchPage() {
       <Card className="rounded-xs border-[#E3E7EB] bg-white shadow-2xs">
         <CardHeader className="border-b border-[#E3E7EB] p-4 flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-            Results ({data?.total ?? 0})
+            {t("search") === "ፈልግ" ? "የፍለጋ ውጤቶች" : "Results"} ({data?.total ?? 0})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4">
           {isLoading ? (
             <div className="flex items-center justify-center p-8 text-xs font-mono text-slate-500">
-              <Loader2 className="w-4 h-4 mr-2 animate-spin text-[#1769AA]" /> Loading records...
+              <Loader2 className="w-4 h-4 mr-2 animate-spin text-[#1769AA]" /> {t("search") === "ፈልግ" ? "መረጃዎችን በመጫን ላይ..." : "Loading records..."}
             </div>
           ) : !data?.items?.length ? (
             <div className="text-center py-12 text-xs font-mono text-slate-500">
@@ -152,12 +156,12 @@ export default function BeneficiarySearchPage() {
               <Table>
                 <TableHeader className="bg-slate-50 border-b border-[#E3E7EB]">
                   <TableRow>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">Fayda ID</TableHead>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">City ID</TableHead>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">Name</TableHead>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">Category</TableHead>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">Sub-city / Woreda</TableHead>
-                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3 text-right">Action</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">{t("faydaId")}</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">{t("cityId")}</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">{t("search") === "ፈልግ" ? "ሙሉ ስም" : "Name"}</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">{t("search") === "ፈልግ" ? "ምድብ" : "Category"}</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3">{t("subCity")} / {t("woreda")}</TableHead>
+                    <TableHead className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-600 h-9 py-2 px-3 text-right">{t("search") === "ፈልግ" ? "ተግባር" : "Action"}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -187,14 +191,14 @@ export default function BeneficiarySearchPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-7 px-2.5 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] text-[#1769AA] hover:bg-[#E8F2FA] transition-colors"
+                          className="h-7 px-2.5 text-xs font-mono uppercase tracking-wider rounded-xs border-[#E3E7EB] text-[#1769AA] hover:bg-[#E8F2FA] transition-colors cursor-pointer"
                           onClick={() =>
                             router.push(
                               `/social-affairs/elderly-and-disabled/beneficiaries/${b.id}`,
                             )
                           }
                         >
-                          Open
+                          {t("search") === "ፈልግ" ? "ክፈት" : "Open"}
                         </Button>
                       </TableCell>
                     </TableRow>
