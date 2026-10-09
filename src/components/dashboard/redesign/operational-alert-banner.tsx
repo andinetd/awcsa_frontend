@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uiTokens } from "@/styles/design-system";
+import { useTranslations } from "next-intl";
 
 interface OperationalAlertBannerProps {
   overdueReportsCount: number;
@@ -23,50 +24,51 @@ export function OperationalAlertBanner({
   inCareCount = 1,
   onNavigateToTab,
 }: OperationalAlertBannerProps) {
+  const t = useTranslations("executive.dashboard.attention");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const cards = [
     {
-      title: "Child welfare & placement",
+      title: t("cards.childWelfare.title"),
       count: inCareCount,
-      unit: "minors in residential care",
-      badge: inCareCount > 0 ? "IN CARE" : "RESOLVED",
+      unit: t("cards.childWelfare.unit"),
+      badge: inCareCount > 0 ? t("cards.childWelfare.inCareBadge") : t("cards.childWelfare.resolvedBadge"),
       statusType: (inCareCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Minors under state custody in residential care centers or awaiting kinship placement.",
-      actionText: "View list of children",
+      description: t("cards.childWelfare.description"),
+      actionText: t("cards.childWelfare.action"),
       href: "/adoption/children",
     },
     {
-      title: "Facility compliance",
+      title: t("cards.facilityCompliance.title"),
       count: overdueReportsCount,
-      unit: overdueReportsCount > 0 ? "overdue submissions" : "care facilities",
-      badge: overdueReportsCount > 0 ? "OVERDUE" : "COMPLIANT",
+      unit: overdueReportsCount > 0 ? t("cards.facilityCompliance.unitOverdue") : t("cards.facilityCompliance.unitNormal"),
+      badge: overdueReportsCount > 0 ? t("cards.facilityCompliance.overdueBadge") : t("cards.facilityCompliance.compliantBadge"),
       statusType: (overdueReportsCount > 0 ? "navy" : "neutral") as keyof typeof uiTokens.statusTag,
       description:
         overdueReportsCount > 0
-          ? "Accredited care centers past monthly intake census reporting deadline."
-          : "All accredited residential facilities verified up to date on monthly filings.",
-      actionText: "Inspect care centers",
+          ? t("cards.facilityCompliance.descOverdue")
+          : t("cards.facilityCompliance.descCompliant"),
+      actionText: t("cards.facilityCompliance.action"),
       href: "/adoption/care-centers",
     },
     {
-      title: "Citizen grievances",
+      title: t("cards.grievances.title"),
       count: openComplaintsCount,
-      unit: "unresolved inquiries",
-      badge: openComplaintsCount > 0 ? "ATTENTION" : "RESOLVED",
+      unit: t("cards.grievances.unit"),
+      badge: openComplaintsCount > 0 ? t("cards.grievances.attentionBadge") : t("cards.grievances.resolvedBadge"),
       statusType: (openComplaintsCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Urgent citizen appeals, child protection reports, and allowance delivery concerns.",
-      actionText: "Inspect complaint registry",
+      description: t("cards.grievances.description"),
+      actionText: t("cards.grievances.action"),
       href: "/complaints",
     },
     {
-      title: "Adoption assessment",
+      title: t("cards.adoption.title"),
       count: pendingAdoptionReviewsCount,
-      unit: "home visits & reviews",
-      badge: pendingAdoptionReviewsCount > 0 ? "VETTING" : "CURRENT",
+      unit: t("cards.adoption.unit"),
+      badge: pendingAdoptionReviewsCount > 0 ? t("cards.adoption.vettingBadge") : t("cards.adoption.currentBadge"),
       statusType: (pendingAdoptionReviewsCount > 0 ? "primary" : "neutral") as keyof typeof uiTokens.statusTag,
-      description: "Applicant screening dossiers awaiting social worker verification and judicial clearance.",
-      actionText: "Review adoption requests",
+      description: t("cards.adoption.description"),
+      actionText: t("cards.adoption.action"),
       href: "/adoption/adoption-requests",
     },
   ];
@@ -75,10 +77,10 @@ export function OperationalAlertBanner({
     <section aria-label="Operational Attention Queue" className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          CASES REQUIRING BUREAU ATTENTION
+          {t("title")}
         </h2>
         <span className="text-[11px] text-slate-400">
-          Active oversight threshold — 4 key operational domains
+          {t("subtitle")}
         </span>
       </div>
 

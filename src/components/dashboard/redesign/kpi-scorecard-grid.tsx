@@ -10,6 +10,7 @@ import {
   Heart,
   Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface MasterKPIProps {
   totalBeneficiaries: number;
@@ -40,13 +41,14 @@ export function KPIScorecardGrid({
   pendingReports,
   complianceRate,
 }: MasterKPIProps) {
+  const t = useTranslations("executive.dashboard.kpi");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
       {/* 1. Total beneficiaries */}
       <div className="rounded-sm border border-[#E3E7EB] bg-white p-4 shadow-none flex flex-col justify-between min-h-[115px]">
         <div>
           <span className="text-xs text-slate-500 font-normal">
-            Total beneficiaries
+            {t("totalBeneficiaries")}
           </span>
           <div className="mt-1">
             <span className="text-3xl font-bold tracking-tight text-slate-900 font-mono">
@@ -55,8 +57,8 @@ export function KPIScorecardGrid({
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-          <span>Addis Ababa municipal total</span>
-          <span className="font-semibold text-[#1769AA]">Verified</span>
+          <span>{t("municipalTotal")}</span>
+          <span className="font-semibold text-[#1769AA]">{t("verified")}</span>
         </div>
       </div>
 
@@ -64,7 +66,7 @@ export function KPIScorecardGrid({
       <div className="rounded-sm border border-[#E3E7EB] bg-white p-4 shadow-none flex flex-col justify-between min-h-[115px]">
         <div>
           <span className="text-xs text-slate-500 font-normal">
-            Child welfare &amp; care
+            {t("childWelfare")}
           </span>
           <div className="mt-1">
             <span className="text-3xl font-bold tracking-tight text-slate-900 font-mono">
@@ -73,8 +75,8 @@ export function KPIScorecardGrid({
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-          <span>In {totalFacilities || 5} residential facilities</span>
-          <span className="font-semibold text-slate-800">{inCareCount || 1} in-care</span>
+          <span>{t("inFacilities", { count: totalFacilities || 5 })}</span>
+          <span className="font-semibold text-slate-800">{t("inCare", { count: inCareCount || 1 })}</span>
         </div>
       </div>
 
@@ -82,7 +84,7 @@ export function KPIScorecardGrid({
       <div className="rounded-sm border border-[#E3E7EB] bg-white p-4 shadow-none flex flex-col justify-between min-h-[115px]">
         <div>
           <span className="text-xs text-slate-500 font-normal">
-            Social support &amp; PWD
+            {t("socialSupport")}
           </span>
           <div className="mt-1">
             <span className="text-3xl font-bold tracking-tight text-slate-900 font-mono">
@@ -91,7 +93,7 @@ export function KPIScorecardGrid({
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-          <span>Elderly {elderlyCount} · PWD {disabilityCount}</span>
+          <span>{t("elderlyPwd", { elderly: elderlyCount, pwd: disabilityCount })}</span>
         </div>
       </div>
 
@@ -99,7 +101,7 @@ export function KPIScorecardGrid({
       <div className="rounded-sm border border-[#E3E7EB] bg-white p-4 shadow-none flex flex-col justify-between min-h-[115px]">
         <div>
           <span className="text-xs text-slate-500 font-normal">
-            Women's affairs
+            {t("womensAffairs")}
           </span>
           <div className="mt-1">
             <span className="text-3xl font-bold tracking-tight text-slate-900 font-mono">
@@ -108,8 +110,8 @@ export function KPIScorecardGrid({
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-          <span>Associations registered</span>
-          <span className="font-semibold text-slate-800">{womenAssociationsCount || 6} groups</span>
+          <span>{t("associationsRegistered")}</span>
+          <span className="font-semibold text-slate-800">{t("associationsCount", { count: womenAssociationsCount || 6 })}</span>
         </div>
       </div>
 
@@ -117,7 +119,7 @@ export function KPIScorecardGrid({
       <div className="rounded-sm border border-[#E3E7EB] bg-white p-4 shadow-none flex flex-col justify-between min-h-[115px]">
         <div>
           <span className="text-xs text-slate-500 font-normal">
-            Reporting compliance
+            {t("reportingCompliance")}
           </span>
           <div className="mt-1">
             <span className="text-3xl font-bold tracking-tight text-slate-900 font-mono">
@@ -126,8 +128,8 @@ export function KPIScorecardGrid({
           </div>
         </div>
         <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-          <span>On-time submissions</span>
-          <span className="font-semibold text-slate-800">{pendingReports} pending</span>
+          <span>{t("onTimeSubmissions")}</span>
+          <span className="font-semibold text-slate-800">{t("pendingCount", { count: pendingReports })}</span>
         </div>
       </div>
     </div>

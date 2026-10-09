@@ -34,8 +34,10 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function BureauHeadPage() {
+  const t = useTranslations("executive.dashboard");
   // Global filter state
   const [timeframe, setTimeframe] = useState<TimeframeOption>("ytd");
   const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
@@ -247,7 +249,7 @@ export default function BureauHeadPage() {
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 bg-[#F7F8FA]">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#1769AA] border-t-transparent" />
         <p className="text-xs font-semibold text-slate-600">
-          Loading AWCSA Executive Information System...
+          {t("loading")}
         </p>
       </div>
     );
@@ -279,7 +281,7 @@ export default function BureauHeadPage() {
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-[#1769AA] shrink-0" />
             <span>
-              Active Filter: Displaying casework, reports and compliance for <strong>{selectedSubCity} Sub-City</strong> jurisdiction only.
+              {t("header.activeFilter", { subCity: selectedSubCity })}
             </span>
           </div>
           <button
@@ -287,7 +289,7 @@ export default function BureauHeadPage() {
             className="inline-flex items-center gap-1 font-semibold text-[#1769AA] hover:underline cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
-            <span>Clear Filter (Show All 11 Sub-Cities)</span>
+            <span>{t("header.clearFilter")}</span>
           </button>
         </div>
       )}
@@ -338,67 +340,67 @@ export default function BureauHeadPage() {
           <div className="space-y-4">
             <div className="rounded-md border border-[#E3E7EB] bg-white p-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[#123B5D] mb-1">
-                Triage Overview: Pending Approvals & Critical Overdue Items
+                {t("attention.triageTitle")}
               </h3>
               <p className="text-xs text-slate-500 mb-4">
-                Immediate administrative items requiring directorate clearance or inspection escalation
+                {t("attention.triageSubtitle")}
               </p>
 
               <div className="space-y-3">
                 <div className="p-3 border border-[#E3E7EB] rounded-sm bg-[#F7F8FA] flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-[#DC2626] uppercase">Critical Overdue</span>
+                      <span className="font-bold text-xs text-[#DC2626] uppercase">{t("attention.overdueBadge")}</span>
                       <span className="text-xs text-slate-400">•</span>
-                      <span className="font-bold text-xs text-[#123B5D]">Facility Census Reports</span>
+                      <span className="font-bold text-xs text-[#123B5D]">{t("attention.overdueTitle")}</span>
                     </div>
                     <p className="text-xs text-slate-600 mt-1">
-                      {overdueReportsCount} licensed care facilities have not submitted their required monthly intake census. Official notice must be issued.
+                      {t("attention.overdueDesc", { count: overdueReportsCount })}
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("reports")}
                     className="px-2.5 py-1 text-xs font-semibold bg-[#1769AA] text-white rounded-xs hover:bg-[#123B5D]"
                   >
-                    Inspect Overdue
+                    {t("attention.inspectOverdue")}
                   </button>
                 </div>
 
                 <div className="p-3 border border-[#E3E7EB] rounded-sm bg-[#F7F8FA] flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-[#C98A16] uppercase">Pending Clearance</span>
+                      <span className="font-bold text-xs text-[#C98A16] uppercase">{t("attention.pendingBadge")}</span>
                       <span className="text-xs text-slate-400">•</span>
-                      <span className="font-bold text-xs text-[#123B5D]">{pendingReports} Facility Submissions</span>
+                      <span className="font-bold text-xs text-[#123B5D]">{pendingReports} {t("attention.pendingTitle")}</span>
                     </div>
                     <p className="text-xs text-slate-600 mt-1">
-                      Reports submitted by accredited facilities waiting for inspector validation and enrollment synchronization.
+                      {t("attention.pendingDesc")}
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("reports")}
                     className="px-2.5 py-1 text-xs font-semibold bg-[#1769AA] text-white rounded-xs hover:bg-[#123B5D]"
                   >
-                    Review Dossiers
+                    {t("attention.reviewDossiers")}
                   </button>
                 </div>
 
                 <div className="p-3 border border-[#E3E7EB] rounded-sm bg-[#F7F8FA] flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-[#C98A16] uppercase">Open Inquiry</span>
+                      <span className="font-bold text-xs text-[#C98A16] uppercase">{t("attention.appealsBadge")}</span>
                       <span className="text-xs text-slate-400">•</span>
-                      <span className="font-bold text-xs text-[#123B5D]">Citizen Service Delivery Appeals</span>
+                      <span className="font-bold text-xs text-[#123B5D]">{t("attention.appealsTitle")}</span>
                     </div>
                     <p className="text-xs text-slate-600 mt-1">
-                      Grievances registered regarding foster allowance disbursals and disability registry delays.
+                      {t("attention.appealsDesc")}
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("complaints")}
                     className="px-2.5 py-1 text-xs font-semibold bg-[#1769AA] text-white rounded-xs hover:bg-[#123B5D]"
                   >
-                    View Inquiries
+                    {t("attention.viewInquiries")}
                   </button>
                 </div>
               </div>

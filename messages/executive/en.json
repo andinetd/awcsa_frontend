@@ -2,11 +2,105 @@
   "dashboard": {
     "title": "Executive Dashboard",
     "subtitle": "System-wide overview and key metrics",
+    "loading": "Loading AWCSA Executive Information System...",
     "tabs": {
-      "overview": "Overview",
+      "overview": "Overview & Performance",
+      "attention": "Action Backlog",
+      "reports": "Care Facility Reports",
+      "subcities": "Sub-City Municipalities",
+      "complaints": "Citizen Grievances",
       "activity": "Recent Activity"
     },
-    "loading": "Loading dashboard...",
+    "header": {
+      "jurisdiction": "Jurisdiction",
+      "allSubCities": "All 11 sub-cities",
+      "subCityFormat": "{name} Sub-City",
+      "period": "Period",
+      "timeframes": {
+        "ytd": "FY 2018 E.C.",
+        "this_month": "Current Month",
+        "last_month": "Previous Month",
+        "quarter": "Current Quarter (Q3)",
+        "all": "Cumulative Archive"
+      },
+      "refresh": "Refresh",
+      "export": "Export",
+      "print": "Print",
+      "referenceDate": "Reference date",
+      "centralSyncActive": "Central data exchange active",
+      "activeFilter": "Active Filter: Displaying casework, reports and compliance for {subCity} Sub-City jurisdiction only.",
+      "clearFilter": "Clear Filter (Show All 11 Sub-Cities)"
+    },
+    "attention": {
+      "title": "CASES REQUIRING BUREAU ATTENTION",
+      "subtitle": "Active oversight threshold — 4 key operational domains",
+      "triageTitle": "Triage Overview: Pending Approvals & Critical Overdue Items",
+      "triageSubtitle": "Immediate administrative items requiring directorate clearance or inspection escalation",
+      "overdueTitle": "Facility Census Reports",
+      "overdueBadge": "Critical Overdue",
+      "overdueDesc": "{count} licensed care facilities have not submitted their required monthly intake census. Official notice must be issued.",
+      "inspectOverdue": "Inspect Overdue",
+      "pendingTitle": "Facility Submissions",
+      "pendingBadge": "Pending Clearance",
+      "pendingDesc": "Reports submitted by accredited facilities waiting for inspector validation and enrollment synchronization.",
+      "reviewDossiers": "Review Dossiers",
+      "appealsTitle": "Citizen Service Delivery Appeals",
+      "appealsBadge": "Open Inquiry",
+      "appealsDesc": "Grievances registered regarding foster allowance disbursals and disability registry delays.",
+      "viewInquiries": "View Inquiries",
+      "cards": {
+        "childWelfare": {
+          "title": "Child welfare & placement",
+          "unit": "minors in residential care",
+          "inCareBadge": "IN CARE",
+          "resolvedBadge": "RESOLVED",
+          "description": "Minors under state custody in residential care centers or awaiting kinship placement.",
+          "action": "View list of children"
+        },
+        "facilityCompliance": {
+          "title": "Facility compliance",
+          "unitOverdue": "overdue submissions",
+          "unitNormal": "care facilities",
+          "overdueBadge": "OVERDUE",
+          "compliantBadge": "COMPLIANT",
+          "descOverdue": "Accredited care centers past monthly intake census reporting deadline.",
+          "descCompliant": "All accredited residential facilities verified up to date on monthly filings.",
+          "action": "Inspect care centers"
+        },
+        "grievances": {
+          "title": "Citizen grievances",
+          "unit": "unresolved inquiries",
+          "attentionBadge": "ATTENTION",
+          "resolvedBadge": "RESOLVED",
+          "description": "Urgent citizen appeals, child protection reports, and allowance delivery concerns.",
+          "action": "Inspect complaint registry"
+        },
+        "adoption": {
+          "title": "Adoption assessment",
+          "unit": "home visits & reviews",
+          "vettingBadge": "VETTING",
+          "currentBadge": "CURRENT",
+          "description": "Applicant screening dossiers awaiting social worker verification and judicial clearance.",
+          "action": "Review adoption requests"
+        }
+      }
+    },
+    "kpi": {
+      "totalBeneficiaries": "Total beneficiaries",
+      "municipalTotal": "Addis Ababa municipal total",
+      "verified": "Verified",
+      "childWelfare": "Child welfare & care",
+      "inFacilities": "In {count} residential facilities",
+      "inCare": "{count} in-care",
+      "socialSupport": "Social support & PWD",
+      "elderlyPwd": "Elderly {elderly} · PWD {pwd}",
+      "womensAffairs": "Women's affairs",
+      "associationsRegistered": "Associations registered",
+      "associationsCount": "{count} groups",
+      "reportingCompliance": "Reporting compliance",
+      "onTimeSubmissions": "On-time submissions",
+      "pendingCount": "{count} pending"
+    },
     "stats": {
       "totalChildren": "Total Children",
       "totalPeople": "Total People Registered",

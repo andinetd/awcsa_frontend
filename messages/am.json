@@ -107,5 +107,82 @@
     "akakiKality": "አቃቂ ቃሊቲ",
     "addisKetema": "አዲስ ከተማ",
     "lemiKura": "ለሚ ኩራ"
+  },
+  "persons": {
+    "title": "የተቀናጀ የድጋፍ ታሪክ ማውጫ",
+    "subtitle": "በሁሉም መምሪያዎች ስር የተመዘገቡ ተጠቃሚዎችን ይፈልጉ እና የተሟላ የተቀናጀ የድጋፍ ታሪካቸውን ይመልከቱ።",
+    "searchCardTitle": "ተጠቃሚ ይፈልጉ",
+    "searchPlaceholder": "በስም፣ በከተማ መታወቂያ፣ በፋይዳ መታወቂያ ወይም በስልክ ቁጥር ይፈልጉ...",
+    "searchButton": "ፈልግ",
+    "searching": "በመፈለግ ላይ...",
+    "resultsFound": "{count} ውጤት ተገኝቷል",
+    "noPersonsFound": "ከፍለጋዎ ጋር የሚዛመድ ምንም ተጠቃሚ አልተገኘም።",
+    "pageInfo": "ገጽ {page} ከ {totalPages}",
+    "previous": "ቀዳሚ",
+    "next": "ቀጣይ",
+    "viewHistory": "የድጋፍ ታሪክ እይ",
+    "cityId": "የከተማ መታወቂያ: {id}",
+    "fayda": "ፋይዳ: {id}",
+    "profiles": {
+      "women": "ሴቶች",
+      "disability": "አካል ጉዳት",
+      "elderly": "አረጋውያን"
+    },
+    "status": {
+      "active": "ንቁ",
+      "inactive": "እንቅስቃሴ የሌለው"
+    },
+    "detail": {
+      "backToSearch": "ወደ ፍለጋ ተመለስ",
+      "loading": "የድጋፍ ታሪክ በመጫን ላይ...",
+      "notFound": "ተጠቃሚው አልተገኘም ወይም መረጃውን መጫን አልተቻለም።",
+      "invalidId": "ትክክለኛ ያልሆነ መለያ ቁጥር።",
+      "goBack": "ተመለስ",
+      "tabs": {
+        "timeline": "የድጋፍ ሂደት / የታሪክ ቅደም ተከተል",
+        "profile": "የግል መገለጫ"
+      },
+      "noEvents": "እስካሁን ለዚህ ተጠቃሚ የተመዘገበ የድጋፍ ክስተት የለም።",
+      "summary": {
+        "totalEvents": "ጠቅላላ ክስተቶች",
+        "supportRecords": "የድጋፍ መዝገቦች",
+        "serviceRequests": "የአገልግሎት ጥያቄዎች",
+        "trainings": "ስልጠናዎች",
+        "jobPlacements": "የሥራ ስምሪቶች"
+      },
+      "kinds": {
+        "SUPPORT_RECORD": "የድጋፍ አቅርቦት",
+        "SERVICE_REQUEST": "የአገልግሎት ጥያቄ",
+        "TRAINING": "ስልጠና",
+        "JOB_PLACEMENT": "የሥራ ስምሪት",
+        "ELIGIBILITY_ASSESSMENT": "የብቁነት ምዘና",
+        "WOMEN_TECH_SUPPORT": "የቴክኖሎጂ ድጋፍ",
+        "WOMEN_TRAINING": "የሴቶች ስልጠና",
+        "WOMEN_EMPLOYMENT": "የሥራ ዕድል",
+        "ASSOCIATION_MEMBERSHIP": "የማህበር አባልነት",
+        "CASE_NOTE": "የጉዳይ ማስታወሻ",
+        "AUDIT_LOG": "የኦዲት ክትትል"
+      },
+      "profileSection": {
+        "title": "የግል መረጃ",
+        "subtitle": "በሁሉም መምሪያዎች ስር የተመዘገቡ ዝርዝሮች",
+        "phone": "ስልክ",
+        "age": "ዕድሜ",
+        "sex": "ጾታ",
+        "subCity": "ክፍለ ከተማ",
+        "woreda": "ወረዳ",
+        "education": "የትምህርት ደረጃ",
+        "occupation": "የስራ ዘርፍ / ሙያ",
+        "employment": "የቅጥር ሁኔታ",
+        "marital": "የጋብቻ ሁኔታ",
+        "monthlyIncome": "ወርሃዊ ገቢ",
+        "familyMembers": "የቤተሰብ አባላት",
+        "registered": "የተመዘገበበት ቀን",
+        "disabilityProfile": "የአካል ጉዳት መገለጫ",
+        "disabilityType": "ዓይነት",
+        "severity": "ደረጃ / ጥንካሬ",
+        "cause": "መንስኤ"
+      }
+    }
   }
 }

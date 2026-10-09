@@ -2,11 +2,105 @@
   "dashboard": {
     "title": "የአስፈፃሚ ዳሽቦርድ",
     "subtitle": "የስርዓት አጠቃላይ እይታ እና ቁልፍ መለኪያዎች",
+    "loading": "የአስፈፃሚ መረጃ ስርዓት በመጫን ላይ...",
     "tabs": {
-      "overview": "አጠቃላይ እይታ",
+      "overview": "አጠቃላይ እይታና አፈጻጸም",
+      "attention": "ትኩረት የሚሹ ጉዳዮች",
+      "reports": "የእንክብካቤ ተቋማት ሪፖርቶች",
+      "subcities": "የክፍለ ከተማ መረጃ",
+      "complaints": "የዜጎች ቅሬታዎች",
       "activity": "የቅርብ ጊዜ እንቅስቃሴዎች"
     },
-    "loading": "ዳሽቦርድ በመጫን ላይ...",
+    "header": {
+      "jurisdiction": "የስልጣን ወሰን / ክልል",
+      "allSubCities": "ሁሉም 11 ክፍለ ከተሞች",
+      "subCityFormat": "{name} ክፍለ ከተማ",
+      "period": "ጊዜ",
+      "timeframes": {
+        "ytd": "2018 የበጀት ዓመት",
+        "this_month": "የአሁኑ ወር",
+        "last_month": "ያለፈው ወር",
+        "quarter": "የአሁኑ ሩብ ዓመት (ሩብ 3)",
+        "all": "አጠቃላይ መዝገብ"
+      },
+      "refresh": "አድስ",
+      "export": "መረጃ አውርድ",
+      "print": "አትም",
+      "referenceDate": "የመረጃ ቀን",
+      "centralSyncActive": "ማዕከላዊ የመረጃ ልውውጥ ንቁ ነው",
+      "activeFilter": "ንቁ ማጣሪያ፡ የ{subCity} ክፍለ ከተማ የጉዳዮች፣ ሪፖርቶች እና የተገዢነት መረጃ ብቻ እየታየ ነው።",
+      "clearFilter": "ማጣሪያውን አጽዳ (ሁሉንም 11 ክፍለ ከተሞች አሳይ)"
+    },
+    "attention": {
+      "title": "የቢሮው አስቸኳይ ትኩረት የሚሹ ጉዳዮች",
+      "subtitle": "የቅርብ ክትትል የሚደረግባቸው 4 ቁልፍ የስራ ዘርፎች",
+      "triageTitle": "የትኩረት ማጠቃለያ፡ የጸደቁ እና የዘገዩ ወሳኝ ጉዳዮች",
+      "triageSubtitle": "የዳይሬክቶሬት ውሳኔ ወይም የቁጥጥር እርምጃ የሚሹ አስቸኳይ ጉዳዮች",
+      "overdueTitle": "የተቋማት የህዝብ ቆጠራ ሪፖርቶች",
+      "overdueBadge": "በጣም የዘገየ",
+      "overdueDesc": "{count} ህጋዊ የእንክብካቤ ተቋማት ወርሃዊ የተጠቃሚዎች ቆጠራ ሪፖርታቸውን አላስገቡም። ይፋዊ ማስጠንቀቂያ መላክ አለበት።",
+      "inspectOverdue": "የዘገዩትን መርምር",
+      "pendingTitle": "የተቋማት ገቢ ሪፖርቶች",
+      "pendingBadge": "ማረጋገጫ የሚጠብቅ",
+      "pendingDesc": "በእውቅና በተሰጣቸው ተቋማት የቀረቡና የባለሙያ ማረጋገጫ የሚጠብቁ ሪፖርቶች።",
+      "reviewDossiers": "ማህደሮችን መርምር",
+      "appealsTitle": "የዜጎች የአገልግሎት አሰጣጥ አቤቱታዎች",
+      "appealsBadge": "ክፍት ጥያቄ",
+      "appealsDesc": "ስለ ሞግዚት አበል ክፍያ መዘግየት እና የአካል ጉዳተኞች ምዝገባ የቀረቡ አቤቱታዎች።",
+      "viewInquiries": "አቤቱታዎችን ተመልከት",
+      "cards": {
+        "childWelfare": {
+          "title": "የህፃናት ደህንነት እና ምደባ",
+          "unit": "በተቋማት እንክብካቤ ስር ያሉ ህፃናት",
+          "inCareBadge": "በእንክብካቤ ስር",
+          "resolvedBadge": "የተፈታ",
+          "description": "በመንግስት ጥበቃ ስር ባሉ ተቋማት ውስጥ ያሉ ወይም የቤተሰብ ምደባ የሚጠባበቁ ህፃናት።",
+          "action": "የህፃናት ዝርዝር እይ"
+        },
+        "facilityCompliance": {
+          "title": "የተቋማት ህጋዊ ተገዢነት",
+          "unitOverdue": "ያልቀረቡ ሪፖርቶች",
+          "unitNormal": "የእንክብካቤ ተቋማት",
+          "overdueBadge": "የዘገየ",
+          "compliantBadge": "ተገዢ",
+          "descOverdue": "የወርሃዊ ሪፖርት የማቅረቢያ ጊዜያቸው ያለፈባቸው የእንክብካቤ ማዕከላት።",
+          "descCompliant": "ሁሉም ህጋዊ የእንክብካቤ ተቋማት ወርሃዊ ሪፖርታቸውን በወቅቱ አቅርበዋል።",
+          "action": "ተቋማትን መርምር"
+        },
+        "grievances": {
+          "title": "የዜጎች አቤቱታዎች",
+          "unit": "ውሳኔ ያላገኙ ጥያቄዎች",
+          "attentionBadge": "ትኩረት የሚሻ",
+          "resolvedBadge": "የተፈታ",
+          "description": "አስቸኳይ የዜጎች አቤቱታዎች፣ የህፃናት ጥበቃ ጥቆማዎች እና የአበል ክፍያ ጥያቄዎች።",
+          "action": "የቅሬታ መዝገብን መርምር"
+        },
+        "adoption": {
+          "title": "የጉዲፈቻ ግምገማ",
+          "unit": "የቤት ጉብኝቶች እና ግምገማዎች",
+          "vettingBadge": "በማጣራት ላይ",
+          "currentBadge": "ወቅታዊ",
+          "description": "የማህበራዊ ሰራተኛ ማረጋገጫ እና የፍርድ ቤት ውሳኔ የሚጠባበቁ የአመልካቾች ማህደሮች።",
+          "action": "የጉዲፈቻ ጥያቄዎችን መርምር"
+        }
+      }
+    },
+    "kpi": {
+      "totalBeneficiaries": "ጠቅላላ ተጠቃሚዎች",
+      "municipalTotal": "የአዲስ አበባ ከተማ አጠቃላይ",
+      "verified": "የተረጋገጠ",
+      "childWelfare": "የህፃናት ደህንነት እና እንክብካቤ",
+      "inFacilities": "በ {count} የእንክብካቤ ተቋማት ውስጥ",
+      "inCare": "{count} በእንክብካቤ ስር",
+      "socialSupport": "ማህበራዊ ድጋፍ እና አካል ጉዳት",
+      "elderlyPwd": "አረጋውያን {elderly} · አካል ጉዳተኞች {pwd}",
+      "womensAffairs": "የሴቶች ጉዳይ",
+      "associationsRegistered": "የተመዘገቡ ማህበራት",
+      "associationsCount": "{count} ማህበራት",
+      "reportingCompliance": "የሪፖርት አቀራረብ ተገዢነት",
+      "onTimeSubmissions": "በወቅቱ የቀረቡ ሪፖርቶች",
+      "pendingCount": "{count} በመጠባበቅ ላይ"
+    },
     "stats": {
       "totalChildren": "ጠቅላላ ሕፃናት",
       "totalPeople": "ጠቅላላ የተመዘገቡ ሰዎች",

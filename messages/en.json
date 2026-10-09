@@ -107,5 +107,82 @@
     "akakiKality": "Akaky Kaliti",
     "addisKetema": "Addis Ketema",
     "lemiKura": "Lemi Kura"
+  },
+  "persons": {
+    "title": "Unified Support History",
+    "subtitle": "Search for any registered individual across all departments and view their full cross-department support history.",
+    "searchCardTitle": "Find a Person",
+    "searchPlaceholder": "Search by name, City ID, Fayda ID or phone number…",
+    "searchButton": "Search",
+    "searching": "Searching…",
+    "resultsFound": "{count} result{count, plural, one {} other {s}} found",
+    "noPersonsFound": "No persons found matching your search.",
+    "pageInfo": "Page {page} of {totalPages}",
+    "previous": "Previous",
+    "next": "Next",
+    "viewHistory": "View History",
+    "cityId": "City ID: {id}",
+    "fayda": "Fayda: {id}",
+    "profiles": {
+      "women": "Women",
+      "disability": "Disability",
+      "elderly": "Elderly"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "detail": {
+      "backToSearch": "Back to search",
+      "loading": "Loading history…",
+      "notFound": "Person not found or could not be loaded.",
+      "invalidId": "Invalid ID.",
+      "goBack": "Go back",
+      "tabs": {
+        "timeline": "Timeline",
+        "profile": "Profile"
+      },
+      "noEvents": "No support events recorded for this person yet.",
+      "summary": {
+        "totalEvents": "Total Events",
+        "supportRecords": "Support Records",
+        "serviceRequests": "Service Requests",
+        "trainings": "Trainings",
+        "jobPlacements": "Job Placements"
+      },
+      "kinds": {
+        "SUPPORT_RECORD": "Support",
+        "SERVICE_REQUEST": "Service Request",
+        "TRAINING": "Training",
+        "JOB_PLACEMENT": "Job Placement",
+        "ELIGIBILITY_ASSESSMENT": "Eligibility",
+        "WOMEN_TECH_SUPPORT": "Tech Support",
+        "WOMEN_TRAINING": "Women Training",
+        "WOMEN_EMPLOYMENT": "Employment",
+        "ASSOCIATION_MEMBERSHIP": "Association",
+        "CASE_NOTE": "Case Note",
+        "AUDIT_LOG": "Audit"
+      },
+      "profileSection": {
+        "title": "Personal Information",
+        "subtitle": "Details registered across all departments",
+        "phone": "Phone",
+        "age": "Age",
+        "sex": "Sex",
+        "subCity": "Sub-city",
+        "woreda": "Woreda",
+        "education": "Education",
+        "occupation": "Occupation",
+        "employment": "Employment",
+        "marital": "Marital",
+        "monthlyIncome": "Monthly Income",
+        "familyMembers": "Family Members",
+        "registered": "Registered",
+        "disabilityProfile": "Disability Profile",
+        "disabilityType": "Type",
+        "severity": "Severity",
+        "cause": "Cause"
+      }
+    }
   }
 }

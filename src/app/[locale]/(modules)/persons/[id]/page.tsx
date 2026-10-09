@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { usePersonHistory } from "@/hooks/persons/persons-hooks";
 import { TimelineEntry, TimelineKind, HistorySummary } from "@/api/persons/types";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Card,
   CardContent,
@@ -127,6 +128,7 @@ function kindSummary(entry: TimelineEntry): string {
 // ── Page component ─────────────────────────────────────────────────────────
 
 export default function PersonHistoryPage() {
+  const t = useTranslations("persons");
   const params = useParams();
   const router = useRouter();
   const clientId = parseInt(params.id as string);
@@ -138,8 +140,8 @@ export default function PersonHistoryPage() {
   if (Number.isNaN(clientId)) {
     return (
       <div className="p-6 flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-slate-500">Invalid ID.</p>
-        <Button onClick={() => router.back()}>Go back</Button>
+        <p className="text-slate-500">{t("detail.invalidId")}</p>
+        <Button onClick={() => router.back()}>{t("detail.goBack")}</Button>
       </div>
     );
   }
@@ -147,7 +149,7 @@ export default function PersonHistoryPage() {
   if (isLoading) {
     return (
       <div className="p-6 flex items-center gap-2 text-slate-500">
-        <Loader2 className="w-4 h-4 animate-spin" /> Loading history…
+        <Loader2 className="w-4 h-4 animate-spin" /> {t("detail.loading")}
       </div>
     );
   }
@@ -155,9 +157,9 @@ export default function PersonHistoryPage() {
   if (isError || !data) {
     return (
       <div className="p-6 text-slate-500">
-        Person not found or could not be loaded.
+        {t("detail.notFound")}
         <Button variant="link" onClick={() => router.back()}>
-          Go back
+          {t("detail.goBack")}
         </Button>
       </div>
     );
@@ -177,7 +179,7 @@ export default function PersonHistoryPage() {
         >
           <ArrowLeft className="w-4 h-4" />
         </Button>
-        <span className="text-sm text-slate-500">Back to search</span>
+        <span className="text-sm text-slate-500">{t("detail.backToSearch")}</span>
       </div>
 
       <div className="p-6 space-y-6">
@@ -191,10 +193,10 @@ export default function PersonHistoryPage() {
         <Tabs defaultValue="timeline">
           <TabsList>
             <TabsTrigger value="timeline" className="gap-1.5">
-              <Activity className="w-3.5 h-3.5" /> Timeline
+              <Activity className="w-3.5 h-3.5" /> {t("detail.tabs.timeline")}
             </TabsTrigger>
             <TabsTrigger value="overview" className="gap-1.5">
-              <User className="w-3.5 h-3.5" /> Profile
+              <User className="w-3.5 h-3.5" /> {t("detail.tabs.profile")}
             </TabsTrigger>
           </TabsList>
 
@@ -202,7 +204,7 @@ export default function PersonHistoryPage() {
           <TabsContent value="timeline" className="mt-4">
             {timeline.length === 0 ? (
               <div className="p-8 text-center text-slate-400 border rounded-lg border-dashed">
-                No support events recorded for this person yet.
+                {t("detail.noEvents")}
               </div>
             ) : (
               <div className="relative space-y-0">
@@ -226,6 +228,7 @@ export default function PersonHistoryPage() {
 // ── Sub-components ──────────────────────────────────────────────────────────
 
 function PersonHeader({ client }: { client: Record<string, any> }) {
+  const t = useTranslations("persons");
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div className="flex items-center gap-4">
@@ -237,25 +240,25 @@ function PersonHeader({ client }: { client: Record<string, any> }) {
             {client.firstName} {client.lastName}
           </h1>
           <p className="text-slate-500 text-sm mt-0.5 flex flex-wrap gap-x-3">
-            {client.cityIdNumber && <span>City ID: {client.cityIdNumber}</span>}
-            {client.faydaId && <span>Fayda: {client.faydaId}</span>}
+            {client.cityIdNumber && <span>{t("cityId", { id: client.cityIdNumber })}</span>}
+            {client.faydaId && <span>{t("fayda", { id: client.faydaId })}</span>}
             {client.phoneNumber && <span>📞 {client.phoneNumber}</span>}
           </p>
           <div className="flex flex-wrap gap-1.5 mt-2">
             <Badge variant="secondary">{client.clientCategory}</Badge>
             {client.WomenProfile && (
               <Badge variant="outline" className="border-rose-200 text-rose-600">
-                Women
+                {t("profiles.women")}
               </Badge>
             )}
             {client.DisabilityProfile && (
               <Badge variant="outline" className="border-blue-200 text-blue-600">
-                Disability
+                {t("profiles.disability")}
               </Badge>
             )}
             {client.ElderlyProfile && (
               <Badge variant="outline" className="border-amber-200 text-amber-600">
-                Elderly
+                {t("profiles.elderly")}
               </Badge>
             )}
           </div>
@@ -266,12 +269,13 @@ function PersonHeader({ client }: { client: Record<string, any> }) {
 }
 
 function SummaryRow({ summary }: { summary: HistorySummary }) {
+  const t = useTranslations("persons");
   const stats = [
-    { label: "Total Events", value: summary.totalEvents, Icon: Activity },
-    { label: "Support Records", value: summary.supportRecords, Icon: HandHeart },
-    { label: "Service Requests", value: summary.serviceRequests, Icon: ShieldCheck },
-    { label: "Trainings", value: summary.trainings, Icon: GraduationCap },
-    { label: "Job Placements", value: summary.jobPlacements, Icon: Briefcase },
+    { label: t("detail.summary.totalEvents"), value: summary.totalEvents, Icon: Activity },
+    { label: t("detail.summary.supportRecords"), value: summary.supportRecords, Icon: HandHeart },
+    { label: t("detail.summary.serviceRequests"), value: summary.serviceRequests, Icon: ShieldCheck },
+    { label: t("detail.summary.trainings"), value: summary.trainings, Icon: GraduationCap },
+    { label: t("detail.summary.jobPlacements"), value: summary.jobPlacements, Icon: Briefcase },
   ];
 
   return (
@@ -290,8 +294,11 @@ function SummaryRow({ summary }: { summary: HistorySummary }) {
 }
 
 function TimelineRow({ entry }: { entry: TimelineEntry }) {
+  const t = useTranslations("persons");
+  const locale = useLocale();
   const meta = KIND_META[entry.kind];
-  const { Icon, colour, label } = meta;
+  const { Icon, colour } = meta;
+  const label = t.has(`detail.kinds.${entry.kind}`) ? t(`detail.kinds.${entry.kind}`) : meta.label;
   const summary = kindSummary(entry);
 
   return (
@@ -312,7 +319,7 @@ function TimelineRow({ entry }: { entry: TimelineEntry }) {
           <span className="font-medium text-slate-800 text-sm">{label}</span>
           <span className="text-xs text-slate-400 flex items-center gap-1 flex-shrink-0">
             <Clock className="w-3 h-3" />
-            {new Date(entry.date).toLocaleString("en-ET", {
+            {new Date(entry.date).toLocaleString(locale === "am" ? "am-ET" : "en-ET", {
               year: "numeric",
               month: "short",
               day: "numeric",
@@ -330,28 +337,30 @@ function TimelineRow({ entry }: { entry: TimelineEntry }) {
 }
 
 function ProfileOverview({ client }: { client: Record<string, any> }) {
+  const t = useTranslations("persons");
+  const locale = useLocale();
   const fields: { label: string; value: string | null }[] = [
-    { label: "Phone", value: client.phoneNumber },
-    { label: "Age", value: client.age?.toString() },
-    { label: "Sex", value: client.sex },
-    { label: "Sub-city", value: client.subCity },
-    { label: "Woreda", value: client.woreda },
-    { label: "Education", value: client.educationLevel },
-    { label: "Occupation", value: client.occupation },
-    { label: "Employment", value: client.employmentStatus },
-    { label: "Marital", value: client.maritalStatus },
+    { label: t("detail.profileSection.phone"), value: client.phoneNumber },
+    { label: t("detail.profileSection.age"), value: client.age?.toString() },
+    { label: t("detail.profileSection.sex"), value: client.sex },
+    { label: t("detail.profileSection.subCity"), value: client.subCity },
+    { label: t("detail.profileSection.woreda"), value: client.woreda },
+    { label: t("detail.profileSection.education"), value: client.educationLevel },
+    { label: t("detail.profileSection.occupation"), value: client.occupation },
+    { label: t("detail.profileSection.employment"), value: client.employmentStatus },
+    { label: t("detail.profileSection.marital"), value: client.maritalStatus },
     {
-      label: "Monthly Income",
+      label: t("detail.profileSection.monthlyIncome"),
       value: client.monthlyIncome ? `${client.monthlyIncome} ETB` : null,
     },
     {
-      label: "Family Members",
+      label: t("detail.profileSection.familyMembers"),
       value: client.familyMembersCount?.toString(),
     },
     {
-      label: "Registered",
+      label: t("detail.profileSection.registered"),
       value: client.createdAt
-        ? new Date(client.createdAt).toLocaleDateString()
+        ? new Date(client.createdAt).toLocaleDateString(locale === "am" ? "am-ET" : "en-ET")
         : null,
     },
   ];
@@ -359,9 +368,9 @@ function ProfileOverview({ client }: { client: Record<string, any> }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Personal Information</CardTitle>
+        <CardTitle>{t("detail.profileSection.title")}</CardTitle>
         <CardDescription>
-          Details registered across all departments
+          {t("detail.profileSection.subtitle")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -384,18 +393,18 @@ function ProfileOverview({ client }: { client: Record<string, any> }) {
         {client.DisabilityProfile && (
           <div className="mt-6 pt-4 border-t">
             <div className="text-xs text-slate-400 uppercase tracking-wide mb-2">
-              Disability Profile
+              {t("detail.profileSection.disabilityProfile")}
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <div className="text-xs text-slate-400">Type</div>
+                <div className="text-xs text-slate-400">{t("detail.profileSection.disabilityType")}</div>
                 <div className="font-medium">
                   {client.DisabilityProfile.disabilityType}
                 </div>
               </div>
               {client.DisabilityProfile.disabilitySeverity && (
                 <div>
-                  <div className="text-xs text-slate-400">Severity</div>
+                  <div className="text-xs text-slate-400">{t("detail.profileSection.severity")}</div>
                   <div className="font-medium">
                     {client.DisabilityProfile.disabilitySeverity}
                   </div>
@@ -403,7 +412,7 @@ function ProfileOverview({ client }: { client: Record<string, any> }) {
               )}
               {client.DisabilityProfile.cause && (
                 <div>
-                  <div className="text-xs text-slate-400">Cause</div>
+                  <div className="text-xs text-slate-400">{t("detail.profileSection.cause")}</div>
                   <div className="font-medium">
                     {client.DisabilityProfile.cause}
                   </div>

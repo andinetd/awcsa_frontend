@@ -22,9 +22,12 @@ import {
   History,
 } from "lucide-react";
 
+import { useTranslations } from "next-intl";
+
 const PAGE_SIZE = 20;
 
 export default function PersonsSearchPage() {
+  const t = useTranslations("persons");
   const router = useRouter();
   const [q, setQ] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -52,33 +55,32 @@ export default function PersonsSearchPage() {
       <div>
         <h1 className="text-3xl font-bold text-slate-900 font-lexend flex items-center gap-2">
           <History className="w-7 h-7 text-primary" />
-          Unified Support History
+          {t("title")}
         </h1>
         <p className="text-slate-500 mt-1">
-          Search for any registered individual across all departments and view
-          their full cross-department support history.
+          {t("subtitle")}
         </p>
       </div>
 
       {/* Search bar */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Find a Person</CardTitle>
+          <CardTitle className="text-base">{t("searchCardTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
               <Input
-                placeholder="Search by name, City ID, Fayda ID or phone number…"
+                placeholder={t("searchPlaceholder")}
                 className="pl-8 bg-slate-50/50 border-slate-200"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
             </div>
-            <Button type="submit" className="gap-2">
+            <Button type="submit" className="gap-2 bg-[#1769AA] hover:bg-[#12568E] text-white">
               <Search className="w-4 h-4" />
-              Search
+              {t("searchButton")}
             </Button>
           </form>
         </CardContent>
@@ -87,20 +89,20 @@ export default function PersonsSearchPage() {
       {/* Results */}
       {(isLoading || isFetching) && (
         <div className="flex items-center gap-2 text-slate-500 text-sm">
-          <Loader2 className="w-4 h-4 animate-spin" /> Searching…
+          <Loader2 className="w-4 h-4 animate-spin" /> {t("searching")}
         </div>
       )}
 
       {data && !isLoading && (
         <>
           <div className="text-sm text-slate-500">
-            {data.total} result{data.total !== 1 ? "s" : ""} found
+            {t("resultsFound", { count: data.total })}
           </div>
 
           <div className="space-y-3">
             {data.results.length === 0 && (
               <div className="p-8 text-center text-slate-400 border rounded-lg border-dashed">
-                No persons found matching your search.
+                {t("noPersonsFound")}
               </div>
             )}
             {data.results.map((person: PersonSearchResult) => (
@@ -108,6 +110,7 @@ export default function PersonsSearchPage() {
                 key={person.id}
                 person={person}
                 onViewHistory={() => handleViewHistory(person.id)}
+                t={t}
               />
             ))}
           </div>
@@ -116,7 +119,7 @@ export default function PersonsSearchPage() {
           {data.totalPages > 1 && (
             <div className="flex items-center justify-between">
               <div className="text-sm text-slate-500">
-                Page {data.page} of {data.totalPages}
+                {t("pageInfo", { page: data.page, totalPages: data.totalPages })}
               </div>
               <div className="flex gap-2">
                 <Button
@@ -125,7 +128,7 @@ export default function PersonsSearchPage() {
                   disabled={page <= 1}
                   onClick={() => setPage((p) => p - 1)}
                 >
-                  <ChevronLeft className="w-4 h-4" /> Previous
+                  <ChevronLeft className="w-4 h-4" /> {t("previous")}
                 </Button>
                 <Button
                   variant="outline"
@@ -133,7 +136,7 @@ export default function PersonsSearchPage() {
                   disabled={page >= data.totalPages}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Next <ChevronRight className="w-4 h-4" />
+                  {t("next")} <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
             </div>
@@ -147,15 +150,17 @@ export default function PersonsSearchPage() {
 function PersonCard({
   person,
   onViewHistory,
+  t,
 }: {
   person: PersonSearchResult;
   onViewHistory: () => void;
+  t: (key: string, values?: any) => string;
 }) {
   const { profiles } = person;
   const profileTags: string[] = [];
-  if (profiles.hasWomenProfile) profileTags.push("Women");
-  if (profiles.hasDisabilityProfile) profileTags.push("Disability");
-  if (profiles.hasElderlyProfile) profileTags.push("Elderly");
+  if (profiles.hasWomenProfile) profileTags.push(t("profiles.women"));
+  if (profiles.hasDisabilityProfile) profileTags.push(t("profiles.disability"));
+  if (profiles.hasElderlyProfile) profileTags.push(t("profiles.elderly"));
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -170,9 +175,9 @@ function PersonCard({
             </div>
             <div className="text-sm text-slate-500 mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5">
               {person.cityIdNumber && (
-                <span>City ID: {person.cityIdNumber}</span>
+                <span>{t("cityId", { id: person.cityIdNumber })}</span>
               )}
-              {person.faydaId && <span>Fayda: {person.faydaId}</span>}
+              {person.faydaId && <span>{t("fayda", { id: person.faydaId })}</span>}
               {person.phoneNumber && <span>📞 {person.phoneNumber}</span>}
               {person.subCity && (
                 <span>
@@ -192,7 +197,7 @@ function PersonCard({
               ))}
               {!person.activeStatus && (
                 <Badge variant="destructive" className="text-xs">
-                  Inactive
+                  {t("status.inactive")}
                 </Badge>
               )}
             </div>
@@ -202,11 +207,11 @@ function PersonCard({
         <Button
           size="sm"
           variant="outline"
-          className="flex-shrink-0 gap-1.5"
+          className="flex-shrink-0 gap-1.5 cursor-pointer"
           onClick={onViewHistory}
         >
           <History className="w-4 h-4" />
-          View History
+          {t("viewHistory")}
         </Button>
       </CardContent>
     </Card>
