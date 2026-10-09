@@ -9,6 +9,7 @@ import {
   useGetTrainingsQuery,
   useGetJobsQuery,
 } from "@/hooks/beneficiaries";
+import { useTranslations } from "next-intl";
 import { ElderlyDisabledDashboardHeader } from "./_components/elderly-disabled-dashboard-header";
 import { ElderlyDisabledKpiGrid } from "./_components/elderly-disabled-kpi-grid";
 import { ElderlyDisabledChartsSection } from "./_components/elderly-disabled-charts-section";
@@ -17,6 +18,7 @@ import { ElderlyDisabledRecentBeneficiaries } from "./_components/elderly-disabl
 import { ElderlyDisabledQuickActions } from "./_components/elderly-disabled-quick-actions";
 
 export default function ElderlyAndDisabledDashboard() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard");
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -75,19 +77,19 @@ export default function ElderlyAndDisabledDashboard() {
     const list = [
       {
         category: "SERVICES",
-        label: "Support Services & Assistive Aid",
+        label: t("charts.categories.services"),
         count: totalServices,
         color: "#1769AA",
       },
       {
         category: "TRAINING",
-        label: "Vocational Skills Training",
+        label: t("charts.categories.training"),
         count: totalTrainings,
         color: "#F59E0B",
       },
       {
         category: "EMPLOYMENT",
-        label: "Inclusive Job Placements",
+        label: t("charts.categories.employment"),
         count: totalJobs,
         color: "#10B981",
       },
@@ -95,7 +97,7 @@ export default function ElderlyAndDisabledDashboard() {
 
     const activeList = list.filter((item) => item.count > 0);
     return activeList.length > 0 ? activeList : list;
-  }, [totalServices, totalTrainings, totalJobs]);
+  }, [totalServices, totalTrainings, totalJobs, t]);
 
   // Dynamically compute monthly trends from actual dates
   const intakeTrends = useMemo(() => {
@@ -167,7 +169,7 @@ export default function ElderlyAndDisabledDashboard() {
         <div className="flex flex-col items-center gap-3 font-mono">
           <div className="size-7 rounded-full border-2 border-[#1769AA] border-t-transparent animate-spin" />
           <span className="text-xs text-slate-500">
-            Loading Disability &amp; Elderly executive dashboard...
+            {t("loading")}
           </span>
         </div>
       </div>

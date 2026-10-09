@@ -6,6 +6,8 @@ import { ArrowRight, Users, Search, Eye, Accessibility, UserCheck } from "lucide
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+
 interface ElderlyDisabledRecentBeneficiariesProps {
   recentList: any[];
 }
@@ -13,6 +15,7 @@ interface ElderlyDisabledRecentBeneficiariesProps {
 export function ElderlyDisabledRecentBeneficiaries({
   recentList = [],
 }: ElderlyDisabledRecentBeneficiariesProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.recent");
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<"ALL" | "ELDERLY" | "DISABLED">("ALL");
 
@@ -42,10 +45,10 @@ export function ElderlyDisabledRecentBeneficiaries({
           </div>
           <div>
             <h3 className="text-xs font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-              Recent Registered Beneficiaries &amp; Intakes
+              {t("title")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              Latest municipal intake registrations across elderly support and disability inclusion programs
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -54,7 +57,7 @@ export function ElderlyDisabledRecentBeneficiaries({
           href="/social-affairs/elderly-and-disabled/beneficiaries"
           className="text-xs font-mono font-semibold text-[#1769AA] hover:text-[#12568E] flex items-center gap-1 transition-colors self-start sm:self-center"
         >
-          <span>View All Beneficiaries</span>
+          <span>{t("viewAll")}</span>
           <ArrowRight className="size-3.5" />
         </Link>
       </div>
@@ -66,7 +69,7 @@ export function ElderlyDisabledRecentBeneficiaries({
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Filter by name or ID number..."
+            placeholder={t("searchPlaceholder")}
             className="h-8 pl-8 text-xs bg-white border-[#E3E7EB] rounded-xs placeholder:text-slate-400"
           />
         </div>
@@ -76,37 +79,37 @@ export function ElderlyDisabledRecentBeneficiaries({
             variant={categoryFilter === "ALL" ? "default" : "outline"}
             size="sm"
             onClick={() => setCategoryFilter("ALL")}
-            className={`h-7 px-2.5 text-[11px] rounded-xs ${
+            className={`h-7 px-2.5 text-[11px] rounded-xs cursor-pointer ${
               categoryFilter === "ALL"
                 ? "bg-[#0B1F3A] hover:bg-[#122D52] text-white"
                 : "bg-white text-slate-600 border-[#E3E7EB]"
             }`}
           >
-            All ({recentList.length})
+            {t("filterAll", { count: recentList.length })}
           </Button>
           <Button
             variant={categoryFilter === "DISABLED" ? "default" : "outline"}
             size="sm"
             onClick={() => setCategoryFilter("DISABLED")}
-            className={`h-7 px-2.5 text-[11px] rounded-xs ${
+            className={`h-7 px-2.5 text-[11px] rounded-xs cursor-pointer ${
               categoryFilter === "DISABLED"
                 ? "bg-[#1769AA] hover:bg-[#12568E] text-white"
                 : "bg-white text-slate-600 border-[#E3E7EB]"
             }`}
           >
-            Persons with Disability
+            {t("filterDisabled")}
           </Button>
           <Button
             variant={categoryFilter === "ELDERLY" ? "default" : "outline"}
             size="sm"
             onClick={() => setCategoryFilter("ELDERLY")}
-            className={`h-7 px-2.5 text-[11px] rounded-xs ${
+            className={`h-7 px-2.5 text-[11px] rounded-xs cursor-pointer ${
               categoryFilter === "ELDERLY"
                 ? "bg-purple-700 hover:bg-purple-800 text-white"
                 : "bg-white text-slate-600 border-[#E3E7EB]"
             }`}
           >
-            Vulnerable Elderly
+            {t("filterElderly")}
           </Button>
         </div>
       </div>
@@ -116,19 +119,19 @@ export function ElderlyDisabledRecentBeneficiaries({
         {filtered.length === 0 ? (
           <div className="py-12 text-center text-xs font-mono text-slate-500">
             <Users className="size-8 mx-auto text-slate-300 mb-2" />
-            <p>No beneficiaries match the current filter</p>
+            <p>{t("noMatches")}</p>
           </div>
         ) : (
           <table className="w-full text-xs font-mono text-left">
             <thead className="bg-slate-50 border-b border-[#E3E7EB] text-slate-600 font-bold uppercase text-[11px]">
               <tr>
-                <th className="px-4 py-2.5">Beneficiary Name</th>
-                <th className="px-4 py-2.5">ID Number</th>
-                <th className="px-4 py-2.5">Category</th>
-                <th className="px-4 py-2.5">Sub-City / Woreda</th>
-                <th className="px-4 py-2.5">Special Needs / Impairment</th>
-                <th className="px-4 py-2.5">Registered Date</th>
-                <th className="px-4 py-2.5 text-right">Action</th>
+                <th className="px-4 py-2.5">{t("colName")}</th>
+                <th className="px-4 py-2.5">{t("colId")}</th>
+                <th className="px-4 py-2.5">{t("colCategory")}</th>
+                <th className="px-4 py-2.5">{t("colLocation")}</th>
+                <th className="px-4 py-2.5">{t("colNeeds")}</th>
+                <th className="px-4 py-2.5">{t("colDate")}</th>
+                <th className="px-4 py-2.5 text-right">{t("colAction")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E3E7EB]">
@@ -175,14 +178,14 @@ export function ElderlyDisabledRecentBeneficiaries({
                           variant="outline"
                           className="rounded-xs text-[10px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200"
                         >
-                          Elderly
+                          {t("badgeElderly")}
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
                           className="rounded-xs text-[10px] font-bold tracking-wider uppercase border bg-amber-50 text-amber-700 border-amber-200"
                         >
-                          Disability
+                          {t("badgeDisability")}
                         </Badge>
                       )}
                     </td>
@@ -192,7 +195,7 @@ export function ElderlyDisabledRecentBeneficiaries({
                       {b.subCity ? (
                         <span>
                           {b.subCity}
-                          {b.woreda ? `, W. ${b.woreda}` : ""}
+                          {b.woreda ? `, ${t("woredaPrefix", { woreda: b.woreda })}` : ""}
                         </span>
                       ) : (
                         <span className="text-slate-400">—</span>
@@ -203,13 +206,13 @@ export function ElderlyDisabledRecentBeneficiaries({
                     <td className="px-4 py-2.5 text-slate-600">
                       {isElderly ? (
                         <span>
-                          {b.age ? `Age ${b.age} • ` : ""}
+                          {b.age ? t("agePrefix", { age: b.age }) : ""}
                           {b.ElderlyProfile?.requiredSupportType ||
-                            "Geriatric Support"}
+                            t("geriatricDefault")}
                         </span>
                       ) : (
                         <span>
-                          {disabilityInfo || "Physical / Mobility Support"}
+                          {disabilityInfo || t("mobilityDefault")}
                         </span>
                       )}
                     </td>
@@ -232,7 +235,7 @@ export function ElderlyDisabledRecentBeneficiaries({
                           className="h-7 px-2 text-[11px] font-mono border-[#E3E7EB] text-slate-700 hover:text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs cursor-pointer"
                         >
                           <Eye className="size-3 mr-1" />
-                          Dossier
+                          {t("btnDossier")}
                         </Button>
                       </Link>
                     </td>

@@ -10,52 +10,55 @@ import {
   Search,
   ArrowRight,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function ElderlyDisabledQuickActions() {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.quickActions");
+
   const actions = [
     {
-      title: "Beneficiaries Registry",
-      desc: "Comprehensive registry of verified elderly and disabled citizens, Fayda ID validation, and case history records",
+      title: t("registry.title"),
+      desc: t("registry.desc"),
       icon: Users,
       href: "/social-affairs/elderly-and-disabled/beneficiaries",
-      badge: "PRIMARY REGISTRY",
+      badge: t("registry.badge"),
       color: "text-[#1769AA]",
       bg: "bg-[#E8F2FA]",
     },
     {
-      title: "Support Services & Aid",
-      desc: "Track assistive devices, physical therapy, medical referrals, nutritional rations, and home visits",
+      title: t("services.title"),
+      desc: t("services.desc"),
       icon: HeartHandshake,
       href: "/social-affairs/elderly-and-disabled/services",
-      badge: "WELFARE DELIVERY",
+      badge: t("services.badge"),
       color: "text-emerald-700",
       bg: "bg-emerald-50",
     },
     {
-      title: "Vocational Skills Training",
-      desc: "Manage skills training cohorts, accessible artisan workshops, technical skills, and COC certifications",
+      title: t("training.title"),
+      desc: t("training.desc"),
       icon: GraduationCap,
       href: "/social-affairs/elderly-and-disabled/training",
-      badge: "CAPACITY BUILDING",
+      badge: t("training.badge"),
       color: "text-amber-700",
       bg: "bg-amber-50",
     },
     {
-      title: "Inclusive Employment",
-      desc: "Liaison with public and private employers to secure wage placements and cooperative micro-enterprises",
+      title: t("employment.title"),
+      desc: t("employment.desc"),
       icon: Briefcase,
       href: "/social-affairs/elderly-and-disabled/jobs",
-      badge: "LIVELIHOODS",
+      badge: t("employment.badge"),
       color: "text-blue-700",
       bg: "bg-blue-50",
     },
     {
-      title: "Beneficiary Search",
-      desc: "Cross-department query tool by Fayda ID, City ID, biometric verification status, phone, or name",
+      title: t("search.title"),
+      desc: t("search.desc"),
       icon: Search,
       href: "/social-affairs/elderly-and-disabled/search",
-      badge: "AUDIT & LOOKUP",
+      badge: t("search.badge"),
       color: "text-indigo-700",
       bg: "bg-indigo-50",
     },
@@ -65,10 +68,10 @@ export function ElderlyDisabledQuickActions() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          PRIMARY SOCIAL PROTECTION MODULES &amp; WORKFLOWS
+          {t("title")}
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Direct navigation to operational registers
+          {t("subtitle")}
         </span>
       </div>
 
@@ -98,7 +101,7 @@ export function ElderlyDisabledQuickActions() {
                   </div>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#1769AA] group-hover:text-[#12568E]">
-                    <span className="font-mono text-[11px]">Open module workspace</span>
+                    <span className="font-mono text-[11px]">{t("openWorkspace")}</span>
                     <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </div>
                 </CardContent>

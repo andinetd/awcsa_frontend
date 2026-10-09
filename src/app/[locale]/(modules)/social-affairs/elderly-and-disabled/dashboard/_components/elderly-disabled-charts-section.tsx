@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface IntakeTrendPoint {
   month: string;
@@ -34,6 +35,7 @@ export function ElderlyDisabledChartsSection({
   intakeTrends = [],
   programBreakdown = [],
 }: ElderlyDisabledChartsSectionProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.charts");
   const [activeSegment, setActiveSegment] = useState<number | null>(null);
 
   const breakdown = programBreakdown;
@@ -49,21 +51,21 @@ export function ElderlyDisabledChartsSection({
         <div className="pb-2 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Monthly Inflow vs. Support Interventions Delivered
+              {t("inflowTitle")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              New vulnerability registrations across 11 sub-cities compared against medical, assistive device, and livelihood resolutions
+              {t("inflowSubtitle")}
             </p>
           </div>
           {/* Legend */}
           <div className="flex items-center gap-3 text-[11px] font-medium text-slate-600 font-mono">
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#0B1F3A]" />
-              Registrations
+              {t("registrations")}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-xs bg-[#1769AA]" />
-              Interventions Delivered
+              {t("interventionsDelivered")}
             </span>
           </div>
         </div>
@@ -96,20 +98,20 @@ export function ElderlyDisabledChartsSection({
                       return (
                         <div className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 shadow-md text-xs font-mono">
                           <p className="font-bold text-slate-800 border-b pb-1 mb-1.5">
-                            {payload[0].payload.month} Summary
+                            {t("monthSummary", { month: payload[0].payload.month })}
                           </p>
                           <div className="space-y-1">
                             <p className="text-slate-600 flex items-center justify-between gap-4">
                               <span className="flex items-center gap-1">
                                 <span className="size-2 rounded-full bg-[#0B1F3A]" />
-                                New Intakes:
+                                {t("newIntakes")}
                               </span>
                               <span className="font-bold text-slate-900">{payload[0].value}</span>
                             </p>
                             <p className="text-slate-600 flex items-center justify-between gap-4">
                               <span className="flex items-center gap-1">
                                 <span className="size-2 rounded-full bg-[#1769AA]" />
-                                Delivered Aid:
+                                {t("deliveredAid")}
                               </span>
                               <span className="font-bold text-[#1769AA]">{payload[1].value}</span>
                             </p>
@@ -128,10 +130,10 @@ export function ElderlyDisabledChartsSection({
         ) : (
           <div className="mt-4 h-[220px] w-full flex flex-col items-center justify-center text-center p-4 border border-dashed border-slate-200 rounded-xs bg-slate-50/50">
             <span className="text-xs font-mono text-slate-600 font-medium">
-              No periodic intake trends recorded yet
+              {t("noIntakeTrends")}
             </span>
             <span className="text-[11px] font-mono text-slate-400 mt-1 max-w-sm">
-              As elderly and disabled citizens are registered and services are delivered, monthly intake and resolution trends will dynamically appear here.
+              {t("noIntakeTrendsDesc")}
             </span>
           </div>
         )}
@@ -142,14 +144,14 @@ export function ElderlyDisabledChartsSection({
         <div className="pb-2 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide font-mono">
-              Support Program Distribution
+              {t("distributionTitle")}
             </h3>
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-xs bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] font-mono">
-              {totalInterventions} TOTAL
+              {t("totalBadge", { count: totalInterventions })}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-            Intervention categories delivered across all beneficiaries
+            {t("distributionSubtitle")}
           </p>
         </div>
 
@@ -202,17 +204,17 @@ export function ElderlyDisabledChartsSection({
                 {totalInterventions}
               </span>
               <span className="text-[9px] uppercase tracking-wider text-slate-400 font-mono">
-                Delivered
+                {t("deliveredCenter")}
               </span>
             </div>
           </div>
         ) : (
           <div className="h-[160px] w-full flex flex-col items-center justify-center text-center p-4 border border-dashed border-slate-200 rounded-xs bg-slate-50/50 my-1">
             <span className="text-xs font-mono text-slate-500">
-              No interventions recorded yet
+              {t("noInterventions")}
             </span>
             <span className="text-[11px] font-mono text-slate-400 mt-0.5">
-              0 support programs delivered
+              {t("noInterventionsDesc")}
             </span>
           </div>
         )}

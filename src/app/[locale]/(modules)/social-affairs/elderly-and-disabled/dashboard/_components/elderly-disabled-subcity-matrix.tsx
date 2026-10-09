@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import { Building2, ShieldCheck, MapPin } from "lucide-react";
+import { Building2, MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 
 interface SubCityRow {
   name: string;
+  subCityKey: string;
   elderlyCount: number;
   disabledCount: number;
   totalBeneficiaries: number;
@@ -32,15 +34,37 @@ const ADDIS_ABABA_SUBCITIES = [
   "Lemi Kura",
 ];
 
+const SUBCITY_KEY_MAP: Record<string, string> = {
+  "bole": "bole",
+  "yeka": "yeka",
+  "kirkos": "kirkos",
+  "arada": "arada",
+  "gulele": "gulele",
+  "lideta": "lideta",
+  "nifas silk-lafto": "nifasSilk",
+  "nifassilk": "nifasSilk",
+  "nifas silk": "nifasSilk",
+  "kolfe keranio": "kolfeKeranio",
+  "kolfe": "kolfeKeranio",
+  "akaky kaliti": "akakiKality",
+  "akaki kality": "akakiKality",
+  "addis ketema": "addisKetema",
+  "lemi kura": "lemiKura",
+};
+
 export function ElderlyDisabledSubCityMatrix({
   beneficiariesList = [],
   servicesList = [],
 }: ElderlyDisabledSubCityMatrixProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.matrix");
+  const tSub = useTranslations("social-affairs.subCities");
+
   const subCities: SubCityRow[] = React.useMemo(() => {
     const map: Record<
       string,
       {
         name: string;
+        subCityKey: string;
         elderly: number;
         disabled: number;
         services: number;
@@ -48,8 +72,10 @@ export function ElderlyDisabledSubCityMatrix({
     > = {};
 
     ADDIS_ABABA_SUBCITIES.forEach((name) => {
-      map[name.toLowerCase()] = {
+      const lower = name.toLowerCase();
+      map[lower] = {
         name,
+        subCityKey: SUBCITY_KEY_MAP[lower] || lower,
         elderly: 0,
         disabled: 0,
         services: 0,
@@ -64,6 +90,7 @@ export function ElderlyDisabledSubCityMatrix({
       if (!map[scKey]) {
         map[scKey] = {
           name: rawSc,
+          subCityKey: SUBCITY_KEY_MAP[scKey] || scKey,
           elderly: 0,
           disabled: 0,
           services: 0,
@@ -85,6 +112,7 @@ export function ElderlyDisabledSubCityMatrix({
       if (!map[scKey]) {
         map[scKey] = {
           name: rawSc,
+          subCityKey: SUBCITY_KEY_MAP[scKey] || scKey,
           elderly: 0,
           disabled: 0,
           services: 0,
@@ -106,6 +134,7 @@ export function ElderlyDisabledSubCityMatrix({
 
       return {
         name: sc.name,
+        subCityKey: sc.subCityKey,
         elderlyCount: sc.elderly,
         disabledCount: sc.disabled,
         totalBeneficiaries: total,
@@ -120,6 +149,28 @@ export function ElderlyDisabledSubCityMatrix({
   const totalCensus = subCities.reduce((a, b) => a + b.totalBeneficiaries, 0);
   const totalServices = subCities.reduce((a, b) => a + b.servicesProvided, 0);
 
+  const getSubCityLabel = (key: string, defaultName: string) => {
+    try {
+      return tSub(key as any);
+    } catch {
+      return defaultName;
+    }
+  };
+
+  const getStatusLabel = (status: SubCityRow["coverageStatus"]) => {
+    switch (status) {
+      case "COMPREHENSIVE":
+        return t("statusComprehensive");
+      case "ACTIVE":
+        return t("statusActive");
+      case "PENDING AID":
+        return t("statusPendingAid");
+      case "NO RECORDS":
+      default:
+        return t("statusNoRecords");
+    }
+  };
+
   return (
     <div className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs overflow-hidden">
       <div className="p-4 border-b border-[#E3E7EB] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -127,17 +178,17 @@ export function ElderlyDisabledSubCityMatrix({
           <Building2 className="size-4 text-[#1769AA]" />
           <div>
             <h3 className="text-xs font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-              Municipal Sub-City Social Protection Matrix
+              {t("title")}
             </h3>
             <p className="text-[11px] text-slate-500 font-mono">
-              Distribution of vulnerable beneficiaries, assistive provisions, and protection coverage across 11 sub-cities
+              {t("subtitle")}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs font-mono">
           <span className="flex items-center gap-1 text-slate-600">
             <span className="size-2 rounded-full bg-emerald-500" />
-            11 Municipal Sub-Cities
+            {t("subCitiesBadge")}
           </span>
         </div>
       </div>
@@ -146,12 +197,12 @@ export function ElderlyDisabledSubCityMatrix({
         <table className="w-full text-left text-xs font-mono">
           <thead className="bg-slate-50 border-b border-[#E3E7EB] text-slate-600 font-bold uppercase text-[11px]">
             <tr>
-              <th className="py-2.5 px-3">Sub-City Administration</th>
-              <th className="py-2.5 px-3 text-right">Elderly</th>
-              <th className="py-2.5 px-3 text-right">Disabled</th>
-              <th className="py-2.5 px-3 text-right">Total Census</th>
-              <th className="py-2.5 px-3 text-right">Services Delivered</th>
-              <th className="py-2.5 px-3 text-center">Protection Coverage</th>
+              <th className="py-2.5 px-3">{t("colSubCity")}</th>
+              <th className="py-2.5 px-3 text-right">{t("colElderly")}</th>
+              <th className="py-2.5 px-3 text-right">{t("colDisabled")}</th>
+              <th className="py-2.5 px-3 text-right">{t("colTotalCensus")}</th>
+              <th className="py-2.5 px-3 text-right">{t("colServicesDelivered")}</th>
+              <th className="py-2.5 px-3 text-center">{t("colProtectionCoverage")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E3E7EB]">
@@ -159,7 +210,7 @@ export function ElderlyDisabledSubCityMatrix({
               <tr key={row.name} className="hover:bg-slate-50/70 transition-colors">
                 <td className="py-2 px-3 font-semibold text-slate-900 flex items-center gap-1.5">
                   <MapPin className="size-3 text-slate-400" />
-                  <span>{row.name}</span>
+                  <span>{getSubCityLabel(row.subCityKey, row.name)}</span>
                 </td>
                 <td className="py-2 px-3 text-right text-slate-700">
                   {row.elderlyCount.toLocaleString()}
@@ -186,7 +237,7 @@ export function ElderlyDisabledSubCityMatrix({
                         : "bg-slate-50 text-slate-400 border-slate-200"
                     }`}
                   >
-                    {row.coverageStatus}
+                    {getStatusLabel(row.coverageStatus)}
                   </Badge>
                 </td>
               </tr>
@@ -194,15 +245,17 @@ export function ElderlyDisabledSubCityMatrix({
           </tbody>
           <tfoot className="bg-slate-50/80 border-t-2 border-[#E3E7EB] font-bold text-slate-900">
             <tr>
-              <td className="py-2.5 px-3 uppercase text-[11px]">Total Addis Ababa Census</td>
+              <td className="py-2.5 px-3 uppercase text-[11px]">{t("totalCensusLabel")}</td>
               <td className="py-2.5 px-3 text-right text-slate-800">{totalElderly.toLocaleString()}</td>
               <td className="py-2.5 px-3 text-right text-slate-800">{totalDisabled.toLocaleString()}</td>
               <td className="py-2.5 px-3 text-right text-[#0B1F3A]">{totalCensus.toLocaleString()}</td>
               <td className="py-2.5 px-3 text-right text-emerald-700">{totalServices.toLocaleString()}</td>
               <td className="py-2.5 px-3 text-center text-[10px] text-slate-500 font-normal">
                 {totalCensus > 0
-                  ? `${Math.round((totalServices / totalCensus) * 100)}% Coverage Ratio`
-                  : "No Records"}
+                  ? t("coverageRatio", {
+                      ratio: Math.round((totalServices / totalCensus) * 100),
+                    })
+                  : t("noRecords")}
               </td>
             </tr>
           </tfoot>

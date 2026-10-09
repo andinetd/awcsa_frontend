@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   ArrowRight,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ElderlyDisabledKpiGridProps {
@@ -35,55 +36,66 @@ export function ElderlyDisabledKpiGrid({
   pendingConfirmation = 0,
   requestedServices = 0,
 }: ElderlyDisabledKpiGridProps) {
+  const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.kpis");
   const triageTotal = pendingEligibility + pendingConfirmation + requestedServices;
 
   const cards = [
     {
-      title: "Total Beneficiaries",
+      title: t("totalBeneficiaries"),
       value: totalBeneficiaries,
-      sub: `${elderlyTotal.toLocaleString()} Elderly • ${disabledTotal.toLocaleString()} Disabled`,
+      sub: t("totalBeneficiariesSub", {
+        elderly: elderlyTotal.toLocaleString(),
+        disabled: disabledTotal.toLocaleString(),
+      }),
       icon: Users,
-      badgeText: "CENSUS",
+      badgeText: t("badgeCensus"),
       badgeColor: "bg-[#E8F2FA] text-[#1769AA] border-[#BCD5EA]",
       iconBg: "bg-[#1769AA]/10 text-[#1769AA]",
       link: "/social-affairs/elderly-and-disabled/beneficiaries",
     },
     {
-      title: "Persons with Disabilities",
+      title: t("disabledTitle"),
       value: disabledTotal,
-      sub: "Physical, sensory, mental & multiple impairments",
+      sub: t("disabledSub"),
       icon: Accessibility,
-      badgeText: "INCLUSIVE",
+      badgeText: t("badgeInclusive"),
       badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
       iconBg: "bg-amber-500/10 text-amber-600",
       link: "/social-affairs/elderly-and-disabled/beneficiaries",
     },
     {
-      title: "Vulnerable Elderly",
+      title: t("elderlyTitle"),
       value: elderlyTotal,
-      sub: "Aged 60+ social safety net & geriatric protection",
+      sub: t("elderlySub"),
       icon: UserCheck,
-      badgeText: "GERIATRIC",
+      badgeText: t("badgeGeriatric"),
       badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
       iconBg: "bg-purple-500/10 text-purple-600",
       link: "/social-affairs/elderly-and-disabled/beneficiaries",
     },
     {
-      title: "Services & Assistive Devices",
+      title: t("servicesTitle"),
       value: totalServices,
-      sub: `${totalTrainings.toLocaleString()} in Skills Cohorts • ${totalJobs.toLocaleString()} Placements`,
+      sub: t("servicesSub", {
+        trainings: totalTrainings.toLocaleString(),
+        jobs: totalJobs.toLocaleString(),
+      }),
       icon: HeartHandshake,
-      badgeText: "DELIVERED",
+      badgeText: t("badgeDelivered"),
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: "bg-emerald-500/10 text-emerald-600",
       link: "/social-affairs/elderly-and-disabled/services",
     },
     {
-      title: "Action Docket (Triage Queue)",
+      title: t("actionDocketTitle"),
       value: triageTotal,
-      sub: `${pendingEligibility} Vetting • ${pendingConfirmation} Confirmation • ${requestedServices} Intake`,
+      sub: t("actionDocketSub", {
+        vetting: pendingEligibility,
+        confirmation: pendingConfirmation,
+        intake: requestedServices,
+      }),
       icon: AlertTriangle,
-      badgeText: triageTotal > 0 ? "ACTION REQUIRED" : "RESOLVED",
+      badgeText: triageTotal > 0 ? t("badgeActionRequired") : t("badgeResolved"),
       badgeColor:
         triageTotal > 0
           ? "bg-rose-50 text-rose-700 border-rose-200 font-bold"
@@ -101,10 +113,10 @@ export function ElderlyDisabledKpiGrid({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-          EXECUTIVE SOCIAL PROTECTION SCORECARD
+          {t("sectionTitle")}
         </h2>
         <span className="text-[11px] text-slate-400 font-mono">
-          Consolidated registry, assistance &amp; triage statistics
+          {t("sectionSubtitle")}
         </span>
       </div>
 

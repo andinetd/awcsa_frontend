@@ -26,8 +26,135 @@
   },
   "elderlyAndDisabled": {
     "dashboard": {
-      "title": "Elderly and Disabled Dashboard",
-      "subtitle": "Overview of registry, training, and job placement activities."
+      "title": "Disability & Elderly Social Protection Administration",
+      "subtitle": "Integrated municipal oversight of vulnerable elderly citizens, persons with disabilities, assistive device allocation, vocational skill cohorts, and economic placements across 11 sub-cities.",
+      "loading": "Loading Disability & Elderly executive dashboard...",
+      "header": {
+        "cityAdmin": "Addis Ababa City Administration",
+        "bureau": "Bureau of Women & Social Affairs",
+        "directorate": "Disability & Elderly Protection",
+        "badge": "Municipal Directorate",
+        "refresh": "Refresh",
+        "print": "Print Brief",
+        "search": "Search",
+        "registerBeneficiary": "Register Beneficiary",
+        "safetyNetRegister": "Social Safety Net Register",
+        "faydaIntegrated": "Fayda & Biometric Integrated"
+      },
+      "kpis": {
+        "sectionTitle": "EXECUTIVE SOCIAL PROTECTION SCORECARD",
+        "sectionSubtitle": "Consolidated registry, assistance & triage statistics",
+        "totalBeneficiaries": "Total Beneficiaries",
+        "totalBeneficiariesSub": "{elderly} Elderly • {disabled} Disabled",
+        "disabledTitle": "Persons with Disabilities",
+        "disabledSub": "Physical, sensory, mental & multiple impairments",
+        "elderlyTitle": "Vulnerable Elderly",
+        "elderlySub": "Aged 60+ social safety net & geriatric protection",
+        "servicesTitle": "Services & Assistive Devices",
+        "servicesSub": "{trainings} in Skills Cohorts • {jobs} Placements",
+        "actionDocketTitle": "Action Docket (Triage Queue)",
+        "actionDocketSub": "{vetting} Vetting • {confirmation} Confirmation • {intake} Intake",
+        "badgeCensus": "CENSUS",
+        "badgeInclusive": "INCLUSIVE",
+        "badgeGeriatric": "GERIATRIC",
+        "badgeDelivered": "DELIVERED",
+        "badgeActionRequired": "ACTION REQUIRED",
+        "badgeResolved": "RESOLVED"
+      },
+      "charts": {
+        "inflowTitle": "Monthly Inflow vs. Support Interventions Delivered",
+        "inflowSubtitle": "New vulnerability registrations across 11 sub-cities compared against medical, assistive device, and livelihood resolutions",
+        "registrations": "Registrations",
+        "interventionsDelivered": "Interventions Delivered",
+        "monthSummary": "{month} Summary",
+        "newIntakes": "New Intakes:",
+        "deliveredAid": "Delivered Aid:",
+        "noIntakeTrends": "No periodic intake trends recorded yet",
+        "noIntakeTrendsDesc": "As elderly and disabled citizens are registered and services are delivered, monthly intake and resolution trends will dynamically appear here.",
+        "distributionTitle": "Support Program Distribution",
+        "distributionSubtitle": "Intervention categories delivered across all beneficiaries",
+        "totalBadge": "{count} TOTAL",
+        "deliveredCenter": "Delivered",
+        "noInterventions": "No interventions recorded yet",
+        "noInterventionsDesc": "0 support programs delivered",
+        "categories": {
+          "services": "Support Services & Assistive Aid",
+          "training": "Vocational Skills Training",
+          "employment": "Inclusive Job Placements"
+        }
+      },
+      "matrix": {
+        "title": "Municipal Sub-City Social Protection Matrix",
+        "subtitle": "Distribution of vulnerable beneficiaries, assistive provisions, and protection coverage across 11 sub-cities",
+        "subCitiesBadge": "11 Municipal Sub-Cities",
+        "colSubCity": "Sub-City Administration",
+        "colElderly": "Elderly",
+        "colDisabled": "Disabled",
+        "colTotalCensus": "Total Census",
+        "colServicesDelivered": "Services Delivered",
+        "colProtectionCoverage": "Protection Coverage",
+        "totalCensusLabel": "Total Addis Ababa Census",
+        "coverageRatio": "{ratio}% Coverage Ratio",
+        "noRecords": "No Records",
+        "statusComprehensive": "COMPREHENSIVE",
+        "statusActive": "ACTIVE",
+        "statusPendingAid": "PENDING AID",
+        "statusNoRecords": "NO RECORDS"
+      },
+      "recent": {
+        "title": "Recent Registered Beneficiaries & Intakes",
+        "subtitle": "Latest municipal intake registrations across elderly support and disability inclusion programs",
+        "viewAll": "View All Beneficiaries",
+        "searchPlaceholder": "Filter by name or ID number...",
+        "filterAll": "All ({count})",
+        "filterDisabled": "Persons with Disability",
+        "filterElderly": "Vulnerable Elderly",
+        "colName": "Beneficiary Name",
+        "colId": "ID Number",
+        "colCategory": "Category",
+        "colLocation": "Sub-City / Woreda",
+        "colNeeds": "Special Needs / Impairment",
+        "colDate": "Registered Date",
+        "colAction": "Action",
+        "badgeElderly": "Elderly",
+        "badgeDisability": "Disability",
+        "btnDossier": "Dossier",
+        "noMatches": "No beneficiaries match the current filter",
+        "woredaPrefix": "W. {woreda}",
+        "agePrefix": "Age {age} • ",
+        "geriatricDefault": "Geriatric Support",
+        "mobilityDefault": "Physical / Mobility Support"
+      },
+      "quickActions": {
+        "title": "PRIMARY SOCIAL PROTECTION MODULES & WORKFLOWS",
+        "subtitle": "Direct navigation to operational registers",
+        "openWorkspace": "Open module workspace",
+        "registry": {
+          "title": "Beneficiaries Registry",
+          "desc": "Comprehensive registry of verified elderly and disabled citizens, Fayda ID validation, and case history records",
+          "badge": "PRIMARY REGISTRY"
+        },
+        "services": {
+          "title": "Support Services & Aid",
+          "desc": "Track assistive devices, physical therapy, medical referrals, nutritional rations, and home visits",
+          "badge": "WELFARE DELIVERY"
+        },
+        "training": {
+          "title": "Vocational Skills Training",
+          "desc": "Manage skills training cohorts, accessible artisan workshops, technical skills, and COC certifications",
+          "badge": "CAPACITY BUILDING"
+        },
+        "employment": {
+          "title": "Inclusive Employment",
+          "desc": "Liaison with public and private employers to secure wage placements and cooperative micro-enterprises",
+          "badge": "LIVELIHOODS"
+        },
+        "search": {
+          "title": "Beneficiary Search",
+          "desc": "Cross-department query tool by Fayda ID, City ID, biometric verification status, phone, or name",
+          "badge": "AUDIT & LOOKUP"
+        }
+      }
     },
     "layout": {
       "title": "Disability & Elderly Module"
@@ -104,6 +231,93 @@
         "active": "Active",
         "inactive": "Inactive",
         "na": "N/A"
+      },
+      "breadcrumbs": {
+        "home": "Home",
+        "module": "Disability & Elderly",
+        "beneficiariesSuffix": "Beneficiaries"
+      },
+      "banner": {
+        "cityAdmin": "Addis Ababa City Administration",
+        "bureau": "Women & Social Affairs Bureau",
+        "directorate": "Social Rehabilitation & Inclusion"
+      },
+      "searchPlaceholderDetailed": "Search Fayda, City ID, name, phone...",
+      "filtersButton": "Filters",
+      "tabs": {
+        "allDisabled": "All Disabled",
+        "severeProfound": "Severe & Profound",
+        "assistanceNeeded": "Assistance / Device Needed",
+        "seekingWork": "Seeking Work (Unemployed)",
+        "activeDisabled": "Active Beneficiaries",
+        "allElderly": "All Elderly",
+        "supportConfirmed": "Support Confirmed",
+        "livingAloneWidowed": "Living Alone / Widowed",
+        "oldestOld": "Oldest-Old (80+)",
+        "activeElderly": "Active Beneficiaries"
+      },
+      "filterDrawer": {
+        "title": "Advanced Vulnerability & Location Filters ({category})",
+        "resetAll": "Reset All Filters",
+        "subCity": "Sub-City",
+        "allSubCities": "All Sub-Cities",
+        "woreda": "Woreda",
+        "allWoredas": "All Woredas",
+        "selectSubCityFirst": "Select Sub-City first",
+        "woredaPrefix": "Woreda {code}",
+        "disabilityType": "Disability Type",
+        "allDisabilityTypes": "All Disability Types",
+        "severityGrade": "Severity Grade",
+        "allSeverities": "All Severities",
+        "physicalAssistance": "Physical Assistance",
+        "allAssistance": "All Assistance",
+        "requiresAssistance": "Requires Assistance / Device",
+        "independent": "Independent",
+        "medicalVerification": "Medical Verification",
+        "allVerifications": "All Statuses",
+        "verified": "Verified",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "ageCohort": "Age Cohort",
+        "allAges": "All Ages",
+        "youngOld": "Young-Old (60–69)",
+        "middleOld": "Middle-Old (70–79)",
+        "oldestOld": "Oldest-Old (80+)",
+        "supportConfirmed": "Support Confirmed",
+        "allRecords": "All Records",
+        "confirmedOnly": "Confirmed Only",
+        "unconfirmed": "Unconfirmed",
+        "employment": "Employment",
+        "allEmployment": "All Employment",
+        "employed": "Employed",
+        "unemployed": "Unemployed",
+        "gender": "Gender",
+        "allGenders": "All Genders",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      },
+      "chips": {
+        "resultsCount": "Results ({filtered} of {total}):",
+        "preset": "Preset: {tab}",
+        "search": "Search: \"{query}\"",
+        "subCity": "Sub-City: {name}",
+        "woreda": "Woreda: {code}",
+        "disabilityType": "Type: {type}",
+        "severity": "Severity: {sev}",
+        "assistance": "Assistance: {status}",
+        "medicalVerification": "Medical: {status}",
+        "ageCohort": "Age: {cohort}",
+        "supportConfirmed": "Confirmed: {status}",
+        "employment": "Employment: {status}",
+        "gender": "Gender: {gender}",
+        "clearAll": "Clear All"
+      },
+      "pagination": {
+        "showing": "Showing {start} to {end} of {total} beneficiaries",
+        "pageInfo": "Page {page} of {pages}",
+        "prev": "Previous",
+        "next": "Next"
       }
     },
     "jobs": {
@@ -217,6 +431,50 @@
           "success": "Service registered successfully",
           "error": "Failed to register service"
         }
+      },
+      "breadcrumbs": {
+        "home": "Home",
+        "module": "Disability & Elderly",
+        "tabServices": "Support Services",
+        "tabTraining": "Vocational Skills Training",
+        "tabJobs": "Inclusive Employment"
+      },
+      "banner": {
+        "cityAdmin": "Addis Ababa City Administration",
+        "bureau": "Bureau of Women & Social Affairs",
+        "section": "Social Rehabilitation & Livelihoods"
+      },
+      "tabs": {
+        "services": "Support Services",
+        "training": "Skills Training",
+        "jobs": "Job Placements"
+      },
+      "filters": {
+        "toggle": "Filters",
+        "reset": "Reset Filters",
+        "category": "Category",
+        "allCategories": "All Categories",
+        "provider": "Provider",
+        "allProviders": "All Providers",
+        "trainingType": "Training Type",
+        "allTypes": "All Types",
+        "cocStatus": "COC Status",
+        "allCoc": "All COC Status",
+        "company": "Company ID",
+        "allCompanies": "All Companies"
+      },
+      "tableHeaders": {
+        "beneficiary": "Beneficiary",
+        "service": "Service",
+        "category": "Category",
+        "frequency": "Frequency",
+        "date": "Date Provided",
+        "provider": "Provider",
+        "dates": "Dates",
+        "coc": "COC",
+        "companyId": "Company ID",
+        "position": "Position",
+        "startDate": "Start Date"
       }
     },
     "training": {
@@ -312,9 +570,12 @@
         "unknown": "Unknown"
       },
       "tabs": {
-        "trainingHistory": "Training History",
-        "jobPlacements": "Job Placements",
-        "supportServices": "Support Services"
+        "overview": "Overview",
+        "eligibility": "Eligibility",
+        "services": "Services",
+        "documents": "Documents",
+        "notes": "Case Notes",
+        "timeline": "Timeline"
       },
       "trainingSection": {
         "title": "Training Records",
@@ -349,6 +610,46 @@
           "date": "Date",
           "noRecords": "No support services found"
         }
+      },
+      "caseTitle": "Case #{id}",
+      "assessment": {
+        "title": "Assessment • {date}",
+        "residency": "Residency:",
+        "verified": "✓ Verified",
+        "notVerified": "✗ Not verified",
+        "communityConfirmation": "Community Confirmation:",
+        "confirmed": "✓ Confirmed",
+        "pending": "✗ Pending",
+        "woredaConfirmation": "Woreda Confirmation:",
+        "medicalStatus": "Medical Status:",
+        "decisionNotes": "Decision Notes:",
+        "rejectionReason": "Rejection Reason:",
+        "noAssessments": "No eligibility assessments yet"
+      },
+      "serviceRecord": {
+        "requested": "Requested: {date}",
+        "serviceDate": " • Service: {date}",
+        "office": "Office:",
+        "location": "Location:",
+        "allowance": "Allowance:",
+        "assistiveDevice": "Assistive device:",
+        "referral": "Referral to:",
+        "confirmedVia": "Confirmed: {date} via {method}",
+        "noServices": "No service records yet"
+      },
+      "documentsSection": {
+        "uploadedOn": "Uploaded on {date}",
+        "verified": "✓ Verified",
+        "unverified": "Unverified",
+        "viewDocument": "View Document",
+        "noDocuments": "No documents attached"
+      },
+      "notesSection": {
+        "addNote": "Add Case Note",
+        "notePlaceholder": "Enter confidential case notes, progress updates, or assessment notes...",
+        "cancel": "Cancel",
+        "saveNote": "Save Note",
+        "noNotes": "No case notes recorded"
       }
     },
     "reports": {

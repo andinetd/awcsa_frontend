@@ -26,8 +26,135 @@
   },
   "elderlyAndDisabled": {
     "dashboard": {
-      "title": "የአረጋውያን እና የአካል ጉዳተኞች ዳሽቦርድ",
-      "subtitle": "የምዝገባ፣ የስልጠና እና የስራ ስምሪት እንቅስቃሴዎች አጠቃላይ እይታ።"
+      "title": "የአካል ጉዳተኞች እና አረጋውያን ማህበራዊ ጥበቃና አስተዳደር",
+      "subtitle": "የተጋላጭ አረጋውያን ዜጎች፣ አካል ጉዳተኞች፣ የረዳት መሣሪያዎች ድልድል፣ የሙያ ክህሎት ስልጠናዎች እና ኢኮኖሚያዊ ስምሪት በ11ዱም ክፍለ ከተሞች የተቀናጀ የማዘጋጃ ቤት ክትትል።",
+      "loading": "የአካል ጉዳተኞች እና አረጋውያን አመራር ዳሽቦርድ በመጫን ላይ...",
+      "header": {
+        "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+        "bureau": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+        "directorate": "የአካል ጉዳተኞች እና አረጋውያን ጥበቃ",
+        "badge": "የማዘጋጃ ቤት መምሪያ",
+        "refresh": "አድስ",
+        "print": "ማጠቃለያ አትም",
+        "search": "ፈልግ",
+        "registerBeneficiary": "ተጠቃሚ መዝግብ",
+        "safetyNetRegister": "የማህበራዊ ሴፍቲኔት መዝገብ",
+        "faydaIntegrated": "ፋይዳ እና ባዮሜትሪክ የተሳሰረ"
+      },
+      "kpis": {
+        "sectionTitle": "የማህበራዊ ጥበቃ ዋና የስራ አፈፃፀም መለኪያ",
+        "sectionSubtitle": "የተጠቃሚዎች ምዝገባ፣ የድጋፍ አሰጣጥ እና የቅድመ ምዘና ስታቲስቲክስ",
+        "totalBeneficiaries": "ጠቅላላ ተጠቃሚዎች",
+        "totalBeneficiariesSub": "{elderly} አረጋውያን • {disabled} አካል ጉዳተኞች",
+        "disabledTitle": "አካል ጉዳተኞች",
+        "disabledSub": "አካላዊ፣ የስሜት ህዋሳት፣ የአእምሮ እና በርካታ ውስብስብ ጉዳቶች",
+        "elderlyTitle": "ተጋላጭ አረጋውያን",
+        "elderlySub": "ዕድሜያቸው 60+ የማህበራዊ ሴፍቲኔት እና የዕድሜ ድጋፍ",
+        "servicesTitle": "አገልግሎቶች እና የረዳት መሣሪያዎች",
+        "servicesSub": "{trainings} በክህሎት ስልጠና • {jobs} የሥራ ስምሪት",
+        "actionDocketTitle": "የውሳኔ ወረፋ (የክለሳ መዝገብ)",
+        "actionDocketSub": "{vetting} በምዘና • {confirmation} በማረጋገጥ • {intake} በአቀባበል ላይ",
+        "badgeCensus": "ቆጠራ",
+        "badgeInclusive": "አካታች",
+        "badgeGeriatric": "የአረጋውያን",
+        "badgeDelivered": "የተሰጠ",
+        "badgeActionRequired": "ትኩረት የሚሻ",
+        "badgeResolved": "የተጠናቀቀ"
+      },
+      "charts": {
+        "inflowTitle": "ወርሃዊ የተመዝጋቢዎች ፍሰት እና የተሰጡ የድጋፍ አገልግሎቶች",
+        "inflowSubtitle": "በ11ዱም ክፍለ ከተሞች የተመዘገቡ አዳዲስ ተጋላጮች ከተሰጡ የህክምና፣ የረዳት መሣሪያዎች እና የኑሮ ድጋፎች ጋር ሲነጻጸር",
+        "registrations": "ምዝገባዎች",
+        "interventionsDelivered": "የተሰጡ ድጋፎች",
+        "monthSummary": "የ{month} ማጠቃለያ",
+        "newIntakes": "አዲስ ምዝገባ:",
+        "deliveredAid": "የተሰጠ ድጋፍ:",
+        "noIntakeTrends": "እስካሁን ምንም ዓይነት ወርሃዊ የፍሰት መረጃ አልተመዘገበም",
+        "noIntakeTrendsDesc": "አረጋውያንና አካል ጉዳተኞች ሲመዘገቡ እና አገልግሎቶች ሲሰጡ፣ ወርሃዊ የቅበላና የድጋፍ አዝማሚያዎች እዚህ ይታያሉ።",
+        "distributionTitle": "የድጋፍ ፕሮግራሞች ስርጭት",
+        "distributionSubtitle": "ለሁሉም ተጠቃሚዎች የተሰጡ የድጋፍ ምድቦች",
+        "totalBadge": "ጠቅላላ {count}",
+        "deliveredCenter": "የተሰጠ",
+        "noInterventions": "እስካሁን የተመዘገበ ድጋፍ የለም",
+        "noInterventionsDesc": "0 የድጋፍ ፕሮግራሞች ተሰጥተዋል",
+        "categories": {
+          "services": "የድጋፍ አገልግሎት እና ረዳት መሣሪያዎች",
+          "training": "የሙያና ክህሎት ስልጠና",
+          "employment": "አካታች የሥራ ዕድል ስምሪት"
+        }
+      },
+      "matrix": {
+        "title": "የክፍለ ከተሞች ማህበራዊ ጥበቃ ማትሪክስ",
+        "subtitle": "የተጋላጭ ተጠቃሚዎች፣ የረዳት ድጋፎች እና የጥበቃ ሽፋን በ11ዱ ክፍለ ከተሞች ስርጭት",
+        "subCitiesBadge": "11 ክፍለ ከተሞች",
+        "colSubCity": "ክፍለ ከተማ አስተዳደር",
+        "colElderly": "አረጋውያን",
+        "colDisabled": "አካል ጉዳተኞች",
+        "colTotalCensus": "ጠቅላላ ቆጠራ",
+        "colServicesDelivered": "የተሰጡ አገልግሎቶች",
+        "colProtectionCoverage": "የጥበቃ ሽፋን",
+        "totalCensusLabel": "የአዲስ አበባ ከተማ ጠቅላላ ቆጠራ",
+        "coverageRatio": "{ratio}% የሽፋን ምጣኔ",
+        "noRecords": "መረጃ የለም",
+        "statusComprehensive": "ሙሉ ሽፋን",
+        "statusActive": "በሂደት ላይ",
+        "statusPendingAid": "ድጋፍ የሚጠብቅ",
+        "statusNoRecords": "መረጃ የለም"
+      },
+      "recent": {
+        "title": "በቅርቡ የተመዘገቡ ተጠቃሚዎች",
+        "subtitle": "በአረጋውያን ድጋፍ እና በአካል ጉዳተኞች ፕሮግራሞች የተመዘገቡ የቅርብ ጊዜ ተጠቃሚዎች",
+        "viewAll": "ሁሉንም ተጠቃሚዎች ይመልከቱ",
+        "searchPlaceholder": "በስም ወይም በመታወቂያ ቁጥር ይፈልጉ...",
+        "filterAll": "ሁሉም ({count})",
+        "filterDisabled": "አካል ጉዳተኞች",
+        "filterElderly": "ተጋላጭ አረጋውያን",
+        "colName": "የተጠቃሚ ስም",
+        "colId": "የመታወቂያ ቁጥር",
+        "colCategory": "ምድብ",
+        "colLocation": "ክፍለ ከተማ / ወረዳ",
+        "colNeeds": "ልዩ ፍላጎት / ጉዳት",
+        "colDate": "የተመዘገበበት ቀን",
+        "colAction": "ተግባር",
+        "badgeElderly": "አረጋዊ",
+        "badgeDisability": "አካል ጉዳተኛ",
+        "btnDossier": "ማህደር",
+        "noMatches": "ከተመረጠው ማጣሪያ ጋር የሚስማማ ተጠቃሚ አልተገኘም",
+        "woredaPrefix": "ወ. {woreda}",
+        "agePrefix": "ዕድሜ {age} • ",
+        "geriatricDefault": "የአረጋውያን ድጋፍ",
+        "mobilityDefault": "አካላዊ / የመንቀሳቀስ ድጋፍ"
+      },
+      "quickActions": {
+        "title": "ዋና የማህበራዊ ጥበቃ ሞጁሎች እና የስራ ፍሰቶች",
+        "subtitle": "ወደ ቀጥተኛ የአሰራር መዝገቦች መሸጋገሪያ",
+        "openWorkspace": "ሞጁሉን ይክፈቱ",
+        "registry": {
+          "title": "የተጠቃሚዎች መዝገብ",
+          "desc": "የተረጋገጡ አረጋውያን እና አካል ጉዳተኞች አጠቃላይ መዝገብ፣ የፋይዳ መታወቂያ ማረጋገጫ እና የማህደር ታሪክ",
+          "badge": "ዋና መዝገብ"
+        },
+        "services": {
+          "title": "የድጋፍ አገልግሎቶች እና ዕርዳታ",
+          "desc": "የተገልጋይ ረዳት መሣሪያዎች፣ አካላዊ ህክምና፣ የህክምና ሪፈራል፣ አልሚ ምግቦች እና የቤት ለቤት ጉብኝቶች",
+          "badge": "የድጋፍ አሰጣጥ"
+        },
+        "training": {
+          "title": "የሙያና ክህሎት ስልጠና",
+          "desc": "የክህሎት ስልጠናዎች፣ ተደራሽ የዕደ-ጥበብ አውደ ጥናቶች፣ ቴክኒካል ሙያዎች እና የሙያ ብቃት (COC) ማረጋገጫዎች",
+          "badge": "አቅም ግንባታ"
+        },
+        "employment": {
+          "title": "አካታች የሥራ ስምሪት",
+          "desc": "የቀጣሪዎች ግንኙነት እና ለአነስተኛ የህብረት ሥራ ማህበራት የገበያና የሥራ ዕድል ማመቻቸት",
+          "badge": "የገቢ ማስገኛ"
+        },
+        "search": {
+          "title": "የተጠቃሚዎች ፍለጋ",
+          "desc": "በፋይዳ፣ በከተማ መታወቂያ፣ በባዮሜትሪክ ሁኔታ፣ በስልክ ወይም በስም የተጠቃሚዎች መፈለጊያ",
+          "badge": "ኦዲትና ፍለጋ"
+        }
+      }
     },
     "layout": {
       "title": "የአካል ጉዳተኞች እና አረጋውያን ሞጁል"
@@ -104,6 +231,93 @@
         "active": "ንቁ",
         "inactive": "ንቁ ያልሆነ",
         "na": "የለም"
+      },
+      "breadcrumbs": {
+        "home": "መነሻ",
+        "module": "አካል ጉዳተኞች እና አረጋውያን",
+        "beneficiariesSuffix": "ተጠቃሚዎች"
+      },
+      "banner": {
+        "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+        "bureau": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+        "directorate": "የማህበረሰብ ማቋቋም እና ማካተት"
+      },
+      "searchPlaceholderDetailed": "በፋይዳ፣ በከተማ መታወቂያ፣ በስም፣ በስልክ ፈልግ...",
+      "filtersButton": "ማጣሪያዎች",
+      "tabs": {
+        "allDisabled": "ሁሉም አካል ጉዳተኞች",
+        "severeProfound": "ከባድና ውስብስብ ጉዳት",
+        "assistanceNeeded": "ረዳት / መሣሪያ የሚሹ",
+        "seekingWork": "ሥራ ፈላጊ (ሥራ የሌላቸው)",
+        "activeDisabled": "ንቁ ተጠቃሚዎች",
+        "allElderly": "ሁሉም አረጋውያን",
+        "supportConfirmed": "ድጋፍ የተረጋገጠላቸው",
+        "livingAloneWidowed": "ብቻቸውን የሚኖሩ / ባልቴት",
+        "oldestOld": "ዕድሜያቸው 80+ አረጋውያን",
+        "activeElderly": "ንቁ ተጠቃሚዎች"
+      },
+      "filterDrawer": {
+        "title": "ዝርዝር የተጋላጭነት እና የቦታ ማጣሪያዎች ({category})",
+        "resetAll": "ሁሉንም ማጣሪያዎች አጽዳ",
+        "subCity": "ክፍለ ከተማ",
+        "allSubCities": "ሁሉም ክፍለ ከተሞች",
+        "woreda": "ወረዳ",
+        "allWoredas": "ሁሉም ወረዳዎች",
+        "selectSubCityFirst": "መጀመሪያ ክፍለ ከተማ ይምረጡ",
+        "woredaPrefix": "ወረዳ {code}",
+        "disabilityType": "የአካል ጉዳት ዓይነት",
+        "allDisabilityTypes": "ሁሉም የጉዳት ዓይነቶች",
+        "severityGrade": "የጉዳት ደረጃ",
+        "allSeverities": "ሁሉም ደረጃዎች",
+        "physicalAssistance": "አካላዊ ድጋፍ",
+        "allAssistance": "ሁሉም የድጋፍ ሁኔታ",
+        "requiresAssistance": "ረዳት / መሣሪያ ይፈልጋል",
+        "independent": "ራሱን የቻለ",
+        "medicalVerification": "የህክምና ማረጋገጫ",
+        "allVerifications": "ሁሉም ሁኔታዎች",
+        "verified": "የተረጋገጠ",
+        "pending": "በመጠባበቅ ላይ",
+        "rejected": "ውድቅ የተደረገ",
+        "ageCohort": "የዕድሜ ክልል",
+        "allAges": "ሁሉም ዕድሜ",
+        "youngOld": "ጀማሪ አረጋውያን (60–69)",
+        "middleOld": "መካከለኛ አረጋውያን (70–79)",
+        "oldestOld": "እድሜ የጠገቡ (80+)",
+        "supportConfirmed": "ድጋፍ ማረጋገጫ",
+        "allRecords": "ሁሉም መዝገቦች",
+        "confirmedOnly": "የተረጋገጠ ብቻ",
+        "unconfirmed": "ያልተረጋገጠ",
+        "employment": "የሥራ ሁኔታ",
+        "allEmployment": "ሁሉም የሥራ ሁኔታዎች",
+        "employed": "ተቀጣሪ / የሥራ ባለቤት",
+        "unemployed": "ሥራ አጥ",
+        "gender": "ጾታ",
+        "allGenders": "ሁሉም ጾታዎች",
+        "male": "ወንድ",
+        "female": "ሴት",
+        "other": "ሌላ"
+      },
+      "chips": {
+        "resultsCount": "ውጤቶች ({filtered} ከ {total}):",
+        "preset": "ምድብ: {tab}",
+        "search": "ፍለጋ: \"{query}\"",
+        "subCity": "ክፍለ ከተማ: {name}",
+        "woreda": "ወረዳ: {code}",
+        "disabilityType": "ዓይነት: {type}",
+        "severity": "ደረጃ: {sev}",
+        "assistance": "ረዳት: {status}",
+        "medicalVerification": "ህክምና: {status}",
+        "ageCohort": "ዕድሜ: {cohort}",
+        "supportConfirmed": "ማረጋገጫ: {status}",
+        "employment": "ሥራ: {status}",
+        "gender": "ጾታ: {gender}",
+        "clearAll": "ሁሉንም አጽዳ"
+      },
+      "pagination": {
+        "showing": "ከ{total} ተጠቃሚዎች ውስጥ ከ{start} እስከ {end} በማሳየት ላይ",
+        "pageInfo": "ገጽ {page} ከ {pages}",
+        "prev": "ቀዳሚ",
+        "next": "ቀጣይ"
       }
     },
     "jobs": {
@@ -217,6 +431,50 @@
           "success": "አገልግሎት በተሳካ ሁኔታ ተመዝግቧል",
           "error": "አገልግሎት ማስመዝገብ አልተሳካም"
         }
+      },
+      "breadcrumbs": {
+        "home": "መነሻ",
+        "module": "አካል ጉዳተኞች እና አረጋውያን",
+        "tabServices": "የድጋፍ አገልግሎቶች",
+        "tabTraining": "የሙያና ክህሎት ስልጠና",
+        "tabJobs": "አካታች የሥራ ስምሪት"
+      },
+      "banner": {
+        "cityAdmin": "የአዲስ አበባ ከተማ አስተዳደር",
+        "bureau": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+        "section": "የማህበረሰብ ማቋቋም እና የኑሮ ማሻሻያ"
+      },
+      "tabs": {
+        "services": "የድጋፍ አገልግሎቶች",
+        "training": "የክህሎት ስልጠናዎች",
+        "jobs": "የሥራ ስምሪቶች"
+      },
+      "filters": {
+        "toggle": "ማጣሪያዎች",
+        "reset": "ማጣሪያዎችን አጽዳ",
+        "category": "ምድብ",
+        "allCategories": "ሁሉም ምድቦች",
+        "provider": "አቅራቢ ድርጅት",
+        "allProviders": "ሁሉም አቅራቢዎች",
+        "trainingType": "የስልጠና ዓይነት",
+        "allTypes": "ሁሉም ዓይነቶች",
+        "cocStatus": "የሲኦሲ (COC) ሁኔታ",
+        "allCoc": "ሁሉም የሲኦሲ ሁኔታ",
+        "company": "የድርጅት መታወቂያ",
+        "allCompanies": "ሁሉም ድርጅቶች"
+      },
+      "tableHeaders": {
+        "beneficiary": "ተጠቃሚ",
+        "service": "አገልግሎት",
+        "category": "ምድብ",
+        "frequency": "ድግግሞሽ",
+        "date": "የተሰጠበት ቀን",
+        "provider": "አቅራቢ",
+        "dates": "የስልጠና ቀናት",
+        "coc": "የሙያ ብቃት (COC)",
+        "companyId": "የድርጅት መታወቂያ",
+        "position": "የሥራ መደብ",
+        "startDate": "የተጀመረበት ቀን"
       }
     },
     "training": {
@@ -312,9 +570,12 @@
         "unknown": "ያልታወቀ"
       },
       "tabs": {
-        "trainingHistory": "የስልጠና ታሪክ",
-        "jobPlacements": "የሥራ ስምሪቶች",
-        "supportServices": "የድጋፍ አገልግሎቶች"
+        "overview": "አጠቃላይ እይታ",
+        "eligibility": "የብቁነት ምዘና",
+        "services": "አገልግሎቶች",
+        "documents": "ሰነዶች",
+        "notes": "የማህደር ማስታወሻዎች",
+        "timeline": "የጊዜ ሰሌዳ"
       },
       "trainingSection": {
         "title": "የስልጠና መዝገቦች",
@@ -349,6 +610,46 @@
           "date": "ቀን",
           "noRecords": "ምንም የድጋፍ አገልግሎት አልተገኘም"
         }
+      },
+      "caseTitle": "ማህደር ቁጥር #{id}",
+      "assessment": {
+        "title": "ምዘና • {date}",
+        "residency": "የነዋሪነት ሁኔታ:",
+        "verified": "✓ የተረጋገጠ",
+        "notVerified": "✗ ያልተረጋገጠ",
+        "communityConfirmation": "የማህበረሰብ ማረጋገጫ:",
+        "confirmed": "✓ የተረጋገጠ",
+        "pending": "✗ በመጠባበቅ ላይ",
+        "woredaConfirmation": "የወረዳ ማረጋገጫ:",
+        "medicalStatus": "የህክምና ሁኔታ:",
+        "decisionNotes": "የውሳኔ ማስታወሻ:",
+        "rejectionReason": "ውድቅ የተደረገበት ምክንያት:",
+        "noAssessments": "እስካሁን ምንም ዓይነት የምዘና መረጃ የለም"
+      },
+      "serviceRecord": {
+        "requested": "የተጠየቀበት ቀን: {date}",
+        "serviceDate": " • የአገልግሎት ቀን: {date}",
+        "office": "ተጠሪ ቢሮ:",
+        "location": "አድራሻ:",
+        "allowance": "ድጎማ:",
+        "assistiveDevice": "የረዳት መሣሪያ:",
+        "referral": "ሪፈራል የተላከበት:",
+        "confirmedVia": "የተረጋገጠበት: {date} በ{method}",
+        "noServices": "እስካሁን የተሰጠ አገልግሎት የለም"
+      },
+      "documentsSection": {
+        "uploadedOn": "የተጫነበት ቀን: {date}",
+        "verified": "✓ የተረጋገጠ",
+        "unverified": "ያልተረጋገጠ",
+        "viewDocument": "ሰነዱን ተመልከት",
+        "noDocuments": "ምንም የተያያዘ ሰነድ የለም"
+      },
+      "notesSection": {
+        "addNote": "ማስታወሻ አክል",
+        "notePlaceholder": "ሚስጥራዊ የማህደር ማስታወሻ፣ የሂደት ክትትል ወይም የምዘና ዝርዝር ያስገቡ...",
+        "cancel": "ሰርዝ",
+        "saveNote": "ማስታወሻ አስቀምጥ",
+        "noNotes": "ምንም የተመዘገበ ማስታወሻ የለም"
       }
     },
     "reports": {
