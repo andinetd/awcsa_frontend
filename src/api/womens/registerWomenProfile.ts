@@ -34,10 +34,12 @@ export const registerWomenProfile = async (
 
     return req.data;
   } catch (error: any) {
-    const errorMessage =
+    const err = new Error(
       error?.response?.data?.message ||
       error?.message ||
-      "Failed to register profile";
-    throw new Error(errorMessage);
+      "Failed to register profile"
+    );
+    (err as any).response = error?.response;
+    throw err;
   }
 };

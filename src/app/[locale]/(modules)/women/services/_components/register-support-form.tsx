@@ -40,6 +40,11 @@ import ServiceTypeSelect from "./service-type-select";
 import WomanSelect from "./woman-select";
 import { useTranslations } from "next-intl";
 
+import {
+  DoubleSupportWarningDialog,
+  DoubleSupportErrorPayload,
+} from "@/components/shared/double-support-warning-dialog";
+
 interface RegisterSupportFormProps {
   defaultClientId?: number;
   defaultAssociationId?: number;
@@ -50,6 +55,8 @@ export default function RegisterSupportForm({
   defaultAssociationId,
 }: RegisterSupportFormProps) {
   const [open, setOpen] = useState(false);
+  const [doubleSupportError, setDoubleSupportError] = useState<DoubleSupportErrorPayload | null>(null);
+  const [warningOpen, setWarningOpen] = useState(false);
   const registerMutation = useRegisterSupportMutation();
   const t = useTranslations("women");
 
@@ -73,10 +80,21 @@ export default function RegisterSupportForm({
     registerMutation.mutate(values as any, {
       onSuccess: () => {
         setOpen(false);
+        setWarningOpen(false);
+        setDoubleSupportError(null);
         form.reset();
         toast.success(t("support.register.messages.success"));
       },
       onError: (error: any) => {
+        const errResponse = error?.response?.data;
+        if (
+          errResponse?.error === "DoubleSupportConflict" &&
+          errResponse?.existingSupport
+        ) {
+          setDoubleSupportError(errResponse.existingSupport);
+          setWarningOpen(true);
+          return;
+        }
         toast.error(error?.message || t("support.register.messages.error"));
       },
     });
@@ -351,6 +369,13 @@ export default function RegisterSupportForm({
           </form>
         </Form>
       </DialogContent>
+
+      <DoubleSupportWarningDialog
+        open={warningOpen}
+        onOpenChange={setWarningOpen}
+        existingSupport={doubleSupportError}
+        attemptedServiceName="Support Service"
+      />
     </Dialog>
   );
 }

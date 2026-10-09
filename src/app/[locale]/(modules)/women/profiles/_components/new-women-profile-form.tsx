@@ -38,8 +38,14 @@ import { SubCitySelect, WoredaSelect } from "@/components/shared/location-select
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
+import { CrossModuleConflictDialog, CrossModuleClientData } from "@/components/shared/cross-module-conflict-dialog";
+
 export default function NewWomenProfileForm() {
   const [open, setOpen] = useState(false);
+  const [conflictClient, setConflictClient] = useState<CrossModuleClientData | null>(null);
+  const [conflictOpen, setConflictOpen] = useState(false);
+  const [pendingValues, setPendingValues] = useState<WomenProfileSchemaType | null>(null);
+
   const registerMutation = useRegisterWomenProfileMutation();
   const t = useTranslations("women");
 
@@ -62,7 +68,7 @@ export default function NewWomenProfileForm() {
 
   const subCity = form.watch("subCity");
 
-  function onSubmit(values: WomenProfileSchemaType) {
+  function submitPayload(values: WomenProfileSchemaType) {
     const payload = {
       ...values,
       occupation: values.careerStatus,
@@ -70,13 +76,33 @@ export default function NewWomenProfileForm() {
     registerMutation.mutate(payload as any, {
       onSuccess: () => {
         setOpen(false);
+        setConflictOpen(false);
+        setConflictClient(null);
+        setPendingValues(null);
         form.reset();
         toast.success(t("form.messages.successRegister"));
       },
       onError: (error: any) => {
+        const errResponse = error?.response?.data;
+        if (errResponse?.error === "CrossModuleConflict" && errResponse?.existingClient) {
+          setConflictClient(errResponse.existingClient);
+          setPendingValues(values);
+          setConflictOpen(true);
+          return;
+        }
         toast.error(error?.message || t("form.messages.errorRegister"));
       },
     });
+  }
+
+  function onSubmit(values: WomenProfileSchemaType) {
+    submitPayload(values);
+  }
+
+  function handleConfirmLink() {
+    if (pendingValues) {
+      submitPayload(pendingValues);
+    }
   }
 
   return (
@@ -395,6 +421,15 @@ export default function NewWomenProfileForm() {
           </form>
         </Form>
       </DialogContent>
+
+      <CrossModuleConflictDialog
+        open={conflictOpen}
+        onOpenChange={setConflictOpen}
+        client={conflictClient}
+        targetModuleName="Women Affairs"
+        onConfirmLink={handleConfirmLink}
+        isLinking={registerMutation.isPending}
+      />
     </Dialog>
   );
 }

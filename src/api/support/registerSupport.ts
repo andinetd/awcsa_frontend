@@ -28,10 +28,12 @@ export const registerSupport = async (data: RegisterSupportPayload) => {
 
     return response.data;
   } catch (error: any) {
-    const errorMessage =
+    const err = new Error(
       error?.response?.data?.message ||
       error?.message ||
-      "Failed to register support service";
-    throw new Error(errorMessage);
+      "Failed to register support service"
+    );
+    (err as any).response = error?.response;
+    throw err;
   }
 };
