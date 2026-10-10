@@ -56,6 +56,13 @@ export default function NewChildForm() {
       return dt.toISOString().split("T")[0];
     };
 
+    const formatDateTime = (d?: Date | string) => {
+      if (!d) return undefined;
+      const dt = d instanceof Date ? d : new Date(String(d));
+      if (isNaN(dt.getTime())) return undefined;
+      return dt.toISOString();
+    };
+
     const payload: Record<string, any> = {
       firstName: values?.first_name ?? "",
       lastName: values?.last_name ?? "",
@@ -67,11 +74,11 @@ export default function NewChildForm() {
 
     if (values?.current_status === "FOUND") {
       payload.placeWhereChildFound = values?.found_address ?? undefined;
-      payload.timeWhenChildFound = values?.found_date ?? undefined;
+      payload.timeWhenChildFound = formatDateTime(values?.found_date) ?? undefined;
       payload.socialWorkerCityIdNumber =
         values?.child_founder_city_id_number ?? undefined;
     } else if (values?.current_status === "IN_CARE") {
-      payload.childCareFacilityId = Number(values?.care_center_id) ?? undefined;
+      payload.childCareFacilityId = Number(values?.care_center_id) || undefined;
       payload.childIdFromFacility =
         values?.child_id_from_care_center ?? undefined;
     } else if (values?.current_status === "IN_ADERA") {
@@ -85,6 +92,7 @@ export default function NewChildForm() {
     } else if (values?.current_status === "RETURNED") {
       payload.previousAdopterCityIdNumber =
         values?.previous_adopter_city_id_number ?? undefined;
+      payload.reasonForReturn = values?.additional_information ?? "Returned by previous adopter";
     }
 
     console.log("values submitted (payload):", payload);

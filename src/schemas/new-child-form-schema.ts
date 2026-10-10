@@ -16,16 +16,16 @@ export const NewChildformSchema = z.object({
     .optional(),
   sex: z.enum(["MALE", "FEMALE"]),
   admitance_reason: z.string().trim().optional(),
-  found_address: z.string().trim(),
+  found_address: z.string().trim().optional(),
   found_subcity: z.string().trim().optional(),
   found_woreda: z.string().trim().optional(),
   additional_information: z.string().trim().optional(),
 
-  found_date: z.date(),
+  found_date: z.date().optional(),
 
   date_of_birth: z.date().optional(),
 
-  child_founder_city_id_number: z.string(),
+  child_founder_city_id_number: z.string().trim().optional(),
   child_founder_name: z.string().optional(),
   child_founder_address: z.string().optional(),
   child_founder_subcity: z.string().optional(),
@@ -49,11 +49,11 @@ export const NewChildformSchema = z.object({
   care_center_worker_id_no: z.string().optional(),
   care_center_worker_name: z.string().optional(),
 
-  child_id_from_care_center: z.string(),
-  bale_adera_city_id_number: z.string(),
-  adopter_city_id_number: z.string(),
-  blood_relative_city_id_number: z.string(),
-  previous_adopter_city_id_number: z.string(),
+  child_id_from_care_center: z.string().trim().optional(),
+  bale_adera_city_id_number: z.string().trim().optional(),
+  adopter_city_id_number: z.string().trim().optional(),
+  blood_relative_city_id_number: z.string().trim().optional(),
+  previous_adopter_city_id_number: z.string().trim().optional(),
 
   current_status: z.enum([
     "RETURNED",
@@ -63,7 +63,7 @@ export const NewChildformSchema = z.object({
     "FOUND",
     "WITH_BLOOD_RELATIVE",
   ]),
-  care_center_id: z.string(),
+  care_center_id: z.string().trim().optional(),
 
   health_officer_1_name: z.string().optional(),
   heallth_officer_2_name: z.string().optional(),
@@ -99,6 +99,77 @@ export const NewChildformSchemaNew = NewChildformSchema.pick({
   previous_adopter_city_id_number: true,
 
   additional_information: true,
+}).superRefine((data, ctx) => {
+  if (data.current_status === "FOUND") {
+    if (!data.found_address || data.found_address.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["found_address"],
+        message: "Address where child was found is required",
+      });
+    }
+    if (!data.found_date) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["found_date"],
+        message: "Date when child was found is required",
+      });
+    }
+    if (!data.child_founder_city_id_number || data.child_founder_city_id_number.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["child_founder_city_id_number"],
+        message: "Social worker/founder city ID number is required",
+      });
+    }
+  } else if (data.current_status === "IN_CARE") {
+    if (!data.care_center_id || data.care_center_id.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["care_center_id"],
+        message: "Child care facility ID is required",
+      });
+    }
+    if (!data.child_id_from_care_center || data.child_id_from_care_center.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["child_id_from_care_center"],
+        message: "Facility internal child ID is required",
+      });
+    }
+  } else if (data.current_status === "IN_ADERA") {
+    if (!data.bale_adera_city_id_number || data.bale_adera_city_id_number.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["bale_adera_city_id_number"],
+        message: "Bale Adera City ID is required",
+      });
+    }
+  } else if (data.current_status === "ADOPTED") {
+    if (!data.adopter_city_id_number || data.adopter_city_id_number.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["adopter_city_id_number"],
+        message: "Adopter City ID is required",
+      });
+    }
+  } else if (data.current_status === "WITH_BLOOD_RELATIVE") {
+    if (!data.blood_relative_city_id_number || data.blood_relative_city_id_number.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["blood_relative_city_id_number"],
+        message: "Blood Relative City ID is required",
+      });
+    }
+  } else if (data.current_status === "RETURNED") {
+    if (!data.previous_adopter_city_id_number || data.previous_adopter_city_id_number.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["previous_adopter_city_id_number"],
+        message: "Previous Adopter City ID is required",
+      });
+    }
+  }
 });
 
 export const NewChildformSchemaSection1 = NewChildformSchema.pick({

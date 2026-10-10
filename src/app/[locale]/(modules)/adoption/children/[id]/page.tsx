@@ -37,6 +37,11 @@ import {
 } from "@/components/custom/custom-card";
 import { useChildDetails } from "@/hooks/adoption/useChildDetails";
 import { TransferStatusDialog } from "../_components/transfer-status-dialog";
+import { CarePlanSection } from "../_components/care-plan-section";
+import { SiblingGroupSection } from "../_components/sibling-group-section";
+import { DigitalDossierSection } from "../_components/digital-dossier-section";
+import { BiometricsSection } from "../_components/biometrics-section";
+import { AderaCustodySection } from "../_components/adera-custody-section";
 import { ChildStatus } from "@/types/child-matching-types";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
@@ -300,6 +305,9 @@ export default function ChildDetailsPage() {
         </div>
       )}
 
+      {/* ── Care Plan & Permanency Lifecycle (Reunification First) ───────── */}
+      <CarePlanSection child={child} />
+
       {/* ── 2-Column Details Grid ───────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Profile Card */}
@@ -560,6 +568,18 @@ export default function ChildDetailsPage() {
           </CardContent>
         </Card>
       </div>
+ 
+      {/* ── Sibling Group (Non-Separation Family Protection) ───────────────── */}
+      <SiblingGroupSection child={child} />
+
+      {/* ── Biometrics & De-duplication Protection ─────────────────────────── */}
+      <BiometricsSection child={child} />
+
+      {/* ── Customary Adera Formalization & Protection ──────────────────────── */}
+      <AderaCustodySection child={child} />
+
+      {/* ── Digital Child Dossier (360° Life Story & Health Record) ────────── */}
+      <DigitalDossierSection child={child} />
 
       {/* ── Transfer & Placement History Audit Trail ────────────────────────── */}
       <Card className="border-[#E3E7EB] bg-white rounded-xs shadow-2xs">
