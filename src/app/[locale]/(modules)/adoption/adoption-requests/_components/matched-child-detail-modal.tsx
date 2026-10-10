@@ -26,6 +26,7 @@ import {
 import { PostMatchNotesSection } from "./post-match-notes-section";
 import { FollowUpReportsSection } from "./follow-up-reports-section";
 import { PostPlacementVisitsSection } from "./post-placement-visits-section";
+import { JudicialProceedingsSection } from "./judicial-proceedings-section";
 
 export interface MatchedChildInfo {
   child: {
@@ -115,7 +116,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
   isLoading = false,
 }) => {
   const t = useTranslations("adoption");
-  const [activeTab, setActiveTab] = useState<"notes" | "followup" | "visits">("notes");
+  const [activeTab, setActiveTab] = useState<"notes" | "followup" | "visits" | "judicial">("notes");
 
   if (!isOpen) return null;
 
@@ -464,6 +465,16 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 }
               })()}
             </button>
+            <button
+              onClick={() => setActiveTab("judicial")}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all duration-150 flex items-center justify-center gap-1.5 ${
+                activeTab === "judicial"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <span>⚖️ Court & VERA Registry</span>
+            </button>
           </div>
 
           {/* Tab content */}
@@ -482,6 +493,13 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
           )}
           {activeTab === "visits" && (
             <PostPlacementVisitsSection
+              matchId={data?.matchId}
+              matchStatus={data?.matchStatus || data?.status}
+              isOfficer={true}
+            />
+          )}
+          {activeTab === "judicial" && (
+            <JudicialProceedingsSection
               matchId={data?.matchId}
               matchStatus={data?.matchStatus || data?.status}
               isOfficer={true}

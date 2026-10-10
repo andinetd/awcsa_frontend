@@ -418,3 +418,205 @@ export const getReunificationDetails = async (
   );
   return res.data?.data;
 };
+
+// =====================================================================
+// Phase 3: Intelligent Matching & Committee API Methods
+// =====================================================================
+
+export const getMatchRecommendationsForApplication = async (
+  applicationId: number,
+) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/intelligent-matching/recommendations/application/${applicationId}`,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const saveFamilySuitabilityAssessment = async (
+  applicationId: number,
+  payload: any,
+) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/intelligent-matching/suitability-assessment/${applicationId}`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const getFamilySuitabilityAssessment = async (applicationId: number) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/intelligent-matching/suitability-assessment/${applicationId}`,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const recordAdoptionCommitteeReview = async (payload: any) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/intelligent-matching/committee-review`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const getAdoptionCommitteeReviews = async (params?: {
+  applicationId?: number;
+  childRegistrationId?: number;
+}) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/intelligent-matching/committee-reviews`,
+    {
+      params,
+      headers: getAuthHeaders(),
+    },
+  );
+  return res.data;
+};
+
+export const executeConfirmedAdoptionMatch = async (payload: {
+  childIdFromFacility: string;
+  applicantId: number;
+  applicationId: number;
+  committeeReviewId?: number | null;
+  matchScore?: number | null;
+  scoringBreakdown?: Record<string, any> | null;
+  note?: string | null;
+}) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/intelligent-matching/execute-match`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+// ─── Phase 4: Court Proceedings & VERA Civil Registry ────────────────────────
+
+export const initiateCourtPetition = async (
+  matchId: number,
+  payload: {
+    courtName: string;
+    benchName?: string;
+    courtFileNumber: string;
+    presidingJudge?: string;
+    filingDate?: string;
+    nextHearingDate?: string;
+    statusRemarks?: string;
+  },
+) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/court-proceedings/match/${matchId}/petition`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const getCourtBundleManifest = async (matchId: number) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/court-proceedings/match/${matchId}/court-bundle`,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const recordCourtHearing = async (
+  caseId: number,
+  payload: {
+    hearingDate: string;
+    hearingType: string;
+    attendees?: Array<{ name: string; role: string }>;
+    judgeOrders?: string;
+    postponementReason?: string;
+    nextHearingDate?: string;
+  },
+) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/court-proceedings/cases/${caseId}/hearings`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const finalizeAdoptionDecree = async (
+  caseId: number,
+  payload: {
+    decreeNumber: string;
+    decreeDate: string;
+    decreeDocumentUrl?: string;
+    certifiedCopyUrl?: string;
+    legalOrdersSummary?: string;
+  },
+) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/court-proceedings/cases/${caseId}/decree`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const recordVeraLinkage = async (
+  matchId: number,
+  payload: {
+    veraOfficeBranch: string;
+    decreeSubmissionDate?: string;
+    registrationNumber?: string;
+    amendedBirthCertNumber: string;
+    dateIssued?: string;
+    originalCertArchived?: boolean;
+    certificateDocumentUrl?: string;
+    notes?: string;
+  },
+) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/court-proceedings/match/${matchId}/vera-linkage`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const getCourtCaseDetails = async (matchId: number) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/court-proceedings/match/${matchId}`,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const initiateInterRegionalTransfer = async (payload: {
+  childRegistrationId: number;
+  originRegion: string;
+  destinationRegion: string;
+  liaisonOfficerName: string;
+  liaisonOfficerPhone?: string;
+  officialLetterNumber: string;
+  transferReason: string;
+  handoverProtocolDocUrl?: string;
+  notes?: string;
+}) => {
+  const res = await axios.post(
+    `${BASE_URL}/adoption/court-proceedings/inter-regional-transfer`,
+    payload,
+    { headers: getAuthHeaders() },
+  );
+  return res.data;
+};
+
+export const getInterRegionalTransfers = async (childRegistrationId?: number) => {
+  const res = await axios.get(
+    `${BASE_URL}/adoption/court-proceedings/inter-regional-transfers`,
+    {
+      params: childRegistrationId ? { childRegistrationId } : undefined,
+      headers: getAuthHeaders(),
+    },
+  );
+  return res.data;
+};
+
+
