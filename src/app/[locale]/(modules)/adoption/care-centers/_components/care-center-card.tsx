@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
-import { Building2, Eye, MapPin, Phone, Users } from "lucide-react";
+import { Building2, Eye, MapPin, Phone, Users, ClipboardCheck } from "lucide-react";
 import React from "react";
 import { formatAge } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -13,11 +13,13 @@ import { cn } from "@/lib/utils";
 interface CareCenterCardProps {
   careCenter: NewCareCenterSchemaType;
   onViewDetails: (careCenter: NewCareCenterSchemaType) => void;
+  onOpenCensus?: (careCenter: NewCareCenterSchemaType) => void;
 }
 
 const CareCenterCard: React.FC<CareCenterCardProps> = ({
   careCenter,
   onViewDetails,
+  onOpenCensus,
 }) => {
   const t = useTranslations("adoption");
   const isGov = careCenter.type === "GOVERNMENT";
@@ -107,7 +109,18 @@ const CareCenterCard: React.FC<CareCenterCardProps> = ({
       </div>
 
       {/* Footer action */}
-      <div className="flex justify-end pt-3 mt-3 border-t border-[#E3E7EB]">
+      <div className="flex items-center justify-end gap-2 pt-3 mt-3 border-t border-[#E3E7EB]">
+        {onOpenCensus && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs px-2.5 text-[#1769AA] hover:bg-[#E8F2FA] border-[#BCD5EA] rounded-xs cursor-pointer shadow-none gap-1.5"
+            onClick={() => onOpenCensus(careCenter)}
+          >
+            <ClipboardCheck className="size-3.5 text-[#1769AA]" />
+            <span>Capacity & Census</span>
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"

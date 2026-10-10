@@ -6,6 +6,7 @@ import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
 import CareCenterCard from "./_components/care-center-card";
 import CareCenterDetailsDialog from "./_components/care-center-details-dialog";
+import { FacilityCensusDialog } from "./_components/facility-census-dialog";
 import { NewCareCenterSchemaType } from "@/schemas/care-centers";
 import { useTranslations } from "next-intl";
 import { Building2, Landmark, HeartHandshake, Search, ShieldCheck, Users, X } from "lucide-react";
@@ -42,6 +43,8 @@ const CareCenters = () => {
   const [selectedCenter, setSelectedCenter] =
     useState<NewCareCenterSchemaType | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [censusCenter, setCensusCenter] = useState<any | null>(null);
+  const [isCensusOpen, setIsCensusOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<"ALL" | "GOVERNMENT" | "NGO">("ALL");
   const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
@@ -49,6 +52,11 @@ const CareCenters = () => {
   const handleViewDetails = (center: NewCareCenterSchemaType) => {
     setSelectedCenter(center);
     setIsDialogOpen(true);
+  };
+
+  const handleOpenCensus = (center: NewCareCenterSchemaType) => {
+    setCensusCenter(center);
+    setIsCensusOpen(true);
   };
 
   const allSubCityNames = useMemo(() => {
@@ -330,6 +338,7 @@ const CareCenters = () => {
             key={index}
             careCenter={center}
             onViewDetails={handleViewDetails}
+            onOpenCensus={handleOpenCensus}
           />
         ))}
 
@@ -350,6 +359,14 @@ const CareCenters = () => {
         careCenter={selectedCenter}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+      />
+
+      {/* ── Facility Capacity & Census Audit Dialog ─────────────────────────── */}
+      <FacilityCensusDialog
+        facilityId={(censusCenter as any)?.id ?? null}
+        facilityName={censusCenter?.name}
+        open={isCensusOpen}
+        onOpenChange={setIsCensusOpen}
       />
     </div>
   );
