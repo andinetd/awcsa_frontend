@@ -234,7 +234,7 @@
     },
     "table": {
       "name": "ሙሉ ስም",
-      "cityId": "የከተማ መታወቂያ",
+      "cityId": "የፋይዳ መለያ",
       "age": "ዕድሜ",
       "phone": "የስልክ ቁጥር",
       "address": "አድራሻ",
@@ -300,7 +300,9 @@
     "editTitle": "የሴት ፕሮፍይል ያርሙ",
     "description": "በስርዓቱ ውስጥ ለመመዝገብ የሴቷን ዝርዝር መረጃ ያስገቡ።",
     "personalInfo": "የግል መረጃ",
-    "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+    "faydaId": "የፋይዳ መለያ",
+    "faydaIdPlaceholder": "የፋይዳ መለያ ቁጥር ያስገቡ",
+    "cityIdNumber": "የፋይዳ መለያ",
     "dateOfBirth": "የትውልድ ቀን",
     "age": "ዕድሜ",
     "agePlaceholder": "ምሳሌ 28",
@@ -988,6 +990,20 @@
     "cardTitle": "የስልጠና መዝገቦች",
     "attendedYes": "ተሳትፋለች",
     "attendedNo": "አልተሳተፈችም",
+    "showing": "ከ {total} ውስጥ {from}-{to} በማሳየት ላይ",
+    "pagination": {
+      "prev": "ቀዳሚ",
+      "next": "ቀጣይ"
+    },
+    "delete": {
+      "title": "ስረዛን ያረጋግጡ",
+      "description": "ይህን የስልጠና መዝገብ መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?",
+      "cancel": "ይቅር",
+      "confirm": "ይሰረዝ",
+      "deleting": "በመሰረዝ ላይ...",
+      "success": "የስልጠና መዝገብ በተሳካ ሁኔታ ተሰርዟል",
+      "error": "ስረዛው አልተሳካም"
+    },
     "table": {
       "beneficiary": "ተጠቃሚ",
       "trainingTopic": "የስልጠና ርዕስ",
@@ -1004,6 +1020,7 @@
     "form": {
       "addButton": "ስልጠና ይመዝገቡ",
       "title": "የሴቶች ስልጠና ይመዝገቡ",
+      "editTitle": "የስልጠና መረጃን ያርትዑ",
       "fields": {
         "firstName": "የመጀመሪያ ስም",
         "lastName": "የአባት ስም",
@@ -1051,6 +1068,20 @@
     "cardTitle": "የስራ መዝገቦች",
     "individual": "ግለሰብ",
     "group": "በቡድን የተደራጀ",
+    "showing": "ከ {total} ውስጥ {from}-{to} በማሳየት ላይ",
+    "pagination": {
+      "prev": "ቀዳሚ",
+      "next": "ቀጣይ"
+    },
+    "delete": {
+      "title": "ስረዛን ያረጋግጡ",
+      "description": "ይህን የስራ መዝገብ መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?",
+      "cancel": "ይቅር",
+      "confirm": "ይሰረዝ",
+      "deleting": "በመሰረዝ ላይ...",
+      "success": "የስራ መዝገብ በተሳካ ሁኔታ ተሰርዟል",
+      "error": "ስረዛው አልተሳካም"
+    },
     "table": {
       "beneficiary": "ተጠቃሚ",
       "type": "አይነት",

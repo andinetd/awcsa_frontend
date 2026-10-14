@@ -136,7 +136,7 @@ export default function WomenTrainingForm({ record, open: controlledOpen, onOpen
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
             <GraduationCap className="w-4 h-4 text-[#1769AA]" />
-            {isEditing ? "Edit Training" : t("title")}
+            {isEditing ? t("editTitle") : t("title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>

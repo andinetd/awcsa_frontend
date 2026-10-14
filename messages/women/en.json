@@ -234,7 +234,7 @@
     },
     "table": {
       "name": "Full Name",
-      "cityId": "City ID",
+      "cityId": "Fayda ID",
       "age": "Age",
       "phone": "Phone Number",
       "address": "Address",
@@ -300,7 +300,9 @@
     "editTitle": "Edit Woman Profile",
     "description": "Enter the details of the woman to register in the system.",
     "personalInfo": "Personal Information",
-    "cityIdNumber": "City ID Number",
+    "faydaId": "Fayda ID",
+    "faydaIdPlaceholder": "Enter Fayda ID (e.g. 123456789012)",
+    "cityIdNumber": "Fayda ID",
     "dateOfBirth": "Date of Birth",
     "age": "Age",
     "agePlaceholder": "e.g. 28",
@@ -988,6 +990,20 @@
     "cardTitle": "Training Records",
     "attendedYes": "Attended",
     "attendedNo": "Not Attended",
+    "showing": "Showing {from}-{to} of {total}",
+    "pagination": {
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "delete": {
+      "title": "Confirm Delete",
+      "description": "Are you sure you want to delete this training record?",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "deleting": "Deleting...",
+      "success": "Training record deleted",
+      "error": "Delete failed"
+    },
     "table": {
       "beneficiary": "Beneficiary",
       "trainingTopic": "Training Topic",
@@ -1004,6 +1020,7 @@
     "form": {
       "addButton": "Register Training",
       "title": "Register Women Training",
+      "editTitle": "Edit Training",
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -1051,6 +1068,20 @@
     "cardTitle": "Employment Records",
     "individual": "Individual",
     "group": "Group Based",
+    "showing": "Showing {from}-{to} of {total}",
+    "pagination": {
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "delete": {
+      "title": "Confirm Delete",
+      "description": "Are you sure you want to delete this employment record?",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "deleting": "Deleting...",
+      "success": "Employment record deleted",
+      "error": "Delete failed"
+    },
     "table": {
       "beneficiary": "Beneficiary",
       "type": "Type",
