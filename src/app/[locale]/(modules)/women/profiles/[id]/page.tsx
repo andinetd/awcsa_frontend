@@ -73,7 +73,7 @@ const WomenProfileDetail = () => {
                   {profile.client.firstName} {profile.client.lastName}
                 </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
-                  {profile.client.cityIdNumber || "—"}
+                  {profile.client.faydaId || profile.client.cityIdNumber || "—"}
                 </span>
               </div>
               <p className="text-xs text-slate-500">{t("profileDetail.title")}</p>
@@ -142,7 +142,7 @@ const WomenProfileDetail = () => {
               <p className="text-slate-500 font-medium">
                 {t("form.cityIdNumber")}
               </p>
-              <p className="font-mono font-semibold text-slate-800 mt-0.5">{profile.client.cityIdNumber || "—"}</p>
+              <p className="font-mono font-semibold text-slate-800 mt-0.5">{profile.client.faydaId || profile.client.cityIdNumber || "—"}</p>
             </div>
             <div>
               <p className="text-slate-500 font-medium">

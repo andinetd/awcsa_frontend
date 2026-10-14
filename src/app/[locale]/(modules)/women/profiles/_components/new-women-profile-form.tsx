@@ -52,6 +52,7 @@ export default function NewWomenProfileForm() {
   const form = useForm<WomenProfileSchemaType>({
     resolver: zodResolver(womenProfileSchema) as any,
     defaultValues: {
+      faydaId: "",
       cityIdNumber: "",
       firstName: "",
       lastName: "",
@@ -68,10 +69,11 @@ export default function NewWomenProfileForm() {
 
   const subCity = form.watch("subCity");
 
-  function submitPayload(values: WomenProfileSchemaType) {
+  function submitPayload(values: WomenProfileSchemaType, confirmLink = false) {
     const payload = {
       ...values,
       occupation: values.careerStatus,
+      confirmLink,
     };
     registerMutation.mutate(payload as any, {
       onSuccess: () => {
@@ -90,18 +92,34 @@ export default function NewWomenProfileForm() {
           setConflictOpen(true);
           return;
         }
-        toast.error(error?.message || t("form.messages.errorRegister"));
+        let message = t("form.messages.errorRegister");
+        if (typeof errResponse?.message === "string") {
+          message = errResponse.message;
+        } else if (Array.isArray(errResponse?.message)) {
+          message = errResponse.message.join(", ");
+        } else if (error?.message) {
+          message = error.message;
+        }
+        const lower = message.toLowerCase();
+        if (
+          lower.includes("fayda") ||
+          lower.includes("already exists") ||
+          lower.includes("profile already exists")
+        ) {
+          form.setError("faydaId", { message });
+        }
+        toast.error(message);
       },
     });
   }
 
   function onSubmit(values: WomenProfileSchemaType) {
-    submitPayload(values);
+    submitPayload(values, false);
   }
 
   function handleConfirmLink() {
     if (pendingValues) {
-      submitPayload(pendingValues);
+      submitPayload(pendingValues, true);
     }
   }
 
@@ -133,13 +151,13 @@ export default function NewWomenProfileForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
-                  name="cityIdNumber"
+                  name="faydaId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.cityIdNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.faydaId")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t("form.cityIdNumber")}
+                          placeholder={t("form.faydaIdPlaceholder")}
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
                           {...field}
                         />

@@ -191,6 +191,7 @@ export default function ProfilesPage() {
         const matchesSearch = [
           p.client.firstName,
           p.client.lastName,
+          p.client.faydaId,
           p.client.cityIdNumber,
           p.client.phoneNumber,
           p.client.subCity,
@@ -972,7 +973,7 @@ export default function ProfilesPage() {
                       </TableCell>
                       <TableCell className="py-3">
                         <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
-                          {profile.client.cityIdNumber || "—"}
+                          {profile.client.faydaId || profile.client.cityIdNumber || "—"}
                         </span>
                       </TableCell>
                       <TableCell className="text-slate-600 text-xs font-mono py-3">

@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const womenProfileSchema = z.object({
-  cityIdNumber: z.string().min(1, "City ID number is required"),
+  faydaId: z.string().min(1, "Fayda ID is required"),
+  cityIdNumber: z.string().optional(),
+  confirmLink: z.boolean().optional(),
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   phoneNumber: z.string().min(10, "Valid phone number is required"),

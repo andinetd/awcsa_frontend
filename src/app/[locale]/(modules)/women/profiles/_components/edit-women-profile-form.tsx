@@ -54,6 +54,7 @@ export default function EditWomenProfileForm({
   const form = useForm<WomenProfileSchemaType>({
     resolver: zodResolver(womenProfileSchema) as any,
     defaultValues: {
+      faydaId: "",
       cityIdNumber: "",
       firstName: "",
       lastName: "",
@@ -79,7 +80,8 @@ export default function EditWomenProfileForm({
       }
 
       form.reset({
-        cityIdNumber: profile.client.cityIdNumber,
+        faydaId: profile.client.faydaId || profile.client.cityIdNumber || "",
+        cityIdNumber: profile.client.cityIdNumber || "",
         firstName: profile.client.firstName,
         lastName: profile.client.lastName,
         phoneNumber: profile.client.phoneNumber,
@@ -138,13 +140,13 @@ export default function EditWomenProfileForm({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
-                  name="cityIdNumber"
+                  name="faydaId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.cityIdNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.faydaId")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t("form.cityIdNumber")}
+                          placeholder={t("form.faydaIdPlaceholder")}
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
                           {...field}
                         />

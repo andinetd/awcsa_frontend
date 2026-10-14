@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth-store";
 
 export interface UpdateWomenProfilePayload {
+  faydaId?: string;
   cityIdNumber?: string;
   firstName?: string;
   lastName?: string;

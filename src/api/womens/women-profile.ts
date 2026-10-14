@@ -1,6 +1,7 @@
 export interface Client {
   id: number;
-  cityIdNumber: string;
+  faydaId?: string | null;
+  cityIdNumber?: string | null;
   firstName: string;
   lastName: string;
   phoneNumber: string;

@@ -3,7 +3,9 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth-store";
 
 export interface RegisterWomenProfilePayload {
-  cityIdNumber: string;
+  faydaId?: string;
+  cityIdNumber?: string;
+  confirmLink?: boolean;
   firstName: string;
   lastName: string;
   phoneNumber: string;
