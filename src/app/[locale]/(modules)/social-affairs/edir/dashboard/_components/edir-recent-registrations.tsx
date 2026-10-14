@@ -26,7 +26,10 @@ export function EdirRecentRegistrations({ recentList }: EdirRecentRegistrationsP
   const getSubCityDisplayName = (name?: string) => {
     if (!name) return "—";
     try {
-      return tSubCities(name);
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
     } catch {
       return name;
     }
