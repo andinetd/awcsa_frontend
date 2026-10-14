@@ -21,6 +21,8 @@ type EmployeeJwtPayload = {
     id: number;
     type: UnitType;
     deputyBureau?: string | null; // Deprecated - use directorateId/teamId instead
+    subCity?: string | null;
+    woreda?: string | null;
     directorateId?: number;
     teamId?: number;
   };

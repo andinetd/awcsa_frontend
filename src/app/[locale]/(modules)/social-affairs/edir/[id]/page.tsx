@@ -41,6 +41,7 @@ interface PageProps {
 
 export default function EdirDetailsPage({ params }: PageProps) {
   const t = useTranslations("social-affairs.edir.edir-details");
+  const tList = useTranslations("social-affairs.edir.list");
   const router = useRouter();
   const resolvedParams = use(params);
   const id = parseInt(resolvedParams.id);
@@ -66,8 +67,6 @@ export default function EdirDetailsPage({ params }: PageProps) {
   }
 
   const typedEdir = edir as Edir;
-
-  const tList = useTranslations("social-affairs.edir.list");
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto w-full p-4 md:p-8">
