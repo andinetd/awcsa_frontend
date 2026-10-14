@@ -69,6 +69,8 @@
       "contact": "Contact",
       "role": "Role",
       "organization": "Org Unit",
+      "department": "Department",
+      "modules": "Modules",
       "status": "Status",
       "created": "Joined",
       "actions": "Actions",

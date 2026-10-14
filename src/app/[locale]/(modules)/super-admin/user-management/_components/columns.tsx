@@ -78,9 +78,19 @@ export const getColumns = ({
   },
   {
     accessorKey: "employee.assignedModules",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={t("department") || "Modules"} />
-    ),
+    header: ({ column }) => {
+      const title = t("department");
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title={
+            title && !title.includes("super-admin.userManagement")
+              ? title
+              : "Department"
+          }
+        />
+      );
+    },
     cell: ({ row }) => {
       const assigned = row.original.employee?.assignedModules;
       const dept = row.original.employee?.department;
