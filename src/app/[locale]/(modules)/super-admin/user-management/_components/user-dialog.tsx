@@ -85,23 +85,46 @@ export function UserDialog({
   const isSaving = createUserMutation.isPending || updateUserMutation.isPending;
 
   const formSchema = useMemo(() => {
-    return z.object({
-      firstName: z.string().min(2, t("errors.firstNameRequired")),
-      lastName: z.string().min(2, t("errors.lastNameRequired")),
-      email: z.string().email(t("errors.invalidEmail")),
-      phoneNumber: z.string().min(10, t("errors.phoneRequired")),
-      cityIdNumber: z.string().min(1, t("errors.cityIdRequired")),
-      password: z.string().min(6, t("errors.passwordMin")),
-      roleId: z.string().min(1, t("errors.roleRequired")),
-      orgUnitId: z.string().min(1, t("errors.orgRequired")),
-      assignedModules: z
-        .array(z.string())
-        .min(1, t("errors.departmentRequired") || "At least one module is required"),
-      department: z.string().optional(),
-      directorateId: z.string().optional(),
-      teamId: z.string().optional(),
-    });
-  }, [t]);
+    return z
+      .object({
+        firstName: z.string().min(2, t("errors.firstNameRequired")),
+        lastName: z.string().min(2, t("errors.lastNameRequired")),
+        email: z.string().email(t("errors.invalidEmail")),
+        phoneNumber: z.string().min(10, t("errors.phoneRequired")),
+        cityIdNumber: z.string().optional(),
+        password: isEdit
+          ? z.string().optional()
+          : z.string().min(6, t("errors.passwordMin")),
+        confirmPassword: z.string().optional(),
+        roleId: z.string().min(1, t("errors.roleRequired")),
+        orgUnitId: z.string().min(1, t("errors.orgRequired")),
+        assignedModules: z
+          .array(z.string())
+          .min(1, t("errors.departmentRequired") || "At least one module is required"),
+        department: z.string().optional(),
+        directorateId: z.string().optional(),
+        teamId: z.string().optional(),
+      })
+      .superRefine((data, ctx) => {
+        if (!isEdit) {
+          if (!data.confirmPassword) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                t("errors.confirmPasswordRequired") || "Please confirm password",
+              path: ["confirmPassword"],
+            });
+          } else if (data.password !== data.confirmPassword) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                t("errors.passwordMismatch") || "Passwords do not match",
+              path: ["confirmPassword"],
+            });
+          }
+        }
+      });
+  }, [t, isEdit]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,6 +135,7 @@ export function UserDialog({
       phoneNumber: "",
       cityIdNumber: "",
       password: "",
+      confirmPassword: "",
       roleId: "",
       orgUnitId: "",
       assignedModules: [],
@@ -122,11 +146,13 @@ export function UserDialog({
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Prefill when editing
   useEffect(() => {
     if (open) {
       setShowPassword(false);
+      setShowConfirmPassword(false);
       if (user?.employee) {
         const assigned =
           user.employee.assignedModules && user.employee.assignedModules.length > 0
@@ -140,7 +166,8 @@ export function UserDialog({
           email: user.email || "",
           phoneNumber: user.employee.phoneNumber || "",
           cityIdNumber: user.employee.cityIdNumber || "",
-          password: "123456",
+          password: "",
+          confirmPassword: "",
           roleId: String(user.employee.role?.id || ""),
           orgUnitId: String(user.employee.orgUnit?.id || ""),
           assignedModules: assigned,
@@ -162,6 +189,7 @@ export function UserDialog({
           phoneNumber: "",
           cityIdNumber: "",
           password: "",
+          confirmPassword: "",
           roleId: "",
           orgUnitId: defaultBureauId,
           assignedModules: [],
@@ -176,7 +204,9 @@ export function UserDialog({
   const handleGenerate = () => {
     const generated = generatePassword();
     form.setValue("password", generated, { shouldValidate: true });
+    form.setValue("confirmPassword", generated, { shouldValidate: true });
     setShowPassword(true);
+    setShowConfirmPassword(true);
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -186,7 +216,6 @@ export function UserDialog({
       firstName: values.firstName,
       lastName: values.lastName,
       phoneNumber: values.phoneNumber,
-      cityIdNumber: values.cityIdNumber,
       department: effectiveDepartment,
       assignedModules: values.assignedModules as CreateUserDto["assignedModules"],
       orgUnitId: Number(values.orgUnitId),
@@ -222,7 +251,7 @@ export function UserDialog({
     const payload: CreateUserDto = {
       ...base,
       email: values.email,
-      password: values.password,
+      password: values.password || "",
       roleId: Number(values.roleId),
     };
     createUserMutation.mutate(payload, {
@@ -300,42 +329,23 @@ export function UserDialog({
                     )}
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="phoneNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-semibold text-slate-700">{t("phone")}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t("placeholders.phone")}
-                            {...field}
-                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[11px]" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="cityIdNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-semibold text-slate-700">{t("cityId")}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t("placeholders.cityId")}
-                            {...field}
-                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[11px]" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("phone")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("placeholders.phone")}
+                          {...field}
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               {!isEdit && (
@@ -400,46 +410,82 @@ export function UserDialog({
                       )}
                     />
                   </div>
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-semibold text-slate-700">{t("password")}</FormLabel>
-                        <div className="relative">
-                          <FormControl>
-                            <Input
-                              type={showPassword ? "text" : "password"}
-                              autoComplete="new-password"
-                              placeholder={t("placeholders.password")}
-                              {...field}
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-20"
-                            />
-                          </FormControl>
-                          <button
-                            type="button"
-                            onClick={handleGenerate}
-                            className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-[11px] font-mono font-medium text-[#1769AA] hover:underline cursor-pointer"
-                          >
-                            <RefreshCw className="h-3 w-3" />
-                            {t("generate")}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                          >
-                            {showPassword ? (
-                              <EyeOff className="h-3.5 w-3.5" />
-                            ) : (
-                              <Eye className="h-3.5 w-3.5" />
-                            )}
-                          </button>
-                        </div>
-                        <FormMessage className="text-[11px]" />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs font-semibold text-slate-700">{t("password")}</FormLabel>
+                          <div className="relative">
+                            <FormControl>
+                              <Input
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="new-password"
+                                placeholder={t("placeholders.password")}
+                                {...field}
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-20"
+                              />
+                            </FormControl>
+                            <button
+                              type="button"
+                              onClick={handleGenerate}
+                              className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-[11px] font-mono font-medium text-[#1769AA] hover:underline cursor-pointer"
+                            >
+                              <RefreshCw className="h-3 w-3" />
+                              {t("generate")}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword((prev) => !prev)}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                            >
+                              {showPassword ? (
+                                <EyeOff className="h-3.5 w-3.5" />
+                              ) : (
+                                <Eye className="h-3.5 w-3.5" />
+                              )}
+                            </button>
+                          </div>
+                          <FormMessage className="text-[11px]" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs font-semibold text-slate-700">
+                            {t("confirmPassword")}
+                          </FormLabel>
+                          <div className="relative">
+                            <FormControl>
+                              <Input
+                                type={showConfirmPassword ? "text" : "password"}
+                                autoComplete="new-password"
+                                placeholder={t("placeholders.confirmPassword")}
+                                {...field}
+                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white pr-8"
+                              />
+                            </FormControl>
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPassword((prev) => !prev)}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                            >
+                              {showConfirmPassword ? (
+                                <EyeOff className="h-3.5 w-3.5" />
+                              ) : (
+                                <Eye className="h-3.5 w-3.5" />
+                              )}
+                            </button>
+                          </div>
+                          <FormMessage className="text-[11px]" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               )}
 

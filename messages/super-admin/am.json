@@ -92,6 +92,7 @@
       "phone": "ስልክ ቁጥር",
       "cityId": "የከተማ መለያ",
       "password": "የይለፍ ቃል",
+      "confirmPassword": "የይለፍ ቃል አረጋግጥ",
       "role": "ሚና",
       "employeeRole": "የሰራተኛ ሚና",
       "org": "ድርጅት",
@@ -125,7 +126,8 @@
         "email": "john@example.com",
         "phone": "0911...",
         "cityId": "መለያ123456",
-        "password": "******"
+        "password": "******",
+        "confirmPassword": "******"
       },
       "errors": {
         "firstNameRequired": "መጀመሪያ ስም ያስፈልጋል",
@@ -134,6 +136,8 @@
         "phoneRequired": "ትክክለኛ የስልክ ቁጥር ያስፈልጋል",
         "cityIdRequired": "የከተማ መለያ ያስፈልጋል",
         "passwordMin": "የይለፍ ቃሉ ቢያንስ 6 ቁምፊዎች መሆን አለበት",
+        "passwordMismatch": "የይለፍ ቃሎች አይዛመዱም",
+        "confirmPasswordRequired": "የይለፍ ቃል ማረጋገጫ ያስፈልጋል",
         "roleRequired": "ሚና ያስፈልጋል",
         "employeeRoleRequired": "የሰራተኛ ሚና ያስፈልጋል",
         "departmentRequired": "የስራ ክፍል ያስፈልጋል",

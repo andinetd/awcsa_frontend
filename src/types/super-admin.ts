@@ -72,7 +72,7 @@ export type Department =
 export interface CreateUserDto {
   firstName: string;
   lastName: string;
-  cityIdNumber: string;
+  cityIdNumber?: string;
   phoneNumber: string;
   email: string;
   password: string;

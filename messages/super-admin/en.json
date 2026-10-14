@@ -92,6 +92,7 @@
       "phone": "Phone Number",
       "cityId": "City ID",
       "password": "Password",
+      "confirmPassword": "Confirm Password",
       "role": "Role",
       "employeeRole": "Employee Role",
       "org": "Organization",
@@ -125,7 +126,8 @@
         "email": "john@example.com",
         "phone": "0911...",
         "cityId": "ID123456",
-        "password": "******"
+        "password": "******",
+        "confirmPassword": "******"
       },
       "errors": {
         "firstNameRequired": "First name is required",
@@ -134,6 +136,8 @@
         "phoneRequired": "Valid phone number is required",
         "cityIdRequired": "City ID is required",
         "passwordMin": "Password must be at least 6 characters",
+        "passwordMismatch": "Passwords do not match",
+        "confirmPasswordRequired": "Please confirm password",
         "roleRequired": "Role is required",
         "employeeRoleRequired": "Employee role is required",
         "departmentRequired": "Department is required",
