@@ -47,6 +47,7 @@ export const baseBeneficiarySchema = z.object({
   zone: z.string().optional(),
   block: z.string().optional(),
   houseNumber: z.string().optional(),
+  confirmLink: z.boolean().optional(),
 });
 
 export const trainingChoicesSchema = z.object({

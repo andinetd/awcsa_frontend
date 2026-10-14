@@ -23,7 +23,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, CheckCircle2, XCircle, ShieldCheck, FileUp, X } from "lucide-react";
+import Link from "next/link";
+import {
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  ShieldCheck,
+  FileUp,
+  X,
+  AlertCircle,
+  AlertTriangle,
+  ExternalLink,
+} from "lucide-react";
 import { toast } from "sonner";
 import {
   registerDisabledFormSchema,
@@ -42,6 +53,11 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import {
+  CrossModuleConflictDialog,
+  CrossModuleClientData,
+} from "@/components/shared/cross-module-conflict-dialog";
 
 const TRAINING_OPTIONS = [
   "AGRICULTURE",
@@ -94,7 +110,6 @@ const SEVERITY_OPTIONS = [
 
 const DEFAULT_VALUES: any = {
   faydaId: "",
-  cityIdNumber: "",
   firstName: "",
   lastName: "",
   grandfatherName: "",
@@ -155,10 +170,25 @@ export function BeneficiaryFormBody({
     | RegisterElderlyFormValues
     | RegisterDisabledFormValues;
 
+  const { userSubCity, userWoreda } = useJurisdictionScope();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema) as any,
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
+    },
   });
+
+  useEffect(() => {
+    if (userSubCity && !form.getValues("subCity")) {
+      form.setValue("subCity", userSubCity);
+    }
+    if (userWoreda && !form.getValues("woreda")) {
+      form.setValue("woreda", userWoreda);
+    }
+  }, [userSubCity, userWoreda, form]);
 
   const registerElderly = useRegisterElderly();
   const registerDisabled = useRegisterDisabled();
@@ -217,20 +247,171 @@ export function BeneficiaryFormBody({
     }
   };
 
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [duplicateBeneficiary, setDuplicateBeneficiary] = useState<{
+    clientId?: number;
+    profileId?: number;
+    fullName?: string;
+    faydaId?: string;
+    cityIdNumber?: string;
+    subCity?: string;
+    woreda?: string;
+    category?: string;
+  } | null>(null);
+  const [conflictClient, setConflictClient] =
+    useState<CrossModuleClientData | null>(null);
+  const [conflictOpen, setConflictOpen] = useState(false);
+  const [pendingPayload, setPendingPayload] = useState<any | null>(null);
+  const [isLinking, setIsLinking] = useState(false);
+
+  const cleanString = (val?: string) => {
+    if (!val) return undefined;
+    const trimmed = val.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  };
+
+  const cleanNumber = (val?: any) => {
+    if (val === undefined || val === null || val === "") return undefined;
+    const n = Number(val);
+    return isNaN(n) ? undefined : n;
+  };
+
+  const buildPayload = (values: FormValues, confirmLink = false) => {
+    const v = values as any;
+    return {
+      ...values,
+      faydaId: v.faydaId?.trim(),
+      firstName: v.firstName?.trim(),
+      lastName: v.lastName?.trim(),
+      grandfatherName: cleanString(v.grandfatherName),
+      phoneNumber: cleanString(v.phoneNumber),
+      dateOfBirth: cleanString(v.dateOfBirth),
+      age: cleanNumber(v.age),
+      familyMembersCount: cleanNumber(v.familyMembersCount),
+      monthlyIncome: cleanNumber(v.monthlyIncome),
+      subCity: cleanString(v.subCity) || userSubCity || undefined,
+      woreda: cleanString(v.woreda) || userWoreda || undefined,
+      zone: cleanString(v.zone),
+      block: cleanString(v.block),
+      houseNumber: cleanString(v.houseNumber),
+      cause: cleanString(v.cause),
+      previousProfession: cleanString(v.previousProfession),
+      previousSupport: cleanString(v.previousSupport),
+      requiredSupportType: cleanString(v.requiredSupportType),
+      requiredAssistiveDevice: cleanString(v.requiredAssistiveDevice),
+      otherSupportRequirements: cleanString(v.otherSupportRequirements),
+      documentName: cleanString(v.documentName),
+      documentBase64: cleanString(v.documentBase64),
+      confirmLink,
+    };
+  };
+
+  const handleMutationError = (error: any, rawPayload: any) => {
+    const resp = error?.response?.data;
+    if (resp?.error === "CrossModuleConflict" && resp?.existingClient) {
+      setConflictClient(resp.existingClient);
+      setPendingPayload(rawPayload);
+      setConflictOpen(true);
+      return;
+    }
+
+    if (resp?.existingBeneficiary) {
+      setDuplicateBeneficiary(resp.existingBeneficiary);
+    } else {
+      setDuplicateBeneficiary(null);
+    }
+
+    let message = "Registration failed. Please check the entered data.";
+    if (resp) {
+      if (typeof resp.message === "string") {
+        message = resp.message;
+      } else if (Array.isArray(resp.message)) {
+        message = resp.message.join(", ");
+      } else if (
+        typeof resp.error === "string" &&
+        resp.error !== "Internal Server Error"
+      ) {
+        message = resp.error;
+      }
+    } else if (error?.message) {
+      message = error.message;
+    }
+
+    // Map common error targets to field errors
+    const lower = message.toLowerCase();
+    if (
+      lower.includes("fayda") ||
+      lower.includes("already exists") ||
+      lower.includes("profile already exists")
+    ) {
+      form.setError("faydaId" as any, { message });
+    }
+    if (lower.includes("phone")) {
+      form.setError("phoneNumber" as any, { message });
+    }
+
+    setServerError(message);
+    toast.error(message);
+  };
+
   const onSubmit = (values: FormValues) => {
-    const payload = { ...values } as any;
+    setServerError(null);
+    setDuplicateBeneficiary(null);
+    const payload = buildPayload(values, false) as any;
     const mutation =
       type === "DISABLED" ? registerDisabled : registerElderly;
     mutation.mutate(payload, {
       onSuccess: () => {
         toast.success(tSrs("registerSuccess"));
-        form.reset(DEFAULT_VALUES);
+        form.reset({
+          ...DEFAULT_VALUES,
+          subCity: userSubCity || "",
+          woreda: userWoreda || "",
+        });
+        setSelectedFile(null);
+        setFaydaStatus("none");
+        setServerError(null);
+        setDuplicateBeneficiary(null);
+        onSuccess?.();
+      },
+      onError: (error: any) => {
+        handleMutationError(error, payload);
+      },
+    });
+  };
+
+  const handleConfirmLink = () => {
+    if (!pendingPayload) return;
+    setIsLinking(true);
+    setDuplicateBeneficiary(null);
+    const linkPayload = {
+      ...pendingPayload,
+      confirmLink: true,
+    };
+    const mutation =
+      type === "DISABLED" ? registerDisabled : registerElderly;
+    mutation.mutate(linkPayload, {
+      onSuccess: () => {
+        setIsLinking(false);
+        setConflictOpen(false);
+        setConflictClient(null);
+        setPendingPayload(null);
+        setServerError(null);
+        setDuplicateBeneficiary(null);
+        toast.success(tSrs("registerSuccess"));
+        form.reset({
+          ...DEFAULT_VALUES,
+          subCity: userSubCity || "",
+          woreda: userWoreda || "",
+        });
         setSelectedFile(null);
         setFaydaStatus("none");
         onSuccess?.();
       },
       onError: (error: any) => {
-        toast.error(error?.message || tSrs("registrationFailed"));
+        setIsLinking(false);
+        setConflictOpen(false);
+        handleMutationError(error, linkPayload);
       },
     });
   };
@@ -240,6 +421,103 @@ export function BeneficiaryFormBody({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-2">
+        {duplicateBeneficiary ? (
+          (() => {
+            const isDifferentWoreda = Boolean(
+              userWoreda &&
+                duplicateBeneficiary.woreda &&
+                userWoreda.trim().toLowerCase() !==
+                  duplicateBeneficiary.woreda.trim().toLowerCase(),
+            );
+            const locText = [
+              duplicateBeneficiary.subCity,
+              duplicateBeneficiary.woreda,
+            ]
+              .filter(Boolean)
+              .join(", ");
+
+            return (
+              <div className="rounded-xs border border-amber-300 bg-amber-50/90 p-3.5 text-xs text-amber-950 shadow-2xs flex flex-col sm:flex-row items-start justify-between gap-3">
+                <div className="flex items-start gap-2.5">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-semibold text-amber-900 uppercase tracking-wide font-mono text-[11px]">
+                        Beneficiary Profile Already Exists
+                      </p>
+                      <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-semibold bg-amber-200/80 text-amber-900 border border-amber-300">
+                        {duplicateBeneficiary.category ||
+                          (type === "DISABLED" ? "DISABILITY" : "ELDERLY")}
+                      </span>
+                      {locText && (
+                        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-200">
+                          {locText}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-amber-900 leading-relaxed">
+                      A beneficiary profile already exists in this module for{" "}
+                      <strong className="font-semibold text-amber-950">
+                        {duplicateBeneficiary.fullName || "this person"}
+                      </strong>{" "}
+                      with Fayda ID{" "}
+                      <code className="font-mono bg-amber-200/60 px-1 py-0.5 rounded text-[11px] text-amber-950">
+                        {duplicateBeneficiary.faydaId}
+                      </code>
+                      {locText ? ` (registered in ${locText})` : ""}.
+                    </p>
+                    {isDifferentWoreda ? (
+                      <p className="text-[11px] text-amber-800 bg-amber-100/70 p-2 rounded-xs border border-amber-200/60">
+                        <strong>Jurisdiction Notice:</strong> This beneficiary is registered in a different woreda ({locText}). Because municipal records are scoped by administrative boundary, officers in other woredas cannot view or alter their case files. If this beneficiary has relocated to your woreda, contact your sub-city administrator.
+                      </p>
+                    ) : (
+                      <p className="text-[11px] text-amber-800">
+                        This person is already registered in your jurisdiction. You can directly view their existing profile and manage their services.
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                  {!isDifferentWoreda && duplicateBeneficiary.clientId && (
+                    <Link
+                      href={`/social-affairs/elderly-and-disabled/beneficiaries/${duplicateBeneficiary.clientId}`}
+                      onClick={() => onSuccess?.()}
+                      className="inline-flex items-center gap-1.5 bg-[#1769AA] hover:bg-[#125380] text-white font-medium px-3 py-1.5 rounded-xs text-xs transition-colors shadow-2xs cursor-pointer font-mono"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      View Profile
+                    </Link>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setDuplicateBeneficiary(null)}
+                    className="text-amber-600 hover:text-amber-900 transition-colors p-1 rounded cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            );
+          })()
+        ) : serverError ? (
+          <div className="rounded-xs border border-red-300 bg-red-50 p-3 text-xs text-red-800 flex items-start gap-2.5 shadow-2xs">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+            <div className="flex-1 space-y-1">
+              <p className="font-semibold text-red-900 uppercase tracking-wide font-mono text-[11px]">
+                Registration Failed
+              </p>
+              <p className="leading-relaxed">{serverError}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setServerError(null)}
+              className="text-red-400 hover:text-red-700 transition-colors p-0.5 rounded cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
@@ -278,23 +556,6 @@ export function BeneficiaryFormBody({
                       <ShieldCheck className="w-4 h-4" />
                     </Button>
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cityIdNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{tSrs("cityId")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. ADDIS-1234"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -990,21 +1251,38 @@ export function BeneficiaryFormBody({
           <Button
             type="button"
             variant="outline"
-            className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
+            className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50 cursor-pointer"
             onClick={() => onSuccess?.()}
           >
             {t("buttons.cancel")}
           </Button>
           <Button
             type="submit"
-            disabled={isPending}
-            className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
+            disabled={isPending || isLinking}
+            className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs cursor-pointer"
           >
-            {isPending && <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />}
-            {submitLabel ?? t("registerNew")}
+            {(isPending || isLinking) && (
+              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+            )}
+            {isLinking
+              ? "Linking..."
+              : isPending
+                ? "Registering..."
+                : (submitLabel ?? t("registerNew"))}
           </Button>
         </div>
       </form>
+
+      <CrossModuleConflictDialog
+        open={conflictOpen}
+        onOpenChange={setConflictOpen}
+        client={conflictClient}
+        targetModuleName={
+          type === "DISABLED" ? "Disability Affairs" : "Elderly Affairs"
+        }
+        onConfirmLink={handleConfirmLink}
+        isLinking={isLinking}
+      />
     </Form>
   );
 }

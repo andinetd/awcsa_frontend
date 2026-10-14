@@ -360,6 +360,7 @@ export interface CreateElderlyPayload {
   previousSupport?: string;
   supportConfirmed?: boolean;
   requiredSupportType?: string;
+  confirmLink?: boolean;
 }
 
 export type UpdateBeneficiaryPayload = Partial<CreateElderlyPayload>;
