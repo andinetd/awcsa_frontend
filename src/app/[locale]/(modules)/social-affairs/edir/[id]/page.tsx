@@ -481,8 +481,8 @@ export default function EdirDetailsPage({ params }: PageProps) {
                     </span>
                     <span className="font-medium text-slate-800 mt-0.5 block">
                       {typedEdir.subCity}, {t("address.woreda")}{" "}
-                      {typedEdir.woreda}, {t("address.kebele")}{" "}
-                      {typedEdir.kebele}
+                      {typedEdir.woreda}
+                      {typedEdir.kebele ? `, ${t("address.kebele")} ${typedEdir.kebele}` : ""}
                     </span>
                   </div>
                   <div>

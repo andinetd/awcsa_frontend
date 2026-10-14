@@ -78,7 +78,6 @@ export default function NewCouncilForm({
     level: "WOREDA",
     subCity: "",
     woreda: "",
-    kebele: "",
     establishmentDate: new Date().toISOString().slice(0, 10),
     chairpersonName: "",
     chairpersonPhone: "",
@@ -104,7 +103,6 @@ export default function NewCouncilForm({
         level: initialData.level,
         subCity: initialData.subCity,
         woreda: initialData.woreda || "",
-        kebele: initialData.kebele || "",
         establishmentDate: initialData.establishmentDate.slice(0, 10),
         chairpersonName: initialData.chairpersonName || "",
         chairpersonPhone: initialData.chairpersonPhone || "",
@@ -124,7 +122,6 @@ export default function NewCouncilForm({
       level: values.level as EdirLevel,
       subCity: values.subCity,
       woreda: values.woreda || undefined,
-      kebele: values.kebele || undefined,
       establishmentDate: values.establishmentDate,
       chairpersonName: values.chairpersonName || undefined,
       chairpersonPhone: values.chairpersonPhone || undefined,
@@ -295,25 +292,6 @@ export default function NewCouncilForm({
                   )}
                 />
               )}
-              <FormField
-                control={form.control}
-                name="kebele"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-mono">
-                      {t("form.fields.kebele")}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.placeholders.kebele")}
-                        className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <div className="border-b border-[#E3E7EB] pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">

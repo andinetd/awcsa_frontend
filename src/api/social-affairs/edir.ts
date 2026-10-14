@@ -45,7 +45,7 @@ export interface Edir {
   establishmentDate: string;
   subCity: string;
   woreda: string;
-  kebele: string;
+  kebele?: string | null;
   houseNumber: string;
   specificLocation: string;
   // Flat member fields

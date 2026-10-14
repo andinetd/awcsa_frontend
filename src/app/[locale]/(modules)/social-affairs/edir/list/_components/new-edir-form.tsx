@@ -74,7 +74,6 @@ export default function NewEdirForm({
       registerLevel: "WOREDA",
       subCity: "",
       woreda: "",
-      kebele: "",
       houseNumber: "",
       specificLocation: "",
       members: {
@@ -149,7 +148,6 @@ export default function NewEdirForm({
         registerLevel: (initialData.registerLevel || "WOREDA") as any,
         subCity: initialData.subCity,
         woreda: initialData.woreda,
-        kebele: initialData.kebele,
         houseNumber: initialData.houseNumber,
         specificLocation: initialData.specificLocation,
         members: {
@@ -331,7 +329,7 @@ export default function NewEdirForm({
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.address")}
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 <FormField
                   control={form.control}
                   name="subCity"
@@ -369,19 +367,6 @@ export default function NewEdirForm({
                 />
                 <FormField
                   control={form.control}
-                  name="kebele"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.kebele")}</FormLabel>
-                      <FormControl>
-                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.kebele")} {...field} />
-                      </FormControl>
-                      <FormMessage className="text-[11px]" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="houseNumber"
                   render={({ field }) => (
                     <FormItem>
@@ -401,7 +386,7 @@ export default function NewEdirForm({
                   control={form.control}
                   name="specificLocation"
                   render={({ field }) => (
-                    <FormItem className="col-span-2">
+                    <FormItem className="col-span-full">
                       <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.location")}</FormLabel>
                       <FormControl>
                         <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.location")} {...field} />

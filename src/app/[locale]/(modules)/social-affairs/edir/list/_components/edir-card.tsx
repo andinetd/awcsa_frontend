@@ -74,8 +74,8 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
           <div className="flex items-center gap-2">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">
-              {getSubCityDisplayName(edir.subCity)}, {t("woreda")} {edir.woreda}, {t("kebele")}{" "}
-              {edir.kebele}
+              {getSubCityDisplayName(edir.subCity)}, {t("woreda")} {edir.woreda}
+              {edir.kebele ? `, ${t("kebele")} ${edir.kebele}` : ""}
             </span>
           </div>
           <div className="flex items-center gap-2">
