@@ -438,7 +438,9 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                 <span className="font-mono text-slate-600">
                   {t("detail.established")}:{" "}
                   <span className="text-slate-800 font-semibold">
-                    {new Date(typedCouncil.establishmentDate).toLocaleDateString()}
+                    {typedCouncil.establishmentDate && !isNaN(new Date(typedCouncil.establishmentDate).getTime())
+                      ? new Date(typedCouncil.establishmentDate).toLocaleDateString()
+                      : t("detail.notAvailable")}
                   </span>
                 </span>
               </div>

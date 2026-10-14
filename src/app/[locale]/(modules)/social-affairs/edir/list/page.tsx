@@ -89,6 +89,7 @@ const statusStyles: Record<EdirStatus, string> = {
 
 const EdirList = () => {
   const t = useTranslations("social-affairs.edir.list");
+  const tSubCities = useTranslations("subCities.names");
   const router = useRouter();
   const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
   const { data: edirs, isLoading, isError } = useGetEdirAssociationsQuery();
@@ -390,8 +391,6 @@ const EdirList = () => {
       </div>
     );
   }
-
-  const tSubCities = useTranslations("subCities.names");
 
   const getSubCityDisplayName = (name: string) => {
     if (!name) return "";

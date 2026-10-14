@@ -96,7 +96,7 @@ export function EdirChartsSection({
                       return (
                         <div className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 shadow-md text-xs font-mono">
                           <p className="font-bold text-slate-800 border-b pb-1 mb-1.5">
-                            {t("monthSummary", { month: payload[0].payload.month })}
+                            {t("monthSummary", { month: payload[0]?.payload?.month ?? "" })}
                           </p>
                           <div className="space-y-1">
                             <p className="text-slate-600 flex items-center justify-between gap-4">
@@ -104,14 +104,14 @@ export function EdirChartsSection({
                                 <span className="size-2 rounded-full bg-[#0B1F3A]" />
                                 {t("newEdirs")}
                               </span>
-                              <span className="font-bold text-slate-900">{payload[0].value}</span>
+                              <span className="font-bold text-slate-900">{payload[0]?.value ?? 0}</span>
                             </p>
                             <p className="text-slate-600 flex items-center justify-between gap-4">
                               <span className="flex items-center gap-1">
                                 <span className="size-2 rounded-full bg-[#1769AA]" />
                                 {t("renewals")}
                               </span>
-                              <span className="font-bold text-[#1769AA]">{payload[1].value}</span>
+                              <span className="font-bold text-[#1769AA]">{payload[1]?.value ?? 0}</span>
                             </p>
                           </div>
                         </div>

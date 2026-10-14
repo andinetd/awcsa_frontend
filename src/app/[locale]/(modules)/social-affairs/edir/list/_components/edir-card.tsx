@@ -91,11 +91,13 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
             <CalendarDays className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="font-mono text-slate-500">
               {t("established")}:{" "}
-              {new Date(edir.establishmentDate).toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
+              {edir.establishmentDate && !isNaN(new Date(edir.establishmentDate).getTime())
+                ? new Date(edir.establishmentDate).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
+                : "—"}
             </span>
           </div>
           {edir.registrationNumber && (

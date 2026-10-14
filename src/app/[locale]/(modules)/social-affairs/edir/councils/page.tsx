@@ -61,6 +61,7 @@ const levelStyles: Record<string, string> = {
 
 const CouncilsPage = () => {
   const t = useTranslations("social-affairs.edir.councils");
+  const tSubCities = useTranslations("subCities.names");
   const router = useRouter();
 
   const [viewMode, setViewMode] = useState<"grid" | "table">("table");
@@ -116,8 +117,6 @@ const CouncilsPage = () => {
       </div>
     );
   }
-
-  const tSubCities = useTranslations("subCities.names");
 
   const getSubCityDisplayName = (name?: string) => {
     if (!name) return "—";

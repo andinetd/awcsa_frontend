@@ -114,7 +114,9 @@ export default function EdirDetailsPage({ params }: PageProps) {
               <span>•</span>
               <span>
                 {t("fields.established")}:{" "}
-                {new Date(typedEdir.establishmentDate).toLocaleDateString()}
+                {typedEdir.establishmentDate && !isNaN(new Date(typedEdir.establishmentDate).getTime())
+                  ? new Date(typedEdir.establishmentDate).toLocaleDateString()
+                  : t("fields.notAvailable")}
               </span>
             </div>
           </div>
