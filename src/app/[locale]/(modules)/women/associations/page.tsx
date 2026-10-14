@@ -7,6 +7,7 @@ import {
   useDeleteWomenAssociationMutation,
 } from "@/hooks/womens";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import WomenAssociationForm from "./_components/women-association-form";
 import RowReportButton from "./_components/row-report-button";
 import { Input } from "@/components/ui/input";
@@ -91,6 +92,7 @@ const DEFAULT_SUBCITY_NAMES = [
 export default function AssociationsPage() {
   const t = useTranslations("women.associations");
   const router = useRouter();
+  const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
   const { data: response, isLoading } = useGetWomenAssociationsQuery();
   const { data: subCitiesData } = useGetSubCitiesQuery();
   const deleteMutation = useDeleteWomenAssociationMutation();
@@ -102,21 +104,31 @@ export default function AssociationsPage() {
   const [page, setPage] = useState(1);
   const [presetTab, setPresetTab] = useState<PresetTab>("ALL");
   const [filterType, setFilterType] = useState<string>("ALL");
-  const [subCityFilter, setSubCityFilter] = useState<string>("ALL");
-  const [woredaFilter, setWoredaFilter] = useState<string>("ALL");
+  const [subCityFilter, setSubCityFilter] = useState<string>(userSubCity || "ALL");
+  const [woredaFilter, setWoredaFilter] = useState<string>(userWoreda || "ALL");
   const [activeFilter, setActiveFilter] = useState<string>("ALL");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
   const limit = 10;
 
   useEffect(() => {
+    if (userSubCity) {
+      setSubCityFilter(userSubCity);
+      setShowAdvancedFilters(true);
+    }
+    if (userWoreda) {
+      setWoredaFilter(userWoreda);
+    }
+  }, [userSubCity, userWoreda]);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     const sub = params.get("subCity");
-    if (sub) {
+    if (sub && !userSubCity) {
       setSubCityFilter(sub);
       setShowAdvancedFilters(true);
     }
-  }, []);
+  }, [userSubCity]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -130,8 +142,9 @@ export default function AssociationsPage() {
   // Derived sub-cities and woredas
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const currentSubCityObj = useMemo(() => {
     if (subCityFilter === "ALL" || !subCityFilter) return null;
@@ -141,8 +154,17 @@ export default function AssociationsPage() {
   }, [subCitiesData, subCityFilter]);
 
   const availableWoredas = useMemo(() => {
-    return currentSubCityObj?.woredas || [];
-  }, [currentSubCityObj]);
+    const list = currentSubCityObj?.woredas || [];
+    if (userWoreda) {
+      const filtered = list.filter(
+        (w) => String(w.code) === String(userWoreda)
+      );
+      return filtered.length > 0
+        ? filtered
+        : [{ id: -1, code: String(userWoreda), subCityId: 0 }];
+    }
+    return list;
+  }, [currentSubCityObj, userWoreda]);
 
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -236,18 +258,18 @@ export default function AssociationsPage() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (subCityFilter !== "ALL" && subCityFilter !== "") count++;
-    if (woredaFilter !== "ALL") count++;
+    if (!userSubCity && subCityFilter !== "ALL" && subCityFilter !== "") count++;
+    if (!userWoreda && woredaFilter !== "ALL") count++;
     if (filterType !== "ALL") count++;
     if (activeFilter !== "ALL") count++;
     return count;
-  }, [subCityFilter, woredaFilter, filterType, activeFilter]);
+  }, [subCityFilter, woredaFilter, filterType, activeFilter, userSubCity, userWoreda]);
 
   const hasActiveFilters =
     debouncedSearch.length > 0 ||
     presetTab !== "ALL" ||
-    (subCityFilter !== "ALL" && subCityFilter !== "") ||
-    woredaFilter !== "ALL" ||
+    (!userSubCity && subCityFilter !== "ALL" && subCityFilter !== "") ||
+    (!userWoreda && woredaFilter !== "ALL") ||
     filterType !== "ALL" ||
     activeFilter !== "ALL";
 
@@ -255,8 +277,8 @@ export default function AssociationsPage() {
     setSearch("");
     setDebouncedSearch("");
     setPresetTab("ALL");
-    setSubCityFilter("ALL");
-    setWoredaFilter("ALL");
+    setSubCityFilter(userSubCity || "ALL");
+    setWoredaFilter(userWoreda || "ALL");
     setFilterType("ALL");
     setActiveFilter("ALL");
     setPage(1);
@@ -426,6 +448,7 @@ export default function AssociationsPage() {
                 {t("filters.subCity")}
               </label>
               <Select
+                disabled={!!userSubCity}
                 value={subCityFilter}
                 onValueChange={(val) => {
                   setSubCityFilter(val);
@@ -433,13 +456,15 @@ export default function AssociationsPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                   <SelectValue placeholder={t("filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("filters.allSubCities")}
-                  </SelectItem>
+                  {!userSubCity && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("filters.allSubCities")}
+                    </SelectItem>
+                  )}
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
                       {sc}
@@ -460,7 +485,7 @@ export default function AssociationsPage() {
                   setWoredaFilter(val);
                   setPage(1);
                 }}
-                disabled={subCityFilter === "ALL" || !subCityFilter}
+                disabled={!!userWoreda || subCityFilter === "ALL" || !subCityFilter}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
                   <SelectValue
@@ -472,9 +497,11 @@ export default function AssociationsPage() {
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("filters.allWoredas")}
-                  </SelectItem>
+                  {!userWoreda && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("filters.allWoredas")}
+                    </SelectItem>
+                  )}
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
                       {t("table.woreda", { defaultValue: "Woreda" })} {w.code}
@@ -581,7 +608,7 @@ export default function AssociationsPage() {
             </Badge>
           )}
 
-          {subCityFilter !== "ALL" && subCityFilter !== "" && (
+          {subCityFilter !== "ALL" && subCityFilter !== "" && !userSubCity && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
@@ -599,7 +626,7 @@ export default function AssociationsPage() {
             </Badge>
           )}
 
-          {woredaFilter !== "ALL" && (
+          {woredaFilter !== "ALL" && !userWoreda && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"

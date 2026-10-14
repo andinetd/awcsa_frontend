@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { BureauReport, BureauReportFilters } from "@/api/bureau/reports";
 import { ADDIS_ABABA_SUBCITIES } from "./types";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,9 +45,10 @@ export function HeavyReportsHub({
   careCenters = [],
   selectedSubCity = "ALL",
 }: HeavyReportsHubProps) {
+  const { userSubCity } = useJurisdictionScope();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
-  const [subCityFilter, setSubCityFilter] = useState<string>(selectedSubCity);
+  const [subCityFilter, setSubCityFilter] = useState<string>(userSubCity || selectedSubCity);
   const [selectedReport, setSelectedReport] = useState<BureauReport | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -58,12 +60,18 @@ export function HeavyReportsHub({
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  // Keep subCity in sync if passed
+  // Keep subCity in sync if passed or user is scoped
   React.useEffect(() => {
-    if (selectedSubCity) {
+    if (userSubCity) {
+      setSubCityFilter(userSubCity);
+    } else if (selectedSubCity) {
       setSubCityFilter(selectedSubCity);
     }
-  }, [selectedSubCity]);
+  }, [selectedSubCity, userSubCity]);
+
+  const availableSubCities = useMemo(() => {
+    return userSubCity ? [userSubCity] : ADDIS_ABABA_SUBCITIES;
+  }, [userSubCity]);
 
   // Filtering
   const filteredReports = useMemo(() => {
@@ -235,6 +243,7 @@ export function HeavyReportsHub({
 
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
             <Select
+              disabled={!!userSubCity}
               value={subCityFilter}
               onValueChange={(val) => {
                 setSubCityFilter(val);
@@ -246,8 +255,8 @@ export function HeavyReportsHub({
                 <SelectValue placeholder="All Sub-Cities" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All Sub-Cities</SelectItem>
-                {ADDIS_ABABA_SUBCITIES.map((sc) => (
+                {!userSubCity && <SelectItem value="ALL">All Sub-Cities</SelectItem>}
+                {availableSubCities.map((sc) => (
                   <SelectItem key={sc} value={sc}>
                     {sc}
                   </SelectItem>

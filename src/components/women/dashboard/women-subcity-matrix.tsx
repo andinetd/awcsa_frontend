@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 interface SubCityRow {
   subCity: string;
@@ -76,8 +77,11 @@ export function WomenSubCityMatrix({
     }
   };
 
+  const { filterSubCityNames } = useJurisdictionScope();
+
   const displayRows = React.useMemo(() => {
-    return ADDIS_ABABA_SUBCITIES.map((name) => {
+    const targetSubCities = filterSubCityNames(ADDIS_ABABA_SUBCITIES);
+    return targetSubCities.map((name) => {
       const match = rows.find(
         (r) =>
           r.subCity?.toLowerCase() === name.toLowerCase() ||
@@ -91,7 +95,7 @@ export function WomenSubCityMatrix({
         members: match?.members ?? 0,
       };
     });
-  }, [rows]);
+  }, [rows, filterSubCityNames]);
 
   const totalAssocsInMatrix = displayRows.reduce((acc, r) => acc + r.total, 0);
   const totalApprovedInMatrix = displayRows.reduce((acc, r) => acc + r.approved, 0);

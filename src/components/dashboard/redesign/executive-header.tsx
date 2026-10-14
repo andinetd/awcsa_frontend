@@ -29,6 +29,7 @@ interface ExecutiveHeaderProps {
   facilityReportsCount?: number;
   subCitiesCount?: number;
   openComplaintsCount?: number;
+  lockedSubCity?: string | null;
 }
 
 export function ExecutiveHeader({
@@ -46,6 +47,7 @@ export function ExecutiveHeader({
   facilityReportsCount = 12,
   subCitiesCount = 11,
   openComplaintsCount = 3,
+  lockedSubCity,
 }: ExecutiveHeaderProps) {
   const t = useTranslations("executive.dashboard");
   const subCityT = useTranslations("subCities");
@@ -107,19 +109,37 @@ export function ExecutiveHeader({
           {/* Jurisdiction Filter */}
           <div className="flex items-center gap-1 bg-white border border-[#E3E7EB] rounded-xs px-2 py-1">
             <span className="text-slate-400 text-[11px]">{t("header.jurisdiction")}:</span>
-            <Select value={selectedSubCity} onValueChange={setSelectedSubCity}>
-              <SelectTrigger className="h-4 border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 shadow-none hover:text-[#1769AA] focus:ring-0 gap-1 cursor-pointer">
+            <Select
+              disabled={!!lockedSubCity}
+              value={lockedSubCity || selectedSubCity}
+              onValueChange={setSelectedSubCity}
+            >
+              <SelectTrigger
+                className={`h-4 border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 shadow-none hover:text-[#1769AA] focus:ring-0 gap-1 ${
+                  lockedSubCity ? "cursor-default" : "cursor-pointer"
+                }`}
+              >
                 <SelectValue placeholder={t("header.allSubCities")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">{t("header.allSubCities")}</SelectItem>
-                {ADDIS_ABABA_SUBCITIES.map((sc) => (
-                  <SelectItem key={sc} value={sc}>
-                    {subCityT.has(`names.${sc}`)
-                      ? t("header.subCityFormat", { name: subCityT(`names.${sc}`) })
-                      : `${sc} Sub-City`}
+                {lockedSubCity ? (
+                  <SelectItem value={lockedSubCity}>
+                    {subCityT.has(`names.${lockedSubCity}`)
+                      ? t("header.subCityFormat", { name: subCityT(`names.${lockedSubCity}`) })
+                      : `${lockedSubCity} Sub-City`}
                   </SelectItem>
-                ))}
+                ) : (
+                  <>
+                    <SelectItem value="ALL">{t("header.allSubCities")}</SelectItem>
+                    {ADDIS_ABABA_SUBCITIES.map((sc) => (
+                      <SelectItem key={sc} value={sc}>
+                        {subCityT.has(`names.${sc}`)
+                          ? t("header.subCityFormat", { name: subCityT(`names.${sc}`) })
+                          : `${sc} Sub-City`}
+                      </SelectItem>
+                    ))}
+                  </>
+                )}
               </SelectContent>
             </Select>
           </div>

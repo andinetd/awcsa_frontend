@@ -4,6 +4,7 @@ import React from "react";
 import { Building2, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 interface SubCityRow {
   name: string;
@@ -67,6 +68,7 @@ export function ElderlyDisabledSubCityMatrix({
 }: ElderlyDisabledSubCityMatrixProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.matrix");
   const tSub = useTranslations("subCities");
+  const { userSubCity } = useJurisdictionScope();
 
   const subCities: SubCityRow[] = React.useMemo(() => {
     const map: Record<
@@ -80,7 +82,23 @@ export function ElderlyDisabledSubCityMatrix({
       }
     > = {};
 
-    CANONICAL_SUBCITIES.forEach(({ name, key }) => {
+    const targetCanonical = userSubCity
+      ? CANONICAL_SUBCITIES.filter(
+          (c) =>
+            c.name.toLowerCase() === userSubCity.toLowerCase() ||
+            c.name.toLowerCase().replace(/[^a-z]/g, "") ===
+              userSubCity.toLowerCase().replace(/[^a-z]/g, "")
+        ).length > 0
+        ? CANONICAL_SUBCITIES.filter(
+            (c) =>
+              c.name.toLowerCase() === userSubCity.toLowerCase() ||
+              c.name.toLowerCase().replace(/[^a-z]/g, "") ===
+                userSubCity.toLowerCase().replace(/[^a-z]/g, "")
+          )
+        : [{ name: userSubCity, key: userSubCity.toLowerCase().replace(/[^a-z]/g, "") }]
+      : CANONICAL_SUBCITIES;
+
+    targetCanonical.forEach(({ name, key }) => {
       map[key] = {
         name,
         subCityKey: key,
@@ -116,6 +134,7 @@ export function ElderlyDisabledSubCityMatrix({
       if (!resolvedKey) return;
 
       if (!map[resolvedKey]) {
+        if (userSubCity) return;
         map[resolvedKey] = {
           name: rawSc,
           subCityKey: resolvedKey,
@@ -138,6 +157,7 @@ export function ElderlyDisabledSubCityMatrix({
       if (!resolvedKey) return;
 
       if (!map[resolvedKey]) {
+        if (userSubCity) return;
         map[resolvedKey] = {
           name: rawSc,
           subCityKey: resolvedKey,

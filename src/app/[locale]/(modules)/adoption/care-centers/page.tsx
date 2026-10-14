@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import NewCareCenterForm from "./_components/new-care-center-form";
 import { useGetCareCentersQuery } from "@/hooks/adoption/care-center";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import CareCenterCard from "./_components/care-center-card";
 import CareCenterDetailsDialog from "./_components/care-center-details-dialog";
 import { FacilityCensusDialog } from "./_components/facility-census-dialog";
@@ -36,6 +37,7 @@ const DEFAULT_SUBCITY_NAMES = [
 
 const CareCenters = () => {
   const t = useTranslations("adoption");
+  const { userSubCity, filterSubCityNames } = useJurisdictionScope();
   const { data: rawCareCenters = [], isLoading, isError } = useGetCareCentersQuery();
   const careCenters = (rawCareCenters || []) as NewCareCenterSchemaType[];
   const { data: subCitiesData } = useGetSubCitiesQuery();
@@ -47,7 +49,13 @@ const CareCenters = () => {
   const [isCensusOpen, setIsCensusOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<"ALL" | "GOVERNMENT" | "NGO">("ALL");
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
+
+  React.useEffect(() => {
+    if (userSubCity) {
+      setSelectedSubCity(userSubCity);
+    }
+  }, [userSubCity]);
 
   const handleViewDetails = (center: NewCareCenterSchemaType) => {
     setSelectedCenter(center);
@@ -61,27 +69,29 @@ const CareCenters = () => {
 
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const totalCenters = careCenters.length;
   const govCenters = careCenters.filter((c) => (c.type || "").toUpperCase() === "GOVERNMENT").length;
   const ngoCenters = careCenters.filter((c) => (c.type || "").toUpperCase() !== "GOVERNMENT").length;
 
   const subCitiesCount = useMemo(() => {
+    if (userSubCity) return 1;
     const set = new Set(careCenters.map((c) => c.subCity).filter(Boolean));
     return set.size || 11;
-  }, [careCenters]);
+  }, [careCenters, userSubCity]);
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
     selectedType !== "ALL" ||
-    selectedSubCity !== "ALL";
+    (!userSubCity && selectedSubCity !== "ALL");
 
   const resetAllFilters = () => {
     setSearchQuery("");
     setSelectedType("ALL");
-    setSelectedSubCity("ALL");
+    setSelectedSubCity(userSubCity || "ALL");
   };
 
   const filteredCenters = useMemo(() => {
@@ -263,12 +273,16 @@ const CareCenters = () => {
           </div>
 
           <div>
-            <Select value={selectedSubCity} onValueChange={(val) => setSelectedSubCity(val)}>
-              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+            <Select
+              disabled={!!userSubCity}
+              value={selectedSubCity}
+              onValueChange={(val) => setSelectedSubCity(val)}
+            >
+              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                 <SelectValue placeholder="All Sub-Cities" />
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="ALL">All Sub-Cities</SelectItem>
+                {!userSubCity && <SelectItem value="ALL">All Sub-Cities</SelectItem>}
                 {allSubCityNames.map((name) => (
                   <SelectItem key={name} value={name}>
                     {name}
@@ -309,7 +323,7 @@ const CareCenters = () => {
                 />
               </Badge>
             )}
-            {selectedSubCity !== "ALL" && (
+            {selectedSubCity !== "ALL" && !userSubCity && (
               <Badge
                 variant="secondary"
                 className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"

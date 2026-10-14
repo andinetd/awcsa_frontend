@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useGetWomenProfilesQuery } from "@/hooks/womens";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import NewWomenProfileForm from "./_components/new-women-profile-form";
 import EditWomenProfileForm from "./_components/edit-women-profile-form";
 import StatusToggleDialog from "./_components/status-toggle-dialog";
@@ -83,6 +84,7 @@ const CAREER_OPTIONS = ["EMPLOYED", "SELF_EMPLOYED", "UNEMPLOYED"] as const;
 
 export default function ProfilesPage() {
   const router = useRouter();
+  const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
   const { data: profiles, isLoading, isError } = useGetWomenProfilesQuery();
   const { data: subCitiesData } = useGetSubCitiesQuery();
   const t = useTranslations("women");
@@ -94,8 +96,8 @@ export default function ProfilesPage() {
 
   // Workflow tab & advanced filter states
   const [presetTab, setPresetTab] = useState<PresetTab>("ALL");
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
-  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>(userWoreda || "ALL");
   const [educationFilter, setEducationFilter] = useState<string>("ALL");
   const [careerFilter, setCareerFilter] = useState<string>("ALL");
   const [approvalFilter, setApprovalFilter] = useState<string>("ALL");
@@ -109,6 +111,15 @@ export default function ProfilesPage() {
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
 
   useEffect(() => {
+    if (userSubCity) {
+      setSelectedSubCity(userSubCity);
+    }
+    if (userWoreda) {
+      setSelectedWoreda(userWoreda);
+    }
+  }, [userSubCity, userWoreda]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
       setPage(1);
@@ -120,8 +131,9 @@ export default function ProfilesPage() {
   // Derived sub-cities and woredas
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const currentSubCityObj = useMemo(() => {
     if (selectedSubCity === "ALL") return null;
@@ -131,8 +143,17 @@ export default function ProfilesPage() {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    return currentSubCityObj?.woredas || [];
-  }, [currentSubCityObj]);
+    const list = currentSubCityObj?.woredas || [];
+    if (userWoreda) {
+      const filtered = list.filter(
+        (w) => String(w.code) === String(userWoreda)
+      );
+      return filtered.length > 0
+        ? filtered
+        : [{ id: -1, code: String(userWoreda), subCityId: 0 }];
+    }
+    return list;
+  }, [currentSubCityObj, userWoreda]);
 
   const getAgeNumber = (profile: WomenProfile): number | null => {
     if (profile.client.age) return profile.client.age;
@@ -299,8 +320,8 @@ export default function ProfilesPage() {
   const hasActiveFilters =
     search.length > 0 ||
     presetTab !== "ALL" ||
-    selectedSubCity !== "ALL" ||
-    selectedWoreda !== "ALL" ||
+    (!userSubCity && selectedSubCity !== "ALL") ||
+    (!userWoreda && selectedWoreda !== "ALL") ||
     educationFilter !== "ALL" ||
     careerFilter !== "ALL" ||
     approvalFilter !== "ALL" ||
@@ -311,8 +332,8 @@ export default function ProfilesPage() {
     setSearch("");
     setDebouncedSearch("");
     setPresetTab("ALL");
-    setSelectedSubCity("ALL");
-    setSelectedWoreda("ALL");
+    setSelectedSubCity(userSubCity || "ALL");
+    setSelectedWoreda(userWoreda || "ALL");
     setEducationFilter("ALL");
     setCareerFilter("ALL");
     setApprovalFilter("ALL");
@@ -552,6 +573,7 @@ export default function ProfilesPage() {
                 {t("womenList.filters.subCity")}
               </label>
               <Select
+                disabled={!!userSubCity}
                 value={selectedSubCity}
                 onValueChange={(val) => {
                   setSelectedSubCity(val);
@@ -559,13 +581,15 @@ export default function ProfilesPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                   <SelectValue placeholder={t("womenList.filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("womenList.filters.allSubCities")}
-                  </SelectItem>
+                  {!userSubCity && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("womenList.filters.allSubCities")}
+                    </SelectItem>
+                  )}
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
                       {sc}
@@ -581,12 +605,12 @@ export default function ProfilesPage() {
                 {t("womenList.filters.woreda")}
               </label>
               <Select
+                disabled={!!userWoreda || selectedSubCity === "ALL"}
                 value={selectedWoreda}
                 onValueChange={(val) => {
                   setSelectedWoreda(val);
                   setPage(1);
                 }}
-                disabled={selectedSubCity === "ALL"}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
                   <SelectValue
@@ -598,9 +622,11 @@ export default function ProfilesPage() {
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("womenList.filters.allWoredas")}
-                  </SelectItem>
+                  {!userWoreda && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("womenList.filters.allWoredas")}
+                    </SelectItem>
+                  )}
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
                       {t("form.woreda")} {w.code}
@@ -777,7 +803,7 @@ export default function ProfilesPage() {
             </Badge>
           )}
 
-          {selectedSubCity !== "ALL" && (
+          {selectedSubCity !== "ALL" && !userSubCity && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
@@ -795,7 +821,7 @@ export default function ProfilesPage() {
             </Badge>
           )}
 
-          {selectedWoreda !== "ALL" && (
+          {selectedWoreda !== "ALL" && !userWoreda && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"

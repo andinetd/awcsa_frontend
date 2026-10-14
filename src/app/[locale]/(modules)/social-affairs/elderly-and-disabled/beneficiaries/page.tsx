@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useBeneficiarySearch } from "@/hooks/beneficiaries/srs-hooks";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import { useBeneficiaryRegisterStore } from "@/stores/beneficiary-register-store";
 import BeneficiaryTable from "../_components/beneficiary-table";
 import BeneficiaryReportDialog from "../_components/report-dialog";
@@ -79,6 +80,7 @@ const SEVERITY_LEVELS: DisabilitySeverity[] = [
 export default function BeneficiariesPage() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
   const openDialog = useBeneficiaryRegisterStore((s) => s.openDialog);
+  const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
 
   const [category, setCategory] = useState<BeneficiaryCategory>("DISABLED");
   const [disabledTab, setDisabledTab] = useState<DisabledPresetTab>("ALL");
@@ -90,8 +92,8 @@ export default function BeneficiariesPage() {
   const limit = 10;
 
   // Location filters
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
-  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>(userWoreda || "ALL");
 
   // Common demographic filters
   const [sexFilter, setSexFilter] = useState<string>("ALL");
@@ -113,6 +115,16 @@ export default function BeneficiariesPage() {
 
   const { data: subCitiesData } = useGetSubCitiesQuery();
 
+  useEffect(() => {
+    if (userSubCity) {
+      setSelectedSubCity(userSubCity);
+      setShowAdvancedFilters(true);
+    }
+    if (userWoreda) {
+      setSelectedWoreda(userWoreda);
+    }
+  }, [userSubCity, userWoreda]);
+
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -127,11 +139,11 @@ export default function BeneficiariesPage() {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     const sub = params.get("subCity");
-    if (sub) {
+    if (sub && !userSubCity) {
       setSelectedSubCity(sub);
       setShowAdvancedFilters(true);
     }
-  }, []);
+  }, [userSubCity]);
 
   // Fetch from server: query category with larger page size for fast client filtering
   const { data, isLoading, isFetching } = useBeneficiarySearch({
@@ -145,8 +157,9 @@ export default function BeneficiariesPage() {
   // Derived sub-cities and woredas
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const currentSubCityObj = useMemo(() => {
     if (selectedSubCity === "ALL" || !selectedSubCity) return null;
@@ -156,8 +169,17 @@ export default function BeneficiariesPage() {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    return currentSubCityObj?.woredas || [];
-  }, [currentSubCityObj]);
+    const list = currentSubCityObj?.woredas || [];
+    if (userWoreda) {
+      const filtered = list.filter(
+        (w) => String(w.code) === String(userWoreda)
+      );
+      return filtered.length > 0
+        ? filtered
+        : [{ id: -1, code: String(userWoreda), subCityId: 0 }];
+    }
+    return list;
+  }, [currentSubCityObj, userWoreda]);
 
   const getAge = (b: Beneficiary): number | null => {
     if (typeof b.age === "number" && b.age > 0) return b.age;
@@ -368,8 +390,8 @@ export default function BeneficiariesPage() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (selectedSubCity !== "ALL") count++;
-    if (selectedWoreda !== "ALL") count++;
+    if (!userSubCity && selectedSubCity !== "ALL") count++;
+    if (!userWoreda && selectedWoreda !== "ALL") count++;
     if (sexFilter !== "ALL") count++;
     if (employmentFilter !== "ALL") count++;
     if (maritalFilter !== "ALL") count++;
@@ -387,6 +409,8 @@ export default function BeneficiariesPage() {
   }, [
     selectedSubCity,
     selectedWoreda,
+    userSubCity,
+    userWoreda,
     sexFilter,
     employmentFilter,
     maritalFilter,
@@ -405,8 +429,8 @@ export default function BeneficiariesPage() {
   const hasActiveFilters =
     debouncedSearch.length > 0 ||
     currentTab !== "ALL" ||
-    selectedSubCity !== "ALL" ||
-    selectedWoreda !== "ALL" ||
+    (!userSubCity && selectedSubCity !== "ALL") ||
+    (!userWoreda && selectedWoreda !== "ALL") ||
     sexFilter !== "ALL" ||
     employmentFilter !== "ALL" ||
     maritalFilter !== "ALL" ||
@@ -427,8 +451,8 @@ export default function BeneficiariesPage() {
     } else {
       setElderlyTab("ALL");
     }
-    setSelectedSubCity("ALL");
-    setSelectedWoreda("ALL");
+    setSelectedSubCity(userSubCity || "ALL");
+    setSelectedWoreda(userWoreda || "ALL");
     setSexFilter("ALL");
     setEmploymentFilter("ALL");
     setMaritalFilter("ALL");
@@ -729,6 +753,7 @@ export default function BeneficiariesPage() {
                 {t("filterDrawer.subCity")}
               </label>
               <Select
+                disabled={!!userSubCity}
                 value={selectedSubCity}
                 onValueChange={(val) => {
                   setSelectedSubCity(val);
@@ -736,13 +761,15 @@ export default function BeneficiariesPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                   <SelectValue placeholder={t("filterDrawer.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("filterDrawer.allSubCities")}
-                  </SelectItem>
+                  {!userSubCity && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("filterDrawer.allSubCities")}
+                    </SelectItem>
+                  )}
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
                       {sc}
@@ -763,7 +790,7 @@ export default function BeneficiariesPage() {
                   setSelectedWoreda(val);
                   setPage(1);
                 }}
-                disabled={selectedSubCity === "ALL" || !selectedSubCity}
+                disabled={!!userWoreda || selectedSubCity === "ALL" || !selectedSubCity}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
                   <SelectValue
@@ -775,9 +802,11 @@ export default function BeneficiariesPage() {
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("filterDrawer.allWoredas")}
-                  </SelectItem>
+                  {!userWoreda && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("filterDrawer.allWoredas")}
+                    </SelectItem>
+                  )}
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
                       {t("filterDrawer.woredaPrefix", { code: w.code })}
@@ -1076,7 +1105,7 @@ export default function BeneficiariesPage() {
             </Badge>
           )}
 
-          {selectedSubCity !== "ALL" && (
+          {selectedSubCity !== "ALL" && !userSubCity && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
@@ -1094,7 +1123,7 @@ export default function BeneficiariesPage() {
             </Badge>
           )}
 
-          {selectedWoreda !== "ALL" && (
+          {selectedWoreda !== "ALL" && !userWoreda && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"

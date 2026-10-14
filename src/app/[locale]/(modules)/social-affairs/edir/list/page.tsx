@@ -6,6 +6,7 @@ import {
   useGetEdirAssociationsQuery,
   useGetSubCitiesQuery,
 } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import EdirCard from "./_components/edir-card";
 import NewEdirForm from "./_components/new-edir-form";
 import { Edir, EdirStatus } from "@/api/social-affairs/edir";
@@ -89,6 +90,7 @@ const statusStyles: Record<EdirStatus, string> = {
 const EdirList = () => {
   const t = useTranslations("social-affairs.edir.list");
   const router = useRouter();
+  const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
   const { data: edirs, isLoading, isError } = useGetEdirAssociationsQuery();
   const { data: subCitiesData } = useGetSubCitiesQuery();
 
@@ -100,8 +102,8 @@ const EdirList = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Location & Administrative filters
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
-  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>(userWoreda || "ALL");
   const [levelFilter, setLevelFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
   const [sizeFilter, setSizeFilter] = useState<"ALL" | "SMALL" | "MEDIUM" | "LARGE">("ALL");
@@ -110,6 +112,16 @@ const EdirList = () => {
   >("ALL");
   const [femaleLeadershipOnly, setFemaleLeadershipOnly] = useState<boolean>(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userSubCity) {
+      setSelectedSubCity(userSubCity);
+      setShowAdvancedFilters(true);
+    }
+    if (userWoreda) {
+      setSelectedWoreda(userWoreda);
+    }
+  }, [userSubCity, userWoreda]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -123,8 +135,9 @@ const EdirList = () => {
   // Derived sub-cities and woredas
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const currentSubCityObj = useMemo(() => {
     if (selectedSubCity === "ALL") return null;
@@ -134,8 +147,17 @@ const EdirList = () => {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    return currentSubCityObj?.woredas || [];
-  }, [currentSubCityObj]);
+    const list = currentSubCityObj?.woredas || [];
+    if (userWoreda) {
+      const filtered = list.filter(
+        (w) => String(w.code) === String(userWoreda)
+      );
+      return filtered.length > 0
+        ? filtered
+        : [{ id: -1, code: String(userWoreda), subCityId: 0 }];
+    }
+    return list;
+  }, [currentSubCityObj, userWoreda]);
 
   // Real-time tab counts across all fetched records
   const tabCounts = useMemo(() => {
@@ -300,8 +322,8 @@ const EdirList = () => {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (selectedSubCity !== "ALL") count++;
-    if (selectedWoreda !== "ALL") count++;
+    if (!userSubCity && selectedSubCity !== "ALL") count++;
+    if (!userWoreda && selectedWoreda !== "ALL") count++;
     if (levelFilter !== "ALL") count++;
     if (statusFilter !== "ALL") count++;
     if (sizeFilter !== "ALL") count++;
@@ -311,6 +333,8 @@ const EdirList = () => {
   }, [
     selectedSubCity,
     selectedWoreda,
+    userSubCity,
+    userWoreda,
     levelFilter,
     statusFilter,
     sizeFilter,
@@ -321,8 +345,8 @@ const EdirList = () => {
   const hasActiveFilters =
     search.length > 0 ||
     presetTab !== "ALL" ||
-    selectedSubCity !== "ALL" ||
-    selectedWoreda !== "ALL" ||
+    (!userSubCity && selectedSubCity !== "ALL") ||
+    (!userWoreda && selectedWoreda !== "ALL") ||
     levelFilter !== "ALL" ||
     statusFilter !== "ALL" ||
     sizeFilter !== "ALL" ||
@@ -333,8 +357,8 @@ const EdirList = () => {
     setSearch("");
     setDebouncedSearch("");
     setPresetTab("ALL");
-    setSelectedSubCity("ALL");
-    setSelectedWoreda("ALL");
+    setSelectedSubCity(userSubCity || "ALL");
+    setSelectedWoreda(userWoreda || "ALL");
     setLevelFilter("ALL");
     setStatusFilter("ALL");
     setSizeFilter("ALL");
@@ -536,6 +560,7 @@ const EdirList = () => {
                 {t("advanced.subCity")}
               </label>
               <Select
+                disabled={!!userSubCity}
                 value={selectedSubCity}
                 onValueChange={(val) => {
                   setSelectedSubCity(val);
@@ -543,13 +568,15 @@ const EdirList = () => {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                   <SelectValue placeholder={t("advanced.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("advanced.allSubCities")}
-                  </SelectItem>
+                  {!userSubCity && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("advanced.allSubCities")}
+                    </SelectItem>
+                  )}
                   {allSubCityNames.map((sc) => (
                     <SelectItem key={sc} value={sc} className="text-xs rounded-xs">
                       {getSubCityDisplayName(sc)}
@@ -570,7 +597,7 @@ const EdirList = () => {
                   setSelectedWoreda(val);
                   setPage(1);
                 }}
-                disabled={selectedSubCity === "ALL"}
+                disabled={!!userWoreda || selectedSubCity === "ALL"}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
                   <SelectValue
@@ -582,9 +609,11 @@ const EdirList = () => {
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
-                    {t("advanced.allWoredas")}
-                  </SelectItem>
+                  {!userWoreda && (
+                    <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                      {t("advanced.allWoredas")}
+                    </SelectItem>
+                  )}
                   {availableWoredas.map((w) => (
                     <SelectItem key={w.id} value={w.code} className="text-xs rounded-xs">
                       {t("woredaLabel", { code: w.code })}
@@ -748,7 +777,7 @@ const EdirList = () => {
             </Badge>
           )}
 
-          {selectedSubCity !== "ALL" && (
+          {selectedSubCity !== "ALL" && !userSubCity && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
@@ -766,7 +795,7 @@ const EdirList = () => {
             </Badge>
           )}
 
-          {selectedWoreda !== "ALL" && (
+          {selectedWoreda !== "ALL" && !userWoreda && (
             <Badge
               variant="outline"
               className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"

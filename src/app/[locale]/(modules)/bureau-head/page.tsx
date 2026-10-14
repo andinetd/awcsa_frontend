@@ -35,14 +35,23 @@ import {
   X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 export default function BureauHeadPage() {
   const t = useTranslations("executive.dashboard");
+  const { userSubCity } = useJurisdictionScope();
+
   // Global filter state
   const [timeframe, setTimeframe] = useState<TimeframeOption>("ytd");
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  React.useEffect(() => {
+    if (userSubCity && selectedSubCity !== userSubCity) {
+      setSelectedSubCity(userSubCity);
+    }
+  }, [userSubCity, selectedSubCity]);
 
   // Queries
   const {
@@ -165,13 +174,20 @@ export default function BureauHeadPage() {
 
   // Sub-city municipal statistics
   const subCityStats = useMemo(() => {
-    return generateSubCityStats(
+    const all = generateSubCityStats(
       totalFacilities,
       totalChildren,
       totalVulnerable,
       totalEdirs
     );
-  }, [totalFacilities, totalChildren, totalVulnerable, totalEdirs]);
+    if (!userSubCity) return all;
+    return all.filter(
+      (s) =>
+        s.name.toLowerCase() === userSubCity.toLowerCase() ||
+        s.name.toLowerCase().replace(/[^a-z]/g, "") ===
+          userSubCity.toLowerCase().replace(/[^a-z]/g, "")
+    );
+  }, [totalFacilities, totalChildren, totalVulnerable, totalEdirs, userSubCity]);
 
   // Refresh handler
   const handleRefresh = async () => {
@@ -265,18 +281,19 @@ export default function BureauHeadPage() {
         setTimeframe={setTimeframe}
         selectedSubCity={selectedSubCity}
         setSelectedSubCity={setSelectedSubCity}
+        lockedSubCity={userSubCity}
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onExportCSV={handleExportCSV}
         onPrint={handlePrint}
         actionBacklogCount={6}
         facilityReportsCount={12}
-        subCitiesCount={11}
+        subCitiesCount={userSubCity ? 1 : 11}
         openComplaintsCount={complaintsList.filter((c: any) => c.status === "PENDING").length || 3}
       />
 
-      {/* Active Jurisdiction Filter Banner (if filtering by a sub-city) */}
-      {selectedSubCity !== "ALL" && (
+      {/* Active Jurisdiction Filter Banner (only if user manually selected a sub-city at Bureau level) */}
+      {selectedSubCity !== "ALL" && !userSubCity && (
         <div className="flex items-center justify-between rounded-md border border-[#1769AA]/30 bg-blue-50/70 px-3.5 py-2 text-xs text-[#123B5D]">
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-[#1769AA] shrink-0" />

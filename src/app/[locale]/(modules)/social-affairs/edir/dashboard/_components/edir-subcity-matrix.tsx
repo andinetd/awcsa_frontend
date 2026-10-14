@@ -4,6 +4,7 @@ import React from "react";
 import { Building2, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 interface EdirSubCityRow {
   name: string;
@@ -62,6 +63,8 @@ export function EdirSubCityMatrix({
     }
   };
 
+  const { userSubCity, filterSubCityNames } = useJurisdictionScope();
+
   const subCities: EdirSubCityRow[] = React.useMemo(() => {
     const map: Record<
       string,
@@ -74,7 +77,9 @@ export function EdirSubCityMatrix({
       }
     > = {};
 
-    ADDIS_ABABA_SUBCITIES.forEach((name) => {
+    const targetSubCities = filterSubCityNames(ADDIS_ABABA_SUBCITIES);
+
+    targetSubCities.forEach((name) => {
       map[name.toLowerCase()] = {
         name,
         edirs: 0,
@@ -90,6 +95,7 @@ export function EdirSubCityMatrix({
       if (!scKey) return;
 
       if (!map[scKey]) {
+        if (userSubCity) return;
         map[scKey] = {
           name: rawSc,
           edirs: 0,
@@ -119,6 +125,7 @@ export function EdirSubCityMatrix({
       if (!scKey) return;
 
       if (!map[scKey]) {
+        if (userSubCity) return;
         map[scKey] = {
           name: rawSc,
           edirs: 0,

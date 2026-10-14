@@ -67,7 +67,9 @@ export function SubCityAnalytics({
               Sub-City Municipal Administration & Coverage Matrix
             </h3>
             <p className="text-[11px] text-slate-500">
-              Comparative casework density, facility distribution, and monthly reporting compliance across all 11 sub-cities
+              {stats.length === 1
+                ? `Casework density, facility distribution, and monthly reporting compliance for ${stats[0].name} Sub-City`
+                : "Comparative casework density, facility distribution, and monthly reporting compliance across all 11 sub-cities"}
             </p>
           </div>
 

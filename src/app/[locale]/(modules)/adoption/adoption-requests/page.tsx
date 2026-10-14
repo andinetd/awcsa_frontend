@@ -30,6 +30,7 @@ import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
 import { useAdoptionApplicationsQuery } from "@/hooks/adoption/adoption-requests";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import type { BackendAdoptionApplication } from "@/api/adoption/adoption-requests/getAdoptionApplications";
 export type { BackendAdoptionApplication };
 
@@ -149,9 +150,11 @@ const AdoptionRequestsContent = () => {
     return "all";
   });
 
+  const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSubCity, setSelectedSubCity] = useState<string>("ALL");
-  const [selectedWoreda, setSelectedWoreda] = useState<string>("ALL");
+  const [selectedSubCity, setSelectedSubCity] = useState<string>(userSubCity || "ALL");
+  const [selectedWoreda, setSelectedWoreda] = useState<string>(userWoreda || "ALL");
   const [dateFilter, setDateFilter] = useState<string>("ALL");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
 
@@ -163,11 +166,22 @@ const AdoptionRequestsContent = () => {
 
   const { data: subCitiesData } = useGetSubCitiesQuery();
 
+  useEffect(() => {
+    if (userSubCity) {
+      setSelectedSubCity(userSubCity);
+      setShowAdvancedFilters(true);
+    }
+    if (userWoreda) {
+      setSelectedWoreda(userWoreda);
+    }
+  }, [userSubCity, userWoreda]);
+
   // Derived sub-cities and woredas
   const allSubCityNames = useMemo(() => {
     const fromApi = (subCitiesData || []).map((s) => s.name);
-    return Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
-  }, [subCitiesData]);
+    const combined = Array.from(new Set([...fromApi, ...DEFAULT_SUBCITY_NAMES]));
+    return filterSubCityNames(combined);
+  }, [subCitiesData, filterSubCityNames]);
 
   const currentSubCityObj = useMemo(() => {
     if (selectedSubCity === "ALL" || !selectedSubCity) return null;
@@ -177,8 +191,17 @@ const AdoptionRequestsContent = () => {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    return currentSubCityObj?.woredas || [];
-  }, [currentSubCityObj]);
+    const list = currentSubCityObj?.woredas || [];
+    if (userWoreda) {
+      const filtered = list.filter(
+        (w) => String(w.code) === String(userWoreda)
+      );
+      return filtered.length > 0
+        ? filtered
+        : [{ id: -1, code: String(userWoreda), subCityId: 0 }];
+    }
+    return list;
+  }, [currentSubCityObj, userWoreda]);
 
   // Keep tab in sync if URL query parameter changes
   useEffect(() => {
@@ -299,22 +322,22 @@ const AdoptionRequestsContent = () => {
   // Active filter count
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (selectedSubCity !== "ALL") count++;
-    if (selectedWoreda !== "ALL") count++;
+    if (!userSubCity && selectedSubCity !== "ALL") count++;
+    if (!userWoreda && selectedWoreda !== "ALL") count++;
     if (dateFilter !== "ALL") count++;
     return count;
-  }, [selectedSubCity, selectedWoreda, dateFilter]);
+  }, [selectedSubCity, selectedWoreda, dateFilter, userSubCity, userWoreda]);
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
-    selectedSubCity !== "ALL" ||
-    selectedWoreda !== "ALL" ||
+    (!userSubCity && selectedSubCity !== "ALL") ||
+    (!userWoreda && selectedWoreda !== "ALL") ||
     dateFilter !== "ALL";
 
   const resetAllFilters = () => {
     setSearchQuery("");
-    setSelectedSubCity("ALL");
-    setSelectedWoreda("ALL");
+    setSelectedSubCity(userSubCity || "ALL");
+    setSelectedWoreda(userWoreda || "ALL");
     setDateFilter("ALL");
   };
 
@@ -477,17 +500,18 @@ const AdoptionRequestsContent = () => {
                 {t("adoptionRequests.filters.subCity")}
               </label>
               <Select
+                disabled={!!userSubCity}
                 value={selectedSubCity}
                 onValueChange={(val) => {
                   setSelectedSubCity(val);
                   setSelectedWoreda("ALL");
                 }}
               >
-                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
                   <SelectValue placeholder={t("adoptionRequests.filters.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL">{t("adoptionRequests.filters.allSubCities")}</SelectItem>
+                  {!userSubCity && <SelectItem value="ALL">{t("adoptionRequests.filters.allSubCities")}</SelectItem>}
                   {allSubCityNames.map((name) => (
                     <SelectItem key={name} value={name}>
                       {name}
@@ -505,7 +529,7 @@ const AdoptionRequestsContent = () => {
               <Select
                 value={selectedWoreda}
                 onValueChange={(val) => setSelectedWoreda(val)}
-                disabled={selectedSubCity === "ALL"}
+                disabled={!!userWoreda || selectedSubCity === "ALL"}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-400">
                   <SelectValue
@@ -517,7 +541,7 @@ const AdoptionRequestsContent = () => {
                   />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
-                  <SelectItem value="ALL">{t("adoptionRequests.filters.allWoredas")}</SelectItem>
+                  {!userWoreda && <SelectItem value="ALL">{t("adoptionRequests.filters.allWoredas")}</SelectItem>}
                   {availableWoredas.length > 0 ? (
                     availableWoredas.map((w) => (
                       <SelectItem key={w.id} value={w.code}>
@@ -575,7 +599,7 @@ const AdoptionRequestsContent = () => {
               />
             </Badge>
           )}
-          {selectedSubCity !== "ALL" && (
+          {selectedSubCity !== "ALL" && !userSubCity && (
             <Badge
               variant="secondary"
               className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
@@ -590,7 +614,7 @@ const AdoptionRequestsContent = () => {
               />
             </Badge>
           )}
-          {selectedWoreda !== "ALL" && (
+          {selectedWoreda !== "ALL" && !userWoreda && (
             <Badge
               variant="secondary"
               className="rounded-xs text-[11px] font-mono gap-1 bg-white border border-[#BCD5EA] text-[#1769AA]"
