@@ -93,17 +93,6 @@ export const sidebarConfig: Record<
         },
       ],
     },
-    {
-      title: "Cross-Department",
-      items: [
-        {
-          title: "Unified History",
-          url: "/persons",
-          icon: History,
-          permission: "view_unified_history",
-        },
-      ],
-    },
   ],
 
   SOCIAL_AFFAIRS: [
@@ -149,17 +138,6 @@ export const sidebarConfig: Record<
         },
       ],
     },
-    {
-      title: "Cross-Department",
-      items: [
-        {
-          title: "Unified History",
-          url: "/persons",
-          icon: History,
-          permission: "view_unified_history",
-        },
-      ],
-    },
   ],
 
   EDIR: [
@@ -184,17 +162,6 @@ export const sidebarConfig: Record<
         },
       ],
     },
-    {
-      title: "Cross-Department",
-      items: [
-        {
-          title: "Unified History",
-          url: "/persons",
-          icon: History,
-          permission: "view_unified_history",
-        },
-      ],
-    },
   ],
 
   WOMEN: [
@@ -209,12 +176,6 @@ export const sidebarConfig: Record<
         { title: "Employment", url: "/women/employment", icon: Briefcase },
         { title: "Associations", url: "/women/associations", icon: Users },
         { title: "1-to-10 Members", url: "/women/members", icon: Users },
-        {
-          title: "Unified History",
-          url: "/persons",
-          icon: History,
-          permission: "view_unified_history",
-        },
       ],
     },
   ],

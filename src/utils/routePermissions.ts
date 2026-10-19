@@ -56,6 +56,7 @@ export const routePermissions: Record<string, RouteGuard> = {
   },
   "/persons": {
     allowedAccountTypes: ["EMPLOYEE"],
+    allowedRoles: ["SYSTEM"],
     requiredPermissions: ["view_unified_history"],
   },
 };

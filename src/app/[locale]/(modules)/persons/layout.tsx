@@ -6,7 +6,10 @@ import { ReactNode } from "react";
 
 export default function PersonsLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider requiredPermissions={["view_unified_history"]}>
+    <AuthProvider
+      allowedRoles={["SYSTEM"]}
+      requiredPermissions={["view_unified_history"]}
+    >
       <SidebarLayout title="Unified Support History">
         {children}
       </SidebarLayout>
