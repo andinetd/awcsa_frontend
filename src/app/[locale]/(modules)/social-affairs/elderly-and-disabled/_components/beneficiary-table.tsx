@@ -291,6 +291,7 @@ function EditBeneficiaryDialog({
 }) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.registration");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
+  const tOpt = useTranslations("social-affairs.elderlyAndDisabled.options");
   const update = useUpdateBeneficiary(beneficiary.id);
   const isDisabled = beneficiary.clientCategory === "DISABLED";
   const profile = isDisabled
@@ -439,13 +440,15 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectGender")}>
+                            {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="MALE">Male</SelectItem>
-                        <SelectItem value="FEMALE">Female</SelectItem>
-                        <SelectItem value="OTHER">Other</SelectItem>
+                        <SelectItem value="MALE">{tOpt("sex.MALE")}</SelectItem>
+                        <SelectItem value="FEMALE">{tOpt("sex.FEMALE")}</SelectItem>
+                        <SelectItem value="OTHER">{tOpt("sex.OTHER")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -572,12 +575,14 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")}>
+                            {field.value ? tOpt(`employment.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="EMPLOYED">Employed</SelectItem>
-                        <SelectItem value="UNEMPLOYED">Unemployed</SelectItem>
+                        <SelectItem value="EMPLOYED">{tOpt("employment.EMPLOYED")}</SelectItem>
+                        <SelectItem value="UNEMPLOYED">{tOpt("employment.UNEMPLOYED")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -596,14 +601,16 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectMarital")}>
+                            {field.value ? tOpt(`marital.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="MARRIED">Married</SelectItem>
-                        <SelectItem value="UNMARRIED">Unmarried</SelectItem>
-                        <SelectItem value="DIVORCED">Divorced</SelectItem>
-                        <SelectItem value="WIDOWED">Widowed</SelectItem>
+                        <SelectItem value="MARRIED">{tOpt("marital.MARRIED")}</SelectItem>
+                        <SelectItem value="UNMARRIED">{tOpt("marital.UNMARRIED")}</SelectItem>
+                        <SelectItem value="DIVORCED">{tOpt("marital.DIVORCED")}</SelectItem>
+                        <SelectItem value="WIDOWED">{tOpt("marital.WIDOWED")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -614,7 +621,7 @@ function EditBeneficiaryDialog({
 
             <div className="border-t pt-3 space-y-3">
               <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-                Training & Workplace
+                {tOpt("trainingAndWorkplace")}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <FormField
@@ -629,13 +636,15 @@ function EditBeneficiaryDialog({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="—" />
+                            <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
+                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {TRAINING_OPTIONS.map((o) => (
                             <SelectItem key={o} value={o}>
-                              {o}
+                              {tOpt(`training.${o}` as any)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -656,13 +665,15 @@ function EditBeneficiaryDialog({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="—" />
+                            <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
+                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {TRAINING_OPTIONS.map((o) => (
                             <SelectItem key={o} value={o}>
-                              {o}
+                              {tOpt(`training.${o}` as any)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -683,13 +694,15 @@ function EditBeneficiaryDialog({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="—" />
+                            <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
+                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {TRAINING_OPTIONS.map((o) => (
                             <SelectItem key={o} value={o}>
-                              {o}
+                              {tOpt(`training.${o}` as any)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -712,17 +725,21 @@ function EditBeneficiaryDialog({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="—" />
+                            <SelectValue placeholder={tOpt("placeholders.selectWorkplace")}>
+                              {field.value ? tOpt(`workplace.${field.value}` as any) : undefined}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="OWN_PRIVATE">
-                            Own / Private
+                            {tOpt("workplace.OWN_PRIVATE")}
                           </SelectItem>
                           <SelectItem value="KEBELE_PUBLIC">
-                            Kebele / Public
+                            {tOpt("workplace.KEBELE_PUBLIC")}
                           </SelectItem>
-                          <SelectItem value="RENTED">Rented</SelectItem>
+                          <SelectItem value="RENTED">
+                            {tOpt("workplace.RENTED")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

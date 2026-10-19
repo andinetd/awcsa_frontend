@@ -160,6 +160,7 @@ export function BeneficiaryFormBody({
 }: BeneficiaryFormBodyProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.registration");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
+  const tOpt = useTranslations("social-affairs.elderlyAndDisabled.options");
   const [faydaStatus, setFaydaStatus] = useState<"none" | "valid" | "invalid">(
     "none",
   );
@@ -657,13 +658,15 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectGender")}>
+                            {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {SEX_OPTIONS.map((o) => (
                           <SelectItem key={o.value} value={o.value}>
-                            {o.label}
+                            {tOpt(`sex.${o.value}` as any)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -801,13 +804,15 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")}>
+                            {field.value ? tOpt(`employment.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {EMPLOYMENT_OPTIONS.map((o) => (
                           <SelectItem key={o.value} value={o.value}>
-                            {o.label}
+                            {tOpt(`employment.${o.value}` as any)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -828,13 +833,15 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="—" />
+                          <SelectValue placeholder={tOpt("placeholders.selectMarital")}>
+                            {field.value ? tOpt(`marital.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {MARITAL_OPTIONS.map((o) => (
                           <SelectItem key={o.value} value={o.value}>
-                            {o.label}
+                            {tOpt(`marital.${o.value}` as any)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -927,20 +934,22 @@ export function BeneficiaryFormBody({
                 name="disabilitySeverity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Severity</FormLabel>
+                    <FormLabel>{t("fields.disabilityLevel")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select" />
+                          <SelectValue placeholder={tOpt("placeholders.selectSeverity")}>
+                            {field.value ? tOpt(`severity.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {SEVERITY_OPTIONS.map((o) => (
                           <SelectItem key={o.value} value={o.value}>
-                            {o.label}
+                            {tOpt(`severity.${o.value}` as any)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -1061,7 +1070,7 @@ export function BeneficiaryFormBody({
 
         <div className="space-y-4 border-t pt-4">
           <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-            Training & Workplace
+            {tOpt("trainingAndWorkplace")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <FormField
@@ -1076,13 +1085,15 @@ export function BeneficiaryFormBody({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="1st" />
+                        <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
+                          {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {TRAINING_OPTIONS.map((o) => (
                         <SelectItem key={o} value={o}>
-                          {o}
+                          {tOpt(`training.${o}` as any)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1103,13 +1114,15 @@ export function BeneficiaryFormBody({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="2nd" />
+                        <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
+                          {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {TRAINING_OPTIONS.map((o) => (
                         <SelectItem key={o} value={o}>
-                          {o}
+                          {tOpt(`training.${o}` as any)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1130,13 +1143,15 @@ export function BeneficiaryFormBody({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="3rd" />
+                        <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
+                          {field.value ? tOpt(`training.${field.value}` as any) : undefined}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {TRAINING_OPTIONS.map((o) => (
                         <SelectItem key={o} value={o}>
-                          {o}
+                          {tOpt(`training.${o}` as any)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1159,13 +1174,15 @@ export function BeneficiaryFormBody({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="—" />
+                        <SelectValue placeholder={tOpt("placeholders.selectWorkplace")}>
+                          {field.value ? tOpt(`workplace.${field.value}` as any) : undefined}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {WORKPLACE_OPTIONS.map((o) => (
                         <SelectItem key={o.value} value={o.value}>
-                          {o.label}
+                          {tOpt(`workplace.${o.value}` as any)}
                         </SelectItem>
                       ))}
                     </SelectContent>

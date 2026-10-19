@@ -357,7 +357,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allCategories")} />
+                    <SelectValue placeholder={t("filters.allCategories")}>
+                      {serviceCategoryFilter === "ALL" ? t("filters.allCategories") : serviceCategoryFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCategories")}</SelectItem>
@@ -368,7 +370,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={serviceProviderFilter} onValueChange={setServiceProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allProviders")} />
+                    <SelectValue placeholder={t("filters.allProviders")}>
+                      {serviceProviderFilter === "ALL" ? t("filters.allProviders") : serviceProviderFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
@@ -516,7 +520,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={trainingTypeFilter} onValueChange={setTrainingTypeFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allTypes")} />
+                    <SelectValue placeholder={t("filters.allTypes")}>
+                      {trainingTypeFilter === "ALL" ? t("filters.allTypes") : trainingTypeFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allTypes")}</SelectItem>
@@ -527,7 +533,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingProviderFilter} onValueChange={setTrainingProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allProviders")} />
+                    <SelectValue placeholder={t("filters.allProviders")}>
+                      {trainingProviderFilter === "ALL" ? t("filters.allProviders") : trainingProviderFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
@@ -538,7 +546,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingCocFilter} onValueChange={setTrainingCocFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[110px]">
-                    <SelectValue placeholder={t("filters.allCoc")} />
+                    <SelectValue placeholder={t("filters.allCoc")}>
+                      {trainingCocFilter === "ALL" ? t("filters.allCoc") : trainingCocFilter === "YES" ? tTraining("coc.yes") : tTraining("coc.no")}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCoc")}</SelectItem>
@@ -686,7 +696,9 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={jobCompanyFilter} onValueChange={setJobCompanyFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[150px]">
-                    <SelectValue placeholder={t("filters.allCompanies")} />
+                    <SelectValue placeholder={t("filters.allCompanies")}>
+                      {jobCompanyFilter === "ALL" ? t("filters.allCompanies") : jobCompanyFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCompanies")}</SelectItem>

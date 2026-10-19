@@ -173,7 +173,16 @@ export default function ServiceForm() {
                       <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                         <SelectValue
                           placeholder={t("placeholders.selectService")}
-                        />
+                        >
+                          {(() => {
+                            if (!field.value) return undefined;
+                            const type = SERVICE_TYPES.find((t) => t.id.toString() === field.value?.toString());
+                            if (!type) return undefined;
+                            const name = tServices.has(`types.${type.id}`) ? tServices(`types.${type.id}`) : type.name;
+                            const cat = tServices.has(`categories.${type.category}`) ? tServices(`categories.${type.category}`) : type.category;
+                            return `${name} (${cat})`;
+                          })()}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="max-h-[300px]">
