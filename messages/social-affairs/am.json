@@ -729,6 +729,72 @@
       "registerDisability": "አካል ጉዳተኛ መዝግብ",
       "switchCategoryHint": "ለተለየ የተጠቃሚ ዓይነት ለመመዝገብ ከዚህ በታች ያለውን ምድብ ይቀይሩ።",
       "switchResetsForm": "ምድብ መቀየር በቅጹ ላይ ያሉትን እሴቶች ያጸዳል።"
+    },
+    "options": {
+      "sex": {
+        "MALE": "ወንድ",
+        "FEMALE": "ሴት",
+        "OTHER": "ሌላ"
+      },
+      "employment": {
+        "EMPLOYED": "ተቀጣሪ",
+        "UNEMPLOYED": "ሥራ አጥ"
+      },
+      "marital": {
+        "MARRIED": "ያገባ/ች",
+        "UNMARRIED": "ያላገባ/ች",
+        "DIVORCED": "የፈታ/ች",
+        "WIDOWED": "የሞተበት/ባት"
+      },
+      "workplace": {
+        "OWN_PRIVATE": "የግል",
+        "KEBELE_PUBLIC": "ቀበሌ / የመንግስት",
+        "RENTED": "የተከራየ"
+      },
+      "disabilityTypes": {
+        "PHYSICAL": "አካላዊ",
+        "VISUAL": "የማየት",
+        "HEARING": "የመስማት",
+        "INTELLECTUAL": "የአእምሮ",
+        "SPEECH": "የመናገር",
+        "MULTIPLE": "ባለብዙ",
+        "OTHER": "ሌላ"
+      },
+      "severity": {
+        "MILD": "ቀላል",
+        "MODERATE": "መካከለኛ",
+        "SEVERE": "ከፍተኛ",
+        "PROFOUND": "እጅግ ከፍተኛ"
+      },
+      "training": {
+        "AGRICULTURE": "ግብርና",
+        "BUSINESS": "ንግድ",
+        "HOTEL_HOSPITALITY": "ሆቴልና መስተንግዶ",
+        "HOUSE_CONSTRUCTION": "ቤት ግንባታ",
+        "AUTOMOTIVE": "አውቶሞቲቭ",
+        "ELECTRICITY": "ኤሌክትሪክ",
+        "ICT": "ኢንፎርሜሽን ቴክኖሎጂ",
+        "MUNICIPALITY_ADMIN": "ማዘጋጃ ቤት አስተዳደር",
+        "ROAD_CONSTRUCTION": "መንገድ ግንባታ",
+        "AGRO_PROCESSING": "ግብርና ማቀነባበሪያ",
+        "FURNITURE_MAKING": "የእንጨትና ፈርኒቸር ስራ",
+        "TEXTILE_GARMENT": "ጨርቃጨርቅና አልባሳት",
+        "LEATHER_WORK": "የቆዳ ስራ",
+        "METAL_WORKING": "የብረታ ብረት ስራ",
+        "OTHER": "ሌላ"
+      },
+      "trainingAndWorkplace": "ስልጠና እና የስራ ቦታ ሁኔታ",
+      "placeholders": {
+        "select": "ይምረጡ",
+        "selectGender": "ጾታ ይምረጡ",
+        "selectEmployment": "የስራ ሁኔታ ይምረጡ",
+        "selectMarital": "የጋብቻ ሁኔታ ይምረጡ",
+        "selectSeverity": "የጉዳት መጠን ይምረጡ",
+        "selectWorkplace": "የስራ ቦታ ሁኔታ ይምረጡ",
+        "firstChoice": "1ኛ ምርጫ",
+        "secondChoice": "2ኛ ምርጫ",
+        "thirdChoice": "3ኛ ምርጫ"
+      }
     }
   },
   "edir": {
@@ -859,7 +925,10 @@
         "assetDescription": "መግለጫ",
         "assetValue": "ዋጋ (ETB)",
         "auditCommittee": "ንብረቶች በኦዲት ኮሚቴ ተቆጥረዋል",
-        "generalAssembly": "ንብረቶች በጠቅላላ ጉባኤ ጸድቀዋል"
+        "generalAssembly": "ንብረቶች በጠቅላላ ጉባኤ ጸድቀዋል",
+        "council": "የዕድሮች ምክር ቤት (አማራጭ)",
+        "councilPlaceholder": "የዕድሮች ምክር ቤት ይምረጡ (ወይም ባዶ)",
+        "noCouncilOption": "ምንም አልተመረጠም"
       },
       "assetTypes": {
         "CASH": "ገንዘብ",
@@ -935,12 +1004,15 @@
           "location": "ልዩ ቦታ",
           "bankAccount": "የባንክ ሒሳብ ቁጥር",
           "contribution": "ወርሃዊ መዋጮ",
-          "remarks": "አስተያየቶች",
-          "managementMembers": "የሥራ አመራር አባላት",
+          "managementMembers": "የሥራ አመራር / መሪዎች",
           "generalMembers": "ጠቅላላ አባላት",
           "male": "ወንድ",
           "female": "ሴት",
-          "total": "ድምር"
+          "total": "ድምር",
+          "totalEdirMembers": "የዕድር አባላት ጠቅላላ ድምር (አመራሮችን ጨምሮ)",
+          "totalMale": "ጠቅላላ ወንድ (አመራር + አባላት)",
+          "totalFemale": "ጠቅላላ ሴት (አመራር + አባላት)",
+          "grandTotal": "የአባላት ጠቅላላ ድምር"
         },
         "buttons": {
           "register": "አዲስ ዕድር ያክሉ",
@@ -968,6 +1040,7 @@
         "error": "ሪፖርቱን ማዘጋጀት አልተቻለም",
         "menuLabel": "ይህንን ዕድር ያውርዱ ወይም ያትሙ",
         "printDossier": "ይፋዊ ዶሴ አትም",
+        "printCertificate": "የእድሳት ምስክር ወረቀት (መመሪያ 151/2016)",
         "reportType": "የሪፖርት ዓይነት",
         "reportTypeOptions": {
           "summary": "የዕድሮች ማጠቃለያ ሠንጠረዥ",
@@ -997,8 +1070,10 @@
           "woreda": "ወረዳ",
           "bankAccount": "የባንክ ሒሳብ ቁጥር",
           "date": "የተመሠረተበት ቀን",
-          "generalMale": "ወንድ አባላት",
-          "generalFemale": "ሴት አባላት",
+          "managementMale": "የሥራ አመራር / መሪዎች (ወንድ)",
+          "managementFemale": "የሥራ አመራር / መሪዎች (ሴት)",
+          "generalMale": "ጠቅላላ አባላት (ወንድ)",
+          "generalFemale": "ጠቅላላ አባላት (ሴት)",
           "members": "አባላት"
         },
         "buttons": {
@@ -1037,9 +1112,40 @@
           "label": "አድስ",
           "success": "ምዝገባ በተሳካ ሁኔታ ታድሷል"
         },
+        "renewDialog": {
+          "title": "የእድር እድሳት እና የኦዲት ማረጋገጫ",
+          "subtitle": "ዓመታዊ የኦዲት መስፈርቶችን (አንቀጽ 7) እና የእድሳት ሁኔታዎችን (አንቀጽ 13) ያረጋግጡ።",
+          "directiveReference": "በመመሪያ ቁጥር 151/2016 አንቀጽ 7 እና 13 መሰረት የተከናወነ",
+          "dateLabel": "የእድሳት ቀን (እድሳቱ የተከናወነበት ቀን)",
+          "checklistTitle": "ዓመታዊ የኦዲት እና አስተዳደራዊ ማረጋገጫ",
+          "auditCommittee": "የዕድሩ ንብረት እና ሂሳብ በኦዲት ኮሚቴ ተመርምሮ የተረጋገጠ መሆኑ (አንቀጽ 7)",
+          "generalAssembly": "የኦዲት ሪፖርቱ እና የንብረት መረጃው በጠቅላላ ጉባኤ የፀደቀ መሆኑ",
+          "penaltyLabel": "ዘግይቶ የቀረበ ቅጣት ይተገበርበት (መመሪያ አንቀጽ 13)",
+          "documentTitle": "የኦዲት ሪፖርት ሰነድ (አማራጭ)",
+          "documentUploaded": "የኦዲት ሪፖርት ሰነድ በተሳካ ሁኔታ ተያይዟል",
+          "documentUploading": "ሰነዱ በመጫን ላይ ነው...",
+          "confirm": "ኦዲቱን አረጋግጥ እና አድስ",
+          "cancel": "ሰርዝ",
+          "renewing": "በማደስ ላይ...",
+          "needAuditWarning": "በመመሪያ ቁጥር 151/2016 መሰረት ሁለቱም የኦዲት ኮሚቴ እና የጠቅላላ ጉባኤ ማረጋገጫዎች ያስፈልጋሉ።"
+        },
         "reissue": {
           "label": "የምስክር ወረቀት አውጣ",
           "success": "የምስክር ወረቀት በተሳካ ሁኔታ ተሰጥቷል"
+        },
+        "certificate": {
+          "label": "የእድሳት ምስክር ወረቀት",
+          "printCertificate": "የእድሳት ምስክር ወረቀት አትም",
+          "dialogTitle": "የእድር እድሳት ምስክር ወረቀት (መመሪያ ቁጥር 151/2016)",
+          "dialogDescription": "በመመሪያ ቁጥር 151/2016 መስፈርት መሰረት ይፋዊ የእድሳት የምስክር ወረቀት አዘጋጅተው ያትሙ።",
+          "officerName": "እድሳቱን የሰጠው ባለሙያ ስም",
+          "officerPlaceholder": "የባለሙያውን ሙሉ ስም ያስገቡ",
+          "refNumber": "ቁጥር (Ref)",
+          "refPlaceholder": "የማጣቀሻ ቁጥር",
+          "issueDate": "ቀን (Date)",
+          "print": "ምስክር ወረቀት አትም",
+          "cancel": "ሰርዝ",
+          "toastAction": "ምስክር ወረቀት አትም"
         },
         "cancel": {
           "label": "ምዝገባ ተሰርዝ",
@@ -1084,7 +1190,7 @@
         "generalMembers": "ጠቅላላ አባላት",
         "male": "ወንድ",
         "female": "ሴት",
-        "total": "ጠቅላላ አባላት",
+        "total": "የአባላት ጠቅላላ ድምር (አመራሮችን ጨምሮ)",
         "subCityWoredaKebele": "ክፍለ ከተማ፣ ወረዳ፣ ቀበሌ",
         "houseNumber": "የቤት ቁጥር",
         "specificLocation": "ልዩ ቦታ",
@@ -1109,7 +1215,9 @@
         "assetValue": "ዋጋ (ETB)",
         "noAssets": "በምዝገባ ወቅት ምንም ንብረት አልተመዘገበም።",
         "viewDocument": "ተመልከት / አውርድ",
-        "noDocument": "የምስረታ ሰነድ ወይም ህገ-ደንብ አልተሰቀለም።"
+        "noDocument": "የምስረታ ሰነድ ወይም ህገ-ደንብ አልተሰቀለም።",
+        "council": "የዕድሮች ምክር ቤት",
+        "noCouncil": "ከተመሰረተ ምክር ቤት ጋር አልተሳሰረም"
       },
       "assetTypes": {
         "CASH": "ገንዘብ",
@@ -1125,6 +1233,7 @@
     },
     "edir-members": {
       "title": "አባላት ({count})",
+      "includingLeadersHint": "ጠቅላላ ቁጥሩ ሁሉንም አመራሮች ({leaders}) እና አባላትን ({general}) በአንድ ላይ ያካትታል።",
       "loading": "አባላትን በመጫን ላይ...",
       "error": "አባላትን መጫን አልተቻለም።",
       "noMembers": "ምንም አባላት አልተገኙም። ለመጀመር አንድ ይጨምሩ።",
@@ -1158,7 +1267,7 @@
         },
         "fields": {
           "fullName": "ሙሉ ስም",
-          "cityId": "የከተማ መለያ ቁጥር",
+          "cityId": "የፋይዳ መታወቂያ",
           "phone": "የስልክ ቁጥር",
           "job": "ሥራ",
           "position": "የሥራ ድርሻ",
@@ -1169,7 +1278,7 @@
         },
         "placeholders": {
           "fullName": "ሙሉ ስም",
-          "cityId": "የከተማ መለያ ቁጥር",
+          "cityId": "የፋይዳ መለያ ቁጥር ያስገቡ",
           "phone": "የስልክ ቁጥር",
           "job": "ሥራ",
           "position": "የሥራ ድርሻ ይምረጡ"
@@ -1403,7 +1512,9 @@
         "generateReport": "የምክር ቤቶች ዝርዝር ሪፖርት",
         "reportDescription": "ይፋዊ የዕድር ምክር ቤቶች ማውጫን ያጣሩ እና ያትሙ።",
         "printCouncilCharter": "የምክር ቤቱን ቻርተር እና አባላት አትም",
-        "printRoster": "ማውጫ አትም"
+        "printRoster": "ማውጫ አትም",
+        "uploading": "በመጫን ላይ...",
+        "addingMembers": "አባላትን በመጨመር ላይ..."
       },
       "messages": {
         "printSuccess": "የህትመት ቅድመ እይታ በተሳካ ሁኔታ ተከፍቷል"
@@ -1417,7 +1528,8 @@
           "general": "አጠቃላይ መረጃ",
           "location": "አድራሻ",
           "leadership": "አመራር እና መገናኛ",
-          "additionalLeadership": "ተጨማሪ የስራ አስፈፃሚ አመራር አባላት"
+          "additionalLeadership": "ተጨማሪ የስራ አስፈፃሚ አመራር አባላት",
+          "documents": "የምክር ቤት ሰነዶች እና መተዳደሪያ ደንብ"
         },
         "buttons": {
           "addLeader": "አባል ጨምር"
@@ -1435,7 +1547,10 @@
           "address": "አድራሻ",
           "leaderName": "ሙሉ ስም",
           "leaderRole": "የስራ ሃላፊነት / ማዕረግ",
-          "leaderPhone": "ስልክ ቁጥር"
+          "leaderPhone": "ስልክ ቁጥር",
+          "leaderRepresentedEdir": "የሚወክሉት ዕድር",
+          "leaderRepresentedWoreda": "የሚወክሉት ወረዳ",
+          "leaderRepresentedSubCity": "የሚወክሉት ክፍለ ከተማ"
         },
         "placeholders": {
           "name": "ለምሳሌ የወረዳ 5 የእድር ምክር ቤት",
@@ -1445,12 +1560,21 @@
           "chairpersonName": "ሙሉ ስም",
           "chairpersonPhone": "ስልክ ቁጥር",
           "contactPhone": "ስልክ ቁጥር",
-          "address": "የጽህፈት ቤት አድራሻ"
+          "address": "የጽህፈት ቤት አድራሻ",
+          "leaderName": "ለምሳሌ አበበ ቢቂላ",
+          "leaderRole": "የስራ ሃላፊነት ይተይቡ ወይም ይምረጡ...",
+          "leaderPhone": "ለምሳሌ 0911223344",
+          "leaderRepresentedEdir": "የዕድር ስም ይምረጡ ወይም ያስገቡ",
+          "leaderRepresentedWoreda": "ወረዳ ይምረጡ",
+          "leaderRepresentedSubCity": "ክፍለ ከተማ ይምረጡ"
         },
         "messages": {
           "successCreate": "ምክር ቤቱ በተሳካ ሁኔታ ተመዝግቧል",
           "successUpdate": "ምክር ቤቱ በተሳካ ሁኔታ ተዘምኗል",
-          "saveError": "ምክር ቤቱን ማስቀመጥ አልተቻለም። ዝርዝሩን አረጋግጠው እንደገና ይሞክሩ።"
+          "saveError": "ምክር ቤቱን ማስቀመጥ አልተቻለም። ዝርዝሩን አረጋግጠው እንደገና ይሞክሩ።",
+          "byLawsUploaded": "የምክር ቤት ሰነድ በተሳካ ሁኔታ ተያይዟል",
+          "byLawsUploading": "ሰነዱ በመጫን ላይ ነው...",
+          "byLawsUploadError": "ሰነዱን መጫን አልተቻለም"
         }
       },
       "detail": {
@@ -1475,6 +1599,10 @@
         "leader": "አመራር",
         "location": "አድራሻ",
         "memberSince": "የተመዘገበበት",
+        "representing": "ውክልና",
+        "representingEdir": "የዕድር ተወካይ",
+        "representingWoreda": "የወረዳ ተወካይ",
+        "representingSubCity": "የክፍለ ከተማ ተወካይ",
         "cancellationReasons": {
           "DISSOLVED": "ምክር ቤቱ በህጉ መሰረት ፈርሷል",
           "MEMBER_MAJORITY_REQUEST": "በአባላቶቹ 2/3 አብላጫ ጥያቄ",
@@ -1537,6 +1665,12 @@
         "role": "የስራ ሃላፊነት / ማዕረግ",
         "phone": "ስልክ ቁጥር",
         "address": "የጽህፈት ቤት አድራሻ",
+        "representedEdir": "የሚወክሉት ዕድር",
+        "representedWoreda": "የሚወክሉት ወረዳ",
+        "representedSubCity": "የሚወክሉት ክፍለ ከተማ",
+        "placeholderEdir": "የዕድር ስም ይምረጡ ወይም ያስገቡ",
+        "placeholderWoreda": "ወረዳ ይምረጡ",
+        "placeholderSubCity": "ክፍለ ከተማ ይምረጡ",
         "remove": "አስወግድ",
         "cancel": "ሰርዝ",
         "save": "አመራሩን መዝግብ",

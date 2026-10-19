@@ -195,7 +195,9 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
             <Label className="text-xs font-semibold text-slate-700">{t("level.title")}</Label>
             <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as any)}>
               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                <SelectValue />
+                <SelectValue>
+                  {levelFilter === "ALL" ? t("list.levels.all") : t(`level.${levelFilter}`)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
                 <SelectItem value="ALL" className="text-xs">{t("list.levels.all")}</SelectItem>
@@ -210,7 +212,9 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
             <Label className="text-xs font-semibold text-slate-700">{t("status.title")}</Label>
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                <SelectValue />
+                <SelectValue>
+                  {statusFilter === "ALL" ? t("list.status.all") : t(`status.${statusFilter}`)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
                 <SelectItem value="ALL" className="text-xs">{t("list.status.all")}</SelectItem>

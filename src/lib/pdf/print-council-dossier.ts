@@ -32,9 +32,10 @@ export function printCouncilDossier(council: EdirCouncil) {
     .map(
       (l, idx) => `
       <tr>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 1}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 2}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 600; font-size: 12px;">${l.fullName}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #1769AA;">${l.role}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 600; color: #0F172A;">${l.representedEntity || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${l.phoneNumber || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">${l.address || "—"}</td>
       </tr>
@@ -206,6 +207,7 @@ export function printCouncilDossier(council: EdirCouncil) {
         <th style="width: 40px;">#</th>
         <th>Full Name</th>
         <th>Executive Role</th>
+        <th>Representing</th>
         <th>Phone Number</th>
         <th>Address / Location</th>
       </tr>
@@ -215,6 +217,7 @@ export function printCouncilDossier(council: EdirCouncil) {
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">1</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 700; font-size: 12px;">${council.chairpersonName || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #0B1F3A;">CHAIRPERSON / PRESIDENT</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">—</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${council.chairpersonPhone || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">${council.address || "—"}</td>
       </tr>

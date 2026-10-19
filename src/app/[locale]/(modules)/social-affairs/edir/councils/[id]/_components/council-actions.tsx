@@ -123,7 +123,9 @@ export default function CouncilActions({ council }: Props) {
                 }
               >
                 <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs">
-                  <SelectValue placeholder={t("detail.cancellationReason")} />
+                  <SelectValue placeholder={t("detail.cancellationReason")}>
+                    {reason ? t(`detail.cancellationReasons.${reason}` as any) : undefined}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {CANCEL_REASONS.map((reasonKey) => (

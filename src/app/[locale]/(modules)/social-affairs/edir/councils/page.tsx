@@ -253,7 +253,7 @@ const CouncilsPage = () => {
                 : "text-slate-500 hover:text-slate-900"
             }`}
             onClick={() => setViewMode("grid")}
-            title="Card Grid View"
+            title={t.has("list.viewGrid") ? t("list.viewGrid") : "Grid"}
           >
             <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
             <span>{t.has("list.viewGrid") ? t("list.viewGrid") : "Grid"}</span>
@@ -268,7 +268,7 @@ const CouncilsPage = () => {
                 : "text-slate-500 hover:text-slate-900"
             }`}
             onClick={() => setViewMode("table")}
-            title="List / Table View"
+            title={t.has("list.viewList") ? t("list.viewList") : "List"}
           >
             <List className="w-3.5 h-3.5 mr-1.5" />
             <span>{t.has("list.viewList") ? t("list.viewList") : "List"}</span>

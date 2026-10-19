@@ -30,16 +30,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ShieldPlus, Edit, Plus, Trash2, UserPlus, Users } from "lucide-react";
+import { ShieldPlus, Edit, Plus, Trash2, UserPlus, Users, FileText } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import {
   useCreateEdirCouncilMutation,
   useUpdateEdirCouncilMutation,
+  useUploadEdirDocumentMutation,
+  useGetSubCitiesQuery,
+  useGetEdirAssociationsQuery,
 } from "@/hooks/social-affairs";
 import { newEdirCouncilSchema, NewEdirCouncilSchemaType, CouncilLeadershipMember } from "@/schemas/edir-council";
 import { toast } from "sonner";
 import { EdirCouncil, EdirLevel } from "@/api/social-affairs/edir";
 import { EdirCouncilPayload } from "@/api/social-affairs/council-api";
+import { FileDragAndDrop } from "@/components/custom/file-dropzone";
 import {
   SubCitySelect,
   WoredaSelect,
@@ -55,7 +59,7 @@ const COMMON_ROLE_SUGGESTIONS = [
   "Vice Chairperson",
   "Secretary",
   "Treasurer",
-  "Auditor / Audit Head",
+  "Auditor",
   "Public Relations Officer",
   "Women Affairs Coordinator",
   "Youth Representative",
@@ -69,9 +73,14 @@ export default function NewCouncilForm({
   trigger,
 }: NewCouncilFormProps) {
   const t = useTranslations("social-affairs.edir.councils");
+  const tSubCities = useTranslations("subCities.names");
   const [open, setOpen] = useState(false);
   const createMutation = useCreateEdirCouncilMutation();
   const updateMutation = useUpdateEdirCouncilMutation();
+  const uploadDocMutation = useUploadEdirDocumentMutation();
+  const { data: subCities = [] } = useGetSubCitiesQuery();
+  const { data: allEdirs = [] } = useGetEdirAssociationsQuery();
+  const [byLawsFile, setByLawsFile] = useState<File[]>([]);
 
   const defaultValues: NewEdirCouncilSchemaType = {
     name: "",
@@ -84,10 +93,11 @@ export default function NewCouncilForm({
     contactPhone: "",
     address: "",
     leadershipMembers: [],
+    byLawsDocId: undefined,
   };
 
   const form = useForm<NewEdirCouncilSchemaType>({
-    resolver: zodResolver(newEdirCouncilSchema),
+    resolver: zodResolver(newEdirCouncilSchema) as any,
     defaultValues,
   });
 
@@ -95,6 +105,29 @@ export default function NewCouncilForm({
     control: form.control,
     name: "leadershipMembers",
   });
+
+  const handleByLawsSelect = (files: File[]) => {
+    setByLawsFile(files);
+    if (files.length > 0) {
+      uploadDocMutation.mutate(files[0], {
+        onSuccess: (doc) => {
+          form.setValue("byLawsDocId", doc.id);
+          toast.success(
+            t.has("form.messages.byLawsUploaded")
+              ? t("form.messages.byLawsUploaded")
+              : "Document uploaded successfully",
+          );
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || "Failed to upload document");
+          setByLawsFile([]);
+          form.setValue("byLawsDocId", undefined);
+        },
+      });
+    } else {
+      form.setValue("byLawsDocId", undefined);
+    }
+  };
 
   useEffect(() => {
     if (open && initialData) {
@@ -111,9 +144,14 @@ export default function NewCouncilForm({
         leadershipMembers: Array.isArray(initialData.leadershipMembers)
           ? initialData.leadershipMembers
           : [],
+        byLawsDocId: (initialData as any)?.byLawsDoc?.id ?? undefined,
       });
+      setByLawsFile([]);
     }
-    if (open && !initialData) form.reset(defaultValues);
+    if (open && !initialData) {
+      form.reset(defaultValues);
+      setByLawsFile([]);
+    }
   }, [open, initialData, form]);
 
   const onSubmit = async (values: NewEdirCouncilSchemaType) => {
@@ -128,6 +166,7 @@ export default function NewCouncilForm({
       contactPhone: values.contactPhone || undefined,
       address: values.address || undefined,
       leadershipMembers: values.leadershipMembers || [],
+      byLawsDocId: values.byLawsDocId ?? undefined,
     };
 
     try {
@@ -149,6 +188,35 @@ export default function NewCouncilForm({
   const watchedLevel = form.watch("level");
   const showWoreda = watchedLevel !== "CITY";
   const watchedSubCity = form.watch("subCity");
+  const watchedWoreda = form.watch("woreda");
+
+  const currentSubCityObj = subCities.find(
+    (s) => s.name.toLowerCase() === (watchedSubCity || "").toLowerCase()
+  );
+  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => w.code) || [
+    "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
+  ];
+
+  const candidateEdirs = allEdirs.filter((e: any) => {
+    if (watchedSubCity && e.subCity && e.subCity.toLowerCase() !== watchedSubCity.toLowerCase()) {
+      return false;
+    }
+    if (watchedWoreda && e.woreda && String(e.woreda) !== String(watchedWoreda)) {
+      return false;
+    }
+    return true;
+  });
+
+  const getSubCityLabel = (name: string) => {
+    try {
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
+    } catch {
+      return name;
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -160,7 +228,7 @@ export default function NewCouncilForm({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-3xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-base font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
             {isEdit ? t("form.updateTitle") : t("form.createTitle")}
@@ -208,7 +276,9 @@ export default function NewCouncilForm({
                     >
                       <FormControl>
                         <SelectTrigger className="h-8 text-xs bg-white border-[#E3E7EB] rounded-xs">
-                          <SelectValue />
+                          <SelectValue placeholder={t("form.fields.level")}>
+                            {field.value ? t(`level.${field.value}` as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="rounded-xs border-[#E3E7EB]">
@@ -402,6 +472,7 @@ export default function NewCouncilForm({
                       role: "",
                       phoneNumber: "",
                       address: "",
+                      representedEntity: "",
                     })
                   }
                   className="h-7 text-xs font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] hover:bg-[#d6e7f7] hover:text-[#12568E] gap-1 cursor-pointer"
@@ -463,7 +534,7 @@ export default function NewCouncilForm({
                         </Button>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
                         {/* Member Full Name */}
                         <FormField
                           control={form.control}
@@ -477,7 +548,7 @@ export default function NewCouncilForm({
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="e.g. Abebe Bikila"
+                                  placeholder={t("form.placeholders.leaderName")}
                                   className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                   {...field}
                                 />
@@ -501,7 +572,7 @@ export default function NewCouncilForm({
                               <FormControl>
                                 <Input
                                   list="edir-council-role-suggestions"
-                                  placeholder="Type or select role..."
+                                  placeholder={t("form.placeholders.leaderRole")}
                                   className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                   {...field}
                                 />
@@ -524,7 +595,7 @@ export default function NewCouncilForm({
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="e.g. 0911223344"
+                                  placeholder={t("form.placeholders.leaderPhone")}
                                   className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                   {...field}
                                 />
@@ -533,10 +604,169 @@ export default function NewCouncilForm({
                             </FormItem>
                           )}
                         />
+
+                        {/* Originating Representation: Edir (if Woreda), Woreda (if Sub-City), Sub-City (if City) */}
+                        {watchedLevel === "WOREDA" && (
+                          <FormField
+                            control={form.control}
+                            name={`leadershipMembers.${index}.representedEntity`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                  {t.has("form.fields.leaderRepresentedEdir")
+                                    ? t("form.fields.leaderRepresentedEdir")
+                                    : "Representing Edir"}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    list={`edir-council-candidates-${index}`}
+                                    placeholder={
+                                      t.has("form.placeholders.leaderRepresentedEdir")
+                                        ? t("form.placeholders.leaderRepresentedEdir")
+                                        : "Select or enter Edir name"
+                                    }
+                                    className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                                    {...field}
+                                    value={field.value || ""}
+                                  />
+                                </FormControl>
+                                <datalist id={`edir-council-candidates-${index}`}>
+                                  {candidateEdirs.map((e: any) => (
+                                    <option key={e.id} value={e.name}>
+                                      {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
+                                    </option>
+                                  ))}
+                                </datalist>
+                                <FormMessage className="text-[10.5px]" />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+
+                        {watchedLevel === "SUB_CITY" && (
+                          <FormField
+                            control={form.control}
+                            name={`leadershipMembers.${index}.representedEntity`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                  {t.has("form.fields.leaderRepresentedWoreda")
+                                    ? t("form.fields.leaderRepresentedWoreda")
+                                    : "Representing Woreda"}
+                                </FormLabel>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  value={field.value || undefined}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]">
+                                      <SelectValue
+                                        placeholder={
+                                          t.has("form.placeholders.leaderRepresentedWoreda")
+                                            ? t("form.placeholders.leaderRepresentedWoreda")
+                                            : "Select Woreda"
+                                        }
+                                      >
+                                        {field.value ? `Woreda ${field.value}` : undefined}
+                                      </SelectValue>
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent className="max-h-56">
+                                    {subCityWoredas.map((wCode) => (
+                                      <SelectItem key={wCode} value={wCode} className="text-xs">
+                                        Woreda {wCode}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage className="text-[10.5px]" />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+
+                        {watchedLevel === "CITY" && (
+                          <FormField
+                            control={form.control}
+                            name={`leadershipMembers.${index}.representedEntity`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                  {t.has("form.fields.leaderRepresentedSubCity")
+                                    ? t("form.fields.leaderRepresentedSubCity")
+                                    : "Representing Sub-City"}
+                                </FormLabel>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  value={field.value || undefined}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]">
+                                      <SelectValue
+                                        placeholder={
+                                          t.has("form.placeholders.leaderRepresentedSubCity")
+                                            ? t("form.placeholders.leaderRepresentedSubCity")
+                                            : "Select Sub-City"
+                                        }
+                                      >
+                                        {field.value ? getSubCityLabel(field.value) : undefined}
+                                      </SelectValue>
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent className="max-h-56">
+                                    {subCities.map((sc) => (
+                                      <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
+                                        {getSubCityLabel(sc.name)}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage className="text-[10.5px]" />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                       </div>
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+
+            {/* Documents Section */}
+            <div className="space-y-3 pt-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5 flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-[#1769AA]" />
+                {t.has("form.sections.documents")
+                  ? t("form.sections.documents")
+                  : "Council Documents & By-Laws"}
+              </h3>
+              <div className="rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/20">
+                <FileDragAndDrop
+                  value={byLawsFile}
+                  onChange={handleByLawsSelect}
+                  maxFiles={1}
+                  acceptedFileTypes={[
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                  ]}
+                />
+              </div>
+              {form.watch("byLawsDocId") && byLawsFile.length === 0 && (
+                <p className="text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-xs">
+                  ✓{" "}
+                  {t.has("form.messages.byLawsUploaded")
+                    ? t("form.messages.byLawsUploaded")
+                    : "Document uploaded successfully"}
+                </p>
+              )}
+              {uploadDocMutation.isPending && (
+                <p className="text-xs font-mono text-[#1769AA]">
+                  {t.has("form.messages.byLawsUploading")
+                    ? t("form.messages.byLawsUploading")
+                    : "Uploading document..."}
+                </p>
               )}
             </div>
 
@@ -551,10 +781,14 @@ export default function NewCouncilForm({
               </Button>
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || uploadDocMutation.isPending}
                 className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs"
               >
-                {isSubmitting ? t("buttons.saving") : t("buttons.save")}
+                {isSubmitting
+                  ? t("buttons.saving")
+                  : uploadDocMutation.isPending
+                    ? t("buttons.uploading")
+                    : t("buttons.save")}
               </Button>
             </div>
           </form>

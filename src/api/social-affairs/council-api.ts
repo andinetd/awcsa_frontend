@@ -51,6 +51,7 @@ export interface EdirCouncilPayload {
   contactPhone?: string;
   address?: string;
   leadershipMembers?: CouncilLeadershipMember[];
+  byLawsDocId?: number | null;
 }
 
 export const registerEdirCouncil = async (

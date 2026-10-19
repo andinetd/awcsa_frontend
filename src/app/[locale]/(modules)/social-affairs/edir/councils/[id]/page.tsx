@@ -405,6 +405,24 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                             {member.role}
                           </span>
                         </div>
+                        {member.representedEntity && (
+                          <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-600 bg-slate-50/80 px-2 py-0.5 rounded-xs border border-slate-200">
+                            <span className="text-slate-500 font-medium">
+                              {typedCouncil.level === "WOREDA"
+                                ? t("detail.representingEdir")
+                                : typedCouncil.level === "SUB_CITY"
+                                ? t("detail.representingWoreda")
+                                : t("detail.representingSubCity")}:
+                            </span>
+                            <span className="font-bold text-slate-800">
+                              {typedCouncil.level === "SUB_CITY" && !member.representedEntity.toLowerCase().includes("woreda")
+                                ? `Woreda ${member.representedEntity}`
+                                : typedCouncil.level === "CITY" && !member.representedEntity.toLowerCase().includes("sub")
+                                ? `${member.representedEntity} Sub-City`
+                                : member.representedEntity}
+                            </span>
+                          </div>
+                        )}
                         {member.phoneNumber && (
                           <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
                             <Phone className="w-3 h-3 text-slate-400 shrink-0" />

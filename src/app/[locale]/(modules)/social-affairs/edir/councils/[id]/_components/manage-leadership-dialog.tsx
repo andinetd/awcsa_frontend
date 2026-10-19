@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   useUpdateEdirCouncilMutation,
+  useGetSubCitiesQuery,
+  useGetEdirAssociationsQuery,
 } from "@/hooks/social-affairs";
 import { EdirCouncil } from "@/api/social-affairs/edir";
 import {
@@ -23,6 +25,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -45,7 +54,7 @@ const COMMON_ROLE_SUGGESTIONS = [
   "Vice Chairperson",
   "Secretary",
   "Treasurer",
-  "Auditor / Audit Head",
+  "Auditor",
   "Public Relations Officer",
   "Women Affairs Coordinator",
   "Youth Representative",
@@ -60,8 +69,39 @@ interface Props {
 
 export default function ManageLeadershipDialog({ council, trigger }: Props) {
   const t = useTranslations("social-affairs.edir.councils");
+  const tSubCities = useTranslations("subCities.names");
   const [open, setOpen] = useState(false);
   const updateMutation = useUpdateEdirCouncilMutation();
+  const { data: subCities = [] } = useGetSubCitiesQuery();
+  const { data: allEdirs = [] } = useGetEdirAssociationsQuery();
+
+  const currentSubCityObj = subCities.find(
+    (s) => s.name.toLowerCase() === (council.subCity || "").toLowerCase()
+  );
+  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => w.code) || [
+    "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
+  ];
+
+  const candidateEdirs = allEdirs.filter((e: any) => {
+    if (council.subCity && e.subCity && e.subCity.toLowerCase() !== council.subCity.toLowerCase()) {
+      return false;
+    }
+    if (council.woreda && e.woreda && String(e.woreda) !== String(council.woreda)) {
+      return false;
+    }
+    return true;
+  });
+
+  const getSubCityLabel = (name: string) => {
+    try {
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
+    } catch {
+      return name;
+    }
+  };
 
   const form = useForm<LeadershipFormValues>({
     resolver: zodResolver(leadershipFormSchema),
@@ -120,7 +160,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-3xl rounded-xs border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <div className="flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-[#1769AA]" />
@@ -165,6 +205,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                     role: "",
                     phoneNumber: "",
                     address: "",
+                    representedEntity: "",
                   })
                 }
                 className="h-7 text-xs font-mono rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] hover:bg-[#d6e7f7] hover:text-[#12568E] gap-1 cursor-pointer"
@@ -207,7 +248,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                       </Button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
                       {/* Member Full Name */}
                       <FormField
                         control={form.control}
@@ -219,7 +260,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="e.g. Abebe Bikila"
+                                placeholder={t("form.placeholders.leaderName")}
                                 className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
@@ -241,7 +282,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                             <FormControl>
                               <Input
                                 list="council-dialog-role-suggestions"
-                                placeholder="Type or select role..."
+                                placeholder={t("form.placeholders.leaderRole")}
                                 className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
@@ -262,7 +303,7 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                             </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="e.g. 0911223344"
+                                placeholder={t("form.placeholders.leaderPhone")}
                                 className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
                                 {...field}
                               />
@@ -271,6 +312,128 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                           </FormItem>
                         )}
                       />
+
+                      {/* Originating Representation: Edir (if Woreda), Woreda (if Sub-City), Sub-City (if City) */}
+                      {council.level === "WOREDA" && (
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.representedEntity`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("leadershipDialog.representedEdir")
+                                  ? t("leadershipDialog.representedEdir")
+                                  : "Representing Edir"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  list={`dialog-edir-candidates-${index}`}
+                                  placeholder={
+                                    t.has("leadershipDialog.placeholderEdir")
+                                      ? t("leadershipDialog.placeholderEdir")
+                                      : "Select or enter Edir name"
+                                  }
+                                  className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+                                  {...field}
+                                  value={field.value || ""}
+                                />
+                              </FormControl>
+                              <datalist id={`dialog-edir-candidates-${index}`}>
+                                {candidateEdirs.map((e: any) => (
+                                  <option key={e.id} value={e.name}>
+                                    {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
+                                  </option>
+                                ))}
+                              </datalist>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+                      )}
+
+                      {council.level === "SUB_CITY" && (
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.representedEntity`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("leadershipDialog.representedWoreda")
+                                  ? t("leadershipDialog.representedWoreda")
+                                  : "Representing Woreda"}
+                              </FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value || undefined}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]">
+                                    <SelectValue
+                                      placeholder={
+                                        t.has("leadershipDialog.placeholderWoreda")
+                                          ? t("leadershipDialog.placeholderWoreda")
+                                          : "Select Woreda"
+                                      }
+                                    >
+                                      {field.value ? `Woreda ${field.value}` : undefined}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-56">
+                                  {subCityWoredas.map((wCode) => (
+                                    <SelectItem key={wCode} value={wCode} className="text-xs">
+                                      Woreda {wCode}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+                      )}
+
+                      {council.level === "CITY" && (
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.representedEntity`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[10.5px] font-bold text-slate-700 uppercase tracking-wider font-mono">
+                                {t.has("leadershipDialog.representedSubCity")
+                                  ? t("leadershipDialog.representedSubCity")
+                                  : "Representing Sub-City"}
+                              </FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value || undefined}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="h-7.5 text-xs bg-white border-[#E3E7EB] rounded-xs focus-visible:ring-1 focus-visible:ring-[#1769AA]">
+                                    <SelectValue
+                                      placeholder={
+                                        t.has("leadershipDialog.placeholderSubCity")
+                                          ? t("leadershipDialog.placeholderSubCity")
+                                          : "Select Sub-City"
+                                      }
+                                    >
+                                      {field.value ? getSubCityLabel(field.value) : undefined}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-56">
+                                  {subCities.map((sc) => (
+                                    <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
+                                      {getSubCityLabel(sc.name)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage className="text-[10.5px]" />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}

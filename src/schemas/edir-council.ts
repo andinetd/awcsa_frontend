@@ -8,6 +8,7 @@ export const councilLeadershipMemberSchema = z.object({
   role: z.string().min(1, "Role / title label is required"),
   phoneNumber: z.string().optional(),
   address: z.string().optional(),
+  representedEntity: z.string().optional(),
 });
 
 export type CouncilLeadershipMember = z.infer<typeof councilLeadershipMemberSchema>;
@@ -27,6 +28,7 @@ export const newEdirCouncilSchema = z
     contactPhone: z.string().optional(),
     address: z.string().optional(),
     leadershipMembers: z.array(councilLeadershipMemberSchema).optional(),
+    byLawsDocId: z.number().optional().nullable(),
   })
   .superRefine((val, ctx) => {
     if (val.level === "WOREDA" && !val.woreda) {

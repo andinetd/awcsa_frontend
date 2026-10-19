@@ -729,6 +729,72 @@
       "registerDisability": "Register Disability",
       "switchCategoryHint": "Switch the category below to register a different type of beneficiary.",
       "switchResetsForm": "Switching the category will clear any values already entered in the form."
+    },
+    "options": {
+      "sex": {
+        "MALE": "Male",
+        "FEMALE": "Female",
+        "OTHER": "Other"
+      },
+      "employment": {
+        "EMPLOYED": "Employed",
+        "UNEMPLOYED": "Unemployed"
+      },
+      "marital": {
+        "MARRIED": "Married",
+        "UNMARRIED": "Unmarried",
+        "DIVORCED": "Divorced",
+        "WIDOWED": "Widowed"
+      },
+      "workplace": {
+        "OWN_PRIVATE": "Own / Private",
+        "KEBELE_PUBLIC": "Kebele / Public",
+        "RENTED": "Rented"
+      },
+      "disabilityTypes": {
+        "PHYSICAL": "Physical",
+        "VISUAL": "Visual",
+        "HEARING": "Hearing",
+        "INTELLECTUAL": "Intellectual",
+        "SPEECH": "Speech",
+        "MULTIPLE": "Multiple",
+        "OTHER": "Other"
+      },
+      "severity": {
+        "MILD": "Mild",
+        "MODERATE": "Moderate",
+        "SEVERE": "Severe",
+        "PROFOUND": "Profound"
+      },
+      "training": {
+        "AGRICULTURE": "Agriculture",
+        "BUSINESS": "Business",
+        "HOTEL_HOSPITALITY": "Hotel & Hospitality",
+        "HOUSE_CONSTRUCTION": "House Construction",
+        "AUTOMOTIVE": "Automotive",
+        "ELECTRICITY": "Electricity",
+        "ICT": "ICT",
+        "MUNICIPALITY_ADMIN": "Municipality Admin",
+        "ROAD_CONSTRUCTION": "Road Construction",
+        "AGRO_PROCESSING": "Agro Processing",
+        "FURNITURE_MAKING": "Furniture Making",
+        "TEXTILE_GARMENT": "Textile & Garment",
+        "LEATHER_WORK": "Leather Work",
+        "METAL_WORKING": "Metal Working",
+        "OTHER": "Other"
+      },
+      "trainingAndWorkplace": "Training & Workplace",
+      "placeholders": {
+        "select": "Select",
+        "selectGender": "Select gender",
+        "selectEmployment": "Select employment status",
+        "selectMarital": "Select marital status",
+        "selectSeverity": "Select severity",
+        "selectWorkplace": "Select workplace condition",
+        "firstChoice": "1st Choice",
+        "secondChoice": "2nd Choice",
+        "thirdChoice": "3rd Choice"
+      }
     }
   },
   "edir": {
@@ -859,7 +925,10 @@
         "assetDescription": "Description",
         "assetValue": "Value (ETB)",
         "auditCommittee": "Assets counted by the Audit Committee",
-        "generalAssembly": "Assets approved by the General Assembly"
+        "generalAssembly": "Assets approved by the General Assembly",
+        "council": "Edir Council (Optional)",
+        "councilPlaceholder": "Select Edir Council (or None)",
+        "noCouncilOption": "None / Not Linked"
       },
       "assetTypes": {
         "CASH": "Cash",
@@ -935,12 +1004,15 @@
           "location": "Specific Location",
           "bankAccount": "Bank Account Number",
           "contribution": "Monthly Contribution",
-          "remarks": "Remarks",
-          "managementMembers": "Management Members",
+          "managementMembers": "Management / Leaders",
           "generalMembers": "General Members",
           "male": "Male",
           "female": "Female",
-          "total": "Total"
+          "total": "Total",
+          "totalEdirMembers": "Total Number of Edir Members (Including Leaders)",
+          "totalMale": "Total Male (Leaders + General)",
+          "totalFemale": "Total Female (Leaders + General)",
+          "grandTotal": "Grand Total Members"
         },
         "buttons": {
           "register": "Add New Edir",
@@ -968,6 +1040,7 @@
         "error": "Failed to generate report",
         "menuLabel": "Download or print this edir",
         "printDossier": "Print Official Dossier",
+        "printCertificate": "Renewal Certificate (Directive 151/2016)",
         "reportType": "Report Type",
         "reportTypeOptions": {
           "summary": "Edir Summary Table",
@@ -997,8 +1070,10 @@
           "woreda": "Woreda",
           "bankAccount": "Bank Account Number",
           "date": "Establishment Date",
-          "generalMale": "Male Members",
-          "generalFemale": "Female Members",
+          "managementMale": "Management / Leaders (Male)",
+          "managementFemale": "Management / Leaders (Female)",
+          "generalMale": "General Members (Male)",
+          "generalFemale": "General Members (Female)",
           "members": "Members"
         },
         "buttons": {
@@ -1037,9 +1112,40 @@
           "label": "Renew",
           "success": "Registration renewed successfully"
         },
+        "renewDialog": {
+          "title": "Edir Renewal & Audit Verification",
+          "subtitle": "Verify annual audit compliance (Article 7) and renewal parameters (Article 13).",
+          "directiveReference": "Directive No. 151/2016 Articles 7 & 13 Compliance",
+          "dateLabel": "Renewal Date (Date performed on)",
+          "checklistTitle": "Annual Audit & Governance Compliance",
+          "auditCommittee": "Assets & accounts audited and verified by Audit Committee (Article 7)",
+          "generalAssembly": "Audit report and asset inventory approved by General Assembly",
+          "penaltyLabel": "Late Renewal Penalty Applied (Directive Article 13)",
+          "documentTitle": "Audit Report Document (Optional)",
+          "documentUploaded": "Audit report attached successfully",
+          "documentUploading": "Uploading audit report...",
+          "confirm": "Verify Audit & Renew",
+          "cancel": "Cancel",
+          "renewing": "Renewing...",
+          "needAuditWarning": "Both Audit Committee verification and General Assembly approval are required per Directive No. 151/2016."
+        },
         "reissue": {
           "label": "Reissue Certificate",
           "success": "Certificate issued successfully"
+        },
+        "certificate": {
+          "label": "Renewal Certificate",
+          "printCertificate": "Print Renewal Certificate",
+          "dialogTitle": "Edir Renewal Certificate (Directive No. 151/2016)",
+          "dialogDescription": "Generate and print the official renewal certificate according to Directive No. 151/2016 standards.",
+          "officerName": "Issuing Officer Name",
+          "officerPlaceholder": "Enter officer full name",
+          "refNumber": "Ref Number (ቁጥር)",
+          "refPlaceholder": "Reference number",
+          "issueDate": "Date (ቀን)",
+          "print": "Print Certificate",
+          "cancel": "Cancel",
+          "toastAction": "Print Certificate"
         },
         "cancel": {
           "label": "Cancel Registration",
@@ -1084,7 +1190,7 @@
         "generalMembers": "General Members",
         "male": "Male",
         "female": "Female",
-        "total": "Total Members",
+        "total": "Total Members (Including Leaders)",
         "subCityWoredaKebele": "Sub City, Woreda, Kebele",
         "houseNumber": "House Number",
         "specificLocation": "Specific Location",
@@ -1109,7 +1215,9 @@
         "assetValue": "Value (ETB)",
         "noAssets": "No assets recorded at registration.",
         "viewDocument": "View / Download",
-        "noDocument": "No by-laws or founding document uploaded."
+        "noDocument": "No by-laws or founding document uploaded.",
+        "council": "Edir Council",
+        "noCouncil": "Not linked to any council"
       },
       "assetTypes": {
         "CASH": "Cash",
@@ -1125,6 +1233,7 @@
     },
     "edir-members": {
       "title": "Members ({count})",
+      "includingLeadersHint": "Total count includes all leaders ({leaders}) and general members ({general}) together.",
       "loading": "Loading members...",
       "error": "Failed to load members.",
       "noMembers": "No members found. Add one to get started.",
@@ -1158,7 +1267,7 @@
         },
         "fields": {
           "fullName": "Full Name",
-          "cityId": "City ID",
+          "cityId": "Fayda ID",
           "phone": "Phone Number",
           "job": "Job",
           "position": "Position",
@@ -1169,7 +1278,7 @@
         },
         "placeholders": {
           "fullName": "Full Name",
-          "cityId": "City ID",
+          "cityId": "Enter Fayda ID (e.g. 123456789012)",
           "phone": "Phone Number",
           "job": "Job",
           "position": "Select position"
@@ -1403,7 +1512,9 @@
         "generateReport": "Council Roster Report",
         "reportDescription": "Filter and print official directory of edir councils.",
         "printCouncilCharter": "Print Council Charter & Roster",
-        "printRoster": "Print Directory"
+        "printRoster": "Print Directory",
+        "uploading": "Uploading...",
+        "addingMembers": "Adding Members..."
       },
       "messages": {
         "printSuccess": "Print preview opened successfully"
@@ -1417,7 +1528,8 @@
           "general": "General Information",
           "location": "Location",
           "leadership": "Leadership & Contact",
-          "additionalLeadership": "Additional Leadership & Executive Committee"
+          "additionalLeadership": "Additional Leadership & Executive Committee",
+          "documents": "Council Documents & By-Laws"
         },
         "buttons": {
           "addLeader": "Add Member"
@@ -1435,7 +1547,10 @@
           "address": "Address",
           "leaderName": "Full Name",
           "leaderRole": "Role / Position Label",
-          "leaderPhone": "Phone Number"
+          "leaderPhone": "Phone Number",
+          "leaderRepresentedEdir": "Representing Edir",
+          "leaderRepresentedWoreda": "Representing Woreda",
+          "leaderRepresentedSubCity": "Representing Sub-City"
         },
         "placeholders": {
           "name": "e.g. Woreda 5 Edir Council",
@@ -1445,12 +1560,21 @@
           "chairpersonName": "Full name",
           "chairpersonPhone": "Phone number",
           "contactPhone": "Phone number",
-          "address": "Office address"
+          "address": "Office address",
+          "leaderName": "e.g. Abebe Bikila",
+          "leaderRole": "Type or select role...",
+          "leaderPhone": "e.g. 0911223344",
+          "leaderRepresentedEdir": "Select or enter Edir name",
+          "leaderRepresentedWoreda": "Select Woreda",
+          "leaderRepresentedSubCity": "Select Sub-City"
         },
         "messages": {
           "successCreate": "Council registered successfully",
           "successUpdate": "Council updated successfully",
-          "saveError": "Failed to save council. Please check the details and try again."
+          "saveError": "Failed to save council. Please check the details and try again.",
+          "byLawsUploaded": "Document uploaded successfully",
+          "byLawsUploading": "Uploading document...",
+          "byLawsUploadError": "Failed to upload document"
         }
       },
       "detail": {
@@ -1475,6 +1599,10 @@
         "leader": "Leadership",
         "location": "Location",
         "memberSince": "Registered",
+        "representing": "Representing",
+        "representingEdir": "Representing Edir",
+        "representingWoreda": "Representing Woreda",
+        "representingSubCity": "Representing Sub-City",
         "cancellationReasons": {
           "DISSOLVED": "Council dissolved per its by-laws",
           "MEMBER_MAJORITY_REQUEST": "Request by 2/3 majority of members",
@@ -1537,6 +1665,12 @@
         "role": "Role / Position",
         "phone": "Phone Number",
         "address": "Office / Address",
+        "representedEdir": "Representing Edir",
+        "representedWoreda": "Representing Woreda",
+        "representedSubCity": "Representing Sub-City",
+        "placeholderEdir": "Select or enter Edir name",
+        "placeholderWoreda": "Select Woreda",
+        "placeholderSubCity": "Select Sub-City",
         "remove": "Remove",
         "cancel": "Cancel",
         "save": "Save Leadership",
