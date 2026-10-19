@@ -200,7 +200,9 @@ export default function UserManagementPage() {
               }}
             >
               <SelectTrigger className="md:w-[150px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                <SelectValue placeholder={ft("status")} />
+                <SelectValue placeholder={ft("status")}>
+                  {status === "all" ? ft("allStatuses") : ft(`statuses.${status}`)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                 <SelectItem value="all" className="text-xs">{ft("allStatuses")}</SelectItem>
@@ -219,7 +221,11 @@ export default function UserManagementPage() {
               }}
             >
               <SelectTrigger className="md:w-[180px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                <SelectValue placeholder={ft("role")} />
+                <SelectValue placeholder={ft("role")}>
+                  {roleFilter === "all"
+                    ? ft("allRoles")
+                    : formData?.roles.find((r) => String(r.id) === roleFilter)?.name.replace(/_/g, " ")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                 <SelectItem value="all" className="text-xs">{ft("allRoles")}</SelectItem>
@@ -238,7 +244,9 @@ export default function UserManagementPage() {
               }}
             >
               <SelectTrigger className="md:w-[170px] h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                <SelectValue placeholder={ft("department")} />
+                <SelectValue placeholder={ft("department")}>
+                  {department === "all" ? ft("allDepartments") : t(`dialog.departments.${department}`)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md">
                 <SelectItem value="all" className="text-xs">{ft("allDepartments")}</SelectItem>

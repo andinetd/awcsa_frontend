@@ -179,6 +179,7 @@
         "roleLabel": "ሚና",
         "selectRole": "ሚና ይምረጡ",
         "saveChanges": "ለውጦችን አስቀምጥ",
+        "cancel": "ሰርዝ",
         "currentRole": "የአሁኑ ሚና",
         "targetTitle": "የዒላማ ሚና",
         "targetPermissions": "ይህ ሚና {count} ፈቃዶችን ይሰጣል።",
@@ -385,7 +386,12 @@
       "add": "ጨምር",
       "edit": "አስተካክል",
       "delete": "ሰርዝ",
+      "cancel": "ሰርዝ",
       "visibility": "ታይነት"
+    },
+    "dialogs": {
+      "deleteConfirmTitle": "እርግጠኛ ነዎት?",
+      "deleteConfirmDesc": "ይህ እርምጃ ሊቀለበስ አይችልም። ይዘቱ ሙሉ በሙሉ ይሰረዛል።"
     },
     "fields": {
       "title": "ርዕስ",
@@ -397,6 +403,7 @@
       "link": "ሊንክ",
       "linkText": "የሊንክ ጽሁፍ",
       "isVisible": "ይታይ",
+      "hidden": "የተደበቀ",
       "serviceName": "የአገልግሎት ስም",
       "serviceDescription": "መግለጫ",
       "linkName": "የሊንክ ስም",
@@ -414,6 +421,7 @@
       "value": "እሴት"
     },
     "messages": {
+      "noItems": "ምንም ይዘት አልተገኘም።",
       "settingsUpdateSuccess": "ማስተካከያው በተሳካ ሁኔታ ተዘምኗል",
       "settingsUpdateError": "ማስተካከያውን ማዘመን አልተቻለም",
       "contentCreateSuccess": "ይዘቱ በተሳካ ሁኔታ ተፈጥሯል",

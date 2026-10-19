@@ -222,7 +222,7 @@ export function ChangeRoleDialog({
                     onClick={() => onOpenChange(false)}
                     className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50"
                   >
-                    Cancel
+                    {t("cancel")}
                   </Button>
                   <Button
                     type="submit"

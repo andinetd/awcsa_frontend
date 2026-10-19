@@ -179,6 +179,7 @@
         "roleLabel": "Role",
         "selectRole": "Select a role",
         "saveChanges": "Save Changes",
+        "cancel": "Cancel",
         "currentRole": "Current role",
         "targetTitle": "Target role",
         "targetPermissions": "This role grants {count} permissions.",
@@ -385,7 +386,12 @@
       "add": "Add Item",
       "edit": "Edit",
       "delete": "Delete",
+      "cancel": "Cancel",
       "visibility": "Visibility"
+    },
+    "dialogs": {
+      "deleteConfirmTitle": "Are you sure?",
+      "deleteConfirmDesc": "This action cannot be undone. This will permanently delete the item."
     },
     "fields": {
       "title": "Title",
@@ -398,6 +404,7 @@
       "linkText": "Link Text",
       "logoUrl": "Logo URL",
       "isVisible": "Visible",
+      "hidden": "Hidden",
       "serviceName": "Service Name",
       "serviceDescription": "Description",
       "linkName": "Link Name",
@@ -414,6 +421,7 @@
       "value": "Value"
     },
     "messages": {
+      "noItems": "No items found.",
       "settingsUpdateSuccess": "Settings updated successfully",
       "settingsUpdateError": "Failed to update settings",
       "contentCreateSuccess": "Content created successfully",

@@ -102,7 +102,7 @@ export default function ContentListManager({
                         className="gap-1 rounded-xs font-mono text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 border border-emerald-200 bg-emerald-50 text-emerald-700"
                       >
                         <Eye className="h-3 w-3" />
-                        Visible
+                        {t("fields.isVisible")}
                       </Badge>
                     ) : (
                       <Badge
@@ -110,7 +110,7 @@ export default function ContentListManager({
                         className="gap-1 rounded-xs font-mono text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 border border-[#E3E7EB] bg-slate-100 text-slate-600"
                       >
                         <EyeOff className="h-3 w-3" />
-                        Hidden
+                        {t("fields.hidden")}
                       </Badge>
                     )}
                   </TableCell>
@@ -136,22 +136,21 @@ export default function ContentListManager({
                       <AlertDialogContent className="max-w-md rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
                         <AlertDialogHeader className="border-b border-[#E3E7EB] pb-3 mb-2">
                           <AlertDialogTitle className="text-base font-bold font-mono text-[#0B1F3A] uppercase tracking-wide">
-                            Are you sure?
+                            {t("dialogs.deleteConfirmTitle")}
                           </AlertDialogTitle>
                           <AlertDialogDescription className="text-xs text-slate-500">
-                            This action cannot be undone. This will permanently
-                            delete the item.
+                            {t("dialogs.deleteConfirmDesc")}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter className="pt-3 border-t border-[#E3E7EB] flex items-center justify-end gap-2">
                           <AlertDialogCancel className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-slate-50">
-                            Cancel
+                            {t("actions.cancel")}
                           </AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleDelete(item.id!)}
                             className="h-8 text-xs rounded-xs bg-rose-600 hover:bg-rose-700 text-white font-semibold shadow-2xs gap-1.5 px-3"
                           >
-                            Delete
+                            {t("actions.delete")}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -165,7 +164,7 @@ export default function ContentListManager({
                   colSpan={4}
                   className="text-center py-10 text-slate-500 text-xs font-mono"
                 >
-                  No items found.
+                  {t("messages.noItems")}
                 </TableCell>
               </TableRow>
             )}
