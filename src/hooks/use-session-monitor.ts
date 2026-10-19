@@ -8,7 +8,7 @@ import { refreshAccessToken } from "@/api/auth/auth";
 import type { JwtPayload } from "@/types/api/auth";
 import type { WarningReason } from "@/hooks/use-session-warning";
 
-const INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes idle timeout
+const INACTIVITY_MS = 60 * 60 * 1000; // 1 hour idle timeout
 const SILENT_REFRESH_THRESHOLD_MS = 5 * 60 * 1000; // Try silent refresh 5 minutes before token expires
 const EXPIRY_WARNING_THRESHOLD_MS = 2 * 60 * 1000; // Only warn user if under 2 minutes left
 const WARNING_SECONDS = 120;
@@ -24,8 +24,13 @@ export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
   const isRefreshingRef = useRef<boolean>(false);
 
   useEffect(() => {
+    let lastThrottledTime = 0;
     const touch = () => {
-      lastActivityRef.current = Date.now();
+      const now = Date.now();
+      if (now - lastThrottledTime > 3000) {
+        lastThrottledTime = now;
+        lastActivityRef.current = now;
+      }
     };
 
     const events = [
@@ -35,8 +40,11 @@ export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
       "touchstart",
       "scroll",
       "wheel",
+      "mousemove",
     ];
-    events.forEach((event) => window.addEventListener(event, touch));
+    events.forEach((event) =>
+      window.addEventListener(event, touch, { passive: true })
+    );
 
     const watchdog = setInterval(async () => {
       const { user, token, refreshToken, rememberMe } = useAuthStore.getState();
