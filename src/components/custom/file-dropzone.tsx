@@ -27,6 +27,22 @@ interface FileItem {
   size: number;
 }
 
+const MIME_EXTENSION_MAP: Record<string, string[]> = {
+  "application/pdf": [".pdf"],
+  "image/jpeg": [".jpg", ".jpeg"],
+  "image/png": [".png"],
+  "image/webp": [".webp"],
+  "application/msword": [".doc"],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+    ".docx",
+  ],
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+    ".xlsx",
+  ],
+  "application/vnd.ms-excel": [".xls"],
+  "text/csv": [".csv"],
+};
+
 export function FileDragAndDrop({
   value,
   onChange,
@@ -100,7 +116,7 @@ export function FileDragAndDrop({
     onDrop,
     accept: acceptedFileTypes.reduce(
       (acc, type) => {
-        acc[type] = [];
+        acc[type] = MIME_EXTENSION_MAP[type] || [];
         return acc;
       },
       {} as Record<string, string[]>,

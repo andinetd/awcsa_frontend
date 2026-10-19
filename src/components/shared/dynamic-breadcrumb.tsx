@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,25 +16,22 @@ export function DynamicBreadcrumb() {
 
   const generateBreadcrumbs = () => {
     const segments = pathname.split("/").filter(Boolean);
-    // Ignore locale segment (first segment)
-    const breadcrumbs = segments
-      .slice(1)
-      .map((segment: string, index: number) => {
-        const path = `/${segments.slice(0, index + 2).join("/")}`;
-        const isLast = index === segments.length - 2;
+    const breadcrumbs = segments.map((segment: string, index: number) => {
+      const path = `/${segments.slice(0, index + 1).join("/")}`;
+      const isLast = index === segments.length - 1;
 
-        // Handle common segment names or formatting
-        let label = segment
-          .replace(/-/g, " ")
-          .replace(/\b\w/g, (l: string) => l.toUpperCase());
+      // Handle common segment names or formatting
+      let label = segment
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (l: string) => l.toUpperCase());
 
-        // Special case for dynamic IDs or UUIDs (usually long strings)
-        if (segment.length > 20 || /^[a-f0-9-]{36}$/i.test(segment)) {
-          label = "Details";
-        }
+      // Special case for dynamic IDs or UUIDs (usually long strings)
+      if (segment.length > 20 || /^[a-f0-9-]{36}$/i.test(segment)) {
+        label = "Details";
+      }
 
-        return { path, label, isLast };
-      });
+      return { path, label, isLast };
+    });
 
     return breadcrumbs;
   };

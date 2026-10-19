@@ -10,10 +10,18 @@ const intlMiddleWare = createMiddleware(routing);
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const locale = req.nextUrl.locale || routing.defaultLocale;
-
   const segments = pathname.split("/");
   const firstSegment = segments[1] as (typeof routing.locales)[number];
+  const cookieLocale = req.cookies.get("NEXT_LOCALE")?.value as
+    | (typeof routing.locales)[number]
+    | undefined;
+
+  const locale = routing.locales.includes(firstSegment)
+    ? firstSegment
+    : cookieLocale && routing.locales.includes(cookieLocale)
+      ? cookieLocale
+      : routing.defaultLocale;
+
   const pathNameWithoutLocale = routing.locales.includes(firstSegment)
     ? "/" + segments.slice(2).join("/")
     : pathname;

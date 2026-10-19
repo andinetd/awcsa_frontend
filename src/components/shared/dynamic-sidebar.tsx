@@ -38,8 +38,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BeneficiaryRegisterTrigger } from "./beneficiary-register-trigger";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const LOCALE_PREFIX = /^\/[a-z]{2}\//;

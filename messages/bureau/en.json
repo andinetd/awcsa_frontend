@@ -85,5 +85,12 @@
     "10": "Oct",
     "11": "Nov",
     "12": "Dec"
+  },
+  "hub": {
+    "allSubCities": "All Sub-Cities",
+    "allStatus": "All Status",
+    "pending": "Pending",
+    "approved": "Approved",
+    "submitted": "Submitted"
   }
 }

@@ -35,6 +35,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
 
   function handleToggle() {
     startTransition(() => {
+      document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax`;
       router.replace(pathname, { locale: nextLocale });
     });
   }

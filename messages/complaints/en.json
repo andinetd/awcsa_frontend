@@ -66,6 +66,7 @@
     }
   },
   "statuses": {
+    "allStatus": "All Status",
     "pending": "Pending",
     "inProgress": "In Progress",
     "resolved": "Resolved",

@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface ComplaintsRegistryProps {
   complaints?: Complaint[];
@@ -30,6 +31,7 @@ export function ComplaintsRegistry({
   complaints = [],
   isLoading = false,
 }: ComplaintsRegistryProps) {
+  const tStatus = useTranslations("complaints.statuses");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
@@ -217,13 +219,18 @@ export function ComplaintsRegistry({
           <div className="flex items-center gap-2 w-full md:w-auto justify-end">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="h-8 w-[140px] text-xs border-[#E3E7EB]">
-                <SelectValue placeholder="All Status" />
+                <SelectValue placeholder={tStatus("allStatus")}>
+                  {statusFilter === "ALL" && tStatus("allStatus")}
+                  {statusFilter === ComplaintStatus.PENDING && tStatus("pending")}
+                  {statusFilter === ComplaintStatus.IN_PROGRESS && tStatus("inProgress")}
+                  {statusFilter === ComplaintStatus.RESOLVED && tStatus("resolved")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All Status</SelectItem>
-                <SelectItem value={ComplaintStatus.PENDING}>Pending</SelectItem>
-                <SelectItem value={ComplaintStatus.IN_PROGRESS}>In Progress</SelectItem>
-                <SelectItem value={ComplaintStatus.RESOLVED}>Resolved</SelectItem>
+                <SelectItem value="ALL">{tStatus("allStatus")}</SelectItem>
+                <SelectItem value={ComplaintStatus.PENDING}>{tStatus("pending")}</SelectItem>
+                <SelectItem value={ComplaintStatus.IN_PROGRESS}>{tStatus("inProgress")}</SelectItem>
+                <SelectItem value={ComplaintStatus.RESOLVED}>{tStatus("resolved")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -307,7 +314,13 @@ export function ComplaintsRegistry({
                               : "bg-slate-400"
                           }`}
                         />
-                        {c.status}
+                        {isPending
+                          ? tStatus("pending")
+                          : isInProgress
+                          ? tStatus("inProgress")
+                          : isResolved
+                          ? tStatus("resolved")
+                          : c.status}
                       </span>
                     </td>
 

@@ -6,4 +6,10 @@ export const routing = defineRouting({
 
   // Used when no locale matches
   defaultLocale: "en",
+
+  localeCookie: {
+    name: "NEXT_LOCALE",
+    maxAge: 365 * 24 * 60 * 60, // 1 year
+    sameSite: "lax",
+  },
 });

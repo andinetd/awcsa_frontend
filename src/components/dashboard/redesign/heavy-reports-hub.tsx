@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { BureauReport, BureauReportFilters } from "@/api/bureau/reports";
 import { ADDIS_ABABA_SUBCITIES } from "./types";
 import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
@@ -45,10 +46,23 @@ export function HeavyReportsHub({
   careCenters = [],
   selectedSubCity = "ALL",
 }: HeavyReportsHubProps) {
+  const t = useTranslations("bureau.hub");
+  const tSubCities = useTranslations("subCities.names");
   const { userSubCity } = useJurisdictionScope();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [subCityFilter, setSubCityFilter] = useState<string>(userSubCity || selectedSubCity);
+
+  const getSubCityLabel = (name: string) => {
+    try {
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
+    } catch {
+      return name;
+    }
+  };
   const [selectedReport, setSelectedReport] = useState<BureauReport | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -252,13 +266,17 @@ export function HeavyReportsHub({
             >
               <SelectTrigger className="h-8 w-[140px] text-xs border-[#E3E7EB]">
                 <MapPin className="mr-1 h-3.5 w-3.5 text-slate-500" />
-                <SelectValue placeholder="All Sub-Cities" />
+                <SelectValue placeholder={t("allSubCities")}>
+                  {subCityFilter !== "ALL"
+                    ? getSubCityLabel(subCityFilter)
+                    : t("allSubCities")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {!userSubCity && <SelectItem value="ALL">All Sub-Cities</SelectItem>}
+                {!userSubCity && <SelectItem value="ALL">{t("allSubCities")}</SelectItem>}
                 {availableSubCities.map((sc) => (
                   <SelectItem key={sc} value={sc}>
-                    {sc}
+                    {getSubCityLabel(sc)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -272,13 +290,18 @@ export function HeavyReportsHub({
               }}
             >
               <SelectTrigger className="h-8 w-[130px] text-xs border-[#E3E7EB]">
-                <SelectValue placeholder="All Status" />
+                <SelectValue placeholder={t("allStatus")}>
+                  {statusFilter === "ALL" && t("allStatus")}
+                  {statusFilter === "Submitted" && t("submitted")}
+                  {statusFilter === "Approved" && t("approved")}
+                  {statusFilter === "Pending" && t("pending")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All Status</SelectItem>
-                <SelectItem value="Submitted">Submitted</SelectItem>
-                <SelectItem value="Approved">Approved</SelectItem>
-                <SelectItem value="Pending">Pending</SelectItem>
+                <SelectItem value="ALL">{t("allStatus")}</SelectItem>
+                <SelectItem value="Submitted">{t("submitted")}</SelectItem>
+                <SelectItem value="Approved">{t("approved")}</SelectItem>
+                <SelectItem value="Pending">{t("pending")}</SelectItem>
               </SelectContent>
             </Select>
 

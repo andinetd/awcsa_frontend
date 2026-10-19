@@ -28,6 +28,7 @@ export function SubCitySelect({
   disabled = false,
 }: SubCitySelectProps) {
   const t = useTranslations("social-affairs.edir.location");
+  const tSubCities = useTranslations("subCities.names");
   const { data: subCities, isLoading } = useGetSubCitiesQuery();
   const orgUnit = useAuthStore((s) => s.orgUnit);
 
@@ -52,6 +53,17 @@ export function SubCitySelect({
 
   const isDisabled = disabled || isLoading || !!lockedSubCity;
 
+  const getSubCityLabel = (name: string) => {
+    try {
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
+    } catch {
+      return name;
+    }
+  };
+
   return (
     <Select
       value={value || undefined}
@@ -59,17 +71,19 @@ export function SubCitySelect({
       disabled={isDisabled}
     >
       <SelectTrigger className={lockedSubCity ? "bg-slate-100 cursor-not-allowed" : ""}>
-        <SelectValue placeholder={isLoading ? t("loading") : placeholder} />
+        <SelectValue placeholder={isLoading ? t("loading") : placeholder}>
+          {value ? getSubCityLabel(value) : undefined}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {known.map((subCity) => (
           <SelectItem key={subCity.id} value={subCity.name}>
-            {subCity.name}
+            {getSubCityLabel(subCity.name)}
           </SelectItem>
         ))}
         {extras.map((option) => (
           <SelectItem key={option} value={option}>
-            {option}
+            {getSubCityLabel(option)}
           </SelectItem>
         ))}
       </SelectContent>
@@ -127,7 +141,9 @@ export function WoredaSelect({
       <SelectTrigger className={lockedWoreda ? "bg-slate-100 cursor-not-allowed" : ""}>
         <SelectValue
           placeholder={isLoading ? t("loading") : placeholder}
-        />
+        >
+          {value ? t("woredaCode", { code: value }) : undefined}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {displayWoredas.map((woreda) => (

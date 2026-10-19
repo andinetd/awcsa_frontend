@@ -66,6 +66,7 @@
     }
   },
   "statuses": {
+    "allStatus": "ሁሉም ሁኔታ",
     "pending": "በመጠባበቅ ላይ",
     "inProgress": "በሂደት ላይ",
     "resolved": "ተፈቷል",
