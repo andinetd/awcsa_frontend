@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -122,6 +122,8 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
   onSuccess,
 }) => {
   const t = useTranslations("adoption");
+  const locale = useLocale();
+  const isAm = locale === "am";
   const { userPermissions, userRole } = useAuthStore();
 
   const canManageFacilityChildren =
@@ -287,7 +289,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                 )}
               >
                 <currentMeta.icon className="w-3.5 h-3.5 mr-1" />
-                {currentMeta.label}
+                {isAm ? currentMeta.amharicLabel : currentMeta.label}
               </span>
             </div>
           </div>
@@ -349,7 +351,7 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                           <div className="flex items-center gap-2">
                             <Icon className="w-4 h-4 text-slate-500" />
                             <span className="font-semibold text-xs">
-                              {meta.label}
+                              {isAm ? meta.amharicLabel : meta.label}
                             </span>
                           </div>
                         </SelectItem>
@@ -363,7 +365,9 @@ export const TransferStatusDialog: React.FC<TransferStatusDialogProps> = ({
                   <div className="mt-2 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs p-2.5 flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-[#1769AA] shrink-0 mt-0.5" />
                     <p className="text-xs text-slate-700 leading-relaxed">
-                      {STATUS_META[newStatus].description}
+                      {isAm
+                        ? STATUS_META[newStatus].amharicDescription
+                        : STATUS_META[newStatus].description}
                     </p>
                   </div>
                 )}

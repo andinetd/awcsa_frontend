@@ -130,6 +130,7 @@ const VisitObservationField = ({
 // ─── Visit Card ───────────────────────────────────────────────────────────────
 
 const VisitCard = ({ visit }: { visit: PostPlacementVisit }) => {
+  const t = useTranslations("adoption");
   const [expanded, setExpanded] = useState(false);
   const safetyCfg = SAFETY_CONFIG[visit.safetyAssessment];
   const overallCfg = OVERALL_CONFIG[visit.overallRating];
@@ -149,13 +150,13 @@ const VisitCard = ({ visit }: { visit: PostPlacementVisit }) => {
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border ${safetyCfg.color}`}
             >
               <SafetyIcon className="w-3 h-3" />
-              {safetyCfg.label}
+              {t(`adoptionDetail.homeVisits.safetyRatings.${visit.safetyAssessment}`)}
             </span>
             <span
               className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${overallCfg.color}`}
             >
               <Star className="w-3 h-3 mr-1" />
-              {overallCfg.label}
+              {t(`adoptionDetail.homeVisits.overallRatings.${visit.overallRating}`)}
             </span>
           </div>
 
@@ -187,22 +188,22 @@ const VisitCard = ({ visit }: { visit: PostPlacementVisit }) => {
           <div className="space-y-0">
             <VisitObservationField
               icon={Home}
-              label="Living Conditions & Environment"
+              label={t("adoptionDetail.homeVisits.livingConditions")}
               value={visit.livingConditions}
             />
             <VisitObservationField
               icon={Heart}
-              label="Child Health & Nutrition"
+              label={t("adoptionDetail.homeVisits.childHealthStatus")}
               value={visit.childHealthStatus}
             />
             <VisitObservationField
               icon={Users}
-              label="Bonding & Family Attachment"
+              label={t("adoptionDetail.homeVisits.bondingObservation")}
               value={visit.bondingObservation}
             />
             <VisitObservationField
               icon={BookOpen}
-              label="Schooling & Education Progress"
+              label={t("adoptionDetail.homeVisits.schoolingStatus")}
               value={visit.schoolingStatus}
             />
           </div>
@@ -212,7 +213,7 @@ const VisitCard = ({ visit }: { visit: PostPlacementVisit }) => {
             <div className="bg-rose-50 border border-rose-200 rounded-lg p-3">
               <p className="text-xs font-bold text-rose-700 uppercase tracking-wide mb-1 flex items-center gap-1">
                 <AlertTriangle className="w-3.5 h-3.5" />
-                Concerns & Red Flags Observed
+                {t("adoptionDetail.homeVisits.concerns")}
               </p>
               <p className="text-sm text-rose-800">{visit.concerns}</p>
             </div>
@@ -223,7 +224,7 @@ const VisitCard = ({ visit }: { visit: PostPlacementVisit }) => {
             <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
               <p className="text-xs font-bold text-indigo-700 uppercase tracking-wide mb-1 flex items-center gap-1">
                 <FileText className="w-3.5 h-3.5" />
-                Officer Recommendations & Action Plan
+                {t("adoptionDetail.homeVisits.recommendations")}
               </p>
               <p className="text-sm text-indigo-900">{visit.recommendations}</p>
             </div>
@@ -311,10 +312,10 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-900">
-              Post-Placement Home Visits
+              {t("adoptionDetail.homeVisits.title")}
             </h3>
             <p className="text-xs text-slate-500">
-              Periodic in-person home evaluations by social welfare officers
+              {t("adoptionDetail.homeVisits.subtitle")}
             </p>
           </div>
           {visits.length > 0 && (
@@ -331,7 +332,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
             className="text-xs h-8 bg-emerald-600 hover:bg-emerald-700 text-white"
           >
             <Home className="w-3.5 h-3.5 mr-1.5" />
-            Record Home Visit
+            {t("adoptionDetail.homeVisits.recordVisit")}
           </Button>
         )}
       </div>
@@ -339,14 +340,14 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
       {/* Visits List */}
       {isLoading ? (
         <div className="py-8 text-center text-slate-400 text-sm">
-          Loading visit evaluations...
+          {t("adoptionDetail.homeVisits.loading")}
         </div>
       ) : visits.length === 0 ? (
         <div className="py-10 text-center bg-white rounded-xl border border-dashed border-slate-200">
           <Home className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No post-placement visits recorded yet.</p>
+          <p className="text-sm text-slate-500">{t("adoptionDetail.homeVisits.noVisits")}</p>
           <p className="text-xs text-slate-400 mt-1">
-            Conduct an in-person home visit and record the evaluation here.
+            {t("adoptionDetail.homeVisits.conductPrompt")}
           </p>
         </div>
       ) : (
@@ -361,9 +362,9 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
       <Dialog open={isRecordOpen} onOpenChange={setIsRecordOpen}>
         <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Record Post-Placement Home Visit</DialogTitle>
+            <DialogTitle>{t("adoptionDetail.homeVisits.recordTitle")}</DialogTitle>
             <DialogDescription>
-              Document in-person observations regarding the child's living conditions, safety, bonding, and schooling.
+              {t("adoptionDetail.homeVisits.recordDescription")}
             </DialogDescription>
           </DialogHeader>
 
@@ -371,7 +372,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Visit Date <span className="text-rose-500">*</span>
+                  {t("adoptionDetail.homeVisits.visitDate")} <span className="text-rose-500">*</span>
                 </Label>
                 <Input
                   type="date"
@@ -382,7 +383,10 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Next Scheduled Visit <span className="text-slate-400 font-normal">(optional)</span>
+                  {t("adoptionDetail.homeVisits.nextVisitDue")}{" "}
+                  <span className="text-slate-400 font-normal">
+                    {t("adoptionDetail.reunification.optional")}
+                  </span>
                 </Label>
                 <Input
                   type="date"
@@ -395,7 +399,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
             {/* Ratings Selection */}
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1.5 block">
-                Safety Assessment <span className="text-rose-500">*</span>
+                {t("adoptionDetail.homeVisits.safetyAssessment")} <span className="text-rose-500">*</span>
               </Label>
               <div className="grid grid-cols-2 gap-2">
                 {(["SAFE", "MINOR_CONCERNS", "MAJOR_CONCERNS", "UNSAFE"] as VisitSafetyRating[]).map(
@@ -413,7 +417,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
                         }`}
                       >
                         <cfg.icon className="w-3.5 h-3.5 shrink-0" />
-                        {cfg.label}
+                        {t(`adoptionDetail.homeVisits.safetyRatings.${s}`)}
                       </button>
                     );
                   },
@@ -423,7 +427,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1.5 block">
-                Overall Placement Rating <span className="text-rose-500">*</span>
+                {t("adoptionDetail.homeVisits.overallRating")} <span className="text-rose-500">*</span>
               </Label>
               <div className="flex flex-wrap gap-1.5">
                 {(["EXCELLENT", "GOOD", "SATISFACTORY", "NEEDS_IMPROVEMENT", "CRITICAL"] as VisitOverallRating[]).map(
@@ -438,7 +442,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
                           : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
                       }`}
                     >
-                      {OVERALL_CONFIG[r].label}
+                      {t(`adoptionDetail.homeVisits.overallRatings.${r}`)}
                     </button>
                   ),
                 )}
@@ -448,7 +452,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
             {/* Text Observations */}
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Living Conditions & Home Environment <span className="text-rose-500">*</span>
+                {t("adoptionDetail.homeVisits.livingConditions")} <span className="text-rose-500">*</span>
               </Label>
               <Textarea
                 placeholder="Describe home cleanliness, sleeping space, adequate bedding, safety hazards..."
@@ -460,7 +464,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Child Health & Nutrition <span className="text-rose-500">*</span>
+                {t("adoptionDetail.homeVisits.childHealthStatus")} <span className="text-rose-500">*</span>
               </Label>
               <Textarea
                 placeholder="Physical appearance, hygiene, nutritional adequacy, medical visits, vaccinations..."
@@ -472,7 +476,7 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Bonding & Attachment Observation <span className="text-rose-500">*</span>
+                {t("adoptionDetail.homeVisits.bondingObservation")} <span className="text-rose-500">*</span>
               </Label>
               <Textarea
                 placeholder="Interaction between child and adoptive parents, siblings, comfort level, affection..."
@@ -484,7 +488,10 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Schooling Status <span className="text-slate-400 font-normal">(optional)</span>
+                {t("adoptionDetail.homeVisits.schoolingStatus")}{" "}
+                <span className="text-slate-400 font-normal">
+                  {t("adoptionDetail.reunification.optional")}
+                </span>
               </Label>
               <Textarea
                 placeholder="School enrollment, attendance, grade performance, socialization with peers..."
@@ -496,7 +503,10 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Concerns Observed <span className="text-slate-400 font-normal">(optional)</span>
+                {t("adoptionDetail.homeVisits.concerns")}{" "}
+                <span className="text-slate-400 font-normal">
+                  {t("adoptionDetail.reunification.optional")}
+                </span>
               </Label>
               <Textarea
                 placeholder="Any red flags, risks, or areas requiring immediate attention..."
@@ -508,7 +518,10 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Recommendations & Next Steps <span className="text-slate-400 font-normal">(optional)</span>
+                {t("adoptionDetail.homeVisits.recommendations")}{" "}
+                <span className="text-slate-400 font-normal">
+                  {t("adoptionDetail.reunification.optional")}
+                </span>
               </Label>
               <Textarea
                 placeholder="Guidance or action plan provided to the adoptive parents..."
@@ -525,14 +538,16 @@ export const PostPlacementVisitsSection: React.FC<PostPlacementVisitsSectionProp
               onClick={() => setIsRecordOpen(false)}
               disabled={recordMutation.isPending}
             >
-              Cancel
+              {t("adoptionDetail.homeVisits.cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!isFormValid || recordMutation.isPending}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              {recordMutation.isPending ? "Recording..." : "Save Evaluation"}
+              {recordMutation.isPending
+                ? t("adoptionDetail.homeVisits.saving")
+                : t("adoptionDetail.homeVisits.saveEvaluation")}
             </Button>
           </DialogFooter>
         </DialogContent>

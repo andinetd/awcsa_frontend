@@ -89,14 +89,11 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
               <Users className="w-5 h-5 text-amber-700" />
             </div>
             <DialogTitle className="text-lg">
-              Biological Parents Reunification & Child Return
+              {t("adoptionDetail.reunification.title")}
             </DialogTitle>
           </div>
           <DialogDescription className="text-slate-600 text-xs leading-relaxed">
-            Record the handover of {childName ? <strong>{childName}</strong> : "the child"} to
-            their biological parents. This action will permanently{" "}
-            <span className="font-semibold text-rose-600">terminate</span> the current adoption match
-            and return the child's official status to <strong>RETURNED</strong>.
+            {t("adoptionDetail.reunification.description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -104,11 +101,8 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-3 items-start text-xs text-amber-800">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold mb-0.5">Important Legal Handover Procedure</p>
-            <p>
-              Ensure all legal court decrees and identity checks for the biological parents have been
-              verified by the social welfare office before finalizing this return.
-            </p>
+            <p className="font-bold mb-0.5">{t("adoptionDetail.reunification.warningTitle")}</p>
+            <p>{t("adoptionDetail.reunification.warning")}</p>
           </div>
         </div>
 
@@ -117,13 +111,16 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
             <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-slate-500" />
-              Biological Family Information
+              {t("adoptionDetail.reunification.biologicalFamilyInfo")}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Father's Full Name <span className="text-slate-400 font-normal">(optional)</span>
+                  {t("adoptionDetail.reunification.fatherName")}{" "}
+                  <span className="text-slate-400 font-normal">
+                    {t("adoptionDetail.reunification.optional")}
+                  </span>
                 </Label>
                 <Input
                   placeholder="e.g. Abebe Bekele"
@@ -134,7 +131,10 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Mother's Full Name <span className="text-slate-400 font-normal">(optional)</span>
+                  {t("adoptionDetail.reunification.motherName")}{" "}
+                  <span className="text-slate-400 font-normal">
+                    {t("adoptionDetail.reunification.optional")}
+                  </span>
                 </Label>
                 <Input
                   placeholder="e.g. Almaz Tadesse"
@@ -145,7 +145,7 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Contact Phone Number <span className="text-rose-500">*</span>
+                  {t("adoptionDetail.reunification.contactPhoneNumber")} <span className="text-rose-500">*</span>
                 </Label>
                 <div className="relative">
                   <Phone className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
@@ -162,7 +162,10 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  National / Fayda ID Number <span className="text-slate-400 font-normal">(optional)</span>
+                  {t("adoptionDetail.reunification.nationalIdNumber")}{" "}
+                  <span className="text-slate-400 font-normal">
+                    {t("adoptionDetail.reunification.optional")}
+                  </span>
                 </Label>
                 <div className="relative">
                   <Tag className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
@@ -180,7 +183,7 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Current Residential Address <span className="text-rose-500">*</span>
+                {t("adoptionDetail.reunification.currentAddress")} <span className="text-rose-500">*</span>
               </Label>
               <div className="relative">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
@@ -199,7 +202,7 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Handover Date <span className="text-rose-500">*</span>
+                  {t("adoptionDetail.reunification.handoverDate")} <span className="text-rose-500">*</span>
                 </Label>
                 <Input
                   type="date"
@@ -212,8 +215,10 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
               <div>
                 <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                  Court Decree / Legal Order Ref Number{" "}
-                  <span className="text-slate-400 font-normal">(optional)</span>
+                  {t("adoptionDetail.reunification.courtOrderNumber")}{" "}
+                  <span className="text-slate-400 font-normal">
+                    {t("adoptionDetail.reunification.optional")}
+                  </span>
                 </Label>
                 <div className="relative">
                   <FileCheck2 className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
@@ -231,10 +236,10 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Circumstances & Reason for Return <span className="text-rose-500">*</span>
+                {t("adoptionDetail.reunification.reunificationReason")} <span className="text-rose-500">*</span>
               </Label>
               <Textarea
-                placeholder="Explain how the biological parents were located and the circumstances of the custody reunion..."
+                placeholder={t("adoptionDetail.reunification.reasonPlaceholder")}
                 rows={3}
                 value={form.reunificationReason}
                 onChange={(e) =>
@@ -245,10 +250,13 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Social Worker Observations & Notes <span className="text-slate-400 font-normal">(optional)</span>
+                {t("adoptionDetail.reunification.socialWorkerNotes")}{" "}
+                <span className="text-slate-400 font-normal">
+                  {t("adoptionDetail.reunification.optional")}
+                </span>
               </Label>
               <Textarea
-                placeholder="Social worker findings, child response, witness accounts, etc..."
+                placeholder={t("adoptionDetail.reunification.notesPlaceholder")}
                 rows={2}
                 value={form.socialWorkerNotes || ""}
                 onChange={(e) =>
@@ -272,21 +280,21 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
               />
               <label htmlFor="reopenCheckbox" className="text-xs text-slate-700 cursor-pointer">
                 <span className="font-bold text-slate-900 block text-sm">
-                  Re-open Adoptive Parent's Application for Rematching
+                  {t("adoptionDetail.reunification.reopenForRematch")}
                 </span>
-                Automatically return the adopter's application status to{" "}
-                <span className="font-semibold text-emerald-700">APPROVED</span> so they are
-                immediately eligible to be matched with a new child without having to restart their
-                application process.
+                {t("adoptionDetail.reunification.reopenDescription")}
               </label>
             </div>
 
             <div>
               <Label className="text-xs font-semibold text-slate-700 mb-1 block">
-                Adopter Counseling & Support Notes <span className="text-slate-400 font-normal">(optional)</span>
+                {t("adoptionDetail.reunification.adopterSupportNotes")}{" "}
+                <span className="text-slate-400 font-normal">
+                  {t("adoptionDetail.reunification.optional")}
+                </span>
               </Label>
               <Textarea
-                placeholder="Document counseling provided to the adoptive family, emotional support, follow-up assistance..."
+                placeholder={t("adoptionDetail.reunification.supportNotesPlaceholder")}
                 rows={2}
                 value={form.adopterSupportNotes || ""}
                 onChange={(e) =>
@@ -299,7 +307,7 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
 
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={onClose} disabled={mutation.isPending}>
-            Cancel
+            {t("adoptionDetail.reunification.cancel")}
           </Button>
           <Button
             onClick={handleSubmit}
@@ -307,7 +315,9 @@ export const ReunificationDialog: React.FC<ReunificationDialogProps> = ({
             className="bg-amber-600 hover:bg-amber-700 text-white"
           >
             <RotateCcw className="w-4 h-4 mr-1.5" />
-            {mutation.isPending ? "Processing Return..." : "Confirm Reunification & Handover"}
+            {mutation.isPending
+              ? t("adoptionDetail.reunification.processing")
+              : t("adoptionDetail.reunification.confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

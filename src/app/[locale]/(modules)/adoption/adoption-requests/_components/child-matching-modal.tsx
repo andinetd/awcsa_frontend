@@ -52,6 +52,11 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
   const [matchNote, setMatchNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const t = useTranslations("adoption");
+  const queryClient = useQueryClient();
+  const { token } = useAuthStore();
+  const router = useRouter();
+
   // Recommendations state
   const [recommendations, setRecommendations] = useState<
     MatchRecommendationCandidate[]
@@ -60,15 +65,13 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
   // Committee Sign-Off state
   const [requireCommitteeSignOff, setRequireCommitteeSignOff] = useState(true);
-  const [committeeChairName, setCommitteeChairName] = useState("Director of Child Affairs");
-  const [committeeDeliberation, setCommitteeDeliberation] = useState(
-    "Adoption Placement Committee reviewed the file and confirmed mutual compatibility.",
+  const [committeeChairName, setCommitteeChairName] = useState(
+    t("adoptionDetail.matching.defaultChairperson") || "Director of Child Affairs",
   );
-
-  const t = useTranslations("adoption");
-  const queryClient = useQueryClient();
-  const { token } = useAuthStore();
-  const router = useRouter();
+  const [committeeDeliberation, setCommitteeDeliberation] = useState(
+    t("adoptionDetail.matching.defaultDeliberation") ||
+      "Adoption Placement Committee reviewed the file and confirmed mutual compatibility.",
+  );
 
   // Load manual directory of children
   const { data: availableChildren = [], isLoading: loadingChildren } =
@@ -147,7 +150,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
       "";
 
     if (!targetFacilityChildId) {
-      toast.error("Please select a child to proceed with placement.");
+      toast.error(t("adoptionDetail.matching.selectChildToast"));
       return;
     }
 
@@ -231,12 +234,12 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
       setIsSubmitting(false);
       onClose();
       router.push("../adoption-requests");
-      toast.success("Child matched successfully with committee verification!");
+      toast.success(t("adoptionDetail.matching.matchSuccessToast"));
     } catch (error) {
       console.error("Error executing placement:", error);
       setIsSubmitting(false);
 
-      let message = "Failed to finalize placement. Please try again.";
+      let message = t("adoptionDetail.matching.matchErrorToast");
       if (axios.isAxiosError(error)) {
         const axiosErr = error as AxiosError<any>;
         const respData = axiosErr.response?.data;
@@ -256,14 +259,14 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="bg-[#1769AA]/10 text-[#1769AA] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
-                Phase 3 Engine
+                {t("adoptionDetail.matching.enginePhase")}
               </span>
               <h2 className="text-base font-bold text-slate-900">
-                Ethical Adoption Matching & Placement Committee
+                {t("adoptionDetail.matching.modalTitle")}
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Multi-factor algorithmic recommendations & committee deliberation
+              {t("adoptionDetail.matching.modalSubtitle")}
             </p>
           </div>
           <button
@@ -286,7 +289,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
             }`}
           >
             <Users className="w-3.5 h-3.5 text-slate-500" />
-            Institutional Care Directory ({availableChildren.length})
+            {t("adoptionDetail.matching.tabDirectory", { count: availableChildren.length })}
           </button>
           <button
             type="button"
@@ -298,9 +301,9 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            Recommendation Metrics Preview (On Hold)
+            {t("adoptionDetail.matching.tabSmart")}
             <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded-full font-medium">
-              Calibrating
+              {t("adoptionDetail.matching.calibrating")}
             </span>
           </button>
         </div>
@@ -314,18 +317,18 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                 <div className="bg-blue-50/70 border border-blue-200/80 rounded p-2.5 text-xs text-blue-900 flex items-start gap-2">
                   <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold">Ethical Recommendation Engine:</span>{" "}
-                    Evaluates age preference, health capability, sibling readiness, and home suitability.
+                    <span className="font-semibold">{t("adoptionDetail.matching.engineBannerTitle")}</span>{" "}
+                    {t("adoptionDetail.matching.engineBannerDesc")}
                   </div>
                 </div>
 
                 {loadingRecommendations ? (
                   <div className="py-12 text-center text-slate-500 text-xs">
-                    Calculating compatibility scores across children registry...
+                    {t("adoptionDetail.matching.calculating")}
                   </div>
                 ) : recommendations.length === 0 ? (
                   <div className="py-12 text-center text-slate-500 text-xs">
-                    No eligible children currently available in institutional care.
+                    {t("adoptionDetail.matching.noEligibleChildren")}
                   </div>
                 ) : (
                   recommendations.map((rec) => {
@@ -351,16 +354,16 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                               {rec.inSiblingGroup && (
                                 <span className="bg-amber-100 text-amber-800 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center gap-1">
                                   <Users className="w-2.5 h-2.5" />
-                                  {rec.siblingCount} Sibling Group
+                                  {t("adoptionDetail.matching.siblingGroup", { count: rec.siblingCount })}
                                 </span>
                               )}
                             </div>
                             <p className="text-xs text-slate-500 mt-0.5">
-                              {rec.gender || "Unknown"} •{" "}
+                              {rec.gender || t("adoptionDetail.matching.unknown")} •{" "}
                               {rec.ageYears !== null
-                                ? `${rec.ageYears} years old`
-                                : "Age unknown"}{" "}
-                              • {rec.facilityName || "Institutional Care"}
+                                ? t("adoptionDetail.matching.yearsOld", { count: rec.ageYears })
+                                : t("adoptionDetail.matching.ageUnknown")}{" "}
+                              • {rec.facilityName || t("adoptionDetail.matching.institutionalCare")}
                             </p>
                           </div>
                           <div className="flex flex-col items-end">
@@ -373,7 +376,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                                   : "bg-amber-100 text-amber-800"
                               }`}
                             >
-                              {rec.matchScore}% Match
+                              {t("adoptionDetail.matching.matchPercent", { score: rec.matchScore })}
                             </span>
                           </div>
                         </div>
@@ -402,7 +405,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                     <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-400" />
                     <input
                       type="text"
-                      placeholder="Search by child name..."
+                      placeholder={t("adoptionDetail.matching.searchPlaceholder")}
                       className="w-full pl-8 pr-3 py-1.5 rounded border border-[#E3E7EB] text-xs focus:ring-1 focus:ring-[#1769AA] outline-none"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -431,12 +434,12 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                           </h4>
                           <div className="text-[11px] text-slate-500 mt-1 space-y-0.5">
                             <p>
-                              {child.serviceData.formData.sex || "Unknown"} • ID:{" "}
+                              {child.serviceData.formData.sex || t("adoptionDetail.matching.unknown")} • {t("adoptionDetail.matching.idLabel")}:{" "}
                               {child.childIdFromFacility || "N/A"}
                             </p>
                             <p className="flex items-center gap-1">
                               <MapPin className="w-3 h-3" />
-                              {child.placeWhereChildFound || "Location unknown"}
+                              {child.placeWhereChildFound || t("adoptionDetail.matching.locationUnknown")}
                             </p>
                           </div>
                         </div>
@@ -468,10 +471,12 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                           : `${selectedChild?.serviceData.formData.firstName} ${selectedChild?.serviceData.formData.lastName}`}
                       </h3>
                       <p className="text-xs text-slate-500">
-                        Facility ID:{" "}
-                        {selectedRecommendation?.facilityChildId ||
-                          selectedChild?.childIdFromFacility ||
-                          "N/A"}
+                        {t("adoptionDetail.matching.facilityIdLabel", {
+                          id:
+                            selectedRecommendation?.facilityChildId ||
+                            selectedChild?.childIdFromFacility ||
+                            "N/A",
+                        })}
                       </p>
                     </div>
                   </div>
@@ -481,7 +486,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                         {selectedRecommendation.matchScore}%
                       </span>
                       <p className="text-[10px] text-slate-500 font-semibold uppercase">
-                        Algorithmic Fit
+                        {t("adoptionDetail.matching.algorithmicFit")}
                       </p>
                     </div>
                   )}
@@ -492,12 +497,12 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                   <div className="bg-white p-3.5 rounded-sm border border-[#E3E7EB] space-y-2">
                     <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                       <Sliders className="w-3.5 h-3.5 text-[#1769AA]" />
-                      Compatibility Factors
+                      {t("adoptionDetail.matching.compatibilityFactors")}
                     </h4>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="p-2 bg-slate-50 rounded border border-slate-100">
                         <div className="flex justify-between text-[11px] font-semibold text-slate-600">
-                          <span>Age Fit</span>
+                          <span>{t("adoptionDetail.matching.ageFit")}</span>
                           <span>{selectedRecommendation.breakdown.ageFitScore}/25</span>
                         </div>
                         <div className="w-full bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
@@ -512,7 +517,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
                       <div className="p-2 bg-slate-50 rounded border border-slate-100">
                         <div className="flex justify-between text-[11px] font-semibold text-slate-600">
-                          <span>Special Health</span>
+                          <span>{t("adoptionDetail.matching.specialHealth")}</span>
                           <span>{selectedRecommendation.breakdown.specialNeedsFitScore}/25</span>
                         </div>
                         <div className="w-full bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
@@ -527,7 +532,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
                       <div className="p-2 bg-slate-50 rounded border border-slate-100">
                         <div className="flex justify-between text-[11px] font-semibold text-slate-600">
-                          <span>Sibling Readiness</span>
+                          <span>{t("adoptionDetail.matching.siblingReadiness")}</span>
                           <span>{selectedRecommendation.breakdown.siblingCapacityScore}/20</span>
                         </div>
                         <div className="w-full bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
@@ -542,7 +547,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
 
                       <div className="p-2 bg-slate-50 rounded border border-slate-100">
                         <div className="flex justify-between text-[11px] font-semibold text-slate-600">
-                          <span>Gender Fit</span>
+                          <span>{t("adoptionDetail.matching.genderFit")}</span>
                           <span>{selectedRecommendation.breakdown.genderFitScore}/15</span>
                         </div>
                         <div className="w-full bg-slate-200 h-1.5 rounded-full mt-1.5 overflow-hidden">
@@ -563,8 +568,10 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                   <div className="bg-amber-50 border border-amber-200 p-3 rounded-sm text-xs text-amber-900 flex items-start gap-2.5">
                     <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold">Sibling Group Integrity Alert:</span> This child has{" "}
-                      <strong>{selectedRecommendation.siblingCount - 1} sibling(s)</strong> in care. Ethiopian child protection guidelines recommend joint placement.
+                      <span className="font-bold">{t("adoptionDetail.matching.siblingAlertTitle")}</span>{" "}
+                      {t("adoptionDetail.matching.siblingAlertDesc", {
+                        count: selectedRecommendation.siblingCount - 1,
+                      })}
                     </div>
                   </div>
                 )}
@@ -574,7 +581,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                       <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
-                      Placement Committee Review
+                      {t("adoptionDetail.matching.committeeReviewTitle")}
                     </h4>
                     <label className="text-[11px] text-slate-600 flex items-center gap-1.5 cursor-pointer">
                       <input
@@ -583,7 +590,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                         onChange={(e) => setRequireCommitteeSignOff(e.target.checked)}
                         className="rounded text-[#1769AA]"
                       />
-                      Record Committee Sign-off
+                      {t("adoptionDetail.matching.recordCommitteeSignoff")}
                     </label>
                   </div>
 
@@ -591,7 +598,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                     <div className="space-y-2 text-xs">
                       <div>
                         <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-                          Committee Chairperson
+                          {t("adoptionDetail.matching.committeeChairperson")}
                         </label>
                         <input
                           type="text"
@@ -602,7 +609,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                       </div>
                       <div>
                         <label className="text-[11px] font-semibold text-slate-700 block mb-1">
-                          Deliberation Summary & Recommendations
+                          {t("adoptionDetail.matching.deliberationSummary")}
                         </label>
                         <textarea
                           className="w-full p-2 border border-[#E3E7EB] rounded text-xs bg-slate-50 focus:bg-white min-h-[50px]"
@@ -617,11 +624,11 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
                 {/* Additional Placement Notes */}
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1">
-                    Placement Case Note
+                    {t("adoptionDetail.matching.caseNoteLabel")}
                   </label>
                   <textarea
                     className="w-full p-2.5 rounded border border-[#E3E7EB] text-xs bg-white focus:ring-1 focus:ring-[#1769AA] outline-none min-h-[55px]"
-                    placeholder="Provide any specific instructions or post-placement monitoring notes..."
+                    placeholder={t("adoptionDetail.matching.caseNotePlaceholder")}
                     value={matchNote}
                     onChange={(e) => setMatchNote(e.target.value)}
                   />
@@ -630,7 +637,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-slate-400 py-12">
                 <User className="w-12 h-12 mb-3 opacity-20" />
-                <p className="text-xs font-medium">Select a candidate child to review compatibility</p>
+                <p className="text-xs font-medium">{t("adoptionDetail.matching.emptyPrompt")}</p>
               </div>
             )}
           </div>
@@ -640,10 +647,14 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
         <div className="px-6 py-3 bg-slate-50 border-t border-[#E3E7EB] flex justify-between items-center">
           <div className="text-[11px] text-slate-500">
             {selectedRecommendation
-              ? `Selected candidate: ${selectedRecommendation.firstName} ${selectedRecommendation.lastName}`
+              ? t("adoptionDetail.matching.selectedCandidate", {
+                  name: `${selectedRecommendation.firstName} ${selectedRecommendation.lastName}`,
+                })
               : selectedChild
-              ? `Selected child: ${selectedChild.serviceData.formData.firstName}`
-              : "No candidate currently selected"}
+              ? t("adoptionDetail.matching.selectedChild", {
+                  name: selectedChild.serviceData?.formData?.firstName || "",
+                })
+              : t("adoptionDetail.matching.noCandidateSelected")}
           </div>
           <div className="flex gap-2">
             <Button
@@ -661,11 +672,11 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
               className="bg-[#1769AA] hover:bg-[#12568E] text-white text-xs h-8 px-4 cursor-pointer"
             >
               {isSubmitting ? (
-                "Finalizing Placement..."
+                t("adoptionDetail.matching.finalizingPlacement")
               ) : (
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  Confirm Placement & Record Committee Sign-Off
+                  {t("adoptionDetail.matching.confirmPlacement")}
                 </span>
               )}
             </Button>

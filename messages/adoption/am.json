@@ -109,7 +109,47 @@
       "success": "ሕፃኑ በተሳካ ሁኔታ ተዛምዷል",
       "fetchError": "የሕፃናት ዝርዝር ማምጣት አልተቻለም።",
       "invalidId": "የአመልካች ወይም የማመልከቻ መታወቂያ የተሳሳተ ነው",
-      "unknown": "የማይታወቅ"
+      "unknown": "የማይታወቅ",
+      "enginePhase": "ደረጃ 3 ሞተር",
+      "modalTitle": "ሥነ-ምግባራዊ የጉዲፈቻ ማዛመድ እና ምደባ ኮሚቴ",
+      "modalSubtitle": "ባለብዙ-መስፈርት ስልታዊ የውሳኔ ሃሳቦች እና የኮሚቴ ውይይት",
+      "tabDirectory": "በእንክብካቤ ማዕከል ውስጥ ያሉ ሕፃናት ዝርዝር ({count})",
+      "tabSmart": "የማዛመድ መስፈርቶች ቅድመ-ዕይታ (ተይዟል)",
+      "calibrating": "በማስተካከል ላይ",
+      "engineBannerTitle": "ሥነ-ምግባራዊ የማዛመጃ ሞተር:",
+      "engineBannerDesc": "የዕድሜ ምርጫን፣ የጤና ሁኔታን፣ የወንድም/እህት ዝግጁነትን እና የቤት ምቹነትን ይገመግማል።",
+      "calculating": "ከሕፃናት መዝገብ ጋር የተስማሚነት ነጥብ በማስላት ላይ...",
+      "noEligibleChildren": "በተቋም እንክብካቤ ውስጥ በአሁኑ ጊዜ የሚገኙ ብቁ ሕፃናት የሉም።",
+      "siblingGroup": "{count} ወንድማማቾች/እህትማማቾች ቡድን",
+      "matchPercent": "{score}% ተስማሚነት",
+      "institutionalCare": "የተቋም እንክብካቤ",
+      "idLabel": "መለያ",
+      "facilityIdLabel": "የተቋም መለያ: {id}",
+      "algorithmicFit": "ስልታዊ ተስማሚነት",
+      "compatibilityFactors": "የተስማሚነት መስፈርቶች",
+      "ageFit": "የዕድሜ ተስማሚነት",
+      "specialHealth": "ልዩ የጤና እንክብካቤ",
+      "siblingReadiness": "የወንድም/እህት ዝግጁነት",
+      "genderFit": "የጾታ ተስማሚነት",
+      "siblingAlertTitle": "የወንድማማቾች/እህትማማቾች ያለመለያየት ማስጠንቀቂያ:",
+      "siblingAlertDesc": "ይህ ሕፃን በእንክብካቤ ውስጥ {count} ወንድም/እህት አለው። የኢትዮጵያ የሕፃናት ጥበቃ መመሪያዎች አብሮ መመደብን ይመክራሉ።",
+      "committeeReviewTitle": "የምደባ ኮሚቴ ግምገማ",
+      "recordCommitteeSignoff": "የኮሚቴውን ማረጋገጫ ይመዝግቡ",
+      "committeeChairperson": "የኮሚቴው ሰብሳቢ",
+      "defaultChairperson": "የሕፃናት ጉዳይ ዳይሬክተር",
+      "deliberationSummary": "የውይይት ማጠቃለያ እና የውሳኔ ሃሳቦች",
+      "defaultDeliberation": "የጉዲፈቻ ምደባ ኮሚቴው ፋይሉን መርምሮ የጋራ ተስማሚነትን አረጋግጧል።",
+      "caseNoteLabel": "የምደባ ጉዳይ ማስታወሻ",
+      "caseNotePlaceholder": "ማናቸውንም ልዩ መመሪያዎች ወይም ከምደባ በኋላ የሚደረግ ክትትል ማስታወሻዎችን ያስገቡ...",
+      "emptyPrompt": "ተስማሚነቱን ለመገምገም እጩ ሕፃን ይምረጡ",
+      "selectedCandidate": "የተመረጠ እጩ: {name}",
+      "selectedChild": "የተመረጠ ሕፃን: {name}",
+      "noCandidateSelected": "እስካሁን የተመረጠ እጩ የለም",
+      "finalizingPlacement": "ምደባውን በማጠናቀቅ ላይ...",
+      "confirmPlacement": "ምደባውን አረጋግጥ እና የኮሚቴውን ውሳኔ መዝግብ",
+      "selectChildToast": "እባክዎ ምደባውን ለማስኬድ ሕፃን ይምረጡ።",
+      "matchSuccessToast": "ሕፃኑ በኮሚቴ ማረጋገጫ በተሳካ ሁኔታ ተዛምዷል!",
+      "matchErrorToast": "ምደባውን ማጠናቀቅ አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
     },
     "matched": {
       "title": "የተዛመደ ሕፃን ዝርዝር",
@@ -277,7 +317,13 @@
       "toasts": {
         "recordSuccess": "የቤት ጉብኝት ምዘና በተሳካ ሁኔታ ተመዝግቧል",
         "recordError": "የቤት ጉብኝት ምዘና መመዝገብ አልተቻለም"
-      }
+      },
+      "loading": "የቤት ጉብኝት ግምገማዎችን በመጫን ላይ...",
+      "conductPrompt": "በአካል የቤት ጉብኝት በማድረግ ግምገማውን እዚህ ይመዝግቡ።",
+      "visitDate": "የጉብኝት ቀን",
+      "cancel": "ተመለስ",
+      "saving": "በማስቀመጥ ላይ...",
+      "saveEvaluation": "ግምገማውን አስቀምጥ"
     },
     "reunification": {
       "button": "ከወላጆች ጋር መልሶ ማገናኘት",
@@ -303,12 +349,21 @@
       "toasts": {
         "success": "ከወላጆች ጋር መልሶ ማገናኘት በተሳካ ሁኔታ ተጠናቋል። ማዛመዱ ተቋርጧል፣ ማመልከቻውም ተዘምኗል።",
         "error": "ከወላጆች ጋር መልሶ ማገናኘት አልተሳካም"
-      }
+      },
+      "warningTitle": "አስፈላጊ የሕግ ማስረከቢያ ሥርዓት",
+      "biologicalFamilyInfo": "የስጋ ቤተሰብ መረጃ",
+      "optional": "(አማራጭ)",
+      "handoverDate": "የተረከቡበት ቀን",
+      "legalDocSection": "ይፋዊ እና ሕጋዊ ሰነዶች",
+      "reasonPlaceholder": "እውነተኛ ወላጆች እንዴት እንደተገኙ እና የልጁን የመመለስ ሁኔታዎች ያብራሩ...",
+      "notesPlaceholder": "የማህበራዊ ጉዳይ ሠራተኛ ግኝቶች፣ የልጁ ምላሽ፣ የምስክሮች ቃል ወዘተ...",
+      "supportNotesPlaceholder": "ለአሳዳጊው ቤተሰብ የተደረገ የምክር አገልግሎት፣ የስነ-ልቦና ድጋፍ እና ክትትልን ይመዝግቡ..."
     },
     "tabs": {
       "caseNotes": "የጉዳይ ማስታወሻዎች",
       "followUpReports": "ክትትል ሪፖርቶች",
-      "homeVisits": "የቤት ጉብኝቶች"
+      "homeVisits": "የቤት ጉብኝቶች",
+      "courtAndVera": "⚖️ ፍርድ ቤት እና የቪራ (VERA) ምዝገባ"
     },
     "toasts": {
       "returned": "ማመልከቻው ለአመልካች ተመልሷል",
@@ -504,7 +559,29 @@
       "cancel": "ሰርዝ",
       "close": "ዝጋ",
       "submit": "የቆጠራ ኦዲት አስገባ",
-      "submitting": "በማስገባት ላይ..."
+      "submitting": "በማስገባት ላይ...",
+      "title": "የተቋሙ የመያዝ አቅም እና የሕፃናት ቆጠራ ኦዲት",
+      "licensedCapacity": "የተፈቀደ የመያዝ አቅም",
+      "approvedLimit": "የተፈቀደ ጣሪያ",
+      "systemRoster": "በሲስተሙ የተመዘገቡ",
+      "registeredChildren": "የተመዘገቡ ሕፃናት",
+      "occupancyRate": "የመያዝ ምጣኔ",
+      "liveCensusLoad": "የአሁን የቆጠራ ጫና",
+      "overcapacity": "ከአቅም በላይ",
+      "latestAuditTitle": "የቅርብ ጊዜ የአካል ቆጠራ ኦዲት",
+      "physicalHeadcount": "የአካል ቆጠራ",
+      "discrepancy": "ልዩነት",
+      "reconciled": "የተጣጣመ",
+      "childrenCount": "{count} ሕፃናት",
+      "discrepancyCount": "{count} ልዩነት",
+      "noAudit": "ለዚህ ተቋም እስካሁን ምንም አይነት ይፋዊ የአካል ቆጠራ ኦዲት አልተደረገም።",
+      "newAuditBtn": "አዲስ የአካል ቆጠራ ኦዲት አከናውን",
+      "formTitle": "የቆጠራ እና የተመዘገቡ ሕፃናት ማስታረቂያ መዝግብ",
+      "physicalCountLabel": "የአካል ቆጠራ *",
+      "physicalCountPlaceholder": "በአካል የተገኙ ሕፃናት",
+      "unregisteredLabel": "ያልተመዘገቡ ሕፃናት ብዛት",
+      "remarksLabel": "የኦዲት አስተያየቶች / የልዩነቱ ምክንያት",
+      "remarksPlaceholder": "በምርመራ ወቅት የታዩ ምልከታዎች፣ በሕክምና ምክንያት የቀሩ ሕፃናት ወዘተ..."
     },
     "form": {
       "registerTitle": "አዲስ የሕፃናት ማሳደጊያ ተቋም መመዝገቢያ",

@@ -109,7 +109,47 @@
       "success": "Child matched successfully",
       "fetchError": "Failed to fetch available children.",
       "invalidId": "Invalid applicant or application id",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "enginePhase": "Phase 3 Engine",
+      "modalTitle": "Ethical Adoption Matching & Placement Committee",
+      "modalSubtitle": "Multi-factor algorithmic recommendations & committee deliberation",
+      "tabDirectory": "Institutional Care Directory ({count})",
+      "tabSmart": "Recommendation Metrics Preview (On Hold)",
+      "calibrating": "Calibrating",
+      "engineBannerTitle": "Ethical Recommendation Engine:",
+      "engineBannerDesc": "Evaluates age preference, health capability, sibling readiness, and home suitability.",
+      "calculating": "Calculating compatibility scores across children registry...",
+      "noEligibleChildren": "No eligible children currently available in institutional care.",
+      "siblingGroup": "{count} Sibling Group",
+      "matchPercent": "{score}% Match",
+      "institutionalCare": "Institutional Care",
+      "idLabel": "ID",
+      "facilityIdLabel": "Facility ID: {id}",
+      "algorithmicFit": "Algorithmic Fit",
+      "compatibilityFactors": "Compatibility Factors",
+      "ageFit": "Age Fit",
+      "specialHealth": "Special Health",
+      "siblingReadiness": "Sibling Readiness",
+      "genderFit": "Gender Fit",
+      "siblingAlertTitle": "Sibling Group Integrity Alert:",
+      "siblingAlertDesc": "This child has {count} sibling(s) in care. Ethiopian child protection guidelines recommend joint placement.",
+      "committeeReviewTitle": "Placement Committee Review",
+      "recordCommitteeSignoff": "Record Committee Sign-off",
+      "committeeChairperson": "Committee Chairperson",
+      "defaultChairperson": "Director of Child Affairs",
+      "deliberationSummary": "Deliberation Summary & Recommendations",
+      "defaultDeliberation": "Adoption Placement Committee reviewed the file and confirmed mutual compatibility.",
+      "caseNoteLabel": "Placement Case Note",
+      "caseNotePlaceholder": "Provide any specific instructions or post-placement monitoring notes...",
+      "emptyPrompt": "Select a candidate child to review compatibility",
+      "selectedCandidate": "Selected candidate: {name}",
+      "selectedChild": "Selected child: {name}",
+      "noCandidateSelected": "No candidate currently selected",
+      "finalizingPlacement": "Finalizing Placement...",
+      "confirmPlacement": "Confirm Placement & Record Committee Sign-Off",
+      "selectChildToast": "Please select a child to proceed with placement.",
+      "matchSuccessToast": "Child matched successfully with committee verification!",
+      "matchErrorToast": "Failed to finalize placement. Please try again."
     },
     "matched": {
       "title": "Matched Child Detail",
@@ -277,7 +317,13 @@
       "toasts": {
         "recordSuccess": "Home visit evaluation recorded successfully",
         "recordError": "Failed to record home visit"
-      }
+      },
+      "loading": "Loading visit evaluations...",
+      "conductPrompt": "Conduct an in-person home visit and record the evaluation here.",
+      "visitDate": "Visit Date",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "saveEvaluation": "Save Evaluation"
     },
     "reunification": {
       "button": "Biological Parents Reunification",
@@ -303,12 +349,21 @@
       "toasts": {
         "success": "Biological parent reunification processed. Match terminated and application updated.",
         "error": "Failed to process biological parent reunification"
-      }
+      },
+      "warningTitle": "Important Legal Handover Procedure",
+      "biologicalFamilyInfo": "Biological Family Information",
+      "optional": "(optional)",
+      "handoverDate": "Handover Date",
+      "legalDocSection": "Official & Legal Documentation",
+      "reasonPlaceholder": "Explain how the biological parents were located and the circumstances of the custody reunion...",
+      "notesPlaceholder": "Social worker findings, child response, witness accounts, etc...",
+      "supportNotesPlaceholder": "Document counseling provided to the adoptive family, emotional support, follow-up assistance..."
     },
     "tabs": {
       "caseNotes": "Case Notes",
       "followUpReports": "Follow-Up Reports",
-      "homeVisits": "Home Visits"
+      "homeVisits": "Home Visits",
+      "courtAndVera": "⚖️ Court & VERA Registry"
     },
     "toasts": {
       "returned": "Application returned to applicant",
@@ -504,7 +559,29 @@
       "cancel": "Cancel",
       "close": "Close",
       "submit": "Submit Audit",
-      "submitting": "Submitting..."
+      "submitting": "Submitting...",
+      "title": "Facility Capacity & Census Auditing",
+      "licensedCapacity": "Licensed Capacity",
+      "approvedLimit": "Approved limit",
+      "systemRoster": "Active System Roster",
+      "registeredChildren": "Registered children",
+      "occupancyRate": "Occupancy Rate",
+      "liveCensusLoad": "Live census load",
+      "overcapacity": "OVERCAPACITY",
+      "latestAuditTitle": "Latest Physical Headcount Audit",
+      "physicalHeadcount": "Physical Headcount",
+      "discrepancy": "Discrepancy",
+      "reconciled": "Reconciled",
+      "childrenCount": "{count} children",
+      "discrepancyCount": "{count} discrepancy",
+      "noAudit": "No formal physical audit conducted for this facility yet.",
+      "newAuditBtn": "Conduct New Physical Headcount Audit",
+      "formTitle": "Log Headcount & Roster Reconciliation",
+      "physicalCountLabel": "Physical Headcount *",
+      "physicalCountPlaceholder": "Physical children present",
+      "unregisteredLabel": "Unregistered Children Count",
+      "remarksLabel": "Audit Remarks / Discrepancy Cause",
+      "remarksPlaceholder": "Observations during inspection, absent children on medical leave, etc."
     },
     "form": {
       "registerTitle": "Register New Care Center",

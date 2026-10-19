@@ -243,7 +243,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                 <span className="text-[10px] uppercase font-medium opacity-80">
                   {childAge !== "—"
                     ? t("adoptionDetail.matching.yearsOld", { count: Number(childAge) })
-                    : "Age Unknown"}
+                    : t("adoptionDetail.matching.ageUnknown")}
                 </span>
               </div>
             </div>
@@ -257,10 +257,10 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
               </div>
               <div className="min-w-0 flex-1 text-sm">
                 <h4 className="font-bold text-amber-950 text-base mb-1">
-                  Match Terminated — Biological Family Reunification
+                  {t("adoptionDetail.reunification.bannerTitle")}
                 </h4>
                 <p className="text-amber-800 text-xs leading-relaxed">
-                  This adoption placement was formally terminated following reunification with the child's biological family. Custody has been returned and the child record status is <strong>RETURNED</strong>. The adoptive parent application has been restored to <strong>APPROVED</strong> for new matching.
+                  {t("adoptionDetail.reunification.bannerText")}
                 </p>
               </div>
             </div>
@@ -473,7 +473,7 @@ export const MatchedChildDetail: React.FC<MatchedChildModalProps> = ({
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <span>⚖️ Court & VERA Registry</span>
+              <span>{t("adoptionDetail.tabs.courtAndVera")}</span>
             </button>
           </div>
 

@@ -84,7 +84,7 @@ export function FacilityCensusDialog({
             </div>
             <div>
               <DialogTitle className="text-base font-bold text-[#0B1F3A]">
-                Facility Capacity & Census Auditing
+                {t("careCenters.census.title")}
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">
                 {facilityName || capacityData?.facilityName || `Facility #${facilityId}`}
@@ -98,27 +98,27 @@ export function FacilityCensusDialog({
           <div className="grid grid-cols-3 gap-3">
             <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                Licensed Capacity
+                {t("careCenters.census.licensedCapacity")}
               </span>
               <p className="text-sm font-bold text-[#0B1F3A]">
                 {capacityData?.licensedCapacity ?? "—"}
               </p>
-              <span className="text-[10px] text-slate-400">Approved limit</span>
+              <span className="text-[10px] text-slate-400">{t("careCenters.census.approvedLimit")}</span>
             </div>
 
             <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                Active System Roster
+                {t("careCenters.census.systemRoster")}
               </span>
               <p className="text-sm font-bold text-[#0B1F3A]">
                 {capacityData?.activeChildrenCount ?? 0}
               </p>
-              <span className="text-[10px] text-slate-400">Registered children</span>
+              <span className="text-[10px] text-slate-400">{t("careCenters.census.registeredChildren")}</span>
             </div>
 
             <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                Occupancy Rate
+                {t("careCenters.census.occupancyRate")}
               </span>
               <div className="flex items-center gap-1">
                 <p
@@ -130,11 +130,11 @@ export function FacilityCensusDialog({
                 </p>
                 {isOverCapacity && (
                   <Badge variant="destructive" className="text-[9px] py-0 px-1">
-                    OVERCAPACITY
+                    {t("careCenters.census.overcapacity")}
                   </Badge>
                 )}
               </div>
-              <span className="text-[10px] text-slate-400">Live census load</span>
+              <span className="text-[10px] text-slate-400">{t("careCenters.census.liveCensusLoad")}</span>
             </div>
           </div>
 
@@ -143,7 +143,7 @@ export function FacilityCensusDialog({
             <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-[#0B1F3A] uppercase font-mono">
-                  Latest Physical Headcount Audit
+                  {t("careCenters.census.latestAuditTitle")}
                 </span>
                 <Badge
                   variant="outline"
@@ -159,17 +159,17 @@ export function FacilityCensusDialog({
 
               <div className="grid grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-xs border border-slate-200">
                 <div>
-                  <strong>Physical Headcount:</strong>{" "}
-                  {capacityData.latestAudit.physicalHeadcount} children
+                  <strong>{t("careCenters.census.physicalHeadcount")}:</strong>{" "}
+                  {t("careCenters.census.childrenCount", { count: capacityData.latestAudit.physicalHeadcount })}
                 </div>
                 <div>
-                  <strong>Discrepancy:</strong>{" "}
+                  <strong>{t("careCenters.census.discrepancy")}:</strong>{" "}
                   {capacityData.latestAudit.discrepancyCount > 0 ? (
                     <span className="text-rose-600 font-bold">
-                      {capacityData.latestAudit.discrepancyCount} discrepancy
+                      {t("careCenters.census.discrepancyCount", { count: capacityData.latestAudit.discrepancyCount })}
                     </span>
                   ) : (
-                    <span className="text-emerald-600 font-semibold">0 (Reconciled)</span>
+                    <span className="text-emerald-600 font-semibold">0 ({t("careCenters.census.reconciled")})</span>
                   )}
                 </div>
               </div>
@@ -183,7 +183,7 @@ export function FacilityCensusDialog({
           ) : (
             <div className="text-center py-4 text-slate-400 bg-[#F7F8FA] border border-dashed border-[#E3E7EB] rounded-xs">
               <ClipboardCheck className="size-5 mx-auto mb-1 opacity-40 text-slate-400" />
-              <p className="text-[11px]">No formal physical audit conducted for this facility yet.</p>
+              <p className="text-[11px]">{t("careCenters.census.noAudit")}</p>
             </div>
           )}
 
@@ -196,27 +196,27 @@ export function FacilityCensusDialog({
               className="w-full h-8 text-xs font-semibold rounded-xs border-[#BCD5EA] text-[#1769AA] hover:bg-[#E8F2FA] gap-1.5 cursor-pointer"
             >
               <Plus className="size-3.5" />
-              Conduct New Physical Headcount Audit
+              {t("careCenters.census.newAuditBtn")}
             </Button>
           ) : (
             <div className="p-3.5 bg-white border border-[#BCD5EA] rounded-xs space-y-3">
               <h5 className="font-bold text-xs text-[#0B1F3A] uppercase font-mono">
-                Log Headcount & Roster Reconciliation
+                {t("careCenters.census.formTitle")}
               </h5>
 
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
-                  <Label className="text-xs font-semibold">Physical Headcount *</Label>
+                  <Label className="text-xs font-semibold">{t("careCenters.census.physicalCountLabel")}</Label>
                   <Input
                     type="number"
-                    placeholder="Physical children present"
+                    placeholder={t("careCenters.census.physicalCountPlaceholder")}
                     value={physicalCount}
                     onChange={(e) => setPhysicalCount(e.target.value)}
                     className="h-8 text-xs rounded-xs"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs font-semibold">Unregistered Children Count</Label>
+                  <Label className="text-xs font-semibold">{t("careCenters.census.unregisteredLabel")}</Label>
                   <Input
                     type="number"
                     value={unregisteredCount}
@@ -227,9 +227,9 @@ export function FacilityCensusDialog({
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs font-semibold">Audit Remarks / Discrepancy Cause</Label>
+                <Label className="text-xs font-semibold">{t("careCenters.census.remarksLabel")}</Label>
                 <Textarea
-                  placeholder="Observations during inspection, absent children on medical leave, etc."
+                  placeholder={t("careCenters.census.remarksPlaceholder")}
                   value={auditNotes}
                   onChange={(e) => setAuditNotes(e.target.value)}
                   className="text-xs rounded-xs h-16"
