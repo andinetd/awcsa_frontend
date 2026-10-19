@@ -24,5 +24,81 @@
       "signInFailed": "መግባት አልተሳካም: {message}"
     },
     "rememberMe": "አስታውሰኝ"
+  },
+  "register": {
+    "welcome": "እንኳን ደህና መጡ",
+    "title": "የጉዲፈቻ መመዝገቢያ",
+    "fields": {
+      "firstName": "ስም",
+      "lastName": "የአያት ስም",
+      "phoneNumber": "ስልክ ቁጥር",
+      "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+      "email": "ኢሜይል",
+      "password": "የይለፍ ቃል"
+    },
+    "placeholders": {
+      "firstName": "ስምዎን ያስገቡ",
+      "lastName": "የአያት ስምዎን ያስገቡ",
+      "phoneNumber": "ስልክ ቁጥርዎን ያስገቡ",
+      "cityIdNumber": "የከተማ መታወቂያ ቁጥርዎን ያስገቡ",
+      "email": "ኢሜይልዎን ያስገቡ",
+      "password": "የይለፍ ቃልዎን ያስገቡ"
+    },
+    "buttons": {
+      "signUp": "ይመዝገቡ",
+      "signingUp": "በመመዝገብ ላይ...",
+      "alreadyHaveAccount": "ቀደም ሲል መለያ አለዎት?",
+      "logIn": "ይግቡ"
+    },
+    "messages": {
+      "success": "ምዝገባው በተሳካ ሁኔታ ተጠናቋል",
+      "failed": "ምዝገባው አልተሳካም"
+    },
+    "validation": {
+      "firstNameMin": "ስም ቢያንስ 2 ቁምፊዎች መሆን አለበት",
+      "lastNameMin": "የአያት ስም ቢያንስ 2 ቁምፊዎች መሆን አለበት",
+      "invalidEmail": "ልክ ያልሆነ ኢሜይል አድራሻ",
+      "phoneMin": "ስልክ ቁጥር ቢያንስ 7 አሃዞች መሆን አለበት",
+      "passwordMin": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት",
+      "cityIdMin": "የከተማ መታወቂያ ቢያንስ 2 ቁምፊዎች መሆን አለበት"
+    }
+  },
+  "resetPassword": {
+    "forgot": {
+      "title": "የይለፍ ቃል ረሱ?",
+      "subtitle": "የይለፍ ቃል መልሶ ማግኛ መመሪያዎችን ለማግኘት የተመዘገቡበትን ኢሜይል ያስገቡ።",
+      "email": "ኢሜይል",
+      "emailPlaceholder": "name@example.com",
+      "submit": "የማግኛ ሊንክ ላክ",
+      "submitting": "በመላክ ላይ...",
+      "backToSignIn": "ወደ መግቢያ ተመለስ",
+      "sentTitle": "ኢሜይልዎን ያረጋግጡ",
+      "sentDesc": "የይለፍ ቃል መልሶ ማግኛ መመሪያዎችን ወደ ኢሜይልዎ ልከናል።",
+      "sentButton": "ወደ መግቢያ ሂድ",
+      "toastSuccess": "የይለፍ ቃል መልሶ ማግኛ ጥያቄ ተልኳል",
+      "toastError": "የይለፍ ቃል መልሶ ማግኛ ጥያቄን ማካሄድ አልተሳካም"
+    },
+    "reset": {
+      "title": "የይለፍ ቃል ቀይር",
+      "subtitle": "አዲሱን የይለፍ ቃልዎን ከዚህ በታች ያስገቡ።",
+      "newPassword": "አዲስ የይለፍ ቃል",
+      "newPasswordPlaceholder": "አዲስ የይለፍ ቃል ያስገቡ",
+      "confirmPassword": "የይለፍ ቃል አረጋግጥ",
+      "confirmPasswordPlaceholder": "የይለፍ ቃልዎን በድጋሚ ያስገቡ",
+      "submit": "የይለፍ ቃል አዘምን",
+      "submitting": "በማዘመን ላይ...",
+      "backToSignIn": "ወደ መግቢያ ተመለስ",
+      "completedTitle": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል",
+      "completedDesc": "የይለፍ ቃልዎ በተሳካ ሁኔታ ተቀይሯል። ወደ መግቢያ ገጽ በማዘዋወር ላይ...",
+      "completedButton": "ወደ መግቢያ ገጽ ሂድ",
+      "toastSuccess": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል",
+      "toastMissingToken": "የማግኛ ቶከን አልተገኘም ወይም ትክክል አይደለም",
+      "toastError": "የይለፍ ቃል መቀየር አልተሳካም"
+    },
+    "validation": {
+      "invalidEmail": "ልክ ያልሆነ ኢሜይል አድራሻ",
+      "passwordMin": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት",
+      "passwordsDontMatch": "የይለፍ ቃሎች አይዛመዱም"
+    }
   }
 }

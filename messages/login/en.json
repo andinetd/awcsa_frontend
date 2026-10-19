@@ -24,5 +24,81 @@
       "signInFailed": "Sign-in failed: {message}"
     },
     "rememberMe": "Remember me"
+  },
+  "register": {
+    "welcome": "Welcome",
+    "title": "Adoption Sign Up",
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone Number",
+      "cityIdNumber": "City ID Number",
+      "email": "Email",
+      "password": "Password"
+    },
+    "placeholders": {
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "phoneNumber": "Enter your phone number",
+      "cityIdNumber": "Enter your city ID number",
+      "email": "Enter your email",
+      "password": "Enter your password"
+    },
+    "buttons": {
+      "signUp": "Sign Up",
+      "signingUp": "Signing Up...",
+      "alreadyHaveAccount": "Already have an account?",
+      "logIn": "Log In"
+    },
+    "messages": {
+      "success": "Signup was successful",
+      "failed": "Signup Failed"
+    },
+    "validation": {
+      "firstNameMin": "First name must be at least 2 characters long",
+      "lastNameMin": "Last name must be at least 2 characters long",
+      "invalidEmail": "Invalid email address",
+      "phoneMin": "Phone number must be at least 7 digits",
+      "passwordMin": "Password must be at least 8 characters long",
+      "cityIdMin": "City ID must be at least 2 characters long"
+    }
+  },
+  "resetPassword": {
+    "forgot": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your registered email address to receive instructions.",
+      "email": "Email",
+      "emailPlaceholder": "name@example.com",
+      "submit": "Send Reset Link",
+      "submitting": "Sending...",
+      "backToSignIn": "Back to Sign In",
+      "sentTitle": "Check Your Email",
+      "sentDesc": "We have sent password reset instructions to your email address.",
+      "sentButton": "Open Sign In",
+      "toastSuccess": "Password reset request sent",
+      "toastError": "Failed to process reset request"
+    },
+    "reset": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password below.",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "submit": "Update Password",
+      "submitting": "Updating...",
+      "backToSignIn": "Back to Sign In",
+      "completedTitle": "Password Reset Complete",
+      "completedDesc": "Your password has been successfully updated. Redirecting to sign in...",
+      "completedButton": "Go to Sign In",
+      "toastSuccess": "Password updated successfully",
+      "toastMissingToken": "Missing or invalid reset token",
+      "toastError": "Failed to reset password"
+    },
+    "validation": {
+      "invalidEmail": "Invalid email address",
+      "passwordMin": "Password must be at least 8 characters long",
+      "passwordsDontMatch": "Passwords do not match"
+    }
   }
 }

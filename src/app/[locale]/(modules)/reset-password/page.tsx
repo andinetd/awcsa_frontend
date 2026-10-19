@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -23,30 +23,42 @@ import {
   forgotPasswordApi,
   resetPasswordApi,
 } from "@/api/auth/password-reset";
-
-const forgotSchema = z.object({
-  email: z.string().email("Invalid email address"),
-});
-
-const resetSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/shared/language-switcher";
 
 function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const t = useTranslations("login.resetPassword");
+  const tPage = useTranslations("login.page");
 
   const [sent, setSent] = useState(false);
   const [resetCompleted, setResetCompleted] = useState(false);
+
+  const forgotSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(t("validation.invalidEmail")),
+      }),
+    [t]
+  );
+
+  const resetSchema = useMemo(
+    () =>
+      z
+        .object({
+          newPassword: z
+            .string()
+            .min(8, t("validation.passwordMin")),
+          confirmPassword: z.string(),
+        })
+        .refine((data) => data.newPassword === data.confirmPassword, {
+          message: t("validation.passwordsDontMatch"),
+          path: ["confirmPassword"],
+        }),
+    [t]
+  );
 
   const forgotForm = useForm<z.infer<typeof forgotSchema>>({
     resolver: zodResolver(forgotSchema),
@@ -62,31 +74,35 @@ function ResetPasswordContent() {
     try {
       await forgotPasswordApi(values.email);
       setSent(true);
-      toast.success("Password reset request sent");
+      toast.success(t("forgot.toastSuccess"));
     } catch (err: any) {
-      toast.error(err.message || "Failed to process reset request");
+      toast.error(err.message || t("forgot.toastError"));
     }
   }
 
   async function onResetSubmit(values: z.infer<typeof resetSchema>) {
     if (!token) {
-      toast.error("Missing or invalid reset token");
+      toast.error(t("reset.toastMissingToken"));
       return;
     }
     try {
       await resetPasswordApi(token, values.newPassword);
       setResetCompleted(true);
-      toast.success("Password updated successfully");
+      toast.success(t("reset.toastSuccess"));
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (err: any) {
-      toast.error(err.message || "Failed to reset password");
+      toast.error(err.message || t("reset.toastError"));
     }
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 relative">
+      <div className="absolute top-6 right-6">
+        <LanguageSwitcher />
+      </div>
+
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-5xl gap-10">
         <div className="flex flex-col items-center text-center md:text-left">
           <img
@@ -101,9 +117,9 @@ function ResetPasswordContent() {
             // Mode 2: Reset password with token
             <>
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-semibold">Set New Password</h2>
+                <h2 className="text-2xl font-semibold">{t("reset.title")}</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Enter your new password below.
+                  {t("reset.subtitle")}
                 </p>
               </div>
 
@@ -111,16 +127,16 @@ function ResetPasswordContent() {
                 <div className="space-y-4 text-center">
                   <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 flex flex-col items-center gap-2">
                     <CheckCircle2 className="size-8 text-green-600" />
-                    <p className="font-medium">Password changed successfully!</p>
+                    <p className="font-medium">{t("reset.completedTitle")}</p>
                     <p className="text-xs text-green-600">
-                      Redirecting you to the sign in page...
+                      {t("reset.completedDesc")}
                     </p>
                   </div>
                   <Button
                     onClick={() => router.push("/login")}
                     className="w-full mt-2"
                   >
-                    Go to Sign In
+                    {t("reset.completedButton")}
                   </Button>
                 </div>
               ) : (
@@ -134,11 +150,11 @@ function ResetPasswordContent() {
                       name="newPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>New Password</FormLabel>
+                          <FormLabel>{t("reset.newPassword")}</FormLabel>
                           <FormControl>
                             <Input
                               type="password"
-                              placeholder="At least 8 characters"
+                              placeholder={t("reset.newPasswordPlaceholder")}
                               {...field}
                             />
                           </FormControl>
@@ -152,11 +168,11 @@ function ResetPasswordContent() {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
+                          <FormLabel>{t("reset.confirmPassword")}</FormLabel>
                           <FormControl>
                             <Input
                               type="password"
-                              placeholder="Re-enter your new password"
+                              placeholder={t("reset.confirmPasswordPlaceholder")}
                               {...field}
                             />
                           </FormControl>
@@ -173,7 +189,7 @@ function ResetPasswordContent() {
                       {resetForm.formState.isSubmitting ? (
                         <Loader2 className="animate-spin size-4" />
                       ) : (
-                        "Update Password"
+                        t("reset.submit")
                       )}
                     </Button>
                   </form>
@@ -184,24 +200,23 @@ function ResetPasswordContent() {
             // Mode 1: Request password reset link
             <>
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-semibold">Reset Password</h2>
+                <h2 className="text-2xl font-semibold">{t("forgot.title")}</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Enter your email to receive a password reset link.
+                  {t("forgot.subtitle")}
                 </p>
               </div>
 
               {sent ? (
                 <div className="space-y-4">
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm text-center">
-                    If an account exists with this email, a password reset link
-                    has been sent.
+                    {t("forgot.sentDesc")}
                   </div>
                   <Link
                     href="/login"
                     className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mt-4"
                   >
                     <ArrowLeft className="size-4" />
-                    <span>Back to Sign In</span>
+                    <span>{t("forgot.backToSignIn")}</span>
                   </Link>
                 </div>
               ) : (
@@ -215,11 +230,11 @@ function ResetPasswordContent() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t("forgot.email")}</FormLabel>
                           <FormControl>
                             <Input
                               type="email"
-                              placeholder="Enter your email"
+                              placeholder={t("forgot.emailPlaceholder")}
                               {...field}
                             />
                           </FormControl>
@@ -236,7 +251,7 @@ function ResetPasswordContent() {
                       {forgotForm.formState.isSubmitting ? (
                         <Loader2 className="animate-spin size-4" />
                       ) : (
-                        "Send Reset Link"
+                        t("forgot.submit")
                       )}
                     </Button>
 
@@ -246,7 +261,7 @@ function ResetPasswordContent() {
                         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                       >
                         <ArrowLeft className="size-4" />
-                        <span>Back to Sign In</span>
+                        <span>{t("forgot.backToSignIn")}</span>
                       </Link>
                     </div>
                   </form>
@@ -259,10 +274,10 @@ function ResetPasswordContent() {
 
       <div className="absolute bottom-6 left-0 right-0 text-xs flex flex-wrap justify-center items-center gap-2 px-4 text-foreground/65">
         <p className="font-medium text-center font-lexend">
-          {`@${new Date().getFullYear()} Bureau of Women, children & social Affairs.`}
+          {tPage("copyright", { year: new Date().getFullYear() })}
         </p>
         <p className="font-semibold cursor-pointer hover:scale-105 transition font-lexend">
-          Addis Ababa
+          {tPage("location")}
         </p>
       </div>
     </div>
