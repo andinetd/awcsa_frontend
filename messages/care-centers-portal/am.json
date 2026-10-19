@@ -21,7 +21,16 @@
       "editChild": "መረጃ አድስ",
       "openMenu": "ምናሌ ክፈት",
       "status": "ሁኔታ"
+    },
+    "filters": {
+      "all": "ሁሉም",
+      "male": "ወንድ",
+      "female": "ሴት"
     }
+  },
+  "gender": {
+    "male": "ወንድ",
+    "female": "ሴት"
   },
   "addChild": {
     "title": "አዲስ የሕፃን ምዝገባ",
@@ -148,8 +157,21 @@
       "healthOfficer1": "የጤና ባለሙያ 1",
       "healthOfficer2": "የጤና ባለሙያ 2",
       "admittanceReason": "የመግቢያ ምክንያት",
-      "additionalInfo": "ተጨማሪ መረጃ"
-    }
+      "additionalInfo": "ተጨማሪ መረጃ",
+      "estimatedAge": "የተገመተ ዕድሜ",
+      "optional": "(አስገዳጅ ያልሆነ)"
+    },
+    "placeholders": {
+      "admittanceReason": "የመግቢያ ምክንያቱን ያስገቡ...",
+      "additionalInfo": "ተጨማሪ መረጃ ያስገቡ...",
+      "selectDate": "ቀን ይምረጡ"
+    },
+    "buttons": {
+      "cancel": "ሰርዝ",
+      "update": "የሕፃኑን መረጃ አዘምን",
+      "updating": "በማዘመን ላይ..."
+    },
+    "loadingChild": "የሕፃኑ መረጃ በመጫን ላይ..."
   },
   "enums": {
     "sex": {

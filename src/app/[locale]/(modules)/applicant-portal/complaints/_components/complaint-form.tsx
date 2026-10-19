@@ -95,7 +95,9 @@ export function ComplaintForm({ onSuccess }: { onSuccess?: () => void }) {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="hover:cursor-pointer">
-                    <SelectValue placeholder={t("form.categoryPlaceholder")} />
+                    <SelectValue placeholder={t("form.categoryPlaceholder")}>
+                      {field.value ? getCategoryLabel(field.value) : undefined}
+                    </SelectValue>
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

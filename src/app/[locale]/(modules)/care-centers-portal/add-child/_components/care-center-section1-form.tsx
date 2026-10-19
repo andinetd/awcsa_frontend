@@ -35,8 +35,11 @@ import { ChevronDownIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 export default function CareCenterChildFormSectionOne() {
+  const t = useTranslations("care-centers-portal.addChild");
+  const tGender = useTranslations("care-centers-portal.gender");
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
@@ -118,7 +121,7 @@ export default function CareCenterChildFormSectionOne() {
                 name="sex"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel>{t("fields.gender")}</FormLabel>
                     <FormControl>
                       <Select
                         name="sex"
@@ -126,11 +129,14 @@ export default function CareCenterChildFormSectionOne() {
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select gender" />
+                          <SelectValue placeholder={t("placeholders.selectGender")}>
+                            {field.value === "MALE" && tGender("male")}
+                            {field.value === "FEMALE" && tGender("female")}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="MALE">Male</SelectItem>
-                          <SelectItem value="FEMALE">Female</SelectItem>
+                          <SelectItem value="MALE">{tGender("male")}</SelectItem>
+                          <SelectItem value="FEMALE">{tGender("female")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

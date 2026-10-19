@@ -127,7 +127,7 @@
       "phoneNumber": "ስልክ ቁጥር",
       "email": "ኢሜይል",
       "spouseCityIdNumber": "የባል/ባለቤት የከተማ መታወቂያ ቁጥር",
-      "marriageCertificate": "የባል/ባለቤት ስምምነት",
+      "spouseAgreement": "የባል/ባለቤት ስምምነት",
       "preferredChildAgeMin": "የሚፈለጉ ሕፃን ዕድሜ (ከ) ",
       "preferredChildAgeMax": "የሚፈለጉ ሕፃን ዕድሜ (እስከ)",
       "preferredNumberOfChildren": "የሚፈለጉ የሕፃናት ብዛት",

@@ -34,6 +34,7 @@ import { ChevronDownIcon, ArrowLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useChildDetails, useUpdateChild } from "@/hooks/adoption/useChildDetails";
 import { differenceInYears, format } from "date-fns";
@@ -43,6 +44,9 @@ interface EditChildFormProps {
 }
 
 export default function EditChildForm({ childId }: EditChildFormProps) {
+  const t = useTranslations("care-centers-portal.addChild");
+  const tGender = useTranslations("care-centers-portal.gender");
+  const tView = useTranslations("care-centers-portal.childView");
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
@@ -118,7 +122,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        <p className="text-sm text-muted-foreground">Loading child information...</p>
+        <p className="text-sm text-muted-foreground">{tView("loadingChild")}</p>
       </div>
     );
   }
@@ -131,7 +135,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
           {/* Basic Information Section */}
           <Card className="flex flex-col space-y-10 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Basic Information
+              {tView("sections.basic")}
             </CardTitle>
 
             {/* Name Section */}
@@ -141,7 +145,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="name_by_family"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name (Given by Family)</FormLabel>
+                    <FormLabel>{tView("fields.nameByFamily")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -154,7 +158,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="name_by_care_center"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name (Given by Care Center) *</FormLabel>
+                    <FormLabel>{tView("fields.nameByCenter")} *</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -168,9 +172,9 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Father's Name{" "}
+                      {tView("fields.fatherName")}{" "}
                       <span className="text-muted-foreground text-sm">
-                        (Optional)
+                        {tView("fields.optional")}
                       </span>
                     </FormLabel>
                     <FormControl>
@@ -189,7 +193,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="sex"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender *</FormLabel>
+                    <FormLabel>{t("fields.gender")} *</FormLabel>
                     <FormControl>
                       <Select
                         name="sex"
@@ -197,11 +201,14 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select gender" />
+                          <SelectValue placeholder={t("placeholders.selectGender")}>
+                            {field.value === "MALE" && tGender("male")}
+                            {field.value === "FEMALE" && tGender("female")}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="MALE">Male</SelectItem>
-                          <SelectItem value="FEMALE">Female</SelectItem>
+                          <SelectItem value="MALE">{tGender("male")}</SelectItem>
+                          <SelectItem value="FEMALE">{tGender("female")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -214,7 +221,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="age"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Estimated Age</FormLabel>
+                    <FormLabel>{tView("fields.estimatedAge")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -239,10 +246,10 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
               name="admitance_reason"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reason for Admission</FormLabel>
+                  <FormLabel>{tView("fields.admittanceReason")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter the reason for admission..."
+                      placeholder={tView("placeholders.admittanceReason")}
                       rows={4}
                       className="resize-none"
                       {...field}
@@ -260,7 +267,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="found_address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Place Found</FormLabel>
+                    <FormLabel>{tView("fields.placeFound")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -273,7 +280,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="found_subcity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sub City</FormLabel>
+                    <FormLabel>{tView("fields.subCity")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -286,7 +293,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="found_woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Woreda</FormLabel>
+                    <FormLabel>{tView("fields.woreda")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -302,7 +309,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
               name="found_date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date Found *</FormLabel>
+                  <FormLabel>{tView("fields.dateFound")} *</FormLabel>
                   <FormControl>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
@@ -312,7 +319,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                         >
                           {field.value
                             ? field.value.toLocaleDateString()
-                            : "Select date"}
+                            : tView("placeholders.selectDate")}
                           <ChevronDownIcon className="ml-2 h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
@@ -342,10 +349,10 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
               name="additional_information"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Additional Information</FormLabel>
+                  <FormLabel>{tView("fields.additionalInfo")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter any extra information..."
+                      placeholder={tView("placeholders.additionalInfo")}
                       rows={4}
                       className="resize-none"
                       {...field}
@@ -359,7 +366,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
 
           <Card className="flex flex-col space-y-10 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Child Founder Information
+              {tView("sections.founder")}
             </CardTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -368,7 +375,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_founder_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Founder Name</FormLabel>
+                    <FormLabel>{tView("fields.founderName")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -381,7 +388,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_founder_address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Founder Address</FormLabel>
+                    <FormLabel>{tView("fields.founderAddress")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -394,7 +401,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_founder_subcity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Founder Sub City</FormLabel>
+                    <FormLabel>{tView("fields.founderSubCity")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -407,7 +414,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_found_woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Founder Woreda</FormLabel>
+                    <FormLabel>{tView("fields.founderWoreda")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -420,7 +427,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_founder_house_no"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>House Number</FormLabel>
+                    <FormLabel>{tView("fields.houseNo")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -444,7 +451,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="child_founder_phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Founder Phone</FormLabel>
+                    <FormLabel>{tView("fields.founderPhone")}</FormLabel>
                     <FormControl>
                       <Input type="tel" {...field} />
                     </FormControl>
@@ -457,7 +464,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
 
           <Card className="flex flex-col space-y-10 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Officer Information
+              {tView("sections.officer")}
             </CardTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -466,7 +473,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Name</FormLabel>
+                    <FormLabel>{tView("fields.officerName")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -479,7 +486,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_responsibility"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Responsibility</FormLabel>
+                    <FormLabel>{tView("fields.responsibility")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -492,7 +499,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Address</FormLabel>
+                    <FormLabel>{tView("fields.officerAddress")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -505,7 +512,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_subcity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Sub City</FormLabel>
+                    <FormLabel>{tView("fields.officerSubCity")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -518,7 +525,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Woreda</FormLabel>
+                    <FormLabel>{tView("fields.officerWoreda")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -531,7 +538,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer Phone</FormLabel>
+                    <FormLabel>{tView("fields.officerPhone")}</FormLabel>
                     <FormControl>
                       <Input type="tel" {...field} />
                     </FormControl>
@@ -544,7 +551,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="officer_id_no"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Officer ID Number</FormLabel>
+                    <FormLabel>{tView("fields.officerId")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -557,7 +564,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
 
           <Card className="flex flex-col space-y-10 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Care Center Worker Information
+              {tView("sections.worker")}
             </CardTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -566,7 +573,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Name</FormLabel>
+                    <FormLabel>{tView("fields.workerName")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -579,7 +586,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_responsibility"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Responsibility</FormLabel>
+                    <FormLabel>{tView("fields.responsibility")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -592,7 +599,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Address</FormLabel>
+                    <FormLabel>{tView("fields.workerAddress")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -605,7 +612,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_subcity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Sub City</FormLabel>
+                    <FormLabel>{tView("fields.workerSubCity")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -618,7 +625,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_woreda"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Woreda</FormLabel>
+                    <FormLabel>{tView("fields.workerWoreda")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -631,7 +638,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker Phone</FormLabel>
+                    <FormLabel>{tView("fields.workerPhone")}</FormLabel>
                     <FormControl>
                       <Input type="tel" {...field} />
                     </FormControl>
@@ -644,7 +651,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="care_center_worker_id_no"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Worker ID Number</FormLabel>
+                    <FormLabel>{tView("fields.workerId")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -657,7 +664,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
 
           <Card className="flex flex-col space-y-10 py-8 px-5">
             <CardTitle className="text-lg font-semibold">
-              Health Officers
+              {tView("sections.health")}
             </CardTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -666,7 +673,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="health_officer_1_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Health Officer 1 Name</FormLabel>
+                    <FormLabel>{tView("fields.healthOfficer1")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -679,7 +686,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 name="heallth_officer_2_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Health Officer 2 Name</FormLabel>
+                    <FormLabel>{tView("fields.healthOfficer2")}</FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
                     </FormControl>
@@ -699,7 +706,7 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 }
                 className="flex-1"
               >
-                Cancel
+                {tView("buttons.cancel")}
               </Button>
               <Button
                 type="submit"
@@ -707,8 +714,8 @@ export default function EditChildForm({ childId }: EditChildFormProps) {
                 disabled={form.formState.isSubmitting || isUpdating}
               >
                 {form.formState.isSubmitting || isUpdating
-                  ? "Updating..."
-                  : "Update Child"}
+                  ? tView("buttons.updating")
+                  : tView("buttons.update")}
               </Button>
             </div>
           </Card>

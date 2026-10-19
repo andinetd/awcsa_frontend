@@ -21,7 +21,16 @@
       "editChild": "Edit Child",
       "openMenu": "Open menu",
       "status": "Status"
+    },
+    "filters": {
+      "all": "All",
+      "male": "Male",
+      "female": "Female"
     }
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female"
   },
   "addChild": {
     "title": "New Child Registration",
@@ -148,8 +157,21 @@
       "healthOfficer1": "Health Officer 1",
       "healthOfficer2": "Health Officer 2",
       "admittanceReason": "Reason for Admission",
-      "additionalInfo": "Additional Information"
-    }
+      "additionalInfo": "Additional Information",
+      "estimatedAge": "Estimated Age",
+      "optional": "(Optional)"
+    },
+    "placeholders": {
+      "admittanceReason": "Enter the reason for admission...",
+      "additionalInfo": "Enter any extra information...",
+      "selectDate": "Select date"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "update": "Update Child",
+      "updating": "Updating..."
+    },
+    "loadingChild": "Loading child information..."
   },
   "enums": {
     "sex": {

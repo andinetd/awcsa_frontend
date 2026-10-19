@@ -227,16 +227,20 @@ const CareCentersPortal = () => {
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <span className="text-xs text-muted-foreground whitespace-nowrap">
-              Gender:
+              {t("columns.gender")}:
             </span>
             <Select value={selectedGender} onValueChange={setSelectedGender}>
               <SelectTrigger className="w-32 h-9 text-xs">
-                <SelectValue placeholder="All" />
+                <SelectValue placeholder={t("filters.all")}>
+                  {selectedGender === "ALL" && t("filters.all")}
+                  {selectedGender === "MALE" && t("filters.male")}
+                  {selectedGender === "FEMALE" && t("filters.female")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">All</SelectItem>
-                <SelectItem value="MALE">Male</SelectItem>
-                <SelectItem value="FEMALE">Female</SelectItem>
+                <SelectItem value="ALL">{t("filters.all")}</SelectItem>
+                <SelectItem value="MALE">{t("filters.male")}</SelectItem>
+                <SelectItem value="FEMALE">{t("filters.female")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
