@@ -44,13 +44,26 @@ export default function EdirMembersList({
   }
 
   const memberList = members || [];
+  const leadersCount = memberList.filter(
+    (m) => m.position && m.position !== "MEMBER"
+  ).length;
+  const generalCount = memberList.length - leadersCount;
 
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center">
-        <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-          {t("title", { count: memberList.length })}
-        </h3>
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+            {t("title", { count: memberList.length })}
+          </h3>
+          <p className="text-[11px] font-mono text-slate-500 mt-0.5">
+            {t("includingLeadersHint", {
+              total: memberList.length,
+              leaders: leadersCount,
+              general: generalCount,
+            })}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <ImportEdirMembersDialog />
           <EdirMemberForm associationId={associationId} />
@@ -82,7 +95,12 @@ export default function EdirMembersList({
               memberList.map((member) => (
                 <TableRow key={member.id} className="hover:bg-slate-50/70 transition-colors">
                   <TableCell className="font-semibold text-xs text-slate-900 px-4 py-2.5">
-                    {member.fullName}
+                    <div>{member.fullName}</div>
+                    {member.cityIdNumber && (
+                      <div className="font-mono text-[11px] text-slate-400 font-normal">
+                        Fayda: {member.cityIdNumber}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell className="font-mono text-xs text-slate-600 px-4 py-2.5">{member.edirIdNumber}</TableCell>
                   <TableCell className="px-4 py-2.5">
@@ -107,7 +125,7 @@ export default function EdirMembersList({
                   <TableCell className="text-right px-4 py-2.5">
                     <div className="flex justify-end items-center gap-1.5">
                       <PersonHistoryDialog
-                        cityIdNumber={member.cityIdNumber}
+                        faydaId={member.cityIdNumber}
                         personName={member.fullName}
                       />
                       <EdirMemberForm
@@ -116,7 +134,7 @@ export default function EdirMembersList({
                         trigger={
                           <Button variant="outline" size="icon" className="h-7 w-7 rounded-xs border-[#E3E7EB] text-slate-600 hover:bg-[#F7F8FA] hover:text-[#1769AA]">
                             <Edit className="w-3.5 h-3.5" />
-                            <span className="sr-only">Edit</span>
+                            <span className="sr-only">{t("form.buttons.update")}</span>
                           </Button>
                         }
                       />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
@@ -30,7 +30,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { RefreshCw, Ban, FileCheck2 } from "lucide-react";
+import { RefreshCw, Ban, FileCheck2, Award } from "lucide-react";
+import EdirRenewalCertificateDialog from "./edir-renewal-certificate-dialog";
+import EdirRenewalAuditDialog from "./edir-renewal-audit-dialog";
 
 const CANCEL_REASONS: EdirCancellationReason[] = [
   "DISSOLVED",
@@ -46,22 +48,23 @@ interface Props {
 
 export default function EdirAccreditationActions({ edir }: Props) {
   const t = useTranslations("social-affairs.edir.edir-details.actions");
-  const renewMutation = useRenewEdirMutation();
   const cancelMutation = useCancelEdirMutation();
   const reissueMutation = useReissueEdirCertificateMutation();
 
+  const [currentEdir, setCurrentEdir] = useState<Edir>(edir);
+
+  useEffect(() => {
+    setCurrentEdir(edir);
+  }, [edir]);
+
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [renewAuditOpen, setRenewAuditOpen] = useState(false);
+  const [certificateOpen, setCertificateOpen] = useState(false);
   const [reason, setReason] = useState<EdirCancellationReason | "">("");
   const [reasonDescription, setReasonDescription] = useState("");
 
-  const isCanceled = edir.status === "CANCELLED";
-  const pending = renewMutation.isPending || cancelMutation.isPending || reissueMutation.isPending;
-
-  const handleRenew = () =>
-    renewMutation.mutate(
-      { id: edir.id! },
-      { onSuccess: () => toast.success(t("renew.success")) }
-    );
+  const isCanceled = currentEdir.status === "CANCELLED";
+  const pending = cancelMutation.isPending || reissueMutation.isPending;
 
   const handleCancel = () => {
     if (!reason) {
@@ -69,7 +72,7 @@ export default function EdirAccreditationActions({ edir }: Props) {
       return;
     }
     cancelMutation.mutate(
-      { id: edir.id!, data: { reason, reasonDescription } },
+      { id: currentEdir.id!, data: { reason, reasonDescription } },
       {
         onSuccess: () => {
           setCancelOpen(false);
@@ -82,32 +85,68 @@ export default function EdirAccreditationActions({ edir }: Props) {
   };
 
   const handleReissue = () =>
-    reissueMutation.mutate(edir.id!, {
-      onSuccess: () => toast.success(t("reissue.success")),
+    reissueMutation.mutate(currentEdir.id!, {
+      onSuccess: () => {
+        toast.success(t("reissue.success"));
+        setCertificateOpen(true);
+      },
     });
 
   return (
     <div className="flex items-center gap-2">
+      <EdirRenewalAuditDialog
+        edir={currentEdir}
+        open={renewAuditOpen}
+        onOpenChange={setRenewAuditOpen}
+        onRenewalSuccess={(renewedEdir) => {
+          setCurrentEdir(renewedEdir);
+          toast.success(t("renew.success"), {
+            action: {
+              label: t("certificate.toastAction"),
+              onClick: () => setCertificateOpen(true),
+            },
+          });
+          setCertificateOpen(true);
+        }}
+        trigger={
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5 cursor-pointer"
+            disabled={pending || isCanceled}
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            {t("renew.label")}
+          </Button>
+        }
+      />
       <Button
         size="sm"
         variant="outline"
-        className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5"
-        onClick={handleRenew}
-        disabled={pending || isCanceled}
-      >
-        <RefreshCw className="w-3.5 h-3.5" />
-        {t("renew.label")}
-      </Button>
-      <Button
-        size="sm"
-        variant="outline"
-        className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5"
+        className="h-8 text-xs font-semibold rounded-xs border-[#E3E7EB] hover:bg-[#F7F8FA] shadow-2xs gap-1.5 cursor-pointer"
         onClick={handleReissue}
         disabled={pending || isCanceled}
       >
         <FileCheck2 className="w-3.5 h-3.5" />
         {t("reissue.label")}
       </Button>
+
+      <EdirRenewalCertificateDialog
+        edir={currentEdir}
+        open={certificateOpen}
+        onOpenChange={setCertificateOpen}
+        trigger={
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-8 text-xs font-semibold rounded-xs border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA] hover:bg-[#d6e7f7] hover:text-[#12568E] shadow-2xs gap-1.5 cursor-pointer"
+            disabled={pending || isCanceled}
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>{t("certificate.label")}</span>
+          </Button>
+        }
+      />
       <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
         <DialogTrigger asChild>
           <Button
@@ -135,7 +174,9 @@ export default function EdirAccreditationActions({ edir }: Props) {
               </label>
               <Select value={reason || undefined} onValueChange={(v) => setReason(v as EdirCancellationReason)}>
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                  <SelectValue placeholder={t("cancel.reasonPlaceholder")} />
+                  <SelectValue placeholder={t("cancel.reasonPlaceholder")}>
+                    {reason ? t(`cancel.reasons.${reason}` as any) : undefined}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {CANCEL_REASONS.map((r) => (

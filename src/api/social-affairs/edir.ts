@@ -73,6 +73,8 @@ export interface Edir {
   foundingMembers?: EdirFoundingMember[];
   assets?: EdirAsset[];
   byLawsDoc?: EdirDocument | null;
+  councilId?: number | null;
+  council?: EdirCouncil | null;
 
   createdAt?: string;
   updatedAt?: string;
@@ -97,6 +99,7 @@ export interface CouncilLeadershipMember {
   role: string;
   phoneNumber?: string;
   address?: string;
+  representedEntity?: string;
 }
 
 export interface EdirCouncil {

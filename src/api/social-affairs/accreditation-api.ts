@@ -1,7 +1,12 @@
 import { BASE_URL } from "@/lib/base-url";
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth-store";
-import { Edir, EdirCancellationReason, EdirDocument } from "./edir";
+import {
+  Edir,
+  EdirCancellationReason,
+  EdirDocument,
+  EdirDocumentType,
+} from "./edir";
 
 const getAuthHeaders = () => {
   const { token } = useAuthStore.getState();
@@ -62,18 +67,30 @@ export const reissueEdirCertificate = async (id: number): Promise<Edir> => {
   }
 };
 
-export const uploadEdirDocument = async (file: File): Promise<EdirDocument> => {
+export const uploadEdirDocument = async (
+  file: File,
+  type: EdirDocumentType = "BY_LAWS"
+): Promise<EdirDocument> => {
   const { token } = useAuthStore.getState();
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("type", "BY_LAWS");
+  formData.append("type", type);
 
-  const response = await axios.post(`${BASE_URL}/edir/documents`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`${BASE_URL}/edir/documents`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      "Failed to upload document";
+    throw new Error(message);
+  }
 };
 
 export const downloadEdirDocument = async (id: number): Promise<string> => {

@@ -43,6 +43,7 @@ export const newEdirSchema = z.object({
   assetsAuditedByAuditCommittee: z.boolean().default(false),
   assetsApprovedByGeneralAssembly: z.boolean().default(false),
   byLawsDocId: z.coerce.number().optional().nullable(),
+  councilId: z.coerce.number().optional().nullable(),
 });
 
 export type NewEdirSchemaType = z.infer<typeof newEdirSchema>;

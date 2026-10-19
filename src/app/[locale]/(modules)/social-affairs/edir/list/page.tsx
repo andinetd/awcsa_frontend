@@ -572,7 +572,11 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
-                  <SelectValue placeholder={t("advanced.allSubCities")} />
+                  <SelectValue placeholder={t("advanced.allSubCities")}>
+                    {selectedSubCity !== "ALL"
+                      ? getSubCityDisplayName(selectedSubCity)
+                      : t("advanced.allSubCities")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {!userSubCity && (
@@ -609,7 +613,11 @@ const EdirList = () => {
                         ? t("advanced.selectSubCityFirst")
                         : t("advanced.allWoredas")
                     }
-                  />
+                  >
+                    {selectedWoreda !== "ALL"
+                      ? t("woredaLabel", { code: selectedWoreda })
+                      : t("advanced.allWoredas")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {!userWoreda && (
@@ -639,7 +647,11 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder={t("advanced.allLevels")} />
+                  <SelectValue placeholder={t("advanced.allLevels")}>
+                    {levelFilter !== "ALL"
+                      ? t(`levels.${levelFilter}` as any)
+                      : t("advanced.allLevels")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -667,7 +679,13 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder={t("advanced.allCompliance")} />
+                  <SelectValue placeholder={t("advanced.allCompliance")}>
+                    {complianceFilter === "AUDITED" && t("advanced.audited")}
+                    {complianceFilter === "ASSEMBLY_APPROVED" && t("advanced.assemblyApproved")}
+                    {complianceFilter === "HAS_BYLAWS" && t("advanced.hasBylaws")}
+                    {complianceFilter === "PENALTY_APPLIED" && t("advanced.penaltyApplied")}
+                    {complianceFilter === "ALL" && t("advanced.allCompliance")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -702,7 +720,12 @@ const EdirList = () => {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder={t("advanced.allSizes")} />
+                  <SelectValue placeholder={t("advanced.allSizes")}>
+                    {sizeFilter === "SMALL" && t("advanced.small")}
+                    {sizeFilter === "MEDIUM" && t("advanced.medium")}
+                    {sizeFilter === "LARGE" && t("advanced.large")}
+                    {sizeFilter === "ALL" && t("advanced.allSizes")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">

@@ -246,7 +246,9 @@ export default function EdirMemberForm({
                         <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
                           <SelectValue
                             placeholder={t("placeholders.position")}
-                          />
+                          >
+                            {field.value && tp.has(field.value as any) ? tp(field.value as any) : undefined}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="rounded-xs border-[#E3E7EB]">

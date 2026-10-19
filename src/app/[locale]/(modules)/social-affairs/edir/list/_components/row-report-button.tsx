@@ -17,10 +17,12 @@ import {
   FileText,
   Printer,
   Loader2,
+  Award,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Edir } from "@/api/social-affairs/edir";
 import { printEdirDossier } from "@/lib/pdf/print-edir-dossier";
+import { printEdirRenewalCertificate } from "@/lib/pdf/print-edir-renewal-certificate";
 import { useGenerateEdirReportMutation } from "@/hooks/social-affairs";
 
 interface EdirRowReportButtonProps {
@@ -46,6 +48,16 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
       toast.error(err?.message || t("error"));
     } finally {
       setIsPrinting(false);
+    }
+  };
+
+  const handlePrintCertificate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      printEdirRenewalCertificate(edir);
+      toast.success(t("messages.pdf"));
+    } catch (err: any) {
+      toast.error(err?.message || t("error"));
     }
   };
 
@@ -132,6 +144,16 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
         >
           <Printer className="w-4 h-4 text-[#1769AA]" />
           <span>{t("printDossier")}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"
+          onSelect={(e) => {
+            e.preventDefault();
+            handlePrintCertificate(e as any);
+          }}
+        >
+          <Award className="w-4 h-4 text-amber-600" />
+          <span>{t("printCertificate")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"

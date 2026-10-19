@@ -36,6 +36,7 @@ import {
   useCreateEdirMutation,
   useUpdateEdirMutation,
   useUploadEdirDocumentMutation,
+  useGetEdirCouncilsQuery,
 } from "@/hooks/social-affairs";
 import { newEdirSchema, NewEdirSchemaType } from "@/schemas/edir";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,6 +66,7 @@ export default function NewEdirForm({
 
   const isPending = createMutation.isPending || updateMutation.isPending;
   const isEditMode = !!edirId;
+  const { data: councils = [] } = useGetEdirCouncilsQuery();
 
   const form = useForm<NewEdirSchemaType>({
     resolver: zodResolver(newEdirSchema) as any,
@@ -88,6 +90,7 @@ export default function NewEdirForm({
       assetsAuditedByAuditCommittee: false,
       assetsApprovedByGeneralAssembly: false,
       byLawsDocId: undefined,
+      councilId: undefined,
     },
   });
 
@@ -127,11 +130,14 @@ export default function NewEdirForm({
           form.setValue("byLawsDocId", doc.id);
           toast.success(t("messages.byLawsUploaded"));
         },
-        onError: () => {
-          toast.error(t("messages.byLawsUploadError"));
+        onError: (err: any) => {
+          toast.error(err?.message || t("messages.byLawsUploadError"));
           setByLawsFile([]);
+          form.setValue("byLawsDocId", undefined);
         },
       });
+    } else {
+      form.setValue("byLawsDocId", undefined);
     }
   };
 
@@ -186,6 +192,7 @@ export default function NewEdirForm({
         assetsApprovedByGeneralAssembly:
           initialData.assetsApprovedByGeneralAssembly ?? false,
         byLawsDocId: initialData.byLawsDoc?.id ?? undefined,
+        councilId: initialData.councilId ?? undefined,
       });
       if (initialData.byLawsDoc) {
         setByLawsFile([]);
@@ -200,6 +207,7 @@ export default function NewEdirForm({
       managementFemale: values.members.management.female,
       generalMale: values.members.general.male,
       generalFemale: values.members.general.female,
+      councilId: values.councilId ? Number(values.councilId) : null,
       foundingMembers: values.foundingMembers.map((fm) => ({
         fullName: fm.fullName,
         address: fm.address || "",
@@ -304,7 +312,9 @@ export default function NewEdirForm({
                       >
                         <FormControl>
                           <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                            <SelectValue placeholder="Select level" />
+                            <SelectValue placeholder={t("fields.registerLevel")}>
+                              {field.value ? t(`levels.${field.value}` as any) : undefined}
+                            </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="rounded-xs border-[#E3E7EB]">
@@ -315,6 +325,44 @@ export default function NewEdirForm({
                               </SelectItem>
                             )
                           )}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="councilId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("fields.council")}
+                      </FormLabel>
+                      <Select
+                        onValueChange={(val) => {
+                          field.onChange(val === "none" ? null : Number(val));
+                        }}
+                        value={field.value ? String(field.value) : "none"}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                            <SelectValue placeholder={t("fields.councilPlaceholder")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-xs border-[#E3E7EB] max-h-56">
+                          <SelectItem value="none" className="text-xs rounded-xs text-slate-500">
+                            {t("fields.noCouncilOption")}
+                          </SelectItem>
+                          {councils.map((council) => (
+                            <SelectItem
+                              key={council.id}
+                              value={String(council.id)}
+                              className="text-xs rounded-xs"
+                            >
+                              {council.name} ({council.level})
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-[11px]" />
@@ -497,6 +545,50 @@ export default function NewEdirForm({
                   />
                 </div>
               </div>
+
+              {/* Grand Total Members (Leaders + General) */}
+              <div className="p-3 bg-[#E8F2FA]/70 border border-[#BCD5EA] rounded-xs space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                    {t("fields.totalEdirMembers")}
+                  </span>
+                  <span className="font-mono font-bold text-base text-[#1769AA]">
+                    {Number(managementMale || 0) +
+                      Number(managementFemale || 0) +
+                      Number(generalMale || 0) +
+                      Number(generalFemale || 0)}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-[#BCD5EA]/70 text-xs font-mono text-slate-700">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      {t("fields.totalMale")}:
+                    </span>
+                    <span className="font-bold text-slate-900 mt-0.5">
+                      {Number(managementMale || 0) + Number(generalMale || 0)}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      {t("fields.totalFemale")}:
+                    </span>
+                    <span className="font-bold text-slate-900 mt-0.5">
+                      {Number(managementFemale || 0) + Number(generalFemale || 0)}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      {t("fields.grandTotal")}:
+                    </span>
+                    <span className="font-bold text-[#1769AA] mt-0.5">
+                      {Number(managementMale || 0) +
+                        Number(managementFemale || 0) +
+                        Number(generalMale || 0) +
+                        Number(generalFemale || 0)}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Financials & Remarks */}
@@ -661,7 +753,9 @@ export default function NewEdirForm({
                           >
                             <FormControl>
                               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                                <SelectValue placeholder={t("fields.assetType")} />
+                                <SelectValue placeholder={t("fields.assetType")}>
+                                  {f.value ? t(`assetTypes.${f.value}` as any) : undefined}
+                                </SelectValue>
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent className="rounded-xs border-[#E3E7EB]">
@@ -822,7 +916,7 @@ export default function NewEdirForm({
               </Button>
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || uploadDocMutation.isPending}
                 className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white font-semibold shadow-2xs"
               >
                 {isPending

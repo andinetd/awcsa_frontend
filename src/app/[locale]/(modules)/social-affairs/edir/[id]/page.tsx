@@ -202,6 +202,23 @@ export default function EdirDetailsPage({ params }: PageProps) {
                       {typedEdir.renewedForYear ?? t("fields.notRenewed")}
                     </p>
                   </div>
+                  <div>
+                    <p className="text-slate-500 font-mono text-[11px] uppercase tracking-wider">
+                      {t("fields.council")}
+                    </p>
+                    {typedEdir.council ? (
+                      <Link
+                        href={`/social-affairs/edir/councils/${typedEdir.council.id}`}
+                        className="font-mono font-semibold text-[#1769AA] hover:underline mt-0.5 inline-block"
+                      >
+                        {typedEdir.council.name} ({typedEdir.council.level})
+                      </Link>
+                    ) : (
+                      <p className="font-mono text-slate-500 mt-0.5">
+                        {t("fields.noCouncil")}
+                      </p>
+                    )}
+                  </div>
                   {typedEdir.renewalPenaltyApplied && (
                     <div className="col-span-full">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-mono font-semibold bg-amber-50 text-amber-700 border border-amber-200">
@@ -456,14 +473,32 @@ export default function EdirDetailsPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-[#E3E7EB] flex justify-between items-center">
-                    <span className="text-xs font-mono text-slate-600 font-bold uppercase">{t("fields.total")}</span>
-                    <span className="font-mono font-bold text-sm text-[#0B1F3A]">
-                      {(typedEdir.managementMale || 0) +
-                        (typedEdir.managementFemale || 0) +
-                        (typedEdir.generalMale || 0) +
-                        (typedEdir.generalFemale || 0)}
-                    </span>
+                  <div className="pt-3 border-t border-[#E3E7EB] space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-mono text-slate-700 font-bold uppercase">
+                        {t("fields.total")}
+                      </span>
+                      <span className="font-mono font-bold text-base text-[#1769AA]">
+                        {(typedEdir.managementMale || 0) +
+                          (typedEdir.managementFemale || 0) +
+                          (typedEdir.generalMale || 0) +
+                          (typedEdir.generalFemale || 0)}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-600 bg-slate-50 p-2 rounded-xs border border-[#E3E7EB]">
+                      <div className="flex justify-between">
+                        <span className="text-[11px] text-slate-500">{t("fields.male")}:</span>
+                        <span className="font-bold text-slate-800">
+                          {(typedEdir.managementMale || 0) + (typedEdir.generalMale || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[11px] text-slate-500">{t("fields.female")}:</span>
+                        <span className="font-bold text-slate-800">
+                          {(typedEdir.managementFemale || 0) + (typedEdir.generalFemale || 0)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

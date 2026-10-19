@@ -116,7 +116,8 @@ export default function GenerateReportDialog() {
     { id: "status", label: t("columns.status") },
     { id: "registerLevel", label: t("columns.registerLevel") },
     { id: "bankAccountNumber", label: t("columns.bankAccount") },
-    { id: "establishmentDate", label: t("columns.date") },
+    { id: "managementMale", label: t("columns.managementMale") },
+    { id: "managementFemale", label: t("columns.managementFemale") },
     { id: "generalMale", label: t("columns.generalMale") },
     { id: "generalFemale", label: t("columns.generalFemale") },
   ];
@@ -194,7 +195,9 @@ export default function GenerateReportDialog() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                  <SelectValue />
+                  <SelectValue>
+                    {reportType === "SUMMARY" ? t("reportTypeOptions.summary") : t("reportTypeOptions.perEdirDossier")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="SUMMARY" className="text-xs rounded-xs">
@@ -215,7 +218,9 @@ export default function GenerateReportDialog() {
                 onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                  <SelectValue />
+                  <SelectValue>
+                    {format === "EXCEL" ? t("formats.excel") : t("formats.pdf")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="EXCEL" className="text-xs rounded-xs flex items-center gap-1.5">
