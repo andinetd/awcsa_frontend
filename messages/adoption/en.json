@@ -139,6 +139,8 @@
       "cancel": "Cancel",
       "noNotes": "No post-match notes recorded yet.",
       "filterAll": "All Categories",
+      "selectCategory": "Select note category",
+      "filterLabel": "Filter:",
       "categories": {
         "GENERAL": "General Note",
         "PLACEMENT_PROGRESS": "Placement Progress",
@@ -464,6 +466,8 @@
     "error": "Error loading care centers.",
     "noCareCenters": "No care centers found.",
     "addNew": "Add New Care Center",
+    "filterSubCity": "All Sub-Cities",
+    "activeFilters": "Active Filters:",
     "types": {
       "GOVERNMENT": "Government",
       "NGO": "NGO / Private",
@@ -495,6 +499,12 @@
       "orgUnitId": "Org Unit ID",
       "description": "Description",
       "close": "Close"
+    },
+    "census": {
+      "cancel": "Cancel",
+      "close": "Close",
+      "submit": "Submit Audit",
+      "submitting": "Submitting..."
     },
     "form": {
       "registerTitle": "Register New Care Center",
@@ -1463,5 +1473,451 @@
     "title": "Child Welfare Support & Benefits",
     "subtitle": "Social protection subsidies, educational allowances, and material support for vulnerable children.",
     "empty": "Child social welfare support programs and subsidy allocations will appear here."
+  },
+  "carePlan": {
+    "title": "Permanency & Care Plan (Reunification First Protocol)",
+    "goals": {
+      "REUNIFICATION": "Family Reunification (Biological Parents)",
+      "KINSHIP_CARE": "Kinship Care (Extended Blood Relatives)",
+      "ADOPTION": "Formal Legal Adoption",
+      "FOSTER_CARE": "Temporary Foster Care",
+      "INDEPENDENT_LIVING": "Youth Independent Living Preparation"
+    },
+    "buttons": {
+      "clearForAdoption": "Clear for Adoption",
+      "updatePlan": "Update Plan",
+      "createPlan": "Create Care Plan",
+      "cancel": "Cancel",
+      "savePlan": "Save Care Plan",
+      "authorizeAdoption": "Authorize Adoption Clearance"
+    },
+    "status": {
+      "clearedTitle": "Cleared for Legal Adoption Placement",
+      "activeTracingTitle": "Biological Family Tracing Active (Adoption Safeguard Locked)",
+      "statusLabel": "Status: {status}",
+      "clearedDesc": "Reunification efforts exhausted. Cleared on {date}. Child can proceed to candidate matching.",
+      "activeTracingDesc": "Per UN & Ethiopian child welfare standards, biological family reunification must be explored before domestic adoption clearance is authorized."
+    },
+    "fields": {
+      "primaryGoal": "Primary Permanency Goal",
+      "secondaryGoal": "Secondary: {goal}",
+      "caseworker": "Caseworker & Review Schedule",
+      "defaultWorker": "Designated Social Worker",
+      "nextReview": "Next Review: {date}",
+      "tracingFindings": "Biological Tracing & Effort Findings",
+      "emptyTitle": "No active Care Plan registered for this child.",
+      "emptyDesc": "Establishing an individualized care plan establishes legal permanency tracking and activates the Reunification First safeguard."
+    },
+    "clearModal": {
+      "title": "Declare Adoption Clearance",
+      "desc": "Document that biological family search and kinship placements have been thoroughly exhausted per welfare regulations.",
+      "effortDetailsLabel": "Reunification Effort Details & Findings *",
+      "effortDetailsPlaceholder": "Explain the tracing efforts conducted (public announcements, police inquiries, community interviews) and why family return is not possible...",
+      "courtOrderLabel": "Court Order / Decree Reference",
+      "courtOrderPlaceholder": "e.g. CRT-AA-2026-9041",
+      "notesLabel": "Committee Remarks / Notes",
+      "notesPlaceholder": "Reviewed and approved by child protection panel..."
+    },
+    "planModal": {
+      "titleCreate": "New Permanency Care Plan",
+      "titleUpdate": "Update Child Care Plan",
+      "desc": "Establish the primary permanency goal and regular review cycle.",
+      "primaryGoalLabel": "Primary Goal *",
+      "secondaryGoalLabel": "Secondary Alternative Goal",
+      "reviewDateLabel": "Next Scheduled Review Date *",
+      "tracingEffortsLabel": "Biological Family Tracing Efforts",
+      "tracingEffortsPlaceholder": "Initial tracing attempts underway...",
+      "generalNotesLabel": "General Casework Notes",
+      "generalNotesPlaceholder": "Review observations and next actions..."
+    }
+  },
+  "siblingGroup": {
+    "title": "Sibling Group (Non-Separation Family Protection)",
+    "buttons": {
+      "addSibling": "Add Sibling",
+      "linkSiblings": "Link Siblings",
+      "cancel": "Cancel",
+      "createGroup": "Create Sibling Group",
+      "addToGroup": "Add to Group"
+    },
+    "banner": {
+      "groupCode": "Group Code: {code}",
+      "linkedCount": "({count} biological siblings linked)",
+      "jointPlacement": "Joint Placement Protected"
+    },
+    "linkedTitle": "Linked Brothers & Sisters",
+    "facilityDefault": "Care Facility",
+    "childDefault": "Child #{id}",
+    "onlyChild": "Only this child is currently recorded in this group. Link additional siblings using the button above.",
+    "emptyTitle": "Child is not registered in a sibling group.",
+    "emptyDesc": "If this child has biological siblings in welfare custody or other care facilities, link them together to enforce non-separation placement safeguards.",
+    "createModal": {
+      "title": "Link Sibling Unit",
+      "desc": "Group this child with a biological brother or sister by entering the sibling's Child ID.",
+      "idLabel": "Sibling Child Registration ID *",
+      "idPlaceholder": "e.g. 14",
+      "notesLabel": "Relationship Notes",
+      "notesPlaceholder": "Found together; biological older brother..."
+    },
+    "addModal": {
+      "title": "Add Sibling to Group ({code})",
+      "desc": "Enter the Child Registration ID of the newly identified brother or sister.",
+      "idLabel": "Sibling Child Registration ID *",
+      "idPlaceholder": "e.g. 25"
+    }
+  },
+  "biometrics": {
+    "title": "Biometric Identity & De-duplication Protection",
+    "subtitle": "Perceptual portrait hashing, facial verification & physical marks (Anti-trafficking safeguard)",
+    "buttons": {
+      "runScan": "Run De-duplication Scan",
+      "update": "Update Biometrics",
+      "register": "Register Biometrics",
+      "addMark": "Add",
+      "removeMark": "Remove",
+      "cancel": "Cancel",
+      "save": "Save Biometrics",
+      "saving": "Saving..."
+    },
+    "profile": {
+      "noPhoto": "No Photo Captured",
+      "perceptualHash": "Perceptual Hash",
+      "pendingRegistration": "N/A (Pending registration)",
+      "consentVerified": "Consent verified"
+    },
+    "marks": {
+      "title": "Physical Identifying Marks",
+      "empty": "No physical distinguishing marks recorded.",
+      "types": {
+        "BIRTHMARK": "Birthmark",
+        "SCAR": "Scar",
+        "TATTOO": "Tattoo / Inking",
+        "OTHER": "Other Distinct Feature"
+      }
+    },
+    "scanResult": {
+      "dupWarning": "Potential Duplicate Warning: {count} Candidate(s) Found",
+      "dupWarningDesc": "Care centers and national registries matched this child's phonetic name or perceptual biometric hash. Cross-examine candidates below to avoid double registration.",
+      "zeroDuplicates": "Zero Duplicates Found across Federal Facility Rosters",
+      "zeroDuplicatesDesc": "No existing child records match this biometric signature or name profile.",
+      "unassigned": "Unassigned",
+      "confidence": "{confidence}% Match"
+    },
+    "dialog": {
+      "title": "Register Child Biometric Profile",
+      "desc": "Upload portrait photo and document physical identifying marks.",
+      "photoUrlLabel": "Facial Photo URL *",
+      "photoHashLabel": "Perceptual Photo Hash (Optional)",
+      "photoHashHint": "If omitted, the backend will auto-derive a deterministic image perceptual digest.",
+      "addMarkLabel": "Add Identifying Mark",
+      "locationPlaceholder": "Location (e.g. Left cheek)",
+      "descPlaceholder": "Detailed description (e.g. 1cm circular brown spot)"
+    }
+  },
+  "aderaCustody": {
+    "title": "Customary Adera Formalization & Child Protection",
+    "subtitle": "Ethical traditional care oversight, Bale Adera custodian accountability & mandatory welfare checkups",
+    "buttons": {
+      "formalize": "Formalize Adera Custody",
+      "convert": "Convert Legal Status",
+      "recordVisit": "Record Home Welfare Visit",
+      "cancel": "Cancel",
+      "saveFormalize": "Authorize Custody",
+      "saveCheckup": "Save Welfare Audit",
+      "saveConvert": "Confirm Conversion"
+    },
+    "emptyTitle": "This child is not currently under a formalized customary Adera care arrangement.",
+    "emptyDesc": "Under Ethiopian customary practice, when a child is left under informal care (Adera), the Bureau mandates formalizing the Bale Adera custodian to prevent exploitation and enable monthly monitoring.",
+    "summary": {
+      "legalStatus": "Adera Legal Status",
+      "custodian": "Bale Adera Custodian",
+      "informalGuardian": "Informal Guardian",
+      "monthlyStipend": "Monthly Stipend",
+      "none": "None",
+      "courtEndorsed": "Court Endorsed",
+      "bureauMonitored": "Bureau Monitored",
+      "lastVisit": "Last Welfare Visit",
+      "noCheckupYet": "No checkups recorded yet",
+      "nextHomeVisitDue": "Next Home Visit Due",
+      "mandatoryInspection": "Mandatory 30-day inspection",
+      "statusActive": "Active",
+      "statusReview": "Under Safety Review",
+      "statusConverted": "Converted"
+    },
+    "checkups": {
+      "title": "Welfare Monitoring History",
+      "historyTitle": "Periodic Home Welfare Checkup History ({count})",
+      "empty": "No home inspection visits recorded yet.",
+      "visitDate": "Visit Date: {date}",
+      "safety": "Safety: {assessment}",
+      "living": "Living: {rating}",
+      "inspectedBy": "Inspected by: {name}",
+      "schooling": "Education / Schooling:",
+      "health": "Physical & Health Appearance:",
+      "riskFlags": "Risk Flags:",
+      "observations": "Social Worker Observations:",
+      "recommendation": "Recommendation: {rec}"
+    },
+    "dialogs": {
+      "formalize": {
+        "title": "Formalize Customary Adera Care",
+        "desc": "Register the informal caregiver (*Bale Adera*) and schedule child welfare checkups.",
+        "clientId": "Bale Adera Client ID *",
+        "relationship": "Relationship to Child",
+        "reason": "Reason Placed in Adera *",
+        "reasonPlaceholder": "Circumstances under which the biological parents left the child...",
+        "stipend": "Monthly Stipend (ETB)",
+        "docUrl": "Document URL",
+        "submitting": "Formalizing...",
+        "submit": "Formalize Arrangement"
+      },
+      "checkup": {
+        "title": "Record Home Welfare Checkup",
+        "desc": "Social worker periodic home inspection and living condition evaluation.",
+        "livingRating": "Living Condition Rating",
+        "safetyAssessment": "Safety Assessment",
+        "schooling": "Schooling / Education Status",
+        "schoolingPlaceholder": "e.g. Attending grade 4",
+        "health": "Health & Nutrition Observations",
+        "healthPlaceholder": "e.g. Clean, well-fed, healthy appearance",
+        "riskFlags": "Risk Flags (comma separated)",
+        "riskFlagsPlaceholder": "CHILD_LABOR, DOMESTIC_SERVITUDE, MISSING_SCHOOL",
+        "remarks": "Detailed Remarks *",
+        "remarksPlaceholder": "Observation of living quarters, interaction with custodian...",
+        "submitting": "Saving...",
+        "submit": "Save Checkup Record",
+        "livingRatings": {
+          "EXCELLENT": "Excellent",
+          "GOOD": "Good",
+          "SATISFACTORY": "Satisfactory",
+          "NEEDS_IMPROVEMENT": "Needs Improvement",
+          "CRITICAL": "Critical"
+        },
+        "safetyRatings": {
+          "SAFE": "Safe",
+          "MINOR_CONCERNS": "Minor Concerns",
+          "MAJOR_CONCERNS": "Major Concerns",
+          "UNSAFE": "Unsafe / Urgent"
+        }
+      },
+      "convert": {
+        "title": "Transition Legal Custody Status",
+        "desc": "Convert the customary informal arrangement to formal legal status.",
+        "targetStatus": "Target Legal Status",
+        "statuses": {
+          "CONVERTED_TO_GUARDIANSHIP": "Convert to Formal Court Guardianship",
+          "CONVERTED_TO_ADOPTION": "Convert to Domestic Adoption",
+          "UNDER_SAFETY_REVIEW": "Place under Safety Review",
+          "TERMINATED": "Terminate & Return Child to Care Center"
+        },
+        "notes": "Transition Notes & Rationale",
+        "notesPlaceholder": "Court decree details, social worker justification...",
+        "submitting": "Updating...",
+        "submit": "Confirm Status Transition"
+      }
+    }
+  },
+  "digitalDossier": {
+    "title": "Digital Child Dossier (360° Life Story & Health Record)",
+    "tabs": {
+      "medical": "Medical & Health",
+      "milestones": "Developmental Milestones ({count})",
+      "photos": "Growth Gallery ({count})",
+      "tracing": "Family Tracing Log ({count})"
+    },
+    "buttons": {
+      "editMedical": "Edit Medical Record",
+      "addMilestone": "Add Milestone",
+      "addPhoto": "Add Photo",
+      "logTracing": "Log Tracing Attempt",
+      "cancel": "Cancel",
+      "saveMedical": "Save Medical Record",
+      "saveMilestone": "Save Milestone",
+      "savePhoto": "Add to Gallery",
+      "saveTracing": "Log Activity"
+    },
+    "medical": {
+      "subtitle": "Comprehensive pediatric, chronic, and immunization history",
+      "bloodGroup": "Blood Group",
+      "notTyped": "Not Typed",
+      "allergies": "Allergies",
+      "chronicConditions": "Chronic Conditions",
+      "noneReported": "None reported",
+      "generalHealthTitle": "General Health & Nutritional Overview",
+      "generalHealthDefault": "No clinical overview has been entered yet.",
+      "specialCareTitle": "Special Daily Care Requirements",
+      "dialogTitle": "Update Medical & Health Record",
+      "dialogDesc": "Record pediatric profile, blood type, known allergies, and care requirements.",
+      "bloodGroupPlaceholder": "e.g. O+, A+, B-",
+      "allergiesLabel": "Known Allergies (comma-separated)",
+      "allergiesPlaceholder": "Penicillin, Peanuts, Pollen...",
+      "chronicLabel": "Diagnosed Chronic Conditions (comma-separated)",
+      "chronicPlaceholder": "Asthma, Diabetes...",
+      "generalHealthLabel": "General Health & Nutrition Overview",
+      "generalHealthPlaceholder": "Child is well-nourished, active...",
+      "specialCareLabel": "Special Daily Care Requirements",
+      "specialCarePlaceholder": "Requires daily inhaler, special diet..."
+    },
+    "milestones": {
+      "subtitle": "Cognitive, motor, language, and emotional observations",
+      "empty": "No developmental milestones logged yet.",
+      "age": "Age: {age}",
+      "assessedOn": "Assessed on {date}",
+      "assessedBy": "by {name}",
+      "dialogTitle": "Record Developmental Milestone",
+      "categoryLabel": "Category *",
+      "statusLabel": "Status *",
+      "ageBracketLabel": "Age Bracket",
+      "ageBracketPlaceholder": "e.g. 1-2 YEARS",
+      "titleLabel": "Milestone / Skill Assessed *",
+      "titlePlaceholder": "e.g. Uses two-word phrases, walks independently...",
+      "observationsLabel": "Clinical / Social Observations",
+      "observationsPlaceholder": "Observations during pediatric or play session...",
+      "types": {
+        "MOTOR": "Motor Skills",
+        "COGNITIVE": "Cognitive Skills",
+        "LANGUAGE": "Language & Speech",
+        "SOCIAL_EMOTIONAL": "Social-Emotional"
+      },
+      "statuses": {
+        "ON_TRACK": "On Track",
+        "ADVANCED": "Advanced",
+        "DELAYED": "Delayed"
+      }
+    },
+    "photos": {
+      "subtitle": "Chronological growth photos documenting the child over time",
+      "empty": "No growth portraits uploaded yet.",
+      "primaryPortrait": "Primary Portrait",
+      "monthsOld": "{months} months old",
+      "dialogTitle": "Upload Growth Photo",
+      "urlLabel": "Photo URL *",
+      "urlPlaceholder": "https://storage.awcsa.gov.et/photos/child-portrait.jpg",
+      "ageLabel": "Approximate Age (in months)",
+      "agePlaceholder": "e.g. 18",
+      "captionLabel": "Caption / Context",
+      "captionPlaceholder": "e.g. 18-month intake checkup",
+      "primaryCheckbox": "Set as active primary portrait photo"
+    },
+    "tracing": {
+      "subtitle": "Official search actions, broadcasts, and investigations",
+      "empty": "No biological family tracing activities logged yet.",
+      "conductedOn": "Conducted on {date}",
+      "investigator": "Investigator: {name}",
+      "dialogTitle": "Log Family Tracing Activity",
+      "methodLabel": "Search Method *",
+      "outcomeLabel": "Outcome *",
+      "locationLabel": "Location / Sub-City",
+      "locationPlaceholder": "e.g. Kirkos sub-city, Woreda 04",
+      "findingsLabel": "Detailed Findings & Observations *",
+      "findingsPlaceholder": "Summary of interviews, announcements, and evidence collected...",
+      "methods": {
+        "PUBLIC_BROADCAST": "Public Broadcast / Media",
+        "POLICE_REPORT": "Police Missing Persons",
+        "COMMUNITY_INQUIRY": "Community Inquiry",
+        "DATABASE_CROSSMATCH": "Database Cross-Match",
+        "PHYSICAL_SEARCH": "Physical Field Search"
+      },
+      "outcomes": {
+        "IN_PROGRESS": "In Progress",
+        "PARENTS_LOCATED": "Parents Located",
+        "DECEASED": "Confirmed Deceased",
+        "UNTRACEABLE": "Exhausted / Untraceable"
+      }
+    }
+  },
+  "judicial": {
+    "title": "Judicial Proceedings & Civil Registry",
+    "subtitle": "Federal First Instance Court Petition, Evidentiary Bundles & VERA Birth Certificate Linkage",
+    "loading": "Loading judicial records...",
+    "empty": {
+      "title": "No Judicial Petition Filed Yet",
+      "desc": "Once committee approval is obtained and placement documents are verified, click \"File Court Petition\" to initiate formal judicial adoption proceedings."
+    },
+    "buttons": {
+      "compileBundle": "Compile Court Bundle",
+      "filePetition": "File Court Petition",
+      "addHearing": "+ Add Hearing",
+      "recordDecree": "Record Decree",
+      "linkVera": "Link VERA Civil Registry",
+      "cancel": "Cancel",
+      "close": "Close",
+      "submitPetition": "Submit Petition Record",
+      "saveHearing": "Save Hearing Record",
+      "grantDecree": "Grant & Record Adoption Decree",
+      "linkVeraEntry": "Link Civil Registry Entry"
+    },
+    "caseDetails": {
+      "caseDocket": "Case Docket: {docket}",
+      "courtAndBench": "Court & Bench",
+      "generalBench": "General Bench",
+      "presidingJudge": "Presiding Judge",
+      "notAssigned": "Not Assigned",
+      "filingDate": "Filing Date: {date}",
+      "nextScheduledHearing": "Next Scheduled Hearing",
+      "noneScheduled": "None Scheduled"
+    },
+    "petitionDialog": {
+      "title": "File Judicial Adoption Petition",
+      "courtName": "Court Name",
+      "benchDivision": "Bench Division",
+      "fileNumber": "Court File Number *",
+      "fileNumberPlaceholder": "e.g. FFIC/FAM/2026/894",
+      "judge": "Presiding Judge",
+      "judgePlaceholder": "e.g. Judge Solomon Kebede",
+      "filingDate": "Filing Date",
+      "nextHearingDate": "Next Hearing Date"
+    },
+    "hearingDialog": {
+      "title": "Record Court Hearing & Judge Orders",
+      "date": "Hearing Date *",
+      "type": "Hearing Type",
+      "nextHearing": "Next Hearing (if postponed)",
+      "attendees": "Attendees (comma separated)",
+      "judgeOrders": "Judge Orders / Summary of Proceedings *",
+      "ordersPlaceholder": "Orders issued by presiding judge..."
+    },
+    "hearingsTimeline": {
+      "title": "Judicial Hearing Sessions ({count})",
+      "recordedBy": "Recorded by {name}",
+      "judgeOrders": "Judge Orders:"
+    },
+    "decree": {
+      "dialogTitle": "Finalize Adoption Decree",
+      "decreeNumber": "Official Decree Number *",
+      "decreeNumberPlaceholder": "e.g. FFIC-DEC-2026-4401",
+      "decreeDate": "Decree Date *",
+      "decreeDocUrl": "Decree Document URL / Path",
+      "certifiedCopyUrl": "Certified Copy URL",
+      "legalOrdersSummary": "Legal Orders Summary",
+      "grantedTitle": "Adoption Decree Granted: #{decreeNumber}",
+      "orderDate": "Date of Judicial Order: {date}"
+    },
+    "vera": {
+      "dialogTitle": "Record VERA Post-Adoption Amended Birth Certificate",
+      "officeBranch": "VERA Office Branch *",
+      "amendedCertNumber": "Amended Birth Certificate # *",
+      "amendedCertPlaceholder": "e.g. VERA-BC-2026-90812",
+      "dateIssued": "Date Issued",
+      "registrationNumber": "Registration Number",
+      "registrationPlaceholder": "e.g. REG-VERA-77",
+      "notes": "Civil Registry Notes",
+      "linkedTitle": "VERA Vital Events Registry Linked",
+      "badge": "Birth Certificate Amended",
+      "branch": "Branch",
+      "amendedCert": "Amended Certificate #",
+      "issuedOn": "Issued On"
+    },
+    "bundle": {
+      "compiledOn": "Compiled on {date}",
+      "checklistTitle": "Evidentiary Manifest Checklist:",
+      "medicalClearance": "Child Comprehensive Medical Clearance (Blood Group: {bloodGroup})",
+      "homeStudy": "Social Worker Home Study Assessment",
+      "suitability": "Psychosocial & Financial Suitability (Composite: {score}%)",
+      "committeeMinutes": "Placement Committee Decision Minutes ({decision})",
+      "tracingCertificate": "Biological Family Tracing Certificate ({count} contact attempts logged)",
+      "siblingReviewGroup": "Sibling Group Integrity Review (Group of {count})",
+      "siblingReviewSingle": "Sibling Group Integrity Review (Single Child)"
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -50,6 +51,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
   matchStatus,
   isOfficer = true,
 }) => {
+  const t = useTranslations("adoption.judicial");
   const [loading, setLoading] = useState(false);
   const [courtCase, setCourtCase] = useState<AdoptionCourtCase | null>(null);
   const [courtBundle, setCourtBundle] = useState<CourtBundleManifest | null>(null);
@@ -216,7 +218,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
     return (
       <div className="flex items-center justify-center p-12 text-slate-500 gap-2">
         <Loader2 className="w-5 h-5 animate-spin" />
-        <span>Loading judicial records...</span>
+        <span>{t("loading")}</span>
       </div>
     );
   }
@@ -230,9 +232,9 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
             <Scale className="w-6 h-6 text-indigo-300" />
           </div>
           <div>
-            <h3 className="text-base font-bold">Judicial Proceedings & Civil Registry</h3>
+            <h3 className="text-base font-bold">{t("title")}</h3>
             <p className="text-xs text-indigo-200 mt-0.5">
-              Federal First Instance Court Petition, Evidentiary Bundles & VERA Birth Certificate Linkage
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -244,7 +246,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
             className="border-white/20 text-indigo-900 bg-white hover:bg-slate-100 text-xs font-semibold"
           >
             <FileText className="w-3.5 h-3.5 mr-1.5" />
-            Compile Court Bundle
+            {t("buttons.compileBundle")}
           </Button>
           {!courtCase && (
             <Button
@@ -253,7 +255,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold"
             >
               <PlusCircle className="w-3.5 h-3.5 mr-1.5" />
-              File Court Petition
+              {t("buttons.filePetition")}
             </Button>
           )}
         </div>
@@ -265,7 +267,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
           <CardHeader className="py-3 px-4 border-b border-indigo-100 flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-bold text-indigo-900 flex items-center gap-2">
               <Landmark className="w-4 h-4 text-indigo-600" />
-              File Judicial Adoption Petition
+              {t("petitionDialog.title")}
             </CardTitle>
             <Button
               variant="ghost"
@@ -273,14 +275,14 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               onClick={() => setShowPetitionForm(false)}
               className="h-7 text-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
           </CardHeader>
           <CardContent className="pt-4 space-y-3">
             <form onSubmit={handleSubmitPetition} className="space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Court Name</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.courtName")}</label>
                   <Input
                     value={petitionData.courtName}
                     onChange={(e) => setPetitionData({ ...petitionData, courtName: e.target.value })}
@@ -289,7 +291,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Bench Division</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.benchDivision")}</label>
                   <Input
                     value={petitionData.benchName}
                     onChange={(e) => setPetitionData({ ...petitionData, benchName: e.target.value })}
@@ -297,26 +299,26 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Court File Number *</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.fileNumber")}</label>
                   <Input
                     value={petitionData.courtFileNumber}
-                    placeholder="e.g. FFIC/FAM/2026/894"
+                    placeholder={t("petitionDialog.fileNumberPlaceholder")}
                     onChange={(e) => setPetitionData({ ...petitionData, courtFileNumber: e.target.value })}
                     required
                     className="mt-1 text-xs"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Presiding Judge</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.judge")}</label>
                   <Input
                     value={petitionData.presidingJudge}
-                    placeholder="e.g. Judge Solomon Kebede"
+                    placeholder={t("petitionDialog.judgePlaceholder")}
                     onChange={(e) => setPetitionData({ ...petitionData, presidingJudge: e.target.value })}
                     className="mt-1 text-xs"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Filing Date</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.filingDate")}</label>
                   <Input
                     type="date"
                     value={petitionData.filingDate}
@@ -325,7 +327,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-700">Next Hearing Date</label>
+                  <label className="text-xs font-medium text-slate-700">{t("petitionDialog.nextHearingDate")}</label>
                   <Input
                     type="date"
                     value={petitionData.nextHearingDate}
@@ -342,7 +344,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs"
                 >
                   {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
-                  Submit Petition Record
+                  {t("buttons.submitPetition")}
                 </Button>
               </div>
             </form>
@@ -358,7 +360,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               <div className="flex items-center gap-2">
                 <Scale className="w-4 h-4 text-indigo-600" />
                 <span className="font-bold text-sm text-slate-900">
-                  Case Docket: {courtCase.courtFileNumber}
+                  {t("caseDetails.caseDocket", { docket: courtCase.courtFileNumber })}
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wider">
                   {courtCase.status}
@@ -372,7 +374,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   className="h-7 text-xs"
                 >
                   <Calendar className="w-3.5 h-3.5 mr-1 text-indigo-600" />
-                  + Add Hearing
+                  {t("buttons.addHearing")}
                 </Button>
                 {courtCase.status !== "DECREE_GRANTED" && (
                   <Button
@@ -381,30 +383,30 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     <Stamp className="w-3.5 h-3.5 mr-1" />
-                    Record Decree
+                    {t("buttons.recordDecree")}
                   </Button>
                 )}
               </div>
             </CardHeader>
             <CardContent className="pt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
               <div>
-                <span className="text-slate-400 block font-medium">Court & Bench</span>
+                <span className="text-slate-400 block font-medium">{t("caseDetails.courtAndBench")}</span>
                 <span className="font-semibold text-slate-800">{courtCase.courtName}</span>
-                <p className="text-slate-500 text-[11px]">{courtCase.benchName || "General Bench"}</p>
+                <p className="text-slate-500 text-[11px]">{courtCase.benchName || t("caseDetails.generalBench")}</p>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Presiding Judge</span>
-                <span className="font-semibold text-slate-800">{courtCase.presidingJudge || "Not Assigned"}</span>
+                <span className="text-slate-400 block font-medium">{t("caseDetails.presidingJudge")}</span>
+                <span className="font-semibold text-slate-800">{courtCase.presidingJudge || t("caseDetails.notAssigned")}</span>
                 <p className="text-slate-500 text-[11px]">
-                  Filing Date: {courtCase.filingDate ? new Date(courtCase.filingDate).toLocaleDateString() : "—"}
+                  {courtCase.filingDate ? t("caseDetails.filingDate", { date: new Date(courtCase.filingDate).toLocaleDateString() }) : "—"}
                 </p>
               </div>
               <div>
-                <span className="text-slate-400 block font-medium">Next Scheduled Hearing</span>
+                <span className="text-slate-400 block font-medium">{t("caseDetails.nextScheduledHearing")}</span>
                 <span className="font-semibold text-indigo-600">
                   {courtCase.nextHearingDate
                     ? new Date(courtCase.nextHearingDate).toLocaleDateString()
-                    : "None Scheduled"}
+                    : t("caseDetails.noneScheduled")}
                 </span>
               </div>
             </CardContent>
@@ -415,17 +417,17 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
             <Card className="border-indigo-100 bg-indigo-50/30">
               <CardHeader className="py-2.5 px-4 border-b border-indigo-100 flex flex-row items-center justify-between">
                 <CardTitle className="text-xs font-bold text-slate-900">
-                  Record Court Hearing & Judge Orders
+                  {t("hearingDialog.title")}
                 </CardTitle>
                 <Button variant="ghost" size="sm" onClick={() => setShowHearingForm(false)} className="h-6 text-xs">
-                  Cancel
+                  {t("buttons.cancel")}
                 </Button>
               </CardHeader>
               <CardContent className="pt-3">
                 <form onSubmit={handleSubmitHearing} className="space-y-3">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Hearing Date *</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("hearingDialog.date")}</label>
                       <Input
                         type="date"
                         value={hearingData.hearingDate}
@@ -435,7 +437,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Hearing Type</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("hearingDialog.type")}</label>
                       <Input
                         value={hearingData.hearingType}
                         onChange={(e) => setHearingData({ ...hearingData, hearingType: e.target.value })}
@@ -443,7 +445,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Next Hearing (if postponed)</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("hearingDialog.nextHearing")}</label>
                       <Input
                         type="date"
                         value={hearingData.nextHearingDate}
@@ -453,7 +455,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     </div>
                   </div>
                   <div>
-                    <label className="text-[11px] font-medium text-slate-700">Attendees (comma separated)</label>
+                    <label className="text-[11px] font-medium text-slate-700">{t("hearingDialog.attendees")}</label>
                     <Input
                       value={hearingData.attendeesText}
                       onChange={(e) => setHearingData({ ...hearingData, attendeesText: e.target.value })}
@@ -461,13 +463,13 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] font-medium text-slate-700">Judge Orders / Summary of Proceedings *</label>
+                    <label className="text-[11px] font-medium text-slate-700">{t("hearingDialog.judgeOrders")}</label>
                     <textarea
                       value={hearingData.judgeOrders}
                       onChange={(e) => setHearingData({ ...hearingData, judgeOrders: e.target.value })}
                       rows={2}
                       required
-                      placeholder="Orders issued by presiding judge..."
+                      placeholder={t("hearingDialog.ordersPlaceholder")}
                       className="mt-1 w-full p-2 border border-slate-200 rounded-md text-xs focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
@@ -479,7 +481,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs"
                     >
                       {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
-                      Save Hearing Record
+                      {t("buttons.saveHearing")}
                     </Button>
                   </div>
                 </form>
@@ -493,7 +495,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               <CardHeader className="py-3 px-4 bg-slate-50 border-b border-slate-100">
                 <CardTitle className="text-xs font-bold text-slate-800 flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-indigo-600" />
-                  Judicial Hearing Sessions ({courtCase.hearings.length})
+                  {t("hearingsTimeline.title", { count: courtCase.hearings.length })}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-3 divide-y divide-slate-100">
@@ -504,12 +506,12 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                         {new Date(h.hearingDate).toLocaleDateString()} — {h.hearingType}
                       </span>
                       <span className="text-[10px] text-slate-400">
-                        Recorded by {h.recordedBy?.firstName} {h.recordedBy?.lastName}
+                        {t("hearingsTimeline.recordedBy", { name: `${h.recordedBy?.firstName || ""} ${h.recordedBy?.lastName || ""}` })}
                       </span>
                     </div>
                     {h.judgeOrders && (
                       <p className="mt-1 text-slate-600 bg-slate-50 p-2 rounded border border-slate-100">
-                        <strong className="text-slate-800">Judge Orders:</strong> {h.judgeOrders}
+                        <strong className="text-slate-800">{t("hearingsTimeline.judgeOrders")}</strong> {h.judgeOrders}
                       </p>
                     )}
                   </div>
@@ -524,27 +526,27 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               <CardHeader className="py-2.5 px-4 border-b border-emerald-100 flex flex-row items-center justify-between">
                 <CardTitle className="text-xs font-bold text-emerald-950 flex items-center gap-2">
                   <Stamp className="w-4 h-4 text-emerald-600" />
-                  Finalize Adoption Decree
+                  {t("decree.dialogTitle")}
                 </CardTitle>
                 <Button variant="ghost" size="sm" onClick={() => setShowDecreeForm(false)} className="h-6 text-xs">
-                  Cancel
+                  {t("buttons.cancel")}
                 </Button>
               </CardHeader>
               <CardContent className="pt-3">
                 <form onSubmit={handleSubmitDecree} className="space-y-3">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Official Decree Number *</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("decree.decreeNumber")}</label>
                       <Input
                         value={decreeData.decreeNumber}
-                        placeholder="e.g. FFIC-DEC-2026-4401"
+                        placeholder={t("decree.decreeNumberPlaceholder")}
                         onChange={(e) => setDecreeData({ ...decreeData, decreeNumber: e.target.value })}
                         required
                         className="mt-1 text-xs"
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Decree Date *</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("decree.decreeDate")}</label>
                       <Input
                         type="date"
                         value={decreeData.decreeDate}
@@ -554,7 +556,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Decree Document URL / Path</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("decree.decreeDocUrl")}</label>
                       <Input
                         value={decreeData.decreeDocumentUrl}
                         placeholder="/documents/decrees/ffic-4401.pdf"
@@ -563,7 +565,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Certified Copy URL</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("decree.certifiedCopyUrl")}</label>
                       <Input
                         value={decreeData.certifiedCopyUrl}
                         placeholder="/documents/decrees/certified-4401.pdf"
@@ -573,7 +575,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     </div>
                   </div>
                   <div>
-                    <label className="text-[11px] font-medium text-slate-700">Legal Orders Summary</label>
+                    <label className="text-[11px] font-medium text-slate-700">{t("decree.legalOrdersSummary")}</label>
                     <textarea
                       value={decreeData.legalOrdersSummary}
                       onChange={(e) => setDecreeData({ ...decreeData, legalOrdersSummary: e.target.value })}
@@ -589,7 +591,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold"
                     >
                       {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
-                      Grant & Record Adoption Decree
+                      {t("buttons.grantDecree")}
                     </Button>
                   </div>
                 </form>
@@ -606,10 +608,10 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                 </div>
                 <div>
                   <h4 className="font-bold text-emerald-950 text-sm">
-                    Adoption Decree Granted: #{courtCase.decreeNumber}
+                    {t("decree.grantedTitle", { decreeNumber: courtCase.decreeNumber })}
                   </h4>
                   <p className="text-emerald-800 text-xs mt-0.5">
-                    Date of Judicial Order: {courtCase.decreeDate ? new Date(courtCase.decreeDate).toLocaleDateString() : "—"}
+                    {t("decree.orderDate", { date: courtCase.decreeDate ? new Date(courtCase.decreeDate).toLocaleDateString() : "—" })}
                   </p>
                   {courtCase.legalOrdersSummary && (
                     <p className="text-slate-600 text-xs mt-2 bg-white/70 p-2 rounded border border-emerald-100">
@@ -625,7 +627,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs shrink-0"
                 >
                   <Globe2 className="w-3.5 h-3.5 mr-1" />
-                  Link VERA Civil Registry
+                  {t("buttons.linkVera")}
                 </Button>
               )}
             </div>
@@ -637,17 +639,17 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               <CardHeader className="py-2.5 px-4 border-b border-sky-100 flex flex-row items-center justify-between">
                 <CardTitle className="text-xs font-bold text-sky-950 flex items-center gap-2">
                   <Globe2 className="w-4 h-4 text-sky-600" />
-                  Record VERA Post-Adoption Amended Birth Certificate
+                  {t("vera.dialogTitle")}
                 </CardTitle>
                 <Button variant="ghost" size="sm" onClick={() => setShowVeraForm(false)} className="h-6 text-xs">
-                  Cancel
+                  {t("buttons.cancel")}
                 </Button>
               </CardHeader>
               <CardContent className="pt-3">
                 <form onSubmit={handleSubmitVera} className="space-y-3">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">VERA Office Branch *</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("vera.officeBranch")}</label>
                       <Input
                         value={veraData.veraOfficeBranch}
                         onChange={(e) => setVeraData({ ...veraData, veraOfficeBranch: e.target.value })}
@@ -656,17 +658,17 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Amended Birth Certificate # *</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("vera.amendedCertNumber")}</label>
                       <Input
                         value={veraData.amendedBirthCertNumber}
-                        placeholder="e.g. VERA-BC-2026-90812"
+                        placeholder={t("vera.amendedCertPlaceholder")}
                         onChange={(e) => setVeraData({ ...veraData, amendedBirthCertNumber: e.target.value })}
                         required
                         className="mt-1 text-xs"
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Date Issued</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("vera.dateIssued")}</label>
                       <Input
                         type="date"
                         value={veraData.dateIssued}
@@ -675,17 +677,17 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       />
                     </div>
                     <div>
-                      <label className="text-[11px] font-medium text-slate-700">Registration Number</label>
+                      <label className="text-[11px] font-medium text-slate-700">{t("vera.registrationNumber")}</label>
                       <Input
                         value={veraData.registrationNumber}
-                        placeholder="e.g. REG-VERA-77"
+                        placeholder={t("vera.registrationPlaceholder")}
                         onChange={(e) => setVeraData({ ...veraData, registrationNumber: e.target.value })}
                         className="mt-1 text-xs"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-[11px] font-medium text-slate-700">Civil Registry Notes</label>
+                    <label className="text-[11px] font-medium text-slate-700">{t("vera.notes")}</label>
                     <textarea
                       value={veraData.notes}
                       onChange={(e) => setVeraData({ ...veraData, notes: e.target.value })}
@@ -701,7 +703,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                       className="bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold"
                     >
                       {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
-                      Link Civil Registry Entry
+                      {t("buttons.linkVeraEntry")}
                     </Button>
                   </div>
                 </form>
@@ -715,23 +717,23 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
               <CardHeader className="py-2.5 px-4 bg-sky-50/60 border-b border-sky-100 flex flex-row items-center justify-between">
                 <CardTitle className="text-xs font-bold text-sky-950 flex items-center gap-2">
                   <Globe2 className="w-4 h-4 text-sky-600" />
-                  VERA Vital Events Registry Linked
+                  {t("vera.linkedTitle")}
                 </CardTitle>
                 <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded-full uppercase">
-                  Birth Certificate Amended
+                  {t("vera.badge")}
                 </span>
               </CardHeader>
               <CardContent className="pt-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <div>
-                  <span className="text-slate-400 block font-medium">Branch</span>
+                  <span className="text-slate-400 block font-medium">{t("vera.branch")}</span>
                   <span className="font-semibold text-slate-800">{courtCase.veraLinkage.veraOfficeBranch}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block font-medium">Amended Certificate #</span>
+                  <span className="text-slate-400 block font-medium">{t("vera.amendedCert")}</span>
                   <span className="font-semibold text-sky-700">{courtCase.veraLinkage.amendedBirthCertNumber}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block font-medium">Issued On</span>
+                  <span className="text-slate-400 block font-medium">{t("vera.issuedOn")}</span>
                   <span className="font-semibold text-slate-800">
                     {courtCase.veraLinkage.dateIssued
                       ? new Date(courtCase.veraLinkage.dateIssued).toLocaleDateString()
@@ -745,9 +747,9 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
       ) : (
         <div className="bg-slate-50 border border-dashed border-slate-300 rounded-xl p-8 text-center">
           <Scale className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <h4 className="text-sm font-semibold text-slate-700">No Judicial Petition Filed Yet</h4>
+          <h4 className="text-sm font-semibold text-slate-700">{t("empty.title")}</h4>
           <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-            Once committee approval is obtained and placement documents are verified, click "File Court Petition" to initiate formal judicial adoption proceedings.
+            {t("empty.desc")}
           </p>
         </div>
       )}
@@ -763,7 +765,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                   {courtBundle.bundleTitle}
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Compiled on {new Date(courtBundle.compiledAt).toLocaleString()}
+                  {t("bundle.compiledOn", { date: new Date(courtBundle.compiledAt).toLocaleString() })}
                 </p>
               </div>
               <Button
@@ -772,12 +774,12 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                 onClick={() => setShowBundleModal(false)}
                 className="text-white hover:bg-slate-800 h-8"
               >
-                Close
+                {t("buttons.close")}
               </Button>
             </div>
             <div className="p-5 overflow-y-auto space-y-4 text-xs">
               <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <span className="font-bold text-slate-700 block mb-1">Evidentiary Manifest Checklist:</span>
+                <span className="font-bold text-slate-700 block mb-1">{t("bundle.checklistTitle")}</span>
                 <ul className="space-y-1 text-slate-600">
                   <li className="flex items-center gap-2">
                     {courtBundle.evidentiarySections.childMedicalClearance.present ? (
@@ -785,7 +787,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     ) : (
                       <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
                     )}
-                    <span>Child Comprehensive Medical Clearance (Blood Group: {courtBundle.evidentiarySections.childMedicalClearance.bloodGroup || "N/A"})</span>
+                    <span>{t("bundle.medicalClearance", { bloodGroup: courtBundle.evidentiarySections.childMedicalClearance.bloodGroup || "N/A" })}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     {courtBundle.evidentiarySections.socialWorkerHomeStudy.present ? (
@@ -793,7 +795,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     ) : (
                       <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
                     )}
-                    <span>Social Worker Home Study Assessment</span>
+                    <span>{t("bundle.homeStudy")}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     {courtBundle.evidentiarySections.familySuitabilityAssessment.present ? (
@@ -801,7 +803,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     ) : (
                       <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
                     )}
-                    <span>Psychosocial & Financial Suitability (Composite: {courtBundle.evidentiarySections.familySuitabilityAssessment.compositeScore ?? "N/A"}%)</span>
+                    <span>{t("bundle.suitability", { score: courtBundle.evidentiarySections.familySuitabilityAssessment.compositeScore ?? "N/A" })}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     {courtBundle.evidentiarySections.placementCommitteeMinutes.present ? (
@@ -809,7 +811,7 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     ) : (
                       <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
                     )}
-                    <span>Placement Committee Decision Minutes ({courtBundle.evidentiarySections.placementCommitteeMinutes.decision || "PENDING"})</span>
+                    <span>{t("bundle.committeeMinutes", { decision: courtBundle.evidentiarySections.placementCommitteeMinutes.decision || "PENDING" })}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     {courtBundle.evidentiarySections.familyTracingStatus.reunificationExhausted ? (
@@ -817,11 +819,11 @@ export const JudicialProceedingsSection: React.FC<JudicialProceedingsSectionProp
                     ) : (
                       <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
                     )}
-                    <span>Biological Family Tracing Certificate ({courtBundle.evidentiarySections.familyTracingStatus.logsCount} contact attempts logged)</span>
+                    <span>{t("bundle.tracingCertificate", { count: courtBundle.evidentiarySections.familyTracingStatus.logsCount })}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Sibling Group Integrity Review ({courtBundle.evidentiarySections.siblingIntegrity.inSiblingGroup ? `Group of ${courtBundle.evidentiarySections.siblingIntegrity.siblingsCount}` : "Single Child"})</span>
+                    <span>{courtBundle.evidentiarySections.siblingIntegrity.inSiblingGroup ? t("bundle.siblingReviewGroup", { count: courtBundle.evidentiarySections.siblingIntegrity.siblingsCount }) : t("bundle.siblingReviewSingle")}</span>
                   </li>
                 </ul>
               </div>

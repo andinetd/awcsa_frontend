@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Activity,
   AlertCircle,
@@ -75,6 +76,7 @@ interface DigitalDossierSectionProps {
 export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
   child,
 }) => {
+  const t = useTranslations("adoption.digitalDossier");
   const medical = child.medicalRecord;
   const milestones = child.developmentMilestones || [];
   const photos = child.growthPhotos || [];
@@ -191,7 +193,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
         <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4">
           <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
             <Sparkles className="size-3.5 text-[#1769AA]" />
-            Digital Child Dossier (360° Life Story & Health Record)
+            {t("title")}
           </CardTitle>
         </CardHeader>
 
@@ -203,28 +205,28 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                 className="text-xs py-1.5 px-3 data-[state=active]:bg-[#0B1F3A] data-[state=active]:text-white rounded-xs font-semibold cursor-pointer"
               >
                 <Stethoscope className="w-3.5 h-3.5 mr-1.5" />
-                Medical & Health
+                {t("tabs.medical")}
               </TabsTrigger>
               <TabsTrigger
                 value="milestones"
                 className="text-xs py-1.5 px-3 data-[state=active]:bg-[#0B1F3A] data-[state=active]:text-white rounded-xs font-semibold cursor-pointer"
               >
                 <Activity className="w-3.5 h-3.5 mr-1.5" />
-                Developmental Milestones ({milestones.length})
+                {t("tabs.milestones", { count: milestones.length })}
               </TabsTrigger>
               <TabsTrigger
                 value="photos"
                 className="text-xs py-1.5 px-3 data-[state=active]:bg-[#0B1F3A] data-[state=active]:text-white rounded-xs font-semibold cursor-pointer"
               >
                 <ImageIcon className="w-3.5 h-3.5 mr-1.5" />
-                Growth Gallery ({photos.length})
+                {t("tabs.photos", { count: photos.length })}
               </TabsTrigger>
               <TabsTrigger
                 value="tracing"
                 className="text-xs py-1.5 px-3 data-[state=active]:bg-[#0B1F3A] data-[state=active]:text-white rounded-xs font-semibold cursor-pointer"
               >
                 <FileSearch className="w-3.5 h-3.5 mr-1.5" />
-                Family Tracing Log ({tracingLogs.length})
+                {t("tabs.tracing", { count: tracingLogs.length })}
               </TabsTrigger>
             </TabsList>
 
@@ -232,7 +234,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             <TabsContent value="medical" className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-500 font-medium">
-                  Comprehensive pediatric, chronic, and immunization history
+                  {t("medical.subtitle")}
                 </span>
                 <Button
                   size="sm"
@@ -240,23 +242,23 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                   className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
                 >
                   <Pencil className="w-3.5 h-3.5 mr-1" />
-                  Edit Medical Record
+                  {t("buttons.editMedical")}
                 </Button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs">
                   <span className="text-[11px] font-mono text-slate-400 uppercase font-bold block mb-1">
-                    Blood Group
+                    {t("medical.bloodGroup")}
                   </span>
                   <span className="text-sm font-bold text-[#0B1F3A] font-mono">
-                    {medical?.bloodGroup || "Not Typed"}
+                    {medical?.bloodGroup || t("medical.notTyped")}
                   </span>
                 </div>
 
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs">
                   <span className="text-[11px] font-mono text-slate-400 uppercase font-bold block mb-1">
-                    Allergies
+                    {t("medical.allergies")}
                   </span>
                   {Array.isArray(medical?.allergies) && medical.allergies.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
@@ -270,13 +272,13 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                       ))}
                     </div>
                   ) : (
-                    <span className="text-slate-500 italic">None reported</span>
+                    <span className="text-slate-500 italic">{t("medical.noneReported")}</span>
                   )}
                 </div>
 
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs">
                   <span className="text-[11px] font-mono text-slate-400 uppercase font-bold block mb-1">
-                    Chronic Conditions
+                    {t("medical.chronicConditions")}
                   </span>
                   {Array.isArray(medical?.chronicConditions) &&
                   medical.chronicConditions.length > 0 ? (
@@ -291,7 +293,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                       ))}
                     </div>
                   ) : (
-                    <span className="text-slate-500 italic">None reported</span>
+                    <span className="text-slate-500 italic">{t("medical.noneReported")}</span>
                   )}
                 </div>
               </div>
@@ -299,18 +301,18 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3.5 rounded-xs text-xs space-y-2">
                 <div>
                   <span className="text-[11px] font-mono text-slate-500 uppercase font-bold block mb-0.5">
-                    General Health & Nutritional Overview
+                    {t("medical.generalHealthTitle")}
                   </span>
                   <p className="text-slate-700 leading-relaxed">
                     {medical?.generalHealthSummary ||
-                      "No clinical overview has been entered yet."}
+                      t("medical.generalHealthDefault")}
                   </p>
                 </div>
 
                 {medical?.specialCareNeeds && (
                   <div className="pt-2 border-t border-[#E3E7EB]">
                     <span className="text-[11px] font-mono text-amber-800 uppercase font-bold block mb-0.5">
-                      Special Daily Care Requirements
+                      {t("medical.specialCareTitle")}
                     </span>
                     <p className="text-slate-700 leading-relaxed">
                       {medical.specialCareNeeds}
@@ -324,7 +326,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             <TabsContent value="milestones" className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-500 font-medium">
-                  Cognitive, motor, language, and emotional observations
+                  {t("milestones.subtitle")}
                 </span>
                 <Button
                   size="sm"
@@ -332,7 +334,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                   className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  Add Milestone
+                  {t("buttons.addMilestone")}
                 </Button>
               </div>
 
@@ -349,10 +351,10 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                             {m.milestoneTitle}
                           </span>
                           <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA]">
-                            {m.milestoneType}
+                            {t(`milestones.types.${m.milestoneType}` as any) || m.milestoneType}
                           </span>
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-xs bg-slate-200 text-slate-700">
-                            Age: {m.ageCategory}
+                            {t("milestones.age", { age: m.ageCategory })}
                           </span>
                         </div>
                         {m.observations && (
@@ -361,9 +363,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                           </p>
                         )}
                         <span className="text-[11px] text-slate-400 block pt-0.5">
-                          Assessed on {new Date(m.assessmentDate).toLocaleDateString()}
+                          {t("milestones.assessedOn", { date: new Date(m.assessmentDate).toLocaleDateString() })}
                           {m.evaluator &&
-                            ` by ${m.evaluator.firstName} ${m.evaluator.lastName}`}
+                            ` ${t("milestones.assessedBy", { name: `${m.evaluator.firstName} ${m.evaluator.lastName}` })}`}
                         </span>
                       </div>
                       <span
@@ -376,7 +378,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                             : "bg-amber-100 text-amber-800"
                         )}
                       >
-                        {m.status.replace("_", " ")}
+                        {t(`milestones.statuses.${m.status}` as any) || m.status.replace("_", " ")}
                       </span>
                     </div>
                   ))}
@@ -385,7 +387,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                 <div className="text-center py-8 text-slate-400">
                   <Activity className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
                   <p className="text-xs font-medium text-slate-600">
-                    No developmental milestones logged yet.
+                    {t("milestones.empty")}
                   </p>
                 </div>
               )}
@@ -395,7 +397,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             <TabsContent value="photos" className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-500 font-medium">
-                  Chronological growth photos documenting the child over time
+                  {t("photos.subtitle")}
                 </span>
                 <Button
                   size="sm"
@@ -403,7 +405,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                   className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  Add Photo
+                  {t("buttons.addPhoto")}
                 </Button>
               </div>
 
@@ -426,14 +428,14 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                         <Camera className="w-8 h-8 text-slate-400 absolute opacity-30 pointer-events-none" />
                         {p.isPrimaryPortrait && (
                           <span className="absolute top-1.5 left-1.5 bg-[#0B1F3A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-xs font-mono shadow-xs">
-                            Primary Portrait
+                            {t("photos.primaryPortrait")}
                           </span>
                         )}
                       </div>
                       <div className="p-2 space-y-0.5">
                         <span className="font-bold text-[#0B1F3A] block truncate">
                           {p.approximateAgeMonths
-                            ? `${p.approximateAgeMonths} months old`
+                            ? t("photos.monthsOld", { months: p.approximateAgeMonths })
                             : new Date(p.photoDate).toLocaleDateString()}
                         </span>
                         {p.caption && (
@@ -449,7 +451,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                 <div className="text-center py-8 text-slate-400">
                   <ImageIcon className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
                   <p className="text-xs font-medium text-slate-600">
-                    No growth portraits uploaded yet.
+                    {t("photos.empty")}
                   </p>
                 </div>
               )}
@@ -459,7 +461,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             <TabsContent value="tracing" className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-500 font-medium">
-                  Official search actions, broadcasts, and investigations
+                  {t("tracing.subtitle")}
                 </span>
                 <Button
                   size="sm"
@@ -467,7 +469,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                   className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  Log Tracing Attempt
+                  {t("buttons.logTracing")}
                 </Button>
               </div>
 
@@ -481,7 +483,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                       <div className="flex items-center justify-between flex-wrap gap-2">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-[#0B1F3A] font-mono">
-                            {log.searchMethod.replace("_", " ")}
+                            {t(`tracing.methods.${log.searchMethod}` as any) || log.searchMethod.replace("_", " ")}
                           </span>
                           {log.location && (
                             <span className="text-slate-500 flex items-center gap-1">
@@ -500,7 +502,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                               : "bg-blue-100 text-blue-800"
                           )}
                         >
-                          {log.outcome.replace("_", " ")}
+                          {t(`tracing.outcomes.${log.outcome}` as any) || log.outcome.replace("_", " ")}
                         </span>
                       </div>
 
@@ -510,13 +512,11 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
 
                       <div className="text-[11px] text-slate-400 pt-1 flex items-center justify-between">
                         <span>
-                          Conducted on{" "}
-                          {new Date(log.conductedAt).toLocaleDateString()}
+                          {t("tracing.conductedOn", { date: new Date(log.conductedAt).toLocaleDateString() })}
                         </span>
                         {log.investigator && (
                           <span>
-                            Investigator: {log.investigator.firstName}{" "}
-                            {log.investigator.lastName}
+                            {t("tracing.investigator", { name: `${log.investigator.firstName} ${log.investigator.lastName}` })}
                           </span>
                         )}
                       </div>
@@ -527,7 +527,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                 <div className="text-center py-8 text-slate-400">
                   <FileSearch className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
                   <p className="text-xs font-medium text-slate-600">
-                    No biological family tracing activities logged yet.
+                    {t("tracing.empty")}
                   </p>
                 </div>
               )}
@@ -542,18 +542,18 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Stethoscope className="w-4 h-4 text-[#1769AA]" />
-              Update Medical & Health Record
+              {t("medical.dialogTitle")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Record pediatric profile, blood type, known allergies, and care requirements.
+              {t("medical.dialogDesc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
-              <Label className="text-xs font-semibold">Blood Group</Label>
+              <Label className="text-xs font-semibold">{t("medical.bloodGroup")}</Label>
               <Input
-                placeholder="e.g. O+, A+, B-"
+                placeholder={t("medical.bloodGroupPlaceholder")}
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -561,9 +561,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Known Allergies (comma-separated)</Label>
+              <Label className="text-xs font-semibold">{t("medical.allergiesLabel")}</Label>
               <Input
-                placeholder="Penicillin, Peanuts, Pollen..."
+                placeholder={t("medical.allergiesPlaceholder")}
                 value={allergies}
                 onChange={(e) => setAllergies(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -571,9 +571,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Diagnosed Chronic Conditions (comma-separated)</Label>
+              <Label className="text-xs font-semibold">{t("medical.chronicLabel")}</Label>
               <Input
-                placeholder="Asthma, Diabetes..."
+                placeholder={t("medical.chronicPlaceholder")}
                 value={chronicConditions}
                 onChange={(e) => setChronicConditions(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -581,10 +581,10 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">General Health & Nutrition Overview</Label>
+              <Label className="text-xs font-semibold">{t("medical.generalHealthLabel")}</Label>
               <Textarea
                 rows={2}
-                placeholder="Child is well-nourished, active..."
+                placeholder={t("medical.generalHealthPlaceholder")}
                 value={generalHealth}
                 onChange={(e) => setGeneralHealth(e.target.value)}
                 className="text-xs rounded-xs mt-1"
@@ -592,9 +592,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Special Daily Care Requirements</Label>
+              <Label className="text-xs font-semibold">{t("medical.specialCareLabel")}</Label>
               <Input
-                placeholder="Requires daily inhaler, special diet..."
+                placeholder={t("medical.specialCarePlaceholder")}
                 value={specialNeeds}
                 onChange={(e) => setSpecialNeeds(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -610,7 +610,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               onClick={() => setIsMedicalModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -622,7 +622,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               {medicalMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Save Medical Record
+              {t("buttons.saveMedical")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -634,14 +634,14 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Activity className="w-4 h-4 text-[#1769AA]" />
-              Record Developmental Milestone
+              {t("milestones.dialogTitle")}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <Label className="text-xs font-semibold">Category *</Label>
+                <Label className="text-xs font-semibold">{t("milestones.categoryLabel")}</Label>
                 <Select
                   value={milestoneType}
                   onValueChange={(val) => setMilestoneType(val as MilestoneType)}
@@ -650,16 +650,16 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="MOTOR">Motor Skills</SelectItem>
-                    <SelectItem value="COGNITIVE">Cognitive Skills</SelectItem>
-                    <SelectItem value="LANGUAGE">Language & Speech</SelectItem>
-                    <SelectItem value="SOCIAL_EMOTIONAL">Social-Emotional</SelectItem>
+                    <SelectItem value="MOTOR">{t("milestones.types.MOTOR")}</SelectItem>
+                    <SelectItem value="COGNITIVE">{t("milestones.types.COGNITIVE")}</SelectItem>
+                    <SelectItem value="LANGUAGE">{t("milestones.types.LANGUAGE")}</SelectItem>
+                    <SelectItem value="SOCIAL_EMOTIONAL">{t("milestones.types.SOCIAL_EMOTIONAL")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <Label className="text-xs font-semibold">Status *</Label>
+                <Label className="text-xs font-semibold">{t("milestones.statusLabel")}</Label>
                 <Select
                   value={milestoneStatus}
                   onValueChange={(val) => setMilestoneStatus(val as MilestoneStatus)}
@@ -668,18 +668,18 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ON_TRACK">On Track</SelectItem>
-                    <SelectItem value="ADVANCED">Advanced</SelectItem>
-                    <SelectItem value="DELAYED">Delayed</SelectItem>
+                    <SelectItem value="ON_TRACK">{t("milestones.statuses.ON_TRACK")}</SelectItem>
+                    <SelectItem value="ADVANCED">{t("milestones.statuses.ADVANCED")}</SelectItem>
+                    <SelectItem value="DELAYED">{t("milestones.statuses.DELAYED")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Age Bracket</Label>
+              <Label className="text-xs font-semibold">{t("milestones.ageBracketLabel")}</Label>
               <Input
-                placeholder="e.g. 1-2 YEARS"
+                placeholder={t("milestones.ageBracketPlaceholder")}
                 value={ageCategory}
                 onChange={(e) => setAgeCategory(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -687,9 +687,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Milestone / Skill Assessed *</Label>
+              <Label className="text-xs font-semibold">{t("milestones.titleLabel")}</Label>
               <Input
-                placeholder="e.g. Uses two-word phrases, walks independently..."
+                placeholder={t("milestones.titlePlaceholder")}
                 value={milestoneTitle}
                 onChange={(e) => setMilestoneTitle(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -697,10 +697,10 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Clinical / Social Observations</Label>
+              <Label className="text-xs font-semibold">{t("milestones.observationsLabel")}</Label>
               <Textarea
                 rows={2}
-                placeholder="Observations during pediatric or play session..."
+                placeholder={t("milestones.observationsPlaceholder")}
                 value={observations}
                 onChange={(e) => setObservations(e.target.value)}
                 className="text-xs rounded-xs mt-1"
@@ -716,7 +716,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               onClick={() => setIsMilestoneModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -728,7 +728,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               {milestoneMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Save Milestone
+              {t("buttons.saveMilestone")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -740,15 +740,15 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Camera className="w-4 h-4 text-[#1769AA]" />
-              Upload Growth Photo
+              {t("photos.dialogTitle")}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
-              <Label className="text-xs font-semibold">Photo URL *</Label>
+              <Label className="text-xs font-semibold">{t("photos.urlLabel")}</Label>
               <Input
-                placeholder="https://storage.awcsa.gov.et/photos/child-portrait.jpg"
+                placeholder={t("photos.urlPlaceholder")}
                 value={photoUrl}
                 onChange={(e) => setPhotoUrl(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -756,10 +756,10 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Approximate Age (in months)</Label>
+              <Label className="text-xs font-semibold">{t("photos.ageLabel")}</Label>
               <Input
                 type="number"
-                placeholder="e.g. 18"
+                placeholder={t("photos.agePlaceholder")}
                 value={approxAge}
                 onChange={(e) => setApproxAge(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -767,9 +767,9 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Caption / Context</Label>
+              <Label className="text-xs font-semibold">{t("photos.captionLabel")}</Label>
               <Input
-                placeholder="e.g. 18-month intake checkup"
+                placeholder={t("photos.captionPlaceholder")}
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -785,7 +785,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                 className="rounded-xs"
               />
               <Label htmlFor="isPrimary" className="text-xs font-medium cursor-pointer">
-                Set as active primary portrait photo
+                {t("photos.primaryCheckbox")}
               </Label>
             </div>
           </div>
@@ -798,7 +798,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               onClick={() => setIsPhotoModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -810,7 +810,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               {photoMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Add to Gallery
+              {t("buttons.savePhoto")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -822,14 +822,14 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <FileSearch className="w-4 h-4 text-[#1769AA]" />
-              Log Family Tracing Activity
+              {t("tracing.dialogTitle")}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <Label className="text-xs font-semibold">Search Method *</Label>
+                <Label className="text-xs font-semibold">{t("tracing.methodLabel")}</Label>
                 <Select
                   value={tracingMethod}
                   onValueChange={(val) => setTracingMethod(val as TracingMethod)}
@@ -838,17 +838,17 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="PUBLIC_BROADCAST">Public Broadcast / Media</SelectItem>
-                    <SelectItem value="POLICE_REPORT">Police Missing Persons</SelectItem>
-                    <SelectItem value="COMMUNITY_INQUIRY">Community Inquiry</SelectItem>
-                    <SelectItem value="DATABASE_CROSSMATCH">Database Cross-Match</SelectItem>
-                    <SelectItem value="PHYSICAL_SEARCH">Physical Field Search</SelectItem>
+                    <SelectItem value="PUBLIC_BROADCAST">{t("tracing.methods.PUBLIC_BROADCAST")}</SelectItem>
+                    <SelectItem value="POLICE_REPORT">{t("tracing.methods.POLICE_REPORT")}</SelectItem>
+                    <SelectItem value="COMMUNITY_INQUIRY">{t("tracing.methods.COMMUNITY_INQUIRY")}</SelectItem>
+                    <SelectItem value="DATABASE_CROSSMATCH">{t("tracing.methods.DATABASE_CROSSMATCH")}</SelectItem>
+                    <SelectItem value="PHYSICAL_SEARCH">{t("tracing.methods.PHYSICAL_SEARCH")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <Label className="text-xs font-semibold">Outcome *</Label>
+                <Label className="text-xs font-semibold">{t("tracing.outcomeLabel")}</Label>
                 <Select
                   value={tracingOutcome}
                   onValueChange={(val) => setTracingOutcome(val as TracingOutcome)}
@@ -857,19 +857,19 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                    <SelectItem value="PARENTS_LOCATED">Parents Located</SelectItem>
-                    <SelectItem value="DECEASED">Confirmed Deceased</SelectItem>
-                    <SelectItem value="UNTRACEABLE">Exhausted / Untraceable</SelectItem>
+                    <SelectItem value="IN_PROGRESS">{t("tracing.outcomes.IN_PROGRESS")}</SelectItem>
+                    <SelectItem value="PARENTS_LOCATED">{t("tracing.outcomes.PARENTS_LOCATED")}</SelectItem>
+                    <SelectItem value="DECEASED">{t("tracing.outcomes.DECEASED")}</SelectItem>
+                    <SelectItem value="UNTRACEABLE">{t("tracing.outcomes.UNTRACEABLE")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Location / Sub-City</Label>
+              <Label className="text-xs font-semibold">{t("tracing.locationLabel")}</Label>
               <Input
-                placeholder="e.g. Kirkos sub-city, Woreda 04"
+                placeholder={t("tracing.locationPlaceholder")}
                 value={tracingLocation}
                 onChange={(e) => setTracingLocation(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -877,10 +877,10 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Detailed Findings & Observations *</Label>
+              <Label className="text-xs font-semibold">{t("tracing.findingsLabel")}</Label>
               <Textarea
                 rows={3}
-                placeholder="Summary of interviews, announcements, and evidence collected..."
+                placeholder={t("tracing.findingsPlaceholder")}
                 value={tracingFindings}
                 onChange={(e) => setTracingFindings(e.target.value)}
                 className="text-xs rounded-xs mt-1"
@@ -896,7 +896,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               onClick={() => setIsTracingModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -908,7 +908,7 @@ export const DigitalDossierSection: React.FC<DigitalDossierSectionProps> = ({
               {tracingMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Log Activity
+              {t("buttons.saveTracing")}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -217,14 +217,16 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
         <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-slate-100 flex-wrap">
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
-              Filter:
+              {t("adoptionDetail.postMatch.filterLabel")}
             </span>
             <Select
               value={selectedCategory}
               onValueChange={(val) => setSelectedCategory(val)}
             >
               <SelectTrigger className="h-8 w-56 text-xs bg-white border-slate-200">
-                <SelectValue placeholder="All Categories" />
+                <SelectValue placeholder={t("adoptionDetail.postMatch.filterAll")}>
+                  {categories.find((c) => c.value === selectedCategory)?.label}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => {
@@ -372,7 +374,11 @@ export const PostMatchNotesSection: React.FC<PostMatchNotesSectionProps> = ({
                     id="category"
                     className="w-full bg-white border-slate-300 h-9 text-sm"
                   >
-                    <SelectValue placeholder="Select note category" />
+                    <SelectValue placeholder={t("adoptionDetail.postMatch.selectCategory")}>
+                      {noteCategory
+                        ? categories.find((c) => c.value === noteCategory)?.label
+                        : undefined}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {categories

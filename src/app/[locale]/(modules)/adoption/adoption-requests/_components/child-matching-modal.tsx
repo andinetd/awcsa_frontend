@@ -652,7 +652,7 @@ export const ChildMatchingModal: React.FC<ChildMatchingModalProps> = ({
               onClick={onClose}
               className="text-xs h-8 border-[#E3E7EB] cursor-pointer"
             >
-              Cancel
+              {t("adoptionDetail.matching.cancel")}
             </Button>
             <Button
               size="sm"

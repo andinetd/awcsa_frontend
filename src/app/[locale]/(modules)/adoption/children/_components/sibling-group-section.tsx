@@ -36,12 +36,14 @@ import {
   useCreateSiblingGroup,
 } from "@/hooks/adoption/useChildDetails";
 import { Child } from "@/types/child-matching-types";
+import { useTranslations } from "next-intl";
 
 interface SiblingGroupSectionProps {
   child: Child;
 }
 
 export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child }) => {
+  const t = useTranslations("adoption.siblingGroup");
   const siblingGroup = child.siblingGroup;
   const siblings = siblingGroup?.children?.filter((s) => s.id !== child.id) || [];
 
@@ -84,7 +86,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
         <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4 flex flex-row items-center justify-between">
           <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
             <Users className="size-3.5 text-[#1769AA]" />
-            Sibling Group (Non-Separation Family Protection)
+            {t("title")}
           </CardTitle>
           <div>
             {siblingGroup ? (
@@ -94,7 +96,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
                 className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" />
-                Add Sibling
+                {t("buttons.addSibling")}
               </Button>
             ) : (
               <Button
@@ -103,7 +105,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
                 className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" />
-                Link Siblings
+                {t("buttons.linkSiblings")}
               </Button>
             )}
           </div>
@@ -118,22 +120,22 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
                   <ShieldCheck className="w-4 h-4 text-[#1769AA] shrink-0" />
                   <div>
                     <span className="font-bold text-[#0B1F3A]">
-                      Group Code: {siblingGroup.groupCode}
+                      {t("banner.groupCode", { code: siblingGroup.groupCode })}
                     </span>
                     <span className="text-slate-500 ml-2">
-                      ({siblings.length + 1} biological siblings linked)
+                      {t("banner.linkedCount", { count: siblings.length + 1 })}
                     </span>
                   </div>
                 </div>
                 <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-white text-[#1769AA] rounded-xs border border-[#BCD5EA]">
-                  Joint Placement Protected
+                  {t("banner.jointPlacement")}
                 </span>
               </div>
 
               {/* Sibling Members Grid */}
               <div className="space-y-2">
                 <span className="text-[11px] font-mono text-slate-500 uppercase font-bold block">
-                  Linked Brothers & Sisters
+                  {t("linkedTitle")}
                 </span>
                 {siblings.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -152,11 +154,11 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
                               <p className="font-bold text-[#0B1F3A] truncate">
                                 {sibClient
                                   ? `${sibClient.firstName} ${sibClient.lastName}`
-                                  : `Child #${sib.id}`}
+                                  : t("childDefault", { id: sib.id })}
                               </p>
                               <p className="text-[11px] text-slate-500 truncate flex items-center gap-1">
                                 <Building2 className="w-3 h-3 text-slate-400" />
-                                {sib.childCareFacility?.name || "Care Facility"}
+                                {sib.childCareFacility?.name || t("facilityDefault")}
                               </p>
                             </div>
                           </div>
@@ -180,7 +182,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
                   </div>
                 ) : (
                   <p className="text-xs text-slate-500 italic py-2">
-                    Only this child is currently recorded in this group. Link additional siblings using the button above.
+                    {t("onlyChild")}
                   </p>
                 )}
               </div>
@@ -189,10 +191,10 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
             <div className="text-center py-6 text-slate-400">
               <Users className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
               <p className="text-xs font-medium text-slate-600">
-                Child is not registered in a sibling group.
+                {t("emptyTitle")}
               </p>
               <p className="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">
-                If this child has biological siblings in welfare custody or other care facilities, link them together to enforce non-separation placement safeguards.
+                {t("emptyDesc")}
               </p>
             </div>
           )}
@@ -205,19 +207,19 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Users className="w-4 h-4 text-[#1769AA]" />
-              Link Sibling Unit
+              {t("createModal.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Group this child with a biological brother or sister by entering the sibling's Child ID.
+              {t("createModal.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
-              <Label className="text-xs font-semibold">Sibling Child Registration ID *</Label>
+              <Label className="text-xs font-semibold">{t("createModal.idLabel")}</Label>
               <Input
                 type="number"
-                placeholder="e.g. 14"
+                placeholder={t("createModal.idPlaceholder")}
                 value={siblingChildId}
                 onChange={(e) => setSiblingChildId(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -225,9 +227,9 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Relationship Notes</Label>
+              <Label className="text-xs font-semibold">{t("createModal.notesLabel")}</Label>
               <Input
-                placeholder="Found together; biological older brother..."
+                placeholder={t("createModal.notesPlaceholder")}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -243,7 +245,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
               onClick={() => setIsCreateModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -255,7 +257,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
               {createGroupMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Create Sibling Group
+              {t("buttons.createGroup")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -267,19 +269,19 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Plus className="w-4 h-4 text-[#1769AA]" />
-              Add Sibling to Group ({siblingGroup?.groupCode})
+              {t("addModal.title", { code: siblingGroup?.groupCode ?? "" })}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Enter the Child Registration ID of the newly identified brother or sister.
+              {t("addModal.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
-              <Label className="text-xs font-semibold">Sibling Child Registration ID *</Label>
+              <Label className="text-xs font-semibold">{t("addModal.idLabel")}</Label>
               <Input
                 type="number"
-                placeholder="e.g. 25"
+                placeholder={t("addModal.idPlaceholder")}
                 value={siblingChildId}
                 onChange={(e) => setSiblingChildId(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -295,7 +297,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
               onClick={() => setIsAddModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -307,7 +309,7 @@ export const SiblingGroupSection: React.FC<SiblingGroupSectionProps> = ({ child 
               {addSiblingMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Add to Group
+              {t("buttons.addToGroup")}
             </Button>
           </DialogFooter>
         </DialogContent>

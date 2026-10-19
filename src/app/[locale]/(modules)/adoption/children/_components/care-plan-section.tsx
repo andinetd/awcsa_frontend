@@ -47,20 +47,22 @@ import {
 } from "@/hooks/adoption/useChildDetails";
 import { Child, ChildCarePlan, CarePlanGoal } from "@/types/child-matching-types";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface CarePlanSectionProps {
   child: Child;
 }
 
-const GOAL_LABELS: Record<CarePlanGoal, string> = {
-  REUNIFICATION: "Family Reunification (Biological Parents)",
-  KINSHIP_CARE: "Kinship Care (Extended Blood Relatives)",
-  ADOPTION: "Formal Legal Adoption",
-  FOSTER_CARE: "Temporary Foster Care",
-  INDEPENDENT_LIVING: "Youth Independent Living Preparation",
-};
+const GOAL_KEYS: CarePlanGoal[] = [
+  "REUNIFICATION",
+  "KINSHIP_CARE",
+  "ADOPTION",
+  "FOSTER_CARE",
+  "INDEPENDENT_LIVING",
+];
 
 export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
+  const t = useTranslations("adoption.carePlan");
   const activePlan = child.carePlans?.find((p) => p.status === "ACTIVE") || child.carePlans?.[0];
 
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -114,7 +116,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
         <CardHeader className="bg-[#F7F8FA] border-b border-[#E3E7EB] py-3 px-4 flex flex-row items-center justify-between">
           <CardTitle className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] flex items-center gap-2 font-mono">
             <Scale className="size-3.5 text-[#1769AA]" />
-            Permanency & Care Plan (Reunification First Protocol)
+            {t("title")}
           </CardTitle>
           <div className="flex items-center gap-2">
             {!isCleared && (
@@ -125,7 +127,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
                 className="h-7 text-xs border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 rounded-xs font-semibold cursor-pointer"
               >
                 <FileCheck2 className="w-3.5 h-3.5 mr-1 text-amber-700" />
-                Clear for Adoption
+                {t("buttons.clearForAdoption")}
               </Button>
             )}
             <Button
@@ -134,7 +136,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               className="h-7 text-xs bg-[#0B1F3A] hover:bg-[#122D52] text-white rounded-xs font-semibold cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5 mr-1" />
-              {activePlan ? "Update Plan" : "Create Care Plan"}
+              {activePlan ? t("buttons.updatePlan") : t("buttons.createPlan")}
             </Button>
           </div>
         </CardHeader>
@@ -160,19 +162,21 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <p className="font-bold text-sm">
                       {isCleared
-                        ? "Cleared for Legal Adoption Placement"
-                        : "Biological Family Tracing Active (Adoption Safeguard Locked)"}
+                        ? t("status.clearedTitle")
+                        : t("status.activeTracingTitle")}
                     </p>
                     <span className="font-mono text-[11px] px-2 py-0.5 rounded-xs font-semibold bg-white/80 border border-current">
-                      Status: {activePlan.status}
+                      {t("status.statusLabel", { status: activePlan.status })}
                     </span>
                   </div>
                   <p className="mt-1 leading-relaxed text-slate-700">
                     {isCleared
-                      ? `Reunification efforts exhausted. Cleared on ${new Date(
-                          activePlan.clearedForAdoptionDate!
-                        ).toLocaleDateString()}. Child can proceed to candidate matching.`
-                      : "Per UN & Ethiopian child welfare standards, biological family reunification must be explored before domestic adoption clearance is authorized."}
+                      ? t("status.clearedDesc", {
+                          date: new Date(
+                            activePlan.clearedForAdoptionDate!
+                          ).toLocaleDateString(),
+                        })
+                      : t("status.activeTracingDesc")}
                   </p>
                 </div>
               </div>
@@ -181,30 +185,34 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs space-y-1">
                   <span className="text-[11px] font-mono text-slate-500 uppercase font-semibold">
-                    Primary Permanency Goal
+                    {t("fields.primaryGoal")}
                   </span>
                   <p className="font-bold text-[#0B1F3A] text-sm">
-                    {GOAL_LABELS[activePlan.primaryGoal] || activePlan.primaryGoal}
+                    {t(`goals.${activePlan.primaryGoal}` as any) || activePlan.primaryGoal}
                   </p>
                   {activePlan.secondaryGoal && (
                     <p className="text-[11px] text-slate-600">
-                      Secondary: {GOAL_LABELS[activePlan.secondaryGoal] || activePlan.secondaryGoal}
+                      {t("fields.secondaryGoal", {
+                        goal: t(`goals.${activePlan.secondaryGoal}` as any) || activePlan.secondaryGoal,
+                      })}
                     </p>
                   )}
                 </div>
 
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs space-y-1">
                   <span className="text-[11px] font-mono text-slate-500 uppercase font-semibold">
-                    Caseworker & Review Schedule
+                    {t("fields.caseworker")}
                   </span>
                   <p className="font-bold text-[#0B1F3A]">
                     {activePlan.assignedWorker
                       ? `${activePlan.assignedWorker.firstName} ${activePlan.assignedWorker.lastName}`
-                      : "Designated Social Worker"}
+                      : t("fields.defaultWorker")}
                   </p>
                   <p className="text-[11px] text-slate-600 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    Next Review: {new Date(activePlan.nextReviewDue).toLocaleDateString()}
+                    {t("fields.nextReview", {
+                      date: new Date(activePlan.nextReviewDue).toLocaleDateString(),
+                    })}
                   </p>
                 </div>
               </div>
@@ -213,7 +221,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               {activePlan.reunificationEffortDetails && (
                 <div className="bg-[#F7F8FA] border border-[#E3E7EB] p-3 rounded-xs text-xs">
                   <span className="text-[11px] font-mono text-slate-500 uppercase font-bold block mb-1">
-                    Biological Tracing & Effort Findings
+                    {t("fields.tracingFindings")}
                   </span>
                   <p className="text-slate-700 leading-relaxed">
                     {activePlan.reunificationEffortDetails}
@@ -225,10 +233,10 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             <div className="text-center py-6 text-slate-400">
               <Scale className="w-8 h-8 mx-auto mb-1 opacity-40 text-slate-300" />
               <p className="text-xs font-medium text-slate-600">
-                No active Care Plan registered for this child.
+                {t("fields.emptyTitle")}
               </p>
               <p className="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">
-                Establishing an individualized care plan establishes legal permanency tracking and activates the Reunification First safeguard.
+                {t("fields.emptyDesc")}
               </p>
             </div>
           )}
@@ -241,21 +249,21 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <FileCheck2 className="w-4 h-4 text-emerald-600" />
-              Declare Adoption Clearance
+              {t("clearModal.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Document that biological family search and kinship placements have been thoroughly exhausted per welfare regulations.
+              {t("clearModal.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
               <Label className="text-xs font-semibold">
-                Reunification Effort Details & Findings *
+                {t("clearModal.effortDetailsLabel")}
               </Label>
               <Textarea
                 rows={3}
-                placeholder="Explain the tracing efforts conducted (public announcements, police inquiries, community interviews) and why family return is not possible..."
+                placeholder={t("clearModal.effortDetailsPlaceholder")}
                 value={effortDetails}
                 onChange={(e) => setEffortDetails(e.target.value)}
                 className="text-xs rounded-xs mt-1"
@@ -263,9 +271,11 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Court Order / Decree Reference</Label>
+              <Label className="text-xs font-semibold">
+                {t("clearModal.courtOrderLabel")}
+              </Label>
               <Input
-                placeholder="e.g. CRT-AA-2026-9041"
+                placeholder={t("clearModal.courtOrderPlaceholder")}
                 value={courtOrder}
                 onChange={(e) => setCourtOrder(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -273,9 +283,11 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Committee Remarks / Notes</Label>
+              <Label className="text-xs font-semibold">
+                {t("clearModal.notesLabel")}
+              </Label>
               <Input
-                placeholder="Reviewed and approved by child protection panel..."
+                placeholder={t("clearModal.notesPlaceholder")}
                 value={clearNotes}
                 onChange={(e) => setClearNotes(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -291,7 +303,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               onClick={() => setIsClearModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -303,7 +315,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               {clearMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Authorize Adoption Clearance
+              {t("buttons.authorizeAdoption")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -315,16 +327,16 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
           <DialogHeader>
             <DialogTitle className="text-sm font-bold text-[#0B1F3A] flex items-center gap-2">
               <Scale className="w-4 h-4 text-[#1769AA]" />
-              {activePlan ? "Update Child Care Plan" : "New Permanency Care Plan"}
+              {activePlan ? t("planModal.titleUpdate") : t("planModal.titleCreate")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Establish the primary permanency goal and regular review cycle.
+              {t("planModal.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div>
-              <Label className="text-xs font-semibold">Primary Goal *</Label>
+              <Label className="text-xs font-semibold">{t("planModal.primaryGoalLabel")}</Label>
               <Select
                 value={primaryGoal}
                 onValueChange={(val) => setPrimaryGoal(val as CarePlanGoal)}
@@ -333,9 +345,9 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(GOAL_LABELS).map(([k, label]) => (
+                  {GOAL_KEYS.map((k) => (
                     <SelectItem key={k} value={k} className="text-xs">
-                      {label}
+                      {t(`goals.${k}` as any)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -343,7 +355,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Secondary Alternative Goal</Label>
+              <Label className="text-xs font-semibold">{t("planModal.secondaryGoalLabel")}</Label>
               <Select
                 value={secondaryGoal}
                 onValueChange={setSecondaryGoal}
@@ -352,9 +364,9 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(GOAL_LABELS).map(([k, label]) => (
+                  {GOAL_KEYS.map((k) => (
                     <SelectItem key={k} value={k} className="text-xs">
-                      {label}
+                      {t(`goals.${k}` as any)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -362,7 +374,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Next Scheduled Review Date *</Label>
+              <Label className="text-xs font-semibold">{t("planModal.reviewDateLabel")}</Label>
               <Input
                 type="date"
                 value={reviewDate}
@@ -372,10 +384,10 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">Biological Family Tracing Efforts</Label>
+              <Label className="text-xs font-semibold">{t("planModal.tracingEffortsLabel")}</Label>
               <Textarea
                 rows={2}
-                placeholder="Initial tracing attempts underway..."
+                placeholder={t("planModal.tracingEffortsPlaceholder")}
                 value={effortNotes}
                 onChange={(e) => setEffortNotes(e.target.value)}
                 className="text-xs rounded-xs mt-1"
@@ -383,9 +395,9 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
             </div>
 
             <div>
-              <Label className="text-xs font-semibold">General Casework Notes</Label>
+              <Label className="text-xs font-semibold">{t("planModal.generalNotesLabel")}</Label>
               <Input
-                placeholder="Review observations and next actions..."
+                placeholder={t("planModal.generalNotesPlaceholder")}
                 value={planNotes}
                 onChange={(e) => setPlanNotes(e.target.value)}
                 className="text-xs rounded-xs mt-1 h-8"
@@ -401,7 +413,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               onClick={() => setIsPlanModalOpen(false)}
               className="text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               type="button"
@@ -413,7 +425,7 @@ export const CarePlanSection: React.FC<CarePlanSectionProps> = ({ child }) => {
               {planMutation.isPending && (
                 <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
               )}
-              Save Care Plan
+              {t("buttons.savePlan")}
             </Button>
           </DialogFooter>
         </DialogContent>

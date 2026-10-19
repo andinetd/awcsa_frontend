@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Fingerprint,
   Camera,
@@ -54,6 +55,7 @@ interface BiometricsSectionProps {
 }
 
 export function BiometricsSection({ child }: BiometricsSectionProps) {
+  const t = useTranslations("adoption.biometrics");
   const childId = child.id;
   const { data: biometricData, isLoading } = useChildBiometrics(childId);
   const registerMutation = useRegisterChildBiometrics(childId);
@@ -124,10 +126,10 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
             </div>
             <div>
               <CardTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-                Biometric Identity & De-duplication Protection
+                {t("title")}
               </CardTitle>
               <CardDescription className="text-xs text-slate-500">
-                Perceptual portrait hashing, facial verification & physical marks (Anti-trafficking safeguard)
+                {t("subtitle")}
               </CardDescription>
             </div>
           </div>
@@ -145,7 +147,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               ) : (
                 <Search className="size-3.5" />
               )}
-              Run De-duplication Scan
+              {t("buttons.runScan")}
             </Button>
             <Button
               size="sm"
@@ -158,7 +160,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 cursor-pointer shadow-2xs"
             >
               <Camera className="size-3.5" />
-              {currentRecord?.facialPhotoUrl ? "Update Biometrics" : "Register Biometrics"}
+              {currentRecord?.facialPhotoUrl ? t("buttons.update") : t("buttons.register")}
             </Button>
           </div>
         </div>
@@ -183,13 +185,13 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               <div className="space-y-1.5 flex-1">
                 <p className="font-bold text-sm">
                   {dupResult.isLikelyDuplicate
-                    ? `Potential Duplicate Warning: ${dupResult.potentialDuplicateCount} Candidate(s) Found`
-                    : "Zero Duplicates Found across Federal Facility Rosters"}
+                    ? t("scanResult.dupWarning", { count: dupResult.potentialDuplicateCount })
+                    : t("scanResult.zeroDuplicates")}
                 </p>
                 <p className="text-slate-600">
                   {dupResult.isLikelyDuplicate
-                    ? "Care centers and national registries matched this child's phonetic name or perceptual biometric hash. Cross-examine candidates below to avoid double registration."
-                    : "No existing child records match this biometric signature or name profile."}
+                    ? t("scanResult.dupWarningDesc")
+                    : t("scanResult.zeroDuplicatesDesc")}
                 </p>
 
                 {dupResult.candidates && dupResult.candidates.length > 0 && (
@@ -203,11 +205,11 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                           <span className="font-bold text-slate-900">{cand.name}</span>{" "}
                           <span className="text-slate-500 font-mono text-[11px]">(ID: #{cand.childId})</span>
                           <p className="text-[11px] text-slate-500">
-                            Facility: {cand.facilityName || "Unassigned"} | Reason: {cand.matchReason}
+                            Facility: {cand.facilityName || t("scanResult.unassigned")} | Reason: {cand.matchReason}
                           </p>
                         </div>
                         <Badge variant="outline" className="text-amber-700 bg-amber-100/60 border-amber-300">
-                          {cand.confidence}% Match
+                          {t("scanResult.confidence", { confidence: cand.confidence })}
                         </Badge>
                       </div>
                     ))}
@@ -231,17 +233,17 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
             ) : (
               <div className="w-32 h-32 bg-slate-200 rounded-xs flex flex-col items-center justify-center text-slate-400 mb-3 border border-dashed border-slate-300">
                 <Camera className="size-8 mb-1" />
-                <span className="text-[11px]">No Photo Captured</span>
+                <span className="text-[11px]">{t("profile.noPhoto")}</span>
               </div>
             )}
             <div className="space-y-1 w-full">
-              <p className="text-xs font-bold text-[#0B1F3A]">Perceptual Hash</p>
+              <p className="text-xs font-bold text-[#0B1F3A]">{t("profile.perceptualHash")}</p>
               <p className="font-mono text-[11px] bg-white border border-[#E3E7EB] px-2 py-1 rounded-xs text-slate-600 truncate">
-                {currentRecord?.photoHash || "N/A (Pending registration)"}
+                {currentRecord?.photoHash || t("profile.pendingRegistration")}
               </p>
               <div className="flex items-center justify-center gap-1 text-[11px] text-slate-500 pt-1">
                 <ShieldCheck className="size-3 text-emerald-600" />
-                <span>Consent verified</span>
+                <span>{t("profile.consentVerified")}</span>
               </div>
             </div>
           </div>
@@ -250,7 +252,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center justify-between border-b border-[#E3E7EB] pb-2">
               <h4 className="text-xs font-bold text-[#0B1F3A] uppercase font-mono tracking-wide">
-                Physical Identifying Marks & Birthmarks ({currentRecord?.identifyingMarks?.length || 0})
+                {t("marks.title")} ({currentRecord?.identifyingMarks?.length || 0})
               </h4>
             </div>
 
@@ -263,7 +265,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                   >
                     <div className="flex items-center justify-between">
                       <Badge variant="outline" className="text-[10px] uppercase font-mono bg-white">
-                        {mark.type}
+                        {t(`marks.types.${mark.type}` as any)}
                       </Badge>
                       <span className="text-[11px] font-semibold text-slate-700">{mark.location}</span>
                     </div>
@@ -276,7 +278,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
             ) : (
               <div className="text-center py-8 text-slate-400 bg-[#F7F8FA] border border-dashed border-[#E3E7EB] rounded-xs">
                 <Fingerprint className="size-6 mx-auto mb-1 opacity-40 text-slate-400" />
-                <p className="text-xs">No distinctive physical marks registered for this child</p>
+                <p className="text-xs">{t("marks.empty")}</p>
               </div>
             )}
           </div>
@@ -288,16 +290,16 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-[#0B1F3A]">
-              Register Child Biometrics & Identifying Marks
+              {t("dialog.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Provide the high-resolution facial portrait URL, perceptual hash, and notable physical marks.
+              {t("dialog.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">Facial Photo URL *</Label>
+              <Label className="text-xs font-semibold">{t("dialog.photoUrlLabel")}</Label>
               <Input
                 placeholder="https://storage.example.com/portraits/child_123.jpg"
                 value={photoUrl}
@@ -307,7 +309,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold">Perceptual Photo Hash (Optional)</Label>
+              <Label className="text-xs font-semibold">{t("dialog.photoHashLabel")}</Label>
               <Input
                 placeholder="phash_a89bc4410f..."
                 value={photoHash}
@@ -315,12 +317,12 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                 className="h-8 text-xs rounded-xs font-mono"
               />
               <p className="text-[11px] text-slate-400">
-                If omitted, the backend will auto-derive a deterministic image perceptual digest.
+                {t("dialog.photoHashHint")}
               </p>
             </div>
 
             <div className="space-y-2 pt-2 border-t border-[#E3E7EB]">
-              <Label className="text-xs font-semibold">Add Identifying Mark</Label>
+              <Label className="text-xs font-semibold">{t("dialog.addMarkLabel")}</Label>
               <div className="grid grid-cols-3 gap-2">
                 <Select
                   value={newMarkType}
@@ -330,14 +332,14 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="BIRTHMARK">Birthmark</SelectItem>
-                    <SelectItem value="SCAR">Scar</SelectItem>
-                    <SelectItem value="TATTOO">Tattoo / Inking</SelectItem>
-                    <SelectItem value="OTHER">Other Distinct Feature</SelectItem>
+                    <SelectItem value="BIRTHMARK">{t("marks.types.BIRTHMARK")}</SelectItem>
+                    <SelectItem value="SCAR">{t("marks.types.SCAR")}</SelectItem>
+                    <SelectItem value="TATTOO">{t("marks.types.TATTOO")}</SelectItem>
+                    <SelectItem value="OTHER">{t("marks.types.OTHER")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input
-                  placeholder="Location (e.g. Left cheek)"
+                  placeholder={t("dialog.locationPlaceholder")}
                   value={newMarkLocation}
                   onChange={(e) => setNewMarkLocation(e.target.value)}
                   className="h-8 text-xs rounded-xs col-span-2"
@@ -345,7 +347,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               </div>
               <div className="flex gap-2">
                 <Input
-                  placeholder="Detailed description (e.g. 1cm circular brown spot)"
+                  placeholder={t("dialog.descPlaceholder")}
                   value={newMarkDesc}
                   onChange={(e) => setNewMarkDesc(e.target.value)}
                   className="h-8 text-xs rounded-xs flex-1"
@@ -358,7 +360,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                   className="h-8 text-xs rounded-xs gap-1 border-[#BCD5EA] text-[#1769AA]"
                 >
                   <Plus className="size-3.5" />
-                  Add
+                  {t("buttons.addMark")}
                 </Button>
               </div>
 
@@ -371,7 +373,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                       className="flex items-center justify-between p-1.5 px-2 bg-slate-50 border border-slate-200 rounded-xs text-[11px]"
                     >
                       <span>
-                        <strong>[{m.type}]</strong> {m.location}: {m.description}
+                        <strong>[{t(`marks.types.${m.type}` as any)}]</strong> {m.location}: {m.description}
                       </span>
                       <Button
                         type="button"
@@ -380,7 +382,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
                         onClick={() => handleRemoveMark(idx)}
                         className="h-5 text-rose-600 hover:text-rose-700 text-[10px] p-0"
                       >
-                        Remove
+                        {t("buttons.removeMark")}
                       </Button>
                     </div>
                   ))}
@@ -396,7 +398,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               onClick={() => setIsRegisterOpen(false)}
               className="h-8 text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               size="sm"
@@ -404,7 +406,7 @@ export function BiometricsSection({ child }: BiometricsSectionProps) {
               disabled={registerMutation.isPending || !photoUrl}
               className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white"
             >
-              {registerMutation.isPending ? "Saving..." : "Save Biometrics"}
+              {registerMutation.isPending ? t("buttons.saving") : t("buttons.save")}
             </Button>
           </DialogFooter>
         </DialogContent>

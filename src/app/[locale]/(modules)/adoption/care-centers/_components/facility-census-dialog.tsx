@@ -28,6 +28,7 @@ import {
   useFacilityCapacityOverview,
   useConductFacilityCensusAudit,
 } from "@/hooks/adoption/useChildDetails";
+import { useTranslations } from "next-intl";
 
 interface FacilityCensusDialogProps {
   facilityId: number | null;
@@ -42,6 +43,7 @@ export function FacilityCensusDialog({
   open,
   onOpenChange,
 }: FacilityCensusDialogProps) {
+  const t = useTranslations("adoption");
   const { data: capacityData, isLoading } = useFacilityCapacityOverview(
     facilityId ?? undefined
   );
@@ -241,7 +243,7 @@ export function FacilityCensusDialog({
                   onClick={() => setIsAuditing(false)}
                   className="h-7 text-xs rounded-xs"
                 >
-                  Cancel
+                  {t("careCenters.census.cancel")}
                 </Button>
                 <Button
                   size="sm"
@@ -249,7 +251,9 @@ export function FacilityCensusDialog({
                   disabled={auditMutation.isPending || !physicalCount}
                   className="h-7 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white"
                 >
-                  {auditMutation.isPending ? "Submitting..." : "Submit Audit"}
+                  {auditMutation.isPending
+                    ? t("careCenters.census.submitting")
+                    : t("careCenters.census.submit")}
                 </Button>
               </div>
             </div>
@@ -261,7 +265,7 @@ export function FacilityCensusDialog({
             onClick={() => onOpenChange(false)}
             className="rounded-xs text-xs bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 h-8 font-semibold shadow-2xs cursor-pointer"
           >
-            Close
+            {t("careCenters.census.close")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -37,10 +37,22 @@ const DEFAULT_SUBCITY_NAMES = [
 
 const CareCenters = () => {
   const t = useTranslations("adoption");
+  const tSubCities = useTranslations("subCities.names");
   const { userSubCity, filterSubCityNames } = useJurisdictionScope();
   const { data: rawCareCenters = [], isLoading, isError } = useGetCareCentersQuery();
   const careCenters = (rawCareCenters || []) as NewCareCenterSchemaType[];
   const { data: subCitiesData } = useGetSubCitiesQuery();
+
+  const getSubCityLabel = (name: string) => {
+    try {
+      if (tSubCities.has(name as any)) {
+        return tSubCities(name as any);
+      }
+      return name;
+    } catch {
+      return name;
+    }
+  };
 
   const [selectedCenter, setSelectedCenter] =
     useState<NewCareCenterSchemaType | null>(null);
@@ -279,13 +291,17 @@ const CareCenters = () => {
               onValueChange={(val) => setSelectedSubCity(val)}
             >
               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
-                <SelectValue placeholder="All Sub-Cities" />
+                <SelectValue placeholder={t("careCenters.filterSubCity")}>
+                  {selectedSubCity !== "ALL"
+                    ? getSubCityLabel(selectedSubCity)
+                    : t("careCenters.filterSubCity")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                {!userSubCity && <SelectItem value="ALL">All Sub-Cities</SelectItem>}
+                {!userSubCity && <SelectItem value="ALL">{t("careCenters.filterSubCity")}</SelectItem>}
                 {allSubCityNames.map((name) => (
                   <SelectItem key={name} value={name}>
-                    {name}
+                    {getSubCityLabel(name)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -297,7 +313,7 @@ const CareCenters = () => {
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-1.5 text-xs bg-slate-100/80 px-2.5 py-1.5 rounded-xs border border-slate-200">
             <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
-              Active Filters:
+              {t("careCenters.activeFilters")}
             </span>
             {searchQuery && (
               <Badge

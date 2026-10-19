@@ -139,6 +139,8 @@
       "cancel": "ተመለስ",
       "noNotes": "እስካሁን የተመዘገበ ተጨማሪ መረጃ የለም።",
       "filterAll": "ሁሉም ምድቦች",
+      "selectCategory": "የማስታወሻ ምድብ ይምረጡ",
+      "filterLabel": "አጣራ፡",
       "categories": {
         "GENERAL": "አጠቃላይ ማስታወሻ",
         "PLACEMENT_PROGRESS": "የማላመድ ሂደት",
@@ -464,6 +466,8 @@
     "error": "ተቋማቱን በመጫን ላይ ስህተት ተከስቷል",
     "noCareCenters": "ምንም የሕፃናት ማሳደጊያ ተቋማት አልተገኙም",
     "addNew": "አዲስ ተቋም ጨምር",
+    "filterSubCity": "ሁሉም ክፍለ ከተሞች",
+    "activeFilters": "ንቁ ማጣሪያዎች፡",
     "types": {
       "GOVERNMENT": "የመንግስት",
       "NGO": "የግል / መንግስታዊ ያልሆነ",
@@ -495,6 +499,12 @@
       "orgUnitId": "የድርጅት መለያ",
       "description": "መግለጫ",
       "close": "ዝጋ"
+    },
+    "census": {
+      "cancel": "ሰርዝ",
+      "close": "ዝጋ",
+      "submit": "የቆጠራ ኦዲት አስገባ",
+      "submitting": "በማስገባት ላይ..."
     },
     "form": {
       "registerTitle": "አዲስ የሕፃናት ማሳደጊያ ተቋም መመዝገቢያ",
@@ -1463,5 +1473,451 @@
     "title": "የሕፃናት ማህበራዊ ድጋፍ እና ጥቅማጥቅሞች",
     "subtitle": "ለተጋላጭ ሕፃናት የሚሰጡ የማህበራዊ ጥበቃ ድጎማዎች፣ የትምህርት አበል እና የቁሳቁስ ድጋፎች።",
     "empty": "የሕፃናት ማህበራዊ ድጋፍ ፕሮግራሞች እና የድጎማ ክፍፍል መረጃዎች እዚህ ይዘረዘራሉ።"
+  },
+  "carePlan": {
+    "title": "ዘላቂ የሕይወት እና የእንክብካቤ እቅድ (የቤተሰብ ቅድሚያ ፕሮቶኮል)",
+    "goals": {
+      "REUNIFICATION": "የቤተሰብ ውህደት (የስጋ ወላጆች)",
+      "KINSHIP_CARE": "የዘመድ እንክብካቤ (የቅርብ የደም ዘመዶች)",
+      "ADOPTION": "ህጋዊ ጉዲፈቻ",
+      "FOSTER_CARE": "ጊዜያዊ አሳዳጊ እንክብካቤ",
+      "INDEPENDENT_LIVING": "የወጣቶች ራስን ችሎ የመኖር ዝግጅት"
+    },
+    "buttons": {
+      "clearForAdoption": "ለጉዲፈቻ ፍቃድ ስጥ",
+      "updatePlan": "እቅድ አድስ",
+      "createPlan": "የእንክብካቤ እቅድ አውጣ",
+      "cancel": "ሰርዝ",
+      "savePlan": "የእንክብካቤ እቅድ አስቀምጥ",
+      "authorizeAdoption": "የጉዲፈቻ ፍቃድን አጽድቅ"
+    },
+    "status": {
+      "clearedTitle": "ለህጋዊ ጉዲፈቻ ምደባ የተፈቀደ",
+      "activeTracingTitle": "የስጋ ቤተሰብ ፍለጋ በሂደት ላይ ያለ (የጉዲፈቻ ጥበቃ ተቆልፏል)",
+      "statusLabel": "ሁኔታ: {status}",
+      "clearedDesc": "የቤተሰብ ውህደት ጥረቶች ተጠናቀዋል። በ {date} የተፈቀደ። ሕፃኑ ለማዛመድ ዝግጁ ነው።",
+      "activeTracingDesc": "በተባበሩት መንግስታት እና በኢትዮጵያ የሕፃናት ደህንነት ህግ መሰረት የጉዲፈቻ ፍቃድ ከመሰጠቱ በፊት የስጋ ቤተሰብ ውህደት መሞከር አለበት።"
+    },
+    "fields": {
+      "primaryGoal": "ዋና የዘላቂነት ግብ",
+      "secondaryGoal": "ሁለተኛ: {goal}",
+      "caseworker": "ማህበራዊ ሰራተኛ እና የክለሳ ጊዜ",
+      "defaultWorker": "የተመደበ ማህበራዊ ሰራተኛ",
+      "nextReview": "ቀጣይ ክለሳ: {date}",
+      "tracingFindings": "የስጋ ቤተሰብ ፍለጋ እና ጥረት ውጤቶች",
+      "emptyTitle": "ለዚህ ሕፃን የተመዘገበ ንቁ የእንክብካቤ እቅድ የለም።",
+      "emptyDesc": "የግል የእንክብካቤ እቅድ ማውጣት ህጋዊ ዘላቂነትን ለመከታተል እና የቤተሰብ ቅድሚያ ጥበቃን ለማረጋገጥ ይረዳል።"
+    },
+    "clearModal": {
+      "title": "የጉዲፈቻ ፍቃድ ማረጋገጫ",
+      "desc": "በሕፃናት ደህንነት ደንብ መሰረት የስጋ ቤተሰብ እና የዘመድ ፍለጋ ሙሉ በሙሉ መጠናቀቁን ያረጋግጡ።",
+      "effortDetailsLabel": "የቤተሰብ ውህደት ጥረት ዝርዝር እና ውጤቶች *",
+      "effortDetailsPlaceholder": "የተደረጉትን የፍለጋ ጥረቶች (የህዝብ ማስታወቂያዎች፣ የፖሊስ ማጣሪያ፣ የማህበረሰብ ቃለ መጠይቅ) እና ቤተሰብ መመለስ ያልተቻለበትን ምክንያት ያብራሩ...",
+      "courtOrderLabel": "የፍርድ ቤት ትዕዛዝ / የውሳኔ ቁጥር",
+      "courtOrderPlaceholder": "ለምሳሌ CRT-AA-2026-9041",
+      "notesLabel": "የኮሚቴ አስተያየት / ማስታወሻ",
+      "notesPlaceholder": "በሕፃናት ጥበቃ ኮሚቴ ተገምግሞ የጸደቀ..."
+    },
+    "planModal": {
+      "titleCreate": "አዲስ የዘላቂነት እንክብካቤ እቅድ",
+      "titleUpdate": "የሕፃኑን የእንክብካቤ እቅድ አድስ",
+      "desc": "ዋናውን የዘላቂነት ግብ እና መደበኛ የክለሳ ጊዜ ይወስኑ።",
+      "primaryGoalLabel": "ዋና ግብ *",
+      "secondaryGoalLabel": "ሁለተኛ አማራጭ ግብ",
+      "reviewDateLabel": "ቀጣይ የታቀደው የክለሳ ቀን *",
+      "tracingEffortsLabel": "የስጋ ቤተሰብ ፍለጋ ጥረቶች",
+      "tracingEffortsPlaceholder": "የመጀመሪያ ፍለጋ ጥረቶች በሂደት ላይ ናቸው...",
+      "generalNotesLabel": "አጠቃላይ የጉዳዩ ማስታወሻዎች",
+      "generalNotesPlaceholder": "የክለሳ ምልከታዎች እና ቀጣይ እርምጃዎች..."
+    }
+  },
+  "siblingGroup": {
+    "title": "የወንድሞችና እህቶች ቡድን (አለመነጣጠል ጥበቃ)",
+    "buttons": {
+      "addSibling": "ወንድም/እህት ጨምር",
+      "linkSiblings": "ወንድምና እህቶችን አገናኝ",
+      "cancel": "ሰርዝ",
+      "createGroup": "የወንድሞችና እህቶች ቡድን ፍጠር",
+      "addToGroup": "ወደ ቡድኑ ጨምር"
+    },
+    "banner": {
+      "groupCode": "የቡድን መለያ: {code}",
+      "linkedCount": "({count} የስጋ ወንድሞችና እህቶች ተገናኝተዋል)",
+      "jointPlacement": "የጋራ ምደባ የተጠበቀ"
+    },
+    "linkedTitle": "የተገናኙ ወንድሞችና እህቶች",
+    "facilityDefault": "የእንክብካቤ ማዕከል",
+    "childDefault": "ሕፃን #{id}",
+    "onlyChild": "በአሁኑ ጊዜ በዚህ ቡድን ውስጥ የተመዘገበው ይህ ሕፃን ብቻ ነው። ከላይ ያለውን አዝራር በመጠቀም ተጨማሪ ወንድሞችንና እህቶችን ያገናኙ።",
+    "emptyTitle": "ሕፃኑ በወንድሞችና እህቶች ቡድን ውስጥ አልተመዘገበም።",
+    "emptyDesc": "ይህ ሕፃን በእንክብካቤ ወይም በሌሎች ማዕከላት ውስጥ ያሉ የስጋ ወንድሞች ወይም እህቶች ካሉት፣ አለመነጣጠልን ለማረጋገጥ ያገናኙዋቸው።",
+    "createModal": {
+      "title": "የወንድሞችና እህቶች ቡድን አገናኝ",
+      "desc": "የወንድሙን ወይም የእህቱን የሕፃን መታወቂያ በማስገባት ከዚህ ሕፃን ጋር ያገናኙ።",
+      "idLabel": "የወንድም/እህት የሕፃን መመዝገቢያ መታወቂያ *",
+      "idPlaceholder": "ለምሳሌ 14",
+      "notesLabel": "የዝምድና ማስታወሻ",
+      "notesPlaceholder": "አብረው የተገኙ፤ የስጋ ታላቅ ወንድም..."
+    },
+    "addModal": {
+      "title": "ወንድም/እህትን ወደ ቡድን ({code}) ጨምር",
+      "desc": "አዲስ የተለየውን ወንድም ወይም እህት የሕፃን መመዝገቢያ መታወቂያ ያስገቡ።",
+      "idLabel": "የወንድም/እህት የሕፃን መመዝገቢያ መታወቂያ *",
+      "idPlaceholder": "ለምሳሌ 25"
+    }
+  },
+  "biometrics": {
+    "title": "የባዮሜትሪክ ማንነት እና የተደጋጋሚ ምዝገባ ጥበቃ",
+    "subtitle": "የፎቶ ሃሽ፣ የፊት ማረጋገጫ እና አካላዊ ምልክቶች (የሕገወጥ ዝውውር መከላከያ)",
+    "buttons": {
+      "runScan": "የተደጋጋሚ ምዝገባ ማጣሪያ አሂድ",
+      "update": "ባዮሜትሪክስ አድስ",
+      "register": "ባዮሜትሪክስ መዝግብ",
+      "addMark": "ጨምር",
+      "removeMark": "አስወግድ",
+      "cancel": "ሰርዝ",
+      "save": "ባዮሜትሪክስ አስቀምጥ",
+      "saving": "በማስቀመጥ ላይ..."
+    },
+    "profile": {
+      "noPhoto": "ምንም ፎቶ አልተነሳም",
+      "perceptualHash": "የምስል ሃሽ (Perceptual Hash)",
+      "pendingRegistration": "አልተመዘገበም (በመጠባበቅ ላይ)",
+      "consentVerified": "ስምምነት ተረጋግጧል"
+    },
+    "marks": {
+      "title": "ልዩ አካላዊ መለያ ምልክቶች",
+      "empty": "ምንም የተመዘገበ ልዩ አካላዊ ምልክት የለም።",
+      "types": {
+        "BIRTHMARK": "የልደት ምልክት",
+        "SCAR": "ጠባሳ",
+        "TATTOO": "ንቅሳት",
+        "OTHER": "ሌላ ልዩ ምልክት"
+      }
+    },
+    "scanResult": {
+      "dupWarning": "የተደጋጋሚ ምዝገባ ማስጠንቀቂያ: {count} ተጠርጣሪ(ዎች) ተገኝተዋል",
+      "dupWarningDesc": "የሕፃናት ማቆያዎች እና ብሔራዊ መዛግብት ከዚህ ሕፃን ስም ወይም የባዮሜትሪክ መረጃ ጋር የሚመሳሰል መዝገብ አግኝተዋል። ድርብ ምዝገባን ለማስወገድ ከዚህ በታች ያሉትን ያመሳክሩ።",
+      "zeroDuplicates": "በተቋማት መዝገብ ውስጥ ምንም አይነት ተደጋጋሚ ምዝገባ አልተገኘም",
+      "zeroDuplicatesDesc": "ከዚህ የባዮሜትሪክ መረጃ ወይም ስም ጋር የሚዛመድ ምንም አይነት የሕፃን መዝገብ አልተገኘም።",
+      "unassigned": "ያልተመደበ",
+      "confidence": "{confidence}% ተዛምዶ"
+    },
+    "dialog": {
+      "title": "የሕፃኑን የባዮሜትሪክ መገለጫ መዝግብ",
+      "desc": "የፊት ፎቶ ይስቀሉ እና ልዩ አካላዊ መለያ ምልክቶችን ይመዝግቡ።",
+      "photoUrlLabel": "የፊት ፎቶ ሊንክ (URL) *",
+      "photoHashLabel": "የምስል ሃሽ (አስገዳጅ ያልሆነ)",
+      "photoHashHint": "ካልተሞላ ሲስተሙ በራሱ ምስሉን መርምሮ ሃሽ ያመነጫል።",
+      "addMarkLabel": "ልዩ መለያ ምልክት ጨምር",
+      "locationPlaceholder": "ቦታ (ለምሳሌ፡ ግራ ጉንጭ)",
+      "descPlaceholder": "ዝርዝር መግለጫ (ለምሳሌ፡ 1ሳ.ሜ ክብ ቡናማ ምልክት)"
+    }
+  },
+  "aderaCustody": {
+    "title": "የባህላዊ አደራ ህጋዊ ማረጋገጫ እና የሕፃናት ጥበቃ",
+    "subtitle": "የባህላዊ አደራ እንክብካቤ ቁጥጥር፣ የባለ አደራ ተጠያቂነት እና የግዴታ የደህንነት ክትትል",
+    "buttons": {
+      "formalize": "የባለ አደራ እንክብካቤን መደበኛ አድርግ",
+      "convert": "ህጋዊ ሁኔታ ቀይር",
+      "recordVisit": "የቤት የደህንነት ጉብኝት መዝግብ",
+      "cancel": "ሰርዝ",
+      "saveFormalize": "አደራውን አጽድቅ",
+      "saveCheckup": "የደህንነት ክትትልን አስቀምጥ",
+      "saveConvert": "የሁኔታ ለውጡን አረጋግጥ"
+    },
+    "emptyTitle": "ይህ ሕፃን በአሁኑ ጊዜ በመደበኛ የባህላዊ አደራ እንክብካቤ ስር አይደለም።",
+    "emptyDesc": "በኢትዮጵያ ባህላዊ ልማድ ሕፃን በአደራ ሲተው ብዝበዛን ለመከላከል እና ወርሃዊ ክትትል ለማድረግ ቢሮው ባለ አደራውን መመዝገብ ግዴታ ያደርጋል።",
+    "summary": {
+      "legalStatus": "የአደራ ህጋዊ ሁኔታ",
+      "custodian": "ባለ አደራ አሳዳጊ",
+      "informalGuardian": "ባህላዊ አሳዳጊ",
+      "monthlyStipend": "ወርሃዊ ድጎማ",
+      "none": "የለም",
+      "courtEndorsed": "በፍርድ ቤት የጸደቀ",
+      "bureauMonitored": "በቢሮው የሚከታተል",
+      "lastVisit": "የመጨረሻ የደህንነት ጉብኝት",
+      "noCheckupYet": "እስካሁን ምንም ጉብኝት አልተመዘገበም",
+      "nextHomeVisitDue": "ቀጣይ የቤት ጉብኝት ቀን",
+      "mandatoryInspection": "የግዴታ የ30-ቀን ክትትል",
+      "statusActive": "ንቁ",
+      "statusReview": "በደህንነት ክለሳ ላይ",
+      "statusConverted": "የተቀየረ"
+    },
+    "checkups": {
+      "title": "የደህንነት ክትትል ታሪክ",
+      "historyTitle": "ወቅታዊ የደህንነት ጉብኝት ታሪክ ({count})",
+      "empty": "እስካሁን ምንም የቤት ጉብኝት አልተመዘገበም።",
+      "visitDate": "የጉብኝት ቀን: {date}",
+      "safety": "ደህንነት: {assessment}",
+      "living": "የአኗኗር ሁኔታ: {rating}",
+      "inspectedBy": "የጎበኘው: {name}",
+      "schooling": "የትምህርት ሁኔታ:",
+      "health": "የጤና እና አካላዊ ሁኔታ:",
+      "riskFlags": "የአደጋ ምልክቶች:",
+      "observations": "የማህበራዊ ሰራተኛ ምልከታ:",
+      "recommendation": "የውሳኔ ሃሳብ: {rec}"
+    },
+    "dialogs": {
+      "formalize": {
+        "title": "የባህላዊ አደራ እንክብካቤን መደበኛ አድርግ",
+        "desc": "ባህላዊ አሳዳጊውን (*ባለ አደራ*) ይመዝግቡ እና የሕፃኑን የደህንነት ክትትል ቀጠሮዎችን ያቅዱ።",
+        "clientId": "የባለ አደራ የተገልጋይ መለያ ቁጥር *",
+        "relationship": "ከሕፃኑ ጋር ያለው ዝምድና",
+        "reason": "በአደራ የተሰጠበት ምክንያት *",
+        "reasonPlaceholder": "ወላጆች ሕፃኑን በአደራ የሰጡበት ሁኔታ...",
+        "stipend": "ወርሃዊ ድጎማ (ብር)",
+        "docUrl": "የሰነድ አድራሻ (URL)",
+        "submitting": "በማጽደቅ ላይ...",
+        "submit": "አደራውን አጽድቅ"
+      },
+      "checkup": {
+        "title": "የቤት የደህንነት ክትትልን መዝግብ",
+        "desc": "የማህበራዊ ሰራተኛ ወቅታዊ የቤት ጉብኝት እና የአኗኗር ሁኔታ ምዘና።",
+        "livingRating": "የአኗኗር ሁኔታ ደረጃ",
+        "safetyAssessment": "የደህንነት ምዘና",
+        "schooling": "የትምህርት ሁኔታ",
+        "schoolingPlaceholder": "ለምሳሌ፡ 4ኛ ክፍል በመማር ላይ",
+        "health": "የጤና እና የተመጣጠነ ምግብ ምልከታዎች",
+        "healthPlaceholder": "ለምሳሌ፡ ጤናማ፣ በደንብ የተመገበ",
+        "riskFlags": "የአደጋ ምልክቶች (በኮማ የተለዩ)",
+        "riskFlagsPlaceholder": "የሕፃናት ጉልበት ብዝበዛ፣ የቤት ውስጥ ስራ፣ ትምህርት መቅረት",
+        "remarks": "ዝርዝር አስተያየት *",
+        "remarksPlaceholder": "ስለ መኖሪያ ሁኔታ፣ ከአሳዳጊው ጋር ስላለው ግንኙነት ምልከታ...",
+        "submitting": "በማስቀመጥ ላይ...",
+        "submit": "የክትትል መዝገብ አስቀምጥ",
+        "livingRatings": {
+          "EXCELLENT": "እጅግ በጣም ጥሩ",
+          "GOOD": "ጥሩ",
+          "SATISFACTORY": "አጥጋቢ",
+          "NEEDS_IMPROVEMENT": "ማሻሻያ የሚያስፈልገው",
+          "CRITICAL": "አስጊ"
+        },
+        "safetyRatings": {
+          "SAFE": "ደህንነቱ የተጠበቀ",
+          "MINOR_CONCERNS": "አነስተኛ ስጋቶች አሉበት",
+          "MAJOR_CONCERNS": "ከፍተኛ ስጋቶች አሉበት",
+          "UNSAFE": "አደገኛ / አፋጣኝ እርምጃ የሚፈልግ"
+        }
+      },
+      "convert": {
+        "title": "ህጋዊ የሞግዚትነት ሁኔታን ቀይር",
+        "desc": "ባህላዊ የአደራ ሁኔታውን ወደ ህጋዊ ፍርድ ቤት ሞግዚትነት ወይም ጉዲፈቻነት ቀይር።",
+        "targetStatus": "የሚቀየርበት ህጋዊ ሁኔታ",
+        "statuses": {
+          "CONVERTED_TO_GUARDIANSHIP": "ወደ ፍርድ ቤት ህጋዊ ሞግዚትነት ቀይር",
+          "CONVERTED_TO_ADOPTION": "ወደ ሀገር ውስጥ ጉዲፈቻ ቀይር",
+          "UNDER_SAFETY_REVIEW": "በደህንነት ክለሳ ስር አድርግ",
+          "TERMINATED": "አቋርጥ እና ሕፃኑን ወደ ማቆያ ተቋም መልስ"
+        },
+        "notes": "የለውጡ ዝርዝር ማብራሪያ እና ምክንያት",
+        "notesPlaceholder": "የፍርድ ቤት ውሳኔ ዝርዝር፣ የማህበራዊ ሰራተኛው ማብራሪያ...",
+        "submitting": "በማዘመን ላይ...",
+        "submit": "የሁኔታ ለውጡን አረጋግጥ"
+      }
+    }
+  },
+  "digitalDossier": {
+    "title": "ዲጂታል የሕፃን ማህደር (የሕይወት ታሪክ እና የጤና መዝገብ)",
+    "tabs": {
+      "medical": "የህክምና እና ጤና",
+      "milestones": "የዕድገት ደረጃዎች ({count})",
+      "photos": "የዕድገት ፎቶዎች ({count})",
+      "tracing": "የቤተሰብ ፍለጋ መዝገብ ({count})"
+    },
+    "buttons": {
+      "editMedical": "የህክምና መዝገብ አድስ",
+      "addMilestone": "የዕድገት ደረጃ ጨምር",
+      "addPhoto": "ፎቶ ጨምር",
+      "logTracing": "የፍለጋ ጥረት መዝግብ",
+      "cancel": "ሰርዝ",
+      "saveMedical": "የህክምና መዝገብ አስቀምጥ",
+      "saveMilestone": "የዕድገት ደረጃ አስቀምጥ",
+      "savePhoto": "ወደ ማህደር ጨምር",
+      "saveTracing": "እንቅስቃሴ መዝግብ"
+    },
+    "medical": {
+      "subtitle": "አጠቃላይ የሕፃናት ሕክምና፣ ሥር የሰደዱ በሽታዎች እና የክትባት ታሪክ",
+      "bloodGroup": "የደም አይነት",
+      "notTyped": "ያልተመረመረ",
+      "allergies": "አለርጂዎች",
+      "chronicConditions": "ሥር የሰደዱ በሽታዎች",
+      "noneReported": "ምንም አልተገኘም",
+      "generalHealthTitle": "አጠቃላይ የጤና እና የተመጣጠነ ምግብ ሁኔታ",
+      "generalHealthDefault": "እስካሁን ምንም የክሊኒካል መረጃ አልተመዘገበም።",
+      "specialCareTitle": "ልዩ የዕለት ተዕለት እንክብካቤ መስፈርቶች",
+      "dialogTitle": "የህክምና እና የጤና መዝገብ አድስ",
+      "dialogDesc": "የሕፃኑን የጤና ሁኔታ፣ የደም አይነት፣ የሚታወቁ አለርጂዎችን እና ልዩ ፍላጎቶችን ይመዝግቡ።",
+      "bloodGroupPlaceholder": "ለምሳሌ፡ O+, A+, B-",
+      "allergiesLabel": "የሚታወቁ አለርጂዎች (በኮማ የተለዩ)",
+      "allergiesPlaceholder": "ፔኒሲሊን፣ ለውዝ፣ የአበባ ብናኝ...",
+      "chronicLabel": "ሥር የሰደዱ የጤና እክሎች (በኮማ የተለዩ)",
+      "chronicPlaceholder": "አስም፣ የስኳር በሽታ...",
+      "generalHealthLabel": "አጠቃላይ የጤና እና የተመጣጠነ ምግብ ሁኔታ",
+      "generalHealthPlaceholder": "ሕፃኑ በደንብ የተመገበ እና ንቁ ነው...",
+      "specialCareLabel": "ልዩ የዕለት ተዕለት እንክብካቤ መስፈርቶች",
+      "specialCarePlaceholder": "የየዕለት እስትንፋስ መርጫ (inhaler)፣ ልዩ ምግብ..."
+    },
+    "milestones": {
+      "subtitle": "የአስተሳሰብ፣ የእንቅስቃሴ፣ የቋንቋ እና የስሜት ዕድገት ምልከታዎች",
+      "empty": "እስካሁን ምንም የተመዘገበ የዕድገት ደረጃ የለም።",
+      "age": "ዕድሜ: {age}",
+      "assessedOn": "የተገመገመበት ቀን: {date}",
+      "assessedBy": "በ {name}",
+      "dialogTitle": "የዕድገት ደረጃን መዝግብ",
+      "categoryLabel": "ምድብ *",
+      "statusLabel": "ሁኔታ *",
+      "ageBracketLabel": "የዕድሜ ክልል",
+      "ageBracketPlaceholder": "ለምሳሌ፡ ከ1-2 ዓመት",
+      "titleLabel": "የተገመገመው ክህሎት / የዕድገት ደረጃ *",
+      "titlePlaceholder": "ለምሳሌ፡ ባለ ሁለት ቃል ዓረፍተ ነገር ይናገራል፣ በራሱ ይራመዳል...",
+      "observationsLabel": "ክሊኒካዊ / ማህበራዊ ምልከታዎች",
+      "observationsPlaceholder": "በምርመራ ወይም በጨዋታ ወቅት የታዩ ምልከታዎች...",
+      "types": {
+        "MOTOR": "የእንቅስቃሴ ክህሎት",
+        "COGNITIVE": "የአስተሳሰብ ክህሎት",
+        "LANGUAGE": "የቋንቋ እና ንግግር ክህሎት",
+        "SOCIAL_EMOTIONAL": "ማህበራዊ እና ስሜታዊ ክህሎት"
+      },
+      "statuses": {
+        "ON_TRACK": "በተገቢው ደረጃ ላይ",
+        "ADVANCED": "የላቀ",
+        "DELAYED": "የዘገየ"
+      }
+    },
+    "photos": {
+      "subtitle": "የሕፃኑን የጊዜ ሂደት ዕድገት የሚያሳዩ ተከታታይ ፎቶዎች",
+      "empty": "እስካሁን ምንም የዕድገት ፎቶ አልተሰቀለም።",
+      "primaryPortrait": "ዋና መለያ ፎቶ",
+      "monthsOld": "{months} ወር",
+      "dialogTitle": "የዕድገት ፎቶ ስቀል",
+      "urlLabel": "የፎቶ አድራሻ (URL) *",
+      "urlPlaceholder": "https://storage.awcsa.gov.et/photos/child-portrait.jpg",
+      "ageLabel": "ግምታዊ ዕድሜ (በወር)",
+      "agePlaceholder": "ለምሳሌ፡ 18",
+      "captionLabel": "መግለጫ / ሁኔታ",
+      "captionPlaceholder": "ለምሳሌ፡ የ18 ወር የጤና ምርመራ ወቅት",
+      "primaryCheckbox": "ዋና መለያ ፎቶ አድርግ"
+    },
+    "tracing": {
+      "subtitle": "ይፋዊ የፍለጋ እርምጃዎች፣ የሚዲያ ማስታወቂያዎች እና ምርመራዎች",
+      "empty": "እስካሁን ምንም የቤተሰብ ፍለጋ ጥረት አልተመዘገበም።",
+      "conductedOn": "የተከናወነበት ቀን: {date}",
+      "investigator": "መርማሪ: {name}",
+      "dialogTitle": "የቤተሰብ ፍለጋ ጥረትን መዝግብ",
+      "methodLabel": "የፍለጋ ዘዴ *",
+      "outcomeLabel": "ውጤት *",
+      "locationLabel": "ቦታ / ክፍለ ከተማ",
+      "locationPlaceholder": "ለምሳሌ፡ ቂርቆስ ክፍለ ከተማ፣ ወረዳ 04",
+      "findingsLabel": "ዝርዝር ግኝቶች እና ምልከታዎች *",
+      "findingsPlaceholder": "የተደረጉ ቃለ መጠይቆች፣ የተላለፉ ማስታወቂያዎች እና የተሰበሰቡ ማስረጃዎች...",
+      "methods": {
+        "PUBLIC_BROADCAST": "የህዝብ ብሮድካስት / ሚዲያ",
+        "POLICE_REPORT": "የፖሊስ የጠፉ ሰዎች ሪፖርት",
+        "COMMUNITY_INQUIRY": "የማህበረሰብ ጥያቄ",
+        "DATABASE_CROSSMATCH": "የዳታቤዝ ማመሳከሪያ",
+        "PHYSICAL_SEARCH": "የአካል የመስክ ፍለጋ"
+      },
+      "outcomes": {
+        "IN_PROGRESS": "በሂደት ላይ ያለ",
+        "PARENTS_LOCATED": "ወላጆች ተገኝተዋል",
+        "DECEASED": "በሕይወት እንደሌሉ ተረጋግጧል",
+        "UNTRACEABLE": "ፍለጋው ተቋርጧል / ሊገኙ አልቻሉም"
+      }
+    }
+  },
+  "judicial": {
+    "title": "የፍርድ ቤት ሂደቶች እና የሲቪል ምዝገባ",
+    "subtitle": "የፌደራል መጀመሪያ ደረጃ ፍርድ ቤት አቤቱታ፣ የማስረጃ ሰነዶች እና የቪራ (VERA) የልደት ሰርተፍኬት ትስስር",
+    "loading": "የፍርድ ቤት መዛግብት በመጫን ላይ...",
+    "empty": {
+      "title": "እስካሁን ምንም የፍርድ ቤት አቤቱታ አልቀረበም",
+      "desc": "የኮሚቴው ፈቃድ ከተገኘ እና የማስረጃ ሰነዶች ከተረጋገጡ በኋላ መደበኛ የጉዲፈቻ ፍርድ ቤት ሂደቱን ለመጀመር \"የፍርድ ቤት አቤቱታ አስገባ\" የሚለውን ይጫኑ።"
+    },
+    "buttons": {
+      "compileBundle": "የፍርድ ቤት ሰነዶችን አዘጋጅ",
+      "filePetition": "የፍርድ ቤት አቤቱታ አስገባ",
+      "addHearing": "+ ችሎት ጨምር",
+      "recordDecree": "የፍርድ ውሳኔ መዝግብ",
+      "linkVera": "ከቪራ (VERA) ሲቪል ምዝገባ ጋር አገናኝ",
+      "cancel": "ሰርዝ",
+      "close": "ዝጋ",
+      "submitPetition": "አቤቱታውን አስገባ",
+      "saveHearing": "የችሎት መዝገብ አስቀምጥ",
+      "grantDecree": "የጉዲፈቻ ፍርድን መዝግብ እና አጽድቅ",
+      "linkVeraEntry": "የሲቪል ምዝገባ መረጃን አገናኝ"
+    },
+    "caseDetails": {
+      "caseDocket": "የመዝገብ ቁጥር: {docket}",
+      "courtAndBench": "ፍርድ ቤት እና ችሎት",
+      "generalBench": "መደበኛ ችሎት",
+      "presidingJudge": "ዳኛ",
+      "notAssigned": "አልተመደበም",
+      "filingDate": "አቤቱታ የቀረበበት ቀን: {date}",
+      "nextScheduledHearing": "ቀጣይ የችሎት ቀጠሮ",
+      "noneScheduled": "ቀጠሮ አልተያዘም"
+    },
+    "petitionDialog": {
+      "title": "የጉዲፈቻ ፍርድ ቤት አቤቱታ አስገባ",
+      "courtName": "የፍርድ ቤት ስም",
+      "benchDivision": "የችሎት ክፍል",
+      "fileNumber": "የፍርድ ቤት መዝገብ ቁጥር *",
+      "fileNumberPlaceholder": "ለምሳሌ፡ FFIC/FAM/2026/894",
+      "judge": "ዳኛ",
+      "judgePlaceholder": "ለምሳሌ፡ ዳኛ ሰለሞን ከበደ",
+      "filingDate": "አቤቱታ የቀረበበት ቀን",
+      "nextHearingDate": "ቀጣይ የችሎት ቀን"
+    },
+    "hearingDialog": {
+      "title": "የችሎት ሂደት እና የዳኛ ትዕዛዞችን መዝግብ",
+      "date": "የችሎት ቀን *",
+      "type": "የችሎት አይነት",
+      "nextHearing": "ቀጣይ ችሎት (የተላለፈ ከሆነ)",
+      "attendees": "ተሳታፊዎች (በኮማ የተለዩ)",
+      "judgeOrders": "የዳኛ ትዕዛዞች / የችሎቱ ሂደት ማጠቃለያ *",
+      "ordersPlaceholder": "በችሎቱ ዳኛ የተሰጡ ትዕዛዞች..."
+    },
+    "hearingsTimeline": {
+      "title": "የፍርድ ቤት የችሎት ሂደቶች ({count})",
+      "recordedBy": "የመዘገበው: {name}",
+      "judgeOrders": "የዳኛ ትዕዛዝ:"
+    },
+    "decree": {
+      "dialogTitle": "የጉዲፈቻ ፍርድን አጽድቅ",
+      "decreeNumber": "ይፋዊ የፍርድ ውሳኔ ቁጥር *",
+      "decreeNumberPlaceholder": "ለምሳሌ፡ FFIC-DEC-2026-4401",
+      "decreeDate": "የፍርድ ውሳኔ ቀን *",
+      "decreeDocUrl": "የፍርድ ሰነድ አድራሻ (URL)",
+      "certifiedCopyUrl": "የተረጋገጠ ቅጂ አድራሻ (URL)",
+      "legalOrdersSummary": "የህጋዊ ትዕዛዞች ማጠቃለያ",
+      "grantedTitle": "የጉዲፈቻ ፍርድ ጸድቋል: #{decreeNumber}",
+      "orderDate": "የፍርድ ትዕዛዝ የተሰጠበት ቀን: {date}"
+    },
+    "vera": {
+      "dialogTitle": "የቪራ (VERA) የተሻሻለ የልደት ሰርተፍኬት መዝግብ",
+      "officeBranch": "የቪራ (VERA) ቅርንጫፍ ቢሮ *",
+      "amendedCertNumber": "የተሻሻለ የልደት ሰርተፍኬት ቁጥር *",
+      "amendedCertPlaceholder": "ለምሳሌ፡ VERA-BC-2026-90812",
+      "dateIssued": "የተሰጠበት ቀን",
+      "registrationNumber": "የምዝገባ ቁጥር",
+      "registrationPlaceholder": "ለምሳሌ፡ REG-VERA-77",
+      "notes": "የሲቪል ምዝገባ ማስታወሻዎች",
+      "linkedTitle": "የቪራ (VERA) ሲቪል መዝገብ ተገናኝቷል",
+      "badge": "የልደት ሰርተፍኬት ተሻሽሏል",
+      "branch": "ቅርንጫፍ",
+      "amendedCert": "የተሻሻለ ሰርተፍኬት #",
+      "issuedOn": "የተሰጠበት ቀን"
+    },
+    "bundle": {
+      "compiledOn": "የተዘጋጀው በ {date}",
+      "checklistTitle": "የማስረጃ ሰነዶች ማመሳከሪያ ዝርዝር:",
+      "medicalClearance": "የሕፃኑ አጠቃላይ የህክምና ማረጋገጫ (የደም አይነት: {bloodGroup})",
+      "homeStudy": "የማህበራዊ ሰራተኛ የቤት ጉብኝት ጥናት ምዘና",
+      "suitability": "ስነ-ልቦናዊ እና የፋይናንስ ብቃት (ድምር: {score}%)",
+      "committeeMinutes": "የምደባ ኮሚቴ የውሳኔ ቃለ ጉባኤ ({decision})",
+      "tracingCertificate": "የስነ-ህይወታዊ ቤተሰብ ፍለጋ ሰርተፍኬት ({count} የፍለጋ ጥረቶች ተመዝግበዋል)",
+      "siblingReviewGroup": "የወንድም/እህት ዝምድና ጥበቃ ክለሳ (የ{count} ልጆች ቡድን)",
+      "siblingReviewSingle": "የወንድም/እህት ዝምድና ጥበቃ ክለሳ (አንድ ልጅ)"
+    }
   }
 }

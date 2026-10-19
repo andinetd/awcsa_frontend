@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   HeartHandshake,
   ShieldCheck,
@@ -58,6 +59,7 @@ interface AderaCustodySectionProps {
 }
 
 export function AderaCustodySection({ child }: AderaCustodySectionProps) {
+  const t = useTranslations("adoption.aderaCustody");
   const childId = child.id;
   const { data: aderaData, isLoading } = useAderaCustody(childId);
   const formalizeMutation = useFormalizeAderaCustody(childId);
@@ -144,10 +146,10 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
             </div>
             <div>
               <CardTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wide font-mono">
-                Customary Adera Formalization & Child Protection
+                {t("title")}
               </CardTitle>
               <CardDescription className="text-xs text-slate-500">
-                Ethical traditional care oversight, Bale Adera custodian accountability & mandatory welfare checkups
+                {t("subtitle")}
               </CardDescription>
             </div>
           </div>
@@ -160,7 +162,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                 className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 cursor-pointer shadow-2xs"
               >
                 <UserCheck className="size-3.5" />
-                Formalize Adera Custody
+                {t("buttons.formalize")}
               </Button>
             ) : (
               <>
@@ -171,7 +173,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                   className="h-8 text-xs font-semibold rounded-xs border-[#BCD5EA] text-[#1769AA] hover:bg-[#E8F2FA] gap-1.5 cursor-pointer"
                 >
                   <ArrowRight className="size-3.5" />
-                  Convert Legal Status
+                  {t("buttons.convert")}
                 </Button>
                 <Button
                   size="sm"
@@ -179,7 +181,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                   className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 cursor-pointer shadow-2xs"
                 >
                   <Home className="size-3.5" />
-                  Record Home Welfare Visit
+                  {t("buttons.recordVisit")}
                 </Button>
               </>
             )}
@@ -192,10 +194,10 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
           <div className="text-center py-8 text-slate-400 bg-[#F7F8FA] border border-dashed border-[#E3E7EB] rounded-xs">
             <HeartHandshake className="size-8 mx-auto mb-2 opacity-40 text-slate-400" />
             <p className="text-xs font-medium text-slate-600">
-              This child is not currently under a formalized customary Adera care arrangement.
+              {t("emptyTitle")}
             </p>
             <p className="text-[11px] text-slate-400 mt-1 max-w-md mx-auto">
-              Under Ethiopian customary practice, when a child is left under informal care (Adera), the Bureau mandates formalizing the Bale Adera custodian to prevent exploitation and enable monthly monitoring.
+              {t("emptyDesc")}
             </p>
           </div>
         ) : (
@@ -204,7 +206,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                  Adera Legal Status
+                  {t("summary.legalStatus")}
                 </span>
                 <div className="flex items-center gap-1.5 pt-0.5">
                   <Badge
@@ -217,44 +219,48 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                         : "bg-blue-50 text-blue-700 border-blue-300"
                     }`}
                   >
-                    {record.status}
+                    {record.status === "ACTIVE"
+                      ? t("summary.statusActive")
+                      : record.status === "UNDER_SAFETY_REVIEW"
+                      ? t("summary.statusReview")
+                      : t("summary.statusConverted")}
                   </Badge>
                 </div>
               </div>
 
               <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                  Bale Adera Custodian
+                  {t("summary.custodian")}
                 </span>
                 <p className="text-xs font-bold text-[#0B1F3A]">
                   {record.custodian ? `${record.custodian.firstName} ${record.custodian.lastName}` : `Client #${record.custodianId}`}
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  Rel: {record.relationshipToChild || "Informal Guardian"}
+                  Rel: {record.relationshipToChild || t("summary.informalGuardian")}
                 </p>
               </div>
 
               <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                  Monthly Stipend
+                  {t("summary.monthlyStipend")}
                 </span>
                 <p className="text-xs font-bold text-[#0B1F3A]">
-                  {record.monthlyStipend ? `${record.monthlyStipend} ETB` : "None"}
+                  {record.monthlyStipend ? `${record.monthlyStipend} ETB` : t("summary.none")}
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  {record.isCourtApproved ? "Court Endorsed" : "Bureau Monitored"}
+                  {record.isCourtApproved ? t("summary.courtEndorsed") : t("summary.bureauMonitored")}
                 </p>
               </div>
 
               <div className="p-3 bg-[#F7F8FA] border border-[#E3E7EB] rounded-xs space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
-                  Next Home Visit Due
+                  {t("summary.nextHomeVisitDue")}
                 </span>
                 <div className="flex items-center gap-1 text-xs font-bold text-[#1769AA] pt-0.5">
                   <Clock className="size-3.5" />
-                  {new Date(record.nextCheckupDue).toLocaleDateString()}
+                  {record.nextCheckupDue ? new Date(record.nextCheckupDue).toLocaleDateString() : t("summary.noCheckupYet")}
                 </div>
-                <p className="text-[11px] text-slate-400">Mandatory 30-day inspection</p>
+                <p className="text-[11px] text-slate-400">{t("summary.mandatoryInspection")}</p>
               </div>
             </div>
 
@@ -262,7 +268,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-[#E3E7EB] pb-2">
                 <h4 className="text-xs font-bold text-[#0B1F3A] uppercase font-mono tracking-wide">
-                  Periodic Home Welfare Checkup History ({record.welfareCheckups?.length || 0})
+                  {t("checkups.historyTitle", { count: record.welfareCheckups?.length || 0 })}
                 </h4>
               </div>
 
@@ -276,7 +282,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-[10px] font-mono bg-white">
-                            Visit Date: {new Date(visit.visitDate).toLocaleDateString()}
+                            {t("checkups.visitDate", { date: new Date(visit.visitDate).toLocaleDateString() })}
                           </Badge>
                           <Badge
                             className={
@@ -285,31 +291,31 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                                 : "bg-rose-600 text-white text-[10px]"
                             }
                           >
-                            Safety: {visit.safetyAssessment}
+                            {t("checkups.safety", { assessment: t(`dialogs.checkup.safetyRatings.${visit.safetyAssessment}` as any) || visit.safetyAssessment })}
                           </Badge>
                           <Badge variant="secondary" className="text-[10px]">
-                            Living: {visit.livingConditionRating}
+                            {t("checkups.living", { rating: t(`dialogs.checkup.livingRatings.${visit.livingConditionRating}` as any) || visit.livingConditionRating })}
                           </Badge>
                         </div>
                         {visit.visitedBy && (
                           <span className="text-[11px] text-slate-500">
-                            Inspected by: {visit.visitedBy.firstName} {visit.visitedBy.lastName}
+                            {t("checkups.inspectedBy", { name: `${visit.visitedBy.firstName} ${visit.visitedBy.lastName}` })}
                           </span>
                         )}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-xs border border-slate-200">
                         <div>
-                          <strong>Education / Schooling:</strong> {visit.childSchoolingStatus}
+                          <strong>{t("checkups.schooling")}</strong> {visit.childSchoolingStatus}
                         </div>
                         <div>
-                          <strong>Physical & Health Appearance:</strong> {visit.childHealthStatus}
+                          <strong>{t("checkups.health")}</strong> {visit.childHealthStatus}
                         </div>
                       </div>
 
                       {visit.riskFlags && (visit.riskFlags as string[]).length > 0 && (
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[11px] font-semibold text-rose-600">Risk Flags:</span>
+                          <span className="text-[11px] font-semibold text-rose-600">{t("checkups.riskFlags")}</span>
                           {(visit.riskFlags as string[]).map((rf, i) => (
                             <Badge key={i} variant="destructive" className="text-[10px] py-0 px-1.5">
                               {rf}
@@ -320,10 +326,10 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
 
                       <div className="text-[11px] text-slate-700 bg-white p-2.5 rounded-xs border border-slate-200 space-y-1">
                         <p>
-                          <strong>Social Worker Observations:</strong> {visit.socialWorkerRemarks}
+                          <strong>{t("checkups.observations")}</strong> {visit.socialWorkerRemarks}
                         </p>
                         <p className="text-[#1769AA] font-semibold">
-                          Recommendation: {visit.safetyRecommendation}
+                          {t("checkups.recommendation", { rec: visit.safetyRecommendation })}
                         </p>
                       </div>
                     </div>
@@ -332,7 +338,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               ) : (
                 <div className="text-center py-6 text-slate-400 bg-[#F7F8FA] border border-dashed border-[#E3E7EB] rounded-xs">
                   <Home className="size-6 mx-auto mb-1 opacity-40 text-slate-400" />
-                  <p className="text-xs">No home inspection visits recorded yet.</p>
+                  <p className="text-xs">{t("checkups.empty")}</p>
                 </div>
               )}
             </div>
@@ -345,16 +351,16 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-[#0B1F3A]">
-              Formalize Customary Adera Care
+              {t("dialogs.formalize.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Register the informal caregiver (*Bale Adera*) and schedule child welfare checkups.
+              {t("dialogs.formalize.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Bale Adera Client ID *</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.formalize.clientId")}</Label>
               <Input
                 placeholder="e.g. 45"
                 value={custodianId}
@@ -363,7 +369,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               />
             </div>
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Relationship to Child</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.formalize.relationship")}</Label>
               <Input
                 placeholder="e.g. Neighbor, Distant Aunt, Godparent"
                 value={relationship}
@@ -372,9 +378,9 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               />
             </div>
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Reason Placed in Adera *</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.formalize.reason")}</Label>
               <Textarea
-                placeholder="Circumstances under which the biological parents left the child..."
+                placeholder={t("dialogs.formalize.reasonPlaceholder")}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 className="text-xs rounded-xs h-16"
@@ -382,7 +388,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <Label className="text-xs font-semibold">Monthly Stipend (ETB)</Label>
+                <Label className="text-xs font-semibold">{t("dialogs.formalize.stipend")}</Label>
                 <Input
                   type="number"
                   placeholder="e.g. 1500"
@@ -392,7 +398,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs font-semibold">Document URL</Label>
+                <Label className="text-xs font-semibold">{t("dialogs.formalize.docUrl")}</Label>
                 <Input
                   placeholder="https://..."
                   value={agreementDocUrl}
@@ -410,7 +416,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               onClick={() => setIsFormalizeOpen(false)}
               className="h-8 text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               size="sm"
@@ -418,7 +424,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               disabled={formalizeMutation.isPending || !custodianId || !reason}
               className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white"
             >
-              {formalizeMutation.isPending ? "Formalizing..." : "Formalize Arrangement"}
+              {formalizeMutation.isPending ? t("dialogs.formalize.submitting") : t("dialogs.formalize.submit")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -429,82 +435,82 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-[#0B1F3A]">
-              Record Home Welfare Checkup
+              {t("dialogs.checkup.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Social worker periodic home inspection and living condition evaluation.
+              {t("dialogs.checkup.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <Label className="text-xs font-semibold">Living Condition Rating</Label>
+                <Label className="text-xs font-semibold">{t("dialogs.checkup.livingRating")}</Label>
                 <Select value={livingRating} onValueChange={setLivingRating}>
                   <SelectTrigger className="h-8 text-xs rounded-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="EXCELLENT">Excellent</SelectItem>
-                    <SelectItem value="GOOD">Good</SelectItem>
-                    <SelectItem value="SATISFACTORY">Satisfactory</SelectItem>
-                    <SelectItem value="NEEDS_IMPROVEMENT">Needs Improvement</SelectItem>
-                    <SelectItem value="CRITICAL">Critical</SelectItem>
+                    <SelectItem value="EXCELLENT">{t("dialogs.checkup.livingRatings.EXCELLENT")}</SelectItem>
+                    <SelectItem value="GOOD">{t("dialogs.checkup.livingRatings.GOOD")}</SelectItem>
+                    <SelectItem value="SATISFACTORY">{t("dialogs.checkup.livingRatings.SATISFACTORY")}</SelectItem>
+                    <SelectItem value="NEEDS_IMPROVEMENT">{t("dialogs.checkup.livingRatings.NEEDS_IMPROVEMENT")}</SelectItem>
+                    <SelectItem value="CRITICAL">{t("dialogs.checkup.livingRatings.CRITICAL")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1">
-                <Label className="text-xs font-semibold">Safety Assessment</Label>
+                <Label className="text-xs font-semibold">{t("dialogs.checkup.safetyAssessment")}</Label>
                 <Select value={safetyRating} onValueChange={setSafetyRating}>
                   <SelectTrigger className="h-8 text-xs rounded-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="SAFE">Safe</SelectItem>
-                    <SelectItem value="MINOR_CONCERNS">Minor Concerns</SelectItem>
-                    <SelectItem value="MAJOR_CONCERNS">Major Concerns</SelectItem>
-                    <SelectItem value="UNSAFE">Unsafe / Urgent</SelectItem>
+                    <SelectItem value="SAFE">{t("dialogs.checkup.safetyRatings.SAFE")}</SelectItem>
+                    <SelectItem value="MINOR_CONCERNS">{t("dialogs.checkup.safetyRatings.MINOR_CONCERNS")}</SelectItem>
+                    <SelectItem value="MAJOR_CONCERNS">{t("dialogs.checkup.safetyRatings.MAJOR_CONCERNS")}</SelectItem>
+                    <SelectItem value="UNSAFE">{t("dialogs.checkup.safetyRatings.UNSAFE")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Schooling / Education Status</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.checkup.schooling")}</Label>
               <Input
                 value={schoolingStatus}
                 onChange={(e) => setSchoolingStatus(e.target.value)}
-                placeholder="e.g. Attending grade 4"
+                placeholder={t("dialogs.checkup.schoolingPlaceholder")}
                 className="h-8 text-xs rounded-xs"
               />
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Health & Nutrition Observations</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.checkup.health")}</Label>
               <Input
                 value={healthStatus}
                 onChange={(e) => setHealthStatus(e.target.value)}
-                placeholder="e.g. Clean, well-fed, healthy appearance"
+                placeholder={t("dialogs.checkup.healthPlaceholder")}
                 className="h-8 text-xs rounded-xs"
               />
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Risk Flags (comma separated)</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.checkup.riskFlags")}</Label>
               <Input
                 value={riskFlagsInput}
                 onChange={(e) => setRiskFlagsInput(e.target.value)}
-                placeholder="CHILD_LABOR, DOMESTIC_SERVITUDE, MISSING_SCHOOL"
+                placeholder={t("dialogs.checkup.riskFlagsPlaceholder")}
                 className="h-8 text-xs rounded-xs"
               />
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Detailed Remarks *</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.checkup.remarks")}</Label>
               <Textarea
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
-                placeholder="Observation of living quarters, interaction with custodian..."
+                placeholder={t("dialogs.checkup.remarksPlaceholder")}
                 className="text-xs rounded-xs h-16"
               />
             </div>
@@ -517,7 +523,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               onClick={() => setIsCheckupOpen(false)}
               className="h-8 text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               size="sm"
@@ -525,7 +531,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               disabled={checkupMutation.isPending || !remarks}
               className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white"
             >
-              {checkupMutation.isPending ? "Saving..." : "Save Checkup Record"}
+              {checkupMutation.isPending ? t("dialogs.checkup.submitting") : t("dialogs.checkup.submit")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -536,16 +542,16 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-[#0B1F3A]">
-              Transition Legal Custody Status
+              {t("dialogs.convert.title")}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              Convert the customary informal arrangement to formal legal status.
+              {t("dialogs.convert.desc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2 text-xs">
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Target Legal Status</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.convert.targetStatus")}</Label>
               <Select
                 value={targetStatus}
                 onValueChange={(v: AderaStatus) => setTargetStatus(v)}
@@ -555,27 +561,27 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="CONVERTED_TO_GUARDIANSHIP">
-                    Convert to Formal Court Guardianship
+                    {t("dialogs.convert.statuses.CONVERTED_TO_GUARDIANSHIP")}
                   </SelectItem>
                   <SelectItem value="CONVERTED_TO_ADOPTION">
-                    Convert to Domestic Adoption
+                    {t("dialogs.convert.statuses.CONVERTED_TO_ADOPTION")}
                   </SelectItem>
                   <SelectItem value="UNDER_SAFETY_REVIEW">
-                    Place under Safety Review
+                    {t("dialogs.convert.statuses.UNDER_SAFETY_REVIEW")}
                   </SelectItem>
                   <SelectItem value="TERMINATED">
-                    Terminate & Return Child to Care Center
+                    {t("dialogs.convert.statuses.TERMINATED")}
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs font-semibold">Transition Notes & Rationale</Label>
+              <Label className="text-xs font-semibold">{t("dialogs.convert.notes")}</Label>
               <Textarea
                 value={convertNotes}
                 onChange={(e) => setConvertNotes(e.target.value)}
-                placeholder="Court decree details, social worker justification..."
+                placeholder={t("dialogs.convert.notesPlaceholder")}
                 className="text-xs rounded-xs h-20"
               />
             </div>
@@ -588,7 +594,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               onClick={() => setIsConvertOpen(false)}
               className="h-8 text-xs rounded-xs"
             >
-              Cancel
+              {t("buttons.cancel")}
             </Button>
             <Button
               size="sm"
@@ -596,7 +602,7 @@ export function AderaCustodySection({ child }: AderaCustodySectionProps) {
               disabled={convertMutation.isPending}
               className="h-8 text-xs rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white"
             >
-              {convertMutation.isPending ? "Updating..." : "Confirm Status Transition"}
+              {convertMutation.isPending ? t("dialogs.convert.submitting") : t("dialogs.convert.submit")}
             </Button>
           </DialogFooter>
         </DialogContent>
