@@ -14,7 +14,9 @@ const PartnersSection = ({ items }: PartnersSectionProps) => {
 
   if (!items || items.length === 0) return null;
 
-  const visibleItems = items.filter((item) => item.isVisible);
+  const visibleItems = items.filter(
+    (item) => item.isVisible && Boolean(item.imageUrl?.trim()),
+  );
   if (visibleItems.length === 0) return null;
 
   return (
@@ -49,7 +51,7 @@ const PartnersSection = ({ items }: PartnersSectionProps) => {
                     className="grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-110"
                   >
                     <Image
-                      src={item.imageUrl || ""}
+                      src={item.imageUrl || "/assets/WCSA_logo.jpg"}
                       alt={item.title?.[locale] || "Partner"}
                       width={160}
                       height={80}
@@ -59,7 +61,7 @@ const PartnersSection = ({ items }: PartnersSectionProps) => {
                 ) : (
                   <div className="grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-110">
                     <Image
-                      src={item.imageUrl || ""}
+                      src={item.imageUrl || "/assets/WCSA_logo.jpg"}
                       alt={item.title?.[locale] || "Partner"}
                       width={160}
                       height={80}

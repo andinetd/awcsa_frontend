@@ -5,6 +5,7 @@ import { CMSContent, CMSSettings, LandingPageData } from "@/types/cms";
 
 const getAuthHeader = () => {
   const { token } = useAuthStore.getState();
+  if (!token) return {};
   return {
     headers: {
       Authorization: `Bearer ${token}`,

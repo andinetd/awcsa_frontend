@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { fontVariables } from "@/styles/fonts";
 import "./globals.css";
 import Providers from "@/components/providers";
-import { NextIntlClientProvider, hasLocale, useMessages } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Link from "next/link";
@@ -26,13 +27,13 @@ export default async function RootLayout({
     notFound();
   }
 
-  // Load messages for the current locale
-  const messages = (await import(`../../../messages/${locale}.json`)).default;
+  // Load all messages for the current locale (including merged namespaces)
+  const messages = await getMessages();
 
   return (
     <html lang={locale}>
       <body className={`${fontVariables} antialiased`}>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>
