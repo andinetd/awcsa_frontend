@@ -36,6 +36,12 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   const marital = beneficiary.maritalStatus || "—";
   const workplace = beneficiary.ElderlyProfile?.workplaceCondition || beneficiary.workplaceCondition || "—";
   const supportConfirmed = (beneficiary.DisabilityProfile?.supportConfirmed || beneficiary.ElderlyProfile?.supportConfirmed || beneficiary.supportConfirmed) ? "CONFIRMED & AUDITED" : "PENDING VERIFICATION";
+  const previousProfession =
+    beneficiary.DisabilityProfile?.previousProfession ||
+    beneficiary.ElderlyProfile?.previousProfession ||
+    beneficiary.previousProfession ||
+    "—";
+  const isElderly = beneficiary.clientCategory === "ELDERLY" || Boolean(beneficiary.ElderlyProfile);
 
   const trainings = [
     beneficiary.preferredTraining1,
@@ -290,6 +296,10 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
       <div class="field" style="grid-column: span 2;">
         <span class="label">Desired Work / Training Sectors (የሚፈልጉት የስራ ዘርፍ)</span>
         <span class="value">${trainingStr}</span>
+      </div>
+      <div class="field" style="grid-column: span 2;">
+        <span class="label">${isElderly ? "Lifetime Profession & Knowledge Sharing (ያካበቱት ሙያና ለትውልድ የሚተላለፍ ተሞክሮ)" : "Prior Profession / Acquired Skills (ያካበቱት / የቀድሞ ሙያ)"}</span>
+        <span class="value">${previousProfession}</span>
       </div>
       <div class="field" style="grid-column: span 2;">
         <span class="label">Previous Support Record</span>

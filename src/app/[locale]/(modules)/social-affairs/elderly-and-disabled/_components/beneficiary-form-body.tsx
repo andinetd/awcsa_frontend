@@ -45,6 +45,7 @@ import {
   AlertCircle,
   AlertTriangle,
   ExternalLink,
+  BookOpen,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -1464,24 +1465,56 @@ export function BeneficiaryFormBody({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="previousProfession"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{tSrs("previousProfession")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Trade or profession"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {type === "DISABLED" && (
+              <FormField
+                control={form.control}
+                name="previousProfession"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{tSrs("previousProfession")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={tSrs("disabledProfessionPlaceholder")}
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
+
+          {type === "ELDERLY" && (
+            <div className="rounded-lg border border-sky-200 bg-sky-50/60 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-sky-950 font-medium text-sm">
+                <BookOpen className="h-4 w-4 text-sky-700" />
+                <span>{tSrs("elderlyProfessionMentorship")}</span>
+              </div>
+              <p className="text-xs text-sky-800">
+                {tSrs("elderlyProfessionDesc")}
+              </p>
+              <FormField
+                control={form.control}
+                name="previousProfession"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        rows={2}
+                        className="bg-white border-sky-200 placeholder:text-slate-400"
+                        placeholder={tSrs("elderlyProfessionPlaceholder")}
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
           <FormField
             control={form.control}
             name="previousSupport"

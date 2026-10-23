@@ -41,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Edit, Loader2, History } from "lucide-react";
+import { Eye, Edit, Loader2, History, BookOpen } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -769,20 +769,53 @@ function EditBeneficiaryDialog({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="previousProfession"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{tSrs("previousProfession")}</FormLabel>
-                      <FormControl>
-                        <Input {...field} value={field.value ?? ""} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {isDisabled && (
+                  <FormField
+                    control={form.control}
+                    name="previousProfession"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{tSrs("previousProfession")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={tSrs("disabledProfessionPlaceholder")}
+                            {...field}
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </div>
+
+              {!isDisabled && (
+                <div className="rounded-lg border border-sky-200 bg-sky-50/60 p-3 space-y-1.5">
+                  <div className="flex items-center gap-2 text-sky-950 font-medium text-xs">
+                    <BookOpen className="h-3.5 w-3.5 text-sky-700" />
+                    <span>{tSrs("elderlyProfessionMentorship")}</span>
+                  </div>
+                  <FormField
+                    control={form.control}
+                    name="previousProfession"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            rows={2}
+                            className="bg-white text-xs border-sky-200 placeholder:text-slate-400"
+                            placeholder={tSrs("elderlyProfessionPlaceholder")}
+                            {...field}
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
               <FormField
                 control={form.control}
                 name="previousSupport"
