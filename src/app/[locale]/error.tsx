@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCw } from "lucide-react";
 
@@ -12,9 +13,11 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to console for diagnostic purposes
+    // Log the error to console and send to Sentry
     console.error("Client runtime exception caught by Error Boundary:", error);
+    Sentry.captureException(error);
   }, [error]);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">

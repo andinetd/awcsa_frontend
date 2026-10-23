@@ -38,8 +38,10 @@ export async function middleware(req: NextRequest) {
     "/unauthorized",
     "/register",
     "/reset-password",
+    "/debug-sentry",
     "",
   ];
+
 
   const isPublicRoute = publicRoutes.some(
     (route) =>
