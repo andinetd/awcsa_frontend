@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import {
+  DISABILITY_CATEGORIES,
+  getSubTypesForCategory,
+  getCategoryForSubType,
+  getDisabilityDisplayLabel,
+  DisabilityCategoryKey,
+} from "@/constants/disability-classification";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -137,6 +144,7 @@ const DEFAULT_VALUES: any = {
   previousSupport: "",
   supportConfirmed: false,
   requiredSupportType: "",
+  disabilityCategory: "",
   disabilityType: "",
   disabilitySeverity: undefined,
   cause: "",
@@ -161,6 +169,7 @@ export function BeneficiaryFormBody({
   const t = useTranslations("social-affairs.elderlyAndDisabled.registration");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
   const tOpt = useTranslations("social-affairs.elderlyAndDisabled.options");
+  const locale = useLocale() === "en" ? "en" : "am";
   const [faydaStatus, setFaydaStatus] = useState<"none" | "valid" | "invalid">(
     "none",
   );
@@ -911,23 +920,101 @@ export function BeneficiaryFormBody({
             <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
               Disability Details
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="disabilityType"
+                name="disabilityCategory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.disabilityType")} *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("placeholders.disabilityType")}
-                        {...field}
-                        value={(field.value as any) ?? ""}
-                      />
-                    </FormControl>
+                    <FormLabel>{t("fields.disabilityCategory")} *</FormLabel>
+                    <Select
+                      onValueChange={(val) => {
+                        field.onChange(val);
+                        // Reset sub-type if it doesn't belong to newly selected category
+                        const currentSubType = form.getValues("disabilityType");
+                        if (currentSubType) {
+                          const currentCat = getCategoryForSubType(currentSubType);
+                          if (currentCat !== val) {
+                            form.setValue("disabilityType", "");
+                          }
+                        }
+                      }}
+                      value={field.value ?? ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("placeholders.selectCategory")}>
+                            {field.value
+                              ? (tOpt.has(`disabilityCategories.${field.value}`)
+                                  ? tOpt(`disabilityCategories.${field.value}`)
+                                  : getDisabilityDisplayLabel(field.value, locale))
+                              : undefined}
+                          </SelectValue>
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {DISABILITY_CATEGORIES.map((cat) => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            {tOpt.has(`disabilityCategories.${cat.value}`)
+                              ? tOpt(`disabilityCategories.${cat.value}`)
+                              : (locale === "en" ? cat.enLabel : cat.amLabel)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
+              />
+              <FormField
+                control={form.control}
+                name="disabilityType"
+                render={({ field }) => {
+                  const selectedCategory =
+                    (form.watch("disabilityCategory") as DisabilityCategoryKey) || undefined;
+                  const availableSubTypes = selectedCategory
+                    ? getSubTypesForCategory(selectedCategory)
+                    : [];
+
+                  return (
+                    <FormItem>
+                      <FormLabel>{t("fields.disabilitySubType")} *</FormLabel>
+                      <Select
+                        disabled={!selectedCategory || availableSubTypes.length === 0}
+                        onValueChange={field.onChange}
+                        value={field.value ?? ""}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={
+                                !selectedCategory
+                                  ? t("placeholders.selectCategory")
+                                  : t("placeholders.selectSubType")
+                              }
+                            >
+                              {field.value
+                                ? (tOpt.has(`disabilityTypes.${field.value}`)
+                                    ? tOpt(`disabilityTypes.${field.value}`)
+                                    : getDisabilityDisplayLabel(field.value, locale))
+                                : undefined}
+                            </SelectValue>
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {availableSubTypes.map((st) => (
+                            <SelectItem key={st.value} value={st.value}>
+                              {tOpt.has(`disabilityTypes.${st.value}`)
+                                ? tOpt(`disabilityTypes.${st.value}`)
+                                : (locale === "en" ? st.enLabel : st.amLabel)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormField
                 control={form.control}

@@ -1,4 +1,8 @@
 import { Beneficiary as BeneficiaryV2 } from "@/api/beneficiaries/types-v2";
+import {
+  getDisabilityDisplayLabel,
+  getCategoryForSubType,
+} from "@/constants/disability-classification";
 
 export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   const printWindow = window.open("", "_blank");
@@ -6,7 +10,14 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
 
   const fullName = `${beneficiary.firstName || ""} ${beneficiary.lastName || ""} ${beneficiary.grandfatherName || ""}`.trim() || "—";
   const categoryLabel = beneficiary.clientCategory === "DISABLED" ? "Person with Disability" : "Elderly Citizen";
-  const disabilityType = beneficiary.DisabilityProfile?.disabilityType || beneficiary.disabilityType || "—";
+  const rawDisabilityType = beneficiary.DisabilityProfile?.disabilityType || beneficiary.disabilityType;
+  const categoryKey = getCategoryForSubType(rawDisabilityType);
+  const disabilityCategoryStr = categoryKey
+    ? `${getDisabilityDisplayLabel(categoryKey, "en")} / ${getDisabilityDisplayLabel(categoryKey, "am")}`
+    : "—";
+  const disabilityType = rawDisabilityType
+    ? `${getDisabilityDisplayLabel(rawDisabilityType, "en")} / ${getDisabilityDisplayLabel(rawDisabilityType, "am")}`
+    : "—";
   const disabilitySeverity = beneficiary.DisabilityProfile?.disabilitySeverity || beneficiary.disabilitySeverity || "—";
   const cause = beneficiary.DisabilityProfile?.cause || beneficiary.cause || "—";
   const faydaId = beneficiary.faydaId || "—";
@@ -234,7 +245,11 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
     <div class="section-title">3. Vulnerability & Disability Assessment</div>
     <div class="grid">
       <div class="field">
-        <span class="label">Primary Disability Type</span>
+        <span class="label">Disability Category</span>
+        <span class="value">${disabilityCategoryStr}</span>
+      </div>
+      <div class="field">
+        <span class="label">Specific Condition / Type</span>
         <span class="value">${disabilityType}</span>
       </div>
       <div class="field">

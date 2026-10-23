@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import {
+  DISABILITY_CATEGORIES,
+  DISABILITY_SUB_TYPES,
+  getSubTypesForCategory,
+  getCategoryForSubType,
+  getDisabilityDisplayLabel,
+  DisabilityCategoryKey,
+} from "@/constants/disability-classification";
 import { useBeneficiarySearch } from "@/hooks/beneficiaries/srs-hooks";
 import { useGetSubCitiesQuery } from "@/hooks/social-affairs";
 import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
@@ -81,6 +89,7 @@ export default function BeneficiariesPage() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
   const tSubCities = useTranslations("subCities.names");
   const tOpts = useTranslations("social-affairs.elderlyAndDisabled.options");
+  const locale = useLocale() === "en" ? "en" : "am";
 
   const getSubCityLabel = (sc: string) => (tSubCities.has(sc) ? tSubCities(sc) : sc);
   const openDialog = useBeneficiaryRegisterStore((s) => s.openDialog);
@@ -106,6 +115,7 @@ export default function BeneficiariesPage() {
   const [activeStatusFilter, setActiveStatusFilter] = useState<string>("ALL");
 
   // Disability-specific filters
+  const [disabilityCategoryFilter, setDisabilityCategoryFilter] = useState<string>("ALL");
   const [disabilityTypeFilter, setDisabilityTypeFilter] = useState<string>("ALL");
   const [severityFilter, setSeverityFilter] = useState<string>("ALL");
   const [verificationFilter, setVerificationFilter] = useState<string>("ALL");
@@ -322,6 +332,12 @@ export default function BeneficiariesPage() {
 
     // 5. Category-specific
     if (category === "DISABLED") {
+      if (disabilityCategoryFilter !== "ALL") {
+        list = list.filter((b) => {
+          const dt = b.DisabilityProfile?.disabilityType;
+          return getCategoryForSubType(dt) === disabilityCategoryFilter;
+        });
+      }
       if (disabilityTypeFilter !== "ALL") {
         list = list.filter((b) =>
           b.DisabilityProfile?.disabilityType
@@ -384,6 +400,7 @@ export default function BeneficiariesPage() {
     employmentFilter,
     maritalFilter,
     activeStatusFilter,
+    disabilityCategoryFilter,
     disabilityTypeFilter,
     severityFilter,
     verificationFilter,
@@ -401,6 +418,7 @@ export default function BeneficiariesPage() {
     if (maritalFilter !== "ALL") count++;
     if (activeStatusFilter !== "ALL") count++;
     if (category === "DISABLED") {
+      if (disabilityCategoryFilter !== "ALL") count++;
       if (disabilityTypeFilter !== "ALL") count++;
       if (severityFilter !== "ALL") count++;
       if (verificationFilter !== "ALL") count++;
@@ -420,6 +438,7 @@ export default function BeneficiariesPage() {
     maritalFilter,
     activeStatusFilter,
     category,
+    disabilityCategoryFilter,
     disabilityTypeFilter,
     severityFilter,
     verificationFilter,
@@ -440,7 +459,8 @@ export default function BeneficiariesPage() {
     maritalFilter !== "ALL" ||
     activeStatusFilter !== "ALL" ||
     (category === "DISABLED" &&
-      (disabilityTypeFilter !== "ALL" ||
+      (disabilityCategoryFilter !== "ALL" ||
+        disabilityTypeFilter !== "ALL" ||
         severityFilter !== "ALL" ||
         verificationFilter !== "ALL" ||
         assistanceFilter !== "ALL")) ||
@@ -461,6 +481,7 @@ export default function BeneficiariesPage() {
     setEmploymentFilter("ALL");
     setMaritalFilter("ALL");
     setActiveStatusFilter("ALL");
+    setDisabilityCategoryFilter("ALL");
     setDisabilityTypeFilter("ALL");
     setSeverityFilter("ALL");
     setVerificationFilter("ALL");
@@ -831,7 +852,44 @@ export default function BeneficiariesPage() {
             {/* Category-specific filters */}
             {category === "DISABLED" ? (
               <>
-                {/* Disability Type */}
+                {/* Disability Category */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                    {t("filterDrawer.disabilityCategory")}
+                  </label>
+                  <Select
+                    value={disabilityCategoryFilter}
+                    onValueChange={(val) => {
+                      setDisabilityCategoryFilter(val);
+                      setDisabilityTypeFilter("ALL");
+                      setPage(1);
+                    }}
+                  >
+                    <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                      <SelectValue placeholder={t("filterDrawer.allDisabilityCategories")}>
+                        {disabilityCategoryFilter === "ALL"
+                          ? t("filterDrawer.allDisabilityCategories")
+                          : tOpts.has(`disabilityCategories.${disabilityCategoryFilter}`)
+                          ? tOpts(`disabilityCategories.${disabilityCategoryFilter}`)
+                          : getDisabilityDisplayLabel(disabilityCategoryFilter, locale)}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xs border-[#E3E7EB]">
+                      <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                        {t("filterDrawer.allDisabilityCategories")}
+                      </SelectItem>
+                      {DISABILITY_CATEGORIES.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value} className="text-xs rounded-xs">
+                          {tOpts.has(`disabilityCategories.${cat.value}`)
+                            ? tOpts(`disabilityCategories.${cat.value}`)
+                            : (locale === "en" ? cat.enLabel : cat.amLabel)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Specific Disability Condition */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
                     {t("filterDrawer.disabilityType")}
@@ -849,16 +907,21 @@ export default function BeneficiariesPage() {
                           ? t("filterDrawer.allDisabilityTypes")
                           : tOpts.has(`disabilityTypes.${disabilityTypeFilter}`)
                           ? tOpts(`disabilityTypes.${disabilityTypeFilter}`)
-                          : disabilityTypeFilter}
+                          : getDisabilityDisplayLabel(disabilityTypeFilter, locale)}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
                         {t("filterDrawer.allDisabilityTypes")}
                       </SelectItem>
-                      {DISABILITY_TYPES.map((dt) => (
-                        <SelectItem key={dt} value={dt} className="text-xs rounded-xs">
-                          {tOpts.has(`disabilityTypes.${dt}`) ? tOpts(`disabilityTypes.${dt}`) : dt}
+                      {(disabilityCategoryFilter !== "ALL"
+                        ? getSubTypesForCategory(disabilityCategoryFilter as DisabilityCategoryKey)
+                        : DISABILITY_SUB_TYPES
+                      ).map((st) => (
+                        <SelectItem key={st.value} value={st.value} className="text-xs rounded-xs">
+                          {tOpts.has(`disabilityTypes.${st.value}`)
+                            ? tOpts(`disabilityTypes.${st.value}`)
+                            : (locale === "en" ? st.enLabel : st.amLabel)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1204,6 +1267,30 @@ export default function BeneficiariesPage() {
             </Badge>
           )}
 
+          {category === "DISABLED" && disabilityCategoryFilter !== "ALL" && (
+            <Badge
+              variant="outline"
+              className="text-[11px] font-mono rounded-xs border-slate-300 bg-white text-slate-700 gap-1 pl-2 pr-1 py-0.5"
+            >
+              <span>
+                {t("chips.disabilityCategory", {
+                  category: tOpts.has(`disabilityCategories.${disabilityCategoryFilter}`)
+                    ? tOpts(`disabilityCategories.${disabilityCategoryFilter}`)
+                    : getDisabilityDisplayLabel(disabilityCategoryFilter, locale),
+                })}
+              </span>
+              <button
+                onClick={() => {
+                  setDisabilityCategoryFilter("ALL");
+                  setDisabilityTypeFilter("ALL");
+                }}
+                className="hover:text-rose-600 ml-0.5 cursor-pointer"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          )}
+
           {category === "DISABLED" && disabilityTypeFilter !== "ALL" && (
             <Badge
               variant="outline"
@@ -1213,7 +1300,7 @@ export default function BeneficiariesPage() {
                 {t("chips.disabilityType", {
                   type: tOpts.has(`disabilityTypes.${disabilityTypeFilter}`)
                     ? tOpts(`disabilityTypes.${disabilityTypeFilter}`)
-                    : disabilityTypeFilter,
+                    : getDisabilityDisplayLabel(disabilityTypeFilter, locale),
                 })}
               </span>
               <button

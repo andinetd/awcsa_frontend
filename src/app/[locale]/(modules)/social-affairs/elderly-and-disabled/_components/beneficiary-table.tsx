@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { getDisabilityDisplayLabel } from "@/constants/disability-classification";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -129,6 +130,7 @@ export default function BeneficiaryTable({
 }: BeneficiaryTableProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
+  const locale = useLocale() === "en" ? "en" : "am";
   const [editing, setEditing] = useState<BeneficiaryV2 | null>(null);
 
   if (isLoading) {
@@ -211,7 +213,7 @@ export default function BeneficiaryTable({
                   </TableCell>
                   <TableCell className="text-xs text-slate-600">
                     {type === "DISABLED"
-                      ? (item.DisabilityProfile?.disabilityType ?? "—")
+                      ? getDisabilityDisplayLabel(item.DisabilityProfile?.disabilityType, locale)
                       : (item.ElderlyProfile?.workplaceCondition ?? "—")}
                   </TableCell>
                   <TableCell>

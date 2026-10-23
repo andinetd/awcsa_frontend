@@ -77,6 +77,7 @@ export const registerDisabledFormSchema = baseBeneficiarySchema
   .merge(trainingChoicesSchema)
   .merge(workplaceSchema)
   .extend({
+    disabilityCategory: z.string().optional(),
     disabilityType: z.string().min(1, "Disability type is required"),
     disabilitySeverity: z
       .enum(["MILD", "MODERATE", "SEVERE", "PROFOUND"])
@@ -224,6 +225,7 @@ export const beneficiarySearchSchema = z.object({
   category: z.enum(["ELDERLY", "DISABLED"]).optional(),
   subCity: z.string().optional(),
   woreda: z.string().optional(),
+  disabilityCategory: z.string().optional(),
   disabilityType: z.string().optional(),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(200).default(25),
