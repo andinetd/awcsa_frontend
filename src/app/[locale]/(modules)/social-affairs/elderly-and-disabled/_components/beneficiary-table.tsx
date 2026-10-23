@@ -42,7 +42,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Eye, Edit, Loader2, History, BookOpen } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -135,6 +135,7 @@ export default function BeneficiaryTable({
   const t = useTranslations("social-affairs.elderlyAndDisabled.beneficiaries");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
   const locale = useLocale() === "en" ? "en" : "am";
+  const router = useRouter();
   const [editing, setEditing] = useState<BeneficiaryV2 | null>(null);
 
   if (isLoading) {
@@ -194,9 +195,10 @@ export default function BeneficiaryTable({
               return (
                 <TableRow
                   key={item.id}
-                  className="border-b border-[#E3E7EB] hover:bg-slate-50/50 transition-colors"
+                  className="border-b border-[#E3E7EB] hover:bg-slate-50 transition-colors cursor-pointer group"
+                  onClick={() => router.push(`${profileHref}/${item.id}`)}
                 >
-                  <TableCell className="font-medium text-xs text-[#0B1F3A]">
+                  <TableCell className="font-medium text-xs text-[#0B1F3A] group-hover:text-[#1769AA] transition-colors">
                     {item.firstName} {item.lastName}
                     {item.age != null && (
                       <span className="text-[11px] font-mono text-slate-400 ml-1">
@@ -241,7 +243,7 @@ export default function BeneficiaryTable({
                       <span className="text-slate-400 font-mono text-xs">—</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-end gap-1">
                       <Button
                         variant="outline"
@@ -259,7 +261,10 @@ export default function BeneficiaryTable({
                         variant="outline"
                         size="icon"
                         className="h-7 w-7 rounded-xs border-[#E3E7EB] hover:bg-slate-50 transition-colors"
-                        onClick={() => setEditing(item)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditing(item);
+                        }}
                         title="Edit"
                       >
                         <Edit className="w-3.5 h-3.5 text-slate-600" />

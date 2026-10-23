@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowRight, Users, Search, Eye, Accessibility, UserCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ export function ElderlyDisabledRecentBeneficiaries({
   recentList = [],
 }: ElderlyDisabledRecentBeneficiariesProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard.recent");
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<"ALL" | "ELDERLY" | "DISABLED">("ALL");
 
@@ -147,7 +148,8 @@ export function ElderlyDisabledRecentBeneficiaries({
                 return (
                   <tr
                     key={b.id}
-                    className="hover:bg-slate-50/70 transition-colors"
+                    className="hover:bg-slate-50 transition-colors cursor-pointer group"
+                    onClick={() => router.push(`/social-affairs/elderly-and-disabled/beneficiaries/${b.id}`)}
                   >
                     {/* Name */}
                     <td className="px-4 py-2.5 font-semibold text-slate-900">
@@ -225,7 +227,7 @@ export function ElderlyDisabledRecentBeneficiaries({
                     </td>
 
                     {/* Action */}
-                    <td className="px-4 py-2.5 text-right">
+                    <td className="px-4 py-2.5 text-right" onClick={(e) => e.stopPropagation()}>
                       <Link
                         href={`/social-affairs/elderly-and-disabled/beneficiaries/${b.id}`}
                       >
