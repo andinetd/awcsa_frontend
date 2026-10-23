@@ -3,6 +3,7 @@ import {
   getDisabilityDisplayLabel,
   getCategoryForSubType,
 } from "@/constants/disability-classification";
+import { getWorkSectorDisplayLabel } from "@/constants/work-sectors";
 
 export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   const printWindow = window.open("", "_blank");
@@ -40,9 +41,14 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
     beneficiary.preferredTraining1,
     beneficiary.preferredTraining2,
     beneficiary.preferredTraining3,
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .map(
+      (t: string) =>
+        `${getWorkSectorDisplayLabel(t, "am")} (${getWorkSectorDisplayLabel(t, "en")})`
+    );
 
-  const trainingStr = trainings.length > 0 ? trainings.join(", ") : "None Specified";
+  const trainingStr = trainings.length > 0 ? trainings.join(", ") : "None Specified / አልተገለጸም";
 
   const todayStr = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -282,7 +288,7 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
         <span class="value">${beneficiary.requiredAssistiveDevice || "—"}</span>
       </div>
       <div class="field" style="grid-column: span 2;">
-        <span class="label">Vocational Training Preferences</span>
+        <span class="label">Desired Work / Training Sectors (የሚፈልጉት የስራ ዘርፍ)</span>
         <span class="value">${trainingStr}</span>
       </div>
       <div class="field" style="grid-column: span 2;">

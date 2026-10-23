@@ -16,6 +16,12 @@ const trainingFieldEnum = z.enum([
   "LEATHER_WORK",
   "METAL_WORKING",
   "OTHER",
+  "BAKERY",
+  "CHIPS_PRODUCTION",
+  "HAIRDRESSING",
+  "POULTRY_FARMING",
+  "SHEEP_REARING",
+  "URBAN_AGRICULTURE",
 ]);
 
 export const faydaIdSchema = z

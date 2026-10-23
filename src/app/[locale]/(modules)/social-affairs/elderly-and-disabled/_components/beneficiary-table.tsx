@@ -54,6 +54,10 @@ import {
   WorkplaceCondition,
   TrainingField,
 } from "@/api/beneficiaries/types-v2";
+import {
+  getWorkSectorOptions,
+  getWorkSectorDisplayLabel,
+} from "@/constants/work-sectors";
 import { useUpdateBeneficiary } from "@/hooks/beneficiaries/srs-hooks";
 import { BeneficiaryRowReportButton } from "./row-report-button";
 
@@ -73,6 +77,12 @@ const TRAINING_OPTIONS: TrainingField[] = [
   "LEATHER_WORK",
   "METAL_WORKING",
   "OTHER",
+  "BAKERY",
+  "CHIPS_PRODUCTION",
+  "HAIRDRESSING",
+  "POULTRY_FARMING",
+  "SHEEP_REARING",
+  "URBAN_AGRICULTURE",
 ];
 
 const editSchema = z.object({
@@ -95,15 +105,9 @@ const editSchema = z.object({
   block: z.string().optional(),
   houseNumber: z.string().optional(),
   address: z.string().optional(),
-  preferredTraining1: z
-    .enum(TRAINING_OPTIONS as [TrainingField, ...TrainingField[]])
-    .optional(),
-  preferredTraining2: z
-    .enum(TRAINING_OPTIONS as [TrainingField, ...TrainingField[]])
-    .optional(),
-  preferredTraining3: z
-    .enum(TRAINING_OPTIONS as [TrainingField, ...TrainingField[]])
-    .optional(),
+  preferredTraining1: z.string().optional(),
+  preferredTraining2: z.string().optional(),
+  preferredTraining3: z.string().optional(),
   previousProfession: z.string().optional(),
   workplaceCondition: z
     .enum(["OWN_PRIVATE", "KEBELE_PUBLIC", "RENTED"])
@@ -294,8 +298,10 @@ function EditBeneficiaryDialog({
   const t = useTranslations("social-affairs.elderlyAndDisabled.registration");
   const tSrs = useTranslations("social-affairs.elderlyAndDisabled.srs");
   const tOpt = useTranslations("social-affairs.elderlyAndDisabled.options");
+  const locale = useLocale() === "en" ? "en" : "am";
   const update = useUpdateBeneficiary(beneficiary.id);
   const isDisabled = beneficiary.clientCategory === "DISABLED";
+  const workSectorOptions = getWorkSectorOptions(isDisabled ? "DISABLED" : "ELDERLY");
   const profile = isDisabled
     ? beneficiary.DisabilityProfile
     : beneficiary.ElderlyProfile;
@@ -629,89 +635,104 @@ function EditBeneficiaryDialog({
                 <FormField
                   control={form.control}
                   name="preferredTraining1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{tSrs("preferredTraining1")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value ?? ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
-                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TRAINING_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {tOpt(`training.${o}` as any)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const options = field.value && !workSectorOptions.includes(field.value as any)
+                      ? [field.value, ...workSectorOptions]
+                      : workSectorOptions;
+                    return (
+                      <FormItem>
+                        <FormLabel>{tSrs("preferredTraining1")}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
+                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {options.map((o) => (
+                              <SelectItem key={o} value={o}>
+                                {tOpt(`training.${o}` as any) || getWorkSectorDisplayLabel(o, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="preferredTraining2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{tSrs("preferredTraining2")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value ?? ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
-                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TRAINING_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {tOpt(`training.${o}` as any)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const options = field.value && !workSectorOptions.includes(field.value as any)
+                      ? [field.value, ...workSectorOptions]
+                      : workSectorOptions;
+                    return (
+                      <FormItem>
+                        <FormLabel>{tSrs("preferredTraining2")}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
+                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {options.map((o) => (
+                              <SelectItem key={o} value={o}>
+                                {tOpt(`training.${o}` as any) || getWorkSectorDisplayLabel(o, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="preferredTraining3"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{tSrs("preferredTraining3")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value ?? ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
-                              {field.value ? tOpt(`training.${field.value}` as any) : undefined}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TRAINING_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {tOpt(`training.${o}` as any)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const options = field.value && !workSectorOptions.includes(field.value as any)
+                      ? [field.value, ...workSectorOptions]
+                      : workSectorOptions;
+                    return (
+                      <FormItem>
+                        <FormLabel>{tSrs("preferredTraining3")}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
+                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {options.map((o) => (
+                              <SelectItem key={o} value={o}>
+                                {tOpt(`training.${o}` as any) || getWorkSectorDisplayLabel(o, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

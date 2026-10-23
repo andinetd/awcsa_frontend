@@ -92,7 +92,13 @@ export type TrainingField =
   | "TEXTILE_GARMENT"
   | "LEATHER_WORK"
   | "METAL_WORKING"
-  | "OTHER";
+  | "OTHER"
+  | "BAKERY"
+  | "CHIPS_PRODUCTION"
+  | "HAIRDRESSING"
+  | "POULTRY_FARMING"
+  | "SHEEP_REARING"
+  | "URBAN_AGRICULTURE";
 
 export const TRAINING_FIELD_LABELS: Record<TrainingField, string> = {
   AGRICULTURE: "Agriculture",
@@ -110,6 +116,12 @@ export const TRAINING_FIELD_LABELS: Record<TrainingField, string> = {
   LEATHER_WORK: "Leather Work",
   METAL_WORKING: "Metal Working",
   OTHER: "Other",
+  BAKERY: "Bakery & Bread Making",
+  CHIPS_PRODUCTION: "Potato Chips & Snack Making",
+  HAIRDRESSING: "Hairdressing & Barbering",
+  POULTRY_FARMING: "Poultry Farming",
+  SHEEP_REARING: "Sheep / Livestock Rearing",
+  URBAN_AGRICULTURE: "Backyard Gardening / Urban Agriculture",
 };
 
 export interface AddressFields {
