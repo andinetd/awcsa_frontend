@@ -168,8 +168,10 @@
       "error": "ምዝገባ አልተሳካም",
       "sections": {
         "basicInfo": "መሠረታዊ መረጃ",
-        "details": "የ{type} ዝርዝር መረጃ"
+        "details": "የ{type} ዝርዝር መረጃ",
+        "caregiverDetails": "የተንከባካቢና የልጁ መረጃ"
       },
+      "autismCaregiverNotice": "ተጠቃሚው የኦቲዝም ወላጅ / ተንከባካቢ በመሆን እየተመዘገቡ ነው። እባክዎ ከዚህ በታች የልጁን እና የእንክብካቤ ፍላጎቶችን መረጃ ይሙሉ::",
       "fields": {
         "firstName": "ስም",
         "lastName": "የአባት ስም",
@@ -185,7 +187,16 @@
         "cause": "ለአካል ጉዳት መንስኤ",
         "education": "የትምህርት ደረጃ",
         "occupation": "የሥራ መስክ",
-        "familyCount": "የቤተሰብ አባላት ብዛት"
+        "familyCount": "የቤተሰብ አባላት ብዛት",
+        "childFullName": "የልጁ ሙሉ ስም",
+        "childAge": "የልጁ ዕድሜ",
+        "childGender": "የልጁ ጾታ",
+        "autismCenterAttended": "የሚከታተልበት የኦቲዝም ማዕከል / ትምህርት ቤት",
+        "caregiverSupportType": "ለተንከባካቢው የሚፈለገው ዋነኛ ድጋፍ",
+        "autismSeverity": "የልጁ የኦቲዝም ደረጃ",
+        "autismPhysicalAssistance": "ልጁ ሙሉ ጊዜ ክትትልና እንክብካቤ ይፈልጋል",
+        "autismAssistiveDevice": "የትምህርት ወይም የስሜት ህዋሳት ድጋፍ መሣሪያዎች",
+        "autismCause": "የልጁ የጤና / ምርመራ ሁኔታ"
       },
       "placeholders": {
         "firstName": "ስም ያስገቡ",
@@ -201,7 +212,13 @@
         "cause": "ለምሳሌ አደጋ፣ ከተፈጥሮ",
         "education": "ደረጃ ያስገቡ",
         "occupation": "የሥራ መስክ ያስገቡ",
-        "familyCount": "0"
+        "familyCount": "0",
+        "childFullName": "የልጁን ሙሉ ስም ያስገቡ",
+        "childAge": "ለምሳሌ 7",
+        "autismCenterAttended": "ለምሳሌ ጆይ ማዕከል፣ ነህምያ ወይም የለም",
+        "autismDiagnosisHistory": "ለምሳሌ በቅዱስ ጳውሎስ ሆስፒታል በ2015 የተረጋገጠ",
+        "autismAssistiveDevice": "ለምሳሌ የስሜት ህዋሳት ማነቃቂያ፣ የመግባቢያ ካርዶች",
+        "caregiverSupportType": "ዋነኛ የድጋፍ ፍላጎት ይምረጡ"
       },
       "levels": {
         "mild": "ቀላል",
@@ -805,6 +822,14 @@
         "MODERATE": "መካከለኛ",
         "SEVERE": "ከፍተኛ",
         "PROFOUND": "እጅግ ከፍተኛ"
+      },
+      "caregiverSupportTypes": {
+        "CAREGIVER_ALLOWANCE": "የተንከባካቢ ወርሃዊ አበል / ድጎማ",
+        "AUTISM_CENTER_REFERRAL": "የኦቲዝም ማዕከል / የቀን ማቆያ ምደባ",
+        "PSYCHOSOCIAL_COUNSELING": "የወላጅ ስነ-ልቦናዊ ምክርና ድጋፍ",
+        "RESPITE_CARE": "የእረፍት ጊዜ ድጋፍ አገልግሎት",
+        "EDUCATION_COOPERATION": "የትምህርት ቤት የትብብር ደብዳቤ",
+        "OTHER": "ሌላ የተንከባካቢ ድጋፍ"
       },
       "training": {
         "AGRICULTURE": "ግብርና",

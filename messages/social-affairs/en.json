@@ -168,8 +168,10 @@
       "error": "Registration failed",
       "sections": {
         "basicInfo": "Basic Information",
-        "details": "{type} Details"
+        "details": "{type} Details",
+        "caregiverDetails": "Caregiver & Dependent Child Information"
       },
+      "autismCaregiverNotice": "The beneficiary is registering as an Autism Parent / Caregiver. Please provide the dependent child's details and care requirements below.",
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -185,7 +187,16 @@
         "cause": "Cause of Disability",
         "education": "Education Level",
         "occupation": "Occupation",
-        "familyCount": "Family Members Count"
+        "familyCount": "Family Members Count",
+        "childFullName": "Child's Full Name",
+        "childAge": "Child's Age",
+        "childGender": "Child's Gender",
+        "autismCenterAttended": "Attending Autism Center / School",
+        "caregiverSupportType": "Primary Caregiver Support Required",
+        "autismSeverity": "Child's Autism Severity / Level",
+        "autismPhysicalAssistance": "Child Requires Full-Time / Constant Care",
+        "autismAssistiveDevice": "Sensory / Educational Support Tools",
+        "autismCause": "Child Diagnosis & Clinical History"
       },
       "placeholders": {
         "firstName": "Enter first name",
@@ -201,7 +212,13 @@
         "cause": "e.g. Accident, Birth",
         "education": "Enter level",
         "occupation": "Enter occupation",
-        "familyCount": "0"
+        "familyCount": "0",
+        "childFullName": "Enter child's full name",
+        "childAge": "e.g. 7",
+        "autismCenterAttended": "e.g. Joy Center, Nehemiah, or None",
+        "autismDiagnosisHistory": "e.g. Diagnosed at St. Paul Hospital in 2023",
+        "autismAssistiveDevice": "e.g. Sensory tools, PECS communication cards",
+        "caregiverSupportType": "Select primary support need"
       },
       "levels": {
         "mild": "Mild",
@@ -805,6 +822,14 @@
         "MODERATE": "Moderate",
         "SEVERE": "Severe",
         "PROFOUND": "Profound"
+      },
+      "caregiverSupportTypes": {
+        "CAREGIVER_ALLOWANCE": "Caregiver Monthly Allowance / Subsidy",
+        "AUTISM_CENTER_REFERRAL": "Autism Center / Daycare Placement",
+        "PSYCHOSOCIAL_COUNSELING": "Parental Psychosocial Counseling & Support",
+        "RESPITE_CARE": "Respite Care Assistance",
+        "EDUCATION_COOPERATION": "Special Needs School Cooperation Letter",
+        "OTHER": "Other Caregiver Support"
       },
       "training": {
         "AGRICULTURE": "Agriculture",

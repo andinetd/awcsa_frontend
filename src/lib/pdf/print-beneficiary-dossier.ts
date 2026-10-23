@@ -9,8 +9,11 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   if (!printWindow) return;
 
   const fullName = `${beneficiary.firstName || ""} ${beneficiary.lastName || ""} ${beneficiary.grandfatherName || ""}`.trim() || "—";
-  const categoryLabel = beneficiary.clientCategory === "DISABLED" ? "Person with Disability" : "Elderly Citizen";
   const rawDisabilityType = beneficiary.DisabilityProfile?.disabilityType || beneficiary.disabilityType;
+  const isCaregiver = rawDisabilityType === "AUTISM_CAREGIVER";
+  const categoryLabel = beneficiary.clientCategory === "DISABLED" 
+    ? (isCaregiver ? "Autism Caregiver / የኦቲዝም ወላጅ" : "Person with Disability") 
+    : "Elderly Citizen";
   const categoryKey = getCategoryForSubType(rawDisabilityType);
   const disabilityCategoryStr = categoryKey
     ? `${getDisabilityDisplayLabel(categoryKey, "en")} / ${getDisabilityDisplayLabel(categoryKey, "am")}`
@@ -242,27 +245,27 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   </div>
 
   <div class="section">
-    <div class="section-title">3. Vulnerability & Disability Assessment</div>
+    <div class="section-title">${isCaregiver ? "3. Caregiver & Dependent Child Assessment (የተንከባካቢና የልጁ መረጃ)" : "3. Vulnerability & Disability Assessment"}</div>
     <div class="grid">
       <div class="field">
-        <span class="label">Disability Category</span>
+        <span class="label">${isCaregiver ? "Caregiver Category" : "Disability Category"}</span>
         <span class="value">${disabilityCategoryStr}</span>
       </div>
       <div class="field">
-        <span class="label">Specific Condition / Type</span>
+        <span class="label">${isCaregiver ? "Registered Caregiver Role" : "Specific Condition / Type"}</span>
         <span class="value">${disabilityType}</span>
       </div>
       <div class="field">
-        <span class="label">Severity Level</span>
+        <span class="label">${isCaregiver ? "Child's Autism Severity / Level" : "Severity Level"}</span>
         <span class="value">${disabilitySeverity}</span>
       </div>
       <div class="field">
-        <span class="label">Cause / Etiology</span>
+        <span class="label">${isCaregiver ? "Child Diagnosis & Medical History" : "Cause / Etiology"}</span>
         <span class="value">${cause}</span>
       </div>
       <div class="field">
-        <span class="label">Workplace Condition</span>
-        <span class="value">${workplace}</span>
+        <span class="label">${isCaregiver ? "Full-Time / Constant Care Needed" : "Workplace Condition"}</span>
+        <span class="value">${isCaregiver ? ((beneficiary.DisabilityProfile?.requiresPhysicalAssistance ?? beneficiary.requiresPhysicalAssistance) ? "Yes (ሙሉ ጊዜ እንክብካቤ ይፈልጋል)" : "No") : workplace}</span>
       </div>
     </div>
   </div>

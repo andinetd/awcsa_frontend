@@ -89,6 +89,11 @@ export const registerDisabledFormSchema = baseBeneficiarySchema
     documentName: z.string().optional(),
     documentUrl: z.string().optional(),
     documentBase64: z.string().optional(),
+    childFullName: z.string().optional(),
+    childAge: z.coerce.number().int().min(0).max(100).optional(),
+    childGender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
+    autismCenterAttended: z.string().optional(),
+    caregiverSupportType: z.string().optional(),
   });
 
 export type RegisterElderlyFormValues = z.infer<typeof registerElderlyFormSchema>;

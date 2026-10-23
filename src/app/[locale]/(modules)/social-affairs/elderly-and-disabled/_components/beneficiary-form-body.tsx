@@ -115,6 +115,15 @@ const SEVERITY_OPTIONS = [
   { value: "PROFOUND", label: "Profound" },
 ];
 
+const CAREGIVER_SUPPORT_OPTIONS = [
+  "CAREGIVER_ALLOWANCE",
+  "AUTISM_CENTER_REFERRAL",
+  "PSYCHOSOCIAL_COUNSELING",
+  "RESPITE_CARE",
+  "EDUCATION_COOPERATION",
+  "OTHER",
+] as const;
+
 const DEFAULT_VALUES: any = {
   faydaId: "",
   firstName: "",
@@ -153,6 +162,11 @@ const DEFAULT_VALUES: any = {
   otherSupportRequirements: "",
   documentName: "",
   documentBase64: "",
+  childFullName: "",
+  childAge: undefined,
+  childGender: undefined,
+  autismCenterAttended: "",
+  caregiverSupportType: undefined,
 };
 
 interface BeneficiaryFormBodyProps {
@@ -206,6 +220,7 @@ export function BeneficiaryFormBody({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const faydaValue = form.watch("faydaId");
+  const isAutismCaregiver = type === "DISABLED" && form.watch("disabilityType") === "AUTISM_CAREGIVER";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -309,7 +324,25 @@ export function BeneficiaryFormBody({
       previousSupport: cleanString(v.previousSupport),
       requiredSupportType: cleanString(v.requiredSupportType),
       requiredAssistiveDevice: cleanString(v.requiredAssistiveDevice),
-      otherSupportRequirements: cleanString(v.otherSupportRequirements),
+      otherSupportRequirements: (() => {
+        const raw = cleanString(v.otherSupportRequirements);
+        if (v.disabilityType === "AUTISM_CAREGIVER") {
+          const parts: string[] = [];
+          if (v.childFullName) parts.push(`Child: ${v.childFullName.trim()}`);
+          if (v.childAge) parts.push(`Age: ${v.childAge}`);
+          if (v.childGender) parts.push(`Gender: ${v.childGender}`);
+          if (v.autismCenterAttended) parts.push(`Center: ${v.autismCenterAttended.trim()}`);
+          if (v.caregiverSupportType) parts.push(`Primary Need: ${v.caregiverSupportType.trim()}`);
+          if (raw && !raw.startsWith("Child:")) parts.push(`Details: ${raw}`);
+          return parts.length > 0 ? parts.join(" | ") : raw;
+        }
+        return raw;
+      })(),
+      childFullName: cleanString(v.childFullName),
+      childAge: cleanNumber(v.childAge),
+      childGender: v.childGender || undefined,
+      autismCenterAttended: cleanString(v.autismCenterAttended),
+      caregiverSupportType: cleanString(v.caregiverSupportType),
       documentName: cleanString(v.documentName),
       documentBase64: cleanString(v.documentBase64),
       confirmLink,
@@ -918,8 +951,18 @@ export function BeneficiaryFormBody({
         {type === "DISABLED" && (
           <div className="space-y-4 border-t pt-4">
             <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-              Disability Details
+              {isAutismCaregiver
+                ? t("sections.caregiverDetails")
+                : t("sections.details", { type: t("disabled") })}
             </h3>
+
+            {isAutismCaregiver && (
+              <div className="flex items-start gap-3 p-3 rounded-xs border border-blue-200 bg-blue-50/70 text-blue-900 text-xs">
+                <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                <p>{t("autismCaregiverNotice")}</p>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
@@ -1021,7 +1064,11 @@ export function BeneficiaryFormBody({
                 name="disabilitySeverity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("fields.disabilityLevel")}</FormLabel>
+                    <FormLabel>
+                      {isAutismCaregiver
+                        ? t("fields.autismSeverity")
+                        : t("fields.disabilityLevel")}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
@@ -1046,15 +1093,142 @@ export function BeneficiaryFormBody({
                 )}
               />
             </div>
+
+            {isAutismCaregiver && (
+              <div className="space-y-3 p-4 rounded-xs border border-blue-100 bg-blue-50/40">
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-slate-700">
+                  {t("sections.caregiverDetails")}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <FormField
+                    control={form.control}
+                    name="childFullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fields.childFullName")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={t("placeholders.childFullName")}
+                            {...field}
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="childAge"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fields.childAge")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder={t("placeholders.childAge")}
+                            {...field}
+                            value={(field.value as any) ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="childGender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fields.childGender")}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={tOpt("placeholders.selectGender")}>
+                                {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="MALE">{tOpt("sex.MALE")}</SelectItem>
+                            <SelectItem value="FEMALE">{tOpt("sex.FEMALE")}</SelectItem>
+                            <SelectItem value="OTHER">{tOpt("sex.OTHER")}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <FormField
+                    control={form.control}
+                    name="autismCenterAttended"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fields.autismCenterAttended")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={t("placeholders.autismCenterAttended")}
+                            {...field}
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="caregiverSupportType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("fields.caregiverSupportType")}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? ""}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t("placeholders.caregiverSupportType")}>
+                                {field.value ? tOpt(`caregiverSupportTypes.${field.value}` as any) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {CAREGIVER_SUPPORT_OPTIONS.map((cst) => (
+                              <SelectItem key={cst} value={cst}>
+                                {tOpt(`caregiverSupportTypes.${cst}` as any)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            )}
+
             <FormField
               control={form.control}
               name="cause"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.cause")}</FormLabel>
+                  <FormLabel>
+                    {isAutismCaregiver ? t("fields.autismCause") : t("fields.cause")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("placeholders.cause")}
+                      placeholder={
+                        isAutismCaregiver
+                          ? t("placeholders.autismDiagnosisHistory")
+                          : t("placeholders.cause")
+                      }
                       {...field}
                       value={field.value ?? ""}
                     />
@@ -1069,10 +1243,18 @@ export function BeneficiaryFormBody({
                 name="requiredAssistiveDevice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{tSrs("requiredAssistiveDevice")}</FormLabel>
+                    <FormLabel>
+                      {isAutismCaregiver
+                        ? t("fields.autismAssistiveDevice")
+                        : tSrs("requiredAssistiveDevice")}
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. Wheelchair, Braille display"
+                        placeholder={
+                          isAutismCaregiver
+                            ? t("placeholders.autismAssistiveDevice")
+                            : "e.g. Wheelchair, Braille display"
+                        }
                         {...field}
                         value={field.value ?? ""}
                       />
@@ -1093,7 +1275,9 @@ export function BeneficiaryFormBody({
                       />
                     </FormControl>
                     <FormLabel className="!mt-0">
-                      {tSrs("requiresPhysicalAssistance")}
+                      {isAutismCaregiver
+                        ? t("fields.autismPhysicalAssistance")
+                        : tSrs("requiresPhysicalAssistance")}
                     </FormLabel>
                   </FormItem>
                 )}
