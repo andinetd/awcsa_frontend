@@ -10,7 +10,9 @@ import {
   Permission,
   Role,
   CreateRoleDto,
+  UserActivityStatistics,
 } from "@/types/super-admin";
+
 
 const getAuthHeader = () => {
   const { token } = useAuthStore.getState();
@@ -55,6 +57,7 @@ export const getUserFormData = async (): Promise<UserFormData> => {
     },
     directorates: Array.isArray(data.directorates) ? data.directorates : [],
     teams: Array.isArray(data.teams) ? data.teams : [],
+    modulePermissionBundles: data.modulePermissionBundles || {},
   };
 };
 
@@ -153,3 +156,12 @@ export const updateUser = async (id: number, data: Partial<CreateUserDto>) => {
   );
   return res.data;
 };
+
+export const getUserActivityStatistics = async (): Promise<UserActivityStatistics> => {
+  const res = await axios.get(
+    `${BASE_URL}/admin/users/activity-statistics`,
+    getAuthHeader(),
+  );
+  return res.data;
+};
+

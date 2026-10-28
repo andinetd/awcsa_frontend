@@ -12,7 +12,9 @@ import {
   createRole,
   assignPermissionsToRole,
   changeUserRole,
+  getUserActivityStatistics,
 } from "@/api/super-admin/user-management";
+
 import { getAuditLogs, getAuditLogDetails } from "@/api/super-admin/audit-logs";
 import { getBackups, downloadBackup } from "@/api/super-admin/backups";
 import {
@@ -40,7 +42,16 @@ export const useGetUserFormData = () => {
   });
 };
 
+export const useGetUserActivityStatistics = () => {
+  return useQuery({
+    queryKey: ["userActivityStatistics"],
+    queryFn: getUserActivityStatistics,
+    refetchInterval: 30_000,
+  });
+};
+
 export const useCreateUser = () => {
+
   const queryClient = useQueryClient();
   const t = useTranslations("super-admin.userManagement.actions.messages");
   return useMutation({

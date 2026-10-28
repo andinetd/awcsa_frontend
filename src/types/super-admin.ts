@@ -69,6 +69,22 @@ export type Department =
   | "SYSTEM"
   | "EDIR";
 
+export interface ModulePermissionItem {
+  name: string;
+  label: string;
+  description: string;
+  isElevated: boolean;
+  category: "CRUD" | "WORKFLOW" | "FOUNDATION";
+}
+
+export interface RoleConstraint {
+  allowedUnitTypes: ("BUREAU" | "SUB_CITY" | "WOREDA" | "OFFICE")[];
+  requiresDirectorate?: boolean;
+  requiresTeam?: boolean;
+  tier: "EXECUTIVE" | "DOMAIN_MANAGER" | "TERRITORIAL_MANAGER" | "FRONTLINE";
+  description: string;
+}
+
 export interface CreateUserDto {
   firstName: string;
   lastName: string;
@@ -82,6 +98,8 @@ export interface CreateUserDto {
   assignedModules?: Department[];
   directorateId?: number; // Optional based on hierarchy
   teamId?: number; // Optional based on hierarchy
+  customPermissions?: string[];
+  redactedPermissions?: string[];
 }
 
 export interface Role {
@@ -90,6 +108,7 @@ export interface Role {
   description: string;
   isSystemRole?: boolean;
   userCount?: number;
+  constraints?: RoleConstraint;
   createdAt: string;
   updatedAt: string;
   assignedPermissions?: {
@@ -158,6 +177,7 @@ export interface UserFormData {
   };
   directorates: Directorate[];
   teams: Team[];
+  modulePermissionBundles?: Record<string, ModulePermissionItem[]>;
 }
 
 export interface AuditLogUser {
@@ -208,3 +228,35 @@ export interface Backup {
   filename: string;
   size: number;
 }
+
+export interface DailyLoginStat {
+  date: string;
+  logins: number;
+  uniqueUsers: number;
+}
+
+export interface RecentLoginSession {
+  id: string;
+  userId: number;
+  email: string;
+  name: string;
+  accountType: string;
+  role?: string;
+  issuedAt: string;
+  lastActivityAt: string;
+  userAgent?: string;
+}
+
+export interface UserActivityStatistics {
+  activeUsersNow: number;
+  totalActiveSessions: number;
+  loginsToday: number;
+  loginsThisWeek: number;
+  loginsThisMonth: number;
+  totalRegisteredUsers: number;
+  dailyLoginsTrend: DailyLoginStat[];
+  usersByAccountType: Record<string, number>;
+  usersByStatus: Record<string, number>;
+  recentLogins: RecentLoginSession[];
+}
+

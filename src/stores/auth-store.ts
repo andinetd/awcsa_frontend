@@ -3,6 +3,8 @@ import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { refreshAccessToken, logoutApi } from "@/api/auth/auth";
+import * as Sentry from "@sentry/nextjs";
+
 import {
   JwtPayload,
   UserRole,
@@ -43,6 +45,14 @@ function applyToken(
       email: rawUser.email || decodedToken.email || "",
       accountType: accountType as AccountType,
     };
+
+    // Track user identity in Sentry
+    Sentry.setUser({
+      id: String(user.id),
+      email: user.email,
+      segment: user.accountType,
+    });
+
 
     const entity = decodedToken.entity || {
       type: accountType === "EMPLOYEE" ? "Employee" : "Client",
@@ -106,7 +116,9 @@ function applyToken(
   } catch (error) {
     console.error("Failed to decode or set token:", error);
     Cookies.remove("wcasf_auth_token");
+    Sentry.setUser(null);
     set({
+
       user: null,
       token: null,
       refreshToken: null,
@@ -315,7 +327,9 @@ export const useAuthStore = create<AuthState>()(
           authChannel?.postMessage({ type: "LOGOUT" });
         }
         Cookies.remove("wcasf_auth_token", { path: "/" });
+        Sentry.setUser(null);
         if (typeof window !== "undefined") {
+
           sessionStorage.removeItem("auth-store");
           localStorage.removeItem("auth-store");
         }

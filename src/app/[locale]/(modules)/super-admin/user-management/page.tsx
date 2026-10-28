@@ -11,6 +11,7 @@ import { UserDialog } from "./_components/user-dialog";
 import { ChangeRoleDialog } from "./_components/change-role-dialog";
 import { ChangePermissionsDialog } from "./_components/change-permissions-dialog";
 import { RolesPanel } from "./_components/roles-panel";
+import { UserActivityStats } from "./_components/user-activity-stats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,30 +40,34 @@ export default function UserManagementPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [tab, setTab] = useState<"users" | "roles">("users");
+  const [tab, setTab] = useState<"users" | "roles" | "activity">("users");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [permissionsDialogOpen, setPermissionsDialogOpen] = useState(false);
 
-  // Sync tab with URL (?tab=roles) without extra suspense boundary
+  // Sync tab with URL (?tab=roles or ?tab=activity) without extra suspense boundary
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("tab") === "roles") setTab("roles");
+    const tabParam = params.get("tab");
+    if (tabParam === "roles" || tabParam === "activity") {
+      setTab(tabParam as "roles" | "activity");
+    }
   }, []);
 
   const handleTabChange = useCallback(
     (value: string) => {
-      const nextTab = value === "roles" ? "roles" : "users";
+      const nextTab = value as "users" | "roles" | "activity";
       setTab(nextTab);
       router.replace(
-        nextTab === "roles" ? `${pathname}?tab=roles` : pathname,
+        nextTab !== "users" ? `${pathname}?tab=${nextTab}` : pathname,
         { scroll: false },
       );
     },
     [router, pathname],
   );
+
 
   // Server-side table state
   const [searchInput, setSearchInput] = useState("");
@@ -175,7 +180,14 @@ export default function UserManagementPage() {
             >
               {t("tabs.roles")}
             </TabsTrigger>
+            <TabsTrigger
+              value="activity"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#0B1F3A] data-[state=active]:shadow-2xs rounded-xs text-xs font-medium py-1 px-3"
+            >
+              Activity & Statistics
+            </TabsTrigger>
           </TabsList>
+
         </div>
 
         <TabsContent value="users" className="space-y-4 mt-0">
@@ -294,7 +306,12 @@ export default function UserManagementPage() {
         <TabsContent value="roles">
           <RolesPanel />
         </TabsContent>
+
+        <TabsContent value="activity">
+          <UserActivityStats />
+        </TabsContent>
       </Tabs>
+
 
       <UserDialog
         open={dialogOpen}

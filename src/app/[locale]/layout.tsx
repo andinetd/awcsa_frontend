@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { fontVariables } from "@/styles/fonts";
 import "./globals.css";
 import Providers from "@/components/providers";
@@ -30,8 +31,20 @@ export default async function RootLayout({
   // Load all messages for the current locale (including merged namespaces)
   const messages = await getMessages();
 
+  const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL;
+  const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+
   return (
     <html lang={locale}>
+      <head>
+        {umamiUrl && umamiWebsiteId && (
+          <Script
+            src={`${umamiUrl}/script.js`}
+            data-website-id={umamiWebsiteId}
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
       <body className={`${fontVariables} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>
