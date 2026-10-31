@@ -16,7 +16,18 @@ export type EdirDocumentType =
   | "CURRENT_REPORT"
   | "AUDIT_REPORT"
   | "MEETING_MINUTES"
-  | "AGREEMENT_LETTER";
+  | "AGREEMENT_LETTER"
+  | "SITE_MAP_OR_TITLE_DEED"
+  | "ASSET_INVENTORY"
+  | "BANK_STATEMENT"
+  | "ASSET_PROOF"
+  | "OTHER";
+
+export type EdirAssetCategory =
+  | "LIQUID_CASH"
+  | "FIXED_PROPERTY"
+  | "MOVABLE_EQUIPMENT"
+  | "INVESTMENT";
 
 export interface EdirFoundingMember {
   id?: number;
@@ -27,8 +38,11 @@ export interface EdirFoundingMember {
 export interface EdirAsset {
   id?: number;
   type: EdirAssetType;
+  category?: EdirAssetCategory;
   description: string;
   value: number;
+  documentId?: number | null;
+  document?: EdirDocument | null;
 }
 
 export interface EdirDocument {
@@ -36,6 +50,7 @@ export interface EdirDocument {
   type: EdirDocumentType;
   fileName: string;
   fileType: string;
+  description?: string | null;
   uploadedAt: string;
 }
 
@@ -55,6 +70,7 @@ export interface Edir {
   generalFemale: number;
   bankAccountNumber: string;
   monthlyPaymentDetails: string;
+  additionalIncome?: string | null;
   remark?: string;
   status?: EdirStatus;
 
@@ -73,6 +89,7 @@ export interface Edir {
   foundingMembers?: EdirFoundingMember[];
   assets?: EdirAsset[];
   byLawsDoc?: EdirDocument | null;
+  documents?: EdirDocument[];
   councilId?: number | null;
   council?: EdirCouncil | null;
 

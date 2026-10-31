@@ -15,8 +15,13 @@ export const edirAssetSchema = z.object({
   type: z.enum(["CASH", "IN_KIND"], {
     message: "Asset type is required",
   }),
+  category: z
+    .enum(["LIQUID_CASH", "FIXED_PROPERTY", "MOVABLE_EQUIPMENT", "INVESTMENT"])
+    .default("MOVABLE_EQUIPMENT"),
   description: z.string().min(1, "Asset description is required"),
   value: z.coerce.number().min(0, "Asset value must be positive"),
+  documentId: z.coerce.number().optional().nullable(),
+  fileName: z.string().optional().nullable(),
 });
 
 export const newEdirSchema = z.object({
@@ -36,6 +41,7 @@ export const newEdirSchema = z.object({
   }),
   bankAccountNumber: z.string().min(1, "Bank account number is required"),
   monthlyPaymentDetails: z.string().min(1, "Payment details are required"),
+  additionalIncome: z.string().optional().nullable(),
   remark: z.string().optional(),
   // Directive 151/2016 registration criteria (Article 7)
   foundingMembers: z.array(edirFoundingMemberSchema).min(1).default([]),
@@ -43,6 +49,7 @@ export const newEdirSchema = z.object({
   assetsAuditedByAuditCommittee: z.boolean().default(false),
   assetsApprovedByGeneralAssembly: z.boolean().default(false),
   byLawsDocId: z.coerce.number().optional().nullable(),
+  documentIds: z.array(z.coerce.number()).optional().default([]),
   councilId: z.coerce.number().optional().nullable(),
 });
 

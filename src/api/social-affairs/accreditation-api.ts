@@ -68,13 +68,35 @@ export const reissueEdirCertificate = async (id: number): Promise<Edir> => {
 };
 
 export const uploadEdirDocument = async (
-  file: File,
-  type: EdirDocumentType = "BY_LAWS"
+  fileOrParams:
+    | File
+    | {
+        file: File;
+        type?: EdirDocumentType;
+        edirAssociationId?: number;
+        description?: string;
+      },
+  defaultType: EdirDocumentType = "BY_LAWS"
 ): Promise<EdirDocument> => {
   const { token } = useAuthStore.getState();
   const formData = new FormData();
-  formData.append("file", file);
-  formData.append("type", type);
+
+  if (fileOrParams instanceof File) {
+    formData.append("file", fileOrParams);
+    formData.append("type", defaultType);
+  } else {
+    formData.append("file", fileOrParams.file);
+    formData.append("type", fileOrParams.type || defaultType);
+    if (fileOrParams.edirAssociationId) {
+      formData.append(
+        "edirAssociationId",
+        fileOrParams.edirAssociationId.toString()
+      );
+    }
+    if (fileOrParams.description) {
+      formData.append("description", fileOrParams.description);
+    }
+  }
 
   try {
     const response = await axios.post(`${BASE_URL}/edir/documents`, formData, {

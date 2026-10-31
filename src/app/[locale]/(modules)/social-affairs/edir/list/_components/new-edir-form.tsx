@@ -30,7 +30,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, X } from "lucide-react";
+import { Plus, Edit, X, Paperclip, FileText, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   useCreateEdirMutation,
@@ -84,12 +84,14 @@ export default function NewEdirForm({
       },
       bankAccountNumber: "",
       monthlyPaymentDetails: "",
+      additionalIncome: "",
       remark: "",
       foundingMembers: [{ fullName: "", address: "" }],
       assets: [],
       assetsAuditedByAuditCommittee: false,
       assetsApprovedByGeneralAssembly: false,
       byLawsDocId: undefined,
+      documentIds: [],
       councilId: undefined,
     },
   });
@@ -105,6 +107,11 @@ export default function NewEdirForm({
 
   const uploadDocMutation = useUploadEdirDocumentMutation();
   const [byLawsFile, setByLawsFile] = useState<File[]>([]);
+  const [additionalDocs, setAdditionalDocs] = useState<
+    Array<{ id: number; fileName: string; type?: string }>
+  >([]);
+  const [uploadingAssetIdx, setUploadingAssetIdx] = useState<number | null>(null);
+  const [uploadingAdditionalDoc, setUploadingAdditionalDoc] = useState(false);
 
   // Auto-compute totals from male + female
   const managementMale = form.watch("members.management.male");
@@ -141,6 +148,75 @@ export default function NewEdirForm({
     }
   };
 
+  const handleAssetFileSelect = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingAssetIdx(index);
+    uploadDocMutation.mutate(
+      {
+        file,
+        type: "ASSET_PROOF",
+        description:
+          form.getValues(`assets.${index}.description`) || "Asset supporting file",
+      } as any,
+      {
+        onSuccess: (doc) => {
+          form.setValue(`assets.${index}.documentId`, doc.id);
+          form.setValue(`assets.${index}.fileName`, doc.fileName);
+          toast.success(t("messages.assetFileUploaded"));
+          setUploadingAssetIdx(null);
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || t("messages.docUploadError"));
+          setUploadingAssetIdx(null);
+        },
+      }
+    );
+  };
+
+  const handleRemoveAssetFile = (index: number) => {
+    form.setValue(`assets.${index}.documentId`, null);
+    form.setValue(`assets.${index}.fileName`, null);
+  };
+
+  const handleAdditionalDocSelect = (files: File[]) => {
+    if (!files || files.length === 0) return;
+    setUploadingAdditionalDoc(true);
+    const file = files[0];
+    uploadDocMutation.mutate(
+      {
+        file,
+        type: "OTHER",
+        description: "Registration supporting document",
+      } as any,
+      {
+        onSuccess: (doc) => {
+          setAdditionalDocs((prev) => [
+            ...prev,
+            { id: doc.id, fileName: doc.fileName, type: doc.type },
+          ]);
+          const currentIds = form.getValues("documentIds") || [];
+          form.setValue("documentIds", [...currentIds, doc.id]);
+          toast.success(t("messages.docUploaded"));
+          setUploadingAdditionalDoc(false);
+        },
+        onError: (err: any) => {
+          toast.error(err?.message || t("messages.docUploadError"));
+          setUploadingAdditionalDoc(false);
+        },
+      }
+    );
+  };
+
+  const handleRemoveAdditionalDoc = (docId: number) => {
+    setAdditionalDocs((prev) => prev.filter((d) => d.id !== docId));
+    const currentIds = form.getValues("documentIds") || [];
+    form.setValue("documentIds", currentIds.filter((id) => id !== docId));
+  };
+
   // Populate form with initial data when available
   useEffect(() => {
     if (initialData) {
@@ -173,6 +249,7 @@ export default function NewEdirForm({
         },
         bankAccountNumber: initialData.bankAccountNumber,
         monthlyPaymentDetails: initialData.monthlyPaymentDetails,
+        additionalIncome: initialData.additionalIncome || "",
         remark: initialData.remark || "",
         foundingMembers:
           initialData.foundingMembers && initialData.foundingMembers.length > 0
@@ -184,18 +261,30 @@ export default function NewEdirForm({
         assets:
           initialData.assets?.map((a) => ({
             type: a.type,
+            category: a.category || "MOVABLE_EQUIPMENT",
             description: a.description,
             value: Number(a.value) || 0,
+            documentId:
+              a.documentId ?? (a.document ? a.document.id : undefined),
+            fileName: a.document ? a.document.fileName : undefined,
           })) ?? [],
         assetsAuditedByAuditCommittee:
           initialData.assetsAuditedByAuditCommittee ?? false,
         assetsApprovedByGeneralAssembly:
           initialData.assetsApprovedByGeneralAssembly ?? false,
         byLawsDocId: initialData.byLawsDoc?.id ?? undefined,
+        documentIds: initialData.documents?.map((d) => d.id) ?? [],
         councilId: initialData.councilId ?? undefined,
       });
       if (initialData.byLawsDoc) {
         setByLawsFile([]);
+      }
+      if (initialData.documents) {
+        setAdditionalDocs(
+          initialData.documents
+            .filter((d) => d.id !== initialData.byLawsDoc?.id)
+            .map((d) => ({ id: d.id, fileName: d.fileName, type: d.type }))
+        );
       }
     }
   }, [initialData, form]);
@@ -214,12 +303,15 @@ export default function NewEdirForm({
       })),
       assets: values.assets.map((a) => ({
         type: a.type,
+        category: a.category || "MOVABLE_EQUIPMENT",
         description: a.description,
         value: Number(a.value) || 0,
+        documentId: a.documentId ? Number(a.documentId) : null,
       })),
       assetsAuditedByAuditCommittee: values.assetsAuditedByAuditCommittee,
       assetsApprovedByGeneralAssembly: values.assetsApprovedByGeneralAssembly,
       byLawsDocId: values.byLawsDocId ?? undefined,
+      documentIds: values.documentIds || [],
     };
 
     if (isEditMode && edirId) {
@@ -596,7 +688,7 @@ export default function NewEdirForm({
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.financials")}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <FormField
                   control={form.control}
                   name="bankAccountNumber"
@@ -625,6 +717,24 @@ export default function NewEdirForm({
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("fields.contribution")}
                           {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="additionalIncome"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.additionalIncome")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                          placeholder={t("fields.additionalIncomePlaceholder")}
+                          {...field}
+                          value={field.value || ""}
                         />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
@@ -733,96 +843,162 @@ export default function NewEdirForm({
                 {t("sections.assets")}
               </h3>
               <div className="space-y-2">
-                {assetFields.fields.map((field, index) => (
-                  <div
-                    key={field.id}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3"
-                  >
-                    <FormField
-                      control={form.control}
-                      name={`assets.${index}.type`}
-                      render={({ field: f }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.assetType")}
-                          </FormLabel>
-                          <Select
-                            onValueChange={f.onChange}
-                            defaultValue={f.value}
-                            value={f.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                                <SelectValue placeholder={t("fields.assetType")}>
-                                  {f.value ? t(`assetTypes.${f.value}` as any) : undefined}
-                                </SelectValue>
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-xs border-[#E3E7EB]">
-                              <SelectItem value="CASH" className="text-xs rounded-xs">
-                                {t("assetTypes.CASH")}
-                              </SelectItem>
-                              <SelectItem value="IN_KIND" className="text-xs rounded-xs">
-                                {t("assetTypes.IN_KIND")}
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`assets.${index}.description`}
-                      render={({ field: f }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.assetDescription")}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={t("fields.assetDescription")}
-                              {...f}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`assets.${index}.value`}
-                      render={({ field: f }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.assetValue")}
-                          </FormLabel>
-                          <FormControl>
-                            <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white font-mono" type="number" min="0" step="0.01" {...f} />
-                          </FormControl>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      onClick={() => assetFields.remove(index)}
+                {assetFields.fields.map((field, index) => {
+                  const currentDocId = form.watch(`assets.${index}.documentId`);
+                  const currentFileName = form.watch(`assets.${index}.fileName`);
+
+                  return (
+                    <div
+                      key={field.id}
+                      className="rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3 space-y-3"
                     >
-                      <X className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                ))}
+                      <div className="grid grid-cols-1 md:grid-cols-[140px_1fr_130px_auto] gap-3 items-start">
+                        <FormField
+                          control={form.control}
+                          name={`assets.${index}.type`}
+                          render={({ field: f }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
+                                {t("fields.assetType")}
+                              </FormLabel>
+                              <Select
+                                onValueChange={f.onChange}
+                                defaultValue={f.value}
+                                value={f.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                                    <SelectValue placeholder={t("fields.assetType")}>
+                                      {f.value ? t(`assetTypes.${f.value}` as any) : undefined}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                                  <SelectItem value="CASH" className="text-xs rounded-xs">
+                                    {t("assetTypes.CASH")}
+                                  </SelectItem>
+                                  <SelectItem value="IN_KIND" className="text-xs rounded-xs">
+                                    {t("assetTypes.IN_KIND")}
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`assets.${index}.description`}
+                          render={({ field: f }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
+                                {t("fields.assetDescription")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
+                                  placeholder={t("fields.assetDescription")}
+                                  {...f}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`assets.${index}.value`}
+                          render={({ field: f }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
+                                {t("fields.assetValue")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white font-mono"
+                                  type="number"
+                                  min="0"
+                                  step="0.01"
+                                  {...f}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                          onClick={() => assetFields.remove(index)}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+
+                      {/* Optional Asset Supporting File */}
+                      <div className="pt-2 border-t border-[#E3E7EB]/60 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <Paperclip className="w-3.5 h-3.5 text-slate-400" />
+                          <span className="text-[11px] font-mono text-slate-600">
+                            {t("fields.assetFile")}:
+                          </span>
+                          {currentDocId ? (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-xs text-[11px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              <FileText className="w-3 h-3 text-emerald-600" />
+                              <span className="max-w-[180px] truncate">
+                                {currentFileName || `Document #${currentDocId}`}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveAssetFile(index)}
+                                className="text-emerald-700 hover:text-rose-600 ml-1"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          ) : (
+                            <span className="text-[11px] font-mono text-slate-400 italic">
+                              None
+                            </span>
+                          )}
+                        </div>
+
+                        <div>
+                          {uploadingAssetIdx === index ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#1769AA]">
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                              {t("fields.uploading") || "Uploading..."}
+                            </span>
+                          ) : !currentDocId ? (
+                            <label className="cursor-pointer inline-flex items-center gap-1 px-2 py-1 rounded-xs text-[11px] font-mono font-medium bg-white hover:bg-slate-100 border border-[#E3E7EB] text-slate-700 transition-colors">
+                              <Paperclip className="w-3 h-3 text-slate-500" />
+                              <span>{t("fields.attachFile")}</span>
+                              <input
+                                type="file"
+                                className="hidden"
+                                onChange={(e) => handleAssetFileSelect(index, e)}
+                              />
+                            </label>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
                   onClick={() =>
-                    assetFields.append({ type: "CASH", description: "", value: 0 })
+                    assetFields.append({
+                      type: "CASH",
+                      category: "MOVABLE_EQUIPMENT",
+                      description: "",
+                      value: 0,
+                    })
                   }
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -876,33 +1052,98 @@ export default function NewEdirForm({
               </div>
             </div>
 
-            {/* By-laws / founding document (Directive Art 7.e) */}
-            <div className="space-y-3">
+            {/* By-laws & Registration Documents (Directive Art 7.e) */}
+            <div className="space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.documents")}
               </h3>
-              <div className="rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/20">
-                <FileDragAndDrop
-                  value={byLawsFile}
-                  onChange={handleByLawsSelect}
-                  maxFiles={1}
-                  acceptedFileTypes={[
-                    "application/pdf",
-                    "image/jpeg",
-                    "image/png",
-                  ]}
-                />
+
+              {/* Primary By-laws */}
+              <div className="space-y-1.5">
+                <p className="text-[11px] font-mono font-semibold text-slate-700">
+                  {t("fields.byLawsDoc") || "By-Laws / Founding Document"}
+                </p>
+                <div className="rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/20">
+                  <FileDragAndDrop
+                    value={byLawsFile}
+                    onChange={handleByLawsSelect}
+                    maxFiles={1}
+                    acceptedFileTypes={[
+                      "application/pdf",
+                      "image/jpeg",
+                      "image/png",
+                    ]}
+                  />
+                </div>
+                {form.watch("byLawsDocId") && byLawsFile.length === 0 && (
+                  <p className="text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-xs">
+                    ✓ {t("messages.byLawsUploaded")}
+                  </p>
+                )}
+                {uploadDocMutation.isPending &&
+                  !uploadingAdditionalDoc &&
+                  uploadingAssetIdx === null && (
+                    <p className="text-xs font-mono text-[#1769AA]">
+                      {t("messages.byLawsUploading")}
+                    </p>
+                  )}
               </div>
-              {form.watch("byLawsDocId") && byLawsFile.length === 0 && (
-                <p className="text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-xs">
-                  ✓ {t("messages.byLawsUploaded")}
-                </p>
-              )}
-              {uploadDocMutation.isPending && (
-                <p className="text-xs font-mono text-[#1769AA]">
-                  {t("messages.byLawsUploading")}
-                </p>
-              )}
+
+              {/* Additional Registration Documents */}
+              <div className="space-y-2 pt-2 border-t border-[#E3E7EB]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-mono font-semibold text-slate-700">
+                      {t("fields.additionalDocuments")}
+                    </p>
+                  </div>
+                  <label className="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 rounded-xs text-[11px] font-mono font-medium bg-white hover:bg-slate-100 border border-[#E3E7EB] text-[#1769AA] transition-colors shadow-2xs">
+                    {uploadingAdditionalDoc ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Plus className="w-3 h-3" />
+                    )}
+                    <span>{t("fields.attachFile")}</span>
+                    <input
+                      type="file"
+                      className="hidden"
+                      disabled={uploadingAdditionalDoc}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          handleAdditionalDocSelect([e.target.files[0]]);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+
+                {additionalDocs.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {additionalDocs.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="flex items-center justify-between p-2 rounded-xs border border-[#E3E7EB] bg-slate-50/50 text-xs"
+                      >
+                        <div className="flex items-center gap-2 truncate pr-2">
+                          <FileText className="w-3.5 h-3.5 text-[#1769AA] shrink-0" />
+                          <span className="font-mono text-[11px] text-slate-800 truncate">
+                            {doc.fileName}
+                          </span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50 shrink-0"
+                          onClick={() => handleRemoveAdditionalDoc(doc.id)}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">

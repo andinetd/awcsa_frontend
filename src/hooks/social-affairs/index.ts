@@ -7,7 +7,7 @@ import { registerNewEdirAssociation } from "@/api/social-affairs/registerNewEdir
 import { getEdirAssociations } from "@/api/social-affairs/getEdirAssociations";
 import { getEdirAssociationById } from "@/api/social-affairs/getEdirAssociationById";
 import { updateEdirAssociation } from "@/api/social-affairs/updateEdirAssociation";
-import { importEdirAssociations } from "@/api/social-affairs/importEdirAssociations";
+import { importEdirAssociations, previewEdirImport } from "@/api/social-affairs/importEdirAssociations";
 import { importEdirMembers } from "@/api/social-affairs/importEdirMembers";
 import { generateEdirReport } from "@/api/social-affairs/generateEdirReport";
 import {
@@ -36,12 +36,20 @@ import {
 import { getSubCities } from "@/api/social-affairs/location-api";
 import { EdirCancellationReason, EdirLevel, EdirStatus } from "@/api/social-affairs/edir";
 
+export const usePreviewEdirImportMutation = () => {
+  return useMutation({
+    mutationFn: (file: File) => previewEdirImport(file),
+  });
+};
+
 export const useImportEdirAssociationsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (file: File) => importEdirAssociations(file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["edir-associations"] });
+      queryClient.invalidateQueries({ queryKey: ["edir-contributions"] });
+      queryClient.invalidateQueries({ queryKey: ["edir-beneficiaries"] });
     },
   });
 };

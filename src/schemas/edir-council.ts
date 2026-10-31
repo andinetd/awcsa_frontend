@@ -29,6 +29,7 @@ export const newEdirCouncilSchema = z
     address: z.string().optional(),
     leadershipMembers: z.array(councilLeadershipMemberSchema).optional(),
     byLawsDocId: z.number().optional().nullable(),
+    associationIds: z.array(z.number()).optional(),
   })
   .superRefine((val, ctx) => {
     if (val.level === "WOREDA" && !val.woreda) {
