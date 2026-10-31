@@ -39,7 +39,7 @@ const Navbar = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="hover:text-primary/80 text-primary transition-colors duration-200 font-medium whitespace-nowrap text-sm lg:text-[18px] font-lexend"
+              className="hover:text-white/80 text-white transition-colors duration-200 font-medium whitespace-nowrap text-sm lg:text-[18px] font-lexend"
             >
               {item.name}
             </Link>
@@ -73,9 +73,9 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-700 hover:bg-white/30 h-8 w-8 sm:h-10 sm:w-10"
+                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
               >
-                <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </Button>
             </SheetTrigger>
             <SheetContent
