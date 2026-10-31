@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -34,13 +34,33 @@ const HeroBanner = ({ data }: { data?: any }) => {
   const description =
     getLocalized(data?.description || data?.content, "description") ||
     getLocalized(data?.description || data?.content, "content");
-  const imageUrl = data?.imageUrl || "/assets/background-placeholder.jpg";
-  const buttonText =
+  const imageUrl =
+    data?.imageUrl && data.imageUrl !== "/assets/background-placeholder.jpg"
+      ? data.imageUrl
+      : "/assets/hero-bg.jpg";
+  const rawButtonText =
     getLocalized(data?.buttonText || data?.linkText, "buttonText") ||
-    getLocalized(data?.buttonText || data?.linkText, "linkText") ||
-    t("hero.signIn");
+    getLocalized(data?.buttonText || data?.linkText, "linkText");
+  // Default to "Explore Services" if no custom text or if set to the legacy "Sign In"
+  const buttonText =
+    rawButtonText && rawButtonText !== "Sign In" && rawButtonText !== "ግባ"
+      ? rawButtonText
+      : t("hero.exploreServices");
   const buttonLink =
     data?.buttonLink || data?.link || data?.metadata?.link || "#services";
+
+  const handleSmoothScroll = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    target: string
+  ) => {
+    if (target.startsWith("#")) {
+      e.preventDefault();
+      const el = document.querySelector(target);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <div
@@ -68,9 +88,33 @@ const HeroBanner = ({ data }: { data?: any }) => {
         {description && (
           <p className="text-lg text-white/80 max-w-2xl">{description}</p>
         )}
-        <Link href={buttonLink}>
-          <Button className="h-10 font-lexend text-lg">{buttonText}</Button>
-        </Link>
+
+        {/* CTA Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-2 w-full sm:w-auto">
+          {buttonLink.startsWith("#") ? (
+            <Button
+              onClick={(e) => handleSmoothScroll(e, buttonLink)}
+              className="w-full sm:w-auto h-11 sm:h-12 px-6 font-lexend text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all"
+            >
+              {buttonText}
+            </Button>
+          ) : (
+            <Link href={buttonLink} className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto h-11 sm:h-12 px-6 font-lexend text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all">
+                {buttonText}
+              </Button>
+            </Link>
+          )}
+
+          <Link href="/register" className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto h-11 sm:h-12 px-6 font-lexend text-sm sm:text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/40 hover:border-white backdrop-blur-sm shadow-md transition-all"
+            >
+              {t("hero.applyAdoption")}
+            </Button>
+          </Link>
+        </div>
       </motion.div>
     </div>
   );
