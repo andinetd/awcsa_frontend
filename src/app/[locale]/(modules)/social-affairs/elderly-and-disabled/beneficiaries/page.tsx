@@ -16,6 +16,7 @@ import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import { useBeneficiaryRegisterStore } from "@/stores/beneficiary-register-store";
 import BeneficiaryTable from "../_components/beneficiary-table";
 import BeneficiaryReportDialog from "../_components/report-dialog";
+import { BatchImportDialog } from "../_components/batch-import-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -51,8 +52,30 @@ import {
   DisabilitySeverity,
 } from "@/api/beneficiaries/types-v2";
 
-type DisabledPresetTab = "ALL" | "SEVERE" | "ASSISTANCE" | "UNEMPLOYED" | "ACTIVE";
-type ElderlyPresetTab = "ALL" | "CONFIRMED" | "VULNERABLE" | "OLDEST" | "ACTIVE";
+type DisabledPresetTab =
+  | "ALL"
+  | "ASSISTIVE_NEEDED"
+  | "SUPPORT_CONFIRMED"
+  | "SEVERE"
+  | "UNEMPLOYED"
+  | "ACTIVE";
+type ElderlyPresetTab =
+  | "ALL"
+  | "MAHBER"
+  | "DIRECT_SUPPORT"
+  | "HEALTH_INSURANCE"
+  | "RELOCATED"
+  | "DECEASED";
+
+const ASSISTIVE_DEVICE_OPTIONS = [
+  { value: "ዊልቸር", labelAm: "ዊልቸር (Wheelchair)", labelEn: "Wheelchair" },
+  { value: "ክራንች", labelAm: "ክራንች (Crutches)", labelEn: "Crutches" },
+  { value: "ኬን", labelAm: "ኬን / ነጭ በትር (White Cane)", labelEn: "White Cane" },
+  { value: "ማዳመጫ", labelAm: "ማዳመጫ (Hearing Aid)", labelEn: "Hearing Aid" },
+  { value: "ብሬስ", labelAm: "ብሬስ (Orthopedic Brace)", labelEn: "Brace" },
+  { value: "መነጽር", labelAm: "መነጽር (Eyeglasses)", labelEn: "Eyeglasses" },
+  { value: "ሰው ሰራሽ", labelAm: "ሰው ሰራሽ አካል (Prosthetic)", labelEn: "Prosthetic" },
+];
 
 const DEFAULT_SUBCITY_NAMES = [
   "Bole",
@@ -120,6 +143,7 @@ export default function BeneficiariesPage() {
   const [severityFilter, setSeverityFilter] = useState<string>("ALL");
   const [verificationFilter, setVerificationFilter] = useState<string>("ALL");
   const [assistanceFilter, setAssistanceFilter] = useState<string>("ALL");
+  const [assistiveDeviceFilter, setAssistiveDeviceFilter] = useState<string>("ALL");
 
   // Elderly-specific filters
   const [elderlyAgeFilter, setElderlyAgeFilter] = useState<string>("ALL");
@@ -183,10 +207,20 @@ export default function BeneficiariesPage() {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    const list = currentSubCityObj?.woredas || [];
+    const defaultWoredas = Array.from({ length: 20 }, (_, i) => ({
+      id: i + 1,
+      code: String(i + 1).padStart(2, "0"),
+      subCityId: currentSubCityObj?.id ?? 0,
+    }));
+    const list =
+      currentSubCityObj?.woredas && currentSubCityObj.woredas.length >= 20
+        ? currentSubCityObj.woredas
+        : defaultWoredas;
     if (userWoreda) {
       const filtered = list.filter(
-        (w) => String(w.code) === String(userWoreda)
+        (w) =>
+          String(w.code) === String(userWoreda) ||
+          Number(w.code) === Number(userWoreda)
       );
       return filtered.length > 0
         ? filtered
@@ -212,15 +246,19 @@ export default function BeneficiariesPage() {
     if (category === "DISABLED") {
       return {
         all: rawItems.length,
+        assistiveNeeded: rawItems.filter(
+          (b) =>
+            (b.DisabilityProfile?.requiresPhysicalAssistance ||
+              !!b.DisabilityProfile?.requiredAssistiveDevice) &&
+            !b.DisabilityProfile?.supportConfirmed,
+        ).length,
+        supportConfirmed: rawItems.filter(
+          (b) => b.DisabilityProfile?.supportConfirmed,
+        ).length,
         severe: rawItems.filter(
           (b) =>
             b.DisabilityProfile?.disabilitySeverity === "SEVERE" ||
             b.DisabilityProfile?.disabilitySeverity === "PROFOUND",
-        ).length,
-        assistance: rawItems.filter(
-          (b) =>
-            b.DisabilityProfile?.requiresPhysicalAssistance ||
-            !!b.DisabilityProfile?.requiredAssistiveDevice,
         ).length,
         unemployed: rawItems.filter((b) => b.employmentStatus === "UNEMPLOYED").length,
         active: rawItems.filter((b) => b.activeStatus).length,
@@ -228,12 +266,11 @@ export default function BeneficiariesPage() {
     } else {
       return {
         all: rawItems.length,
-        confirmed: rawItems.filter((b) => b.ElderlyProfile?.supportConfirmed).length,
-        vulnerable: rawItems.filter(
-          (b) => b.maritalStatus === "WIDOWED" || b.maritalStatus === "UNMARRIED",
-        ).length,
-        oldest: rawItems.filter((b) => (getAge(b) ?? 0) >= 80).length,
-        active: rawItems.filter((b) => b.activeStatus).length,
+        mahber: rawItems.filter((b) => b.ElderlyProfile?.isAssociationMember).length,
+        directSupport: rawItems.filter((b) => b.ElderlyProfile?.isDirectSupport).length,
+        healthInsurance: rawItems.filter((b) => b.ElderlyProfile?.hasHealthInsurance).length,
+        relocated: rawItems.filter((b) => !!b.previousSubCity).length,
+        deceased: rawItems.filter((b) => b.isDeceased).length,
       };
     }
   }, [rawItems, category]);
@@ -244,17 +281,20 @@ export default function BeneficiariesPage() {
 
     // 1. Workflow preset tab
     if (category === "DISABLED") {
-      if (disabledTab === "SEVERE") {
+      if (disabledTab === "ASSISTIVE_NEEDED") {
+        list = list.filter(
+          (b) =>
+            (b.DisabilityProfile?.requiresPhysicalAssistance ||
+              !!b.DisabilityProfile?.requiredAssistiveDevice) &&
+            !b.DisabilityProfile?.supportConfirmed,
+        );
+      } else if (disabledTab === "SUPPORT_CONFIRMED") {
+        list = list.filter((b) => b.DisabilityProfile?.supportConfirmed);
+      } else if (disabledTab === "SEVERE") {
         list = list.filter(
           (b) =>
             b.DisabilityProfile?.disabilitySeverity === "SEVERE" ||
             b.DisabilityProfile?.disabilitySeverity === "PROFOUND",
-        );
-      } else if (disabledTab === "ASSISTANCE") {
-        list = list.filter(
-          (b) =>
-            b.DisabilityProfile?.requiresPhysicalAssistance ||
-            !!b.DisabilityProfile?.requiredAssistiveDevice,
         );
       } else if (disabledTab === "UNEMPLOYED") {
         list = list.filter((b) => b.employmentStatus === "UNEMPLOYED");
@@ -262,16 +302,16 @@ export default function BeneficiariesPage() {
         list = list.filter((b) => b.activeStatus);
       }
     } else {
-      if (elderlyTab === "CONFIRMED") {
-        list = list.filter((b) => b.ElderlyProfile?.supportConfirmed);
-      } else if (elderlyTab === "VULNERABLE") {
-        list = list.filter(
-          (b) => b.maritalStatus === "WIDOWED" || b.maritalStatus === "UNMARRIED",
-        );
-      } else if (elderlyTab === "OLDEST") {
-        list = list.filter((b) => (getAge(b) ?? 0) >= 80);
-      } else if (elderlyTab === "ACTIVE") {
-        list = list.filter((b) => b.activeStatus);
+      if (elderlyTab === "MAHBER") {
+        list = list.filter((b) => b.ElderlyProfile?.isAssociationMember);
+      } else if (elderlyTab === "DIRECT_SUPPORT") {
+        list = list.filter((b) => b.ElderlyProfile?.isDirectSupport);
+      } else if (elderlyTab === "HEALTH_INSURANCE") {
+        list = list.filter((b) => b.ElderlyProfile?.hasHealthInsurance);
+      } else if (elderlyTab === "RELOCATED") {
+        list = list.filter((b) => !!b.previousSubCity);
+      } else if (elderlyTab === "DECEASED") {
+        list = list.filter((b) => b.isDeceased);
       }
     }
 
@@ -294,7 +334,12 @@ export default function BeneficiariesPage() {
           b.occupation,
           b.DisabilityProfile?.disabilityType,
           b.DisabilityProfile?.cause,
+          b.DisabilityProfile?.requiredAssistiveDevice,
           b.ElderlyProfile?.requiredSupportType,
+          b.ElderlyProfile?.associationName,
+          b.ElderlyProfile?.householdRole,
+          b.previousSubCity,
+          b.previousWoreda,
         ].filter(Boolean) as string[];
         return fields.some((f) => f.toLowerCase().includes(q));
       });
@@ -310,7 +355,12 @@ export default function BeneficiariesPage() {
       list = list.filter((b) => {
         const wStr = String(b.woreda || "").toLowerCase().trim();
         const target = String(selectedWoreda).toLowerCase().trim();
-        return wStr === target || wStr === `woreda ${target}` || wStr === `w-${target}`;
+        return (
+          wStr === target ||
+          wStr === `woreda ${target}` ||
+          wStr === `w-${target}` ||
+          (!isNaN(Number(wStr)) && !isNaN(Number(target)) && Number(wStr) === Number(target))
+        );
       });
     }
 
@@ -369,6 +419,13 @@ export default function BeneficiariesPage() {
             !b.DisabilityProfile?.requiredAssistiveDevice,
         );
       }
+      if (assistiveDeviceFilter !== "ALL") {
+        list = list.filter((b) =>
+          b.DisabilityProfile?.requiredAssistiveDevice
+            ?.toLowerCase()
+            .includes(assistiveDeviceFilter.toLowerCase()),
+        );
+      }
     } else {
       if (elderlyAgeFilter !== "ALL") {
         list = list.filter((b) => {
@@ -405,6 +462,7 @@ export default function BeneficiariesPage() {
     severityFilter,
     verificationFilter,
     assistanceFilter,
+    assistiveDeviceFilter,
     elderlyAgeFilter,
     supportConfirmedFilter,
   ]);
@@ -423,6 +481,7 @@ export default function BeneficiariesPage() {
       if (severityFilter !== "ALL") count++;
       if (verificationFilter !== "ALL") count++;
       if (assistanceFilter !== "ALL") count++;
+      if (assistiveDeviceFilter !== "ALL") count++;
     } else {
       if (elderlyAgeFilter !== "ALL") count++;
       if (supportConfirmedFilter !== "ALL") count++;
@@ -443,6 +502,7 @@ export default function BeneficiariesPage() {
     severityFilter,
     verificationFilter,
     assistanceFilter,
+    assistiveDeviceFilter,
     elderlyAgeFilter,
     supportConfirmedFilter,
   ]);
@@ -463,7 +523,8 @@ export default function BeneficiariesPage() {
         disabilityTypeFilter !== "ALL" ||
         severityFilter !== "ALL" ||
         verificationFilter !== "ALL" ||
-        assistanceFilter !== "ALL")) ||
+        assistanceFilter !== "ALL" ||
+        assistiveDeviceFilter !== "ALL")) ||
     (category === "ELDERLY" &&
       (elderlyAgeFilter !== "ALL" || supportConfirmedFilter !== "ALL"));
 
@@ -486,6 +547,7 @@ export default function BeneficiariesPage() {
     setSeverityFilter("ALL");
     setVerificationFilter("ALL");
     setAssistanceFilter("ALL");
+    setAssistiveDeviceFilter("ALL");
     setElderlyAgeFilter("ALL");
     setSupportConfirmedFilter("ALL");
     setPage(1);
@@ -622,6 +684,8 @@ export default function BeneficiariesPage() {
 
             <BeneficiaryReportDialog />
 
+            <BatchImportDialog />
+
             <Button
               className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5 cursor-pointer"
               onClick={() => openDialog(category)}
@@ -639,16 +703,22 @@ export default function BeneficiariesPage() {
           [
             { id: "ALL" as const, label: t("tabs.allDisabled"), count: tabCounts.all },
             {
+              id: "ASSISTIVE_NEEDED" as const,
+              label: locale === "am" ? "ድጋፍ መሳሪያ የሚፈልጉ" : "Needs Assistive Device",
+              count: tabCounts.assistiveNeeded,
+              color: "text-amber-800 bg-amber-50 border-amber-200",
+            },
+            {
+              id: "SUPPORT_CONFIRMED" as const,
+              label: locale === "am" ? "ድጋፍ የተሰጣቸው" : "Support Confirmed",
+              count: tabCounts.supportConfirmed,
+              color: "text-emerald-800 bg-emerald-50 border-emerald-200",
+            },
+            {
               id: "SEVERE" as const,
               label: t("tabs.severeProfound"),
               count: tabCounts.severe,
               color: "text-rose-700 bg-rose-50",
-            },
-            {
-              id: "ASSISTANCE" as const,
-              label: t("tabs.assistanceNeeded"),
-              count: tabCounts.assistance,
-              color: "text-amber-700 bg-amber-50",
             },
             {
               id: "UNEMPLOYED" as const,
@@ -692,30 +762,40 @@ export default function BeneficiariesPage() {
           })
         ) : (
           [
-            { id: "ALL" as const, label: t("tabs.allElderly"), count: tabCounts.all },
             {
-              id: "CONFIRMED" as const,
-              label: t("tabs.supportConfirmed"),
-              count: tabCounts.confirmed,
-              color: "text-emerald-700 bg-emerald-50",
+              id: "ALL" as const,
+              label: locale === "am" ? "ሁሉም በወረዳው የሚገኙ (Census)" : "All Residents (Census)",
+              count: tabCounts.all,
             },
             {
-              id: "VULNERABLE" as const,
-              label: t("tabs.livingAloneWidowed"),
-              count: tabCounts.vulnerable,
-              color: "text-amber-700 bg-amber-50",
+              id: "MAHBER" as const,
+              label: locale === "am" ? "የማህበር አባላት (mahber)" : "Association (mahber)",
+              count: tabCounts.mahber,
+              color: "text-blue-700 bg-blue-50 border-blue-200",
             },
             {
-              id: "OLDEST" as const,
-              label: t("tabs.oldestOld"),
-              count: tabCounts.oldest,
-              color: "text-purple-700 bg-purple-50",
+              id: "DIRECT_SUPPORT" as const,
+              label: locale === "am" ? "ቀጥታ ድጋፍ (ቀ.ድ)" : "Direct Support (ቀ.ድ)",
+              count: tabCounts.directSupport,
+              color: "text-amber-800 bg-amber-50 border-amber-200",
             },
             {
-              id: "ACTIVE" as const,
-              label: t("tabs.activeElderly"),
-              count: tabCounts.active,
-              color: "text-blue-700 bg-blue-50",
+              id: "HEALTH_INSURANCE" as const,
+              label: locale === "am" ? "የጤና መድህን" : "Health Insurance (CBHI)",
+              count: tabCounts.healthInsurance,
+              color: "text-teal-800 bg-teal-50 border-teal-200",
+            },
+            {
+              id: "RELOCATED" as const,
+              label: locale === "am" ? "የተዛወሩ (ከቂ.ወ.7...)" : "Relocated (ከቂ.ወ.7)",
+              count: tabCounts.relocated,
+              color: "text-purple-800 bg-purple-50 border-purple-200",
+            },
+            {
+              id: "DECEASED" as const,
+              label: locale === "am" ? "በሞት የተለዩ" : "Deceased (Archive)",
+              count: tabCounts.deceased,
+              color: "text-rose-800 bg-rose-50 border-rose-200",
             },
           ].map((tab) => {
             const isActive = elderlyTab === tab.id;
@@ -1033,6 +1113,46 @@ export default function BeneficiariesPage() {
                       <SelectItem value="REJECTED" className="text-xs rounded-xs">
                         {t("filterDrawer.rejected")}
                       </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Assistive Device Type */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                    {locale === "am" ? "የድጋፍ መሳሪያ ዓይነት" : "Assistive Device Type"}
+                  </label>
+                  <Select
+                    value={assistiveDeviceFilter}
+                    onValueChange={(val) => {
+                      setAssistiveDeviceFilter(val);
+                      setPage(1);
+                    }}
+                  >
+                    <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                      <SelectValue placeholder={locale === "am" ? "ሁሉም መሳሪያዎች" : "All Devices"}>
+                        {assistiveDeviceFilter === "ALL"
+                          ? locale === "am"
+                            ? "ሁሉም መሳሪያዎች"
+                            : "All Devices"
+                          : ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)
+                              ? locale === "am"
+                                ? ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)!
+                                    .labelAm
+                                : ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)!
+                                    .labelEn
+                              : assistiveDeviceFilter}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xs border-[#E3E7EB]">
+                      <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
+                        {locale === "am" ? "ሁሉም መሳሪያዎች" : "All Devices"}
+                      </SelectItem>
+                      {ASSISTIVE_DEVICE_OPTIONS.map((dev) => (
+                        <SelectItem key={dev.value} value={dev.value} className="text-xs rounded-xs">
+                          {locale === "am" ? dev.labelAm : dev.labelEn}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

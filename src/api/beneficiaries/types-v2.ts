@@ -170,6 +170,13 @@ export interface ElderlyProfileFull {
   previousSupport?: string | null;
   supportConfirmed: boolean;
   requiredSupportType?: string | null;
+  isAssociationMember?: boolean;
+  associationName?: string | null;
+  hasHealthInsurance?: boolean;
+  cbhiIdNumber?: string | null;
+  isDirectSupport?: boolean;
+  householdRole?: string | null;
+  caretakerStatus?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -305,6 +312,10 @@ export interface Beneficiary {
   houseNumber?: string | null;
   clientCategory: BeneficiaryCategory;
   activeStatus: boolean;
+  isDeceased?: boolean;
+  deceasedDate?: string | null;
+  previousSubCity?: string | null;
+  previousWoreda?: string | null;
   createdAt: string;
   updatedAt: string;
   DisabilityProfile?: DisabilityProfileFull | null;
@@ -322,6 +333,11 @@ export interface BeneficiarySearchParams {
   subCity?: string;
   woreda?: string;
   disabilityType?: string;
+  isDeceased?: "true" | "false" | "all";
+  isRelocated?: "true" | "false";
+  isAssociationMember?: "true" | "false";
+  isDirectSupport?: "true" | "false";
+  hasHealthInsurance?: "true" | "false";
   page?: number;
   pageSize?: number;
 }
@@ -372,10 +388,21 @@ export interface CreateElderlyPayload {
   previousSupport?: string;
   supportConfirmed?: boolean;
   requiredSupportType?: string;
+  isAssociationMember?: boolean;
+  associationName?: string;
+  hasHealthInsurance?: boolean;
+  cbhiIdNumber?: string;
+  isDirectSupport?: boolean;
+  householdRole?: string;
+  caretakerStatus?: string;
+  previousSubCity?: string;
+  previousWoreda?: string;
+  isDeceased?: boolean;
+  deceasedDate?: string;
   confirmLink?: boolean;
 }
 
-export type UpdateBeneficiaryPayload = Partial<CreateElderlyPayload>;
+export type UpdateBeneficiaryPayload = Partial<CreateElderlyPayload & CreateDisabledPayload>;
 
 export interface CreateDisabledPayload extends CreateElderlyPayload {
   disabilityType: string;

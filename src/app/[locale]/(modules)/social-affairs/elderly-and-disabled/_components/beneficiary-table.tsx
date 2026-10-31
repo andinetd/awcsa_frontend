@@ -43,7 +43,7 @@ import {
 } from "@/components/ui/select";
 import { Eye, Edit, Loader2, History, BookOpen } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
+import { cn, calculateAge } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 import {
@@ -90,6 +90,7 @@ const editSchema = z.object({
   lastName: z.string().min(1),
   grandfatherName: z.string().optional(),
   phoneNumber: z.string().optional(),
+  dateOfBirth: z.string().optional(),
   age: z.coerce.number().int().min(0).max(150).optional(),
   sex: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
   educationLevel: z.string().optional(),
@@ -218,9 +219,85 @@ export default function BeneficiaryTable({
                     {item.woreda ? ` / ${item.woreda}` : ""}
                   </TableCell>
                   <TableCell className="text-xs text-slate-600">
-                    {type === "DISABLED"
-                      ? getDisabilityDisplayLabel(item.DisabilityProfile?.disabilityType, locale)
-                      : (item.ElderlyProfile?.workplaceCondition ?? "—")}
+                    {type === "DISABLED" ? (
+                      <div className="space-y-1">
+                        <div>
+                          {getDisabilityDisplayLabel(item.DisabilityProfile?.disabilityType, locale)}
+                        </div>
+                        {item.DisabilityProfile?.requiredAssistiveDevice && (
+                          <div className="flex flex-wrap items-center gap-1">
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "font-mono text-[9px] uppercase px-1.5 py-0.2 rounded-xs border font-semibold",
+                                item.DisabilityProfile.supportConfirmed
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                                  : "bg-amber-50 text-amber-800 border-amber-300",
+                              )}
+                            >
+                              {item.DisabilityProfile.supportConfirmed
+                                ? (locale === "am" ? "✓ ድጋፍ ያገኙ: " : "✓ Received: ")
+                                : (locale === "am" ? "⏳ የሚፈልጉት: " : "⏳ Needs: ")}
+                              {item.DisabilityProfile.requiredAssistiveDevice}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <div className="text-slate-700 font-medium">
+                          {item.ElderlyProfile?.workplaceCondition ?? "—"}
+                        </div>
+                        {/* Programs and Cohorts Badges */}
+                        <div className="flex flex-wrap items-center gap-1">
+                          {item.isDeceased && (
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-[9px] uppercase px-1 py-0.2 rounded-xs border font-semibold bg-rose-50 text-rose-700 border-rose-300"
+                            >
+                              በሞት የተለዩ
+                            </Badge>
+                          )}
+                          {item.previousSubCity && (
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-[9px] uppercase px-1 py-0.2 rounded-xs border font-semibold bg-purple-50 text-purple-700 border-purple-300"
+                            >
+                              ከ{item.previousSubCity}
+                            </Badge>
+                          )}
+                          {item.ElderlyProfile?.isAssociationMember && (
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-[9px] uppercase px-1 py-0.2 rounded-xs border font-semibold bg-blue-50 text-blue-700 border-blue-300"
+                            >
+                              ማህበር
+                            </Badge>
+                          )}
+                          {item.ElderlyProfile?.isDirectSupport && (
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-[9px] uppercase px-1 py-0.2 rounded-xs border font-semibold bg-amber-50 text-amber-800 border-amber-300"
+                            >
+                              ቀ.ድ.
+                            </Badge>
+                          )}
+                          {item.ElderlyProfile?.hasHealthInsurance && (
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-[9px] uppercase px-1 py-0.2 rounded-xs border font-semibold bg-teal-50 text-teal-800 border-teal-300"
+                            >
+                              ጤና መድህን
+                            </Badge>
+                          )}
+                        </div>
+                        {item.ElderlyProfile?.requiredSupportType && (
+                          <div className="text-[11px] font-mono text-slate-500">
+                            {item.ElderlyProfile.requiredSupportType}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell>
                     {latestEligibility ? (
@@ -318,6 +395,7 @@ function EditBeneficiaryDialog({
       lastName: beneficiary.lastName ?? "",
       grandfatherName: beneficiary.grandfatherName ?? "",
       phoneNumber: beneficiary.phoneNumber ?? "",
+      dateOfBirth: beneficiary.dateOfBirth ? beneficiary.dateOfBirth.split("T")[0] : "",
       age: beneficiary.age ?? undefined,
       sex: beneficiary.sex ?? undefined,
       educationLevel: beneficiary.educationLevel ?? "",
@@ -341,6 +419,27 @@ function EditBeneficiaryDialog({
       requiredSupportType: beneficiary.ElderlyProfile?.requiredSupportType ?? "",
     } as any,
   });
+
+  const dobValue = form.watch("dateOfBirth");
+  const prevDobRef = React.useRef<string | undefined>(dobValue);
+
+  React.useEffect(() => {
+    if (dobValue) {
+      const derived = calculateAge(dobValue);
+      if (derived !== null) {
+        form.setValue("age", derived as any, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    } else if (prevDobRef.current && !dobValue) {
+      form.setValue("age", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+    prevDobRef.current = dobValue;
+  }, [dobValue, form]);
 
   const onSubmit = (values: EditFormValues) => {
     update.mutate(values as any, {
@@ -403,9 +502,13 @@ function EditBeneficiaryDialog({
                 name="grandfatherName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Grandfather Name</FormLabel>
+                    <FormLabel>{locale === "am" ? "የአያት ስም" : "Grandfather Name"}</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value ?? ""} placeholder="Grandfather's name" />
+                      <Input
+                        {...field}
+                        value={field.value ?? ""}
+                        placeholder={locale === "am" ? "የአያት ስም ያስገቡ" : "Grandfather's name"}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -426,15 +529,46 @@ function EditBeneficiaryDialog({
               />
               <FormField
                 control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("fields.dob")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        max={new Date().toISOString().split("T")[0]}
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="age"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{tSrs("age")}</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>{tSrs("age")}</FormLabel>
+                      {dobValue && (
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {locale === "am" ? "ከተወለዱበት ቀን የተሰላ" : "Auto-derived"}
+                        </span>
+                      )}
+                    </div>
                     <FormControl>
                       <Input
                         type="number"
                         {...field}
                         value={(field.value as any) ?? ""}
+                        readOnly={!!dobValue}
+                        className={
+                          dobValue
+                            ? "bg-slate-50 text-slate-700 cursor-not-allowed"
+                            : ""
+                        }
                       />
                     </FormControl>
                     <FormMessage />

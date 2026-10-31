@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLocale } from "next-intl";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,7 @@ interface BeneficiaryReportMenuProps {
 
 export function BeneficiaryReportMenu({ beneficiary }: BeneficiaryReportMenuProps) {
   const [loading, setLoading] = useState(false);
+  const locale = useLocale() === "en" ? "en" : "am";
 
   const handlePrint = () => {
     setLoading(true);
@@ -43,12 +45,12 @@ export function BeneficiaryReportMenu({ beneficiary }: BeneficiaryReportMenuProp
           ) : (
             <FileDown className="w-3.5 h-3.5 text-[#1769AA]" />
           )}
-          <span>Reports & Dossier</span>
+          <span>{locale === "am" ? "ሪፖርት እና ዶሲዬ" : "Reports & Dossier"}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 rounded-xs border-[#E3E7EB] shadow-md font-mono text-xs">
         <DropdownMenuLabel className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
-          Beneficiary Print Actions
+          {locale === "am" ? "የህትመት ተግባራት" : "Beneficiary Print Actions"}
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-[#E3E7EB]" />
         <DropdownMenuItem
@@ -56,7 +58,7 @@ export function BeneficiaryReportMenu({ beneficiary }: BeneficiaryReportMenuProp
           className="cursor-pointer gap-2 focus:bg-[#E8F2FA] focus:text-[#1769AA]"
         >
           <Printer className="w-3.5 h-3.5 text-[#1769AA]" />
-          <span>Print Official Dossier</span>
+          <span>{locale === "am" ? "ዋናውን ዶሲዬ አትም" : "Print Official Dossier"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

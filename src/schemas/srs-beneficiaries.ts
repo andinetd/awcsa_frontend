@@ -77,6 +77,17 @@ export const registerElderlyFormSchema = baseBeneficiarySchema
   .merge(workplaceSchema)
   .extend({
     requiredSupportType: z.string().optional(),
+    isAssociationMember: z.boolean().optional(),
+    associationName: z.string().optional(),
+    hasHealthInsurance: z.boolean().optional(),
+    cbhiIdNumber: z.string().optional(),
+    isDirectSupport: z.boolean().optional(),
+    householdRole: z.string().optional(),
+    caretakerStatus: z.string().optional(),
+    previousSubCity: z.string().optional(),
+    previousWoreda: z.string().optional(),
+    isDeceased: z.boolean().optional(),
+    deceasedDate: z.string().optional(),
   });
 
 export const registerDisabledFormSchema = baseBeneficiarySchema

@@ -87,3 +87,46 @@ export const updateBeneficiaryProfile = async (
   );
   return response.data;
 };
+
+export interface BatchImportResponse {
+  totalRowsScanned: number;
+  sheetsProcessed: {
+    sheetName: string;
+    rowCount: number;
+  }[];
+  uniqueCitizensResolved: number;
+  createdCount: number;
+  updatedCount: number;
+  elderlyProcessedCount: number;
+  disabledProcessedCount: number;
+  assistiveRequestsCreatedCount?: number;
+  deceasedCount: number;
+  directSupportCount: number;
+  healthInsuranceCount: number;
+  associationMemberCount: number;
+  disabilityLinkedCount: number;
+  relocatedCount: number;
+}
+
+export const importBeneficiariesExcel = async (
+  file: File,
+  subCity?: string,
+  woreda?: string
+): Promise<BatchImportResponse> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (subCity) formData.append('subCity', subCity);
+  if (woreda) formData.append('woreda', woreda);
+
+  const response = await axios.post(
+    `${BASE_URL}/beneficiaries/import-excel`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${useAuthStore.getState().token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+  return response.data;
+};

@@ -60,6 +60,7 @@ import {
   useRegisterElderly,
   useFaydaVerify,
 } from "@/hooks/beneficiaries/srs-hooks";
+import { calculateAge } from "@/lib/utils";
 import { BeneficiaryType } from "@/api/beneficiaries/types";
 import {
   SubCitySelect,
@@ -111,6 +112,129 @@ const CAREGIVER_SUPPORT_OPTIONS = [
   "OTHER",
 ] as const;
 
+export const ASSISTIVE_DEVICE_OPTIONS = [
+  { value: "NONE", labelAm: "ምንም (አያስፈልግም)", labelEn: "None / Not Required" },
+  { value: "ዊልቸር (Wheelchair)", labelAm: "ዊልቸር (Wheelchair)", labelEn: "Wheelchair" },
+  { value: "ክራንች (Crutches)", labelAm: "ክራንች (Crutches)", labelEn: "Crutches" },
+  { value: "ኬን / ነጭ በትር (White Cane)", labelAm: "ኬን / ነጭ በትር (White Cane)", labelEn: "White Cane" },
+  { value: "ማዳመጫ (Hearing Aid)", labelAm: "ማዳመጫ (Hearing Aid)", labelEn: "Hearing Aid" },
+  { value: "ብሬስ (Orthopedic Brace)", labelAm: "ብሬስ (Orthopedic Brace)", labelEn: "Orthopedic Brace" },
+  { value: "መነጽር (Eyeglasses)", labelAm: "መነጽር (Eyeglasses)", labelEn: "Eyeglasses" },
+  { value: "ሰው ሰራሽ አካል (Prosthetic / Artificial Limb)", labelAm: "ሰው ሰራሽ አካል (Prosthetic)", labelEn: "Prosthetic / Artificial Limb" },
+  { value: "ተጓዥ ሮሌተር / ዎከር (Walker / Rollator)", labelAm: "ተጓዥ ሮሌተር / ዎከር (Walker)", labelEn: "Walker / Rollator" },
+  { value: "OTHER", labelAm: "ሌላ (Other - እባክዎ ይጥቀሱ)", labelEn: "Other (Please specify)" },
+];
+
+export function AssistiveDeviceSelect({
+  value,
+  onChange,
+  locale,
+  onAutoCheckPhysicalAssistance,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  locale: string;
+  onAutoCheckPhysicalAssistance?: () => void;
+}) {
+  const isNone = !value || value.trim() === "" || value === "NONE";
+
+  const matchedOption = ASSISTIVE_DEVICE_OPTIONS.find(
+    (opt) => opt.value !== "NONE" && opt.value !== "OTHER" && opt.value === value
+  ) || ASSISTIVE_DEVICE_OPTIONS.find(
+    (opt) =>
+      opt.value !== "NONE" &&
+      opt.value !== "OTHER" &&
+      value &&
+      (opt.value.toLowerCase().includes(value.toLowerCase()) ||
+        value.toLowerCase().includes(opt.value.split(" ")[0].toLowerCase()))
+  );
+
+  const [mode, setMode] = useState<string>(() => {
+    if (isNone) return "NONE";
+    if (matchedOption) return matchedOption.value;
+    return "OTHER";
+  });
+
+  const [customText, setCustomText] = useState<string>(() => {
+    if (!isNone && !matchedOption) return value;
+    return "";
+  });
+
+  useEffect(() => {
+    if (isNone) {
+      setMode("NONE");
+    } else if (matchedOption) {
+      setMode(matchedOption.value);
+    } else {
+      setMode("OTHER");
+      setCustomText(value);
+    }
+  }, [value, isNone, matchedOption]);
+
+  const handleSelect = (val: string) => {
+    setMode(val);
+    if (val === "NONE") {
+      onChange("");
+      setCustomText("");
+    } else if (val === "OTHER") {
+      onChange(customText);
+    } else {
+      onChange(val);
+      setCustomText("");
+      if (
+        (val.includes("ዊልቸር") || val.includes("ክራንች") || val.includes("Wheelchair") || val.includes("Crutches")) &&
+        onAutoCheckPhysicalAssistance
+      ) {
+        onAutoCheckPhysicalAssistance();
+      }
+    }
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    setCustomText(text);
+    onChange(text);
+  };
+
+  return (
+    <div className="space-y-2">
+      <Select value={mode} onValueChange={handleSelect}>
+        <SelectTrigger className="h-9 text-xs rounded-xs border-[#E3E7EB] bg-white">
+          <SelectValue placeholder={locale === "am" ? "የድጋፍ መሳሪያ ይምረጡ..." : "Select assistive device..."} />
+        </SelectTrigger>
+        <SelectContent className="rounded-xs border-[#E3E7EB]">
+          {ASSISTIVE_DEVICE_OPTIONS.map((opt) => (
+            <SelectItem key={opt.value} value={opt.value} className="text-xs rounded-xs">
+              {locale === "am" ? opt.labelAm : opt.labelEn}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {mode === "OTHER" && (
+        <div className="space-y-1">
+          <Input
+            value={customText}
+            onChange={handleTextChange}
+            placeholder={
+              locale === "am"
+                ? "እባክዎ የሚፈለገውን የድጋፍ መሳሪያ ዓይነት እዚህ ይጻፉ..."
+                : "Please specify the required assistive device..."
+            }
+            className="h-8 text-xs font-mono rounded-xs border-[#1769AA]/40 focus-visible:ring-1 focus-visible:ring-[#1769AA]"
+            autoFocus
+          />
+          <span className="text-[10px] text-slate-500 font-mono block">
+            {locale === "am"
+              ? "የሚፈለገውን ልዩ የድጋፍ መሳሪያ ስም ያስገቡ (ምሳሌ፡ የአልጋ ማንሻ፣ ልዩ ጫማ...)"
+              : "Specify custom assistive equipment (e.g. Bed lifter, orthopedic shoes...)"}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const DEFAULT_VALUES: any = {
   faydaId: "",
   firstName: "",
@@ -154,6 +278,17 @@ const DEFAULT_VALUES: any = {
   childGender: undefined,
   autismCenterAttended: "",
   caregiverSupportType: undefined,
+  isAssociationMember: false,
+  associationName: "",
+  hasHealthInsurance: false,
+  cbhiIdNumber: "",
+  isDirectSupport: false,
+  householdRole: "",
+  caretakerStatus: "",
+  previousSubCity: "",
+  previousWoreda: "",
+  isDeceased: false,
+  deceasedDate: "",
 };
 
 interface BeneficiaryFormBodyProps {
@@ -205,8 +340,31 @@ export function BeneficiaryFormBody({
   const registerDisabled = useRegisterDisabled();
   const faydaVerify = useFaydaVerify();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [includeVocational, setIncludeVocational] = useState(false);
+  const [includePrograms, setIncludePrograms] = useState(false);
 
   const faydaValue = form.watch("faydaId");
+  const dobValue = form.watch("dateOfBirth");
+  const prevDobRef = React.useRef<string | undefined>(dobValue);
+
+  useEffect(() => {
+    if (dobValue) {
+      const derived = calculateAge(dobValue);
+      if (derived !== null) {
+        form.setValue("age", derived as any, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    } else if (prevDobRef.current && !dobValue) {
+      form.setValue("age", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+    prevDobRef.current = dobValue;
+  }, [dobValue, form]);
+
   const isAutismCaregiver = type === "DISABLED" && form.watch("disabilityType") === "AUTISM_CAREGIVER";
   const workSectorOptions = getWorkSectorOptions(type);
 
@@ -249,6 +407,13 @@ export function BeneficiaryFormBody({
           const [first, ...rest] = result.fullName.split(" ");
           form.setValue("firstName", first);
           form.setValue("lastName", rest.join(" "));
+        }
+        if (result.dateOfBirth) {
+          const formattedDob = result.dateOfBirth.replace(/\//g, "-").split("T")[0];
+          form.setValue("dateOfBirth", formattedDob, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
         }
       } else {
         toast.error(
@@ -571,7 +736,11 @@ export function BeneficiaryFormBody({
                   <div className="flex gap-2">
                     <FormControl>
                       <Input
-                        placeholder="e.g. 1234567890123456"
+                        placeholder={
+                          locale === "am"
+                            ? "ምሳሌ፡ 1234567890123456"
+                            : "e.g. 1234567890123456"
+                        }
                         {...field}
                         value={field.value ?? ""}
                       />
@@ -628,27 +797,16 @@ export function BeneficiaryFormBody({
               name="grandfatherName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Grandfather Name</FormLabel>
+                  <FormLabel>
+                    {locale === "am" ? "የአያት ስም" : "Grandfather Name"}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Grandfather's name"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.phone")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("placeholders.phone")}
+                      placeholder={
+                        locale === "am"
+                          ? "የአያት ስም ያስገቡ"
+                          : "Grandfather's name"
+                      }
                       {...field}
                       value={field.value ?? ""}
                     />
@@ -660,16 +818,15 @@ export function BeneficiaryFormBody({
             <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
-                name="age"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{tSrs("age")}</FormLabel>
+                    <FormLabel>{t("fields.phone")}</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
-                        placeholder="65"
+                        placeholder={t("placeholders.phone")}
                         {...field}
-                        value={(field.value as any) ?? ""}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -706,23 +863,57 @@ export function BeneficiaryFormBody({
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.dob")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="date"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-2">
+              <FormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("fields.dob")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        max={new Date().toISOString().split("T")[0]}
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>{tSrs("age")}</FormLabel>
+                      {dobValue && (
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {locale === "am" ? "ከተወለዱበት ቀን የተሰላ" : "Auto-derived"}
+                        </span>
+                      )}
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="65"
+                        {...field}
+                        value={(field.value as any) ?? ""}
+                        readOnly={!!dobValue}
+                        className={
+                          dobValue
+                            ? "bg-slate-50 text-slate-700 cursor-not-allowed"
+                            : ""
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -1237,14 +1428,15 @@ export function BeneficiaryFormBody({
                         : tSrs("requiredAssistiveDevice")}
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={
-                          isAutismCaregiver
-                            ? t("placeholders.autismAssistiveDevice")
-                            : "e.g. Wheelchair, Braille display"
-                        }
-                        {...field}
+                      <AssistiveDeviceSelect
                         value={field.value ?? ""}
+                        onChange={field.onChange}
+                        locale={locale}
+                        onAutoCheckPhysicalAssistance={() => {
+                          if (!form.getValues("requiresPhysicalAssistance")) {
+                            form.setValue("requiresPhysicalAssistance", true);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -1279,7 +1471,11 @@ export function BeneficiaryFormBody({
                   <FormLabel>{tSrs("otherSupportRequirements")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Any other needs..."
+                      placeholder={
+                        locale === "am"
+                          ? "ሌሎች ተጨማሪ የድጋፍ ፍላጎቶች ካሉ ይግለጹ..."
+                          : "Any other needs..."
+                      }
                       {...field}
                       value={field.value ?? ""}
                     />
@@ -1293,10 +1489,14 @@ export function BeneficiaryFormBody({
             <div className="space-y-2 border border-dashed border-slate-300 rounded-lg p-4 bg-slate-50/50">
               <FormLabel className="flex items-center gap-2 text-sm font-medium text-slate-700">
                 <FileUp className="w-4 h-4 text-primary" />
-                Supporting Document / Medical Evidence (Optional)
+                {locale === "am"
+                  ? "ደጋፊ ሰነድ / የሕክምና ማስረጃ (አማራጭ)"
+                  : "Supporting Document / Medical Evidence (Optional)"}
               </FormLabel>
               <p className="text-xs text-slate-500">
-                Attach medical report, disability certificate, or supporting letter (PDF, PNG, JPG, DOCX - max 10MB)
+                {locale === "am"
+                  ? "የሕክምና ማስረጃ፣ የአካል ጉዳት ምስክር ወረቀት ወይም ደጋፊ ደብዳቤ ያያይዙ (PDF, PNG, JPG, DOCX - ከፍተኛ 10MB)"
+                  : "Attach medical report, disability certificate, or supporting letter (PDF, PNG, JPG, DOCX - max 10MB)"}
               </p>
               <div className="flex items-center gap-3">
                 <Input
@@ -1314,13 +1514,15 @@ export function BeneficiaryFormBody({
                     className="text-xs text-destructive hover:bg-destructive/10"
                   >
                     <X className="w-3.5 h-3.5 mr-1" />
-                    Remove
+                    {locale === "am" ? "አስወግድ" : "Remove"}
                   </Button>
                 )}
               </div>
               {selectedFile && (
                 <p className="text-xs text-emerald-600 font-medium flex items-center gap-1">
-                  ✓ Ready to upload: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+                  {locale === "am"
+                    ? `✓ ለመስቀል ተዘጋጅቷል፡ ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)`
+                    : `✓ Ready to upload: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(1)} KB)`}
                 </p>
               )}
             </div>
@@ -1328,9 +1530,27 @@ export function BeneficiaryFormBody({
         )}
 
         <div className="space-y-4 border-t pt-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
-            {tOpt("trainingAndWorkplace")}
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider font-mono">
+              {type === "ELDERLY" ? tSrs("workProfileTitle") : tSrs("trainingProfileTitle")}
+            </h3>
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-mono text-[#1769AA] font-semibold bg-slate-50 border border-slate-200 px-2.5 py-1 rounded hover:bg-slate-100 transition-colors">
+              <input
+                type="checkbox"
+                checked={includeVocational}
+                onChange={(e) => setIncludeVocational(e.target.checked)}
+                className="rounded text-[#1769AA] focus:ring-0"
+              />
+              <span>
+                {type === "ELDERLY"
+                  ? tSrs("includeWorkSection")
+                  : tSrs("includeTrainingSection")}
+              </span>
+            </label>
+          </div>
+
+          {includeVocational && (
+            <div className="space-y-4 pt-1 animate-in fade-in duration-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <FormField
               control={form.control}
@@ -1341,7 +1561,11 @@ export function BeneficiaryFormBody({
                   : workSectorOptions;
                 return (
                   <FormItem>
-                    <FormLabel>{tSrs("preferredTraining1")}</FormLabel>
+                    <FormLabel>
+                      {type === "ELDERLY"
+                        ? tSrs("elderlyTrainingChoice1")
+                        : tSrs("disabledTrainingChoice1")}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
@@ -1375,7 +1599,11 @@ export function BeneficiaryFormBody({
                   : workSectorOptions;
                 return (
                   <FormItem>
-                    <FormLabel>{tSrs("preferredTraining2")}</FormLabel>
+                    <FormLabel>
+                      {type === "ELDERLY"
+                        ? tSrs("elderlyTrainingChoice2")
+                        : tSrs("disabledTrainingChoice2")}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
@@ -1409,7 +1637,11 @@ export function BeneficiaryFormBody({
                   : workSectorOptions;
                 return (
                   <FormItem>
-                    <FormLabel>{tSrs("preferredTraining3")}</FormLabel>
+                    <FormLabel>
+                      {type === "ELDERLY"
+                        ? tSrs("elderlyTrainingChoice3")
+                        : tSrs("disabledTrainingChoice3")}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
@@ -1523,7 +1755,11 @@ export function BeneficiaryFormBody({
                 <FormLabel>{tSrs("previousSupport")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Describe any support previously provided..."
+                    placeholder={
+                      locale === "am"
+                        ? "ቀደም ሲል የተሰጠ የድጋፍ ዓይነት ካለ እዚህ ይግለጹ..."
+                        : "Describe any support previously provided..."
+                    }
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -1549,16 +1785,42 @@ export function BeneficiaryFormBody({
               </FormItem>
             )}
           />
-          {type === "ELDERLY" && (
+          {type === "ELDERLY" ? (
             <FormField
               control={form.control}
               name="requiredSupportType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{tSrs("requiredSupportType")}</FormLabel>
+                  <FormLabel>{tSrs("workSupportType")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Allowance, Medical, Training"
+                      placeholder={
+                        locale === "am"
+                          ? "ምሳሌ፡ የመስሪያ ቦታ፣ መነሻ ካፒታል፣ ቁሳቁስ..."
+                          : "e.g. Workspace, Seed capital, Equipment..."
+                      }
+                      {...field}
+                      value={field.value ?? ""}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : (
+            <FormField
+              control={form.control}
+              name="otherSupportRequirements"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{tSrs("disabledPostTrainingSupport")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={
+                        locale === "am"
+                          ? "ምሳሌ፡ የስራ ማስጀመሪያ እቃዎች፣ አጋዥ ቴክኖሎጂ፣ የስራ ቅጥር ድጋፍ..."
+                          : "e.g. Startup tools, Assistive devices, Job linkage..."
+                      }
                       {...field}
                       value={field.value ?? ""}
                     />
@@ -1568,7 +1830,290 @@ export function BeneficiaryFormBody({
               )}
             />
           )}
+            </div>
+          )}
         </div>
+
+        {type === "ELDERLY" && (
+          <div className="space-y-4 border-t pt-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider font-mono">
+                {locale === "am"
+                  ? "የማህበራዊ ጥበቃ እና መርሃ-ግብሮች (Social Protection & Programs)"
+                  : "Social Protection & Cohort Extensions"}
+              </h3>
+              <label className="flex items-center gap-2 cursor-pointer text-xs font-mono text-[#1769AA] font-semibold bg-slate-50 border border-slate-200 px-2.5 py-1 rounded hover:bg-slate-100 transition-colors">
+                <input
+                  type="checkbox"
+                  checked={includePrograms}
+                  onChange={(e) => setIncludePrograms(e.target.checked)}
+                  className="rounded text-[#1769AA] focus:ring-0"
+                />
+                <span>
+                  {locale === "am"
+                    ? "የመርሃ-ግብሮች እና ማህበረሰብ መረጃ አካትት"
+                    : "Include Program Details"}
+                </span>
+              </label>
+            </div>
+
+            {includePrograms && (
+              <div className="space-y-4 pt-1 animate-in fade-in duration-200 bg-slate-50/50 p-4 rounded-xs border border-slate-200">
+                {/* 1. Target Programs */}
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold text-slate-700 block uppercase">
+                    {locale === "am" ? "የተጠቃሚነት እና የአባልነት መርሃ-ግብሮች" : "Program Memberships & Benefits"}
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* Association (mahber) */}
+                    <div className="p-3 bg-white border border-slate-200 rounded-xs space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="isAssociationMember"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="!mt-0 text-xs font-semibold">
+                              {locale === "am" ? "የማህበር አባል (mahber)" : "Association Member"}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      {form.watch("isAssociationMember") && (
+                        <FormField
+                          control={form.control}
+                          name="associationName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder={locale === "am" ? "የማህበሩ ስም (ምሳሌ፡ የወረዳ 07 ማህበር)" : "Association Name"}
+                                  className="h-7 text-xs font-mono"
+                                  {...field}
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      )}
+                    </div>
+
+                    {/* Direct Support (ቀ.ድ) */}
+                    <div className="p-3 bg-white border border-slate-200 rounded-xs space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="isDirectSupport"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="!mt-0 text-xs font-semibold">
+                              {locale === "am" ? "የቀጥታ ድጋፍ ተጠቃሚ (ቀ.ድ)" : "Direct Support (PSNP)"}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      <span className="text-[11px] text-slate-400 font-mono block">
+                        {locale === "am" ? "የሴፍቲኔት ቀጥተኛ የጥሬ ገንዘብ ድጋፍ" : "Productive safety net direct cash support"}
+                      </span>
+                    </div>
+
+                    {/* Health Insurance */}
+                    <div className="p-3 bg-white border border-slate-200 rounded-xs space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="hasHealthInsurance"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="!mt-0 text-xs font-semibold">
+                              {locale === "am" ? "የጤና መድህን (CBHI)" : "Health Insurance"}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      {form.watch("hasHealthInsurance") && (
+                        <FormField
+                          control={form.control}
+                          name="cbhiIdNumber"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder={locale === "am" ? "የመድህን መታወቂያ ቁጥር" : "CBHI Card Number"}
+                                  className="h-7 text-xs font-mono"
+                                  {...field}
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Community & Household Status */}
+                <div className="space-y-2 pt-2 border-t border-slate-200">
+                  <span className="text-xs font-mono font-bold text-slate-700 block uppercase">
+                    {locale === "am" ? "የማህበረሰብ እና የቤተሰብ ሁኔታ" : "Community & Household Demographics"}
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <FormField
+                      control={form.control}
+                      name="householdRole"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs">
+                            {locale === "am" ? "የቤተሰብ ሀላፊነት" : "Household Role"}
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                            <FormControl>
+                              <SelectTrigger className="h-8 text-xs font-mono bg-white">
+                                <SelectValue placeholder={locale === "am" ? "ሀላፊነት ይምረጡ..." : "Select role..."} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="አባወራ">{locale === "am" ? "አባወራ (Male Head)" : "Male Head of Household"}</SelectItem>
+                              <SelectItem value="እማወራ">{locale === "am" ? "እማወራ (Female Head)" : "Female Head of Household"}</SelectItem>
+                              <SelectItem value="ጥገኛ">{locale === "am" ? "ጥገኛ (Dependent)" : "Dependent"}</SelectItem>
+                              <SelectItem value="ብቸኛ">{locale === "am" ? "ብቸኛ (Living Alone)" : "Living Alone"}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="caretakerStatus"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs">
+                            {locale === "am" ? "የረዳት ሁኔታ" : "Caretaker Status"}
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value ?? ""}>
+                            <FormControl>
+                              <SelectTrigger className="h-8 text-xs font-mono bg-white">
+                                <SelectValue placeholder={locale === "am" ? "የረዳት ሁኔታ ይምረጡ..." : "Select caretaker status..."} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="ያለው">{locale === "am" ? "ያለው (Has Caretaker)" : "Has Caretaker"}</SelectItem>
+                              <SelectItem value="የሌለው">{locale === "am" ? "የሌለው (No Caretaker)" : "No Caretaker"}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* 3. Relocation & Vital Status */}
+                <div className="space-y-2 pt-2 border-t border-slate-200">
+                  <span className="text-xs font-mono font-bold text-slate-700 block uppercase">
+                    {locale === "am" ? "የዝውውር እና የህልውና ሁኔታ" : "Relocation & Vital Status"}
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="p-3 bg-white border border-slate-200 rounded-xs space-y-2">
+                      <span className="text-xs font-semibold text-slate-700 block">
+                        {locale === "am" ? "ከሌላ ክፍለ ከተማ/ወረዳ የተዛወሩ (Relocated)" : "Relocated from other Sub-City"}
+                      </span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <FormField
+                          control={form.control}
+                          name="previousSubCity"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder={locale === "am" ? "የቀድሞ ክ/ከተማ (ምሳሌ፡ ቂርቆስ)" : "Prev. Sub-City"}
+                                  className="h-7 text-xs font-mono"
+                                  {...field}
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="previousWoreda"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder={locale === "am" ? "የቀድሞ ወረዳ (ምሳሌ፡ ወረዳ 07)" : "Prev. Woreda"}
+                                  className="h-7 text-xs font-mono"
+                                  {...field}
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-white border border-slate-200 rounded-xs space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="isDeceased"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="!mt-0 text-xs font-semibold text-rose-700">
+                              {locale === "am" ? "በሞት የተለዩ (Deceased Archive)" : "Deceased (Archive)"}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      {form.watch("isDeceased") && (
+                        <FormField
+                          control={form.control}
+                          name="deceasedDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  type="date"
+                                  className="h-7 text-xs font-mono"
+                                  {...field}
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
           <Button
