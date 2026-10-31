@@ -99,12 +99,27 @@ function SidebarNavItem({
   }, [isActive, pathname]);
 
   if (item.children?.length) {
+    const primaryChildUrl = item.children[0]?.url || item.url || "#";
+
+    const handleParentClick = (e: React.MouseEvent) => {
+      // If closed, open it so user sees the sub-pages
+      if (!isOpen) {
+        onToggle();
+      }
+    };
+
+    const handleChevronClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onToggle();
+    };
+
     return (
       <SidebarMenuItem>
         <SidebarMenuButton
+          asChild
           tooltip={itemTitle}
           isActive={hasActiveChild}
-          onClick={onToggle}
           size="sm"
           className={cn(
             "h-8 text-xs font-medium text-slate-300 hover:text-white hover:bg-[#0E2646] transition-colors rounded-sm",
@@ -112,26 +127,39 @@ function SidebarNavItem({
               "bg-[#142A48] text-white font-semibold",
           )}
         >
-          {item.icon && (
-            <item.icon
-              className={cn(
-                "size-4 shrink-0",
-                hasActiveChild
-                  ? "text-[#38BDF8]"
-                  : "text-slate-400",
-              )}
-            />
-          )}
-          <span className="text-xs truncate">{itemTitle}</span>
-          <ChevronRight
-            className={cn(
-              "ml-auto size-3.5 shrink-0 transition-transform duration-200",
-              isOpen && "rotate-90",
-              hasActiveChild
-                ? "text-[#38BDF8]"
-                : "text-slate-500",
+          <Link
+            href={primaryChildUrl}
+            onClick={handleParentClick}
+            className="flex items-center gap-2 w-full"
+          >
+            {item.icon && (
+              <item.icon
+                className={cn(
+                  "size-4 shrink-0",
+                  hasActiveChild
+                    ? "text-[#38BDF8]"
+                    : "text-slate-400",
+                )}
+              />
             )}
-          />
+            <span className="text-xs truncate flex-1">{itemTitle}</span>
+            <button
+              type="button"
+              aria-label={`Toggle ${itemTitle} sub-menu`}
+              onClick={handleChevronClick}
+              className="p-1 -mr-1 hover:bg-white/10 rounded-xs transition-colors shrink-0"
+            >
+              <ChevronRight
+                className={cn(
+                  "size-3.5 shrink-0 transition-transform duration-200",
+                  isOpen && "rotate-90",
+                  hasActiveChild
+                    ? "text-[#38BDF8]"
+                    : "text-slate-500",
+                )}
+              />
+            </button>
+          </Link>
         </SidebarMenuButton>
         {isOpen && (
           <SidebarMenuSub className="border-l border-white/10 ml-3.5 pl-2 py-0.5 space-y-0.5">
