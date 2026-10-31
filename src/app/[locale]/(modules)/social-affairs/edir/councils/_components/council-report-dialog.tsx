@@ -21,6 +21,12 @@ import {
 } from "@/components/ui/select";
 import { EdirCouncil, EdirLevel, EdirStatus } from "@/api/social-affairs/edir";
 import { useTranslations, useLocale } from "next-intl";
+import {
+  translateSubCity,
+  formatWoreda,
+  translateLevel,
+  translateStatus,
+} from "@/lib/pdf/translations";
 
 interface CouncilReportDialogProps {
   councils: EdirCouncil[];
@@ -46,34 +52,11 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
     if (!printWindow) return;
 
     const levelText = (lvl: string) => {
-      if (!isAm) return lvl;
-      switch (lvl) {
-        case "WOREDA":
-          return "ወረዳ";
-        case "SUB_CITY":
-        case "SUBCITY":
-          return "ክፍለ ከተማ";
-        case "CITY":
-          return "ከተማ";
-        default:
-          return lvl;
-      }
+      return translateLevel(lvl, isAm);
     };
 
     const statusText = (st: string) => {
-      if (!isAm) return st;
-      switch (st) {
-        case "ACTIVE":
-          return "ንቁ";
-        case "EXPIRED":
-          return "ጊዜው ያለፈበት";
-        case "REVOKED":
-          return "የታገደ";
-        case "CANCELLED":
-          return "የተሰረዘ";
-        default:
-          return st;
-      }
+      return translateStatus(st, isAm);
     };
 
     const rows = filtered
@@ -84,7 +67,7 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 700; font-size: 12px;">${c.name}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${c.registrationNumber || "—"}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${levelText(c.level)}</td>
-          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${c.subCity ? `${c.subCity}${isAm ? " ክ/ከተማ" : ""}` : ""} ${c.woreda ? `· ${isAm ? "ወረዳ" : "Woreda"} ${c.woreda}` : ""}</td>
+          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${c.subCity ? `${translateSubCity(c.subCity, isAm)}${isAm ? " ክ/ከተማ" : " Sub-City"}` : ""} ${c.woreda ? `· ${formatWoreda(c.woreda, isAm)}` : ""}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 600;">${c.chairpersonName || "—"}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${c.chairpersonPhone || "—"}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-weight: 700; text-align: center;">${c._count?.memberEdirs ?? c.memberEdirs?.length ?? 0}</td>

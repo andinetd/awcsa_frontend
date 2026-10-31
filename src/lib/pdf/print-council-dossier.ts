@@ -1,4 +1,11 @@
 import { EdirCouncil } from "@/api/social-affairs/edir";
+import {
+  translateSubCity,
+  formatWoreda,
+  translateLevel,
+  translateStatus,
+  translateRole,
+} from "./translations";
 
 export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "en") {
   const printWindow = window.open("", "_blank");
@@ -29,36 +36,11 @@ export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "e
   };
 
   const statusLabel = (status?: string) => {
-    const s = status || "ACTIVE";
-    if (!isAm) return s;
-    switch (s) {
-      case "ACTIVE":
-        return "ንቁ";
-      case "EXPIRED":
-        return "ጊዜው ያለፈበት";
-      case "REVOKED":
-        return "የታገደ";
-      case "CANCELLED":
-        return "የተሰረዘ";
-      default:
-        return s;
-    }
+    return translateStatus(status, isAm);
   };
 
   const levelLabel = (level?: string) => {
-    const l = level || "WOREDA";
-    if (!isAm) return l;
-    switch (l) {
-      case "WOREDA":
-        return "ወረዳ";
-      case "SUB_CITY":
-      case "SUBCITY":
-        return "ክፍለ ከተማ";
-      case "CITY":
-        return "ከተማ";
-      default:
-        return l;
-    }
+    return translateLevel(level, isAm);
   };
 
   const memberRows = (council.memberEdirs || [])
@@ -68,7 +50,7 @@ export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "e
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 1}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 600; font-size: 12px;">${m.name}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${m.registrationNumber || "—"}</td>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${m.subCity ? `${m.subCity}${isAm ? " ክ/ከተማ" : ""}` : ""} ${m.woreda ? `· ${isAm ? "ወረዳ" : "Woreda"} ${m.woreda}` : ""}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${m.subCity ? `${translateSubCity(m.subCity, isAm)}${isAm ? " ክ/ከተማ" : " Sub-City"}` : ""} ${m.woreda ? `· ${formatWoreda(m.woreda, isAm)}` : ""}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 700; text-transform: uppercase;">${statusLabel(m.status)}</td>
       </tr>
     `
@@ -81,7 +63,7 @@ export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "e
       <tr>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 2}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 600; font-size: 12px;">${l.fullName}</td>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #1769AA;">${l.role}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #1769AA;">${translateRole(l.role, isAm)}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 600; color: #0F172A;">${l.representedEntity || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${l.phoneNumber || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">${l.address || "—"}</td>
@@ -102,7 +84,7 @@ export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "e
         charterStatus: "የቻርተሩ ሁኔታ",
         regNumber: "የምዝገባ / ዕውቅና ቁጥር",
         jurisdiction: "የአስተዳደር እርከን",
-        jurisdictionVal: `${levelLabel(council.level)} (${council.subCity ? `${council.subCity} ክ/ከተማ` : ""} ${council.woreda ? `· ወረዳ ${council.woreda}` : ""})`,
+        jurisdictionVal: `${levelLabel(council.level)} (${council.subCity ? `${translateSubCity(council.subCity, true)} ክ/ከተማ` : ""} ${council.woreda ? `· ${formatWoreda(council.woreda, true)}` : ""})`,
         secLeadership: "የምክር ቤቱ አመራር እና ሥራ አስፈጻሚ ኮሚቴ",
         roleChair: "ሰብሳቢ / ፕሬዚዳንት",
         thNo: "ተ.ቁ",
@@ -132,7 +114,7 @@ export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "e
         charterStatus: "Charter Status",
         regNumber: "Registration / Accreditation Number",
         jurisdiction: "Jurisdictional Level",
-        jurisdictionVal: `${council.level} (${council.subCity} ${council.woreda ? `· Woreda ${council.woreda}` : ""})`,
+        jurisdictionVal: `${council.level} (${council.subCity ? `${council.subCity} Sub-City` : ""} ${council.woreda ? `· ${formatWoreda(council.woreda, false)}` : ""})`,
         secLeadership: "Council Leadership & Executive Committee",
         roleChair: "CHAIRPERSON / PRESIDENT",
         thNo: "#",

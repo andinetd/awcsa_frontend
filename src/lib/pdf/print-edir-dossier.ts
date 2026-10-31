@@ -1,4 +1,10 @@
 import { Edir } from "@/api/social-affairs/edir";
+import {
+  translateSubCity,
+  formatWoreda,
+  translateLevel,
+  translateStatus,
+} from "./translations";
 
 export function printEdirDossier(edir: Edir, lang: "en" | "am" = "en") {
   const printWindow = window.open("", "_blank");
@@ -38,38 +44,11 @@ export function printEdirDossier(edir: Edir, lang: "en" | "am" = "en") {
   const certDate = formatDate(edir.certificateIssuedAt);
 
   const statusLabel = () => {
-    const s = edir.status || "PENDING";
-    if (!isAm) return s;
-    switch (s) {
-      case "ACTIVE":
-        return "ንቁ";
-      case "EXPIRED":
-        return "ጊዜው ያለፈበት";
-      case "REVOKED":
-        return "የታገደ";
-      case "CANCELLED":
-        return "የተሰረዘ";
-      case "PENDING":
-        return "በመጠባበቅ ላይ";
-      default:
-        return s;
-    }
+    return translateStatus(edir.status, isAm);
   };
 
   const registerLevelLabel = () => {
-    const l = edir.registerLevel || "WOREDA";
-    if (!isAm) return l;
-    switch (l as string) {
-      case "WOREDA":
-        return "ወረዳ";
-      case "SUBCITY":
-      case "SUB_CITY":
-        return "ክፍለ ከተማ";
-      case "CITY":
-        return "ከተማ";
-      default:
-        return l;
-    }
+    return translateLevel(edir.registerLevel, isAm);
   };
 
   const renewalYearLabel = () => {
@@ -106,7 +85,7 @@ export function printEdirDossier(edir: Edir, lang: "en" | "am" = "en") {
         secLocation: "የአስተዳደር ወሰንና አድራሻ",
         subCityWoreda: "ክፍለ ከተማና ወረዳ",
         houseSpecific: "የቤት ቁጥርና ልዩ ቦታ",
-        subCityVal: `${edir.subCity ? `${edir.subCity} ክፍለ ከተማ` : ""} · ወረዳ ${edir.woreda || "—"}${edir.kebele ? ` · ቀበሌ ${edir.kebele}` : ""}`,
+        subCityVal: `${edir.subCity ? `${translateSubCity(edir.subCity, true)} ክፍለ ከተማ` : ""} · ${formatWoreda(edir.woreda, true) || "ወረዳ —"}${edir.kebele ? ` · ቀበሌ ${edir.kebele}` : ""}`,
         houseVal: `የቤት ቁጥር #${edir.houseNumber || "—"} · ${edir.specificLocation || "—"}`,
         secMembership: "የአባላት ስታትስቲክስና የባንክ ሒሳብ",
         totalMembers: "ጠቅላላ የተመዘገቡ አባላት",
@@ -142,7 +121,7 @@ export function printEdirDossier(edir: Edir, lang: "en" | "am" = "en") {
         secLocation: "Jurisdiction & Municipal Location",
         subCityWoreda: "Sub-City & Woreda",
         houseSpecific: "House & Specific Location",
-        subCityVal: `${edir.subCity} · Woreda ${edir.woreda} ${edir.kebele ? `· Kebele ${edir.kebele}` : ""}`,
+        subCityVal: `${edir.subCity ? `${edir.subCity} Sub-City` : ""} · ${formatWoreda(edir.woreda, false) || "Woreda —"}${edir.kebele ? ` · Kebele ${edir.kebele}` : ""}`,
         houseVal: `House #${edir.houseNumber || "—"} · ${edir.specificLocation || "—"}`,
         secMembership: "Membership & Financial Governance",
         totalMembers: "Total Declared Census",

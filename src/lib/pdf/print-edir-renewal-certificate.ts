@@ -1,4 +1,5 @@
 import { Edir } from "@/api/social-affairs/edir";
+import { translateSubCity } from "./translations";
 
 export interface PrintEdirCertificateOptions {
   officerName?: string;
@@ -277,9 +278,9 @@ export function printEdirRenewalCertificate(
   <div class="content-section point-2">
     <div class="row">
       <span>2. እድሩ የሚገኝበት ክ/ከተማ</span>
-      <span class="dotted-fill" style="min-width: 150px;">${edir.subCity || "—"}</span>
+      <span class="dotted-fill" style="min-width: 150px;">${translateSubCity(edir.subCity, true) || "—"}</span>
       <span>ወረዳ</span>
-      <span class="dotted-fill" style="min-width: 90px;">${edir.woreda || "—"}</span>
+      <span class="dotted-fill" style="min-width: 90px;">${edir.woreda ? String(edir.woreda).replace(/\D+/g, "").padStart(2, "0") || edir.woreda : "—"}</span>
       <span>የቤት ቁጥር</span>
       <span class="dotted-fill" style="min-width: 90px;">${edir.houseNumber || "—"}</span>
     </div>
