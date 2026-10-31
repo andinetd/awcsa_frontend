@@ -1,18 +1,65 @@
 import { EdirCouncil } from "@/api/social-affairs/edir";
 
-export function printCouncilDossier(council: EdirCouncil) {
+export function printCouncilDossier(council: EdirCouncil, lang: "en" | "am" = "en") {
   const printWindow = window.open("", "_blank");
   if (!printWindow) return;
 
+  const isAm = lang === "am";
   const memberCount = council._count?.memberEdirs ?? council.memberEdirs?.length ?? 0;
 
-  const formattedDate = council.establishmentDate
-    ? new Date(council.establishmentDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "—";
+  const formatDate = (dateStr?: string | Date | null) => {
+    if (!dateStr) return "—";
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return "—";
+      return isAm
+        ? d.toLocaleDateString("am-ET", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : d.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+    } catch {
+      return String(dateStr);
+    }
+  };
+
+  const statusLabel = (status?: string) => {
+    const s = status || "ACTIVE";
+    if (!isAm) return s;
+    switch (s) {
+      case "ACTIVE":
+        return "ንቁ";
+      case "EXPIRED":
+        return "ጊዜው ያለፈበት";
+      case "REVOKED":
+        return "የታገደ";
+      case "CANCELLED":
+        return "የተሰረዘ";
+      default:
+        return s;
+    }
+  };
+
+  const levelLabel = (level?: string) => {
+    const l = level || "WOREDA";
+    if (!isAm) return l;
+    switch (l) {
+      case "WOREDA":
+        return "ወረዳ";
+      case "SUB_CITY":
+      case "SUBCITY":
+        return "ክፍለ ከተማ";
+      case "CITY":
+        return "ከተማ";
+      default:
+        return l;
+    }
+  };
 
   const memberRows = (council.memberEdirs || [])
     .map(
@@ -21,8 +68,8 @@ export function printCouncilDossier(council: EdirCouncil) {
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 1}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 600; font-size: 12px;">${m.name}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${m.registrationNumber || "—"}</td>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${m.subCity} ${m.woreda ? `· Woreda ${m.woreda}` : ""}</td>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 700; text-transform: uppercase;">${m.status}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${m.subCity ? `${m.subCity}${isAm ? " ክ/ከተማ" : ""}` : ""} ${m.woreda ? `· ${isAm ? "ወረዳ" : "Woreda"} ${m.woreda}` : ""}</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 700; text-transform: uppercase;">${statusLabel(m.status)}</td>
       </tr>
     `
     )
@@ -43,19 +90,81 @@ export function printCouncilDossier(council: EdirCouncil) {
     )
     .join("");
 
+  const labels = isAm
+    ? {
+        pageTitle: `የምክር ቤት ቻርተርና መዝገብ - ${council.name}`,
+        printBtn: "ቻርተሩን አትም (Ctrl + P)",
+        instTitle1: "የአዲስ አበባ ከተማ አስተዳደር",
+        instTitle2: "የሴቶችና ማኅበራዊ ጉዳይ ቢሮ",
+        instTitle3: "የባህላዊ ዕድርና ማኅበረሰብ ማኅበራት ዳይሬክቶሬት",
+        docTitle: "ይፋዊ የዕድሮች የጋራ ምክር ቤት ቻርተርና መዝገብ",
+        councilName: "የምክር ቤቱ ስም",
+        charterStatus: "የቻርተሩ ሁኔታ",
+        regNumber: "የምዝገባ / ዕውቅና ቁጥር",
+        jurisdiction: "የአስተዳደር እርከን",
+        jurisdictionVal: `${levelLabel(council.level)} (${council.subCity ? `${council.subCity} ክ/ከተማ` : ""} ${council.woreda ? `· ወረዳ ${council.woreda}` : ""})`,
+        secLeadership: "የምክር ቤቱ አመራር እና ሥራ አስፈጻሚ ኮሚቴ",
+        roleChair: "ሰብሳቢ / ፕሬዚዳንት",
+        thNo: "ተ.ቁ",
+        thFullName: "ሙሉ ስም",
+        thRole: "የሥራ ኃላፊነት",
+        thRepresenting: "የወከለው አካል",
+        thPhone: "ስልክ ቁጥር",
+        thAddress: "አድራሻ / ቦታ",
+        secMembers: `አባል የሆኑ የዕድር ማኅበራት (በድምሩ ${memberCount})`,
+        thEdirName: "የዕድሩ ስም",
+        thRegNo: "የምዝገባ ቁ.",
+        thJurisdiction: "የአስተዳደር ወሰን",
+        thAccreditation: "የዕውቅና ሁኔታ",
+        noMembers: "እስካሁን የተካተቱ አባል ዕድሮች የሉም።",
+        signChair: "የምክር ቤቱ ሰብሳቢ",
+        signSecretary: "ጸሐፊ / የክትትል ኃላፊ",
+        signSeal: "የቢሮው ይፋዊ ማህተም",
+      }
+    : {
+        pageTitle: `Council Charter & Roster - ${council.name}`,
+        printBtn: "Print Council Charter (Ctrl + P)",
+        instTitle1: "Addis Ababa City Administration",
+        instTitle2: "Bureau of Women and Social Affairs",
+        instTitle3: "Federated Edir Councils Directorate",
+        docTitle: "Official Council Charter & Affiliated Roster",
+        councilName: "Council Name",
+        charterStatus: "Charter Status",
+        regNumber: "Registration / Accreditation Number",
+        jurisdiction: "Jurisdictional Level",
+        jurisdictionVal: `${council.level} (${council.subCity} ${council.woreda ? `· Woreda ${council.woreda}` : ""})`,
+        secLeadership: "Council Leadership & Executive Committee",
+        roleChair: "CHAIRPERSON / PRESIDENT",
+        thNo: "#",
+        thFullName: "Full Name",
+        thRole: "Executive Role",
+        thRepresenting: "Representing",
+        thPhone: "Phone Number",
+        thAddress: "Address / Location",
+        secMembers: `Affiliated Member Edir Associations (${memberCount} Total)`,
+        thEdirName: "Edir Name",
+        thRegNo: "Registration #",
+        thJurisdiction: "Jurisdiction",
+        thAccreditation: "Accreditation",
+        noMembers: "No member edirs affiliated yet.",
+        signChair: "Council Chairperson",
+        signSecretary: "Secretary / Oversight Officer",
+        signSeal: "Bureau Accreditation Seal",
+      };
+
   const html = `
 <!DOCTYPE html>
-<html>
+<html lang="${lang}">
 <head>
   <meta charset="utf-8" />
-  <title>Council Charter & Roster - ${council.name}</title>
+  <title>${labels.pageTitle}</title>
   <style>
     @page {
       size: A4 portrait;
       margin: 15mm;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Ethiopic", "Nyala", "Abyssinica SIL", Arial, sans-serif;
       color: #0F172A;
       margin: 0;
       padding: 20px;
@@ -170,53 +279,53 @@ export function printCouncilDossier(council: EdirCouncil) {
 <body>
   <div class="no-print" style="margin-bottom: 16px; text-align: right;">
     <button onclick="window.print()" style="padding: 8px 16px; background: #1769AA; color: #fff; border: none; font-weight: 600; border-radius: 2px; cursor: pointer;">
-      Print Council Charter (Ctrl + P)
+      ${labels.printBtn}
     </button>
   </div>
 
   <div class="header">
-    <div class="inst-title">Addis Ababa City Administration</div>
-    <div class="sub-title">Bureau of Women and Social Affairs</div>
-    <div class="inst-title">Federated Edir Councils Directorate</div>
-    <div class="doc-title">Official Council Charter &amp; Affiliated Roster</div>
+    <div class="inst-title">${labels.instTitle1}</div>
+    <div class="sub-title">${labels.instTitle2}</div>
+    <div class="inst-title">${labels.instTitle3}</div>
+    <div class="doc-title">${labels.docTitle}</div>
   </div>
 
   <div class="meta-grid">
     <div class="meta-box">
-      <div class="meta-label">Council Name</div>
+      <div class="meta-label">${labels.councilName}</div>
       <div class="meta-val">${council.name}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Charter Status</div>
-      <div class="meta-val" style="color: #047857;">${council.status}</div>
+      <div class="meta-label">${labels.charterStatus}</div>
+      <div class="meta-val" style="color: #047857;">${statusLabel(council.status)}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Registration / Accreditation Number</div>
+      <div class="meta-label">${labels.regNumber}</div>
       <div class="meta-val" style="font-family: monospace;">${council.registrationNumber || "—"}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Jurisdictional Level</div>
-      <div class="meta-val">${council.level} (${council.subCity} ${council.woreda ? `· Woreda ${council.woreda}` : ""})</div>
+      <div class="meta-label">${labels.jurisdiction}</div>
+      <div class="meta-val">${labels.jurisdictionVal}</div>
     </div>
   </div>
 
-  <div class="section-title">Council Leadership &amp; Executive Committee</div>
+  <div class="section-title">${labels.secLeadership}</div>
   <table>
     <thead>
       <tr>
-        <th style="width: 40px;">#</th>
-        <th>Full Name</th>
-        <th>Executive Role</th>
-        <th>Representing</th>
-        <th>Phone Number</th>
-        <th>Address / Location</th>
+        <th style="width: 40px;">${labels.thNo}</th>
+        <th>${labels.thFullName}</th>
+        <th>${labels.thRole}</th>
+        <th>${labels.thRepresenting}</th>
+        <th>${labels.thPhone}</th>
+        <th>${labels.thAddress}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">1</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 700; font-size: 12px;">${council.chairpersonName || "—"}</td>
-        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #0B1F3A;">CHAIRPERSON / PRESIDENT</td>
+        <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 700; color: #0B1F3A;">${labels.roleChair}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">—</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${council.chairpersonPhone || "—"}</td>
         <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; color: #475569;">${council.address || "—"}</td>
@@ -225,18 +334,18 @@ export function printCouncilDossier(council: EdirCouncil) {
     </tbody>
   </table>
 
-  <div class="section-title">Affiliated Member Edir Associations (${memberCount} Total)</div>
+  <div class="section-title">${labels.secMembers}</div>
   ${
     memberCount > 0
       ? `
   <table>
     <thead>
       <tr>
-        <th style="width: 40px;">#</th>
-        <th>Edir Name</th>
-        <th>Registration #</th>
-        <th>Jurisdiction</th>
-        <th>Accreditation</th>
+        <th style="width: 40px;">${labels.thNo}</th>
+        <th>${labels.thEdirName}</th>
+        <th>${labels.thRegNo}</th>
+        <th>${labels.thJurisdiction}</th>
+        <th>${labels.thAccreditation}</th>
       </tr>
     </thead>
     <tbody>
@@ -244,18 +353,18 @@ export function printCouncilDossier(council: EdirCouncil) {
     </tbody>
   </table>
   `
-      : `<p style="font-size: 12px; color: #64748B; font-style: italic;">No member edirs affiliated yet.</p>`
+      : `<p style="font-size: 12px; color: #64748B; font-style: italic;">${labels.noMembers}</p>`
   }
 
   <div class="footer-sign">
     <div>
-      <div class="sign-line">Council Chairperson</div>
+      <div class="sign-line">${labels.signChair}</div>
     </div>
     <div>
-      <div class="sign-line">Secretary / Oversight Officer</div>
+      <div class="sign-line">${labels.signSecretary}</div>
     </div>
     <div>
-      <div class="sign-line">Bureau Accreditation Seal</div>
+      <div class="sign-line">${labels.signSeal}</div>
     </div>
   </div>
 

@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EdirCouncil, EdirLevel, EdirStatus } from "@/api/social-affairs/edir";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface CouncilReportDialogProps {
   councils: EdirCouncil[];
@@ -28,11 +28,14 @@ interface CouncilReportDialogProps {
 
 export default function CouncilReportDialog({ councils }: CouncilReportDialogProps) {
   const t = useTranslations("social-affairs.edir.councils");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [levelFilter, setLevelFilter] = useState<EdirLevel | "ALL">("ALL");
   const [statusFilter, setStatusFilter] = useState<EdirStatus | "ALL">("ALL");
+  const [language, setLanguage] = useState<"en" | "am">(locale === "am" ? "am" : "en");
 
   const handlePrintReport = () => {
+    const isAm = language === "am";
     const filtered = councils.filter((c) => {
       const matchLevel = levelFilter === "ALL" || c.level === levelFilter;
       const matchStatus = statusFilter === "ALL" || c.status === statusFilter;
@@ -42,6 +45,37 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
+    const levelText = (lvl: string) => {
+      if (!isAm) return lvl;
+      switch (lvl) {
+        case "WOREDA":
+          return "ወረዳ";
+        case "SUB_CITY":
+        case "SUBCITY":
+          return "ክፍለ ከተማ";
+        case "CITY":
+          return "ከተማ";
+        default:
+          return lvl;
+      }
+    };
+
+    const statusText = (st: string) => {
+      if (!isAm) return st;
+      switch (st) {
+        case "ACTIVE":
+          return "ንቁ";
+        case "EXPIRED":
+          return "ጊዜው ያለፈበት";
+        case "REVOKED":
+          return "የታገደ";
+        case "CANCELLED":
+          return "የተሰረዘ";
+        default:
+          return st;
+      }
+    };
+
     const rows = filtered
       .map(
         (c, idx) => `
@@ -49,27 +83,65 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${idx + 1}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-weight: 700; font-size: 12px;">${c.name}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${c.registrationNumber || "—"}</td>
-          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${c.level}</td>
-          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${c.subCity} ${c.woreda ? `· Woreda ${c.woreda}` : ""}</td>
+          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${levelText(c.level)}</td>
+          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px;">${c.subCity ? `${c.subCity}${isAm ? " ክ/ከተማ" : ""}` : ""} ${c.woreda ? `· ${isAm ? "ወረዳ" : "Woreda"} ${c.woreda}` : ""}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 12px; font-weight: 600;">${c.chairpersonName || "—"}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-size: 11px;">${c.chairpersonPhone || "—"}</td>
           <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-family: monospace; font-weight: 700; text-align: center;">${c._count?.memberEdirs ?? c.memberEdirs?.length ?? 0}</td>
-          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 700;">${c.status}</td>
+          <td style="padding: 6px 10px; border: 1px solid #CBD5E1; font-size: 11px; font-weight: 700;">${statusText(c.status)}</td>
         </tr>
       `
       )
       .join("");
 
+    const labels = isAm
+      ? {
+          instTitle: "የአዲስ አበባ ከተማ አስተዳደር · የሴቶችና ማኅበራዊ ጉዳይ ቢሮ",
+          docTitle: "የባህላዊ ዕድር ምክር ቤቶች ይፋዊ ማውጫና ሪፖርት",
+          generated: "የተዘጋጀበት ቀን",
+          totalRecords: "ጠቅላላ መዝገቦች",
+          printBtn: "ሪፖርቱን አትም (Ctrl + P)",
+          thNo: "ተ.ቁ",
+          thName: "የምክር ቤቱ ስም",
+          thRegNo: "የምዝገባ ቁ.",
+          thLevel: "እርከን",
+          thJurisdiction: "ክፍለ ከተማ / ወረዳ",
+          thChair: "ሰብሳቢ",
+          thPhone: "የእውቂያ ስልክ",
+          thMembers: "አባላት",
+          thStatus: "ሁኔታ",
+        }
+      : {
+          instTitle: "Addis Ababa City Administration · Bureau of Women & Social Affairs",
+          docTitle: "Traditional Edir Councils Master Directory Report",
+          generated: "Generated",
+          totalRecords: "Total Records",
+          printBtn: "Print Roster Report (Ctrl + P)",
+          thNo: "#",
+          thName: "Council Name",
+          thRegNo: "Reg #",
+          thLevel: "Level",
+          thJurisdiction: "Sub-City / Woreda",
+          thChair: "Chairperson",
+          thPhone: "Contact Phone",
+          thMembers: "Members",
+          thStatus: "Status",
+        };
+
+    const formattedDate = isAm
+      ? new Date().toLocaleDateString("am-ET", { year: "numeric", month: "short", day: "numeric" })
+      : new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
     const html = `
 <!DOCTYPE html>
-<html>
+<html lang="${language}">
 <head>
   <meta charset="utf-8" />
-  <title>Edir Councils Master Registry Report</title>
+  <title>${labels.docTitle}</title>
   <style>
     @page { size: A4 landscape; margin: 12mm; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Ethiopic", "Nyala", "Abyssinica SIL", Arial, sans-serif;
       color: #0F172A;
       margin: 0;
       padding: 16px;
@@ -122,28 +194,28 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
 <body>
   <div class="no-print" style="margin-bottom: 12px; text-align: right;">
     <button onclick="window.print()" style="padding: 6px 14px; background: #1769AA; color: #fff; border: none; font-weight: 600; border-radius: 2px; cursor: pointer;">
-      Print Roster Report (Ctrl + P)
+      ${labels.printBtn}
     </button>
   </div>
 
   <div class="header">
-    <div class="inst-title">Addis Ababa City Administration · Bureau of Women &amp; Social Affairs</div>
-    <div class="doc-title">Traditional Edir Councils Master Directory Report</div>
-    <div class="meta">Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })} · Total Records: ${filtered.length}</div>
+    <div class="inst-title">${labels.instTitle}</div>
+    <div class="doc-title">${labels.docTitle}</div>
+    <div class="meta">${labels.generated}: ${formattedDate} · ${labels.totalRecords}: ${filtered.length}</div>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th style="width: 30px;">#</th>
-        <th>Council Name</th>
-        <th>Reg #</th>
-        <th>Level</th>
-        <th>Sub-City / Woreda</th>
-        <th>Chairperson</th>
-        <th>Contact Phone</th>
-        <th style="text-align: center;">Members</th>
-        <th>Status</th>
+        <th style="width: 30px;">${labels.thNo}</th>
+        <th>${labels.thName}</th>
+        <th>${labels.thRegNo}</th>
+        <th>${labels.thLevel}</th>
+        <th>${labels.thJurisdiction}</th>
+        <th>${labels.thChair}</th>
+        <th>${labels.thPhone}</th>
+        <th style="text-align: center;">${labels.thMembers}</th>
+        <th>${labels.thStatus}</th>
       </tr>
     </thead>
     <tbody>
@@ -192,36 +264,51 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
 
         <div className="grid gap-3 py-3">
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700">{t("level.title")}</Label>
+            <Label className="text-xs font-semibold text-slate-700">{t("reportModal.levelTitle")}</Label>
             <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as any)}>
               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                 <SelectValue>
-                  {levelFilter === "ALL" ? t("list.levels.all") : t(`level.${levelFilter}`)}
+                  {levelFilter === "ALL" ? t("reportModal.levels.all") : t(`reportModal.levels.${levelFilter}`)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="ALL" className="text-xs">{t("list.levels.all")}</SelectItem>
-                <SelectItem value="WOREDA" className="text-xs">{t("level.WOREDA")}</SelectItem>
-                <SelectItem value="SUB_CITY" className="text-xs">{t("level.SUB_CITY")}</SelectItem>
-                <SelectItem value="CITY" className="text-xs">{t("level.CITY")}</SelectItem>
+                <SelectItem value="ALL" className="text-xs">{t("reportModal.levels.all")}</SelectItem>
+                <SelectItem value="WOREDA" className="text-xs">{t("reportModal.levels.WOREDA")}</SelectItem>
+                <SelectItem value="SUB_CITY" className="text-xs">{t("reportModal.levels.SUB_CITY")}</SelectItem>
+                <SelectItem value="CITY" className="text-xs">{t("reportModal.levels.CITY")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700">{t("status.title")}</Label>
+            <Label className="text-xs font-semibold text-slate-700">{t("reportModal.statusTitle")}</Label>
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
               <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
                 <SelectValue>
-                  {statusFilter === "ALL" ? t("list.status.all") : t(`status.${statusFilter}`)}
+                  {statusFilter === "ALL" ? t("reportModal.statuses.all") : t(`reportModal.statuses.${statusFilter}`)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent className="rounded-xs border-[#E3E7EB]">
-                <SelectItem value="ALL" className="text-xs">{t("list.status.all")}</SelectItem>
-                <SelectItem value="ACTIVE" className="text-xs">{t("status.ACTIVE")}</SelectItem>
-                <SelectItem value="EXPIRED" className="text-xs">{t("status.EXPIRED")}</SelectItem>
-                <SelectItem value="REVOKED" className="text-xs">{t("status.REVOKED")}</SelectItem>
-                <SelectItem value="CANCELLED" className="text-xs">{t("status.CANCELLED")}</SelectItem>
+                <SelectItem value="ALL" className="text-xs">{t("reportModal.statuses.all")}</SelectItem>
+                <SelectItem value="ACTIVE" className="text-xs">{t("reportModal.statuses.ACTIVE")}</SelectItem>
+                <SelectItem value="EXPIRED" className="text-xs">{t("reportModal.statuses.EXPIRED")}</SelectItem>
+                <SelectItem value="REVOKED" className="text-xs">{t("reportModal.statuses.REVOKED")}</SelectItem>
+                <SelectItem value="CANCELLED" className="text-xs">{t("reportModal.statuses.CANCELLED")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-slate-700">{locale === "am" ? "የሪፖርት ቋንቋ" : "Report Language"}</Label>
+            <Select value={language} onValueChange={(v) => setLanguage(v as any)}>
+              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
+                <SelectValue>
+                  {language === "am" ? "አማርኛ" : "English"}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="rounded-xs border-[#E3E7EB]">
+                <SelectItem value="en" className="text-xs">English</SelectItem>
+                <SelectItem value="am" className="text-xs">አማርኛ</SelectItem>
               </SelectContent>
             </Select>
           </div>

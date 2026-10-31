@@ -9,6 +9,7 @@ export interface GenerateReportPayload {
   woreda?: string;
   selectedColumns?: string[];
   format: "EXCEL" | "PDF";
+  language?: "en" | "am";
 }
 
 export const generateEdirReport = async (payload: GenerateReportPayload) => {
@@ -20,6 +21,7 @@ export const generateEdirReport = async (payload: GenerateReportPayload) => {
     startDate: payload.startDate || "1970-01-01",
     endDate: payload.endDate || new Date().toISOString().split("T")[0],
     selectedColumns: (payload.selectedColumns || []).filter((c) => c !== "members"),
+    language: payload.language || "en",
   };
 
   try {

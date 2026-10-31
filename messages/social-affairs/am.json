@@ -705,7 +705,7 @@
       "age": "እድሜ",
       "subCity": "ክፍለ ከተማ",
       "woreda": "ወረዳ",
-      "zone": "ዞን",
+      "zone": "ቀጠና",
       "block": "ብሎክ",
       "houseNumber": "የቤት ቁጥር",
       "employmentStatus": "የስራ ሁኔታ",
@@ -713,6 +713,18 @@
       "preferredTraining1": "1ኛ የሚፈልጉት የስራ ዘርፍ",
       "preferredTraining2": "2ኛ የሚፈልጉት የስራ ዘርፍ",
       "preferredTraining3": "3ኛ የሚፈልጉት የስራ ዘርፍ",
+      "elderlyTrainingChoice1": "1ኛ የሚፈልጉት የሥራ መስክ",
+      "elderlyTrainingChoice2": "2ኛ የሚፈልጉት የሥራ መስክ",
+      "elderlyTrainingChoice3": "3ኛ የሚፈልጉት የሥራ መስክ",
+      "disabledTrainingChoice1": "1ኛ የሚፈልጉት የሙያ ስልጠና",
+      "disabledTrainingChoice2": "2ኛ የሚፈልጉት የሙያ ስልጠና",
+      "disabledTrainingChoice3": "3ኛ የሚፈልጉት የሙያ ስልጠና",
+      "workSupportType": "ለሥራው የሚያስፈልግ የድጋፍ ዓይነት",
+      "disabledPostTrainingSupport": "ቀደም ሲል ስልጠና የወሰዱ ከሆነ የሚያስፈልጋቸው የድጋፍ ዓይነት",
+      "includeWorkSection": "የሥራ ፍላጎት እና የድጋፍ መረጃ አካትት",
+      "includeTrainingSection": "የሙያ ስልጠና እና የድጋፍ መረጃ አካትት",
+      "workProfileTitle": "የሥራ እና የድጋፍ ሁኔታ",
+      "trainingProfileTitle": "የሙያ ስልጠና እና የድጋፍ ሁኔታ",
       "previousProfession": "ያካበቱት / የቀድሞ ሙያ",
       "elderlyProfessionMentorship": "ያካበቱት ሙያና ለትውልድ የሚተላለፍ የልምድ ዘርፍ",
       "elderlyProfessionDesc": "አረጋውያን በህይወት ዘመናቸው ያካበቱትን ሙያና የስራ ልምድ ለወጣቱ ትውልድ ለማስተላለፍ የሚያስችል የተሞክሮ መረጃ።",
@@ -971,7 +983,7 @@
         "address": "አድራሻ",
         "membership": "የአባልነት ስታቲስቲክስ",
         "financials": "ፋይናንስ እና አስተያየቶች",
-        "foundingMembers": "መስራች አባላት",
+        "foundingMembers": "መሪ አባላት",
         "assets": "በምዝገባ ወቅት የነበሩ ንብረቶች",
         "approvals": "ኦዲት እና ማፅደቅ",
         "documents": "የምስረታ ሰነድ / ህገ-ደንብ"
@@ -987,17 +999,30 @@
         "location": "ልዩ ቦታ",
         "bankAccount": "የባንክ ሂሳብ ቁጥር",
         "contribution": "የወር መዋጮ",
+        "additionalIncome": "ተጨማሪ ገቢ (ካለ)",
+        "additionalIncomePlaceholder": "ለምሳሌ፦ የድንኳንና ወንበር ኪራይ፣ የአዳራሽ ኪራይ፣ ሱቆች...",
         "remarks": "አስተያየቶች",
         "managementMembers": "የሥራ አመራር አባላት",
         "generalMembers": "ጠቅላላ አባላት",
         "male": "ወንድ",
         "female": "ሴት",
         "total": "ጠቅላላ",
-        "founderName": "የመስራች አባል ስም",
+        "totalEdirMembers": "የዕድር አባላት ጠቅላላ ድምር (አመራሮችን ጨምሮ)",
+        "totalMale": "ጠቅላላ ወንድ (አመራር + አባላት)",
+        "totalFemale": "ጠቅላላ ሴት (አመራር + አባላት)",
+        "grandTotal": "የአባላት ጠቅላላ ድምር",
+        "founderName": "የመሪ አባል ስም",
         "founderAddress": "አድራሻ",
         "assetType": "ዓይነት",
+        "assetCategory": "የንብረት ምድብ",
         "assetDescription": "መግለጫ",
         "assetValue": "ዋጋ (ETB)",
+        "assetFile": "ደጋፊ ሰነድ / ፋይል (አማራጭ)",
+        "attachFile": "ፋይል አያይዝ",
+        "removeFile": "አስወግድ",
+        "additionalDocuments": "ተጨማሪ የምዝገባ ደጋፊ ሰነዶች (ካርታ፣ ኦዲት፣ የባንክ ደብተር፣ ወዘተ)",
+        "byLawsDoc": "የመተዳደሪያ ደንብ / መስራች ሰነድ",
+        "uploading": "በመጫን ላይ...",
         "auditCommittee": "ንብረቶች በኦዲት ኮሚቴ ተቆጥረዋል",
         "generalAssembly": "ንብረቶች በጠቅላላ ጉባኤ ጸድቀዋል",
         "council": "የዕድሮች ምክር ቤት (አማራጭ)",
@@ -1007,6 +1032,12 @@
       "assetTypes": {
         "CASH": "ገንዘብ",
         "IN_KIND": "በዓይነት"
+      },
+      "assetCategories": {
+        "MOVABLE_EQUIPMENT": "ተንቀሳቃሽ ንብረት",
+        "FIXED_PROPERTY": "ቋሚ ንብረት",
+        "LIQUID_CASH": "ጥሬ ገንዘብ",
+        "INVESTMENT": "ኢንቨስትመንት"
       },
       "levels": {
         "WOREDA": "ወረዳ",
@@ -1019,13 +1050,16 @@
         "update": "መረጃ አድስ",
         "registering": "በመመዝገብ ላይ...",
         "updating": "በማዘመን ላይ...",
-        "addFounder": "መስራች አባል ጨምር",
+        "addFounder": "መሪ አባል ጨምር",
         "addAsset": "ንብረት ጨምር"
       },
       "messages": {
         "byLawsUploading": "ሰነድ በመጫን ላይ...",
         "byLawsUploaded": "የምስረታ ሰነድ / ህገ-ደንብ ተያይዟል",
         "byLawsUploadError": "ሰነድ መጫን አልተሳካም",
+        "docUploaded": "ሰነድ በተሳካ ሁኔታ ተያይዟል",
+        "docUploadError": "ሰነድ መጫን አልተሳካም",
+        "assetFileUploaded": "የንብረት ፋይል ተያይዟል",
         "successCreate": "እድር በተሳካ ሁኔታ ተመዝግቧል",
         "successUpdate": "የእድር መረጃ በተሳካ ሁኔታ ተዘምኗል"
       }
@@ -1066,7 +1100,11 @@
           "basic": "መሠረታዊ መረጃ",
           "address": "አድራሻ",
           "membership": "የአባልነት ስታቲስቲክስ",
-          "financials": "ፋይናንስ እና አስተያየቶች"
+          "financials": "ፋይናንስ እና አስተያየቶች",
+          "foundingMembers": "መስራች አባላት (መመሪያ አንቀጽ 7.ሀ)",
+          "assets": "በምዝገባ ወቅት ያለው ሀብት (መመሪያ አንቀጽ 7.ለ)",
+          "approvals": "የኦዲትና ጠቅላላ ጉባኤ ማረጋገጫዎች",
+          "documents": "የመተዳደሪያ ደንብ እና የምዝገባ ሰነዶች"
         },
         "fields": {
           "name": "የዕድር ስም",
@@ -1078,6 +1116,13 @@
           "location": "ልዩ ቦታ",
           "bankAccount": "የባንክ ሒሳብ ቁጥር",
           "contribution": "ወርሃዊ መዋጮ",
+          "additionalIncome": "ተጨማሪ ገቢ (ካለ)",
+          "additionalIncomePlaceholder": "ለምሳሌ፦ የድንኳንና ወንበር ኪራይ፣ የአዳራሽ ኪራይ፣ ሱቆች...",
+          "remarks": "ማስታወሻ / አስተያየት",
+          "registerLevel": "የዕውቅና ደረጃ",
+          "council": "የዕድር ምክር ቤት",
+          "councilPlaceholder": "ምክር ቤት ይምረጡ",
+          "noCouncilOption": "የለም (ራሱን የቻለ)",
           "managementMembers": "የሥራ አመራር / መሪዎች",
           "generalMembers": "ጠቅላላ አባላት",
           "male": "ወንድ",
@@ -1086,25 +1131,91 @@
           "totalEdirMembers": "የዕድር አባላት ጠቅላላ ድምር (አመራሮችን ጨምሮ)",
           "totalMale": "ጠቅላላ ወንድ (አመራር + አባላት)",
           "totalFemale": "ጠቅላላ ሴት (አመራር + አባላት)",
-          "grandTotal": "የአባላት ጠቅላላ ድምር"
+          "grandTotal": "የአባላት ጠቅላላ ድምር",
+          "founderName": "ሙሉ ስም",
+          "founderAddress": "አድራሻ (ክ/ከተማ / ወረዳ / የቤት ቁ.)",
+          "assetType": "የሀብት ዓይነት",
+          "assetDescription": "የሀብቱ ዝርዝር መግለጫ",
+          "assetValue": "የተገመተ ዋጋ (ብር)",
+          "assetCategory": "የሀብት ምድብ",
+          "assetFile": "ማስረጃ ሰነድ",
+          "attachFile": "ፋይል አያይዝ",
+          "uploading": "በመጫን ላይ...",
+          "auditCommittee": "ሀብቱ በውስጥ ኦዲት ኮሚቴ የተረጋገጠ",
+          "generalAssembly": "ሀብቱ በጠቅላላ ጉባኤ የጸደቀ",
+          "byLawsDoc": "የመተዳደሪያ ደንብ / መስራች ሰነድ",
+          "additionalDocuments": "ተጨማሪ የምዝገባ ሰነዶች (ካርታ፣ የባንክ ደብተር፣ ወዘተ)"
+        },
+        "assetTypes": {
+          "CASH": "ጥሬ ገንዘብ",
+          "IN_KIND": "ዓይነት / ንብረት"
+        },
+        "levels": {
+          "WOREDA": "ወረዳ ደረጃ",
+          "SUB_CITY": "ክፍለ ከተማ ደረጃ",
+          "CITY": "ከተማ ደረጃ"
+        },
+        "messages": {
+          "byLawsUploaded": "የመተዳደሪያ ደንብ በተሳካ ሁኔታ ተጭኗል",
+          "byLawsUploadError": "የመተዳደሪያ ደንብ መጫን አልተቻለም",
+          "byLawsUploading": "የመተዳደሪያ ደንብ በመጫን ላይ...",
+          "assetFileUploaded": "የሀብት ማስረጃ ሰነድ ተያይዟል",
+          "docUploadError": "ሰነዱን መጫን አልተቻለም",
+          "docUploaded": "ሰነዱ በተሳካ ሁኔታ ተያይዟል",
+          "successUpdate": "የዕድር ማኅበር መረጃ በተሳካ ሁኔታ ተሻሽሏል",
+          "successCreate": "የዕድር ማኅበር በተሳካ ሁኔታ ተመዝግቧል"
         },
         "buttons": {
           "register": "አዲስ ዕድር ያክሉ",
           "cancel": "ሰርዝ",
           "update": "ዕድር ያዘምኑ",
           "updating": "በማዘመን ላይ...",
-          "registering": "በመመዝገብ ላይ..."
+          "registering": "በመመዝገብ ላይ...",
+          "addFounder": "መስራች አባል ጨምር",
+          "addAsset": "ሀብት ጨምር"
         }
       },
       "import": {
-        "title": "የዕድር ማኅበራትን ያስገቡ (Import)",
-        "description": "ብዙ የዕድር ማኅበራትን በአንድ ጊዜ ለማስገባት የኤክሴል (Excel) ፋይል ይጫኑ።",
-        "success": "የዕድር ማኅበራት በተሳካ ሁኔታ ገብተዋል",
-        "error": "የዕድር ማኅበራትን ማስገባት አልተቻለም",
+        "title": "የዕድር መረጃዎችን ያስገቡ (Import)",
+        "description": "የዕድር ማኅበራትን፣ ማህበራዊ ድጋፎችን እና ተጠቃሚዎችን በጅምላ ለማስገባት የኤክሴል ፋይል ይጫኑ።",
+        "success": "የኤክሴል መረጃዎች በተሳካ ሁኔታ ተመዝግበዋል",
+        "error": "መረጃዎችን ማስገባት አልተቻለም",
+        "previewTitle": "የሚገቡ መረጃዎች ቅድመ-እይታ",
+        "previewDescription": "ወደ ሲስተሙ ከማስገባትዎ በፊት የተነበቡትን መረጃዎች በትክክል ይመርምሩ።",
+        "downloadTemplate": "ቴምፕሌት አውርድ",
+        "excelTemplate": "ይፋዊ የኤክሴል ቴምፕሌት",
         "buttons": {
-          "import": "የዕድር ማኅበራትን ያስገቡ",
+          "import": "አረጋግጥና አስገባ",
           "importing": "በማስገባት ላይ...",
+          "preview": "ዳታውን ተመልከት",
+          "previewing": "በማጣራት ላይ...",
+          "changeFile": "ፋይል ቀይር",
           "cancel": "ሰርዝ"
+        },
+        "tabs": {
+          "edirs": "የዕድር ማኅበራት",
+          "contributions": "ማህበራዊ ኃላፊነት",
+          "beneficiaries": "የታገዙ ተጠቃሚዎች"
+        },
+        "summary": {
+          "edirs": "የዕድር ማኅበራት",
+          "contributions": "ማህበራዊ ድጋፎች",
+          "beneficiaries": "ተጠቃሚዎች",
+          "matching": "የዕድሮች ትስስር",
+          "matched": "የተዛመዱ",
+          "unmatched": "ያልተዛመዱ",
+          "duplicates": "የተደገሙ መረጃዎች",
+          "issues": "የማጣሪያ ማሳሰቢያዎች",
+          "duplicateNote": "የተደገሙ መረጃዎች ተለይተዋል። ነባር የዕድር መረጃዎች ሳይዛቡ ይጠበቃሉ።"
+        },
+        "filter": {
+          "all": "ሁሉም መረጃዎች",
+          "issuesOnly": "ስህተት እና ድግግሞሽ ብቻ"
+        },
+        "badges": {
+          "duplicate": "የተደገመ",
+          "clean": "ዝግጁ",
+          "issues": "ጉድለት"
         }
       },
       "report": {
@@ -1114,7 +1225,13 @@
         "error": "ሪፖርቱን ማዘጋጀት አልተቻለም",
         "menuLabel": "ይህንን ዕድር ያውርዱ ወይም ያትሙ",
         "printDossier": "ይፋዊ ዶሴ አትም",
+        "printDossierAm": "ይፋዊ ዶሴ (አማርኛ) አትም",
+        "printDossierEn": "ይፋዊ ዶሴ (እንግሊዝኛ) አትም",
         "printCertificate": "የእድሳት ምስክር ወረቀት (መመሪያ 151/2016)",
+        "languages": {
+          "en": "እንግሊዝኛ",
+          "am": "አማርኛ"
+        },
         "reportType": "የሪፖርት ዓይነት",
         "reportTypeOptions": {
           "summary": "የዕድሮች ማጠቃለያ ሠንጠረዥ",
@@ -1126,7 +1243,8 @@
           "endDate": "የመጨረሻ ቀን",
           "subCity": "ክፍለ ከተማ",
           "woreda": "ወረዳ",
-          "format": "ፎርማት"
+          "format": "ፎርማት",
+          "language": "የሪፖርት ቋንቋ"
         },
         "formats": {
           "excel": "ኤክሴል ሰነድ",
@@ -1253,7 +1371,7 @@
         "location": "የአድራሻ ዝርዝሮች",
         "financial": "የፋይናንስ መረጃ",
         "accreditation": "ምዝገባ እና እውቅና",
-        "foundingMembers": "መስራች አባላት",
+        "foundingMembers": "መሪ አባላት",
         "assets": "በምዝገባ ወቅት የነበሩ ንብረቶች",
         "documents": "የምስረታ ሰነድ / ህገ-ደንብ"
       },
@@ -1270,6 +1388,7 @@
         "specificLocation": "ልዩ ቦታ",
         "bankAccountNumber": "የባንክ ሒሳብ ቁጥር",
         "monthlyPayment": "ወርሃዊ ክፍያ",
+        "additionalIncome": "ተጨማሪ ገቢ",
         "established": "የተመሠረተበት ቀን",
         "registrationNumber": "የምዝገባ ቁጥር",
         "registrationDate": "የምዝገባ ቀን",
@@ -1283,7 +1402,7 @@
         "founderAddress": "አድራሻ",
         "auditCommittee": "በኦዲት ኮሚቴ ተቆጥሯል",
         "generalAssembly": "በጠቅላላ ጉባኤ ጸድቋል",
-        "noFoundingMembers": "ምንም መስራች አባላት አልተመዘገቡም።",
+        "noFoundingMembers": "ምንም መሪ አባላት አልተመዘገቡም።",
         "assetType": "ዓይነት",
         "assetDescription": "መግለጫ",
         "assetValue": "ዋጋ (ETB)",
@@ -1552,11 +1671,13 @@
         }
       },
       "level": {
+        "title": "ደረጃ",
         "WOREDA": "ወረዳ",
         "SUB_CITY": "ክፍለ ከተማ",
         "CITY": "ከተማ"
       },
       "status": {
+        "title": "ሁኔታ",
         "ACTIVE": "ንቁ",
         "EXPIRED": "ጊዜ ያለፈ",
         "REVOKED": "የተሰረዘ",
@@ -1603,6 +1724,7 @@
           "location": "አድራሻ",
           "leadership": "አመራር እና መገናኛ",
           "additionalLeadership": "ተጨማሪ የስራ አስፈፃሚ አመራር አባላት",
+          "memberEdirs": "አባል እድሮች (ነባር እድሮችን ያካትቱ)",
           "documents": "የምክር ቤት ሰነዶች እና መተዳደሪያ ደንብ"
         },
         "buttons": {
@@ -1649,6 +1771,22 @@
           "byLawsUploaded": "የምክር ቤት ሰነድ በተሳካ ሁኔታ ተያይዟል",
           "byLawsUploading": "ሰነዱ በመጫን ላይ ነው...",
           "byLawsUploadError": "ሰነዱን መጫን አልተቻለም"
+        },
+        "memberEdirs": {
+          "title": "አባል እድሮች",
+          "subtitle": "የዚህ ምክር ቤት አባል እንዲሆኑ ነባር ንቁ እድሮችን ይምረጡ",
+          "searchPlaceholder": "ብቁ እድሮችን በስም ወይም በመለያ ቁጥር ይፈልጉ...",
+          "noEligible": "ለተመረጠው ደረጃ እና አድራሻ ምንም ብቁ ንቁ እድር አልተገኘም።",
+          "selectedCount": "{count} እድሮች ተመርጠዋል",
+          "selectAll": "ሁሉንም ምረጥ",
+          "clearAll": "አጽዳ",
+          "onlyUnassigned": "ምክር ቤት የሌላቸውን ብቻ አሳይ",
+          "alreadyInCouncil": "በ{name} ውስጥ ያለ",
+          "colName": "የዕድር ስም",
+          "colRegNumber": "የምዝገባ ቁጥር",
+          "colLocation": "አድራሻ / አካባቢ",
+          "colCouncilStatus": "የምክር ቤት ሁኔታ",
+          "unassigned": "ያልተመደበ"
         }
       },
       "detail": {

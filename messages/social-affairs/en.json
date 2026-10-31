@@ -705,14 +705,26 @@
       "age": "Age",
       "subCity": "Sub-city",
       "woreda": "Woreda",
-      "zone": "Zone",
+      "zone": "Ketena (ቀጠና)",
       "block": "Block",
       "houseNumber": "House Number",
       "employmentStatus": "Employment",
       "maritalStatus": "Marital Status",
-      "preferredTraining1": "1st Desired Work Sector",
-      "preferredTraining2": "2nd Desired Work Sector",
-      "preferredTraining3": "3rd Desired Work Sector",
+      "preferredTraining1": "1st Choice",
+      "preferredTraining2": "2nd Choice",
+      "preferredTraining3": "3rd Choice",
+      "elderlyTrainingChoice1": "1st Desired Work Field",
+      "elderlyTrainingChoice2": "2nd Desired Work Field",
+      "elderlyTrainingChoice3": "3rd Desired Work Field",
+      "disabledTrainingChoice1": "1st Desired Vocational Training",
+      "disabledTrainingChoice2": "2nd Desired Vocational Training",
+      "disabledTrainingChoice3": "3rd Desired Vocational Training",
+      "workSupportType": "Support Needed for the Work",
+      "disabledPostTrainingSupport": "Support Needed if Previously Trained",
+      "includeWorkSection": "Include Work & Support Needs",
+      "includeTrainingSection": "Include Vocational Training Needs",
+      "workProfileTitle": "Work & Support Profile",
+      "trainingProfileTitle": "Vocational Training & Support Profile",
       "previousProfession": "Previous / Acquired Profession",
       "elderlyProfessionMentorship": "Lifetime Profession & Youth Knowledge Sharing",
       "elderlyProfessionDesc": "Record of lifetime professional craft, expertise, and wisdom that the elderly can transfer to the younger generation through mentorship.",
@@ -971,7 +983,7 @@
         "address": "Address",
         "membership": "Membership Statistics",
         "financials": "Financials & Remarks",
-        "foundingMembers": "Founding Members",
+        "foundingMembers": "Leader Members",
         "assets": "Assets at Registration",
         "approvals": "Audit & Approval",
         "documents": "Founding Document / By-laws"
@@ -987,17 +999,30 @@
         "location": "Specific Location",
         "bankAccount": "Bank Account Number",
         "contribution": "Monthly Contribution",
+        "additionalIncome": "Additional Income (Optional)",
+        "additionalIncomePlaceholder": "e.g., Tent & chair rental, hall rental, shops...",
         "remarks": "Remarks",
         "managementMembers": "Management Members",
         "generalMembers": "General Members",
         "male": "Male",
         "female": "Female",
         "total": "Total",
-        "founderName": "Founding Member Name",
+        "totalEdirMembers": "Total Number of Edir Members (Including Leaders)",
+        "totalMale": "Total Male (Leaders + General)",
+        "totalFemale": "Total Female (Leaders + General)",
+        "grandTotal": "Grand Total Members",
+        "founderName": "Leader Member Name",
         "founderAddress": "Address",
         "assetType": "Type",
+        "assetCategory": "Asset Category",
         "assetDescription": "Description",
         "assetValue": "Value (ETB)",
+        "assetFile": "Supporting File (Optional)",
+        "attachFile": "Attach File",
+        "removeFile": "Remove",
+        "additionalDocuments": "Additional Registration Documents (Site Map, Bank Statement, Audit, etc.)",
+        "byLawsDoc": "By-Laws / Founding Document (የመተዳደሪያ ደንብ)",
+        "uploading": "Uploading...",
         "auditCommittee": "Assets counted by the Audit Committee",
         "generalAssembly": "Assets approved by the General Assembly",
         "council": "Edir Council (Optional)",
@@ -1007,6 +1032,12 @@
       "assetTypes": {
         "CASH": "Cash",
         "IN_KIND": "In Kind"
+      },
+      "assetCategories": {
+        "MOVABLE_EQUIPMENT": "Movable Equipment",
+        "FIXED_PROPERTY": "Fixed Property",
+        "LIQUID_CASH": "Liquid Cash",
+        "INVESTMENT": "Investment"
       },
       "levels": {
         "WOREDA": "Woreda",
@@ -1019,13 +1050,16 @@
         "update": "Update Edir",
         "registering": "Registering...",
         "updating": "Updating...",
-        "addFounder": "Add Founding Member",
+        "addFounder": "Add Leader Member",
         "addAsset": "Add Asset"
       },
       "messages": {
         "byLawsUploading": "Uploading document...",
         "byLawsUploaded": "By-laws / founding document attached",
         "byLawsUploadError": "Failed to upload document",
+        "docUploaded": "Document attached successfully",
+        "docUploadError": "Failed to upload document",
+        "assetFileUploaded": "Asset file attached",
         "successCreate": "Edir registered successfully",
         "successUpdate": "Edir updated successfully"
       }
@@ -1066,7 +1100,11 @@
           "basic": "Basic Information",
           "address": "Address",
           "membership": "Membership Statistics",
-          "financials": "Financials & Remarks"
+          "financials": "Financials & Remarks",
+          "foundingMembers": "Founding Members (Directive Art. 7.a)",
+          "assets": "Assets at Registration (Directive Art. 7.b)",
+          "approvals": "Audit & General Assembly Approvals",
+          "documents": "By-Laws & Registration Documents"
         },
         "fields": {
           "name": "Edir Name",
@@ -1078,6 +1116,13 @@
           "location": "Specific Location",
           "bankAccount": "Bank Account Number",
           "contribution": "Monthly Contribution",
+          "additionalIncome": "Additional Income (Optional)",
+          "additionalIncomePlaceholder": "e.g., Tent & chair rental, hall rental, shops...",
+          "remarks": "Remarks / Notes",
+          "registerLevel": "Registration Level",
+          "council": "Edir Council",
+          "councilPlaceholder": "Select Council",
+          "noCouncilOption": "None (Independent)",
           "managementMembers": "Management / Leaders",
           "generalMembers": "General Members",
           "male": "Male",
@@ -1086,25 +1131,91 @@
           "totalEdirMembers": "Total Number of Edir Members (Including Leaders)",
           "totalMale": "Total Male (Leaders + General)",
           "totalFemale": "Total Female (Leaders + General)",
-          "grandTotal": "Grand Total Members"
+          "grandTotal": "Grand Total Members",
+          "founderName": "Full Name",
+          "founderAddress": "Address (Sub-city / Woreda / House No.)",
+          "assetType": "Asset Type",
+          "assetDescription": "Asset Description",
+          "assetValue": "Estimated Value (ETB)",
+          "assetCategory": "Asset Category",
+          "assetFile": "Proof / Document",
+          "attachFile": "Attach File",
+          "uploading": "Uploading...",
+          "auditCommittee": "Assets audited and confirmed by the Internal Audit Committee",
+          "generalAssembly": "Assets and founding inventory approved by General Assembly",
+          "byLawsDoc": "By-Laws / Founding Document (የመተዳደሪያ ደንብ)",
+          "additionalDocuments": "Additional Registration Documents (Site map, bank statement, etc.)"
+        },
+        "assetTypes": {
+          "CASH": "Cash / Liquid",
+          "IN_KIND": "In-Kind / Property"
+        },
+        "levels": {
+          "WOREDA": "Woreda Level",
+          "SUB_CITY": "Sub-City Level",
+          "CITY": "City Level"
+        },
+        "messages": {
+          "byLawsUploaded": "By-laws uploaded successfully",
+          "byLawsUploadError": "Failed to upload by-laws",
+          "byLawsUploading": "Uploading by-laws...",
+          "assetFileUploaded": "Asset document attached",
+          "docUploadError": "Failed to upload document",
+          "docUploaded": "Document attached successfully",
+          "successUpdate": "Edir association updated successfully",
+          "successCreate": "Edir association registered successfully"
         },
         "buttons": {
           "register": "Add New Edir",
           "cancel": "Cancel",
           "update": "Update Edir",
           "updating": "Updating...",
-          "registering": "Registering..."
+          "registering": "Registering...",
+          "addFounder": "Add Founding Member",
+          "addAsset": "Add Asset"
         }
       },
       "import": {
-        "title": "Import Edir Associations",
-        "description": "Upload an Excel file to import multiple Edir associations at once.",
-        "success": "Edir associations imported successfully",
-        "error": "Failed to import Edir associations",
+        "title": "Import Edir Data",
+        "description": "Upload an Excel file to import Edir associations, social contributions, and beneficiaries.",
+        "success": "Excel data imported successfully",
+        "error": "Failed to import data",
+        "previewTitle": "Import Data Preview",
+        "previewDescription": "Inspect the parsed records before confirming import into the system.",
+        "downloadTemplate": "Download Template",
+        "excelTemplate": "Official Excel Template",
         "buttons": {
-          "import": "Import Edir Associations",
-          "importing": "Importing...",
+          "import": "Confirm & Import",
+          "importing": "Importing Data...",
+          "preview": "Preview Data",
+          "previewing": "Analyzing...",
+          "changeFile": "Change File",
           "cancel": "Cancel"
+        },
+        "tabs": {
+          "edirs": "Edir Associations",
+          "contributions": "CSR Contributions",
+          "beneficiaries": "Beneficiaries"
+        },
+        "summary": {
+          "edirs": "Edir Associations",
+          "contributions": "CSR Contributions",
+          "beneficiaries": "Beneficiaries",
+          "matching": "Matching Status",
+          "matched": "matched",
+          "unmatched": "unmatched",
+          "duplicates": "Duplicates Detected",
+          "issues": "Quality Alerts",
+          "duplicateNote": "Duplicate records identified. Existing associations will be preserved and not overwritten."
+        },
+        "filter": {
+          "all": "All Records",
+          "issuesOnly": "Duplicates & Issues Only"
+        },
+        "badges": {
+          "duplicate": "Duplicate",
+          "clean": "Ready",
+          "issues": "Issue"
         }
       },
       "report": {
@@ -1114,7 +1225,13 @@
         "error": "Failed to generate report",
         "menuLabel": "Download or print this edir",
         "printDossier": "Print Official Dossier",
+        "printDossierAm": "Print Official Dossier (Amharic)",
+        "printDossierEn": "Print Official Dossier (English)",
         "printCertificate": "Renewal Certificate (Directive 151/2016)",
+        "languages": {
+          "en": "English",
+          "am": "Amharic"
+        },
         "reportType": "Report Type",
         "reportTypeOptions": {
           "summary": "Edir Summary Table",
@@ -1126,7 +1243,8 @@
           "endDate": "End Date",
           "subCity": "Sub City",
           "woreda": "Woreda",
-          "format": "Format"
+          "format": "Format",
+          "language": "Report Language"
         },
         "formats": {
           "excel": "Excel Workbook",
@@ -1253,7 +1371,7 @@
         "location": "Location Details",
         "financial": "Financial Info",
         "accreditation": "Registration & Accreditation",
-        "foundingMembers": "Founding Members",
+        "foundingMembers": "Leader Members",
         "assets": "Assets at Registration",
         "documents": "Founding Document / By-laws"
       },
@@ -1270,6 +1388,7 @@
         "specificLocation": "Specific Location",
         "bankAccountNumber": "Bank Account Number",
         "monthlyPayment": "Monthly Payment",
+        "additionalIncome": "Additional Income",
         "established": "Established On",
         "registrationNumber": "Registration Number",
         "registrationDate": "Registration Date",
@@ -1283,7 +1402,7 @@
         "founderAddress": "Address",
         "auditCommittee": "Counted by Audit Committee",
         "generalAssembly": "Approved by General Assembly",
-        "noFoundingMembers": "No founding members recorded.",
+        "noFoundingMembers": "No leader members recorded.",
         "assetType": "Type",
         "assetDescription": "Description",
         "assetValue": "Value (ETB)",
@@ -1552,11 +1671,13 @@
         }
       },
       "level": {
+        "title": "Level",
         "WOREDA": "Woreda",
         "SUB_CITY": "Sub City",
         "CITY": "City"
       },
       "status": {
+        "title": "Status",
         "ACTIVE": "Active",
         "EXPIRED": "Expired",
         "REVOKED": "Revoked",
@@ -1603,6 +1724,7 @@
           "location": "Location",
           "leadership": "Leadership & Contact",
           "additionalLeadership": "Additional Leadership & Executive Committee",
+          "memberEdirs": "Member Edirs (Include Existing Edirs)",
           "documents": "Council Documents & By-Laws"
         },
         "buttons": {
@@ -1649,6 +1771,22 @@
           "byLawsUploaded": "Document uploaded successfully",
           "byLawsUploading": "Uploading document...",
           "byLawsUploadError": "Failed to upload document"
+        },
+        "memberEdirs": {
+          "title": "Member Edirs",
+          "subtitle": "Select active Edirs from this area to include as members of this council",
+          "searchPlaceholder": "Search eligible Edirs by name or reg #...",
+          "noEligible": "No eligible active Edirs found for the selected level and location.",
+          "selectedCount": "{count} Edirs selected",
+          "selectAll": "Select All",
+          "clearAll": "Clear",
+          "onlyUnassigned": "Only show unassigned Edirs",
+          "alreadyInCouncil": "Currently in {name}",
+          "colName": "Edir Name",
+          "colRegNumber": "Registration #",
+          "colLocation": "Location",
+          "colCouncilStatus": "Council Status",
+          "unassigned": "Unassigned"
         }
       },
       "detail": {

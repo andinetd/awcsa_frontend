@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -35,14 +35,16 @@ interface EdirRowReportButtonProps {
  */
 export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) {
   const t = useTranslations("social-affairs.edir.edir.report");
+  const locale = useLocale();
+  const currentLang: "en" | "am" = locale === "am" ? "am" : "en";
   const { mutate: generateReport, isPending } = useGenerateEdirReportMutation();
   const [isPrinting, setIsPrinting] = useState(false);
 
-  const handlePrint = (e: React.MouseEvent) => {
+  const handlePrint = (e: React.MouseEvent, lang: "en" | "am" = currentLang) => {
     e.stopPropagation();
     setIsPrinting(true);
     try {
-      printEdirDossier(edir);
+      printEdirDossier(edir, lang);
       toast.success(t("messages.pdf"));
     } catch (err: any) {
       toast.error(err?.message || t("error"));
@@ -64,7 +66,7 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
   const handleExport = (e: React.MouseEvent, format: "EXCEL" | "PDF") => {
     e.stopPropagation();
     if (format === "PDF") {
-      printEdirDossier(edir);
+      printEdirDossier(edir, currentLang);
       toast.success(t("messages.pdf"));
       return;
     }
@@ -72,6 +74,7 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
     generateReport(
       {
         format: "EXCEL",
+        language: currentLang,
         selectedColumns: [
           "name",
           "id",
@@ -128,7 +131,7 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-56 rounded-xs border-[#E3E7EB] bg-white shadow-lg text-xs"
+        className="w-60 rounded-xs border-[#E3E7EB] bg-white shadow-lg text-xs"
         onClick={(e) => e.stopPropagation()}
       >
         <DropdownMenuLabel className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-700">
@@ -139,11 +142,21 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
           className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"
           onSelect={(e) => {
             e.preventDefault();
-            handlePrint(e as any);
+            handlePrint(e as any, "am");
           }}
         >
           <Printer className="w-4 h-4 text-[#1769AA]" />
-          <span>{t("printDossier")}</span>
+          <span>{t("printDossierAm")}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"
+          onSelect={(e) => {
+            e.preventDefault();
+            handlePrint(e as any, "en");
+          }}
+        >
+          <Printer className="w-4 h-4 text-slate-600" />
+          <span>{t("printDossierEn")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"
@@ -155,6 +168,7 @@ export default function EdirRowReportButton({ edir }: EdirRowReportButtonProps) 
           <Award className="w-4 h-4 text-amber-600" />
           <span>{t("printCertificate")}</span>
         </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-[#E3E7EB]" />
         <DropdownMenuItem
           className="cursor-pointer text-xs flex items-center gap-2 py-1.5 focus:bg-slate-50"
           onSelect={(e) => {

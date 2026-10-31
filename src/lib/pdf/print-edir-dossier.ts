@@ -1,8 +1,10 @@
 import { Edir } from "@/api/social-affairs/edir";
 
-export function printEdirDossier(edir: Edir) {
+export function printEdirDossier(edir: Edir, lang: "en" | "am" = "en") {
   const printWindow = window.open("", "_blank");
   if (!printWindow) return;
+
+  const isAm = lang === "am";
 
   const totalMembers =
     (edir.managementMale || 0) +
@@ -10,29 +12,72 @@ export function printEdirDossier(edir: Edir) {
     (edir.generalMale || 0) +
     (edir.generalFemale || 0);
 
-  const formattedDate = edir.establishmentDate
-    ? new Date(edir.establishmentDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "—";
+  const formatDate = (dateStr?: string | Date | null) => {
+    if (!dateStr) return "—";
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return "—";
+      return isAm
+        ? d.toLocaleDateString("am-ET", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : d.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+    } catch {
+      return String(dateStr);
+    }
+  };
 
-  const regDate = edir.registrationDate
-    ? new Date(edir.registrationDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "—";
+  const formattedDate = formatDate(edir.establishmentDate);
+  const regDate = formatDate(edir.registrationDate);
+  const certDate = formatDate(edir.certificateIssuedAt);
 
-  const certDate = edir.certificateIssuedAt
-    ? new Date(edir.certificateIssuedAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "—";
+  const statusLabel = () => {
+    const s = edir.status || "PENDING";
+    if (!isAm) return s;
+    switch (s) {
+      case "ACTIVE":
+        return "ንቁ";
+      case "EXPIRED":
+        return "ጊዜው ያለፈበት";
+      case "REVOKED":
+        return "የታገደ";
+      case "CANCELLED":
+        return "የተሰረዘ";
+      case "PENDING":
+        return "በመጠባበቅ ላይ";
+      default:
+        return s;
+    }
+  };
+
+  const registerLevelLabel = () => {
+    const l = edir.registerLevel || "WOREDA";
+    if (!isAm) return l;
+    switch (l as string) {
+      case "WOREDA":
+        return "ወረዳ";
+      case "SUBCITY":
+      case "SUB_CITY":
+        return "ክፍለ ከተማ";
+      case "CITY":
+        return "ከተማ";
+      default:
+        return l;
+    }
+  };
+
+  const renewalYearLabel = () => {
+    if (edir.renewedForYear) {
+      return isAm ? `${edir.renewedForYear} ዓ.ም` : `Year ${edir.renewedForYear}`;
+    }
+    return isAm ? "ያልታደሰ" : "Not Renewed";
+  };
 
   const foundingRows = (edir.foundingMembers || [])
     .map(
@@ -46,19 +91,93 @@ export function printEdirDossier(edir: Edir) {
     )
     .join("");
 
+  const labels = isAm
+    ? {
+        pageTitle: `የዕድር ይፋዊ መዝገብ - ${edir.name}`,
+        printBtn: "ሰነዱን አትም (Ctrl + P)",
+        instTitle1: "የአዲስ አበባ ከተማ አስተዳደር",
+        instTitle2: "የሴቶችና ማኅበራዊ ጉዳይ ቢሮ",
+        instTitle3: "የባህላዊ ዕድርና ማኅበረሰብ ማኅበራት ዳይሬክቶሬት",
+        docTitle: "ይፋዊ የዕድር ማኅበር ዶሴና መዝገብ",
+        name: "የማኅበሩ ሙሉ ስም",
+        status: "የዕውቅና ሁኔታ",
+        regId: "የምዝገባ / የምስክር ወረቀት ቁጥር",
+        level: "የምዝገባ ደረጃ",
+        secLocation: "የአስተዳደር ወሰንና አድራሻ",
+        subCityWoreda: "ክፍለ ከተማና ወረዳ",
+        houseSpecific: "የቤት ቁጥርና ልዩ ቦታ",
+        subCityVal: `${edir.subCity ? `${edir.subCity} ክፍለ ከተማ` : ""} · ወረዳ ${edir.woreda || "—"}${edir.kebele ? ` · ቀበሌ ${edir.kebele}` : ""}`,
+        houseVal: `የቤት ቁጥር #${edir.houseNumber || "—"} · ${edir.specificLocation || "—"}`,
+        secMembership: "የአባላት ስታትስቲክስና የባንክ ሒሳብ",
+        totalMembers: "ጠቅላላ የተመዘገቡ አባላት",
+        mgmtMale: "አመራር (ወንድ)",
+        mgmtFemale: "አመራር (ሴት)",
+        genMale: "አባላት (ወንድ)",
+        genFemale: "አባላት (ሴት)",
+        bankAcc: "የባንክ ሒሳብ ቁጥር",
+        secDates: "ሕጋዊ የዕውቅናና የምስክር ወረቀት ቀናት",
+        established: "የተመሠረተበት ቀን",
+        registered: "የተመዘገበበት ቀን",
+        certIssued: "የምስክር ወረቀት የተሰጠበት ቀን",
+        renewedYear: "የታደሰበት የበጀት ዓመት",
+        secFounding: "የመሪ አባላት ዝርዝር (መመሪያ አንቀጽ 7.ሀ)",
+        tableNo: "ተ.ቁ",
+        tableName: "ሙሉ ስም",
+        tableAddress: "አድራሻ / ቀበሌ",
+        signChair: "የዕድሩ ሊቀመንበር ፊርማና ማህተም",
+        signOfficer: "የወረዳው ማኅበራዊ ጉዳይ ኃላፊ",
+        signApproval: "የማዘጋጃ ቤት መዝጋቢ ማረጋገጫ",
+      }
+    : {
+        pageTitle: `Edir Official Record - ${edir.name}`,
+        printBtn: "Print Document (Ctrl + P)",
+        instTitle1: "Addis Ababa City Administration",
+        instTitle2: "Bureau of Women and Social Affairs",
+        instTitle3: "Traditional Edir & Community Associations Directorate",
+        docTitle: "Official Association Dossier & Registry",
+        name: "Association Full Name",
+        status: "Accreditation Status",
+        regId: "Registration / Certificate ID",
+        level: "Registration Level",
+        secLocation: "Jurisdiction & Municipal Location",
+        subCityWoreda: "Sub-City & Woreda",
+        houseSpecific: "House & Specific Location",
+        subCityVal: `${edir.subCity} · Woreda ${edir.woreda} ${edir.kebele ? `· Kebele ${edir.kebele}` : ""}`,
+        houseVal: `House #${edir.houseNumber || "—"} · ${edir.specificLocation || "—"}`,
+        secMembership: "Membership & Financial Governance",
+        totalMembers: "Total Declared Census",
+        mgmtMale: "Management (Male)",
+        mgmtFemale: "Management (Female)",
+        genMale: "General (Male)",
+        genFemale: "General (Female)",
+        bankAcc: "Bank Account",
+        secDates: "Statutory Legal Accreditation Dates",
+        established: "Established On",
+        registered: "Registered On",
+        certIssued: "Certificate Issued Date",
+        renewedYear: "Renewed for Fiscal Year",
+        secFounding: "Leader Members Roster (Article 7.a)",
+        tableNo: "#",
+        tableName: "Full Name",
+        tableAddress: "Address / Kebele",
+        signChair: "Edir Chairperson Signature & Stamp",
+        signOfficer: "Woreda Social Affairs Officer",
+        signApproval: "Municipal Registrar Approval",
+      };
+
   const html = `
 <!DOCTYPE html>
-<html>
+<html lang="${lang}">
 <head>
   <meta charset="utf-8" />
-  <title>Edir Official Record - ${edir.name}</title>
+  <title>${labels.pageTitle}</title>
   <style>
     @page {
       size: A4 portrait;
       margin: 15mm;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Ethiopic", "Nyala", "Abyssinica SIL", Arial, sans-serif;
       color: #0F172A;
       margin: 0;
       padding: 20px;
@@ -184,62 +303,62 @@ export function printEdirDossier(edir: Edir) {
 <body>
   <div class="no-print" style="margin-bottom: 16px; text-align: right;">
     <button onclick="window.print()" style="padding: 8px 16px; background: #1769AA; color: #fff; border: none; font-weight: 600; border-radius: 2px; cursor: pointer;">
-      Print Document (Ctrl + P)
+      ${labels.printBtn}
     </button>
   </div>
 
   <div class="header">
-    <div class="inst-title">Addis Ababa City Administration</div>
-    <div class="sub-title">Bureau of Women and Social Affairs</div>
-    <div class="inst-title">Traditional Edir &amp; Community Associations Directorate</div>
-    <div class="doc-title">Official Association Dossier &amp; Registry</div>
+    <div class="inst-title">${labels.instTitle1}</div>
+    <div class="sub-title">${labels.instTitle2}</div>
+    <div class="inst-title">${labels.instTitle3}</div>
+    <div class="doc-title">${labels.docTitle}</div>
   </div>
 
   <div class="meta-grid">
     <div class="meta-box">
-      <div class="meta-label">Association Full Name</div>
+      <div class="meta-label">${labels.name}</div>
       <div class="meta-val">${edir.name}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Accreditation Status</div>
+      <div class="meta-label">${labels.status}</div>
       <div class="meta-val">
         <span class="badge ${edir.status === "ACTIVE" ? "badge-active" : "badge-expired"}">
-          ${edir.status || "PENDING"}
+          ${statusLabel()}
         </span>
       </div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Registration / Certificate ID</div>
+      <div class="meta-label">${labels.regId}</div>
       <div class="meta-val" style="font-family: monospace;">${edir.registrationNumber || "—"}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Registration Level</div>
-      <div class="meta-val">${edir.registerLevel || "WOREDA"}</div>
+      <div class="meta-label">${labels.level}</div>
+      <div class="meta-val">${registerLevelLabel()}</div>
     </div>
   </div>
 
-  <div class="section-title">Jurisdiction &amp; Municipal Location</div>
+  <div class="section-title">${labels.secLocation}</div>
   <div class="meta-grid">
     <div class="meta-box">
-      <div class="meta-label">Sub-City &amp; Woreda</div>
-      <div class="meta-val">${edir.subCity} · Woreda ${edir.woreda} ${edir.kebele ? `· Kebele ${edir.kebele}` : ""}</div>
+      <div class="meta-label">${labels.subCityWoreda}</div>
+      <div class="meta-val">${labels.subCityVal}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">House &amp; Specific Location</div>
-      <div class="meta-val">House #${edir.houseNumber || "—"} · ${edir.specificLocation || "—"}</div>
+      <div class="meta-label">${labels.houseSpecific}</div>
+      <div class="meta-val">${labels.houseVal}</div>
     </div>
   </div>
 
-  <div class="section-title">Membership &amp; Financial Governance</div>
+  <div class="section-title">${labels.secMembership}</div>
   <table>
     <thead>
       <tr>
-        <th>Total Declared Census</th>
-        <th>Management (Male)</th>
-        <th>Management (Female)</th>
-        <th>General (Male)</th>
-        <th>General (Female)</th>
-        <th>Bank Account</th>
+        <th>${labels.totalMembers}</th>
+        <th>${labels.mgmtMale}</th>
+        <th>${labels.mgmtFemale}</th>
+        <th>${labels.genMale}</th>
+        <th>${labels.genFemale}</th>
+        <th>${labels.bankAcc}</th>
       </tr>
     </thead>
     <tbody>
@@ -254,36 +373,36 @@ export function printEdirDossier(edir: Edir) {
     </tbody>
   </table>
 
-  <div class="section-title">Statutory Legal Accreditation Dates</div>
+  <div class="section-title">${labels.secDates}</div>
   <div class="meta-grid">
     <div class="meta-box">
-      <div class="meta-label">Established On</div>
+      <div class="meta-label">${labels.established}</div>
       <div class="meta-val">${formattedDate}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Registered On</div>
+      <div class="meta-label">${labels.registered}</div>
       <div class="meta-val">${regDate}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Certificate Issued Date</div>
+      <div class="meta-label">${labels.certIssued}</div>
       <div class="meta-val">${certDate}</div>
     </div>
     <div class="meta-box">
-      <div class="meta-label">Renewed for Fiscal Year</div>
-      <div class="meta-val">${edir.renewedForYear ? `Year ${edir.renewedForYear}` : "Not Renewed"}</div>
+      <div class="meta-label">${labels.renewedYear}</div>
+      <div class="meta-val">${renewalYearLabel()}</div>
     </div>
   </div>
 
   ${
     edir.foundingMembers && edir.foundingMembers.length > 0
       ? `
-  <div class="section-title">Founding Members Roster (Article 7.a)</div>
+  <div class="section-title">${labels.secFounding}</div>
   <table>
     <thead>
       <tr>
-        <th style="width: 40px;">#</th>
-        <th>Full Name</th>
-        <th>Address / Kebele</th>
+        <th style="width: 40px;">${labels.tableNo}</th>
+        <th>${labels.tableName}</th>
+        <th>${labels.tableAddress}</th>
       </tr>
     </thead>
     <tbody>
@@ -296,13 +415,13 @@ export function printEdirDossier(edir: Edir) {
 
   <div class="footer-sign">
     <div>
-      <div class="sign-line">Edir Chairperson Signature &amp; Stamp</div>
+      <div class="sign-line">${labels.signChair}</div>
     </div>
     <div>
-      <div class="sign-line">Woreda Social Affairs Officer</div>
+      <div class="sign-line">${labels.signOfficer}</div>
     </div>
     <div>
-      <div class="sign-line">Municipal Registrar Approval</div>
+      <div class="sign-line">${labels.signApproval}</div>
     </div>
   </div>
 

@@ -28,10 +28,11 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function GenerateReportDialog() {
   const t = useTranslations("social-affairs.edir.edir.report");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const { mutate: generateReport, isPending } = useGenerateEdirReportMutation();
 
@@ -42,6 +43,7 @@ export default function GenerateReportDialog() {
   const [woreda, setWoreda] = useState("");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
   const [reportType, setReportType] = useState<"SUMMARY" | "PER_EDIR_DOSSIER">("SUMMARY");
+  const [language, setLanguage] = useState<"en" | "am">(locale === "am" ? "am" : "en");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "name",
     "registrationNumber",
@@ -69,6 +71,7 @@ export default function GenerateReportDialog() {
       woreda: woreda || undefined,
       selectedColumns,
       format,
+      language,
     };
 
     generateReport(payload, {
@@ -181,7 +184,7 @@ export default function GenerateReportDialog() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs font-semibold text-slate-700">{t("reportType")}</Label>
               <Select
@@ -228,6 +231,28 @@ export default function GenerateReportDialog() {
                   </SelectItem>
                   <SelectItem value="PDF" className="text-xs rounded-xs flex items-center gap-1.5">
                     {t("formats.pdf")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("fields.language")}</Label>
+              <Select
+                value={language}
+                onValueChange={(v) => setLanguage(v as "en" | "am")}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                  <SelectValue>
+                    {language === "am" ? t("languages.am") : t("languages.en")}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB]">
+                  <SelectItem value="en" className="text-xs rounded-xs">
+                    {t("languages.en")}
+                  </SelectItem>
+                  <SelectItem value="am" className="text-xs rounded-xs">
+                    {t("languages.am")}
                   </SelectItem>
                 </SelectContent>
               </Select>
