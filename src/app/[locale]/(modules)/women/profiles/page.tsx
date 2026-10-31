@@ -143,10 +143,20 @@ export default function ProfilesPage() {
   }, [subCitiesData, selectedSubCity]);
 
   const availableWoredas = useMemo(() => {
-    const list = currentSubCityObj?.woredas || [];
+    const defaultWoredas = Array.from({ length: 20 }, (_, i) => ({
+      id: i + 1,
+      code: String(i + 1).padStart(2, "0"),
+      subCityId: currentSubCityObj?.id ?? 0,
+    }));
+    const list =
+      currentSubCityObj?.woredas && currentSubCityObj.woredas.length >= 20
+        ? currentSubCityObj.woredas
+        : defaultWoredas;
     if (userWoreda) {
       const filtered = list.filter(
-        (w) => String(w.code) === String(userWoreda)
+        (w) =>
+          String(w.code) === String(userWoreda) ||
+          Number(w.code) === Number(userWoreda)
       );
       return filtered.length > 0
         ? filtered

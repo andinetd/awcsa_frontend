@@ -154,10 +154,20 @@ export default function AssociationsPage() {
   }, [subCitiesData, subCityFilter]);
 
   const availableWoredas = useMemo(() => {
-    const list = currentSubCityObj?.woredas || [];
+    const defaultWoredas = Array.from({ length: 20 }, (_, i) => ({
+      id: i + 1,
+      code: String(i + 1).padStart(2, "0"),
+      subCityId: currentSubCityObj?.id ?? 0,
+    }));
+    const list =
+      currentSubCityObj?.woredas && currentSubCityObj.woredas.length >= 20
+        ? currentSubCityObj.woredas
+        : defaultWoredas;
     if (userWoreda) {
       const filtered = list.filter(
-        (w) => String(w.code) === String(userWoreda)
+        (w) =>
+          String(w.code) === String(userWoreda) ||
+          Number(w.code) === Number(userWoreda)
       );
       return filtered.length > 0
         ? filtered
@@ -207,7 +217,14 @@ export default function AssociationsPage() {
       data = data.filter((rec) => {
         const wStr = String(rec.woreda || "").toLowerCase().trim();
         const target = String(woredaFilter).toLowerCase().trim();
-        return wStr === target || wStr === `woreda ${target}` || wStr === `w-${target}`;
+        const targetNum = Number(target.replace(/\D/g, ""));
+        const wNum = Number(wStr.replace(/\D/g, ""));
+        return (
+          wStr === target ||
+          wStr === `woreda ${target}` ||
+          wStr === `w-${target}` ||
+          (!isNaN(targetNum) && !isNaN(wNum) && targetNum === wNum)
+        );
       });
     }
 

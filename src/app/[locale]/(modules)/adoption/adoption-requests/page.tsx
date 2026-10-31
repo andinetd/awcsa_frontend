@@ -549,7 +549,7 @@ const AdoptionRequestsContent = () => {
                       </SelectItem>
                     ))
                   ) : (
-                    Array.from({ length: 15 }, (_, i) => String(i + 1)).map((num) => (
+                    Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(2, "0")).map((num) => (
                       <SelectItem key={num} value={num}>
                         {t("adoptionRequests.filters.woreda")} {num}
                       </SelectItem>
