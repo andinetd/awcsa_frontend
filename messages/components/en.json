@@ -19,7 +19,7 @@
     "removeToUpload": "Remove some files to upload more",
     "invalidFileType": "Invalid file type. Please try again.",
     "dropHere": "Drop your files here",
-    "dropOrBrowse": "Drop your files here or {browse}",
+    "dropOrBrowse": "Drop your files here or <browse>browse</browse>",
     "browse": "browse",
     "maxSize": "Maximum size: {size}",
     "filesRemaining": "{count, plural, one {# file remaining} other {# files remaining}}",

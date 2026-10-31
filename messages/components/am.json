@@ -19,7 +19,7 @@
     "removeToUpload": "ተጨማሪ ለመጫን የተወሰኑ ፋይሎችን ያስወግዱ",
     "invalidFileType": "ልክ ያልሆነ የፋይል አይነት። እባክዎ እንደገና ይሞክሩ።",
     "dropHere": "ፋይሎችዎን እዚህ ያስቀምጡ",
-    "dropOrBrowse": "ፋይሎችዎን እዚህ ያስቀምጡ ወይም {browse}",
+    "dropOrBrowse": "ፋይሎችዎን እዚህ ያስቀምጡ ወይም <browse>ይፈልጉ</browse>",
     "browse": "ይፈልጉ",
     "maxSize": "ከፍተኛው መጠን: {size}",
     "filesRemaining": "{count, plural, one {# ፋይል ቀርቷል} other {# ፋይሎች ቀርተዋል}}",
