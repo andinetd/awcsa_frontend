@@ -4,38 +4,63 @@ import {
   getCategoryForSubType,
 } from "@/constants/disability-classification";
 import { getWorkSectorDisplayLabel } from "@/constants/work-sectors";
+import {
+  translateSubCity,
+  formatWoreda,
+  translateSex,
+  translateMaritalStatus,
+  translateEducation,
+  translateEmployment,
+} from "@/lib/pdf/translations";
 
-export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
+export function printBeneficiaryDossier(
+  beneficiary: BeneficiaryV2 | any,
+  lang: "en" | "am" = "en"
+) {
   const printWindow = window.open("", "_blank");
   if (!printWindow) return;
 
+  const isAm = lang === "am";
   const fullName = `${beneficiary.firstName || ""} ${beneficiary.lastName || ""} ${beneficiary.grandfatherName || ""}`.trim() || "—";
   const rawDisabilityType = beneficiary.DisabilityProfile?.disabilityType || beneficiary.disabilityType;
   const isCaregiver = rawDisabilityType === "AUTISM_CAREGIVER";
-  const categoryLabel = beneficiary.clientCategory === "DISABLED" 
-    ? (isCaregiver ? "Autism Caregiver / የኦቲዝም ወላጅ" : "Person with Disability") 
-    : "Elderly Citizen";
+  const categoryLabel = isAm
+    ? beneficiary.clientCategory === "DISABLED"
+      ? (isCaregiver ? "የኦቲዝም ወላጅ / ተንከባካቢ" : "አካል ጉዳተኛ ዜጋ")
+      : "አረጋዊ ዜጋ"
+    : beneficiary.clientCategory === "DISABLED"
+      ? (isCaregiver ? "Autism Caregiver / የኦቲዝም ወላጅ" : "Person with Disability")
+      : "Elderly Citizen";
+
   const categoryKey = getCategoryForSubType(rawDisabilityType);
   const disabilityCategoryStr = categoryKey
-    ? `${getDisabilityDisplayLabel(categoryKey, "en")} / ${getDisabilityDisplayLabel(categoryKey, "am")}`
+    ? isAm
+      ? getDisabilityDisplayLabel(categoryKey, "am")
+      : `${getDisabilityDisplayLabel(categoryKey, "en")} / ${getDisabilityDisplayLabel(categoryKey, "am")}`
     : "—";
   const disabilityType = rawDisabilityType
-    ? `${getDisabilityDisplayLabel(rawDisabilityType, "en")} / ${getDisabilityDisplayLabel(rawDisabilityType, "am")}`
+    ? isAm
+      ? getDisabilityDisplayLabel(rawDisabilityType, "am")
+      : `${getDisabilityDisplayLabel(rawDisabilityType, "en")} / ${getDisabilityDisplayLabel(rawDisabilityType, "am")}`
     : "—";
   const disabilitySeverity = beneficiary.DisabilityProfile?.disabilitySeverity || beneficiary.disabilitySeverity || "—";
   const cause = beneficiary.DisabilityProfile?.cause || beneficiary.cause || "—";
   const faydaId = beneficiary.faydaId || "—";
   const cityId = beneficiary.cityIdNumber || beneficiary.cityId || "—";
   const phone = beneficiary.phoneNumber || "—";
-  const subCity = beneficiary.subCity || "—";
-  const woreda = beneficiary.woreda || "—";
+  const subCity = isAm ? translateSubCity(beneficiary.subCity, true) : (beneficiary.subCity || "—");
+  const woreda = isAm ? formatWoreda(beneficiary.woreda, true) : (beneficiary.woreda ? formatWoreda(beneficiary.woreda, false) : "—");
   const zone = beneficiary.zone || "—";
   const houseNumber = beneficiary.houseNumber || "—";
-  const education = beneficiary.educationLevel || "—";
-  const employment = beneficiary.employmentStatus || "—";
-  const marital = beneficiary.maritalStatus || "—";
+  const education = isAm ? translateEducation(beneficiary.educationLevel, true) : (beneficiary.educationLevel || "—");
+  const employment = isAm ? translateEmployment(beneficiary.employmentStatus, true) : (beneficiary.employmentStatus || "—");
+  const marital = isAm ? translateMaritalStatus(beneficiary.maritalStatus, true) : (beneficiary.maritalStatus || "—");
+  const sex = isAm ? translateSex(beneficiary.sex, true) : (beneficiary.sex || "—");
   const workplace = beneficiary.ElderlyProfile?.workplaceCondition || beneficiary.workplaceCondition || "—";
-  const supportConfirmed = (beneficiary.DisabilityProfile?.supportConfirmed || beneficiary.ElderlyProfile?.supportConfirmed || beneficiary.supportConfirmed) ? "CONFIRMED & AUDITED" : "PENDING VERIFICATION";
+  const isConfirmed = Boolean(beneficiary.DisabilityProfile?.supportConfirmed || beneficiary.ElderlyProfile?.supportConfirmed || beneficiary.supportConfirmed);
+  const supportConfirmed = isAm
+    ? (isConfirmed ? "የተረጋገጠና የተመረመረ" : "ማረጋገጫ በመጠባበቅ ላይ")
+    : (isConfirmed ? "CONFIRMED & AUDITED" : "PENDING VERIFICATION");
   const previousProfession =
     beneficiary.DisabilityProfile?.previousProfession ||
     beneficiary.ElderlyProfile?.previousProfession ||
@@ -49,14 +74,15 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
     beneficiary.preferredTraining3,
   ]
     .filter(Boolean)
-    .map(
-      (t: string) =>
-        `${getWorkSectorDisplayLabel(t, "am")} (${getWorkSectorDisplayLabel(t, "en")})`
+    .map((t: string) =>
+      isAm
+        ? getWorkSectorDisplayLabel(t, "am")
+        : `${getWorkSectorDisplayLabel(t, "am")} (${getWorkSectorDisplayLabel(t, "en")})`
     );
 
-  const trainingStr = trainings.length > 0 ? trainings.join(", ") : "None Specified / አልተገለጸም";
+  const trainingStr = trainings.length > 0 ? trainings.join(", ") : (isAm ? "አልተገለጸም" : "None Specified / አልተገለጸም");
 
-  const todayStr = new Date().toLocaleDateString("en-US", {
+  const todayStr = new Date().toLocaleDateString(isAm ? "am-ET" : "en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -194,130 +220,130 @@ export function printBeneficiaryDossier(beneficiary: BeneficiaryV2 | any) {
   <div class="header">
     <div class="inst-title">Addis Ababa City Administration Women, Children & Social Affairs Bureau</div>
     <div class="amharic-title">የአዲስ አበባ ከተማ አስተዳደር ሴቶች፣ ሕፃናት እና ማህበራዊ ጉዳይ ቢሮ</div>
-    <div class="doc-title">Disability & Elderly Social Protection Dossier</div>
+    <div class="doc-title">${isAm ? "የአካል ጉዳተኞችና አረጋውያን ማህበራዊ ጥበቃ ዶሲዬ" : "Disability & Elderly Social Protection Dossier"}</div>
   </div>
 
   <div class="badge-bar">
-    <div><strong>CATEGORY:</strong> ${categoryLabel.toUpperCase()}</div>
-    <div><strong>FAYDA ID:</strong> <span class="mono">${faydaId}</span></div>
-    <div><strong>CITY ID:</strong> <span class="mono">${cityId}</span></div>
+    <div><strong>${isAm ? "ምድብ:" : "CATEGORY:"}</strong> ${categoryLabel.toUpperCase()}</div>
+    <div><strong>${isAm ? "የፋይዳ ቁጥር:" : "FAYDA ID:"}</strong> <span class="mono">${faydaId}</span></div>
+    <div><strong>${isAm ? "የከተማ መታወቂያ:" : "CITY ID:"}</strong> <span class="mono">${cityId}</span></div>
     <div class="status-badge">${supportConfirmed}</div>
   </div>
 
   <div class="section">
-    <div class="section-title">1. Beneficiary Demographics & Identity</div>
+    <div class="section-title">${isAm ? "1. የተጠቃሚው አጠቃላይና የግል መረጃ" : "1. Beneficiary Demographics & Identity"}</div>
     <div class="grid">
       <div class="field">
-        <span class="label">Full Legal Name</span>
+        <span class="label">${isAm ? "ሙሉ ህጋዊ ስም" : "Full Legal Name"}</span>
         <span class="value">${fullName}</span>
       </div>
       <div class="field">
-        <span class="label">Phone Number</span>
+        <span class="label">${isAm ? "ስልክ ቁጥር" : "Phone Number"}</span>
         <span class="value mono">${phone}</span>
       </div>
       <div class="field">
-        <span class="label">Sex & Age</span>
-        <span class="value">${beneficiary.sex || "—"} / ${beneficiary.age != null ? `${beneficiary.age} years` : "—"}</span>
+        <span class="label">${isAm ? "ጾታና ዕድሜ" : "Sex & Age"}</span>
+        <span class="value">${sex} / ${beneficiary.age != null ? (isAm ? `${beneficiary.age} ዓመት` : `${beneficiary.age} years`) : "—"}</span>
       </div>
       <div class="field">
-        <span class="label">Marital Status</span>
+        <span class="label">${isAm ? "የጋብቻ ሁኔታ" : "Marital Status"}</span>
         <span class="value">${marital}</span>
       </div>
       <div class="field">
-        <span class="label">Education Level</span>
+        <span class="label">${isAm ? "የትምህርት ደረጃ" : "Education Level"}</span>
         <span class="value">${education}</span>
       </div>
       <div class="field">
-        <span class="label">Employment Status</span>
+        <span class="label">${isAm ? "የሥራ ሁኔታ" : "Employment Status"}</span>
         <span class="value">${employment}</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">2. Residence & Municipal Jurisdiction</div>
+    <div class="section-title">${isAm ? "2. የመኖሪያ አድራሻና ማዘጋጃ ቤታዊ ክልል" : "2. Residence & Municipal Jurisdiction"}</div>
     <div class="grid">
       <div class="field">
-        <span class="label">Sub-City</span>
+        <span class="label">${isAm ? "ክፍለ ከተማ" : "Sub-City"}</span>
         <span class="value">${subCity}</span>
       </div>
       <div class="field">
-        <span class="label">Woreda</span>
+        <span class="label">${isAm ? "ወረዳ" : "Woreda"}</span>
         <span class="value">${woreda}</span>
       </div>
       <div class="field">
-        <span class="label">Zone / Block</span>
+        <span class="label">${isAm ? "ዞን / ብሎክ" : "Zone / Block"}</span>
         <span class="value">${zone} / ${beneficiary.block || "—"}</span>
       </div>
       <div class="field">
-        <span class="label">House Number</span>
+        <span class="label">${isAm ? "የቤት ቁጥር" : "House Number"}</span>
         <span class="value">${houseNumber}</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">${isCaregiver ? "3. Caregiver & Dependent Child Assessment (የተንከባካቢና የልጁ መረጃ)" : "3. Vulnerability & Disability Assessment"}</div>
+    <div class="section-title">${isAm ? (isCaregiver ? "3. የተንከባካቢና የልጁ መረጃ" : "3. የተጋላጭነትና የአካል ጉዳት ምዘና") : (isCaregiver ? "3. Caregiver & Dependent Child Assessment (የተንከባካቢና የልጁ መረጃ)" : "3. Vulnerability & Disability Assessment")}</div>
     <div class="grid">
       <div class="field">
-        <span class="label">${isCaregiver ? "Caregiver Category" : "Disability Category"}</span>
+        <span class="label">${isAm ? (isCaregiver ? "የተንከባካቢ ምድብ" : "የአካል ጉዳት ምድብ") : (isCaregiver ? "Caregiver Category" : "Disability Category")}</span>
         <span class="value">${disabilityCategoryStr}</span>
       </div>
       <div class="field">
-        <span class="label">${isCaregiver ? "Registered Caregiver Role" : "Specific Condition / Type"}</span>
+        <span class="label">${isAm ? (isCaregiver ? "የተንከባካቢ ሚና" : "ዝርዝር ሁኔታ / ዓይነት") : (isCaregiver ? "Registered Caregiver Role" : "Specific Condition / Type")}</span>
         <span class="value">${disabilityType}</span>
       </div>
       <div class="field">
-        <span class="label">${isCaregiver ? "Child's Autism Severity / Level" : "Severity Level"}</span>
+        <span class="label">${isAm ? (isCaregiver ? "የልጁ ኦቲዝም ደረጃ" : "የጉዳት መጠን / ደረጃ") : (isCaregiver ? "Child's Autism Severity / Level" : "Severity Level")}</span>
         <span class="value">${disabilitySeverity}</span>
       </div>
       <div class="field">
-        <span class="label">${isCaregiver ? "Child Diagnosis & Medical History" : "Cause / Etiology"}</span>
+        <span class="label">${isAm ? (isCaregiver ? "የህክምና ምርመራ ውጤት" : "መንስኤ / ምክንያት") : (isCaregiver ? "Child Diagnosis & Medical History" : "Cause / Etiology")}</span>
         <span class="value">${cause}</span>
       </div>
       <div class="field">
-        <span class="label">${isCaregiver ? "Full-Time / Constant Care Needed" : "Workplace Condition"}</span>
-        <span class="value">${isCaregiver ? ((beneficiary.DisabilityProfile?.requiresPhysicalAssistance ?? beneficiary.requiresPhysicalAssistance) ? "Yes (ሙሉ ጊዜ እንክብካቤ ይፈልጋል)" : "No") : workplace}</span>
+        <span class="label">${isAm ? (isCaregiver ? "ሙሉ ጊዜ እንክብካቤ ይፈልጋል" : "የሥራ ቦታ ሁኔታ") : (isCaregiver ? "Full-Time / Constant Care Needed" : "Workplace Condition")}</span>
+        <span class="value">${isCaregiver ? ((beneficiary.DisabilityProfile?.requiresPhysicalAssistance ?? beneficiary.requiresPhysicalAssistance) ? (isAm ? "አዎ (ሙሉ ጊዜ እንክብካቤ ይፈልጋል)" : "Yes (ሙሉ ጊዜ እንክብካቤ ይፈልጋል)") : (isAm ? "አይደለም" : "No")) : workplace}</span>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">4. Support Services & Economic Reintegration</div>
+    <div class="section-title">${isAm ? "4. የድጋፍ አገልግሎቶችና የኢኮኖሚ መልሶ ማቋቋም" : "4. Support Services & Economic Reintegration"}</div>
     <div class="grid">
       <div class="field">
-        <span class="label">Required Support Type</span>
+        <span class="label">${isAm ? "የሚፈለግ የድጋፍ ዓይነት" : "Required Support Type"}</span>
         <span class="value">${beneficiary.requiredSupportType || beneficiary.DisabilityProfile?.requiredSupportType || "—"}</span>
       </div>
       <div class="field">
-        <span class="label">Required Assistive Device</span>
+        <span class="label">${isAm ? "የሚፈለግ አጋዥ መሣሪያ" : "Required Assistive Device"}</span>
         <span class="value">${beneficiary.requiredAssistiveDevice || "—"}</span>
       </div>
       <div class="field" style="grid-column: span 2;">
-        <span class="label">Desired Work / Training Sectors (የሚፈልጉት የስራ ዘርፍ)</span>
+        <span class="label">${isAm ? "የሚፈልጉት የሥራ / ሥልጠና ዘርፍ" : "Desired Work / Training Sectors (የሚፈልጉት የስራ ዘርፍ)"}</span>
         <span class="value">${trainingStr}</span>
       </div>
       <div class="field" style="grid-column: span 2;">
-        <span class="label">${isElderly ? "Lifetime Profession & Knowledge Sharing (ያካበቱት ሙያና ለትውልድ የሚተላለፍ ተሞክሮ)" : "Prior Profession / Acquired Skills (ያካበቱት / የቀድሞ ሙያ)"}</span>
+        <span class="label">${isAm ? (isElderly ? "ያካበቱት ሙያና ለትውልድ የሚተላለፍ ተሞክሮ" : "ያካበቱት / የቀድሞ ሙያ") : (isElderly ? "Lifetime Profession & Knowledge Sharing (ያካበቱት ሙያና ለትውልድ የሚተላለፍ ተሞክሮ)" : "Prior Profession / Acquired Skills (ያካበቱት / የቀድሞ ሙያ)")}</span>
         <span class="value">${previousProfession}</span>
       </div>
       <div class="field" style="grid-column: span 2;">
-        <span class="label">Previous Support Record</span>
-        <span class="value">${beneficiary.previousSupport || "None recorded"}</span>
+        <span class="label">${isAm ? "የቀድሞ የድጋፍ ታሪክ" : "Previous Support Record"}</span>
+        <span class="value">${beneficiary.previousSupport || (isAm ? "የለም" : "None recorded")}</span>
       </div>
     </div>
   </div>
 
   <div class="footer">
     <div>
-      <div style="font-weight: 600; color: #0B1F3A;">Official Municipal Attestation</div>
-      <div style="color: #64748B; font-size: 10px; margin-top: 2px;">Generated on ${todayStr} via AAC-WCSA Portal</div>
+      <div style="font-weight: 600; color: #0B1F3A;">${isAm ? "ይፋዊ የማዘጋጃ ቤት ማረጋገጫ" : "Official Municipal Attestation"}</div>
+      <div style="color: #64748B; font-size: 10px; margin-top: 2px;">${isAm ? `የተዘጋጀበት ቀን፡ ${todayStr} በቢሮው ፖርታል` : `Generated on ${todayStr} via AAC-WCSA Portal`}</div>
     </div>
     <div class="sig-box">
-      Case Officer / Social Worker Signature
+      ${isAm ? "የባለሙያ / የማህበራዊ ሰራተኛ ፊርማ" : "Case Officer / Social Worker Signature"}
     </div>
     <div class="sig-box">
-      Bureau Seal / Authorized Stamp
+      ${isAm ? "የቢሮው ማህተም" : "Bureau Seal / Authorized Stamp"}
     </div>
   </div>
 

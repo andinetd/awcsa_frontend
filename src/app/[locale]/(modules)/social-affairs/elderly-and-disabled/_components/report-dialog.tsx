@@ -129,6 +129,7 @@ export default function BeneficiaryReportDialog() {
   const [subCity, setSubCity] = useState("");
   const [woreda, setWoreda] = useState("");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
+  const [language, setLanguage] = useState<"AM" | "EN">("AM");
   const [selectedColumns, setSelectedColumns] = useState<string[]>(
     COLUMNS_BY_CATEGORY.REGISTRATION.map((col) => col.id),
   );
@@ -157,6 +158,7 @@ export default function BeneficiaryReportDialog() {
       subCity: subCity || undefined,
       woreda: woreda || undefined,
       format,
+      language,
       selectedColumns,
     };
 
@@ -306,19 +308,35 @@ export default function BeneficiaryReportDialog() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
-              Export Format
-            </Label>
-            <Select value={format} onValueChange={(v: any) => setFormat(v)}>
-              <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="font-mono text-xs">
-                <SelectItem value="EXCEL">Excel Workbook (.xlsx)</SelectItem>
-                <SelectItem value="PDF">PDF Document (.pdf)</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                Export Format
+              </Label>
+              <Select value={format} onValueChange={(v: any) => setFormat(v)}>
+                <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="font-mono text-xs">
+                  <SelectItem value="EXCEL">Excel Workbook (.xlsx)</SelectItem>
+                  <SelectItem value="PDF">PDF Document (.pdf)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-700">
+                Language / ቋንቋ
+              </Label>
+              <Select value={language} onValueChange={(v: "AM" | "EN") => setLanguage(v)}>
+                <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="font-mono text-xs">
+                  <SelectItem value="AM">አማርኛ (Amharic)</SelectItem>
+                  <SelectItem value="EN">English</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-1.5">

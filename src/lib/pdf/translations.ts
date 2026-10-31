@@ -31,6 +31,68 @@ export const STATUS_TRANSLATIONS_AM: Record<string, string> = {
   REVOKED: "የታገደ",
   CANCELLED: "የተሰረዘ",
   PENDING: "በመጠባበቅ ላይ",
+  APPROVED: "የጸደቀ",
+  REJECTED: "ውድቅ የተደረገ",
+  SUBMITTED: "የቀረበ",
+  DRAFT: "ረቂቅ",
+};
+
+export const MARITAL_STATUS_TRANSLATIONS_AM: Record<string, string> = {
+  SINGLE: "ያላገባ/ች",
+  MARRIED: "ያገባ/ች",
+  DIVORCED: "የፈታ/ች",
+  WIDOWED: "የትዳር አጋር የሞተበት/ባት",
+  SEPARATED: "የተለያየ/ች",
+};
+
+export const EDUCATION_LEVEL_TRANSLATIONS_AM: Record<string, string> = {
+  NONE: "ያልተማረ/ች",
+  ILLITERATE: "ያልተማረ/ች",
+  PRIMARY: "አንደኛ ደረጃ",
+  SECONDARY: "ሁለተኛ ደረጃ",
+  HIGH_SCHOOL: "ሁለተኛ ደረጃ",
+  CERTIFICATE: "ሰርተፊኬት",
+  DIPLOMA: "ዲፕሎማ",
+  DEGREE: "ዲግሪ",
+  BSC: "የመጀመሪያ ዲግሪ",
+  BA: "የመጀመሪያ ዲግሪ",
+  MASTERS: "ማስተርስ",
+  MSC: "ሁለተኛ ዲግሪ",
+  PHD: "ዶክትሬት",
+  DOCTORATE: "ዶክትሬት",
+};
+
+export const EMPLOYMENT_STATUS_TRANSLATIONS_AM: Record<string, string> = {
+  EMPLOYED: "ተቀጣሪ",
+  UNEMPLOYED: "ሥራ አጥ",
+  SELF_EMPLOYED: "የግል ሥራ",
+  RETIRED: "ጡረተኛ",
+  DAILY_LABORER: "የቀን ሠራተኛ",
+  STUDENT: "ተማሪ",
+};
+
+export const GENDER_TRANSLATIONS_AM: Record<string, string> = {
+  MALE: "ወንድ",
+  FEMALE: "ሴት",
+  OTHER: "ሌላ",
+};
+
+export const CATEGORY_TRANSLATIONS_AM: Record<string, string> = {
+  DISABLED: "አካል ጉዳተኛ",
+  ELDERLY: "አረጋዊ/ት",
+  INDIVIDUAL: "ግለሰብ",
+  ASSOCIATION: "ማኅበር",
+};
+
+export const WOMEN_ASSOCIATION_TYPE_TRANSLATIONS_AM: Record<string, string> = {
+  DEVELOPMENT_ARMY: "የልማት ሠራዊት",
+  SAVINGS_AND_CREDIT: "የቁጠባና ብድር",
+  INCOME_GENERATING: "የገቢ ማስገኛ",
+  SELF_HELP: "የእርስ በእርስ መረዳጃ",
+  DEVELOPMENT_ASSOCIATION: "የልማት ማኅበር",
+  ASSOCIATION: "ማኅበር",
+  FEDERATION: "ፌዴሬሽን",
+  UNION: "ዩኒየን",
 };
 
 export const ROLE_TRANSLATIONS_AM: Record<string, string> = {
@@ -49,6 +111,8 @@ export const ROLE_TRANSLATIONS_AM: Record<string, string> = {
   LEADER: "ሊቀመንበር",
   DEPUTY_LEADER: "ምክትል ሊቀመንበር",
   MEMBER: "አባል",
+  WORK_SKILLS_RESPONSIBLE: "የስራና ክህሎት ተጠሪ",
+  EDUCATION_RESPONSIBLE: "የትምህርት ተጠሪ",
 };
 
 export const EDIR_TYPE_TRANSLATIONS_AM: Record<string, string> = {
@@ -102,7 +166,7 @@ export function translateLevel(level?: string | null, isAm = true): string {
 export function translateStatus(status?: string | null, isAm = true): string {
   if (!status) return "";
   if (!isAm) return status;
-  const normalized = status.trim().toUpperCase();
+  const normalized = status.trim().toUpperCase().replace(/[\s-]+/g, "_");
   return STATUS_TRANSLATIONS_AM[normalized] || status;
 }
 
@@ -111,4 +175,46 @@ export function translateRole(role?: string | null, isAm = true): string {
   if (!isAm) return role;
   const normalized = role.trim().toUpperCase().replace(/[\s-]+/g, "_");
   return ROLE_TRANSLATIONS_AM[normalized] || role;
+}
+
+export function translateSex(sex?: string | null, isAm = true): string {
+  if (!sex) return "";
+  if (!isAm) return sex;
+  const normalized = sex.trim().toUpperCase();
+  return GENDER_TRANSLATIONS_AM[normalized] || sex;
+}
+
+export function translateMaritalStatus(status?: string | null, isAm = true): string {
+  if (!status) return "";
+  if (!isAm) return status;
+  const normalized = status.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  return MARITAL_STATUS_TRANSLATIONS_AM[normalized] || status;
+}
+
+export function translateEducation(level?: string | null, isAm = true): string {
+  if (!level) return "";
+  if (!isAm) return level;
+  const normalized = level.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  return EDUCATION_LEVEL_TRANSLATIONS_AM[normalized] || level;
+}
+
+export function translateEmployment(status?: string | null, isAm = true): string {
+  if (!status) return "";
+  if (!isAm) return status;
+  const normalized = status.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  return EMPLOYMENT_STATUS_TRANSLATIONS_AM[normalized] || status;
+}
+
+export function translateCategory(category?: string | null, isAm = true): string {
+  if (!category) return "";
+  if (!isAm) return category;
+  const normalized = category.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  return CATEGORY_TRANSLATIONS_AM[normalized] || category;
+}
+
+export function translateAssociationType(type?: string | null, isAm = true): string {
+  if (!type) return "";
+  if (!isAm) return type;
+  const normalized = type.trim().toUpperCase().replace(/[\s-]+/g, "_");
+  return WOMEN_ASSOCIATION_TYPE_TRANSLATIONS_AM[normalized] || type;
 }

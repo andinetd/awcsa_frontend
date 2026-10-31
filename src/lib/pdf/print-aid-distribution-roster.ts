@@ -1,4 +1,5 @@
 import { AidDistribution } from "@/api/beneficiaries/aid-distribution";
+import { formatWoreda, translateSubCity } from "./translations";
 
 export interface PrintRosterOptions {
   distributions: AidDistribution[];
@@ -55,8 +56,8 @@ export function printAidDistributionRoster(options: PrintRosterOptions) {
     }
   );
 
-  const displayWoreda = woreda || (distributions[0]?.woreda || "______");
-  const displaySubCity = subCity || (distributions[0]?.subCity || "ለሚ ኩራ");
+  const displayWoreda = formatWoreda(woreda || distributions[0]?.woreda || "______", true);
+  const displaySubCity = translateSubCity(subCity || distributions[0]?.subCity || "ለሚ ኩራ", true);
   const displayMonth = distributionMonth || (distributions[0]?.distributionMonth || "__________");
 
   const rowsHtml = distributions
@@ -66,7 +67,7 @@ export function printAidDistributionRoster(options: PrintRosterOptions) {
         : "—";
       const sexLabel = item.client?.sex === "FEMALE" ? "ሴት" : item.client?.sex === "MALE" ? "ወንድ" : "—";
       const age = item.client?.age ?? "—";
-      const rowWoreda = item.woreda || item.client?.woreda || displayWoreda;
+      const rowWoreda = formatWoreda(item.woreda || item.client?.woreda || displayWoreda, true);
       const phone = item.client?.phoneNumber || "—";
 
       const oilText = item.oilLiters && item.oilLiters > 0 ? `${item.oilLiters} ሊ` : "—";

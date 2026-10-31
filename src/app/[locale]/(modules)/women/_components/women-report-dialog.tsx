@@ -142,6 +142,7 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
   const [associationStatus, setAssociationStatus] = useState("all");
   const [associationTypeFilter, setAssociationTypeFilter] = useState("all");
   const [format, setFormat] = useState<"EXCEL" | "PDF">("EXCEL");
+  const [language, setLanguage] = useState<"en" | "am">("am");
   const [includeMembers, setIncludeMembers] = useState(false);
   const [associationReportType, setAssociationReportType] = useState<
     "SUMMARY" | "PER_ASSOCIATION_FORMS"
@@ -168,6 +169,7 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
       category,
       selectedColumns: columns,
       format,
+      language,
     };
 
     if (category !== "EMPLOYMENT") {
@@ -618,24 +620,41 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
               </div>
             )}
 
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700">{t("report.format")}</Label>
-            <Select
-              value={format}
-              disabled={
-                category === "ASSOCIATION" &&
-                associationReportType === "PER_ASSOCIATION_FORMS"
-              }
-              onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
-            >
-              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
-                <SelectItem value="EXCEL" className="text-xs">Excel</SelectItem>
-                <SelectItem value="PDF" className="text-xs">PDF</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">{t("report.format")}</Label>
+              <Select
+                value={format}
+                disabled={
+                  category === "ASSOCIATION" &&
+                  associationReportType === "PER_ASSOCIATION_FORMS"
+                }
+                onValueChange={(v) => setFormat(v as "EXCEL" | "PDF")}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
+                  <SelectItem value="EXCEL" className="text-xs">Excel</SelectItem>
+                  <SelectItem value="PDF" className="text-xs">PDF</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700">ቋንቋ / Language</Label>
+              <Select
+                value={language}
+                onValueChange={(v) => setLanguage(v as "en" | "am")}
+              >
+                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xs border-[#E3E7EB] shadow-md text-xs">
+                  <SelectItem value="am" className="text-xs">አማርኛ (Amharic)</SelectItem>
+                  <SelectItem value="en" className="text-xs">English</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {!(

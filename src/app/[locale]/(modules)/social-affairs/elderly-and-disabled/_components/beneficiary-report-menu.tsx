@@ -22,10 +22,10 @@ export function BeneficiaryReportMenu({ beneficiary }: BeneficiaryReportMenuProp
   const [loading, setLoading] = useState(false);
   const locale = useLocale() === "en" ? "en" : "am";
 
-  const handlePrint = () => {
+  const handlePrint = (lang: "en" | "am" = "am") => {
     setLoading(true);
     try {
-      printBeneficiaryDossier(beneficiary);
+      printBeneficiaryDossier(beneficiary, lang);
     } finally {
       setTimeout(() => setLoading(false), 500);
     }
@@ -48,17 +48,24 @@ export function BeneficiaryReportMenu({ beneficiary }: BeneficiaryReportMenuProp
           <span>{locale === "am" ? "ሪፖርት እና ዶሲዬ" : "Reports & Dossier"}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 rounded-xs border-[#E3E7EB] shadow-md font-mono text-xs">
+      <DropdownMenuContent align="end" className="w-60 rounded-xs border-[#E3E7EB] shadow-md font-mono text-xs">
         <DropdownMenuLabel className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
           {locale === "am" ? "የህትመት ተግባራት" : "Beneficiary Print Actions"}
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-[#E3E7EB]" />
         <DropdownMenuItem
-          onClick={handlePrint}
+          onClick={() => handlePrint("am")}
           className="cursor-pointer gap-2 focus:bg-[#E8F2FA] focus:text-[#1769AA]"
         >
           <Printer className="w-3.5 h-3.5 text-[#1769AA]" />
-          <span>{locale === "am" ? "ዋናውን ዶሲዬ አትም" : "Print Official Dossier"}</span>
+          <span>ዋናውን ዶሲዬ አትም (አማርኛ)</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => handlePrint("en")}
+          className="cursor-pointer gap-2 focus:bg-[#E8F2FA] focus:text-[#1769AA]"
+        >
+          <Printer className="w-3.5 h-3.5 text-[#1769AA]" />
+          <span>Print Official Dossier (English)</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

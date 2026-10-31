@@ -139,6 +139,7 @@ export const useGenerateAssociationReportMutation = () => {
     mutationFn: (payload: {
       associationId: number;
       format: AssociationReportFormat;
+      language?: "en" | "am";
     }) => generateAssociationReport(payload),
   });
 };

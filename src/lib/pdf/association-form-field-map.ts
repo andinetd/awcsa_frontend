@@ -1,5 +1,6 @@
 import type { WomenAssociationRecord } from "@/api/womens/associations";
 import { formatPhone } from "@/lib/utils/format-phone";
+import { formatWoreda, translateSubCity } from "./translations";
 import {
   GROUP_NAME_X,
   GROUP_NAME_W,
@@ -423,9 +424,9 @@ export function resolveFieldValue(
 
   switch (cell.kind) {
     case "header.subCity":
-      return record.subCity || null;
+      return translateSubCity(record.subCity, true) || null;
     case "header.woreda":
-      return record.woreda || null;
+      return formatWoreda(record.woreda, true) || null;
     case "header.block":
       return record.block || null;
     case "header.associationName":

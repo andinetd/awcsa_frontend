@@ -35,9 +35,9 @@ export default function RowReportButton({
   const t = useTranslations("women.associations.report");
   const mutation = useGenerateAssociationReportMutation();
 
-  const handleSelect = (format: "EXCEL" | "PDF") => {
+  const handleSelect = (format: "EXCEL" | "PDF", language: "en" | "am" = "am") => {
     mutation.mutate(
-      { associationId, format },
+      { associationId, format, language },
       {
         onSuccess: () => {
           toast.success(t(`messages.${format.toLowerCase()}` as any));
@@ -69,26 +69,35 @@ export default function RowReportButton({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel>{t("menuLabel")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();
-            handleSelect("PDF");
+            handleSelect("PDF", "am");
           }}
         >
           <FileText className="w-4 h-4 mr-2" />
-          {t("pdf")}
+          {t("pdf")} (PDF)
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();
-            handleSelect("EXCEL");
+            handleSelect("EXCEL", "am");
           }}
         >
           <FileSpreadsheet className="w-4 h-4 mr-2" />
-          {t("excel")}
+          {t("excel")} (አማርኛ)
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            handleSelect("EXCEL", "en");
+          }}
+        >
+          <FileSpreadsheet className="w-4 h-4 mr-2" />
+          {t("excel")} (English)
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

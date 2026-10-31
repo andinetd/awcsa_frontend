@@ -31,6 +31,7 @@ export interface GenerateWomenReportPayload {
   includeMembers?: boolean;
   selectedColumns?: string[];
   format: "EXCEL" | "PDF";
+  language?: "en" | "am";
 }
 
 const FILE_PREFIXES: Record<WomenReportCategory, string> = {

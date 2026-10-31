@@ -23,19 +23,24 @@ function triggerDownload(blob: Blob, fileName: string) {
 export const generateAssociationReport = async (payload: {
   associationId: number;
   format: AssociationReportFormat;
+  language?: "en" | "am";
 }) => {
   const sanitizedId = String(payload.associationId).replace(
     /[^a-zA-Z0-9_-]/g,
     ""
   );
-  const fileName = `association-${sanitizedId}-${payload.format.toLowerCase()}.${FILE_EXTENSIONS[payload.format]}`;
+  const langSuffix = payload.language ? `-${payload.language}` : "";
+  const fileName = `association-${sanitizedId}${langSuffix}-${payload.format.toLowerCase()}.${FILE_EXTENSIONS[payload.format]}`;
 
   try {
     const { token } = useAuthStore.getState();
 
     const response = await axios.post(
       `${BASE_URL}/women-affairs/reports/association/${payload.associationId}`,
-      { format: payload.format },
+      {
+        format: payload.format,
+        language: payload.language || "am",
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,

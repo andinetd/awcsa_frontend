@@ -145,6 +145,7 @@ export interface BeneficiaryReportPayload {
   status?: string;
   disabilityType?: string;
   format: "EXCEL" | "PDF";
+  language?: "EN" | "AM" | "en" | "am";
   selectedColumns?: string[];
 }
 
