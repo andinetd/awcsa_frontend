@@ -120,17 +120,34 @@ export function WoredaSelect({
     }
   }, [lockedWoreda, value, onValueChange]);
 
-  const subCityRef = (subCities || []).find((s) => s.name === subCity);
-  const baseWoredas = subCityRef?.woredas || [];
+  const DEFAULT_WOREDA_COUNT = 20;
+  const subCityRef = (subCities || []).find(
+    (s) => s.name.trim().toLowerCase() === (subCity || "").trim().toLowerCase()
+  );
+
+  const defaultWoredaList = Array.from({ length: DEFAULT_WOREDA_COUNT }, (_, i) => ({
+    id: i + 1,
+    code: String(i + 1).padStart(2, "0"),
+    subCityId: subCityRef?.id ?? 0,
+  }));
+
+  const baseWoredas =
+    subCityRef?.woredas && subCityRef.woredas.length >= DEFAULT_WOREDA_COUNT
+      ? subCityRef.woredas
+      : defaultWoredaList;
+
   const filteredWoredas = baseWoredas.filter(
-    (w) => !lockedWoreda || String(w.code) === String(lockedWoreda)
+    (w) =>
+      !lockedWoreda ||
+      String(w.code) === String(lockedWoreda) ||
+      Number(w.code) === Number(lockedWoreda)
   );
   const displayWoredas =
     lockedWoreda && filteredWoredas.length === 0
       ? [{ id: -1, code: String(lockedWoreda), subCityId: 0 }]
       : filteredWoredas;
 
-  const isDisabled = disabled || isLoading || (!subCityRef && !lockedWoreda) || !!lockedWoreda;
+  const isDisabled = disabled || (!subCity && !lockedWoreda) || !!lockedWoreda;
 
   return (
     <Select

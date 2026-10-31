@@ -47,6 +47,19 @@ export function formatAge(years: number | undefined | null): string {
   } ${remainingMonths} month${remainingMonths !== 1 ? "s" : ""}`;
 }
 
+export function calculateAge(dobString?: string | null): number | null {
+  if (!dobString) return null;
+  const birthDate = new Date(dobString);
+  if (isNaN(birthDate.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age >= 0 && age <= 150 ? age : null;
+}
+
 export interface RegisterEmployeeDto {
   cityIdNumber: string;
   firstName: string;
