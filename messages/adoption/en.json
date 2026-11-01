@@ -2,6 +2,7 @@
   "moduleTitle": "Adoption Module",
   "adoptionRequests": {
     "title": "Adoption Requests",
+    "subtitle": "Multi-stage applicant vetting: document intake, home suitability inspection, committee approval, and matching.",
     "tabs": {
       "pending": "Pending",
       "returned": "Returned to Applicant",
