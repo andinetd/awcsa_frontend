@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLocale } from "next-intl";
+import { translateMonth } from "@/utils/date-utils";
 import {
   Bar,
   BarChart,
@@ -32,8 +34,11 @@ const DEMOGRAPHIC_PALETTE: Record<string, string> = {
 };
 
 export function ExecutiveChartsSection({ data }: ExecutiveChartsSectionProps) {
+  const locale = useLocale();
+  const isAm = locale === "am";
+
   // Monthly intake vs services data matching Image 1
-  const trendsData =
+  const rawTrends =
     data.trends && data.trends.length > 0
       ? data.trends
       : [
@@ -44,6 +49,11 @@ export function ExecutiveChartsSection({ data }: ExecutiveChartsSectionProps) {
           { month: "Aug", registrations: 30, activities: 8 },
           { month: "Sep", registrations: 0, activities: 0 },
         ];
+
+  const trendsData = rawTrends.map((t) => ({
+    ...t,
+    month: translateMonth(t.month, isAm),
+  }));
 
   const demographicsData =
     data.demographics && data.demographics.length > 0

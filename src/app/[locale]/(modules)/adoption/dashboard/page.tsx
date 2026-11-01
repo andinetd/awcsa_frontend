@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { AMHARIC_MONTHS, ENGLISH_MONTHS_SHORT } from "@/utils/date-utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChildWelfareDashboard } from "@/hooks/dashboard/useChildWelfareDashboard";
 import { useChildren } from "@/hooks/adoption/useChildren";
@@ -16,6 +17,8 @@ import { AdoptionRecentCasesTable, AdoptionCaseItem } from "@/components/adoptio
 
 export default function ChildWelfareDashboard() {
   const t = useTranslations("child-welfare.dashboard");
+  const locale = useLocale();
+  const isAm = locale === "am";
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -239,7 +242,7 @@ export default function ChildWelfareDashboard() {
 
   // Calculate trailing 6 months intake trends
   const intakeTrends = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = isAm ? AMHARIC_MONTHS : ENGLISH_MONTHS_SHORT;
     const now = new Date();
     const buckets: { month: string; intake: number; placements: number; year: number; monthIdx: number }[] = [];
 
@@ -287,7 +290,7 @@ export default function ChildWelfareDashboard() {
     });
 
     return buckets.map(({ month, intake, placements }) => ({ month, intake, placements }));
-  }, [childrenData, applications]);
+  }, [childrenData, applications, isAm]);
 
   if (isDashboardLoading && !dashboardData) {
     return (

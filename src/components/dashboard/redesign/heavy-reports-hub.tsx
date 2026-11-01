@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { AMHARIC_MONTHS, ENGLISH_MONTHS_SHORT } from "@/utils/date-utils";
 import { BureauReport, BureauReportFilters } from "@/api/bureau/reports";
 import { ADDIS_ABABA_SUBCITIES } from "./types";
 import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
@@ -68,11 +69,11 @@ export function HeavyReportsHub({
   const [pageSize, setPageSize] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const locale = useLocale();
+  const isAm = locale === "am";
+
   // Month names
-  const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-  ];
+  const months = isAm ? AMHARIC_MONTHS : ENGLISH_MONTHS_SHORT;
 
   // Keep subCity in sync if passed or user is scoped
   React.useEffect(() => {

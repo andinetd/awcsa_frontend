@@ -27,6 +27,7 @@ import {
   translateLevel,
   translateStatus,
 } from "@/lib/pdf/translations";
+import { formatLocalizedDate } from "@/utils/date-utils";
 
 interface CouncilReportDialogProps {
   councils: EdirCouncil[];
@@ -111,9 +112,7 @@ export default function CouncilReportDialog({ councils }: CouncilReportDialogPro
           thStatus: "Status",
         };
 
-    const formattedDate = isAm
-      ? new Date().toLocaleDateString("am-ET", { year: "numeric", month: "short", day: "numeric" })
-      : new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    const formattedDate = formatLocalizedDate(new Date(), isAm);
 
     const html = `
 <!DOCTYPE html>

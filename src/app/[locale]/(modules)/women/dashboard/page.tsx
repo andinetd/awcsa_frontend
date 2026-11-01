@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations, useLocale } from "next-intl";
+import { getMonthName } from "@/utils/date-utils";
 import {
   useGetWomenProfilesQuery,
   useGetTechnologySupportQuery,
@@ -98,7 +99,7 @@ export default function WomenDashboard() {
 
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthLabel = new Intl.DateTimeFormat(locale === "am" ? "am-ET" : "en-US", { month: "short" }).format(d);
+      const monthLabel = getMonthName(d.getMonth(), locale === "am");
       buckets.push({
         month: monthLabel,
         year: d.getFullYear(),

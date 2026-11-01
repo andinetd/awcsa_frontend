@@ -8,6 +8,7 @@ import {
 } from "@/hooks/social-affairs";
 import { Edir } from "@/api/social-affairs/edir";
 import { useTranslations, useLocale } from "next-intl";
+import { getMonthName } from "@/utils/date-utils";
 import { EdirDashboardHeader } from "./_components/edir-dashboard-header";
 import { EdirKpiGrid } from "./_components/edir-kpi-grid";
 import { EdirChartsSection } from "./_components/edir-charts-section";
@@ -122,7 +123,7 @@ export default function EdirDashboard() {
     for (let i = 5; i >= 0; i--) {
       const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      const month = d.toLocaleDateString(locale === "am" ? "am-ET" : "en-US", { month: "short" });
+      const month = getMonthName(d.getMonth(), locale === "am");
       buckets.push({ key, month, registered: 0, renewed: 0 });
     }
 

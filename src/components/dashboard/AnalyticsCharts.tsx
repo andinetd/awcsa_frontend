@@ -31,7 +31,8 @@ import {
 } from "@/components/ui/chart";
 import { AnalyticsData } from "@/api/dashboard/analytics";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { translateMonth } from "@/utils/date-utils";
 
 interface AnalyticsChartsProps {
   data: AnalyticsData;
@@ -39,6 +40,13 @@ interface AnalyticsChartsProps {
 
 export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
   const t = useTranslations("executive.dashboard.analytics");
+  const locale = useLocale();
+  const isAm = locale === "am";
+
+  const trendsData = (data.trends || []).map((t) => ({
+    ...t,
+    month: translateMonth(t.month, isAm),
+  }));
 
   // Trends Configuration
   const trendsConfig = {
@@ -102,7 +110,7 @@ export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
           >
             <AreaChart
               accessibilityLayer
-              data={data.trends || []}
+              data={trendsData}
               margin={{
                 left: 12,
                 right: 12,
@@ -146,7 +154,7 @@ export function AnalyticsCharts({ data }: AnalyticsChartsProps) {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(value) => value.slice(0, 3)}
+                tickFormatter={(value) => (isAm ? value : value.slice(0, 3))}
               />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <Area

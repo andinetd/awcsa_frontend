@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { formatLocalizedDate } from "@/utils/date-utils";
 import { 
   Baby, 
   Users, 
@@ -30,11 +31,8 @@ export function AdoptionHeader({
   totalFacilities = 0,
 }: AdoptionHeaderProps) {
   const t = useTranslations("adoption");
-  const currentDate = new Date().toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const locale = useLocale();
+  const currentDate = formatLocalizedDate(new Date(), locale === "am");
 
   return (
     <div className="space-y-3">

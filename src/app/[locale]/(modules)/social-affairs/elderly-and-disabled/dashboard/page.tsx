@@ -9,7 +9,8 @@ import {
   useGetTrainingsQuery,
   useGetJobsQuery,
 } from "@/hooks/beneficiaries";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { getMonthName } from "@/utils/date-utils";
 import { ElderlyDisabledDashboardHeader } from "./_components/elderly-disabled-dashboard-header";
 import { ElderlyDisabledKpiGrid } from "./_components/elderly-disabled-kpi-grid";
 import { ElderlyDisabledChartsSection } from "./_components/elderly-disabled-charts-section";
@@ -19,6 +20,7 @@ import { ElderlyDisabledQuickActions } from "./_components/elderly-disabled-quic
 
 export default function ElderlyAndDisabledDashboard() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.dashboard");
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -121,7 +123,7 @@ export default function ElderlyAndDisabledDashboard() {
     for (let i = 5; i >= 0; i--) {
       const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      const month = d.toLocaleDateString("en-US", { month: "short" });
+      const month = getMonthName(d.getMonth(), locale === "am");
       buckets.push({ key, month, registered: 0, supported: 0 });
     }
 
@@ -153,7 +155,7 @@ export default function ElderlyAndDisabledDashboard() {
       registered,
       supported,
     }));
-  }, [allBeneficiaries, services]);
+  }, [allBeneficiaries, services, locale]);
 
   const isLoadingInitial =
     isDashboardLoading &&

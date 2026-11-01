@@ -13,6 +13,7 @@ import { Download, Printer, RefreshCw } from "lucide-react";
 import { uiTokens } from "@/styles/design-system";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
+import { formatLocalizedDate } from "@/utils/date-utils";
 
 interface ExecutiveHeaderProps {
   activeTab: string;
@@ -53,11 +54,7 @@ export function ExecutiveHeader({
   const subCityT = useTranslations("subCities");
   const locale = useLocale();
 
-  const currentDateFormatted = new Date().toLocaleDateString(locale === "am" ? "am-ET" : "en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const currentDateFormatted = formatLocalizedDate(new Date(), locale === "am");
 
   const tabs = [
     { id: "overview", label: t("tabs.overview") },
