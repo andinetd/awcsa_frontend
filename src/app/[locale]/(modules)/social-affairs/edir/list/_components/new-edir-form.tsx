@@ -772,7 +772,11 @@ export default function NewEdirForm({
             <div className="space-y-3">
               <div className="flex justify-between items-center border-b border-[#E3E7EB] pb-1.5">
                 <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                  {t("sections.leadershipMembers")}
+                  {t.has("sections.leadershipMembers")
+                    ? t("sections.leadershipMembers")
+                    : t.has("sections.leadership")
+                      ? t("sections.leadership")
+                      : "Edir Leadership Members"}
                 </h3>
               </div>
               <div className="space-y-2">
@@ -800,12 +804,20 @@ export default function NewEdirForm({
                       render={({ field: f }) => (
                         <FormItem>
                           <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.leaderFullName")}
+                            {t.has("fields.leaderFullName")
+                              ? t("fields.leaderFullName")
+                              : t.has("fields.founderName")
+                                ? t("fields.founderName")
+                                : "Full Name"}
                           </FormLabel>
                           <FormControl>
                             <Input
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={t("fields.leaderFullName")}
+                              placeholder={
+                                t.has("fields.leaderFullName")
+                                  ? t("fields.leaderFullName")
+                                  : "Full Name"
+                              }
                               {...f}
                             />
                           </FormControl>
@@ -819,13 +831,19 @@ export default function NewEdirForm({
                       render={({ field: f }) => (
                         <FormItem>
                           <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.leaderPosition")}
+                            {t.has("fields.leaderPosition")
+                              ? t("fields.leaderPosition")
+                              : "Position"}
                           </FormLabel>
                           <FormControl>
                             <Input
                               list="edir-leadership-positions"
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={t("fields.leaderPosition")}
+                              placeholder={
+                                t.has("fields.leaderPosition")
+                                  ? t("fields.leaderPosition")
+                                  : "Position"
+                              }
                               {...f}
                             />
                           </FormControl>
@@ -839,7 +857,9 @@ export default function NewEdirForm({
                       render={({ field: f }) => (
                         <FormItem>
                           <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.leaderPhone")}
+                            {t.has("fields.leaderPhone")
+                              ? t("fields.leaderPhone")
+                              : "Phone Number"}
                           </FormLabel>
                           <FormControl>
                             <Input
@@ -875,7 +895,11 @@ export default function NewEdirForm({
                   }
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  {t("buttons.addLeader")}
+                  {t.has("buttons.addLeader")
+                    ? t("buttons.addLeader")
+                    : t.has("buttons.addFounder")
+                      ? t("buttons.addFounder")
+                      : "Add Leader Member"}
                 </Button>
               </div>
               {form.formState.errors.leadershipMembers?.root && (
