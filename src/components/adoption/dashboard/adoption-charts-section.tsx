@@ -198,12 +198,12 @@ export function AdoptionChartsSection({
             {/* Centered Donut Total Label */}
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
               <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">
-                Total
+                {t("dashboard.charts.donutTotal")}
               </span>
               <span className="text-lg font-bold font-mono text-[#0F172A] leading-none">
                 {totalMinors}
               </span>
-              <span className="text-[9.5px] text-slate-400">Minors</span>
+              <span className="text-[9.5px] text-slate-400">{t("dashboard.charts.donutMinors")}</span>
             </div>
           </div>
         )}

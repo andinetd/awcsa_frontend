@@ -955,7 +955,9 @@
         "IN_ADERA": "Adera Custody Placements",
         "WITH_BLOOD_RELATIVE": "Kinship / Relatives",
         "ADOPTED": "Domestic Adoption Finalized"
-      }
+      },
+      "donutTotal": "Total",
+      "donutMinors": "Minors"
     },
     "header": {
       "adminLevel1": "ADDIS ABABA CITY ADMINISTRATION",
@@ -1098,8 +1100,17 @@
           "licensedNgo": "Licensed NGO / Private",
           "general": "Care Facility"
         },
-        "active": "Active"
-      }
+        "active": "Active",
+        "directory": "Directory",
+        "emptyFacilities": "No care facilities registered yet.",
+        "percentFull": "{percent}% full",
+        "totalBedCapacity": "Total Municipal Bed Capacity:",
+        "bedsOccupied": "{totalCapacity} beds ({totalOccupancy} occupied)",
+        "facilityFallback": "Facility {count}"
+      },
+      "inspectStage": "Inspect stage →",
+      "legalCompliance": "Strict adherence to Ethiopian Federal Family Code & Hague Standards",
+      "auditedBadge": "100% Audited"
     },
     "recentCases": {
       "title": "Adoption Application Queue & Vetting Roster",
@@ -1130,7 +1141,10 @@
       "reviewAction": "Review Dossier",
       "officerDefault": "Municipal Intake Team",
       "assignedOfficerLabel": "Assigned Officer",
-      "standardPlacement": "Standard Placement"
+      "standardPlacement": "Standard Placement",
+      "applicantFallback": "Applicant",
+      "genderAny": "Any Gender",
+      "ageRangeYears": "{min}-{max} yrs"
     }
   },
   "homeVisitRegistration": {

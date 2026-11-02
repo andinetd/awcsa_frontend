@@ -100,7 +100,7 @@ export function AdoptionPipelineFunnel({
                         href={`/adoption/adoption-requests?tab=${item.tabKey}`}
                         className="text-[#1769AA] hover:underline shrink-0 ml-2"
                       >
-                        Inspect stage →
+                        {t("dashboard.pipeline.inspectStage")}
                       </Link>
                     )}
                   </div>
@@ -113,9 +113,9 @@ export function AdoptionPipelineFunnel({
         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50 px-3 py-2 rounded">
           <span className="flex items-center gap-1.5 font-medium text-slate-700">
             <ShieldCheck className="size-3.5 text-[#15803D]" />
-            Strict adherence to Ethiopian Federal Family Code &amp; Hague Standards
+            {t("dashboard.pipeline.legalCompliance")}
           </span>
-          <span className="font-mono font-semibold text-[#1769AA]">100% Audited</span>
+          <span className="font-mono font-semibold text-[#1769AA]">{t("dashboard.pipeline.auditedBadge")}</span>
         </div>
       </div>
 
@@ -135,7 +135,7 @@ export function AdoptionPipelineFunnel({
               href="/adoption/care-centers"
               className="text-xs font-medium text-[#1769AA] hover:underline flex items-center gap-1"
             >
-              Directory
+              {t("dashboard.pipeline.facilities.directory")}
               <ChevronRight className="size-3" />
             </Link>
           </div>
@@ -143,7 +143,7 @@ export function AdoptionPipelineFunnel({
           <div className="divide-y divide-slate-100 mt-2">
             {facilities.length === 0 ? (
               <div className="py-12 text-center text-xs text-slate-400">
-                No care facilities registered yet.
+                {t("dashboard.pipeline.facilities.emptyFacilities")}
               </div>
             ) : (
               facilities.map((facility) => {
@@ -167,7 +167,7 @@ export function AdoptionPipelineFunnel({
                           {facility.occupancy} / {facility.capacity}
                         </span>
                         <div className="text-[10px] text-slate-400">
-                          {occPercent}% full
+                          {t("dashboard.pipeline.facilities.percentFull", { percent: occPercent })}
                         </div>
                       </div>
                     </div>
@@ -192,9 +192,9 @@ export function AdoptionPipelineFunnel({
         </div>
 
         <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-          <span className="text-slate-500">Total Municipal Bed Capacity:</span>
+          <span className="text-slate-500">{t("dashboard.pipeline.facilities.totalBedCapacity")}</span>
           <span className="font-mono font-bold text-slate-900">
-            {totalCapacity} beds ({totalOccupancy} occupied)
+            {t("dashboard.pipeline.facilities.bedsOccupied", { totalCapacity, totalOccupancy })}
           </span>
         </div>
       </div>

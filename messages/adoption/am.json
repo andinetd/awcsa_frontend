@@ -955,7 +955,9 @@
         "IN_ADERA": "በአደራ ሞግዚትነት ውስጥ",
         "WITH_BLOOD_RELATIVE": "ከቅርብ ዘመድ ጋር",
         "ADOPTED": "የፀደቀ የሀገር ውስጥ ጉዲፈቻ"
-      }
+      },
+      "donutTotal": "ጠቅላላ",
+      "donutMinors": "ህፃናት"
     },
     "header": {
       "adminLevel1": "የአዲስ አበባ ከተማ አስተዳደር",
@@ -1098,8 +1100,17 @@
           "licensedNgo": "ፈቃድ ያለው መንግስታዊ ያልሆነ / የግል",
           "general": "የእንክብካቤ ተቋም"
         },
-        "active": "ንቁ"
-      }
+        "active": "ንቁ",
+        "directory": "ማውጫ",
+        "emptyFacilities": "እስካሁን የተመዘገበ የእንክብካቤ ማዕከል የለም።",
+        "percentFull": "{percent}% ተሞልቷል",
+        "totalBedCapacity": "ጠቅላላ የማዘጋጃ ቤቱ የመኝታ አቅም:",
+        "bedsOccupied": "{totalCapacity} አልጋዎች ({totalOccupancy} የተያዙ)",
+        "facilityFallback": "ተቋም {count}"
+      },
+      "inspectStage": "ደረጃውን መርምር →",
+      "legalCompliance": "የኢትዮጵያ ፌዴራል የቤተሰብ ህግ እና የሄግ ስምምነት መስፈርቶችን በጥብቅ የተከተለ",
+      "auditedBadge": "100% የተረጋገጠ"
     },
     "recentCases": {
       "title": "የጉዲፈቻ ማመልከቻዎች ቅደም ተከተል እና ማጣሪያ ዝርዝር",
@@ -1130,7 +1141,10 @@
       "reviewAction": "ማህደር መርምር",
       "officerDefault": "የከተማው ቅበላ ቡድን",
       "assignedOfficerLabel": "የተመደበ ባለሙያ",
-      "standardPlacement": "መደበኛ ምደባ"
+      "standardPlacement": "መደበኛ ምደባ",
+      "applicantFallback": "አመልካች",
+      "genderAny": "ማንኛውም ፆታ",
+      "ageRangeYears": "{min}-{max} ዓመት"
     }
   },
   "homeVisitRegistration": {

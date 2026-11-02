@@ -17,6 +17,7 @@ import { AdoptionRecentCasesTable, AdoptionCaseItem } from "@/components/adoptio
 
 export default function ChildWelfareDashboard() {
   const t = useTranslations("child-welfare.dashboard");
+  const tSubCities = useTranslations("subCities.names");
   const locale = useLocale();
   const isAm = locale === "am";
   const queryClient = useQueryClient();
@@ -169,7 +170,7 @@ export default function ChildWelfareDashboard() {
     const cap = Number(center.capacity) || 25;
     return {
       id: center.id || idx + 1,
-      name: center.name || `Facility ${idx + 1}`,
+      name: center.name || tAdoption("dashboard.pipeline.facilities.facilityFallback", { count: idx + 1 }),
       type: center.type
         ? center.type.toUpperCase() === "GOVERNMENT"
           ? tAdoption("dashboard.pipeline.facilities.types.government")
@@ -186,7 +187,7 @@ export default function ChildWelfareDashboard() {
     const applicantName =
       app.applicantInfo?.fullName ||
       `${app.applicantInfo?.firstName || ""} ${app.applicantInfo?.lastName || ""}`.trim() ||
-      "Applicant";
+      tAdoption("dashboard.recentCases.applicantFallback");
 
     const rawStatus = (app.applicationInfo?.status || app.status || "PENDING_REVIEW").toUpperCase();
 
@@ -199,18 +200,44 @@ export default function ChildWelfareDashboard() {
     else if (rawStatus === "REJECTED") statusLabel = tAdoption("adoptionRequests.statuses.denied");
     else statusLabel = rawStatus.replace(/_/g, " ");
 
-    const subCity = app.applicantInfo?.subCity || "—";
-    const woreda = app.applicantInfo?.woreda || "—";
+    const rawSubCity = app.applicantInfo?.subCity;
+    const subCity = rawSubCity
+      ? (tSubCities.has(rawSubCity as any) ? tSubCities(rawSubCity as any) : rawSubCity)
+      : "—";
+
+    const rawWoreda = app.applicantInfo?.woreda;
+    let woreda = "—";
+    if (rawWoreda) {
+      const woredaNum = String(rawWoreda).replace(/^(woreda|ወረዳ)\s*/i, "").trim();
+      woreda = isAm ? `ወረዳ ${woredaNum}` : `Woreda ${woredaNum}`;
+    }
 
     const prefSex = app.applicationInfo?.preferredChildren?.sex;
     const prefAge = app.applicationInfo?.preferredChildren?.ageRange;
+    let sexLabel = "";
+    if (prefSex) {
+      const upper = String(prefSex).toUpperCase();
+      if (upper === "MALE") sexLabel = tAdoption("enums.sex.MALE");
+      else if (upper === "FEMALE") sexLabel = tAdoption("enums.sex.FEMALE");
+      else if (upper === "ANY") sexLabel = tAdoption("dashboard.recentCases.genderAny");
+      else sexLabel = prefSex;
+    }
+
+    let ageLabel = "";
+    if (prefAge && (prefAge.min !== undefined || prefAge.max !== undefined)) {
+      ageLabel = tAdoption("dashboard.recentCases.ageRangeYears", {
+        min: prefAge.min ?? 0,
+        max: prefAge.max ?? 5,
+      });
+    }
+
     let preference = tAdoption("dashboard.recentCases.standardPlacement");
-    if (prefSex && prefAge) {
-      preference = `${prefSex}, ${prefAge.min ?? 0}-${prefAge.max ?? 5} yrs`;
-    } else if (prefSex) {
-      preference = `${prefSex}`;
-    } else if (prefAge) {
-      preference = `${prefAge.min ?? 0}-${prefAge.max ?? 5} yrs`;
+    if (sexLabel && ageLabel) {
+      preference = `${sexLabel}፣ ${ageLabel}`;
+    } else if (sexLabel) {
+      preference = sexLabel;
+    } else if (ageLabel) {
+      preference = ageLabel;
     }
 
     const dateStr =

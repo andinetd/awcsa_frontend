@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +14,7 @@ import {
 
 export function DynamicBreadcrumb() {
   const pathname = usePathname();
+  const t = useTranslations("sidebar");
 
   const generateBreadcrumbs = () => {
     const segments = pathname.split("/").filter(Boolean);
@@ -30,7 +32,13 @@ export function DynamicBreadcrumb() {
         label = "Details";
       }
 
-      return { path, label, isLast };
+      const displayLabel = t.has(`items.${label}`)
+        ? t(`items.${label}`)
+        : t.has(`sections.${label}`)
+        ? t(`sections.${label}`)
+        : label;
+
+      return { path, label: displayLabel, isLast };
     });
 
     return breadcrumbs;
