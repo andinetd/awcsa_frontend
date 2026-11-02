@@ -138,10 +138,10 @@ export default function NewEdirForm({
       uploadDocMutation.mutate(files[0], {
         onSuccess: (doc) => {
           form.setValue("byLawsDocId", doc.id);
-          toast.success(t("messages.byLawsUploaded"));
+          toast.success(safeT("messages.byLawsUploaded", "Document uploaded successfully"));
         },
         onError: (err: any) => {
-          toast.error(err?.message || t("messages.byLawsUploadError"));
+          toast.error(err?.message || safeT("messages.byLawsUploadError", "Failed to upload document"));
           setByLawsFile([]);
           form.setValue("byLawsDocId", undefined);
         },
@@ -169,11 +169,11 @@ export default function NewEdirForm({
         onSuccess: (doc) => {
           form.setValue(`assets.${index}.documentId`, doc.id);
           form.setValue(`assets.${index}.fileName`, doc.fileName);
-          toast.success(t("messages.assetFileUploaded"));
+          toast.success(safeT("messages.assetFileUploaded", "Asset file attached successfully"));
           setUploadingAssetIdx(null);
         },
         onError: (err: any) => {
-          toast.error(err?.message || t("messages.docUploadError"));
+          toast.error(err?.message || safeT("messages.docUploadError", "Failed to upload document"));
           setUploadingAssetIdx(null);
         },
       }
@@ -203,11 +203,11 @@ export default function NewEdirForm({
           ]);
           const currentIds = form.getValues("documentIds") || [];
           form.setValue("documentIds", [...currentIds, doc.id]);
-          toast.success(t("messages.docUploaded"));
+          toast.success(safeT("messages.docUploaded", "Document attached successfully"));
           setUploadingAdditionalDoc(false);
         },
         onError: (err: any) => {
-          toast.error(err?.message || t("messages.docUploadError"));
+          toast.error(err?.message || safeT("messages.docUploadError", "Failed to upload document"));
           setUploadingAdditionalDoc(false);
         },
       }
@@ -372,7 +372,7 @@ export default function NewEdirForm({
         {
           onSuccess: () => {
             setOpen(false);
-            toast.success(t("messages.successUpdate"));
+            toast.success(safeT("messages.successUpdate", "Edir updated successfully"));
           },
         },
       );
@@ -381,7 +381,7 @@ export default function NewEdirForm({
         onSuccess: () => {
           setOpen(false);
           form.reset();
-          toast.success(t("messages.successCreate"));
+          toast.success(safeT("messages.successCreate", "Edir registered successfully"));
         },
       });
     }
@@ -395,17 +395,17 @@ export default function NewEdirForm({
         ) : (
           <Button className="h-8 text-xs font-semibold rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5">
             <Plus className="w-3.5 h-3.5" />
-            {t("buttons.register")}
+            {safeT("buttons.register", "Register Edir")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[720px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono flex items-center gap-2">
-            {isEditMode ? t("updateTitle") : t("createTitle")}
+            {isEditMode ? safeT("updateTitle", "Update Edir Association") : safeT("createTitle", "Register New Edir")}
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500 font-mono mt-0.5">
-            {isEditMode ? t("updateDesc") : t("createDesc")}
+            {isEditMode ? safeT("updateDesc", "Update the details of the Edir association.") : safeT("createDesc", "Enter the details of the new Edir association.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -414,7 +414,7 @@ export default function NewEdirForm({
             {/* Basic Info */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.basic")}
+                {safeT("sections.basic", "Basic Information")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
@@ -422,9 +422,9 @@ export default function NewEdirForm({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.name")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.name", "Edir Name")}</FormLabel>
                       <FormControl>
-                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.name")} {...field} />
+                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={safeT("fields.name", "Edir Name")} {...field} />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
                     </FormItem>
@@ -435,7 +435,7 @@ export default function NewEdirForm({
                   name="establishmentDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.date")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.date", "Establishment Date")}</FormLabel>
                       <FormControl>
                         <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
                       </FormControl>
@@ -527,7 +527,7 @@ export default function NewEdirForm({
             {/* Address */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.address")}
+                {safeT("sections.address", "Address")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 <FormField
@@ -535,12 +535,12 @@ export default function NewEdirForm({
                   name="subCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.subCity")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.subCity", "Sub City")}</FormLabel>
                       <FormControl>
                         <SubCitySelect
                           value={field.value}
                           onValueChange={field.onChange}
-                          placeholder={t("fields.subCity")}
+                          placeholder={safeT("fields.subCity", "Sub City")}
                         />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
@@ -552,13 +552,13 @@ export default function NewEdirForm({
                   name="woreda"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.woreda")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.woreda", "Woreda")}</FormLabel>
                       <FormControl>
                         <WoredaSelect
                           value={field.value}
                           onValueChange={field.onChange}
                           subCity={form.watch("subCity")}
-                          placeholder={t("fields.woreda")}
+                          placeholder={safeT("fields.woreda", "Woreda")}
                         />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
@@ -570,11 +570,11 @@ export default function NewEdirForm({
                   name="houseNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.houseNumber")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.houseNumber", "House Number")}</FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          placeholder={t("fields.houseNumber")}
+                          placeholder={safeT("fields.houseNumber", "House Number")}
                           {...field}
                           value={field.value ?? ""}
                         />
@@ -588,11 +588,11 @@ export default function NewEdirForm({
                   name="specificLocation"
                   render={({ field }) => (
                     <FormItem className="col-span-full">
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.location")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.location", "Specific Location (Optional)")}</FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          placeholder={t("fields.location")}
+                          placeholder={safeT("fields.location", "Specific Location (Optional)")}
                           {...field}
                           value={field.value ?? ""}
                         />
@@ -607,7 +607,7 @@ export default function NewEdirForm({
             {/* Members Stats */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.membership")}
+                {safeT("sections.membership", "Membership Statistics")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <FormField
@@ -616,7 +616,7 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("fields.male")}
+                        {safeT("fields.male", "Male")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -637,7 +637,7 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("fields.female")}
+                        {safeT("fields.female", "Female")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -658,7 +658,7 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("fields.total")}
+                        {safeT("fields.total", "Total")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -680,7 +680,7 @@ export default function NewEdirForm({
             {/* Financials & Remarks */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.financials")}
+                {safeT("sections.financials", "Financials & Remarks")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 <FormField
@@ -689,13 +689,13 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("fields.totalCapital")}
+                        {safeT("fields.totalCapital", "Total Capital / Wealth (ETB)")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white font-mono"
                           type="number"
-                          placeholder={t("fields.totalCapital")}
+                          placeholder={safeT("fields.totalCapital", "Total Capital / Wealth (ETB)")}
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) =>
@@ -712,11 +712,11 @@ export default function NewEdirForm({
                   name="bankAccountNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.bankAccount")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.bankAccount", "Bank Account Number")}</FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white font-mono"
-                          placeholder={t("fields.bankAccount")}
+                          placeholder={safeT("fields.bankAccount", "Bank Account Number")}
                           {...field}
                         />
                       </FormControl>
@@ -729,11 +729,11 @@ export default function NewEdirForm({
                   name="monthlyPaymentDetails"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.contribution")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.contribution", "Monthly Contribution")}</FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          placeholder={t("fields.contribution")}
+                          placeholder={safeT("fields.contribution", "Monthly Contribution")}
                           {...field}
                         />
                       </FormControl>
@@ -746,11 +746,11 @@ export default function NewEdirForm({
                   name="additionalIncome"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.additionalIncome")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.additionalIncome", "Additional Income (Optional)")}</FormLabel>
                       <FormControl>
                         <Input
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          placeholder={t("fields.additionalIncomePlaceholder")}
+                          placeholder={safeT("fields.additionalIncomePlaceholder", "e.g., Tent & chair rental, hall rental, shops...")}
                           {...field}
                           value={field.value || ""}
                         />
@@ -765,9 +765,9 @@ export default function NewEdirForm({
                 name="remark"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.remarks")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{safeT("fields.remarks", "Remarks")}</FormLabel>
                     <FormControl>
-                      <Textarea className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white min-h-[70px]" placeholder={t("fields.remarks")} {...field} />
+                      <Textarea className="text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white min-h-[70px]" placeholder={safeT("fields.remarks", "Remarks")} {...field} />
                     </FormControl>
                     <FormMessage className="text-[11px]" />
                   </FormItem>
@@ -1023,7 +1023,7 @@ export default function NewEdirForm({
                         <div className="flex items-center gap-2">
                           <Paperclip className="w-3.5 h-3.5 text-slate-400" />
                           <span className="text-[11px] font-mono text-slate-600">
-                            {t("fields.assetFile")}:
+                            {safeT("fields.assetFile", "Supporting File")}:
                           </span>
                           {currentDocId ? (
                             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-xs text-[11px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -1050,12 +1050,12 @@ export default function NewEdirForm({
                           {uploadingAssetIdx === index ? (
                             <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#1769AA]">
                               <Loader2 className="w-3 h-3 animate-spin" />
-                              {t("fields.uploading") || "Uploading..."}
+                              {safeT("fields.uploading", "Uploading...")}
                             </span>
                           ) : !currentDocId ? (
                             <label className="cursor-pointer inline-flex items-center gap-1 px-2 py-1 rounded-xs text-[11px] font-mono font-medium bg-white hover:bg-slate-100 border border-[#E3E7EB] text-slate-700 transition-colors">
                               <Paperclip className="w-3 h-3 text-slate-500" />
-                              <span>{t("fields.attachFile")}</span>
+                              <span>{safeT("fields.attachFile", "Attach File")}</span>
                               <input
                                 type="file"
                                 className="hidden"
@@ -1142,7 +1142,7 @@ export default function NewEdirForm({
               {/* Primary By-laws */}
               <div className="space-y-1.5">
                 <p className="text-[11px] font-mono font-semibold text-slate-700">
-                  {t("fields.byLawsDoc") || "By-Laws / Founding Document"}
+                  {safeT("fields.byLawsDoc", "By-Laws / Founding Document (የመተዳደሪያ ደንብ)")}
                 </p>
                 <div className="rounded-xs border border-[#E3E7EB] p-2 bg-slate-50/20">
                   <FileDragAndDrop
@@ -1158,14 +1158,14 @@ export default function NewEdirForm({
                 </div>
                 {form.watch("byLawsDocId") && byLawsFile.length === 0 && (
                   <p className="text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 p-2 rounded-xs">
-                    ✓ {t("messages.byLawsUploaded")}
+                    ✓ {safeT("messages.byLawsUploaded", "By-laws uploaded successfully")}
                   </p>
                 )}
                 {uploadDocMutation.isPending &&
                   !uploadingAdditionalDoc &&
                   uploadingAssetIdx === null && (
                     <p className="text-xs font-mono text-[#1769AA]">
-                      {t("messages.byLawsUploading")}
+                      {safeT("messages.byLawsUploading", "Uploading by-laws...")}
                     </p>
                   )}
               </div>
@@ -1175,7 +1175,7 @@ export default function NewEdirForm({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[11px] font-mono font-semibold text-slate-700">
-                      {t("fields.additionalDocuments")}
+                      {safeT("fields.additionalDocuments", "Additional Registration Documents")}
                     </p>
                   </div>
                   <label className="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 rounded-xs text-[11px] font-mono font-medium bg-white hover:bg-slate-100 border border-[#E3E7EB] text-[#1769AA] transition-colors shadow-2xs">
@@ -1184,7 +1184,7 @@ export default function NewEdirForm({
                     ) : (
                       <Plus className="w-3 h-3" />
                     )}
-                    <span>{t("fields.attachFile")}</span>
+                    <span>{safeT("fields.attachFile", "Attach File")}</span>
                     <input
                       type="file"
                       className="hidden"
