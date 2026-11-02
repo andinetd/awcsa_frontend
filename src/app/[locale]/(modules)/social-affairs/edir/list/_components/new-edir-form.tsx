@@ -60,6 +60,13 @@ export default function NewEdirForm({
   trigger,
 }: NewEdirFormProps) {
   const t = useTranslations("social-affairs.edir.form");
+  const safeT = (key: string, fallback: string): string => {
+    try {
+      return t.has(key as any) ? (t(key as any) as string) : fallback;
+    } catch {
+      return fallback;
+    }
+  };
   const [open, setOpen] = useState(false);
   const createMutation = useCreateEdirMutation();
   const updateMutation = useUpdateEdirMutation();
@@ -442,7 +449,7 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t.has("fields.edirType") ? t("fields.edirType") : "Edir Type"}
+                        {safeT("fields.edirType", "Edir Type")}
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -451,7 +458,7 @@ export default function NewEdirForm({
                       >
                         <FormControl>
                           <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                            <SelectValue placeholder={t("fields.edirType")}>
+                            <SelectValue placeholder={safeT("fields.edirType", "Edir Type")}>
                               {field.value
                                 ? t.has(`edirTypes.${field.value}` as any)
                                   ? t(`edirTypes.${field.value}` as any)
@@ -482,22 +489,22 @@ export default function NewEdirForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("fields.council")}
+                        {safeT("fields.council", "Edir Council")}
                       </FormLabel>
                       <Select
                         onValueChange={(val) => {
-                          field.onChange(val === "none" ? null : Number(val));
+                           field.onChange(val === "none" ? null : Number(val));
                         }}
                         value={field.value ? String(field.value) : "none"}
                       >
                         <FormControl>
                           <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                            <SelectValue placeholder={t("fields.councilPlaceholder")} />
+                            <SelectValue placeholder={safeT("fields.councilPlaceholder", "Select Council")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="rounded-xs border-[#E3E7EB] max-h-56">
                           <SelectItem value="none" className="text-xs rounded-xs text-slate-500">
-                            {t("fields.noCouncilOption")}
+                            {safeT("fields.noCouncilOption", "None (Independent)")}
                           </SelectItem>
                           {councils.map((council) => (
                             <SelectItem
@@ -912,7 +919,7 @@ export default function NewEdirForm({
             {/* Assets at registration (Directive Art 7.b) */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.assets")}
+                {safeT("sections.assets", "Assets at Registration")}
               </h3>
               <div className="space-y-2">
                 {assetFields.fields.map((field, index) => {
@@ -931,7 +938,7 @@ export default function NewEdirForm({
                           render={({ field: f }) => (
                             <FormItem>
                               <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                                {t("fields.assetType")}
+                                {safeT("fields.assetType", "Asset Type")}
                               </FormLabel>
                               <Select
                                 onValueChange={f.onChange}
@@ -940,17 +947,19 @@ export default function NewEdirForm({
                               >
                                 <FormControl>
                                   <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                                    <SelectValue placeholder={t("fields.assetType")}>
-                                      {f.value ? t(`assetTypes.${f.value}` as any) : undefined}
+                                    <SelectValue placeholder={safeT("fields.assetType", "Asset Type")}>
+                                      {f.value
+                                        ? safeT(`assetTypes.${f.value}`, f.value)
+                                        : undefined}
                                     </SelectValue>
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                                   <SelectItem value="CASH" className="text-xs rounded-xs">
-                                    {t("assetTypes.CASH")}
+                                    {safeT("assetTypes.CASH", "Cash")}
                                   </SelectItem>
                                   <SelectItem value="IN_KIND" className="text-xs rounded-xs">
-                                    {t("assetTypes.IN_KIND")}
+                                    {safeT("assetTypes.IN_KIND", "In Kind")}
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
@@ -964,12 +973,12 @@ export default function NewEdirForm({
                           render={({ field: f }) => (
                             <FormItem>
                               <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                                {t("fields.assetDescription")}
+                                {safeT("fields.assetDescription", "Asset Description")}
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                                  placeholder={t("fields.assetDescription")}
+                                  placeholder={safeT("fields.assetDescription", "Asset Description")}
                                   {...f}
                                 />
                               </FormControl>
@@ -983,7 +992,7 @@ export default function NewEdirForm({
                           render={({ field: f }) => (
                             <FormItem>
                               <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                                {t("fields.assetValue")}
+                                {safeT("fields.assetValue", "Value (ETB)")}
                               </FormLabel>
                               <FormControl>
                                 <Input
@@ -1074,7 +1083,7 @@ export default function NewEdirForm({
                   }
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  {t("buttons.addAsset")}
+                  {safeT("buttons.addAsset", "Add Asset")}
                 </Button>
               </div>
             </div>
@@ -1082,7 +1091,7 @@ export default function NewEdirForm({
             {/* Audit & Assembly approval (Directive Art 7.b) */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.approvals")}
+                {safeT("sections.approvals", "Audit & Approval")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <FormField
@@ -1098,7 +1107,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-0.5 leading-none">
-                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.auditCommittee")}</FormLabel>
+                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{safeT("fields.auditCommittee", "Assets counted by Audit Committee")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -1116,7 +1125,7 @@ export default function NewEdirForm({
                         />
                       </FormControl>
                       <div className="space-y-0.5 leading-none">
-                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.generalAssembly")}</FormLabel>
+                        <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{safeT("fields.generalAssembly", "Assets approved by General Assembly")}</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -1127,7 +1136,7 @@ export default function NewEdirForm({
             {/* By-laws & Registration Documents (Directive Art 7.e) */}
             <div className="space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.documents")}
+                {safeT("sections.documents", "By-Laws & Registration Documents")}
               </h3>
 
               {/* Primary By-laws */}
@@ -1225,7 +1234,7 @@ export default function NewEdirForm({
                 className="h-8 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA]"
                 onClick={() => setOpen(false)}
               >
-                {t("buttons.cancel")}
+                {safeT("buttons.cancel", "Cancel")}
               </Button>
               <Button
                 type="submit"
@@ -1234,11 +1243,11 @@ export default function NewEdirForm({
               >
                 {isPending
                   ? isEditMode
-                    ? t("buttons.updating")
-                    : t("buttons.registering")
+                    ? safeT("buttons.updating", "Updating...")
+                    : safeT("buttons.registering", "Registering...")
                   : isEditMode
-                    ? t("buttons.update")
-                    : t("buttons.register")}
+                    ? safeT("buttons.update", "Update Edir")
+                    : safeT("buttons.register", "Register Edir")}
               </Button>
             </div>
           </form>
