@@ -24,7 +24,6 @@ import { toast } from "sonner";
 import NewCouncilForm from "../_components/new-council-form";
 import CouncilActions from "./_components/council-actions";
 import AddMemberDialog from "./_components/add-member-dialog";
-import ManageLeadershipDialog from "./_components/manage-leadership-dialog";
 import CouncilReportMenu from "./_components/council-report-menu";
 
 import Link from "next/link";
@@ -102,6 +101,55 @@ export default function CouncilDetailsPage({ params }: PageProps) {
   const memberCount =
     typedCouncil._count?.memberEdirs ?? typedCouncil.memberEdirs.length;
 
+  const allMembers = Array.isArray(typedCouncil.leadershipMembers)
+    ? [...typedCouncil.leadershipMembers]
+    : [];
+
+  const chairIdx = allMembers.findIndex(
+    (m) =>
+      m.role === "የእድር ዳኛ" ||
+      m.role?.toLowerCase().includes("dagna") ||
+      m.role?.toLowerCase().includes("chair") ||
+      (typedCouncil.chairpersonName && m.fullName === typedCouncil.chairpersonName)
+  );
+  const chairpersonMember = chairIdx !== -1 ? allMembers[chairIdx] : undefined;
+
+  const secIdx = allMembers.findIndex(
+    (m, idx) =>
+      idx !== chairIdx &&
+      (m.role === "ጸሐፊ" ||
+        m.role?.toLowerCase().includes("secre") ||
+        m.role?.toLowerCase().includes("tsehaf") ||
+        m.role === "ገንዘብ ያዥ")
+  );
+  const secretaryMember = secIdx !== -1 ? allMembers[secIdx] : undefined;
+
+  const otherMembers = allMembers.filter(
+    (_, idx) => idx !== chairIdx && idx !== secIdx
+  );
+
+  const formatRepresentedEntity = (entity?: string) => {
+    if (!entity) return null;
+    return (
+      <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-600 bg-slate-50/80 px-2 py-0.5 rounded-xs border border-slate-200">
+        <span className="text-slate-500 font-medium">
+          {typedCouncil.level === "WOREDA"
+            ? t("detail.representingEdir")
+            : typedCouncil.level === "SUB_CITY"
+            ? t("detail.representingWoreda")
+            : t("detail.representingSubCity")}:
+        </span>
+        <span className="font-bold text-slate-800">
+          {typedCouncil.level === "SUB_CITY" && !entity.toLowerCase().includes("woreda")
+            ? `Woreda ${entity}`
+            : typedCouncil.level === "CITY" && !entity.toLowerCase().includes("sub")
+            ? `${entity} Sub-City`
+            : entity}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full p-4 md:p-8">
       {/* Municipal Breadcrumbs */}
@@ -164,7 +212,6 @@ export default function CouncilDetailsPage({ params }: PageProps) {
 
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
           <AddMemberDialog council={typedCouncil} />
-          <ManageLeadershipDialog council={typedCouncil} />
           <CouncilActions council={typedCouncil} />
           <NewCouncilForm
             initialData={typedCouncil}
@@ -332,29 +379,24 @@ export default function CouncilDetailsPage({ params }: PageProps) {
             <CardHeader className="border-b border-[#E3E7EB] bg-slate-50/50 py-2.5 px-4 flex flex-row items-center justify-between">
               <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#1769AA]" />
-                <span>{t("detail.leader")}</span>
-                {Array.isArray(typedCouncil.leadershipMembers) && typedCouncil.leadershipMembers.length > 0 && (
-                  <span className="text-[10px] font-mono text-[#1769AA] font-bold bg-[#E8F2FA] px-1.5 py-0.2 rounded-xs border border-[#BCD5EA]">
-                    {typedCouncil.leadershipMembers.length + 1}
-                  </span>
-                )}
+                <span>{t("sections.leadership")}</span>
               </CardTitle>
-              <ManageLeadershipDialog
-                council={typedCouncil}
+              <NewCouncilForm
+                initialData={typedCouncil}
+                councilId={typedCouncil.id}
                 trigger={
                   <Button
                     variant="ghost"
                     size="sm"
                     className="h-6 px-2 text-[10.5px] font-mono font-bold text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs gap-1 cursor-pointer"
                   >
-                    <Plus className="w-3 h-3" />
-                    <span>{t("manageLeaders")}</span>
+                    <span>{t("buttons.edit")}</span>
                   </Button>
                 }
               />
             </CardHeader>
             <CardContent className="p-5 space-y-3.5 text-xs">
-              {/* Primary Chairperson */}
+              {/* Primary Chairperson (Edir Dagna) */}
               <div className="rounded-xs border border-[#E3E7EB] bg-slate-50/60 p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#0B1F3A] text-white px-1.5 py-0.2 rounded-xs">
@@ -364,15 +406,38 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                 <div className="flex items-center gap-2.5">
                   <Crown className="w-4 h-4 text-amber-500 shrink-0" />
                   <span className="font-semibold text-slate-900">
-                    {typedCouncil.chairpersonName || t("detail.notAvailable")}
+                    {chairpersonMember?.fullName || typedCouncil.chairpersonName || t("detail.notAvailable")}
                   </span>
                 </div>
-                {typedCouncil.chairpersonPhone && (
+                {(chairpersonMember?.phoneNumber || typedCouncil.chairpersonPhone) && (
                   <div className="flex items-center gap-2 font-mono text-slate-600 text-[11px] pl-6">
                     <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span>{typedCouncil.chairpersonPhone}</span>
+                    <span>{chairpersonMember?.phoneNumber || typedCouncil.chairpersonPhone}</span>
                   </div>
                 )}
+                {formatRepresentedEntity(chairpersonMember?.representedEntity)}
+              </div>
+
+              {/* Tsehafi (Secretary) */}
+              <div className="rounded-xs border border-[#E3E7EB] bg-slate-50/60 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#1769AA] text-white px-1.5 py-0.2 rounded-xs">
+                    {t("secretaryTitle")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <UserCheck className="w-4 h-4 text-[#1769AA] shrink-0" />
+                  <span className="font-semibold text-slate-900">
+                    {secretaryMember?.fullName || t("detail.notAvailable")}
+                  </span>
+                </div>
+                {secretaryMember?.phoneNumber && (
+                  <div className="flex items-center gap-2 font-mono text-slate-600 text-[11px] pl-6">
+                    <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{secretaryMember.phoneNumber}</span>
+                  </div>
+                )}
+                {formatRepresentedEntity(secretaryMember?.representedEntity)}
               </div>
 
               {/* Office Contact Phone */}
@@ -385,17 +450,17 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                 </div>
               )}
 
-              {/* Additional Leadership Committee Members */}
-              {Array.isArray(typedCouncil.leadershipMembers) && typedCouncil.leadershipMembers.length > 0 && (
+              {/* Additional Leadership Committee Members (if any) */}
+              {otherMembers.length > 0 && (
                 <div className="pt-2 border-t border-[#E3E7EB] space-y-2">
                   <p className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-slate-500">
-                    {t("executiveCommitteeCount", { count: typedCouncil.leadershipMembers.length })}
+                    {t("executiveCommitteeCount", { count: otherMembers.length })}
                   </p>
                   <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                    {typedCouncil.leadershipMembers.map((member, idx) => (
+                    {otherMembers.map((member, idx) => (
                       <div
                         key={idx}
-                        className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 space-y-1 hover:border-[#BCD5EA] transition-colors"
+                        className="rounded-xs border border-[#E3E7EB] bg-white p-2.5 space-y-1.5 hover:border-[#BCD5EA] transition-colors"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-semibold text-slate-800 text-xs truncate">
@@ -405,24 +470,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                             {member.role}
                           </span>
                         </div>
-                        {member.representedEntity && (
-                          <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-600 bg-slate-50/80 px-2 py-0.5 rounded-xs border border-slate-200">
-                            <span className="text-slate-500 font-medium">
-                              {typedCouncil.level === "WOREDA"
-                                ? t("detail.representingEdir")
-                                : typedCouncil.level === "SUB_CITY"
-                                ? t("detail.representingWoreda")
-                                : t("detail.representingSubCity")}:
-                            </span>
-                            <span className="font-bold text-slate-800">
-                              {typedCouncil.level === "SUB_CITY" && !member.representedEntity.toLowerCase().includes("woreda")
-                                ? `Woreda ${member.representedEntity}`
-                                : typedCouncil.level === "CITY" && !member.representedEntity.toLowerCase().includes("sub")
-                                ? `${member.representedEntity} Sub-City`
-                                : member.representedEntity}
-                            </span>
-                          </div>
-                        )}
+                        {formatRepresentedEntity(member.representedEntity)}
                         {member.phoneNumber && (
                           <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
                             <Phone className="w-3 h-3 text-slate-400 shrink-0" />

@@ -3,11 +3,17 @@ import { z } from "zod";
 export const edirMemberDetailSchema = z.object({
   male: z.coerce.number().min(0),
   female: z.coerce.number().min(0),
-  total: z.coerce.number().min(0),
+  total: z.coerce.number().min(0).optional(),
+});
+
+export const edirLeadershipMemberSchema = z.object({
+  fullName: z.string().min(1, "Member full name is required"),
+  position: z.string().min(1, "Position is required"),
+  phoneNumber: z.string().optional().nullable(),
 });
 
 export const edirFoundingMemberSchema = z.object({
-  fullName: z.string().min(2, "Founding member name is required"),
+  fullName: z.string().min(1, "Founding member name is required"),
   address: z.string().optional(),
 });
 
@@ -29,22 +35,24 @@ export const newEdirSchema = z.object({
   establishmentDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "Invalid date",
   }),
+  edirType: z
+    .enum(["COMMUNITY", "WOMENS", "WORKPLACE", "SPECIALIZED"])
+    .default("COMMUNITY"),
   registerLevel: z.enum(["WOREDA", "SUB_CITY", "CITY"]).default("WOREDA"),
-  subCity: z.string().min(2, "Sub-city is required"),
+  subCity: z.string().min(1, "Sub-city is required"),
   woreda: z.string().min(1, "Woreda is required"),
   kebele: z.string().optional(),
-  houseNumber: z.string().min(1, "House number is required"),
-  specificLocation: z.string().min(1, "Specific location is required"),
-  members: z.object({
-    management: edirMemberDetailSchema,
-    general: edirMemberDetailSchema,
-  }),
-  bankAccountNumber: z.string().min(1, "Bank account number is required"),
-  monthlyPaymentDetails: z.string().min(1, "Payment details are required"),
+  houseNumber: z.string().optional().nullable(),
+  specificLocation: z.string().optional().nullable(),
+  members: edirMemberDetailSchema,
+  totalAssetValue: z.coerce.number().min(0).optional().nullable(),
+  bankAccountNumber: z.string().optional().default(""),
+  monthlyPaymentDetails: z.string().optional().default(""),
   additionalIncome: z.string().optional().nullable(),
   remark: z.string().optional(),
-  // Directive 151/2016 registration criteria (Article 7)
-  foundingMembers: z.array(edirFoundingMemberSchema).min(1).default([]),
+  // Leadership & Directive 151/2016 registration criteria
+  leadershipMembers: z.array(edirLeadershipMemberSchema).default([]),
+  foundingMembers: z.array(edirFoundingMemberSchema).optional().default([]),
   assets: z.array(edirAssetSchema).default([]),
   assetsAuditedByAuditCommittee: z.boolean().default(false),
   assetsApprovedByGeneralAssembly: z.boolean().default(false),

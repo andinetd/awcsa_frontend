@@ -73,20 +73,23 @@ export default function NewEdirForm({
     defaultValues: {
       name: "",
       establishmentDate: new Date().toISOString().split("T")[0],
+      edirType: "COMMUNITY",
       registerLevel: "WOREDA",
       subCity: "",
       woreda: "",
       houseNumber: "",
       specificLocation: "",
-      members: {
-        management: { male: 0, female: 0, total: 0 },
-        general: { male: 0, female: 0, total: 0 },
-      },
+      members: { male: 0, female: 0, total: 0 },
+      totalAssetValue: undefined,
       bankAccountNumber: "",
       monthlyPaymentDetails: "",
       additionalIncome: "",
       remark: "",
-      foundingMembers: [{ fullName: "", address: "" }],
+      leadershipMembers: [
+        { fullName: "", position: "የእድር ዳኛ / ሰብሳቢ (Leader)", phoneNumber: "" },
+        { fullName: "", position: "ጸሐፊ (Secretary)", phoneNumber: "" },
+      ],
+      foundingMembers: [],
       assets: [],
       assetsAuditedByAuditCommittee: false,
       assetsApprovedByGeneralAssembly: false,
@@ -96,9 +99,9 @@ export default function NewEdirForm({
     },
   });
 
-  const foundingFields = useFieldArray({
+  const leadershipFields = useFieldArray({
     control: form.control,
-    name: "foundingMembers",
+    name: "leadershipMembers",
   });
   const assetFields = useFieldArray({
     control: form.control,
@@ -113,21 +116,14 @@ export default function NewEdirForm({
   const [uploadingAssetIdx, setUploadingAssetIdx] = useState<number | null>(null);
   const [uploadingAdditionalDoc, setUploadingAdditionalDoc] = useState(false);
 
-  // Auto-compute totals from male + female
-  const managementMale = form.watch("members.management.male");
-  const managementFemale = form.watch("members.management.female");
-  const generalMale = form.watch("members.general.male");
-  const generalFemale = form.watch("members.general.female");
+  // Auto-compute total members from male + female
+  const membersMale = form.watch("members.male");
+  const membersFemale = form.watch("members.female");
 
   useEffect(() => {
-    const total = Number(managementMale || 0) + Number(managementFemale || 0);
-    form.setValue("members.management.total", total);
-  }, [managementMale, managementFemale, form]);
-
-  useEffect(() => {
-    const total = Number(generalMale || 0) + Number(generalFemale || 0);
-    form.setValue("members.general.total", total);
-  }, [generalMale, generalFemale, form]);
+    const total = Number(membersMale || 0) + Number(membersFemale || 0);
+    form.setValue("members.total", total);
+  }, [membersMale, membersFemale, form]);
 
   const handleByLawsSelect = (files: File[]) => {
     setByLawsFile(files);
@@ -224,40 +220,65 @@ export default function NewEdirForm({
         ? new Date(initialData.establishmentDate).toISOString().split("T")[0]
         : "";
 
+      let leaders: Array<{ fullName: string; position: string; phoneNumber?: string }> = [];
+      if (initialData.leadershipMembers && initialData.leadershipMembers.length > 0) {
+        leaders = initialData.leadershipMembers.map((lm) => ({
+          fullName: lm.fullName,
+          position: lm.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+          phoneNumber: lm.phoneNumber || "",
+        }));
+      } else if ((initialData as any).members && Array.isArray((initialData as any).members) && (initialData as any).members.length > 0) {
+        leaders = (initialData as any).members.map((m: any) => ({
+          fullName: m.fullName,
+          position: m.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+          phoneNumber: m.phoneNumber || "",
+        }));
+      } else if (initialData.chairpersonName) {
+        leaders = [
+          {
+            fullName: initialData.chairpersonName,
+            position: "የእድር ዳኛ / ሰብሳቢ (Leader)",
+            phoneNumber: initialData.chairpersonPhone || "",
+          },
+        ];
+        if (initialData.deputyChairpersonName) {
+          leaders.push({
+            fullName: initialData.deputyChairpersonName,
+            position: "ምክትል እድር ዳኛ / ሰብሳቢ (Deputy Leader)",
+            phoneNumber: initialData.deputyChairpersonPhone || "",
+          });
+        }
+      } else {
+        leaders = [
+          { fullName: "", position: "የእድር ዳኛ / ሰብሳቢ (Leader)", phoneNumber: "" },
+          { fullName: "", position: "ጸሐፊ (Secretary)", phoneNumber: "" },
+        ];
+      }
+
+      const totalMale = (initialData.generalMale || 0) + (initialData.managementMale || 0);
+      const totalFemale = (initialData.generalFemale || 0) + (initialData.managementFemale || 0);
+
       form.reset({
         name: initialData.name,
         establishmentDate: dateStr,
-        registerLevel: (initialData.registerLevel || "WOREDA") as any,
+        edirType: (initialData.edirType as any) || "COMMUNITY",
+        registerLevel: "WOREDA",
         subCity: initialData.subCity,
         woreda: initialData.woreda,
-        houseNumber: initialData.houseNumber,
-        specificLocation: initialData.specificLocation,
+        houseNumber: initialData.houseNumber || "",
+        specificLocation: initialData.specificLocation || "",
         members: {
-          management: {
-            male: initialData.managementMale || 0,
-            female: initialData.managementFemale || 0,
-            total:
-              (initialData.managementMale || 0) +
-              (initialData.managementFemale || 0),
-          },
-          general: {
-            male: initialData.generalMale || 0,
-            female: initialData.generalFemale || 0,
-            total:
-              (initialData.generalMale || 0) + (initialData.generalFemale || 0),
-          },
+          male: totalMale,
+          female: totalFemale,
+          total: totalMale + totalFemale,
         },
-        bankAccountNumber: initialData.bankAccountNumber,
-        monthlyPaymentDetails: initialData.monthlyPaymentDetails,
+        totalAssetValue: initialData.totalAssetValue ? Number(initialData.totalAssetValue) : undefined,
+        bankAccountNumber: initialData.bankAccountNumber || "",
+        monthlyPaymentDetails: initialData.monthlyPaymentDetails || "",
         additionalIncome: initialData.additionalIncome || "",
         remark: initialData.remark || "",
-        foundingMembers:
-          initialData.foundingMembers && initialData.foundingMembers.length > 0
-            ? initialData.foundingMembers.map((fm) => ({
-                fullName: fm.fullName,
-                address: fm.address || "",
-              }))
-            : [{ fullName: "", address: "" }],
+        leadershipMembers: leaders,
+        foundingMembers: [],
         assets:
           initialData.assets?.map((a) => ({
             type: a.type,
@@ -290,16 +311,40 @@ export default function NewEdirForm({
   }, [initialData, form]);
 
   function onSubmit(values: NewEdirSchemaType) {
+    const validLeaders = (values.leadershipMembers || []).filter(
+      (m) => m.fullName && m.fullName.trim().length > 0,
+    );
+    const primaryLeader = validLeaders[0];
+    const deputyLeader = validLeaders[1];
+
+    const totalMale = Number(values.members?.male || 0);
+    const totalFemale = Number(values.members?.female || 0);
+
     const apiPayload = {
       ...values,
-      managementMale: values.members.management.male,
-      managementFemale: values.members.management.female,
-      generalMale: values.members.general.male,
-      generalFemale: values.members.general.female,
+      registerLevel: "WOREDA",
+      totalAssetValue: values.totalAssetValue ? Number(values.totalAssetValue) : null,
+      chairpersonName: primaryLeader?.fullName || null,
+      chairpersonPhone: primaryLeader?.phoneNumber || null,
+      deputyChairpersonName: deputyLeader?.fullName || null,
+      deputyChairpersonPhone: deputyLeader?.phoneNumber || null,
+      managementMale: 0,
+      managementFemale: 0,
+      generalMale: totalMale,
+      generalFemale: totalFemale,
+      members: {
+        management: { male: 0, female: 0, total: 0 },
+        general: { male: totalMale, female: totalFemale, total: totalMale + totalFemale },
+      },
       councilId: values.councilId ? Number(values.councilId) : null,
-      foundingMembers: values.foundingMembers.map((fm) => ({
-        fullName: fm.fullName,
-        address: fm.address || "",
+      leadershipMembers: validLeaders.map((lm) => ({
+        fullName: lm.fullName.trim(),
+        position: lm.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+        phoneNumber: lm.phoneNumber || "",
+      })),
+      foundingMembers: validLeaders.map((lm) => ({
+        fullName: lm.fullName.trim(),
+        address: lm.position || "",
       })),
       assets: values.assets.map((a) => ({
         type: a.type,
@@ -393,10 +438,12 @@ export default function NewEdirForm({
                 />
                 <FormField
                   control={form.control}
-                  name="registerLevel"
+                  name="edirType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.registerLevel")}</FormLabel>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t.has("fields.edirType") ? t("fields.edirType") : "Edir Type"}
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -404,16 +451,22 @@ export default function NewEdirForm({
                       >
                         <FormControl>
                           <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                            <SelectValue placeholder={t("fields.registerLevel")}>
-                              {field.value ? t(`levels.${field.value}` as any) : undefined}
+                            <SelectValue placeholder={t("fields.edirType")}>
+                              {field.value
+                                ? t.has(`edirTypes.${field.value}` as any)
+                                  ? t(`edirTypes.${field.value}` as any)
+                                  : field.value
+                                : undefined}
                             </SelectValue>
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          {(["WOREDA", "SUB_CITY", "CITY"] as const).map(
-                            (level) => (
-                              <SelectItem key={level} value={level} className="text-xs rounded-xs">
-                                {t(`levels.${level}`)}
+                          {(["COMMUNITY", "WOMENS", "WORKPLACE", "SPECIALIZED"] as const).map(
+                            (type) => (
+                              <SelectItem key={type} value={type} className="text-xs rounded-xs">
+                                {t.has(`edirTypes.${type}` as any)
+                                  ? t(`edirTypes.${type}` as any)
+                                  : type}
                               </SelectItem>
                             )
                           )}
@@ -516,6 +569,7 @@ export default function NewEdirForm({
                           className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
                           placeholder={t("fields.houseNumber")}
                           {...field}
+                          value={field.value ?? ""}
                         />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
@@ -529,7 +583,12 @@ export default function NewEdirForm({
                     <FormItem className="col-span-full">
                       <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.location")}</FormLabel>
                       <FormControl>
-                        <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("fields.location")} {...field} />
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                          placeholder={t("fields.location")}
+                          {...field}
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage className="text-[11px]" />
                     </FormItem>
@@ -543,143 +602,71 @@ export default function NewEdirForm({
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.membership")}
               </h3>
-              <div className="space-y-2">
-                <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.managementMembers")}</FormLabel>
-                <div className="grid grid-cols-3 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="members.management.male"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.male")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="members.management.female"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.female")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="members.management.total"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.total")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-100 font-mono text-slate-600" type="number" {...field} disabled readOnly />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.generalMembers")}</FormLabel>
-                <div className="grid grid-cols-3 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="members.general.male"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.male")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="members.general.female"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.female")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="members.general.total"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                          {t("fields.total")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-100 font-mono text-slate-600" type="number" {...field} disabled readOnly />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              {/* Grand Total Members (Leaders + General) */}
-              <div className="p-3 bg-[#E8F2FA]/70 border border-[#BCD5EA] rounded-xs space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                    {t("fields.totalEdirMembers")}
-                  </span>
-                  <span className="font-mono font-bold text-base text-[#1769AA]">
-                    {Number(managementMale || 0) +
-                      Number(managementFemale || 0) +
-                      Number(generalMale || 0) +
-                      Number(generalFemale || 0)}
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-3 pt-2 border-t border-[#BCD5EA]/70 text-xs font-mono text-slate-700">
-                  <div className="flex flex-col">
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      {t("fields.totalMale")}:
-                    </span>
-                    <span className="font-bold text-slate-900 mt-0.5">
-                      {Number(managementMale || 0) + Number(generalMale || 0)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      {t("fields.totalFemale")}:
-                    </span>
-                    <span className="font-bold text-slate-900 mt-0.5">
-                      {Number(managementFemale || 0) + Number(generalFemale || 0)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      {t("fields.grandTotal")}:
-                    </span>
-                    <span className="font-bold text-[#1769AA] mt-0.5">
-                      {Number(managementMale || 0) +
-                        Number(managementFemale || 0) +
-                        Number(generalMale || 0) +
-                        Number(generalFemale || 0)}
-                    </span>
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <FormField
+                  control={form.control}
+                  name="members.male"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("fields.male")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                          type="number"
+                          {...field}
+                          value={field.value ?? 0}
+                          onChange={(e) => field.onChange(Number(e.target.value) || 0)}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="members.female"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("fields.female")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                          type="number"
+                          {...field}
+                          value={field.value ?? 0}
+                          onChange={(e) => field.onChange(Number(e.target.value) || 0)}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="members.total"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("fields.total")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-100 font-mono text-slate-700 font-bold"
+                          type="number"
+                          {...field}
+                          value={Number(membersMale || 0) + Number(membersFemale || 0)}
+                          disabled
+                          readOnly
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
 
@@ -688,7 +675,31 @@ export default function NewEdirForm({
               <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
                 {t("sections.financials")}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                <FormField
+                  control={form.control}
+                  name="totalAssetValue"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("fields.totalCapital")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white font-mono"
+                          type="number"
+                          placeholder={t("fields.totalCapital")}
+                          {...field}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(e.target.value === "" ? undefined : Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[11px]" />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="bankAccountNumber"
@@ -757,29 +768,44 @@ export default function NewEdirForm({
               />
             </div>
 
-            {/* Founding Members (Directive Art 7.a) */}
+            {/* Leadership Members */}
             <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("sections.foundingMembers")}
-              </h3>
+              <div className="flex justify-between items-center border-b border-[#E3E7EB] pb-1.5">
+                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                  {t("sections.leadershipMembers")}
+                </h3>
+              </div>
               <div className="space-y-2">
-                {foundingFields.fields.map((field, index) => (
+                <datalist id="edir-leadership-positions">
+                  <option value="የእድር ዳኛ / ሰብሳቢ (Leader)" />
+                  <option value="ምክትል እድር ዳኛ (Deputy Leader)" />
+                  <option value="ጸሐፊ (Secretary)" />
+                  <option value="ገንዘብ ያዥ (Treasurer)" />
+                  <option value="ምክትል ገንዘብ ያዥ (Deputy Treasurer)" />
+                  <option value="የሂሳብ ሹም (Accountant)" />
+                  <option value="ኦዲተር (Auditor)" />
+                  <option value="የንብረት አስተዳዳሪ (Storekeeper)" />
+                  <option value="ጥበቃ (Guard)" />
+                  <option value="አባል (Member)" />
+                </datalist>
+
+                {leadershipFields.fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3"
+                    className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3"
                   >
                     <FormField
                       control={form.control}
-                      name={`foundingMembers.${index}.fullName`}
+                      name={`leadershipMembers.${index}.fullName`}
                       render={({ field: f }) => (
                         <FormItem>
                           <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.founderName")}
+                            {t("fields.leaderFullName")}
                           </FormLabel>
                           <FormControl>
                             <Input
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={t("fields.founderName")}
+                              placeholder={t("fields.leaderFullName")}
                               {...f}
                             />
                           </FormControl>
@@ -789,17 +815,38 @@ export default function NewEdirForm({
                     />
                     <FormField
                       control={form.control}
-                      name={`foundingMembers.${index}.address`}
+                      name={`leadershipMembers.${index}.position`}
                       render={({ field: f }) => (
                         <FormItem>
                           <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t("fields.founderAddress")}
+                            {t("fields.leaderPosition")}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              list="edir-leadership-positions"
+                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
+                              placeholder={t("fields.leaderPosition")}
+                              {...f}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[11px]" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`leadershipMembers.${index}.phoneNumber`}
+                      render={({ field: f }) => (
+                        <FormItem>
+                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
+                            {t("fields.leaderPhone")}
                           </FormLabel>
                           <FormControl>
                             <Input
                               className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={t("fields.founderAddress")}
+                              placeholder="09..."
                               {...f}
+                              value={f.value ?? ""}
                             />
                           </FormControl>
                           <FormMessage className="text-[11px]" />
@@ -811,7 +858,8 @@ export default function NewEdirForm({
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      onClick={() => foundingFields.remove(index)}
+                      onClick={() => leadershipFields.remove(index)}
+                      disabled={leadershipFields.fields.length <= 1}
                     >
                       <X className="w-3.5 h-3.5" />
                     </Button>
@@ -823,16 +871,16 @@ export default function NewEdirForm({
                   size="sm"
                   className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
                   onClick={() =>
-                    foundingFields.append({ fullName: "", address: "" })
+                    leadershipFields.append({ fullName: "", position: "", phoneNumber: "" })
                   }
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  {t("buttons.addFounder")}
+                  {t("buttons.addLeader")}
                 </Button>
               </div>
-              {form.formState.errors.foundingMembers?.root && (
+              {form.formState.errors.leadershipMembers?.root && (
                 <p className="text-xs text-rose-600 font-mono">
-                  {form.formState.errors.foundingMembers.root.message}
+                  {form.formState.errors.leadershipMembers.root.message}
                 </p>
               )}
             </div>

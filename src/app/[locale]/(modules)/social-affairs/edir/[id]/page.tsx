@@ -113,6 +113,13 @@ export default function EdirDetailsPage({ params }: PageProps) {
                   {t(`status.${typedEdir.status}`)}
                 </span>
               )}
+              {typedEdir.edirType && (
+                <span className="px-2 py-0.5 rounded-xs text-[11px] font-mono font-semibold border bg-indigo-50 text-indigo-700 border-indigo-200">
+                  {t.has(`edirTypes.${typedEdir.edirType}`)
+                    ? t(`edirTypes.${typedEdir.edirType}`)
+                    : typedEdir.edirType}
+                </span>
+              )}
               <span>•</span>
               <span>
                 {t("fields.established")}:{" "}
@@ -244,16 +251,93 @@ export default function EdirDetailsPage({ params }: PageProps) {
                 </CardContent>
               </Card>
 
-              {/* Founding Members (Article 7.a) */}
+              {/* Leadership Members */}
               <Card className="rounded-xs border border-[#E3E7EB] bg-white shadow-2xs">
                 <CardHeader className="border-b border-[#E3E7EB] px-5 py-3.5">
                   <CardTitle className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] flex items-center gap-2">
                     <Users className="w-3.5 h-3.5 text-[#1769AA]" />
-                    {t("sections.foundingMembers")}
+                    {t("sections.leadershipMembers")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-5 space-y-3">
-                  {typedEdir.foundingMembers?.length ? (
+                  {typedEdir.leadershipMembers?.length ? (
+                    <div className="border border-[#E3E7EB] rounded-xs overflow-hidden">
+                      <table className="w-full text-xs">
+                        <thead className="bg-slate-50 text-left border-b border-[#E3E7EB]">
+                          <tr>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderFullName")}
+                            </th>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderPosition")}
+                            </th>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderPhone")}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E3E7EB]">
+                          {typedEdir.leadershipMembers.map((lm, idx) => (
+                            <tr key={idx} className="hover:bg-slate-50/60">
+                              <td className="px-4 py-2 font-medium text-slate-800">{lm.fullName}</td>
+                              <td className="px-4 py-2">
+                                <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                  {lm.position || "—"}
+                                </span>
+                              </td>
+                              <td className="px-4 py-2 font-mono text-slate-600">
+                                {lm.phoneNumber || "—"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : typedEdir.chairpersonName ? (
+                    <div className="border border-[#E3E7EB] rounded-xs overflow-hidden">
+                      <table className="w-full text-xs">
+                        <thead className="bg-slate-50 text-left border-b border-[#E3E7EB]">
+                          <tr>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderFullName")}
+                            </th>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderPosition")}
+                            </th>
+                            <th className="px-4 py-2.5 font-mono font-bold text-slate-600 uppercase text-[11px]">
+                              {t("fields.leaderPhone")}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E3E7EB]">
+                          <tr className="hover:bg-slate-50/60">
+                            <td className="px-4 py-2 font-medium text-slate-800">{typedEdir.chairpersonName}</td>
+                            <td className="px-4 py-2">
+                              <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                ሰብሳቢ / ዳኛ (Leader)
+                              </span>
+                            </td>
+                            <td className="px-4 py-2 font-mono text-slate-600">
+                              {typedEdir.chairpersonPhone || "—"}
+                            </td>
+                          </tr>
+                          {typedEdir.deputyChairpersonName && (
+                            <tr className="hover:bg-slate-50/60">
+                              <td className="px-4 py-2 font-medium text-slate-800">{typedEdir.deputyChairpersonName}</td>
+                              <td className="px-4 py-2">
+                                <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                  ምክትል ሰብሳቢ (Deputy Leader)
+                                </span>
+                              </td>
+                              <td className="px-4 py-2 font-mono text-slate-600">
+                                {typedEdir.deputyChairpersonPhone || "—"}
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : typedEdir.foundingMembers?.length ? (
                     <div className="border border-[#E3E7EB] rounded-xs overflow-hidden">
                       <table className="w-full text-xs">
                         <thead className="bg-slate-50 text-left border-b border-[#E3E7EB]">
@@ -482,79 +566,36 @@ export default function EdirDetailsPage({ params }: PageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-5 space-y-3">
-                  <div className="bg-slate-50/70 p-3 rounded-xs border border-[#E3E7EB]">
-                    <h4 className="font-semibold text-xs text-slate-800 mb-2">
-                      {t("fields.managementMembers")}
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="flex flex-col">
-                        <span className="text-slate-500 text-[11px] font-mono">
-                          {t("fields.male")}
-                        </span>
-                        <span className="font-mono font-semibold text-slate-900">
-                          {typedEdir.managementMale || 0}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-slate-500 text-[11px] font-mono">
-                          {t("fields.female")}
-                        </span>
-                        <span className="font-mono font-semibold text-slate-900">
-                          {typedEdir.managementFemale || 0}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-50/70 p-3 rounded-xs border border-[#E3E7EB]">
-                    <h4 className="font-semibold text-xs text-slate-800 mb-2">
-                      {t("fields.generalMembers")}
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="flex flex-col">
-                        <span className="text-slate-500 text-[11px] font-mono">
-                          {t("fields.male")}
-                        </span>
-                        <span className="font-mono font-semibold text-slate-900">
-                          {typedEdir.generalMale || 0}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-slate-500 text-[11px] font-mono">
-                          {t("fields.female")}
-                        </span>
-                        <span className="font-mono font-semibold text-slate-900">
-                          {typedEdir.generalFemale || 0}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-[#E3E7EB] space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-mono text-slate-700 font-bold uppercase">
-                        {t("fields.total")}
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="flex flex-col bg-slate-50/70 p-3 rounded-xs border border-[#E3E7EB]">
+                      <span className="text-slate-500 text-[11px] font-mono uppercase tracking-wider">
+                        {t("fields.male")}
                       </span>
-                      <span className="font-mono font-bold text-base text-[#1769AA]">
+                      <span className="font-mono font-bold text-lg text-slate-900 mt-1">
+                        {(typedEdir.generalMale || 0) + (typedEdir.managementMale || 0)}
+                      </span>
+                    </div>
+                    <div className="flex flex-col bg-slate-50/70 p-3 rounded-xs border border-[#E3E7EB]">
+                      <span className="text-slate-500 text-[11px] font-mono uppercase tracking-wider">
+                        {t("fields.female")}
+                      </span>
+                      <span className="font-mono font-bold text-lg text-slate-900 mt-1">
+                        {(typedEdir.generalFemale || 0) + (typedEdir.managementFemale || 0)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#E3E7EB]">
+                    <div className="flex justify-between items-center bg-[#E8F2FA]/70 p-3 rounded-xs border border-[#BCD5EA]">
+                      <span className="text-xs font-mono text-[#0B1F3A] font-bold uppercase">
+                        {t("fields.totalEdirMembers")}
+                      </span>
+                      <span className="font-mono font-bold text-xl text-[#1769AA]">
                         {(typedEdir.managementMale || 0) +
                           (typedEdir.managementFemale || 0) +
                           (typedEdir.generalMale || 0) +
                           (typedEdir.generalFemale || 0)}
                       </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-600 bg-slate-50 p-2 rounded-xs border border-[#E3E7EB]">
-                      <div className="flex justify-between">
-                        <span className="text-[11px] text-slate-500">{t("fields.male")}:</span>
-                        <span className="font-bold text-slate-800">
-                          {(typedEdir.managementMale || 0) + (typedEdir.generalMale || 0)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-[11px] text-slate-500">{t("fields.female")}:</span>
-                        <span className="font-bold text-slate-800">
-                          {(typedEdir.managementFemale || 0) + (typedEdir.generalFemale || 0)}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -604,6 +645,19 @@ export default function EdirDetailsPage({ params }: PageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-5 space-y-3 text-xs">
+                  <div>
+                    <span className="text-slate-500 block text-[11px] font-mono uppercase tracking-wider">
+                      {t("fields.totalCapital")}
+                    </span>
+                    <span className="font-mono text-sm font-semibold text-slate-800 mt-0.5 block">
+                      {typedEdir.totalAssetValue != null
+                        ? Number(typedEdir.totalAssetValue).toLocaleString(undefined, {
+                            style: "currency",
+                            currency: "ETB",
+                          })
+                        : "—"}
+                    </span>
+                  </div>
                   <div>
                     <span className="text-slate-500 block text-[11px] font-mono uppercase tracking-wider">
                       {t("fields.bankAccountNumber")}

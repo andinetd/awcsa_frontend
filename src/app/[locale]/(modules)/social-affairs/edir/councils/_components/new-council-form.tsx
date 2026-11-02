@@ -56,18 +56,6 @@ interface NewCouncilFormProps {
   trigger?: React.ReactNode;
 }
 
-const COMMON_ROLE_SUGGESTIONS = [
-  "Vice Chairperson",
-  "Secretary",
-  "Treasurer",
-  "Auditor",
-  "Public Relations Officer",
-  "Women Affairs Coordinator",
-  "Youth Representative",
-  "Executive Member",
-  "Legal Advisor",
-];
-
 export default function NewCouncilForm({
   initialData,
   councilId,
@@ -91,11 +79,22 @@ export default function NewCouncilForm({
     subCity: "",
     woreda: "",
     establishmentDate: new Date().toISOString().slice(0, 10),
-    chairpersonName: "",
-    chairpersonPhone: "",
     contactPhone: "",
     address: "",
-    leadershipMembers: [],
+    leadershipMembers: [
+      {
+        fullName: "",
+        role: "የእድር ዳኛ",
+        phoneNumber: "",
+        representedEntity: "",
+      },
+      {
+        fullName: "",
+        role: "ጸሐፊ",
+        phoneNumber: "",
+        representedEntity: "",
+      },
+    ],
     byLawsDocId: undefined,
     associationIds: [],
   };
@@ -135,19 +134,46 @@ export default function NewCouncilForm({
 
   useEffect(() => {
     if (open && initialData) {
+      let members: CouncilLeadershipMember[] = [];
+
+      if (
+        Array.isArray(initialData.leadershipMembers) &&
+        initialData.leadershipMembers.length > 0
+      ) {
+        members = initialData.leadershipMembers.map((m) => ({
+          fullName: m.fullName || "",
+          role: m.role || "አባል",
+          phoneNumber: m.phoneNumber || "",
+          address: m.address || "",
+          representedEntity: m.representedEntity || "",
+        }));
+      } else {
+        // Fallback for legacy councils with only scalar chairpersonName
+        members = [
+          {
+            fullName: initialData.chairpersonName || "",
+            role: "የእድር ዳኛ",
+            phoneNumber: initialData.chairpersonPhone || "",
+            representedEntity: "",
+          },
+          {
+            fullName: "",
+            role: "ጸሐፊ",
+            phoneNumber: "",
+            representedEntity: "",
+          },
+        ];
+      }
+
       form.reset({
         name: initialData.name,
         level: initialData.level,
         subCity: initialData.subCity,
         woreda: initialData.woreda || "",
         establishmentDate: initialData.establishmentDate.slice(0, 10),
-        chairpersonName: initialData.chairpersonName || "",
-        chairpersonPhone: initialData.chairpersonPhone || "",
         contactPhone: initialData.contactPhone || "",
         address: initialData.address || "",
-        leadershipMembers: Array.isArray(initialData.leadershipMembers)
-          ? initialData.leadershipMembers
-          : [],
+        leadershipMembers: members,
         byLawsDocId: (initialData as any)?.byLawsDoc?.id ?? undefined,
         associationIds: initialData.memberEdirs?.map((m) => m.id) || [],
       });
@@ -162,17 +188,36 @@ export default function NewCouncilForm({
   }, [open, initialData, form]);
 
   const onSubmit = async (values: NewEdirCouncilSchemaType) => {
+    const rawMembers = values.leadershipMembers || [];
+    const validMembers: CouncilLeadershipMember[] = rawMembers
+      .filter((m) => m.fullName && m.fullName.trim() !== "")
+      .map((m) => ({
+        fullName: m.fullName!.trim(),
+        role: m.role?.trim() || "አባል",
+        phoneNumber: m.phoneNumber?.trim() || undefined,
+        address: m.address?.trim() || undefined,
+        representedEntity: m.representedEntity?.trim() || undefined,
+      }));
+
+    const chair =
+      validMembers.find(
+        (m) =>
+          m.role === "የእድር ዳኛ" ||
+          m.role?.toLowerCase().includes("dagna") ||
+          m.role?.toLowerCase().includes("chair")
+      ) || validMembers[0];
+
     const payload: EdirCouncilPayload = {
       name: values.name,
       level: values.level as EdirLevel,
       subCity: values.subCity,
       woreda: values.woreda || undefined,
       establishmentDate: values.establishmentDate,
-      chairpersonName: values.chairpersonName || undefined,
-      chairpersonPhone: values.chairpersonPhone || undefined,
+      chairpersonName: chair?.fullName || undefined,
+      chairpersonPhone: chair?.phoneNumber || undefined,
       contactPhone: values.contactPhone || undefined,
       address: values.address || undefined,
-      leadershipMembers: values.leadershipMembers || [],
+      leadershipMembers: validMembers,
       byLawsDocId: values.byLawsDocId ?? undefined,
       associationIds: values.associationIds || [],
     };
@@ -303,6 +348,117 @@ export default function NewCouncilForm({
     } catch {
       return name;
     }
+  };
+
+  const renderRepresentedEntityField = (
+    name: any,
+    labelOverride?: string,
+  ) => {
+    const label =
+      labelOverride ||
+      (watchedLevel === "WOREDA"
+        ? t("form.fields.leaderRepresentedEdir")
+        : watchedLevel === "SUB_CITY"
+        ? t("form.fields.leaderRepresentedWoreda")
+        : t("form.fields.leaderRepresentedSubCity"));
+
+    if (watchedLevel === "WOREDA") {
+      return (
+        <FormField
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs font-semibold text-slate-700">
+                {label}
+              </FormLabel>
+              <FormControl>
+                <Input
+                  list="edir-council-candidate-edirs"
+                  placeholder={t("form.placeholders.leaderRepresentedEdir")}
+                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white focus:bg-white"
+                  {...field}
+                  value={field.value || ""}
+                />
+              </FormControl>
+              <FormMessage className="text-[11px]" />
+            </FormItem>
+          )}
+        />
+      );
+    }
+
+    if (watchedLevel === "SUB_CITY") {
+      return (
+        <FormField
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs font-semibold text-slate-700">
+                {label}
+              </FormLabel>
+              <Select onValueChange={field.onChange} value={field.value || undefined}>
+                <FormControl>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                    <SelectValue
+                      placeholder={t("form.placeholders.leaderRepresentedWoreda")}
+                    >
+                      {field.value ? `Woreda ${field.value}` : undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="max-h-56">
+                  {subCityWoredas.map((wCode) => (
+                    <SelectItem key={wCode} value={wCode} className="text-xs">
+                      Woreda {wCode}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-[11px]" />
+            </FormItem>
+          )}
+        />
+      );
+    }
+
+    if (watchedLevel === "CITY") {
+      return (
+        <FormField
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs font-semibold text-slate-700">
+                {label}
+              </FormLabel>
+              <Select onValueChange={field.onChange} value={field.value || undefined}>
+                <FormControl>
+                  <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                    <SelectValue
+                      placeholder={t("form.placeholders.leaderRepresentedSubCity")}
+                    >
+                      {field.value ? getSubCityLabel(field.value) : undefined}
+                    </SelectValue>
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="max-h-56">
+                  {subCities.map((sc) => (
+                    <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
+                      {getSubCityLabel(sc.name)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-[11px]" />
+            </FormItem>
+          )}
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -489,50 +645,233 @@ export default function NewCouncilForm({
               </div>
             </div>
 
-            {/* Leadership & Contact */}
+            {/* Datalists for Candidate Edirs and Role Suggestions */}
+            <datalist id="edir-council-candidate-edirs">
+              {candidateEdirs.map((e: any) => (
+                <option key={e.id} value={e.name}>
+                  {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
+                </option>
+              ))}
+            </datalist>
+            <datalist id="edir-council-member-role-suggestions">
+              <option value="የእድር ዳኛ" />
+              <option value="ጸሐፊ" />
+              <option value="አባል" />
+              <option value="ምክትል እድር ዳኛ" />
+              <option value="ምክትል ጸሐፊ" />
+            </datalist>
+
+            {/* Council Leadership & Members */}
             <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.sections.leadership")}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                <FormField
-                  control={form.control}
-                  name="chairpersonName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("form.fields.chairpersonName")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.placeholders.chairpersonName")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          {...field}
+              <div className="border-b border-[#E3E7EB] pb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
+                  {t("form.sections.leadership")}
+                </h3>
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                  {t.has("form.sections.leadershipHelp")
+                    ? t("form.sections.leadershipHelp")
+                    : "Edir Dagna, Tsehafi, and optional additional members"}
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {fields.map((fieldItem, index) => {
+                  const roleValue = form.watch(`leadershipMembers.${index}.role`);
+
+                  return (
+                    <div
+                      key={fieldItem.id}
+                      className="rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-3 space-y-2.5 hover:border-slate-300 transition-colors"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-xs ${
+                              roleValue === "የእድር ዳኛ" || (!roleValue && index === 0)
+                                ? "bg-[#0B1F3A] text-white"
+                                : roleValue === "ጸሐፊ" || (!roleValue && index === 1)
+                                ? "bg-[#1769AA] text-white"
+                                : "bg-slate-200 text-slate-700"
+                            }`}
+                          >
+                            {roleValue || `Member #${index + 1}`}
+                          </span>
+                        </div>
+
+                        {fields.length > 2 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xs cursor-pointer"
+                            onClick={() => remove(index)}
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </Button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 items-start">
+                        {/* Full Name */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.fullName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-600">
+                                {t.has("form.fields.leaderName")
+                                  ? t("form.fields.leaderName")
+                                  : "Full Name"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={
+                                    index === 0
+                                      ? t("form.placeholders.chairpersonName")
+                                      : index === 1
+                                      ? t("form.placeholders.secretaryName")
+                                      : t("form.placeholders.leaderName")
+                                  }
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white focus:bg-white"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
                         />
-                      </FormControl>
-                      <FormMessage className="text-[11px]" />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="chairpersonPhone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("form.fields.chairpersonPhone")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.placeholders.chairpersonPhone")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          {...field}
+
+                        {/* Role */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.role`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-600">
+                                {t.has("form.fields.leaderRole")
+                                  ? t("form.fields.leaderRole")
+                                  : "Role"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  list="edir-council-member-role-suggestions"
+                                  placeholder={t("form.placeholders.leaderRole")}
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white focus:bg-white"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
                         />
-                      </FormControl>
-                      <FormMessage className="text-[11px]" />
-                    </FormItem>
-                  )}
-                />
+
+                        {/* Phone Number */}
+                        <FormField
+                          control={form.control}
+                          name={`leadershipMembers.${index}.phoneNumber`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-[11px] font-mono font-medium text-slate-600">
+                                {t.has("form.fields.leaderPhone")
+                                  ? t("form.fields.leaderPhone")
+                                  : "Phone"}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={t("form.placeholders.leaderPhone")}
+                                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white focus:bg-white"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-[11px]" />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Represented Entity */}
+                        <div>
+                          {renderRepresentedEntityField(
+                            `leadershipMembers.${index}.representedEntity`
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Add Leadership / Member Buttons */}
+              <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-[#0B1F3A] hover:bg-[#F7F8FA] gap-1 font-medium cursor-pointer"
+                  onClick={() =>
+                    append({
+                      fullName: "",
+                      role: "የእድር ዳኛ",
+                      phoneNumber: "",
+                      address: "",
+                      representedEntity: "",
+                    })
+                  }
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#0B1F3A]" />
+                  <span>
+                    {t.has("form.buttons.addEdirDagna")
+                      ? t("form.buttons.addEdirDagna")
+                      : "Add Edir Dagna"}
+                  </span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-[#1769AA] hover:bg-[#F7F8FA] gap-1 font-medium cursor-pointer"
+                  onClick={() =>
+                    append({
+                      fullName: "",
+                      role: "ጸሐፊ",
+                      phoneNumber: "",
+                      address: "",
+                      representedEntity: "",
+                    })
+                  }
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#1769AA]" />
+                  <span>
+                    {t.has("form.buttons.addTsehafi")
+                      ? t("form.buttons.addTsehafi")
+                      : "Add Tsehafi"}
+                  </span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1 font-medium cursor-pointer"
+                  onClick={() =>
+                    append({
+                      fullName: "",
+                      role: "አባል",
+                      phoneNumber: "",
+                      address: "",
+                      representedEntity: "",
+                    })
+                  }
+                >
+                  <Plus className="w-3.5 h-3.5 text-slate-500" />
+                  <span>
+                    {t.has("form.buttons.addMember")
+                      ? t("form.buttons.addMember")
+                      : "Add Member"}
+                  </span>
+                </Button>
+              </div>
+
+              {/* Office Contact Phone */}
+              <div className="pt-1">
                 <FormField
                   control={form.control}
                   name="contactPhone"
@@ -552,271 +891,6 @@ export default function NewCouncilForm({
                     </FormItem>
                   )}
                 />
-              </div>
-            </div>
-
-            {/* Additional Leadership Members */}
-            <div className="space-y-3">
-              <div className="flex justify-between items-center border-b border-[#E3E7EB] pb-1.5">
-                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                  {t.has("form.sections.additionalLeadership")
-                    ? t("form.sections.additionalLeadership")
-                    : "Additional Leadership Members"}
-                </h3>
-                <span className="text-[11px] font-mono text-slate-500">
-                  {fields.length}{" "}
-                  {t.has("leadershipDialog.memberCount")
-                    ? t("leadershipDialog.memberCount", { count: fields.length })
-                    : "members"}
-                </span>
-              </div>
-
-              {/* Datalist for fast role selection or auto-complete */}
-              <datalist id="edir-council-role-suggestions">
-                {COMMON_ROLE_SUGGESTIONS.map((role) => {
-                  const localizedRole = t.has(`commonRoles.${role}` as any)
-                    ? t(`commonRoles.${role}` as any)
-                    : role;
-                  return (
-                    <React.Fragment key={role}>
-                      <option value={localizedRole} />
-                      {localizedRole !== role && <option value={role} />}
-                    </React.Fragment>
-                  );
-                })}
-              </datalist>
-
-              <div className="space-y-2">
-                {fields.map((fieldItem, index) => (
-                  <div
-                    key={fieldItem.id}
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2.5 items-start rounded-xs border border-[#E3E7EB] bg-slate-50/30 p-2.5"
-                  >
-                    {/* Full Name */}
-                    <FormField
-                      control={form.control}
-                      name={`leadershipMembers.${index}.fullName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t.has("form.fields.leaderName")
-                              ? t("form.fields.leaderName")
-                              : "Full Name"}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={t("form.placeholders.leaderName")}
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Role / Position */}
-                    <FormField
-                      control={form.control}
-                      name={`leadershipMembers.${index}.role`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t.has("form.fields.leaderRole")
-                              ? t("form.fields.leaderRole")
-                              : "Role / Position"}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              list="edir-council-role-suggestions"
-                              placeholder={t("form.placeholders.leaderRole")}
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Phone Number */}
-                    <FormField
-                      control={form.control}
-                      name={`leadershipMembers.${index}.phoneNumber`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                            {t.has("form.fields.leaderPhone")
-                              ? t("form.fields.leaderPhone")
-                              : "Phone Number"}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={t("form.placeholders.leaderPhone")}
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-[11px]" />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Representing Entity */}
-                    {watchedLevel === "WOREDA" && (
-                      <FormField
-                        control={form.control}
-                        name={`leadershipMembers.${index}.representedEntity`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                              {t.has("form.fields.leaderRepresentedEdir")
-                                ? t("form.fields.leaderRepresentedEdir")
-                                : "Representing Edir"}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                list={`edir-council-candidates-${index}`}
-                                placeholder={
-                                  t.has("form.placeholders.leaderRepresentedEdir")
-                                    ? t("form.placeholders.leaderRepresentedEdir")
-                                    : "Select Edir"
-                                }
-                                className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                                {...field}
-                                value={field.value || ""}
-                              />
-                            </FormControl>
-                            <datalist id={`edir-council-candidates-${index}`}>
-                              {candidateEdirs.map((e: any) => (
-                                <option key={e.id} value={e.name}>
-                                  {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
-                                </option>
-                              ))}
-                            </datalist>
-                            <FormMessage className="text-[11px]" />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
-                    {watchedLevel === "SUB_CITY" && (
-                      <FormField
-                        control={form.control}
-                        name={`leadershipMembers.${index}.representedEntity`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                              {t.has("form.fields.leaderRepresentedWoreda")
-                                ? t("form.fields.leaderRepresentedWoreda")
-                                : "Representing Woreda"}
-                            </FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                                  <SelectValue
-                                    placeholder={
-                                      t.has("form.placeholders.leaderRepresentedWoreda")
-                                        ? t("form.placeholders.leaderRepresentedWoreda")
-                                        : "Select Woreda"
-                                    }
-                                  >
-                                    {field.value ? `Woreda ${field.value}` : undefined}
-                                  </SelectValue>
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="max-h-56">
-                                {subCityWoredas.map((wCode) => (
-                                  <SelectItem key={wCode} value={wCode} className="text-xs">
-                                    Woreda {wCode}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage className="text-[11px]" />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
-                    {watchedLevel === "CITY" && (
-                      <FormField
-                        control={form.control}
-                        name={`leadershipMembers.${index}.representedEntity`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[11px] font-mono font-medium text-slate-500">
-                              {t.has("form.fields.leaderRepresentedSubCity")
-                                ? t("form.fields.leaderRepresentedSubCity")
-                                : "Representing Sub-City"}
-                            </FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                                  <SelectValue
-                                    placeholder={
-                                      t.has("form.placeholders.leaderRepresentedSubCity")
-                                        ? t("form.placeholders.leaderRepresentedSubCity")
-                                        : "Select Sub-City"
-                                    }
-                                  >
-                                    {field.value ? getSubCityLabel(field.value) : undefined}
-                                  </SelectValue>
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="max-h-56">
-                                {subCities.map((sc) => (
-                                  <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
-                                    {getSubCityLabel(sc.name)}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage className="text-[11px]" />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
-                    {/* Delete button (X icon) */}
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 mt-5 rounded-xs text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      onClick={() => remove(index)}
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                ))}
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
-                  onClick={() =>
-                    append({
-                      fullName: "",
-                      role: "",
-                      phoneNumber: "",
-                      address: "",
-                      representedEntity: "",
-                    })
-                  }
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  {t.has("form.buttons.addLeader")
-                    ? t("form.buttons.addLeader")
-                    : "Add Member"}
-                </Button>
               </div>
             </div>
 

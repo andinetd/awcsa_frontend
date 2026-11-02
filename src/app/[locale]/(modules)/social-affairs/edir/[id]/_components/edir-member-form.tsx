@@ -67,10 +67,10 @@ export default function EdirMemberForm({
     defaultValues: {
       fullName: "",
       edirIdNumber: associationId.toString(),
-      cityIdNumber: "",
+      cityIdNumber: "N/A",
       phoneNumber: "",
       job: "",
-      position: "MEMBER",
+      position: "LEADER",
       familyMembersCount: 0,
       joinedAt: new Date().toISOString().split("T")[0],
       isActive: true,
@@ -82,28 +82,28 @@ export default function EdirMemberForm({
     if (initialData) {
       form.reset({
         fullName: initialData.fullName,
-        edirIdNumber: initialData.edirIdNumber,
-        cityIdNumber: initialData.cityIdNumber,
-        phoneNumber: initialData.phoneNumber,
-        job: initialData.job,
-        position: initialData.position,
-        familyMembersCount: initialData.familyMembersCount,
+        edirIdNumber: initialData.edirIdNumber || associationId.toString(),
+        cityIdNumber: initialData.cityIdNumber || "N/A",
+        phoneNumber: initialData.phoneNumber || "",
+        job: initialData.job || "",
+        position: initialData.position || "LEADER",
+        familyMembersCount: initialData.familyMembersCount || 0,
         joinedAt: initialData.joinedAt
           ? new Date(initialData.joinedAt).toISOString().split("T")[0]
           : "",
         leftAt: initialData.leftAt
           ? new Date(initialData.leftAt).toISOString().split("T")[0]
           : "",
-        isActive: initialData.isActive,
+        isActive: initialData.isActive ?? true,
       });
     } else {
       form.reset({
         fullName: "",
         edirIdNumber: associationId.toString(),
-        cityIdNumber: "",
+        cityIdNumber: "N/A",
         phoneNumber: "",
         job: "",
-        position: "MEMBER",
+        position: "LEADER",
         familyMembersCount: 0,
         joinedAt: new Date().toISOString().split("T")[0],
         isActive: true,
@@ -115,7 +115,7 @@ export default function EdirMemberForm({
   function onSubmit(values: MemberSchemaType) {
     const payload = {
       ...values,
-      edirIdNumber: associationId.toString(), // Ensure it's set
+      edirIdNumber: associationId.toString(),
       associationId,
     };
 
@@ -154,7 +154,7 @@ export default function EdirMemberForm({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[580px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
+      <DialogContent className="sm:max-w-[480px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white p-6 shadow-lg">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
           <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
             {isEditMode ? t("title.update") : t("title.add")}
@@ -165,7 +165,7 @@ export default function EdirMemberForm({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 pt-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-2">
             <FormField
               control={form.control}
               name="fullName"
@@ -184,53 +184,7 @@ export default function EdirMemberForm({
               )}
             />
 
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="cityIdNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.cityId")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                        placeholder={t("placeholders.cityId")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-[11px]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.phone")}</FormLabel>
-                    <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.phone")} {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[11px]" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="job"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.job")}</FormLabel>
-                    <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("placeholders.job")} {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[11px]" />
-                  </FormItem>
-                )}
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="position"
@@ -244,94 +198,47 @@ export default function EdirMemberForm({
                     >
                       <FormControl>
                         <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                          <SelectValue
-                            placeholder={t("placeholders.position")}
-                          >
-                            {field.value && tp.has(field.value as any) ? tp(field.value as any) : undefined}
+                          <SelectValue placeholder={t("placeholders.position")}>
+                            {field.value && tp.has(field.value as any) ? tp(field.value as any) : field.value}
                           </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="rounded-xs border-[#E3E7EB]">
-                        <SelectItem value="MEMBER" className="text-xs rounded-xs">{tp("MEMBER")}</SelectItem>
-                        <SelectItem value="LEADER" className="text-xs rounded-xs">{tp("LEADER")}</SelectItem>
-                        <SelectItem value="COMMITTEE" className="text-xs rounded-xs">
-                          {tp("COMMITTEE")}
-                        </SelectItem>
-                        <SelectItem value="SECRETARY" className="text-xs rounded-xs">
-                          {tp("SECRETARY")}
-                        </SelectItem>
-                        <SelectItem value="CASHIER" className="text-xs rounded-xs">{tp("CASHIER")}</SelectItem>
+                        <SelectItem value="LEADER" className="text-xs rounded-xs">{tp.has("LEADER") ? tp("LEADER") : "Leader"}</SelectItem>
+                        <SelectItem value="DEPUTY_LEADER" className="text-xs rounded-xs">{tp.has("DEPUTY_LEADER") ? tp("DEPUTY_LEADER") : "Deputy Leader"}</SelectItem>
+                        <SelectItem value="SECRETARY" className="text-xs rounded-xs">{tp.has("SECRETARY") ? tp("SECRETARY") : "Secretary"}</SelectItem>
+                        <SelectItem value="TREASURER" className="text-xs rounded-xs">{tp.has("TREASURER") ? tp("TREASURER") : "Treasurer"}</SelectItem>
+                        <SelectItem value="DEPUTY_TREASURER" className="text-xs rounded-xs">{tp.has("DEPUTY_TREASURER") ? tp("DEPUTY_TREASURER") : "Deputy Treasurer"}</SelectItem>
+                        <SelectItem value="ACCOUNTANT" className="text-xs rounded-xs">{tp.has("ACCOUNTANT") ? tp("ACCOUNTANT") : "Accountant"}</SelectItem>
+                        <SelectItem value="AUDITOR" className="text-xs rounded-xs">{tp.has("AUDITOR") ? tp("AUDITOR") : "Auditor"}</SelectItem>
+                        <SelectItem value="STOREKEEPER" className="text-xs rounded-xs">{tp.has("STOREKEEPER") ? tp("STOREKEEPER") : "Storekeeper"}</SelectItem>
+                        <SelectItem value="GUARD" className="text-xs rounded-xs">{tp.has("GUARD") ? tp("GUARD") : "Guard"}</SelectItem>
+                        <SelectItem value="MEMBER" className="text-xs rounded-xs">{tp.has("MEMBER") ? tp("MEMBER") : "Member"}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
-            </div>
 
-            <div className="grid grid-cols-2 gap-3">
               <FormField
                 control={form.control}
-                name="familyMembersCount"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.familyMembers")}</FormLabel>
+                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.phone")}</FormLabel>
                     <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[11px]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="joinedAt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.joinedAt")}</FormLabel>
-                    <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
+                      <Input
+                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                        placeholder="09..."
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[11px]" />
                   </FormItem>
                 )}
               />
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <FormField
-                control={form.control}
-                name="leftAt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("fields.leftAt")}</FormLabel>
-                    <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" type="date" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[11px]" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="isActive"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xs border border-[#E3E7EB] bg-slate-50/40 p-3">
-                  <FormControl>
-                    <Checkbox
-                      className="rounded-xs data-[state=checked]:bg-[#1769AA] data-[state=checked]:border-[#1769AA]"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-0.5 leading-none">
-                    <FormLabel className="text-xs font-medium text-slate-700 cursor-pointer">{t("fields.isActive")}</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
 
             <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
               <Button

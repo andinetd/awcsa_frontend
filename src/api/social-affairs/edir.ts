@@ -54,15 +54,30 @@ export interface EdirDocument {
   uploadedAt: string;
 }
 
+export type EdirType = "COMMUNITY" | "WOMENS" | "WORKPLACE" | "SPECIALIZED";
+
+export interface EdirLeadershipMember {
+  fullName: string;
+  position: string;
+  phoneNumber?: string | null;
+}
+
 export interface Edir {
   id?: number;
   name: string;
   establishmentDate: string;
+  edirType?: EdirType;
   subCity: string;
   woreda: string;
   kebele?: string | null;
-  houseNumber: string;
-  specificLocation: string;
+  houseNumber?: string | null;
+  specificLocation?: string | null;
+  chairpersonName?: string | null;
+  chairpersonPhone?: string | null;
+  deputyChairpersonName?: string | null;
+  deputyChairpersonPhone?: string | null;
+  totalAssetValue?: number | null;
+  leadershipMembers?: EdirLeadershipMember[];
   // Flat member fields
   managementMale: number;
   managementFemale: number;

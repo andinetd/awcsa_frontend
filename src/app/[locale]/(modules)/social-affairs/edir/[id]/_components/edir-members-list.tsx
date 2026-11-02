@@ -96,16 +96,20 @@ export default function EdirMembersList({
                 <TableRow key={member.id} className="hover:bg-slate-50/70 transition-colors">
                   <TableCell className="font-semibold text-xs text-slate-900 px-4 py-2.5">
                     <div>{member.fullName}</div>
-                    {member.cityIdNumber && (
+                    {member.cityIdNumber && member.cityIdNumber !== "N/A" && (
                       <div className="font-mono text-[11px] text-slate-400 font-normal">
                         Fayda: {member.cityIdNumber}
                       </div>
                     )}
                   </TableCell>
-                  <TableCell className="font-mono text-xs text-slate-600 px-4 py-2.5">{member.edirIdNumber}</TableCell>
+                  <TableCell className="font-mono text-xs text-slate-600 px-4 py-2.5">
+                    {member.edirIdNumber && member.edirIdNumber !== "N/A" ? member.edirIdNumber : "—"}
+                  </TableCell>
                   <TableCell className="px-4 py-2.5">
                     <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[11px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                      {t(`positions.${member.position}`)}
+                      {member.position && t.has(`positions.${member.position}`)
+                        ? t(`positions.${member.position}`)
+                        : member.position || "—"}
                     </span>
                   </TableCell>
                   <TableCell className="font-mono text-xs text-slate-600 px-4 py-2.5">{member.phoneNumber || "—"}</TableCell>
