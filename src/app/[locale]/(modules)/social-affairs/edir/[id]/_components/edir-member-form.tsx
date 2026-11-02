@@ -210,6 +210,7 @@ export default function EdirMemberForm({
                         <SelectItem value="TREASURER" className="text-xs rounded-xs">{tp.has("TREASURER") ? tp("TREASURER") : "Treasurer"}</SelectItem>
                         <SelectItem value="DEPUTY_TREASURER" className="text-xs rounded-xs">{tp.has("DEPUTY_TREASURER") ? tp("DEPUTY_TREASURER") : "Deputy Treasurer"}</SelectItem>
                         <SelectItem value="ACCOUNTANT" className="text-xs rounded-xs">{tp.has("ACCOUNTANT") ? tp("ACCOUNTANT") : "Accountant"}</SelectItem>
+                        <SelectItem value="DEPUTY_ACCOUNTANT" className="text-xs rounded-xs">{tp.has("DEPUTY_ACCOUNTANT") ? tp("DEPUTY_ACCOUNTANT") : "Deputy Accountant"}</SelectItem>
                         <SelectItem value="AUDITOR" className="text-xs rounded-xs">{tp.has("AUDITOR") ? tp("AUDITOR") : "Auditor"}</SelectItem>
                         <SelectItem value="STOREKEEPER" className="text-xs rounded-xs">{tp.has("STOREKEEPER") ? tp("STOREKEEPER") : "Storekeeper"}</SelectItem>
                         <SelectItem value="GUARD" className="text-xs rounded-xs">{tp.has("GUARD") ? tp("GUARD") : "Guard"}</SelectItem>

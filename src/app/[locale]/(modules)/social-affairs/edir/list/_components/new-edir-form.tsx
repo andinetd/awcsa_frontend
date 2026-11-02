@@ -48,6 +48,16 @@ import {
   WoredaSelect,
 } from "@/components/shared/location-selects";
 
+function normalizeLeadershipPosition(pos?: string): string {
+  if (!pos) return "LEADER";
+  const upper = pos.toUpperCase();
+  if (upper === "LEADER" || upper === "SECRETARY" || upper === "TREASURER") return upper;
+  if (pos.includes("ዳኛ") || pos.includes("ሰብሳቢ") || upper.includes("LEAD") || upper.includes("CHAIR")) return "LEADER";
+  if (pos.includes("ጸሐፊ") || pos.includes("ፀሐፊ") || upper.includes("SEC")) return "SECRETARY";
+  if (pos.includes("ገንዘብ") || upper.includes("TREAS") || upper.includes("CASH")) return "TREASURER";
+  return "LEADER";
+}
+
 interface NewEdirFormProps {
   initialData?: Edir;
   edirId?: number;
@@ -60,6 +70,7 @@ export default function NewEdirForm({
   trigger,
 }: NewEdirFormProps) {
   const t = useTranslations("social-affairs.edir.form");
+  const tp = useTranslations("social-affairs.edir.edir-members.positions");
   const safeT = (key: string, fallback: string): string => {
     try {
       return t.has(key as any) ? (t(key as any) as string) : fallback;
@@ -93,8 +104,9 @@ export default function NewEdirForm({
       additionalIncome: "",
       remark: "",
       leadershipMembers: [
-        { fullName: "", position: "የእድር ዳኛ / ሰብሳቢ (Leader)", phoneNumber: "" },
-        { fullName: "", position: "ጸሐፊ (Secretary)", phoneNumber: "" },
+        { fullName: "", position: "LEADER", phoneNumber: "" },
+        { fullName: "", position: "SECRETARY", phoneNumber: "" },
+        { fullName: "", position: "TREASURER", phoneNumber: "" },
       ],
       foundingMembers: [],
       assets: [],
@@ -231,34 +243,35 @@ export default function NewEdirForm({
       if (initialData.leadershipMembers && initialData.leadershipMembers.length > 0) {
         leaders = initialData.leadershipMembers.map((lm) => ({
           fullName: lm.fullName,
-          position: lm.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+          position: normalizeLeadershipPosition(lm.position),
           phoneNumber: lm.phoneNumber || "",
         }));
       } else if ((initialData as any).members && Array.isArray((initialData as any).members) && (initialData as any).members.length > 0) {
         leaders = (initialData as any).members.map((m: any) => ({
           fullName: m.fullName,
-          position: m.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+          position: normalizeLeadershipPosition(m.position),
           phoneNumber: m.phoneNumber || "",
         }));
       } else if (initialData.chairpersonName) {
         leaders = [
           {
             fullName: initialData.chairpersonName,
-            position: "የእድር ዳኛ / ሰብሳቢ (Leader)",
+            position: "LEADER",
             phoneNumber: initialData.chairpersonPhone || "",
           },
         ];
         if (initialData.deputyChairpersonName) {
           leaders.push({
             fullName: initialData.deputyChairpersonName,
-            position: "ምክትል እድር ዳኛ / ሰብሳቢ (Deputy Leader)",
+            position: "SECRETARY",
             phoneNumber: initialData.deputyChairpersonPhone || "",
           });
         }
       } else {
         leaders = [
-          { fullName: "", position: "የእድር ዳኛ / ሰብሳቢ (Leader)", phoneNumber: "" },
-          { fullName: "", position: "ጸሐፊ (Secretary)", phoneNumber: "" },
+          { fullName: "", position: "LEADER", phoneNumber: "" },
+          { fullName: "", position: "SECRETARY", phoneNumber: "" },
+          { fullName: "", position: "TREASURER", phoneNumber: "" },
         ];
       }
 
@@ -321,8 +334,12 @@ export default function NewEdirForm({
     const validLeaders = (values.leadershipMembers || []).filter(
       (m) => m.fullName && m.fullName.trim().length > 0,
     );
-    const primaryLeader = validLeaders[0];
-    const deputyLeader = validLeaders[1];
+    const primaryLeader =
+      validLeaders.find((m) => normalizeLeadershipPosition(m.position) === "LEADER") ||
+      validLeaders[0];
+    const deputyLeader =
+      validLeaders.find((m) => normalizeLeadershipPosition(m.position) === "SECRETARY") ||
+      validLeaders[1];
 
     const totalMale = Number(values.members?.male || 0);
     const totalFemale = Number(values.members?.female || 0);
@@ -346,12 +363,12 @@ export default function NewEdirForm({
       councilId: values.councilId ? Number(values.councilId) : null,
       leadershipMembers: validLeaders.map((lm) => ({
         fullName: lm.fullName.trim(),
-        position: lm.position || "የእድር ዳኛ / ሰብሳቢ (Leader)",
+        position: normalizeLeadershipPosition(lm.position),
         phoneNumber: lm.phoneNumber || "",
       })),
       foundingMembers: validLeaders.map((lm) => ({
         fullName: lm.fullName.trim(),
-        address: lm.position || "",
+        address: normalizeLeadershipPosition(lm.position),
       })),
       assets: values.assets.map((a) => ({
         type: a.type,
@@ -787,19 +804,6 @@ export default function NewEdirForm({
                 </h3>
               </div>
               <div className="space-y-2">
-                <datalist id="edir-leadership-positions">
-                  <option value="የእድር ዳኛ / ሰብሳቢ (Leader)" />
-                  <option value="ምክትል እድር ዳኛ (Deputy Leader)" />
-                  <option value="ጸሐፊ (Secretary)" />
-                  <option value="ገንዘብ ያዥ (Treasurer)" />
-                  <option value="ምክትል ገንዘብ ያዥ (Deputy Treasurer)" />
-                  <option value="የሂሳብ ሹም (Accountant)" />
-                  <option value="ኦዲተር (Auditor)" />
-                  <option value="የንብረት አስተዳዳሪ (Storekeeper)" />
-                  <option value="ጥበቃ (Guard)" />
-                  <option value="አባል (Member)" />
-                </datalist>
-
                 {leadershipFields.fields.map((field, index) => (
                   <div
                     key={field.id}
@@ -842,18 +846,33 @@ export default function NewEdirForm({
                               ? t("fields.leaderPosition")
                               : "Position"}
                           </FormLabel>
-                          <FormControl>
-                            <Input
-                              list="edir-leadership-positions"
-                              className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white"
-                              placeholder={
-                                t.has("fields.leaderPosition")
-                                  ? t("fields.leaderPosition")
-                                  : "Position"
-                              }
-                              {...f}
-                            />
-                          </FormControl>
+                          <Select
+                            onValueChange={f.onChange}
+                            value={normalizeLeadershipPosition(f.value)}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
+                                <SelectValue
+                                  placeholder={
+                                    t.has("fields.leaderPosition")
+                                      ? t("fields.leaderPosition")
+                                      : "Position"
+                                  }
+                                />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="rounded-xs border-[#E3E7EB]">
+                              <SelectItem value="LEADER" className="text-xs rounded-xs">
+                                {tp.has("LEADER") ? tp("LEADER") : "Edir Dagna / Leader"}
+                              </SelectItem>
+                              <SelectItem value="SECRETARY" className="text-xs rounded-xs">
+                                {tp.has("SECRETARY") ? tp("SECRETARY") : "Tsehafi / Secretary"}
+                              </SelectItem>
+                              <SelectItem value="TREASURER" className="text-xs rounded-xs">
+                                {tp.has("TREASURER") ? tp("TREASURER") : "Genzeb Yazh / Treasurer"}
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage className="text-[11px]" />
                         </FormItem>
                       )}
@@ -898,7 +917,7 @@ export default function NewEdirForm({
                   size="sm"
                   className="h-7 text-xs rounded-xs border-[#E3E7EB] text-slate-700 hover:bg-[#F7F8FA] gap-1.5"
                   onClick={() =>
-                    leadershipFields.append({ fullName: "", position: "", phoneNumber: "" })
+                    leadershipFields.append({ fullName: "", position: "LEADER", phoneNumber: "" })
                   }
                 >
                   <Plus className="w-3.5 h-3.5" />

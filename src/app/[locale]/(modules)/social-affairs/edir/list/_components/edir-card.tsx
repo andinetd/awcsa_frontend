@@ -30,6 +30,7 @@ const statusStyles: Record<EdirStatus, string> = {
 const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
   const t = useTranslations("social-affairs.edir.edir.list");
   const tSubCities = useTranslations("subCities.names");
+  const tTypes = useTranslations("social-affairs.edir.edir-details.edirTypes");
   const router = useRouter();
 
   const getSubCityDisplayName = (name?: string) => {
@@ -62,15 +63,22 @@ const EdirCard: React.FC<EdirCardProps> = ({ edir }) => {
             <span className="text-sm font-bold text-[#0B1F3A] leading-tight line-clamp-1">
               {edir.name}
             </span>
-            {edir.status && (
-              <span
-                className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded-xs border shrink-0 ${
-                  statusStyles[edir.status] || "bg-slate-100 text-slate-700 border-slate-200"
-                }`}
-              >
-                {t(`status.${edir.status}`)}
-              </span>
-            )}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {edir.edirType && (
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-xs bg-[#F4F6F8] text-[#0B1F3A] border border-[#E3E7EB]">
+                  {tTypes.has(edir.edirType as any) ? tTypes(edir.edirType as any) : edir.edirType}
+                </span>
+              )}
+              {edir.status && (
+                <span
+                  className={`text-[11px] font-mono font-semibold px-2 py-0.5 rounded-xs border shrink-0 ${
+                    statusStyles[edir.status] || "bg-slate-100 text-slate-700 border-slate-200"
+                  }`}
+                >
+                  {t(`status.${edir.status}`)}
+                </span>
+              )}
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 space-y-2 text-xs text-slate-600">

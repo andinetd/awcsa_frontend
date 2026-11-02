@@ -44,6 +44,7 @@ interface PageProps {
 export default function EdirDetailsPage({ params }: PageProps) {
   const t = useTranslations("social-affairs.edir.edir-details");
   const tList = useTranslations("social-affairs.edir.list");
+  const tp = useTranslations("social-affairs.edir.edir-members.positions");
   const router = useRouter();
   const resolvedParams = use(params);
   const id = parseInt(resolvedParams.id);
@@ -282,7 +283,9 @@ export default function EdirDetailsPage({ params }: PageProps) {
                               <td className="px-4 py-2 font-medium text-slate-800">{lm.fullName}</td>
                               <td className="px-4 py-2">
                                 <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                  {lm.position || "—"}
+                                  {lm.position && tp.has(lm.position as any)
+                                    ? tp(lm.position as any)
+                                    : lm.position || "—"}
                                 </span>
                               </td>
                               <td className="px-4 py-2 font-mono text-slate-600">
@@ -314,7 +317,7 @@ export default function EdirDetailsPage({ params }: PageProps) {
                             <td className="px-4 py-2 font-medium text-slate-800">{typedEdir.chairpersonName}</td>
                             <td className="px-4 py-2">
                               <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                ሰብሳቢ / ዳኛ (Leader)
+                                {tp.has("LEADER") ? tp("LEADER") : "የእድር ዳኛ / ሰብሳቢ"}
                               </span>
                             </td>
                             <td className="px-4 py-2 font-mono text-slate-600">
@@ -326,7 +329,7 @@ export default function EdirDetailsPage({ params }: PageProps) {
                               <td className="px-4 py-2 font-medium text-slate-800">{typedEdir.deputyChairpersonName}</td>
                               <td className="px-4 py-2">
                                 <span className="inline-flex px-1.5 py-0.5 rounded-xs text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                  ምክትል ሰብሳቢ (Deputy Leader)
+                                  {tp.has("DEPUTY_LEADER") ? tp("DEPUTY_LEADER") : "ምክትል እድር ዳኛ"}
                                 </span>
                               </td>
                               <td className="px-4 py-2 font-mono text-slate-600">

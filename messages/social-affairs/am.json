@@ -1166,10 +1166,10 @@
           "additionalDocuments": "ተጨማሪ የምዝገባ ሰነዶች (ካርታ፣ የባንክ ደብተር፣ ወዘተ)"
         },
         "edirTypes": {
-          "COMMUNITY": "የማህበረሰብ",
-          "WOMENS": "የሴቶች",
-          "WORKPLACE": "የስራ ቦታ",
-          "SPECIALIZED": "ልዩ"
+          "COMMUNITY": "የማህበረሰብ ዕድር",
+          "WOMENS": "የሴቶች ዕድር",
+          "WORKPLACE": "የተቋም/የስራ ቦታ ዕድር",
+          "SPECIALIZED": "ልዩ ዕድር"
         },
         "assetTypes": {
           "CASH": "ጥሬ ገንዘብ",
