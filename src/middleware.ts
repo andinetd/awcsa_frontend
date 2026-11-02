@@ -63,24 +63,18 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    // SIGNATURE & INTEGRITY CHECK
-    const isValidSignature = await verifyJwtSignature(token as string);
-    if (!isValidSignature) {
-      console.warn("[Middleware] Invalid JWT signature on:", pathname);
-      const loginUrl = new URL(`/${locale}/login`, req.url);
-      const response = NextResponse.redirect(loginUrl);
-      response.cookies.delete("wcasf_auth_token");
-      return response;
-    }
+    // SIGNATURE & INTEGRITY CHECK (non-fatal — see jwt-verify.ts for rationale)
+    await verifyJwtSignature(token as string);
 
     const decodedToken = jwtDecode<JwtPayload>(token as string);
 
-    // EXPIRATION CHECK
+    // EXPIRATION CHECK — only valid reason to delete the cookie
     if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
       console.warn("[Middleware] JWT expired for user:", (decodedToken as any)?.user?.email);
       const loginUrl = new URL(`/${locale}/login`, req.url);
       const response = NextResponse.redirect(loginUrl);
       response.cookies.delete("wcasf_auth_token");
+      response.cookies.delete("wcasf_refresh_token");
       return response;
     }
 
