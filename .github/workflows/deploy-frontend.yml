@@ -32,6 +32,8 @@ jobs:
 
             npm run build
 
-            pm2 restart awcsa-frontend || pm2 start npm --name awcsa-frontend -- start
+            export PATH="./node_modules/.bin:$PATH"
 
-            pm2 save
+            npx pm2 restart awcsa-frontend || npx pm2 start npm --name awcsa-frontend -- start
+
+            npx pm2 save
