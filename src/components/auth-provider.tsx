@@ -1,7 +1,7 @@
 "use client";
 import { useAuthStore } from "@/stores/auth-store";
 import { DeputyBureau } from "@/types/api/auth";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { ReactNode, useEffect } from "react";
 import CheckingAccess from "./shared/access-check-ui";
 import { LOGIN_ROUTE, isPublicAuthPath } from "@/lib/auth-routes";
@@ -36,6 +36,17 @@ const AuthProvider = ({
     }
 
     if (!user) {
+      // Check if a valid auth cookie exists before kicking user to login
+      const cookieToken = typeof document !== "undefined"
+        ? document.cookie.split("; ").find((row) => row.startsWith("wcasf_auth_token="))
+        : null;
+
+      if (cookieToken) {
+        // Attempt to reload token from cookie before logging out
+        useAuthStore.getState().loadTokenFromCookie();
+        return;
+      }
+
       useAuthStore.getState().logout();
       router.replace(LOGIN_ROUTE);
       return;

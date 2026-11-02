@@ -2,11 +2,11 @@
 
 import { useCallback, useRef, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { refreshAccessToken } from "@/api/auth/auth";
-import { LOGIN_ROUTE } from "@/lib/auth-routes";
+import { LOGIN_ROUTE, isPublicAuthPath } from "@/lib/auth-routes";
 
 export type WarningReason = "token" | "inactivity";
 
@@ -43,7 +43,7 @@ export function useSessionWarning() {
         toast.error(message, { duration: 5000 });
       }
       // Avoid a self-redirect if the user is already on the login page.
-      if (pathname !== LOGIN_ROUTE) {
+      if (!isPublicAuthPath(pathname)) {
         router.replace(LOGIN_ROUTE);
       }
     },
@@ -100,9 +100,9 @@ export function useSessionWarning() {
   /** Start the warning countdown. Called by the session monitor. */
   const startWarning = useCallback(
     (warnReason: WarningReason, seconds: number) => {
-      // Don't open the warning modal on the login page — the user is already
+      // Don't open the warning modal on public auth pages — the user is already
       // logging in or just logged out, and re-redirecting would loop.
-      if (pathname === LOGIN_ROUTE) return;
+      if (isPublicAuthPath(pathname)) return;
 
       clearCountdown();
       setReason(warnReason);

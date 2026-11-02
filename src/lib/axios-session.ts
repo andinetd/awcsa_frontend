@@ -19,7 +19,14 @@ function isAuthEndpoint(url?: string): boolean {
 }
 
 function requestRefresh(): Promise<ClientSignInResponse | null> {
-  const { refreshToken } = useAuthStore.getState();
+  let refreshToken = useAuthStore.getState().refreshToken;
+  if (!refreshToken && typeof document !== "undefined") {
+    const match = document.cookie.match(/(?:^|;\s*)wcasf_refresh_token=([^;]*)/);
+    if (match) {
+      refreshToken = decodeURIComponent(match[1]);
+    }
+  }
+
   if (!refreshToken) {
     return Promise.resolve(null);
   }
@@ -57,6 +64,22 @@ export function setupAuthInterceptor(): void {
     return;
   }
 
+  // Request interceptor: attach token dynamically from store or cookie
+  axios.interceptors.request.use((config) => {
+    let token = useAuthStore.getState().token;
+    if (!token && typeof document !== "undefined") {
+      const match = document.cookie.match(/(?:^|;\s*)wcasf_auth_token=([^;]*)/);
+      if (match) {
+        token = decodeURIComponent(match[1]);
+      }
+    }
+
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
   interceptorId = axios.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -89,10 +112,16 @@ export function setupAuthInterceptor(): void {
       // naive `endsWith("/login")` check would always be false. Use the
       // shared isPublicAuthPath helper which strips the locale internally.
       if (!isPublicAuthPath(window.location.pathname)) {
-        window.location.assign("/login");
+        const segments = window.location.pathname.split("/").filter(Boolean);
+        const locale = segments[0] === "am" || segments[0] === "en" ? segments[0] : "am";
+        window.location.assign(`/${locale}/login`);
       }
 
       return Promise.reject(error);
     },
   );
+}
+
+if (typeof window !== "undefined") {
+  setupAuthInterceptor();
 }

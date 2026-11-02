@@ -466,33 +466,6 @@ export default function NewCouncilForm({
                   />
                 )}
 
-                {/* Kebele */}
-                {showWoreda && (
-                  <FormField
-                    control={form.control}
-                    name="kebele"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-semibold text-slate-700">
-                          {t.has("form.fields.kebele") ? t("form.fields.kebele") : "Kebele"}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={
-                              t.has("form.placeholders.kebele")
-                                ? t("form.placeholders.kebele")
-                                : "Kebele"
-                            }
-                            className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[11px]" />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
                 {/* Specific Address */}
                 <FormField
                   control={form.control}

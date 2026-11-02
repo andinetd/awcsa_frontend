@@ -125,7 +125,7 @@ export interface EdirCouncil {
   level: EdirLevel;
   subCity: string;
   woreda: string | null;
-  kebele: string | null;
+  kebele?: string | null;
   establishmentDate: string;
   chairpersonName: string | null;
   chairpersonPhone: string | null;

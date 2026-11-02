@@ -44,7 +44,6 @@ export interface EdirCouncilPayload {
   level: EdirLevel;
   subCity: string;
   woreda?: string;
-  kebele?: string;
   establishmentDate: string;
   chairpersonName?: string;
   chairpersonPhone?: string;

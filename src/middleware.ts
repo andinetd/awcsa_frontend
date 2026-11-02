@@ -57,6 +57,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("wcasf_auth_token")?.value;
 
   if (!token) {
+    console.log("[Middleware] No wcasf_auth_token cookie found. Redirecting to login from:", pathname);
     const loginUrl = new URL(`/${locale}/login`, req.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -65,7 +66,7 @@ export async function middleware(req: NextRequest) {
     // SIGNATURE & INTEGRITY CHECK
     const isValidSignature = await verifyJwtSignature(token as string);
     if (!isValidSignature) {
-      console.warn("Middleware rejected JWT signature on path:", req.nextUrl.pathname);
+      console.warn("[Middleware] Invalid JWT signature on:", pathname);
       const loginUrl = new URL(`/${locale}/login`, req.url);
       const response = NextResponse.redirect(loginUrl);
       response.cookies.delete("wcasf_auth_token");
@@ -76,6 +77,7 @@ export async function middleware(req: NextRequest) {
 
     // EXPIRATION CHECK
     if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      console.warn("[Middleware] JWT expired for user:", (decodedToken as any)?.user?.email);
       const loginUrl = new URL(`/${locale}/login`, req.url);
       const response = NextResponse.redirect(loginUrl);
       response.cookies.delete("wcasf_auth_token");
@@ -90,6 +92,7 @@ export async function middleware(req: NextRequest) {
       );
 
     if (!matchedRoute) {
+      console.warn("[Middleware] No matched route for normalizedPath:", normalizedPath);
       // DENY BY DEFAULT for non-public routes
       return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
     }

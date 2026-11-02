@@ -201,7 +201,6 @@ const EdirList = () => {
         const matchesReg = edir.registrationNumber?.toLowerCase().includes(query);
         const matchesSubCity = edir.subCity?.toLowerCase().includes(query);
         const matchesWoreda = edir.woreda?.toLowerCase().includes(query);
-        const matchesKebele = edir.kebele?.toLowerCase().includes(query);
         const matchesLoc = edir.specificLocation?.toLowerCase().includes(query);
         const matchesBank = edir.bankAccountNumber?.toLowerCase().includes(query);
         const matchesFounders = (edir.foundingMembers || []).some((fm) =>
@@ -213,7 +212,6 @@ const EdirList = () => {
           !matchesReg &&
           !matchesSubCity &&
           !matchesWoreda &&
-          !matchesKebele &&
           !matchesLoc &&
           !matchesBank &&
           !matchesFounders
@@ -1079,7 +1077,6 @@ const EdirList = () => {
                         </div>
                         <div className="text-[11px] text-slate-500">
                           {t("woredaLabel", { code: edir.woreda ?? "—" })}
-                          {edir.kebele ? t("kebeleLabel", { code: edir.kebele }) : ""}
                         </div>
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-slate-700">

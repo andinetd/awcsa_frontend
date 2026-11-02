@@ -22,12 +22,18 @@ function applyToken(
   set: (s: Partial<AuthState>) => void,
 ): void {
   try {
-    Cookies.set("wcasf_auth_token", token, {
+    const cookieOptions = {
       secure: process.env.NEXT_PUBLIC_SECURE_COOKIES === "true",
-      sameSite: "lax",
+      sameSite: "lax" as const,
       ...(rememberMe ? { expires: 7 } : {}),
       path: "/",
-    });
+    };
+
+    Cookies.set("wcasf_auth_token", token, cookieOptions);
+    if (refreshToken) {
+      Cookies.set("wcasf_refresh_token", refreshToken, cookieOptions);
+    }
+    Cookies.set("wcasf_remember_me", rememberMe ? "true" : "false", cookieOptions);
 
     const decodedToken: any = jwtDecode(token);
 
@@ -261,8 +267,11 @@ export const useAuthStore = create<AuthState>()(
 
       loadTokenFromCookie: async () => {
         const token = Cookies.get("wcasf_auth_token");
+        const cookieRefreshToken = Cookies.get("wcasf_refresh_token");
+        const cookieRememberMe = Cookies.get("wcasf_remember_me") === "true";
         const currentToken = get().token;
-        const rememberMe = get().rememberMe;
+        const rememberMe = get().rememberMe || cookieRememberMe;
+        const refreshToken = get().refreshToken || cookieRefreshToken;
 
         // If cookie is gone, clean up any lingering memory/storage state
         if (!token) {
@@ -274,17 +283,6 @@ export const useAuthStore = create<AuthState>()(
           return;
         }
 
-        // If rememberMe is false and this tab doesn't have session data,
-        // it means the tab was closed and a new one was opened -> end session
-        if (
-          typeof window !== "undefined" &&
-          !rememberMe &&
-          !sessionStorage.getItem("auth-store")
-        ) {
-          get().logout();
-          return;
-        }
-
         try {
           const decoded: JwtPayload = jwtDecode(token);
           const isExpired = decoded.exp
@@ -293,13 +291,12 @@ export const useAuthStore = create<AuthState>()(
 
           if (isExpired) {
             // Silent restore: try to refresh before dropping the session.
-            const refreshToken = get().refreshToken;
             if (refreshToken) {
               const refreshed = await refreshAccessToken(refreshToken);
               if (refreshed?.access_token) {
                 applyToken(
                   refreshed.access_token,
-                  get().rememberMe,
+                  rememberMe,
                   refreshed.refresh_token || refreshToken,
                   set,
                 );
@@ -309,7 +306,7 @@ export const useAuthStore = create<AuthState>()(
             }
             get().logout();
           } else {
-            get().setToken(token);
+            applyToken(token, rememberMe, refreshToken, set);
           }
         } catch (e) {
           console.error("Failed to load token from cookie:", e);
@@ -327,6 +324,8 @@ export const useAuthStore = create<AuthState>()(
           authChannel?.postMessage({ type: "LOGOUT" });
         }
         Cookies.remove("wcasf_auth_token", { path: "/" });
+        Cookies.remove("wcasf_refresh_token", { path: "/" });
+        Cookies.remove("wcasf_remember_me", { path: "/" });
         Sentry.setUser(null);
         if (typeof window !== "undefined") {
 
@@ -370,6 +369,9 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-store",
       storage: createJSONStorage(() => customAuthStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.loadTokenFromCookie();
+      },
     },
   ),
 );

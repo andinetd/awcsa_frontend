@@ -22,6 +22,7 @@ export const PUBLIC_AUTH_PATHS: ReadonlySet<string> = new Set([
 /** True when the current path should not be auth-gated. */
 export function isPublicAuthPath(pathname: string | null | undefined): boolean {
   if (!pathname) return false;
-  if (pathname === "/") return true;
-  return PUBLIC_AUTH_PATHS.has(pathname);
+  const pathWithoutLocale = pathname.replace(/^\/(?:am|en)(?=\/|$)/, "") || "/";
+  if (pathWithoutLocale === "/") return true;
+  return PUBLIC_AUTH_PATHS.has(pathWithoutLocale) || PUBLIC_AUTH_PATHS.has(pathname);
 }

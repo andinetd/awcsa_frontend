@@ -12,7 +12,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { LOGIN_ROUTE } from "@/lib/auth-routes";
 import { Loader2, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 

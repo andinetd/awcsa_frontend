@@ -19,7 +19,6 @@ export const newEdirCouncilSchema = z
     level: edirCouncilLevelSchema,
     subCity: z.string().min(2, "Sub city is required"),
     woreda: z.string().optional(),
-    kebele: z.string().optional(),
     establishmentDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
       message: "Invalid date",
     }),

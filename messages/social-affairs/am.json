@@ -971,7 +971,7 @@
       "genderCounts": "ወ: {male} | ሴ: {female}",
       "woredaLabel": "ወረዳ {code}",
       "kebeleLabel": "፣ ቀበሌ {code}",
-      "subCityWoredaKebele": "{subCity}፣ ወረዳ {woreda}{kebele}"
+      "subCityWoredaKebele": "{subCity}፣ ወረዳ {woreda}"
     },
     "form": {
       "createTitle": "አዲስ እድር መዝግብ",
@@ -1383,7 +1383,7 @@
         "male": "ወንድ",
         "female": "ሴት",
         "total": "የአባላት ጠቅላላ ድምር (አመራሮችን ጨምሮ)",
-        "subCityWoredaKebele": "ክፍለ ከተማ፣ ወረዳ፣ ቀበሌ",
+        "subCityWoredaKebele": "ክፍለ ከተማ፣ ወረዳ",
         "houseNumber": "የቤት ቁጥር",
         "specificLocation": "ልዩ ቦታ",
         "bankAccountNumber": "የባንክ ሒሳብ ቁጥር",
@@ -1735,7 +1735,6 @@
           "level": "የምዝገባ ደረጃ",
           "subCity": "ክፍለ ከተማ",
           "woreda": "ወረዳ",
-          "kebele": "ቀበሌ",
           "establishmentDate": "የተቋቋመበት ቀን",
           "chairpersonName": "የሊቀመንበር ስም",
           "chairpersonPhone": "የሊቀመንበር ስልክ",
@@ -1752,7 +1751,6 @@
           "name": "ለምሳሌ የወረዳ 5 የእድር ምክር ቤት",
           "subCity": "ክፍለ ከተማ / ከተማ",
           "woreda": "ወረዳ (አማራጭ)",
-          "kebele": "ቀበሌ (አማራጭ)",
           "chairpersonName": "ሙሉ ስም",
           "chairpersonPhone": "ስልክ ቁጥር",
           "contactPhone": "ስልክ ቁጥር",

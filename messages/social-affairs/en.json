@@ -971,7 +971,7 @@
       "genderCounts": "M: {male} | F: {female}",
       "woredaLabel": "Woreda {code}",
       "kebeleLabel": ", Kebele {code}",
-      "subCityWoredaKebele": "{subCity}, Woreda {woreda}{kebele}"
+      "subCityWoredaKebele": "{subCity}, Woreda {woreda}"
     },
     "form": {
       "createTitle": "Register New Edir",
@@ -1383,7 +1383,7 @@
         "male": "Male",
         "female": "Female",
         "total": "Total Members (Including Leaders)",
-        "subCityWoredaKebele": "Sub City, Woreda, Kebele",
+        "subCityWoredaKebele": "Sub City, Woreda",
         "houseNumber": "House Number",
         "specificLocation": "Specific Location",
         "bankAccountNumber": "Bank Account Number",
@@ -1735,7 +1735,6 @@
           "level": "Registration Level",
           "subCity": "Sub City",
           "woreda": "Woreda",
-          "kebele": "Kebele",
           "establishmentDate": "Establishment Date",
           "chairpersonName": "Chairperson Name",
           "chairpersonPhone": "Chairperson Phone",
@@ -1752,7 +1751,6 @@
           "name": "e.g. Woreda 5 Edir Council",
           "subCity": "Sub city / city",
           "woreda": "Woreda (optional)",
-          "kebele": "Kebele (optional)",
           "chairpersonName": "Full name",
           "chairpersonPhone": "Phone number",
           "contactPhone": "Phone number",

@@ -15,13 +15,12 @@ import { Input } from "@/components/ui/input";
 import { useClientSignupMutation } from "@/hooks/client/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, Link } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/shared/language-switcher";
-import Link from "next/link";
 
 export default function AdoptionRegisterPage() {
   const router = useRouter();

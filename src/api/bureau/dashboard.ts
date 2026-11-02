@@ -11,10 +11,15 @@ export interface BureauDashboardSummary {
 
 export const getBureauDashboardSummary =
   async (): Promise<BureauDashboardSummary> => {
-    const { token } = useAuthStore.getState();
+    let token = useAuthStore.getState().token;
+    if (!token && typeof document !== "undefined") {
+      const match = document.cookie.match(/(?:^|;\s*)wcasf_auth_token=([^;]*)/);
+      if (match) token = decodeURIComponent(match[1]);
+    }
+
     const res = await axios.get(`${BASE_URL}/bureau/dashboard/summary`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
     return res.data;

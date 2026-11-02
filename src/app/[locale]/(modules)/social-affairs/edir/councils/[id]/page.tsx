@@ -466,7 +466,6 @@ export default function CouncilDetailsPage({ params }: PageProps) {
                 <p className="font-semibold text-[#0B1F3A]">
                   {typedCouncil.subCity}
                   {typedCouncil.woreda ? ` • ${typedCouncil.woreda}` : ""}
-                  {typedCouncil.kebele ? ` • ${typedCouncil.kebele}` : ""}
                 </p>
                 {typedCouncil.address && (
                   <p className="text-slate-500 mt-1">{typedCouncil.address}</p>
