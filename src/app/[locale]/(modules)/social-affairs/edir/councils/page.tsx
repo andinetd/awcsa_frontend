@@ -83,18 +83,19 @@ const CouncilsPage = () => {
   }, [search]);
 
   const filteredCouncils = (councils || []).filter((council: EdirCouncil) => {
+    if (!council) return false;
     const q = debouncedSearch.toLowerCase();
     const matchesSearch =
-      council.name.toLowerCase().includes(q) ||
+      (council.name || "").toLowerCase().includes(q) ||
       (council.registrationNumber || "").toLowerCase().includes(q) ||
-      council.subCity.toLowerCase().includes(q) ||
+      (council.subCity || "").toLowerCase().includes(q) ||
       (council.chairpersonName || "").toLowerCase().includes(q) ||
       (council.chairpersonPhone || "").toLowerCase().includes(q) ||
-      (council.leadershipMembers || []).some(
-        (m) =>
-          (m.fullName || "").toLowerCase().includes(q) ||
-          (m.role || "").toLowerCase().includes(q) ||
-          (m.phoneNumber || "").toLowerCase().includes(q)
+      (Array.isArray(council.leadershipMembers) ? council.leadershipMembers : []).some(
+        (m: any) =>
+          (m?.fullName || "").toLowerCase().includes(q) ||
+          (m?.role || "").toLowerCase().includes(q) ||
+          (m?.phoneNumber || "").toLowerCase().includes(q)
       );
     const matchesLevel = levelFilter === "ALL" || council.level === levelFilter;
     const matchesStatus =

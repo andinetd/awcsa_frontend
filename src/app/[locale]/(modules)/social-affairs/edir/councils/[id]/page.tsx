@@ -99,7 +99,7 @@ export default function CouncilDetailsPage({ params }: PageProps) {
 
   const typedCouncil = council as EdirCouncil;
   const memberCount =
-    typedCouncil._count?.memberEdirs ?? typedCouncil.memberEdirs.length;
+    typedCouncil._count?.memberEdirs ?? typedCouncil.memberEdirs?.length ?? 0;
 
   const allMembers = Array.isArray(typedCouncil.leadershipMembers)
     ? [...typedCouncil.leadershipMembers]

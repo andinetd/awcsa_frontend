@@ -75,15 +75,18 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
   const { data: subCities = [] } = useGetSubCitiesQuery();
   const { data: allEdirs = [] } = useGetEdirAssociationsQuery();
 
-  const currentSubCityObj = subCities.find(
-    (s) => s.name.toLowerCase() === (council.subCity || "").toLowerCase()
+  const currentSubCityObj = (subCities || []).find(
+    (s) => (s?.name || "").trim().toLowerCase() === (council.subCity || "").trim().toLowerCase()
   );
-  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => w.code) || [
+  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => String(w.code)) || [
     "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
   ];
 
-  const candidateEdirs = allEdirs.filter((e: any) => {
-    if (council.subCity && e.subCity && e.subCity.toLowerCase() !== council.subCity.toLowerCase()) {
+  const safeAllEdirs = Array.isArray(allEdirs) ? allEdirs : [];
+
+  const candidateEdirs = safeAllEdirs.filter((e: any) => {
+    if (!e) return false;
+    if (council.subCity && e.subCity && (e.subCity || "").trim().toLowerCase() !== (council.subCity || "").trim().toLowerCase()) {
       return false;
     }
     if (council.woreda && e.woreda && String(e.woreda) !== String(council.woreda)) {
@@ -339,11 +342,13 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                                 />
                               </FormControl>
                               <datalist id={`dialog-edir-candidates-${index}`}>
-                                {candidateEdirs.map((e: any) => (
-                                  <option key={e.id} value={e.name}>
-                                    {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
-                                  </option>
-                                ))}
+                                {candidateEdirs
+                                  .filter((e: any) => !!e?.name)
+                                  .map((e: any) => (
+                                    <option key={e.id} value={e.name}>
+                                      {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
+                                    </option>
+                                  ))}
                               </datalist>
                               <FormMessage className="text-[10.5px]" />
                             </FormItem>
@@ -380,11 +385,13 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent className="max-h-56">
-                                  {subCityWoredas.map((wCode) => (
-                                    <SelectItem key={wCode} value={wCode} className="text-xs">
-                                      Woreda {wCode}
-                                    </SelectItem>
-                                  ))}
+                                  {subCityWoredas
+                                    .filter((wCode) => !!wCode)
+                                    .map((wCode) => (
+                                      <SelectItem key={wCode} value={String(wCode)} className="text-xs">
+                                        Woreda {wCode}
+                                      </SelectItem>
+                                    ))}
                                 </SelectContent>
                               </Select>
                               <FormMessage className="text-[10.5px]" />
@@ -422,11 +429,13 @@ export default function ManageLeadershipDialog({ council, trigger }: Props) {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent className="max-h-56">
-                                  {subCities.map((sc) => (
-                                    <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
-                                      {getSubCityLabel(sc.name)}
-                                    </SelectItem>
-                                  ))}
+                                  {(subCities || [])
+                                    .filter((sc) => !!sc?.name)
+                                    .map((sc) => (
+                                      <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
+                                        {getSubCityLabel(sc.name)}
+                                      </SelectItem>
+                                    ))}
                                 </SelectContent>
                               </Select>
                               <FormMessage className="text-[10.5px]" />

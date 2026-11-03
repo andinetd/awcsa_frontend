@@ -37,7 +37,7 @@ export default function CouncilCard({
 }: CouncilCardProps) {
   const t = useTranslations("social-affairs.edir.councils");
   const tSubCities = useTranslations("subCities.names");
-  const memberCount = council._count?.memberEdirs ?? council.memberEdirs.length;
+  const memberCount = council._count?.memberEdirs ?? council.memberEdirs?.length ?? 0;
 
   const getSubCityDisplayName = (name?: string) => {
     if (!name) return "";

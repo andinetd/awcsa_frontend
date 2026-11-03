@@ -49,6 +49,7 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 interface NewCouncilFormProps {
   initialData?: EdirCouncil;
@@ -73,11 +74,14 @@ export default function NewCouncilForm({
   const [edirSearch, setEdirSearch] = useState("");
   const [onlyUnassigned, setOnlyUnassigned] = useState(true);
 
+  const { userSubCity, userWoreda, isWoreda, isSubCity } = useJurisdictionScope();
+  const initialLevel: EdirLevel = isWoreda ? "WOREDA" : isSubCity ? "SUB_CITY" : "WOREDA";
+
   const defaultValues: NewEdirCouncilSchemaType = {
     name: "",
-    level: "WOREDA",
-    subCity: "",
-    woreda: "",
+    level: initialLevel,
+    subCity: userSubCity || "",
+    woreda: userWoreda || "",
     establishmentDate: new Date().toISOString().slice(0, 10),
     contactPhone: "",
     address: "",
@@ -181,11 +185,30 @@ export default function NewCouncilForm({
       setEdirSearch("");
     }
     if (open && !initialData) {
-      form.reset(defaultValues);
+      form.reset({
+        ...defaultValues,
+        level: initialLevel,
+        subCity: userSubCity || "",
+        woreda: userWoreda || "",
+      });
       setByLawsFile([]);
       setEdirSearch("");
     }
-  }, [open, initialData, form]);
+  }, [open, initialData, form, initialLevel, userSubCity, userWoreda]);
+
+  useEffect(() => {
+    if (open && !initialData) {
+      if (userSubCity && !form.getValues("subCity")) {
+        form.setValue("subCity", userSubCity);
+      }
+      if (userWoreda && !form.getValues("woreda")) {
+        form.setValue("woreda", userWoreda);
+      }
+      if (isWoreda && form.getValues("level") !== "WOREDA") {
+        form.setValue("level", "WOREDA");
+      }
+    }
+  }, [open, userSubCity, userWoreda, isWoreda, initialData, form]);
 
   const onSubmit = async (values: NewEdirCouncilSchemaType) => {
     const rawMembers = values.leadershipMembers || [];
@@ -243,15 +266,18 @@ export default function NewCouncilForm({
   const watchedSubCity = form.watch("subCity");
   const watchedWoreda = form.watch("woreda");
 
-  const currentSubCityObj = subCities.find(
-    (s) => s.name.toLowerCase() === (watchedSubCity || "").toLowerCase()
+  const currentSubCityObj = (subCities || []).find(
+    (s) => (s?.name || "").trim().toLowerCase() === (watchedSubCity || "").trim().toLowerCase()
   );
-  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => w.code) || [
+  const subCityWoredas = currentSubCityObj?.woredas?.map((w) => String(w.code)) || [
     "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
   ];
 
-  const candidateEdirs = allEdirs.filter((e: any) => {
-    if (watchedSubCity && e.subCity && e.subCity.toLowerCase() !== watchedSubCity.toLowerCase()) {
+  const safeAllEdirs = Array.isArray(allEdirs) ? allEdirs : [];
+
+  const candidateEdirs = safeAllEdirs.filter((e: any) => {
+    if (!e) return false;
+    if (watchedSubCity && e.subCity && (e.subCity || "").trim().toLowerCase() !== (watchedSubCity || "").trim().toLowerCase()) {
       return false;
     }
     if (watchedWoreda && e.woreda && String(e.woreda) !== String(watchedWoreda)) {
@@ -262,12 +288,12 @@ export default function NewCouncilForm({
 
   useEffect(() => {
     const current = form.getValues("associationIds") || [];
-    if (current.length > 0 && allEdirs.length > 0) {
+    if (current.length > 0 && safeAllEdirs.length > 0) {
       const validIds = new Set(
-        allEdirs
+        safeAllEdirs
           .filter(
             (e: any) =>
-              e.registerLevel === watchedLevel && e.status === "ACTIVE",
+              e?.registerLevel === watchedLevel && e?.status === "ACTIVE",
           )
           .map((e: any) => e.id),
       );
@@ -276,9 +302,10 @@ export default function NewCouncilForm({
         form.setValue("associationIds", stillValid, { shouldDirty: true });
       }
     }
-  }, [watchedLevel, allEdirs, form]);
+  }, [watchedLevel, safeAllEdirs, form]);
 
-  const eligibleMemberEdirs = allEdirs.filter((e: any) => {
+  const eligibleMemberEdirs = safeAllEdirs.filter((e: any) => {
+    if (!e) return false;
     // Only ACTIVE edirs can join a council
     if (e.status && e.status !== "ACTIVE") return false;
     // Must match council level
@@ -287,7 +314,7 @@ export default function NewCouncilForm({
     if (
       watchedSubCity &&
       e.subCity &&
-      e.subCity.toLowerCase() !== watchedSubCity.toLowerCase()
+      (e.subCity || "").trim().toLowerCase() !== (watchedSubCity || "").trim().toLowerCase()
     ) {
       return false;
     }
@@ -409,11 +436,13 @@ export default function NewCouncilForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="max-h-56">
-                  {subCityWoredas.map((wCode) => (
-                    <SelectItem key={wCode} value={wCode} className="text-xs">
-                      Woreda {wCode}
-                    </SelectItem>
-                  ))}
+                  {subCityWoredas
+                    .filter((wCode) => !!wCode)
+                    .map((wCode) => (
+                      <SelectItem key={wCode} value={String(wCode)} className="text-xs">
+                        Woreda {wCode}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage className="text-[11px]" />
@@ -444,11 +473,13 @@ export default function NewCouncilForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="max-h-56">
-                  {subCities.map((sc) => (
-                    <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
-                      {getSubCityLabel(sc.name)}
-                    </SelectItem>
-                  ))}
+                  {(subCities || [])
+                    .filter((sc) => !!sc?.name)
+                    .map((sc) => (
+                      <SelectItem key={sc.id || sc.name} value={sc.name} className="text-xs">
+                        {getSubCityLabel(sc.name)}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage className="text-[11px]" />
@@ -516,35 +547,42 @@ export default function NewCouncilForm({
                 <FormField
                   control={form.control}
                   name="level"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">
-                        {t("form.fields.level")}
-                      </FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
-                            <SelectValue placeholder={t("form.fields.level")}>
-                              {field.value ? t(`level.${field.value}` as any) : undefined}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          {(["WOREDA", "SUB_CITY", "CITY"] as EdirLevel[]).map(
-                            (level) => (
+                  render={({ field }) => {
+                    const availableLevels: EdirLevel[] = isWoreda
+                      ? ["WOREDA"]
+                      : isSubCity
+                      ? ["WOREDA", "SUB_CITY"]
+                      : ["WOREDA", "SUB_CITY", "CITY"];
+
+                    return (
+                      <FormItem>
+                        <FormLabel className="text-xs font-semibold text-slate-700">
+                          {t("form.fields.level")}
+                        </FormLabel>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={isWoreda}
+                        >
+                          <FormControl>
+                            <SelectTrigger className={`h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white ${isWoreda ? "bg-slate-100 cursor-not-allowed" : ""}`}>
+                              <SelectValue placeholder={t("form.fields.level")}>
+                                {field.value ? t(`level.${field.value}` as any) : undefined}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-xs border-[#E3E7EB]">
+                            {availableLevels.map((level) => (
                               <SelectItem key={level} value={level} className="text-xs font-mono">
                                 {t(`level.${level}`)}
                               </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-[11px]" />
-                    </FormItem>
-                  )}
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-[11px]" />
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 {/* Establishment Date */}
@@ -647,11 +685,13 @@ export default function NewCouncilForm({
 
             {/* Datalists for Candidate Edirs and Role Suggestions */}
             <datalist id="edir-council-candidate-edirs">
-              {candidateEdirs.map((e: any) => (
-                <option key={e.id} value={e.name}>
-                  {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
-                </option>
-              ))}
+              {candidateEdirs
+                .filter((e: any) => !!e?.name)
+                .map((e: any) => (
+                  <option key={e.id} value={e.name}>
+                    {e.name} {e.woreda ? `(Woreda ${e.woreda})` : ""}
+                  </option>
+                ))}
             </datalist>
             <datalist id="edir-council-member-role-suggestions">
               <option value="የእድር ዳኛ" />
