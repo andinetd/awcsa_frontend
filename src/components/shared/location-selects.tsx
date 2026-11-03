@@ -44,16 +44,17 @@ export function SubCitySelect({
   }, [lockedSubCity, value, onValueChange]);
 
   const known = (subCities || []).filter(
-    (s) => !lockedSubCity || s.name.toLowerCase() === lockedSubCity.toLowerCase()
+    (s) => !lockedSubCity || (s?.name || "").trim().toLowerCase() === (lockedSubCity || "").trim().toLowerCase()
   );
   const knownNames = new Set(known.map((s) => s.name));
   const extras = lockedSubCity
     ? (known.length === 0 ? [lockedSubCity] : [])
-    : [...new Set(extraOptions.filter((o) => !knownNames.has(o)))];
+    : [...new Set(extraOptions.filter((o) => !!o && !knownNames.has(o)))];
 
   const isDisabled = disabled || isLoading || !!lockedSubCity;
 
   const getSubCityLabel = (name: string) => {
+    if (!name) return "";
     try {
       if (tSubCities.has(name as any)) {
         return tSubCities(name as any);
@@ -76,16 +77,20 @@ export function SubCitySelect({
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {known.map((subCity) => (
-          <SelectItem key={subCity.id} value={subCity.name}>
-            {getSubCityLabel(subCity.name)}
-          </SelectItem>
-        ))}
-        {extras.map((option) => (
-          <SelectItem key={option} value={option}>
-            {getSubCityLabel(option)}
-          </SelectItem>
-        ))}
+        {known
+          .filter((subCity) => !!subCity?.name)
+          .map((subCity) => (
+            <SelectItem key={subCity.id} value={subCity.name}>
+              {getSubCityLabel(subCity.name)}
+            </SelectItem>
+          ))}
+        {extras
+          .filter((option) => !!option)
+          .map((option) => (
+            <SelectItem key={option} value={option}>
+              {getSubCityLabel(option)}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   );
@@ -122,7 +127,7 @@ export function WoredaSelect({
 
   const DEFAULT_WOREDA_COUNT = 20;
   const subCityRef = (subCities || []).find(
-    (s) => s.name.trim().toLowerCase() === (subCity || "").trim().toLowerCase()
+    (s) => (s?.name || "").trim().toLowerCase() === (subCity || "").trim().toLowerCase()
   );
 
   const defaultWoredaList = Array.from({ length: DEFAULT_WOREDA_COUNT }, (_, i) => ({
@@ -149,6 +154,14 @@ export function WoredaSelect({
 
   const isDisabled = disabled || (!subCity && !lockedWoreda) || !!lockedWoreda;
 
+  const getWoredaLabel = (code: string | number) => {
+    try {
+      return t("woredaCode", { code });
+    } catch {
+      return `Woreda ${code}`;
+    }
+  };
+
   return (
     <Select
       value={value || undefined}
@@ -159,15 +172,17 @@ export function WoredaSelect({
         <SelectValue
           placeholder={isLoading ? t("loading") : placeholder}
         >
-          {value ? t("woredaCode", { code: value }) : undefined}
+          {value ? getWoredaLabel(value) : undefined}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {displayWoredas.map((woreda) => (
-          <SelectItem key={woreda.id} value={woreda.code}>
-            {t("woredaCode", { code: woreda.code })}
-          </SelectItem>
-        ))}
+        {displayWoredas
+          .filter((woreda) => !!woreda?.code)
+          .map((woreda) => (
+            <SelectItem key={woreda.id} value={String(woreda.code)}>
+              {getWoredaLabel(woreda.code)}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   );

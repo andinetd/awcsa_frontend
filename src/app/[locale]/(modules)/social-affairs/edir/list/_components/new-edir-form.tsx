@@ -47,6 +47,7 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 function normalizeLeadershipPosition(pos?: string): string {
   if (!pos) return "LEADER";
@@ -85,6 +86,7 @@ export default function NewEdirForm({
   const isPending = createMutation.isPending || updateMutation.isPending;
   const isEditMode = !!edirId;
   const { data: councils = [] } = useGetEdirCouncilsQuery();
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const form = useForm<NewEdirSchemaType>({
     resolver: zodResolver(newEdirSchema) as any,
@@ -93,8 +95,8 @@ export default function NewEdirForm({
       establishmentDate: new Date().toISOString().split("T")[0],
       edirType: "COMMUNITY",
       registerLevel: "WOREDA",
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       houseNumber: "",
       specificLocation: "",
       members: { male: 0, female: 0, total: 0 },
@@ -117,6 +119,17 @@ export default function NewEdirForm({
       councilId: undefined,
     },
   });
+
+  useEffect(() => {
+    if (open && !initialData) {
+      if (userSubCity && !form.getValues("subCity")) {
+        form.setValue("subCity", userSubCity);
+      }
+      if (userWoreda && !form.getValues("woreda")) {
+        form.setValue("woreda", userWoreda);
+      }
+    }
+  }, [open, userSubCity, userWoreda, initialData, form]);
 
   const leadershipFields = useFieldArray({
     control: form.control,

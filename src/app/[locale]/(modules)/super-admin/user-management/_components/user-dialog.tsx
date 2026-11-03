@@ -38,7 +38,7 @@ import {
   useGetUserFormData,
 } from "@/hooks/super-admin";
 import { toast } from "sonner";
-import { Eye, EyeOff, Loader2, RefreshCw, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, Loader2, RefreshCw } from "lucide-react";
 import { useAuthStore } from "@/stores/auth-store";
 
 const PASSWORD_CHARSET =
@@ -147,16 +147,12 @@ export function UserDialog({
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [redactedPermissions, setRedactedPermissions] = useState<string[]>([]);
-  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
-
   // Prefill when editing
   useEffect(() => {
     if (open) {
       setShowPassword(false);
       setShowConfirmPassword(false);
       if (user?.employee) {
-        setRedactedPermissions((user.employee as any).redactedPermissions || []);
         const assigned =
           user.employee.assignedModules && user.employee.assignedModules.length > 0
             ? user.employee.assignedModules
@@ -181,7 +177,6 @@ export function UserDialog({
           teamId: user.employee.team?.id ? String(user.employee.team.id) : "",
         });
       } else {
-        setRedactedPermissions([]);
         const defaultBureauId =
           formData?.structure?.bureaus?.length === 1
             ? String(formData.structure.bureaus[0].id)
@@ -227,7 +222,7 @@ export function UserDialog({
         ? Number(values.directorateId)
         : undefined,
       teamId: values.teamId ? Number(values.teamId) : undefined,
-      redactedPermissions,
+      redactedPermissions: [],
     };
 
     if (isEdit && user) {
@@ -635,158 +630,7 @@ export function UserDialog({
                   }}
                 />
 
-                {/* Module Permissions & Access Control Checklist */}
-                {form.watch("assignedModules")?.filter((m) => m !== SYSTEM_MODULE).length > 0 && (
-                  <div className="space-y-3 pt-1 pb-1">
-                    <div className="flex items-center justify-between border-b border-[#E3E7EB] pb-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <ShieldCheck className="h-4 w-4 text-[#1769AA]" />
-                        <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
-                          Module Permissions & Access Control
-                        </h4>
-                      </div>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        {redactedPermissions.length > 0
-                          ? `${redactedPermissions.length} redacted`
-                          : "All defaults active"}
-                      </span>
-                    </div>
 
-                    <p className="text-[11px] text-slate-500 leading-relaxed">
-                      Permissions for selected modules are pre-selected by default. Uncheck any specific action below to redact it for this user account.
-                    </p>
-
-                    <div className="space-y-3">
-                      {form
-                        .watch("assignedModules")
-                        .filter((m) => m !== SYSTEM_MODULE)
-                        .map((mod) => {
-                          const bundle = formData?.modulePermissionBundles?.[mod] || [];
-                          if (bundle.length === 0) return null;
-
-                          const modRedactedCount = bundle.filter((p) =>
-                            redactedPermissions.includes(p.name),
-                          ).length;
-                          const activeCount = bundle.length - modRedactedCount;
-                          const isExpanded = expandedModules[mod] ?? true;
-
-                          return (
-                            <div
-                              key={mod}
-                              className="rounded-xs border border-[#E3E7EB] bg-slate-50/40 overflow-hidden"
-                            >
-                              <div
-                                onClick={() =>
-                                  setExpandedModules((prev) => ({
-                                    ...prev,
-                                    [mod]: !isExpanded,
-                                  }))
-                                }
-                                className="flex items-center justify-between p-2.5 bg-white border-b border-[#E3E7EB] cursor-pointer hover:bg-slate-50 transition-colors"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs font-bold font-mono text-[#0B1F3A]">
-                                    {t(`departments.${mod}`) || mod.replace(/_/g, " ")}
-                                  </span>
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold bg-blue-50 text-[#1769AA] border border-blue-200">
-                                    {activeCount} / {bundle.length} active
-                                  </span>
-                                  {modRedactedCount > 0 && (
-                                    <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                                      {modRedactedCount} redacted
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      const permNames = bundle.map((p) => p.name);
-                                      setRedactedPermissions((prev) =>
-                                        prev.filter((p) => !permNames.includes(p)),
-                                      );
-                                    }}
-                                    className="text-[10px] text-[#1769AA] hover:underline font-mono cursor-pointer"
-                                  >
-                                    Select All
-                                  </button>
-                                  <span className="text-slate-300">|</span>
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      const elevatedNames = bundle
-                                        .filter((p) => p.isElevated)
-                                        .map((p) => p.name);
-                                      setRedactedPermissions((prev) => [
-                                        ...prev.filter((p) => !bundle.some((bp) => bp.name === p)),
-                                        ...elevatedNames,
-                                      ]);
-                                    }}
-                                    className="text-[10px] text-slate-500 hover:text-slate-700 font-mono cursor-pointer"
-                                  >
-                                    Safe Defaults
-                                  </button>
-                                </div>
-                              </div>
-
-                              {isExpanded && (
-                                <div className="p-3 grid grid-cols-1 md:grid-cols-2 gap-2 max-h-60 overflow-y-auto">
-                                  {bundle.map((perm) => {
-                                    const isRedacted = redactedPermissions.includes(perm.name);
-                                    const isChecked = !isRedacted;
-
-                                    return (
-                                      <label
-                                        key={perm.name}
-                                        className={`flex items-start gap-2 p-2 rounded-xs border cursor-pointer transition-colors text-xs ${
-                                          isChecked
-                                            ? "border-[#E3E7EB] bg-white text-slate-800 hover:border-slate-300"
-                                            : "border-dashed border-slate-300 bg-slate-100/80 text-slate-400"
-                                        }`}
-                                      >
-                                        <Checkbox
-                                          checked={isChecked}
-                                          className="mt-0.5"
-                                          onCheckedChange={(checked) => {
-                                            setRedactedPermissions((prev) =>
-                                              checked
-                                                ? prev.filter((p) => p !== perm.name)
-                                                : [...prev, perm.name],
-                                            );
-                                          }}
-                                        />
-                                        <div className="flex flex-col min-w-0">
-                                          <div className="flex items-center gap-1.5 flex-wrap">
-                                            <span
-                                              className={`font-semibold text-xs ${
-                                                isChecked ? "text-[#0B1F3A]" : "line-through text-slate-400"
-                                              }`}
-                                            >
-                                              {perm.label}
-                                            </span>
-                                            {perm.isElevated && (
-                                              <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                                                Elevated
-                                              </span>
-                                            )}
-                                          </div>
-                                          <span className="text-[10px] text-slate-500 truncate" title={perm.description}>
-                                            {perm.description}
-                                          </span>
-                                        </div>
-                                      </label>
-                                    );
-                                  })}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-                )}
 
                 <FormField
                   control={form.control}
