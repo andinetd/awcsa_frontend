@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   registerSupportService,
   SERVICE_TYPES,
@@ -44,6 +44,7 @@ import {
   SubCitySelect,
   WoredaSelect,
 } from "@/components/shared/location-selects";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 
 export default function ServiceForm() {
   const t = useTranslations("social-affairs.elderlyAndDisabled.services.form");
@@ -53,15 +54,25 @@ export default function ServiceForm() {
   const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   // Fetch beneficiaries for selection
   const { data: disabledBeneficiaries } = useGetBeneficiariesQuery("DISABLED");
   const { data: elderlyBeneficiaries } = useGetBeneficiariesQuery("ELDERLY");
 
-  const allBeneficiaries = [
-    ...(disabledBeneficiaries || []),
-    ...(elderlyBeneficiaries || []),
-  ];
+  const allBeneficiaries = useMemo(() => {
+    const list = [
+      ...(Array.isArray(disabledBeneficiaries) ? disabledBeneficiaries : []),
+      ...(Array.isArray(elderlyBeneficiaries) ? elderlyBeneficiaries : []),
+    ];
+    const seen = new Set<string>();
+    return list.filter((b: any) => {
+      const val = b?.cityIdNumber?.trim();
+      if (!val || seen.has(val)) return false;
+      seen.add(val);
+      return true;
+    });
+  }, [disabledBeneficiaries, elderlyBeneficiaries]);
 
   const formSchema = z.object({
     cityIdNumber: z.string().min(1, t("fields.beneficiary")),
@@ -80,14 +91,21 @@ export default function ServiceForm() {
     defaultValues: {
       provider: "",
       amountOrQuantity: "",
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       remark: "",
       dateProvided: new Date().toISOString().split("T")[0],
       serviceTypeId: 0,
       cityIdNumber: "",
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      if (userSubCity) form.setValue("subCity", userSubCity);
+      if (userWoreda) form.setValue("woreda", userWoreda);
+    }
+  }, [open, userSubCity, userWoreda, form]);
 
   const mutation = useMutation({
     mutationFn: registerSupportService,
@@ -135,7 +153,7 @@ export default function ServiceForm() {
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value || undefined}
                   >
                     <FormControl>
                       <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
@@ -145,11 +163,17 @@ export default function ServiceForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {allBeneficiaries?.map((b: any) => (
-                        <SelectItem key={b.cityIdNumber} value={b.cityIdNumber}>
-                          {b.firstName} {b.lastName} ({b.cityIdNumber})
+                      {allBeneficiaries.length === 0 ? (
+                        <SelectItem value="_NONE" disabled className="text-xs text-slate-400">
+                          {tCommon("noResults") || "No beneficiaries found"}
                         </SelectItem>
-                      ))}
+                      ) : (
+                        allBeneficiaries.map((b: any) => (
+                          <SelectItem key={b.cityIdNumber} value={b.cityIdNumber}>
+                            {b.firstName} {b.lastName} ({b.cityIdNumber})
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -166,8 +190,8 @@ export default function ServiceForm() {
                     {t("fields.serviceType")}
                   </FormLabel>
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value?.toString()}
+                    onValueChange={(val) => field.onChange(val ? Number(val) : 0)}
+                    value={field.value ? field.value.toString() : undefined}
                   >
                     <FormControl>
                       <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">

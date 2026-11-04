@@ -50,6 +50,13 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Home, ChevronRight } from "lucide-react";
 
+function formatDate(val?: string | null) {
+  if (!val) return "—";
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return "—";
+  return d.toISOString().split("T")[0];
+}
+
 export interface ServicesContentProps {
   initialTab?: "services" | "training" | "jobs";
 }
@@ -108,27 +115,28 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
     queryKey: ["support-services"],
     queryFn: () => getSupportServices(),
   });
+  const safeServices = Array.isArray(services) ? services : [];
 
   const serviceCategories = useMemo(() => {
-    if (!services) return [];
     const set = new Set<string>();
-    services.forEach((s: any) => {
-      if (s.category) set.add(s.category);
+    safeServices.forEach((s: any) => {
+      const val = typeof s?.category === "string" ? s.category.trim() : "";
+      if (val) set.add(val);
     });
     return Array.from(set);
-  }, [services]);
+  }, [safeServices]);
 
   const serviceProviders = useMemo(() => {
-    if (!services) return [];
     const set = new Set<string>();
-    services.forEach((s: any) => {
-      if (s.provider) set.add(s.provider);
+    safeServices.forEach((s: any) => {
+      const val = typeof s?.provider === "string" ? s.provider.trim() : "";
+      if (val) set.add(val);
     });
     return Array.from(set);
-  }, [services]);
+  }, [safeServices]);
 
   const filteredServices = useMemo(() => {
-    return (services || []).filter((item: any) => {
+    return safeServices.filter((item: any) => {
       if (searchServices.trim()) {
         const q = searchServices.toLowerCase().trim();
         const matches =
@@ -148,32 +156,33 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
       }
       return true;
     });
-  }, [services, searchServices, serviceCategoryFilter, serviceProviderFilter]);
+  }, [safeServices, searchServices, serviceCategoryFilter, serviceProviderFilter]);
 
   // 2. Training Sessions Data
   const { data: trainings, isLoading: isLoadingTrainings } =
     useGetTrainingsQuery();
+  const safeTrainings = Array.isArray(trainings) ? trainings : [];
 
   const trainingTypes = useMemo(() => {
-    if (!trainings) return [];
     const set = new Set<string>();
-    trainings.forEach((t: any) => {
-      if (t.trainingType) set.add(t.trainingType);
+    safeTrainings.forEach((t: any) => {
+      const val = typeof t?.trainingType === "string" ? t.trainingType.trim() : "";
+      if (val) set.add(val);
     });
     return Array.from(set);
-  }, [trainings]);
+  }, [safeTrainings]);
 
   const trainingProviders = useMemo(() => {
-    if (!trainings) return [];
     const set = new Set<string>();
-    trainings.forEach((t: any) => {
-      if (t.provider) set.add(t.provider);
+    safeTrainings.forEach((t: any) => {
+      const val = typeof t?.provider === "string" ? t.provider.trim() : "";
+      if (val) set.add(val);
     });
     return Array.from(set);
-  }, [trainings]);
+  }, [safeTrainings]);
 
   const filteredTrainings = useMemo(() => {
-    return (trainings || []).filter((item: any) => {
+    return safeTrainings.filter((item: any) => {
       if (searchTraining.trim()) {
         const q = searchTraining.toLowerCase().trim();
         const matches =
@@ -195,22 +204,23 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
       if (trainingCocFilter === "NO" && item.hasCOC) return false;
       return true;
     });
-  }, [trainings, searchTraining, trainingTypeFilter, trainingProviderFilter, trainingCocFilter]);
+  }, [safeTrainings, searchTraining, trainingTypeFilter, trainingProviderFilter, trainingCocFilter]);
 
   // 3. Job Placements Data
   const { data: jobs, isLoading: isLoadingJobs } = useGetJobsQuery();
+  const safeJobs = Array.isArray(jobs) ? jobs : [];
 
   const jobCompanies = useMemo(() => {
-    if (!jobs) return [];
     const set = new Set<string>();
-    jobs.forEach((j: any) => {
-      if (j.companyIdNumber) set.add(j.companyIdNumber);
+    safeJobs.forEach((j: any) => {
+      const val = typeof j?.companyIdNumber === "string" ? j.companyIdNumber.trim() : "";
+      if (val) set.add(val);
     });
     return Array.from(set);
-  }, [jobs]);
+  }, [safeJobs]);
 
   const filteredJobs = useMemo(() => {
-    return (jobs || []).filter((item: any) => {
+    return safeJobs.filter((item: any) => {
       if (searchJobs.trim()) {
         const q = searchJobs.toLowerCase().trim();
         const matches =
@@ -227,7 +237,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
       }
       return true;
     });
-  }, [jobs, searchJobs, jobCompanyFilter]);
+  }, [safeJobs, searchJobs, jobCompanyFilter]);
 
   const tabTitle =
     currentTab === "services"
@@ -297,7 +307,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           >
             <HeartHandshake className="w-3.5 h-3.5" />
             <span>{t("title")}</span>
-            {services && (
+            {Array.isArray(services) && (
               <span className="ml-1 text-[10px] font-mono px-1 py-0.2 rounded-xs bg-slate-200/80 data-[state=active]:bg-white/20">
                 {services.length}
               </span>
@@ -309,7 +319,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           >
             <GraduationCap className="w-3.5 h-3.5" />
             <span>{tTraining("title")}</span>
-            {trainings && (
+            {Array.isArray(trainings) && (
               <span className="ml-1 text-[10px] font-mono px-1 py-0.2 rounded-xs bg-slate-200/80 data-[state=active]:bg-white/20">
                 {trainings.length}
               </span>
@@ -321,7 +331,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           >
             <Briefcase className="w-3.5 h-3.5" />
             <span>{tJobs("title")}</span>
-            {jobs && (
+            {Array.isArray(jobs) && (
               <span className="ml-1 text-[10px] font-mono px-1 py-0.2 rounded-xs bg-slate-200/80 data-[state=active]:bg-white/20">
                 {jobs.length}
               </span>
@@ -363,7 +373,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCategories")}</SelectItem>
-                    {serviceCategories.map((c) => (
+                    {serviceCategories.filter((c) => !!c?.trim()).map((c) => (
                       <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
                     ))}
                   </SelectContent>
@@ -376,7 +386,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
-                    {serviceProviders.map((p) => (
+                    {serviceProviders.filter((p) => !!p?.trim()).map((p) => (
                       <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
                     ))}
                   </SelectContent>
@@ -428,53 +438,56 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                         </TableCell>
                       </TableRow>
                     ) : filteredServices.length > 0 ? (
-                      filteredServices.map((s: any) => (
-                        <TableRow
-                          key={s.id}
-                          className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
-                        >
-                          <TableCell className="py-2.5 px-3 font-medium">
-                            <PersonHistoryDialog
-                              clientId={s.client?.id}
-                              personName={`${s.client?.firstName} ${s.client?.lastName}`}
-                              cityIdNumber={s.client?.cityIdNumber}
-                              trigger={
-                                <button
-                                  type="button"
-                                  className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
-                                  title="Click to view cross-department support history"
-                                >
-                                  {s.client?.firstName} {s.client?.lastName}
-                                </button>
-                              }
-                            />
-                            <p className="text-[11px] font-mono text-slate-500">
-                              {s.client?.cityIdNumber}
-                            </p>
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3">
-                            <p className="font-medium text-slate-800">
-                              {t.has(`types.${s.serviceTypeId}`)
-                                ? t(`types.${s.serviceTypeId}`)
-                                : s.serviceType?.name || s.serviceName || `Service #${s.serviceTypeId}`}
-                            </p>
-                            <p className="text-[11px] font-mono text-slate-400">{s.provider}</p>
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3">
-                            <Badge variant="outline" className="rounded-xs font-mono text-[10px] uppercase tracking-wider font-semibold border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]">
-                              {s.category && t.has(`categories.${s.category}`)
-                                ? t(`categories.${s.category}`)
-                                : s.category || "General"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
-                            {s.frequency ? String(s.frequency).replace(/_/g, " ") : "As Needed"}
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
-                            {new Date(s.dateProvided).toLocaleDateString()}
-                          </TableCell>
-                        </TableRow>
-                      ))
+                      filteredServices.map((s: any) => {
+                        const clientName = [s.client?.firstName, s.client?.lastName].filter(Boolean).join(" ") || "—";
+                        return (
+                          <TableRow
+                            key={s.id}
+                            className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
+                          >
+                            <TableCell className="py-2.5 px-3 font-medium">
+                              <PersonHistoryDialog
+                                clientId={s.client?.id}
+                                personName={clientName}
+                                cityIdNumber={s.client?.cityIdNumber}
+                                trigger={
+                                  <button
+                                    type="button"
+                                    className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
+                                    title="Click to view cross-department support history"
+                                  >
+                                    {clientName}
+                                  </button>
+                                }
+                              />
+                              <p className="text-[11px] font-mono text-slate-500">
+                                {s.client?.cityIdNumber || "—"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3">
+                              <p className="font-medium text-slate-800">
+                                {s.serviceTypeId && t.has(`types.${s.serviceTypeId}`)
+                                  ? t(`types.${s.serviceTypeId}`)
+                                  : s.serviceType?.name || s.serviceName || (s.serviceTypeId ? `Service #${s.serviceTypeId}` : "—")}
+                              </p>
+                              <p className="text-[11px] font-mono text-slate-400">{s.provider || "—"}</p>
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3">
+                              <Badge variant="outline" className="rounded-xs font-mono text-[10px] uppercase tracking-wider font-semibold border-[#BCD5EA] bg-[#E8F2FA] text-[#1769AA]">
+                                {s.category && t.has(`categories.${s.category}`)
+                                  ? t(`categories.${s.category}`)
+                                  : s.category || "General"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
+                              {s.frequency ? String(s.frequency).replace(/_/g, " ") : "As Needed"}
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
+                              {formatDate(s.dateProvided)}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
                     ) : (
                       <TableRow>
                         <TableCell
@@ -526,7 +539,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allTypes")}</SelectItem>
-                    {trainingTypes.map((type) => (
+                    {trainingTypes.filter((type) => !!type?.trim()).map((type) => (
                       <SelectItem key={type} value={type} className="text-xs">{type}</SelectItem>
                     ))}
                   </SelectContent>
@@ -539,7 +552,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
-                    {trainingProviders.map((p) => (
+                    {trainingProviders.filter((p) => !!p?.trim()).map((p) => (
                       <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>
                     ))}
                   </SelectContent>
@@ -604,53 +617,53 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                         </TableCell>
                       </TableRow>
                     ) : filteredTrainings.length > 0 ? (
-                      filteredTrainings.map((tr: any) => (
-                        <TableRow
-                          key={tr.id}
-                          className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
-                        >
-                          <TableCell className="py-2.5 px-3 font-medium">
-                            <PersonHistoryDialog
-                              clientId={tr.client?.id}
-                              personName={`${tr.client?.firstName} ${tr.client?.lastName}`}
-                              cityIdNumber={tr.client?.cityIdNumber}
-                              trigger={
-                                <button
-                                  type="button"
-                                  className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
-                                  title="Click to view cross-department support history"
-                                >
-                                  {tr.client?.firstName} {tr.client?.lastName}
-                                </button>
-                              }
-                            />
-                            <p className="text-[11px] font-mono text-slate-500">
-                              {tr.client?.cityIdNumber}
-                            </p>
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3 font-medium text-slate-800">{tr.trainingType}</TableCell>
-                          <TableCell className="py-2.5 px-3 text-slate-600">{tr.provider}</TableCell>
-                          <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
-                            {new Date(tr.startDate).toLocaleDateString()}
-                            {tr.completionDate &&
-                              ` - ${new Date(
-                                tr.completionDate,
-                              ).toLocaleDateString()}`}
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3">
-                            <Badge
-                              variant="outline"
-                              className={`rounded-xs font-mono text-[10px] uppercase tracking-wider font-semibold border ${
-                                tr.hasCOC
-                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                  : "bg-slate-100 text-slate-700 border-[#E3E7EB]"
-                              }`}
-                            >
-                              {tr.hasCOC ? tTraining("coc.yes") : tTraining("coc.no")}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))
+                      filteredTrainings.map((tr: any) => {
+                        const clientName = [tr.client?.firstName, tr.client?.lastName].filter(Boolean).join(" ") || "—";
+                        return (
+                          <TableRow
+                            key={tr.id}
+                            className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
+                          >
+                            <TableCell className="py-2.5 px-3 font-medium">
+                              <PersonHistoryDialog
+                                clientId={tr.client?.id}
+                                personName={clientName}
+                                cityIdNumber={tr.client?.cityIdNumber}
+                                trigger={
+                                  <button
+                                    type="button"
+                                    className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
+                                    title="Click to view cross-department support history"
+                                  >
+                                    {clientName}
+                                  </button>
+                                }
+                              />
+                              <p className="text-[11px] font-mono text-slate-500">
+                                {tr.client?.cityIdNumber || "—"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3 font-medium text-slate-800">{tr.trainingType || "—"}</TableCell>
+                            <TableCell className="py-2.5 px-3 text-slate-600">{tr.provider || "—"}</TableCell>
+                            <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
+                              {formatDate(tr.startDate)}
+                              {tr.completionDate ? ` - ${formatDate(tr.completionDate)}` : ""}
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3">
+                              <Badge
+                                variant="outline"
+                                className={`rounded-xs font-mono text-[10px] uppercase tracking-wider font-semibold border ${
+                                  tr.hasCOC
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                    : "bg-slate-100 text-slate-700 border-[#E3E7EB]"
+                                }`}
+                              >
+                                {tr.hasCOC ? tTraining("coc.yes") : tTraining("coc.no")}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
                     ) : (
                       <TableRow>
                         <TableCell
@@ -702,7 +715,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCompanies")}</SelectItem>
-                    {jobCompanies.map((c) => (
+                    {jobCompanies.filter((c) => !!c?.trim()).map((c) => (
                       <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
                     ))}
                   </SelectContent>
@@ -750,37 +763,40 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                         </TableCell>
                       </TableRow>
                     ) : filteredJobs.length > 0 ? (
-                      filteredJobs.map((j: any) => (
-                        <TableRow
-                          key={j.id}
-                          className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
-                        >
-                          <TableCell className="py-2.5 px-3 font-medium">
-                            <PersonHistoryDialog
-                              clientId={j.client?.id}
-                              personName={`${j.client?.firstName} ${j.client?.lastName}`}
-                              cityIdNumber={j.client?.cityIdNumber}
-                              trigger={
-                                <button
-                                  type="button"
-                                  className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
-                                  title="Click to view cross-department support history"
-                                >
-                                  {j.client?.firstName} {j.client?.lastName}
-                                </button>
-                              }
-                            />
-                            <p className="text-[11px] font-mono text-slate-500">
-                              {j.client?.cityIdNumber}
-                            </p>
-                          </TableCell>
-                          <TableCell className="py-2.5 px-3 font-mono text-slate-700">{j.companyIdNumber}</TableCell>
-                          <TableCell className="py-2.5 px-3 font-medium text-slate-800">{j.jobTitle}</TableCell>
-                          <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
-                            {new Date(j.startDate).toLocaleDateString()}
-                          </TableCell>
-                        </TableRow>
-                      ))
+                      filteredJobs.map((j: any) => {
+                        const clientName = [j.client?.firstName, j.client?.lastName].filter(Boolean).join(" ") || "—";
+                        return (
+                          <TableRow
+                            key={j.id}
+                            className="border-b border-[#E3E7EB] hover:bg-slate-50/70 transition-colors"
+                          >
+                            <TableCell className="py-2.5 px-3 font-medium">
+                              <PersonHistoryDialog
+                                clientId={j.client?.id}
+                                personName={clientName}
+                                cityIdNumber={j.client?.cityIdNumber}
+                                trigger={
+                                  <button
+                                    type="button"
+                                    className="text-left font-semibold text-slate-900 hover:text-[#1769AA] hover:underline cursor-pointer transition-colors"
+                                    title="Click to view cross-department support history"
+                                  >
+                                    {clientName}
+                                  </button>
+                                }
+                              />
+                              <p className="text-[11px] font-mono text-slate-500">
+                                {j.client?.cityIdNumber || "—"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="py-2.5 px-3 font-mono text-slate-700">{j.companyIdNumber || "—"}</TableCell>
+                            <TableCell className="py-2.5 px-3 font-medium text-slate-800">{j.jobTitle || "—"}</TableCell>
+                            <TableCell className="py-2.5 px-3 text-xs font-mono text-slate-600">
+                              {formatDate(j.startDate)}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
                     ) : (
                       <TableRow>
                         <TableCell

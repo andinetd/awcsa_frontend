@@ -15,10 +15,9 @@ export const getBeneficiaries = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
-    throw new Error(
-      error?.response?.data?.message || `Failed to fetch ${type} beneficiaries`
-    );
+    console.warn(`Failed to fetch ${type} beneficiaries`, error);
+    return [];
   }
 };

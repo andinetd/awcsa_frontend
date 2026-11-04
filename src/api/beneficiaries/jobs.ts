@@ -14,11 +14,10 @@ export const getJobs = async (cityId?: string) => {
       },
       params: cityId ? { cityId } : undefined,
     });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
-    throw new Error(
-      error?.response?.data?.message || "Failed to fetch job placements",
-    );
+    console.warn("Failed to fetch job placements", error);
+    return [];
   }
 };
 

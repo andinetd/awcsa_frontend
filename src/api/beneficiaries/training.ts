@@ -14,11 +14,10 @@ export const getTrainings = async (cityId?: string) => {
       },
       params: cityId ? { cityId } : undefined,
     });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
-    throw new Error(
-      error?.response?.data?.message || "Failed to fetch training records"
-    );
+    console.warn("Failed to fetch training records", error);
+    return [];
   }
 };
 

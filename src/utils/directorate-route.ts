@@ -27,7 +27,7 @@ export const getRouteByDirectorate = (
 export const getRouteByDepartment = (
   department: string | null | undefined,
 ): string => {
-  if (!department) return "/bureau-head";
+  if (!department) return "/unauthorized";
 
   switch (department) {
     case "WOMEN_AFFAIRS":
@@ -42,7 +42,7 @@ export const getRouteByDepartment = (
     case "SYSTEM":
       return "/bureau-head";
     default:
-      return "/bureau-head";
+      return "/unauthorized";
   }
 };
 

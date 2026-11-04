@@ -125,7 +125,8 @@ export const getSupportServices = async (cityId?: string) => {
       params: cityId ? { cityId } : undefined,
     });
 
-    return (response.data || []).map((item: any) => {
+    const rawList = Array.isArray(response.data) ? response.data : [];
+    return rawList.map((item: any) => {
       const backendType = item.serviceType;
       const def =
         SERVICE_TYPES.find((t) => t.id === item.serviceTypeId) ||

@@ -51,7 +51,19 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
   const { data: disabled } = useGetBeneficiariesQuery("DISABLED");
   const { data: elderly } = useGetBeneficiariesQuery("ELDERLY");
 
-  const beneficiaries = [...(disabled || []), ...(elderly || [])];
+  const beneficiaries = React.useMemo(() => {
+    const list = [
+      ...(Array.isArray(disabled) ? disabled : []),
+      ...(Array.isArray(elderly) ? elderly : []),
+    ];
+    const seen = new Set<string>();
+    return list.filter((b: any) => {
+      const val = b?.cityIdNumber?.trim();
+      if (!val || seen.has(val)) return false;
+      seen.add(val);
+      return true;
+    });
+  }, [disabled, elderly]);
 
   const form = useForm<JobPlacementSchemaType>({
     resolver: zodResolver(jobPlacementSchema) as any,
@@ -110,7 +122,7 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value || undefined}
                     >
                       <FormControl>
                         <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
@@ -120,11 +132,17 @@ export default function JobForm({ cityIdNumber, trigger }: JobFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {beneficiaries.map((b) => (
-                          <SelectItem key={b.id} value={b.cityIdNumber}>
-                            {b.firstName} {b.lastName} ({b.cityIdNumber})
+                        {beneficiaries.length === 0 ? (
+                          <SelectItem value="_NONE" disabled className="text-xs text-slate-400">
+                            No beneficiaries found
                           </SelectItem>
-                        ))}
+                        ) : (
+                          beneficiaries.map((b) => (
+                            <SelectItem key={b.cityIdNumber} value={b.cityIdNumber}>
+                              {b.firstName} {b.lastName} ({b.cityIdNumber})
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
