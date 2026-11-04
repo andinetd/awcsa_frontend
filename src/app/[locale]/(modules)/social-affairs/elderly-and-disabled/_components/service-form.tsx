@@ -67,9 +67,12 @@ export default function ServiceForm() {
     ];
     const seen = new Set<string>();
     return list.filter((b: any) => {
-      const val = b?.cityIdNumber?.trim();
-      if (!val || seen.has(val)) return false;
-      seen.add(val);
+      const idStr =
+        b?.faydaId?.trim() ||
+        b?.cityIdNumber?.trim() ||
+        (b?.id ? String(b.id) : "");
+      if (!idStr || seen.has(idStr)) return false;
+      seen.add(idStr);
       return true;
     });
   }, [disabledBeneficiaries, elderlyBeneficiaries]);
@@ -152,7 +155,24 @@ export default function ServiceForm() {
                     {t("fields.beneficiary")}
                   </FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                      const selected = allBeneficiaries.find((b: any) => {
+                        const identifier =
+                          b?.cityIdNumber?.trim() ||
+                          b?.faydaId?.trim() ||
+                          (b?.id ? String(b.id) : "");
+                        return identifier === val;
+                      });
+                      if (selected) {
+                        if (selected.subCity && (!userSubCity || userSubCity === selected.subCity)) {
+                          form.setValue("subCity", selected.subCity);
+                        }
+                        if (selected.woreda && (!userWoreda || userWoreda === selected.woreda)) {
+                          form.setValue("woreda", selected.woreda);
+                        }
+                      }
+                    }}
                     value={field.value || undefined}
                   >
                     <FormControl>
@@ -162,17 +182,26 @@ export default function ServiceForm() {
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="max-h-[300px]">
                       {allBeneficiaries.length === 0 ? (
                         <SelectItem value="_NONE" disabled className="text-xs text-slate-400">
-                          {tCommon("noResults") || "No beneficiaries found"}
+                          {tCommon("noBeneficiaries")}
                         </SelectItem>
                       ) : (
-                        allBeneficiaries.map((b: any) => (
-                          <SelectItem key={b.cityIdNumber} value={b.cityIdNumber}>
-                            {b.firstName} {b.lastName} ({b.cityIdNumber})
-                          </SelectItem>
-                        ))
+                        allBeneficiaries.map((b: any) => {
+                          const identifier =
+                            b?.cityIdNumber?.trim() ||
+                            b?.faydaId?.trim() ||
+                            (b?.id ? String(b.id) : "");
+                          const fullName = [b?.firstName, b?.lastName].filter(Boolean).join(" ") || "Unknown";
+                          const idDisplay = b?.faydaId ? `FAN: ${b.faydaId}` : (b?.cityIdNumber || `#${b?.id}`);
+                          const categoryBadge = b?.clientCategory === "DISABLED" || b?.DisabilityProfile ? "Disabled" : "Elderly";
+                          return (
+                            <SelectItem key={identifier} value={identifier}>
+                              {fullName} ({idDisplay}) — {categoryBadge}
+                            </SelectItem>
+                          );
+                        })
                       )}
                     </SelectContent>
                   </Select>
@@ -197,16 +226,7 @@ export default function ServiceForm() {
                       <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
                         <SelectValue
                           placeholder={t("placeholders.selectService")}
-                        >
-                          {(() => {
-                            if (!field.value) return undefined;
-                            const type = SERVICE_TYPES.find((t) => t.id.toString() === field.value?.toString());
-                            if (!type) return undefined;
-                            const name = tServices.has(`types.${type.id}`) ? tServices(`types.${type.id}`) : type.name;
-                            const cat = tServices.has(`categories.${type.category}`) ? tServices(`categories.${type.category}`) : type.category;
-                            return `${name} (${cat})`;
-                          })()}
-                        </SelectValue>
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="max-h-[300px]">

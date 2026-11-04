@@ -20,19 +20,22 @@ export interface ElderlyProfile {
 
 export interface Beneficiary {
   id: number;
-  cityIdNumber: string;
+  faydaId?: string | null;
+  cityIdNumber?: string | null;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
-  address: string | null;
-  dateOfBirth: string | null;
+  phoneNumber?: string | null;
+  address?: string | null;
+  subCity?: string | null;
+  woreda?: string | null;
+  dateOfBirth?: string | null;
   clientCategory: BeneficiaryType;
-  educationLevel: string | null;
-  occupation: string | null;
-  familyMembersCount: number;
-  activeStatus: boolean;
-  createdAt: string;
-  updatedAt: string;
+  educationLevel?: string | null;
+  occupation?: string | null;
+  familyMembersCount?: number;
+  activeStatus?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
   DisabilityProfile?: DisabilityProfile | null;
   ElderlyProfile?: ElderlyProfile | null;
   TrainingRecord?: TrainingRecord[];

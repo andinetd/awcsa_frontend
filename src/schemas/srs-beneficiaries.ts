@@ -30,11 +30,21 @@ export const faydaIdSchema = z
   .max(32, "Fayda ID must be at most 32 characters")
   .regex(/^[0-9]+$/, "Fayda ID must contain only digits");
 
+export function parseFullName(fullName?: string | null) {
+  if (!fullName) return { firstName: "", lastName: "", grandfatherName: "" };
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  const firstName = parts[0] || "";
+  const lastName = parts[1] || "";
+  const grandfatherName = parts.slice(2).join(" ");
+  return { firstName, lastName, grandfatherName };
+}
+
 export const baseBeneficiarySchema = z.object({
   faydaId: faydaIdSchema,
   cityIdNumber: z.string().optional(),
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
+  fullName: z.string().min(2, "Full name is required").optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   grandfatherName: z.string().optional(),
   phoneNumber: z.string().optional(),
   age: z.coerce.number().int().min(0).max(150).optional(),

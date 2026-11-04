@@ -17,9 +17,10 @@ export const usePersonSearch = (params: PersonSearchParams) =>
 /**
  * Fetch the unified cross-department support history for a single person.
  */
-export const usePersonHistory = (clientId?: number) =>
+export const usePersonHistory = (clientId?: number, enabled = true) =>
   useQuery({
     queryKey: ["persons", "history", clientId],
     queryFn: () => getPersonHistory(clientId!),
-    enabled: !!clientId,
+    enabled: !!clientId && enabled,
+    retry: false,
   });

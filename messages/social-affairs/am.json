@@ -173,6 +173,7 @@
       },
       "autismCaregiverNotice": "ተጠቃሚው የኦቲዝም ወላጅ / ተንከባካቢ በመሆን እየተመዘገቡ ነው። እባክዎ ከዚህ በታች የልጁን እና የእንክብካቤ ፍላጎቶችን መረጃ ይሙሉ::",
       "fields": {
+        "fullName": "ሙሉ ስም",
         "firstName": "ስም",
         "lastName": "የአባት ስም",
         "cityId": "የከተማ መታወቂያ ቁጥር",
@@ -199,6 +200,9 @@
         "autismCause": "የልጁ የጤና / ምርመራ ሁኔታ"
       },
       "placeholders": {
+        "fullName": "ሙሉ ስም ያስገቡ (ለምሳሌ፡ አበበ ከበደ ተሰማ)",
+        "selectEducation": "የትምህርት ደረጃ ይምረጡ",
+        "selectEmployment": "የሥራ ሁኔታ ይምረጡ",
         "firstName": "ስም ያስገቡ",
         "lastName": "የአባት ስም ያስገቡ",
         "cityId": "ለምሳሌ AA-12345",
@@ -237,6 +241,8 @@
       "registeredCard": "የተመዘገቡ ተጠቃሚዎች",
       "searchPlaceholder": "ተጠቃሚዎችን ፈልግ...",
       "registerNew": "አዲስ መመዝገብ",
+      "registerElderly": "አረጋዊ መዝግብ",
+      "registerDisabled": "አካል ጉዳተኛ መዝግብ",
       "disabled": "አካል ጉዳተኛ",
       "elderly": "አረጋዊ",
       "filter": "ማጣሪያ",
@@ -314,8 +320,8 @@
         "unconfirmed": "ያልተረጋገጠ",
         "employment": "የሥራ ሁኔታ",
         "allEmployment": "ሁሉም የሥራ ሁኔታዎች",
-        "employed": "ተቀጣሪ / የሥራ ባለቤት",
-        "unemployed": "ሥራ አጥ",
+        "employed": "ሥራ አለው/ላት",
+        "unemployed": "ሥራ የለውም/ላት",
         "gender": "ጾታ",
         "allGenders": "ሁሉም ጾታዎች",
         "male": "ወንድ",
@@ -778,8 +784,19 @@
         "OTHER": "ሌላ"
       },
       "employment": {
-        "EMPLOYED": "ተቀጣሪ",
-        "UNEMPLOYED": "ሥራ አጥ"
+        "EMPLOYED": "ሥራ አለው/ላት",
+        "UNEMPLOYED": "ሥራ የለውም/ላት"
+      },
+      "education": {
+        "NONE": "ያልተማረ/ች",
+        "PRIMARY": "የመጀመሪያ ደረጃ (1-8)",
+        "SECONDARY": "ሁለተኛ ደረጃ (9-12)",
+        "CERTIFICATE": "ሰርተፊኬት / ቴክኒክና ሙያ",
+        "DIPLOMA": "ዲፕሎማ",
+        "BACHELOR": "የመጀመሪያ ዲግሪ",
+        "MASTERS": "ሁለተኛ ዲግሪ (ማስተርስ)",
+        "DOCTORATE": "ዶክትሬት (PhD)",
+        "OTHER": "ሌላ"
       },
       "marital": {
         "MARRIED": "ያገባ/ች",

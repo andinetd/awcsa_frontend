@@ -50,24 +50,19 @@ export function BeneficiaryRegisterDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex items-center gap-1.5 p-0.5 rounded-xs bg-slate-100 border border-[#E3E7EB] w-fit">
+        <div className="flex items-center gap-1.5 p-1 rounded-sm bg-slate-100 border border-[#E3E7EB] w-full sm:w-fit">
           <CategoryPill
             active={category === "DISABLED"}
             onClick={() => handleCategoryChange("DISABLED")}
-            icon={<UserPlus className="w-3.5 h-3.5 mr-1" />}
+            icon={<UserPlus className="w-4 h-4 mr-1 text-blue-600" />}
             label={t("disabled")}
           />
           <CategoryPill
             active={category === "ELDERLY"}
             onClick={() => handleCategoryChange("ELDERLY")}
-            icon={<Users className="w-3.5 h-3.5 mr-1" />}
+            icon={<Users className="w-4 h-4 mr-1 text-amber-600" />}
             label={t("elderly")}
           />
-        </div>
-
-        <div className="flex items-start gap-2 rounded-xs border border-amber-200 bg-amber-50/70 p-2.5 text-xs font-mono text-amber-800">
-          <Info className="w-4 h-4 mt-0.5 shrink-0 text-amber-600" />
-          <span>{tSrs("switchResetsForm")}</span>
         </div>
 
         <BeneficiaryFormBody

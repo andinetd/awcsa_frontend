@@ -19,6 +19,7 @@
 
 import React, { useState } from "react";
 import { usePersonHistory, usePersonSearch } from "@/hooks/persons/persons-hooks";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   TimelineEntry,
   TimelineKind,
@@ -298,8 +299,15 @@ export default function CrossDepartmentHistory({
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [showAll, setShowAll] = useState(false);
 
+  const canView = useAuthStore(
+    (s) =>
+      s.hasPermission("view_unified_history") ||
+      s.userRole === "Super_Admin" ||
+      s.userRole === "Bureau_Manager"
+  );
+
   // If clientId is not provided, try to resolve via search query
-  const needsSearch = !clientId && Boolean(cityIdNumber || faydaId);
+  const needsSearch = canView && !clientId && Boolean(cityIdNumber || faydaId);
   const { data: searchData, isLoading: searchLoading } = usePersonSearch({
     cityIdNumber: cityIdNumber || undefined,
     faydaId: faydaId || undefined,
@@ -309,8 +317,13 @@ export default function CrossDepartmentHistory({
   const resolvedClientId = clientId ?? searchData?.results?.[0]?.id;
 
   const { data, isLoading: historyLoading, isError } = usePersonHistory(
-    resolvedClientId
+    resolvedClientId,
+    canView
   );
+
+  if (!canView || isError) {
+    return null;
+  }
 
   const isLoading = (needsSearch && searchLoading) || historyLoading;
   const timeline: TimelineEntry[] = data?.timeline ?? [];

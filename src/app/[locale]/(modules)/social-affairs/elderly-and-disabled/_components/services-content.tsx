@@ -145,7 +145,8 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           `${item.client?.firstName} ${item.client?.lastName}`
             .toLowerCase()
             .includes(q) ||
-          item.client?.cityIdNumber?.toLowerCase().includes(q);
+          item.client?.cityIdNumber?.toLowerCase().includes(q) ||
+          item.client?.faydaId?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       if (serviceCategoryFilter !== "ALL" && item.category !== serviceCategoryFilter) {
@@ -191,7 +192,8 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           `${item.client?.firstName} ${item.client?.lastName}`
             .toLowerCase()
             .includes(q) ||
-          item.client?.cityIdNumber?.toLowerCase().includes(q);
+          item.client?.cityIdNumber?.toLowerCase().includes(q) ||
+          item.client?.faydaId?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       if (trainingTypeFilter !== "ALL" && item.trainingType !== trainingTypeFilter) {
@@ -229,7 +231,8 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
           `${item.client?.firstName} ${item.client?.lastName}`
             .toLowerCase()
             .includes(q) ||
-          item.client?.cityIdNumber?.toLowerCase().includes(q);
+          item.client?.cityIdNumber?.toLowerCase().includes(q) ||
+          item.client?.faydaId?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       if (jobCompanyFilter !== "ALL" && item.companyIdNumber !== jobCompanyFilter) {
@@ -367,9 +370,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={serviceCategoryFilter} onValueChange={setServiceCategoryFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allCategories")}>
-                      {serviceCategoryFilter === "ALL" ? t("filters.allCategories") : serviceCategoryFilter}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allCategories")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCategories")}</SelectItem>
@@ -380,9 +381,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={serviceProviderFilter} onValueChange={setServiceProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allProviders")}>
-                      {serviceProviderFilter === "ALL" ? t("filters.allProviders") : serviceProviderFilter}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allProviders")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
@@ -449,7 +448,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                               <PersonHistoryDialog
                                 clientId={s.client?.id}
                                 personName={clientName}
-                                cityIdNumber={s.client?.cityIdNumber}
+                                cityIdNumber={s.client?.faydaId || s.client?.cityIdNumber}
                                 trigger={
                                   <button
                                     type="button"
@@ -461,7 +460,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                                 }
                               />
                               <p className="text-[11px] font-mono text-slate-500">
-                                {s.client?.cityIdNumber || "—"}
+                                {s.client?.faydaId ? `FAN: ${s.client.faydaId}` : (s.client?.cityIdNumber || "—")}
                               </p>
                             </TableCell>
                             <TableCell className="py-2.5 px-3">
@@ -533,9 +532,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={trainingTypeFilter} onValueChange={setTrainingTypeFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allTypes")}>
-                      {trainingTypeFilter === "ALL" ? t("filters.allTypes") : trainingTypeFilter}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allTypes")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allTypes")}</SelectItem>
@@ -546,9 +543,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingProviderFilter} onValueChange={setTrainingProviderFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[140px]">
-                    <SelectValue placeholder={t("filters.allProviders")}>
-                      {trainingProviderFilter === "ALL" ? t("filters.allProviders") : trainingProviderFilter}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allProviders")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allProviders")}</SelectItem>
@@ -559,9 +554,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </Select>
                 <Select value={trainingCocFilter} onValueChange={setTrainingCocFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[110px]">
-                    <SelectValue placeholder={t("filters.allCoc")}>
-                      {trainingCocFilter === "ALL" ? t("filters.allCoc") : trainingCocFilter === "YES" ? tTraining("coc.yes") : tTraining("coc.no")}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allCoc")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCoc")}</SelectItem>
@@ -628,7 +621,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                               <PersonHistoryDialog
                                 clientId={tr.client?.id}
                                 personName={clientName}
-                                cityIdNumber={tr.client?.cityIdNumber}
+                                cityIdNumber={tr.client?.faydaId || tr.client?.cityIdNumber}
                                 trigger={
                                   <button
                                     type="button"
@@ -640,7 +633,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                                 }
                               />
                               <p className="text-[11px] font-mono text-slate-500">
-                                {tr.client?.cityIdNumber || "—"}
+                                {tr.client?.faydaId ? `FAN: ${tr.client.faydaId}` : (tr.client?.cityIdNumber || "—")}
                               </p>
                             </TableCell>
                             <TableCell className="py-2.5 px-3 font-medium text-slate-800">{tr.trainingType || "—"}</TableCell>
@@ -709,9 +702,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                 </div>
                 <Select value={jobCompanyFilter} onValueChange={setJobCompanyFilter}>
                   <SelectTrigger className="h-8 text-xs font-mono rounded-xs border-[#E3E7EB] bg-white w-[150px]">
-                    <SelectValue placeholder={t("filters.allCompanies")}>
-                      {jobCompanyFilter === "ALL" ? t("filters.allCompanies") : jobCompanyFilter}
-                    </SelectValue>
+                    <SelectValue placeholder={t("filters.allCompanies")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xs border-[#E3E7EB]">
                     <SelectItem value="ALL" className="text-xs font-semibold">{t("filters.allCompanies")}</SelectItem>
@@ -774,7 +765,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                               <PersonHistoryDialog
                                 clientId={j.client?.id}
                                 personName={clientName}
-                                cityIdNumber={j.client?.cityIdNumber}
+                                cityIdNumber={j.client?.faydaId || j.client?.cityIdNumber}
                                 trigger={
                                   <button
                                     type="button"
@@ -786,7 +777,7 @@ export default function ServicesContent({ initialTab }: ServicesContentProps) {
                                 }
                               />
                               <p className="text-[11px] font-mono text-slate-500">
-                                {j.client?.cityIdNumber || "—"}
+                                {j.client?.faydaId ? `FAN: ${j.client.faydaId}` : (j.client?.cityIdNumber || "—")}
                               </p>
                             </TableCell>
                             <TableCell className="py-2.5 px-3 font-mono text-slate-700">{j.companyIdNumber || "—"}</TableCell>

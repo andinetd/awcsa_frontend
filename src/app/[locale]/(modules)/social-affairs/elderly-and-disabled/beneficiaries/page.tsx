@@ -17,6 +17,7 @@ import { useBeneficiaryRegisterStore } from "@/stores/beneficiary-register-store
 import BeneficiaryTable from "../_components/beneficiary-table";
 import BeneficiaryReportDialog from "../_components/report-dialog";
 import { BatchImportDialog } from "../_components/batch-import-dialog";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -24,12 +25,20 @@ import {
   Loader2,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   SlidersHorizontal,
   X,
   RotateCcw,
   Home,
   Users,
+  UserPlus,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -117,10 +126,23 @@ export default function BeneficiariesPage() {
   const getSubCityLabel = (sc: string) => (tSubCities.has(sc) ? tSubCities(sc) : sc);
   const openDialog = useBeneficiaryRegisterStore((s) => s.openDialog);
   const { userSubCity, userWoreda, filterSubCityNames } = useJurisdictionScope();
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams?.get("category");
+  const initialCategory: BeneficiaryCategory =
+    urlCategory?.toUpperCase() === "ELDERLY" ? "ELDERLY" : "DISABLED";
 
-  const [category, setCategory] = useState<BeneficiaryCategory>("DISABLED");
+  const [category, setCategory] = useState<BeneficiaryCategory>(initialCategory);
   const [disabledTab, setDisabledTab] = useState<DisabledPresetTab>("ALL");
   const [elderlyTab, setElderlyTab] = useState<ElderlyPresetTab>("ALL");
+
+  useEffect(() => {
+    if (urlCategory) {
+      const parsed = urlCategory.toUpperCase();
+      if (parsed === "ELDERLY" || parsed === "DISABLED") {
+        setCategory(parsed);
+      }
+    }
+  }, [urlCategory]);
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -560,6 +582,11 @@ export default function BeneficiariesPage() {
     setDebouncedSearch("");
     setDisabledTab("ALL");
     setElderlyTab("ALL");
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("category", cat.toLowerCase());
+      window.history.replaceState(null, "", url.toString());
+    }
   };
 
   const totalItems = filteredItems.length;
@@ -686,13 +713,41 @@ export default function BeneficiariesPage() {
 
             <BatchImportDialog />
 
-            <Button
-              className="h-8 text-xs font-mono uppercase tracking-wider rounded-xs bg-[#1769AA] hover:bg-[#12568E] text-white shadow-2xs gap-1.5 cursor-pointer"
-              onClick={() => openDialog(category)}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              {t("registerNew")}
-            </Button>
+            <DropdownMenu>
+              <div className="flex items-center rounded-xs shadow-2xs">
+                <Button
+                  className="h-8 text-xs font-mono uppercase tracking-wider rounded-l-xs rounded-r-none bg-[#1769AA] hover:bg-[#12568E] text-white gap-1.5 cursor-pointer"
+                  onClick={() => openDialog(category)}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  {category === "ELDERLY" ? t("registerElderly") : t("registerDisabled")}
+                </Button>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    className="h-8 px-2 rounded-r-xs rounded-l-none border-l border-white/20 bg-[#1769AA] hover:bg-[#12568E] text-white cursor-pointer"
+                    title={t("registerNew")}
+                  >
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+              </div>
+              <DropdownMenuContent align="end" className="w-56 font-mono text-xs">
+                <DropdownMenuItem
+                  onClick={() => openDialog("ELDERLY")}
+                  className="gap-2 cursor-pointer"
+                >
+                  <Users className="w-4 h-4 text-amber-600" />
+                  <span>{t("registerElderly")}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => openDialog("DISABLED")}
+                  className="gap-2 cursor-pointer"
+                >
+                  <UserPlus className="w-4 h-4 text-blue-600" />
+                  <span>{t("registerDisabled")}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
@@ -867,9 +922,7 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white disabled:bg-slate-100 disabled:text-slate-500">
-                  <SelectValue placeholder={t("filterDrawer.allSubCities")}>
-                    {selectedSubCity === "ALL" ? t("filterDrawer.allSubCities") : getSubCityLabel(selectedSubCity)}
-                  </SelectValue>
+                  <SelectValue placeholder={t("filterDrawer.allSubCities")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {!userSubCity && (
@@ -906,13 +959,7 @@ export default function BeneficiariesPage() {
                         ? t("filterDrawer.selectSubCityFirst")
                         : t("filterDrawer.allWoredas")
                     }
-                  >
-                    {selectedWoreda === "ALL"
-                      ? t("filterDrawer.allWoredas")
-                      : selectedWoreda
-                      ? t("filterDrawer.woredaPrefix", { code: selectedWoreda })
-                      : undefined}
-                  </SelectValue>
+                  />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   {!userWoreda && (
@@ -946,13 +993,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allDisabilityCategories")}>
-                        {disabilityCategoryFilter === "ALL"
-                          ? t("filterDrawer.allDisabilityCategories")
-                          : tOpts.has(`disabilityCategories.${disabilityCategoryFilter}`)
-                          ? tOpts(`disabilityCategories.${disabilityCategoryFilter}`)
-                          : getDisabilityDisplayLabel(disabilityCategoryFilter, locale)}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allDisabilityCategories")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -982,13 +1023,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allDisabilityTypes")}>
-                        {disabilityTypeFilter === "ALL"
-                          ? t("filterDrawer.allDisabilityTypes")
-                          : tOpts.has(`disabilityTypes.${disabilityTypeFilter}`)
-                          ? tOpts(`disabilityTypes.${disabilityTypeFilter}`)
-                          : getDisabilityDisplayLabel(disabilityTypeFilter, locale)}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allDisabilityTypes")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1021,13 +1056,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allSeverities")}>
-                        {severityFilter === "ALL"
-                          ? t("filterDrawer.allSeverities")
-                          : tOpts.has(`severity.${severityFilter}`)
-                          ? tOpts(`severity.${severityFilter}`)
-                          : severityFilter}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allSeverities")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1055,13 +1084,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allAssistance")}>
-                        {assistanceFilter === "ALL"
-                          ? t("filterDrawer.allAssistance")
-                          : assistanceFilter === "YES"
-                          ? t("filterDrawer.requiresAssistance")
-                          : t("filterDrawer.independent")}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allAssistance")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1090,15 +1113,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allVerifications")}>
-                        {verificationFilter === "ALL"
-                          ? t("filterDrawer.allVerifications")
-                          : verificationFilter === "VERIFIED"
-                          ? t("filterDrawer.verified")
-                          : verificationFilter === "PENDING"
-                          ? t("filterDrawer.pending")
-                          : t("filterDrawer.rejected")}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allVerifications")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1130,19 +1145,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={locale === "am" ? "ሁሉም መሳሪያዎች" : "All Devices"}>
-                        {assistiveDeviceFilter === "ALL"
-                          ? locale === "am"
-                            ? "ሁሉም መሳሪያዎች"
-                            : "All Devices"
-                          : ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)
-                              ? locale === "am"
-                                ? ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)!
-                                    .labelAm
-                                : ASSISTIVE_DEVICE_OPTIONS.find((o) => o.value === assistiveDeviceFilter)!
-                                    .labelEn
-                              : assistiveDeviceFilter}
-                      </SelectValue>
+                      <SelectValue placeholder={locale === "am" ? "ሁሉም መሳሪያዎች" : "All Devices"} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1172,15 +1175,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allAges")}>
-                        {elderlyAgeFilter === "ALL"
-                          ? t("filterDrawer.allAges")
-                          : elderlyAgeFilter === "60_69"
-                          ? t("filterDrawer.youngOld")
-                          : elderlyAgeFilter === "70_79"
-                          ? t("filterDrawer.middleOld")
-                          : t("filterDrawer.oldestOld")}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allAges")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1212,13 +1207,7 @@ export default function BeneficiariesPage() {
                     }}
                   >
                     <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                      <SelectValue placeholder={t("filterDrawer.allRecords")}>
-                        {supportConfirmedFilter === "ALL"
-                          ? t("filterDrawer.allRecords")
-                          : supportConfirmedFilter === "YES"
-                          ? t("filterDrawer.confirmedOnly")
-                          : t("filterDrawer.unconfirmed")}
-                      </SelectValue>
+                      <SelectValue placeholder={t("filterDrawer.allRecords")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-xs border-[#E3E7EB]">
                       <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1249,13 +1238,7 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder={t("filterDrawer.allEmployment")}>
-                    {employmentFilter === "ALL"
-                      ? t("filterDrawer.allEmployment")
-                      : employmentFilter === "EMPLOYED"
-                      ? t("filterDrawer.employed")
-                      : t("filterDrawer.unemployed")}
-                  </SelectValue>
+                  <SelectValue placeholder={t("filterDrawer.allEmployment")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1284,15 +1267,7 @@ export default function BeneficiariesPage() {
                 }}
               >
                 <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-white">
-                  <SelectValue placeholder={t("filterDrawer.allGenders")}>
-                    {sexFilter === "ALL"
-                      ? t("filterDrawer.allGenders")
-                      : sexFilter === "MALE"
-                      ? t("filterDrawer.male")
-                      : sexFilter === "FEMALE"
-                      ? t("filterDrawer.female")
-                      : t("filterDrawer.other")}
-                  </SelectValue>
+                  <SelectValue placeholder={t("filterDrawer.allGenders")} />
                 </SelectTrigger>
                 <SelectContent className="rounded-xs border-[#E3E7EB]">
                   <SelectItem value="ALL" className="text-xs rounded-xs font-semibold">
@@ -1303,9 +1278,6 @@ export default function BeneficiariesPage() {
                   </SelectItem>
                   <SelectItem value="FEMALE" className="text-xs rounded-xs">
                     {t("filterDrawer.female")}
-                  </SelectItem>
-                  <SelectItem value="OTHER" className="text-xs rounded-xs">
-                    {t("filterDrawer.other")}
                   </SelectItem>
                 </SelectContent>
               </Select>

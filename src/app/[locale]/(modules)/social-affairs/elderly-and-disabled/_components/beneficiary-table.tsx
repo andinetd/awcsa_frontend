@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { getDisabilityDisplayLabel } from "@/constants/disability-classification";
+import { EDUCATION_LEVEL_OPTIONS } from "./beneficiary-form-body";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -587,15 +588,12 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectGender")}>
-                            {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectGender")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="MALE">{tOpt("sex.MALE")}</SelectItem>
                         <SelectItem value="FEMALE">{tOpt("sex.FEMALE")}</SelectItem>
-                        <SelectItem value="OTHER">{tOpt("sex.OTHER")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -608,9 +606,23 @@ function EditBeneficiaryDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("fields.education")}</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value ?? ""} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("placeholders.education")} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {EDUCATION_LEVEL_OPTIONS.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {locale === "am" ? opt.labelAm : opt.labelEn}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -722,9 +734,7 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")}>
-                            {field.value ? tOpt(`employment.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -748,9 +758,7 @@ function EditBeneficiaryDialog({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectMarital")}>
-                            {field.value ? tOpt(`marital.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectMarital")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -787,9 +795,7 @@ function EditBeneficiaryDialog({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
-                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                              </SelectValue>
+                              <SelectValue placeholder={tOpt("placeholders.firstChoice")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -821,9 +827,7 @@ function EditBeneficiaryDialog({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
-                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                              </SelectValue>
+                              <SelectValue placeholder={tOpt("placeholders.secondChoice")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -855,9 +859,7 @@ function EditBeneficiaryDialog({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
-                                {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                              </SelectValue>
+                              <SelectValue placeholder={tOpt("placeholders.thirdChoice")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -887,9 +889,7 @@ function EditBeneficiaryDialog({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder={tOpt("placeholders.selectWorkplace")}>
-                              {field.value ? tOpt(`workplace.${field.value}` as any) : undefined}
-                            </SelectValue>
+                            <SelectValue placeholder={tOpt("placeholders.selectWorkplace")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>

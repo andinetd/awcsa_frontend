@@ -42,7 +42,27 @@ import {
   TrainingField,
   WorkplaceCondition,
 } from "@/api/beneficiaries/types-v2";
-import { FileText, FileCheck, FilePlus, Loader2, Plus, History, Briefcase, Pencil, Users, User } from "lucide-react";
+import {
+  FileText,
+  FileCheck,
+  FilePlus,
+  Loader2,
+  Plus,
+  History,
+  Briefcase,
+  Pencil,
+  Users,
+  User,
+  UserCheck,
+  Edit3,
+  ShieldCheck,
+  CheckCircle2,
+  GraduationCap,
+  HandHeart,
+  StickyNote,
+  Activity,
+  Clock,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { caseNoteSchema, CaseNoteFormValues } from "@/schemas/srs-beneficiaries";
@@ -373,24 +393,68 @@ export default function CaseHistoryView({ clientId }: CaseHistoryViewProps) {
           )}
         </TabsContent>
 
-        <TabsContent value="timeline" className="space-y-2 pt-2">
+        <TabsContent value="timeline" className="space-y-3 pt-2">
           {timeline.length ? (
-            timeline.map((entry, idx) => (
-              <div
-                key={idx}
-                className="flex gap-3 items-start border-l-2 border-[#BCD5EA] pl-3 py-2 bg-white rounded-xs border border-[#E3E7EB] p-3 shadow-2xs"
-              >
-                <div className="text-[11px] font-mono text-slate-500 shrink-0">
-                  {new Date(entry.date).toLocaleString()}
-                </div>
-                <div className="text-xs">
-                  <span className="font-bold text-[#0B1F3A] font-mono">{entry.kind}</span> —{" "}
-                  <span className="text-slate-600">
-                    {summarize(entry.kind, entry.payload)}
-                  </span>
-                </div>
-              </div>
-            ))
+            <div className="space-y-2.5">
+              {timeline.map((entry, idx) => {
+                const meta = getTimelineMeta(entry, locale);
+                const Icon = meta.icon;
+                const formattedDate = new Date(entry.date).toLocaleString(
+                  locale === "am" ? "am-ET" : "en-US",
+                  {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                );
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3.5 p-3.5 bg-white rounded-xs border border-[#E3E7EB] shadow-2xs hover:border-[#BCD5EA] transition-colors"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${meta.categoryColor}`}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-bold text-[#0B1F3A] font-mono">
+                            {meta.title}
+                          </span>
+                          <span
+                            className={`text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded border ${meta.categoryColor}`}
+                          >
+                            {meta.category}
+                          </span>
+                          {meta.metaBadge && (
+                            <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                              {meta.metaBadge}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-1 text-[11px] font-mono text-slate-500 shrink-0">
+                          <Clock className="w-3 h-3 text-slate-400" />
+                          <span>{formattedDate}</span>
+                        </div>
+                      </div>
+
+                      {meta.description && (
+                        <p className="text-xs text-slate-600 mt-1 font-normal leading-relaxed">
+                          {meta.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             <Empty message="No timeline events" />
           )}
@@ -1558,6 +1622,152 @@ function Empty({ message }: { message: string }) {
       {message}
     </div>
   );
+}
+
+interface TimelineMeta {
+  title: string;
+  category: string;
+  categoryColor: string;
+  icon: React.ElementType;
+  dotColor: string;
+  description: string;
+  metaBadge?: string;
+}
+
+function getTimelineMeta(
+  entry: { kind: string; date: string | Date; payload: any },
+  locale: "am" | "en"
+): TimelineMeta {
+  const p = entry.payload || {};
+  const isAm = locale === "am";
+
+  if (entry.kind === "AUDIT") {
+    const action = p.action || "";
+    if (action === "REGISTER_BENEFICIARY") {
+      const cat = p.newValue?.category;
+      const catLabel =
+        cat === "ELDERLY"
+          ? isAm
+            ? "አረጋውያን"
+            : "Elderly"
+          : isAm
+          ? "አካል ጉዳተኞች"
+          : "Disability";
+      return {
+        title: isAm ? "የተጠቃሚ መገለጫ ተመዘገበ" : "Beneficiary Profile Registered",
+        category: isAm ? "ምዝገባ" : "Registration",
+        categoryColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        icon: UserCheck,
+        dotColor: "bg-emerald-500",
+        description: isAm
+          ? `ተጠቃሚው በ${catLabel} ማህበራዊ ድጋፍ መዝገብ ውስጥ ተመዝግቧል`
+          : `Citizen registered in the ${catLabel} social assistance registry`,
+        metaBadge: p.entityId ? `#${p.entityId}` : undefined,
+      };
+    }
+    if (action.includes("UPDATE")) {
+      return {
+        title: isAm ? "የመገለጫ መረጃ ተሻሽሏል" : "Profile Information Updated",
+        category: isAm ? "ዝማኔ" : "Update",
+        categoryColor: "bg-blue-50 text-blue-700 border-blue-200",
+        icon: Edit3,
+        dotColor: "bg-blue-500",
+        description: isAm
+          ? "የተጠቃሚው ማህደር መረጃ በስርዓቱ ላይ ተሻሽሏል"
+          : "Beneficiary profile records were updated in the system",
+        metaBadge: p.entityId ? `#${p.entityId}` : undefined,
+      };
+    }
+    const friendlyAction = action.replace(/_/g, " ").toLowerCase();
+    return {
+      title: isAm ? "የማህደር እንቅስቃሴ" : action ? action.replace(/_/g, " ") : "System Activity",
+      category: isAm ? "ስርዓት" : "Audit",
+      categoryColor: "bg-slate-100 text-slate-700 border-slate-200",
+      icon: Activity,
+      dotColor: "bg-slate-400",
+      description: isAm
+        ? `${p.entityType || "ማህደር"} ላይ ክንውን ተመዝግቧል`
+        : `Action ${friendlyAction} recorded on ${p.entityType || "profile"}`,
+    };
+  }
+
+  if (entry.kind === "SERVICE_REQUEST") {
+    return {
+      title: isAm ? "የድጋፍ አገልግሎት ጥያቄ" : "Support Service Request",
+      category: isAm ? "አገልግሎት" : "Service",
+      categoryColor: "bg-sky-50 text-sky-700 border-sky-200",
+      icon: ShieldCheck,
+      dotColor: "bg-sky-500",
+      description: [p.serviceType, p.status].filter(Boolean).join(" • "),
+      metaBadge: p.responsibleOffice,
+    };
+  }
+
+  if (entry.kind === "ELIGIBILITY") {
+    return {
+      title: isAm ? "የብቁነት ምዘና ውሳኔ" : "Eligibility Assessment Decision",
+      category: isAm ? "ብቁነት" : "Eligibility",
+      categoryColor: "bg-violet-50 text-violet-700 border-violet-200",
+      icon: CheckCircle2,
+      dotColor: "bg-violet-500",
+      description: isAm
+        ? `የተሰጠ ውሳኔ: ${p.decision || "በመጠባበቅ ላይ"}`
+        : `Decision: ${p.decision || "Pending"}${p.decisionNotes ? ` — ${p.decisionNotes}` : ""}`,
+    };
+  }
+
+  if (entry.kind === "TRAINING") {
+    return {
+      title: isAm ? "የሙያ ስልጠና ምዝገባ" : "Vocational Training Enrollment",
+      category: isAm ? "ስልጠና" : "Training",
+      categoryColor: "bg-amber-50 text-amber-700 border-amber-200",
+      icon: GraduationCap,
+      dotColor: "bg-amber-500",
+      description: [p.trainingType, p.provider ? `@ ${p.provider}` : ""].filter(Boolean).join(" "),
+    };
+  }
+
+  if (entry.kind === "JOB") {
+    return {
+      title: isAm ? "የሥራ ስምሪት መዝገብ" : "Job Placement Recorded",
+      category: isAm ? "ሥራ" : "Job Placement",
+      categoryColor: "bg-teal-50 text-teal-700 border-teal-200",
+      icon: Briefcase,
+      dotColor: "bg-teal-500",
+      description: [p.jobTitle, p.companyIdNumber ? `@ ${p.companyIdNumber}` : ""].filter(Boolean).join(" "),
+    };
+  }
+
+  if (entry.kind === "SUPPORT") {
+    return {
+      title: isAm ? "ድጋፍ / እርዳታ ተሰጠ" : "Support / Aid Provided",
+      category: isAm ? "ድጋፍ" : "Support",
+      categoryColor: "bg-rose-50 text-rose-700 border-rose-200",
+      icon: HandHeart,
+      dotColor: "bg-rose-500",
+      description: [p.amountOrQuantity, p.provider ? `(${p.provider})` : ""].filter(Boolean).join(" "),
+    };
+  }
+
+  if (entry.kind === "NOTE") {
+    return {
+      title: isAm ? "የማህደር ማስታወሻ" : "Case Worker Note",
+      category: isAm ? "ማስታወሻ" : "Case Note",
+      categoryColor: "bg-slate-100 text-slate-700 border-slate-200",
+      icon: StickyNote,
+      dotColor: "bg-slate-500",
+      description: p.note || "",
+    };
+  }
+
+  return {
+    title: entry.kind,
+    category: "General",
+    categoryColor: "bg-slate-100 text-slate-700 border-slate-200",
+    icon: Activity,
+    dotColor: "bg-slate-400",
+    description: summarize(entry.kind, p),
+  };
 }
 
 function summarize(kind: string, payload: any): string {

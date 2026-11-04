@@ -173,6 +173,7 @@
       },
       "autismCaregiverNotice": "The beneficiary is registering as an Autism Parent / Caregiver. Please provide the dependent child's details and care requirements below.",
       "fields": {
+        "fullName": "Full Name",
         "firstName": "First Name",
         "lastName": "Last Name",
         "cityId": "City ID Number",
@@ -199,6 +200,9 @@
         "autismCause": "Child Diagnosis & Clinical History"
       },
       "placeholders": {
+        "fullName": "Enter full name (e.g. Abebe Kebede Tessema)",
+        "selectEducation": "Select education level",
+        "selectEmployment": "Select employment status",
         "firstName": "Enter first name",
         "lastName": "Enter last name",
         "cityId": "e.g. AA-12345",
@@ -237,6 +241,8 @@
       "registeredCard": "Registered Beneficiaries",
       "searchPlaceholder": "Search beneficiaries...",
       "registerNew": "Register new",
+      "registerElderly": "Register Elderly",
+      "registerDisabled": "Register Disabled",
       "disabled": "Disabled",
       "elderly": "Elderly",
       "filter": "Filter",
@@ -314,8 +320,8 @@
         "unconfirmed": "Unconfirmed",
         "employment": "Employment",
         "allEmployment": "All Employment",
-        "employed": "Employed",
-        "unemployed": "Unemployed",
+        "employed": "Has Work",
+        "unemployed": "No Work",
         "gender": "Gender",
         "allGenders": "All Genders",
         "male": "Male",
@@ -778,8 +784,19 @@
         "OTHER": "Other"
       },
       "employment": {
-        "EMPLOYED": "Employed",
-        "UNEMPLOYED": "Unemployed"
+        "EMPLOYED": "Has Work",
+        "UNEMPLOYED": "No Work"
+      },
+      "education": {
+        "NONE": "None / Illiterate",
+        "PRIMARY": "Primary School (1-8)",
+        "SECONDARY": "Secondary School (9-12)",
+        "CERTIFICATE": "Certificate / TVET",
+        "DIPLOMA": "Diploma",
+        "BACHELOR": "Bachelor's Degree",
+        "MASTERS": "Master's Degree",
+        "DOCTORATE": "Doctorate (PhD)",
+        "OTHER": "Other"
       },
       "marital": {
         "MARRIED": "Married",

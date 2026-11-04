@@ -106,15 +106,7 @@ export default function BeneficiarySearchPage() {
             </div>
             <Select value={by} onValueChange={(v: any) => setBy(v)}>
               <SelectTrigger className="w-[160px] h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
-                <SelectValue>
-                  {by === "fayda"
-                    ? t("searchByFayda")
-                    : by === "name"
-                    ? t("searchByName")
-                    : by === "phone"
-                    ? t("searchByPhone")
-                    : t("searchByCityId")}
-                </SelectValue>
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="fayda" className="text-xs font-mono">{t("searchByFayda")}</SelectItem>
@@ -128,13 +120,7 @@ export default function BeneficiarySearchPage() {
               onValueChange={(v: string) => setCategory(v === "ALL" ? "" : (v as "ELDERLY" | "DISABLED"))}
             >
               <SelectTrigger className="w-[150px] h-8 text-xs font-mono rounded-xs border-[#E3E7EB] focus:ring-1 focus:ring-[#1769AA]">
-                <SelectValue placeholder={t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories"}>
-                  {!category
-                    ? (t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories")
-                    : category === "ELDERLY"
-                    ? t("registerElderly")
-                    : t("registerDisability")}
-                </SelectValue>
+                <SelectValue placeholder={t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories"} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ALL" className="text-xs font-mono">{t("search") === "ፈልግ" ? "ሁሉም ምድቦች" : "All Categories"}</SelectItem>

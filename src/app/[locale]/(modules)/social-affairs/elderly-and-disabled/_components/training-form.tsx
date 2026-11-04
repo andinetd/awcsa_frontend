@@ -46,6 +46,7 @@ export default function TrainingForm({
   trigger,
 }: TrainingFormProps) {
   const t = useTranslations("social-affairs.elderlyAndDisabled.training.form");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = React.useState(false);
   const registerMutation = useRegisterTrainingMutation();
   const { data: disabled } = useGetBeneficiariesQuery("DISABLED");
@@ -58,9 +59,12 @@ export default function TrainingForm({
     ];
     const seen = new Set<string>();
     return list.filter((b: any) => {
-      const val = b?.cityIdNumber?.trim();
-      if (!val || seen.has(val)) return false;
-      seen.add(val);
+      const idStr =
+        b?.faydaId?.trim() ||
+        b?.cityIdNumber?.trim() ||
+        (b?.id ? String(b.id) : "");
+      if (!idStr || seen.has(idStr)) return false;
+      seen.add(idStr);
       return true;
     });
   }, [disabled, elderly]);
@@ -134,17 +138,26 @@ export default function TrainingForm({
                           />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="max-h-[300px]">
                         {beneficiaries.length === 0 ? (
                           <SelectItem value="_NONE" disabled className="text-xs text-slate-400">
-                            No beneficiaries found
+                            {tCommon("noBeneficiaries")}
                           </SelectItem>
                         ) : (
-                          beneficiaries.map((b) => (
-                            <SelectItem key={b.cityIdNumber} value={b.cityIdNumber}>
-                              {b.firstName} {b.lastName} ({b.cityIdNumber})
-                            </SelectItem>
-                          ))
+                          beneficiaries.map((b: any) => {
+                            const identifier =
+                              b?.cityIdNumber?.trim() ||
+                              b?.faydaId?.trim() ||
+                              (b?.id ? String(b.id) : "");
+                            const fullName = [b?.firstName, b?.lastName].filter(Boolean).join(" ") || "Unknown";
+                            const idDisplay = b?.faydaId ? `FAN: ${b.faydaId}` : (b?.cityIdNumber || `#${b?.id}`);
+                            const categoryBadge = b?.clientCategory === "DISABLED" || b?.DisabilityProfile ? "Disabled" : "Elderly";
+                            return (
+                              <SelectItem key={identifier} value={identifier}>
+                                {fullName} ({idDisplay}) — {categoryBadge}
+                              </SelectItem>
+                            );
+                          })
                         )}
                       </SelectContent>
                     </Select>

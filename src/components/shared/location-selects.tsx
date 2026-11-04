@@ -72,9 +72,7 @@ export function SubCitySelect({
       disabled={isDisabled}
     >
       <SelectTrigger className={lockedSubCity ? "bg-slate-100 cursor-not-allowed" : ""}>
-        <SelectValue placeholder={isLoading ? t("loading") : placeholder}>
-          {value ? getSubCityLabel(value) : undefined}
-        </SelectValue>
+        <SelectValue placeholder={isLoading ? t("loading") : placeholder} />
       </SelectTrigger>
       <SelectContent>
         {known
@@ -171,9 +169,7 @@ export function WoredaSelect({
       <SelectTrigger className={lockedWoreda ? "bg-slate-100 cursor-not-allowed" : ""}>
         <SelectValue
           placeholder={isLoading ? t("loading") : placeholder}
-        >
-          {value ? getWoredaLabel(value) : undefined}
-        </SelectValue>
+        />
       </SelectTrigger>
       <SelectContent>
         {displayWoredas

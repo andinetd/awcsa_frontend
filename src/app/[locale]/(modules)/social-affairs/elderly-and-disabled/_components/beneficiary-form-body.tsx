@@ -54,6 +54,7 @@ import {
   RegisterDisabledFormValues,
   RegisterElderlyFormValues,
   faydaIdSchema,
+  parseFullName,
 } from "@/schemas/srs-beneficiaries";
 import {
   useRegisterDisabled,
@@ -75,12 +76,23 @@ import {
 const SEX_OPTIONS = [
   { value: "MALE", label: "Male" },
   { value: "FEMALE", label: "Female" },
-  { value: "OTHER", label: "Other" },
+];
+
+export const EDUCATION_LEVEL_OPTIONS = [
+  { value: "NONE", labelAm: "ያልተማረ/ች", labelEn: "None / Illiterate" },
+  { value: "PRIMARY", labelAm: "የመጀመሪያ ደረጃ (1-8)", labelEn: "Primary School (1-8)" },
+  { value: "SECONDARY", labelAm: "ሁለተኛ ደረጃ (9-12)", labelEn: "Secondary School (9-12)" },
+  { value: "CERTIFICATE", labelAm: "ሰርተፊኬት / ቴክኒክና ሙያ", labelEn: "Certificate / TVET" },
+  { value: "DIPLOMA", labelAm: "ዲፕሎማ", labelEn: "Diploma" },
+  { value: "BACHELOR", labelAm: "የመጀመሪያ ዲግሪ", labelEn: "Bachelor's Degree" },
+  { value: "MASTERS", labelAm: "ሁለተኛ ዲግሪ (ማስተርስ)", labelEn: "Master's Degree" },
+  { value: "DOCTORATE", labelAm: "ዶክትሬት (PhD)", labelEn: "Doctorate (PhD)" },
+  { value: "OTHER", labelAm: "ሌላ", labelEn: "Other" },
 ];
 
 const EMPLOYMENT_OPTIONS = [
-  { value: "EMPLOYED", label: "Employed" },
-  { value: "UNEMPLOYED", label: "Unemployed" },
+  { value: "EMPLOYED", label: "Has Work" },
+  { value: "UNEMPLOYED", label: "No Work" },
 ];
 
 const MARITAL_OPTIONS = [
@@ -237,6 +249,7 @@ export function AssistiveDeviceSelect({
 
 const DEFAULT_VALUES: any = {
   faydaId: "",
+  fullName: "",
   firstName: "",
   lastName: "",
   grandfatherName: "",
@@ -404,9 +417,11 @@ export function BeneficiaryFormBody({
       if (result.verified) {
         toast.success(tSrs("faydaVerified"));
         if (result.fullName) {
-          const [first, ...rest] = result.fullName.split(" ");
-          form.setValue("firstName", first);
-          form.setValue("lastName", rest.join(" "));
+          form.setValue("fullName", result.fullName, { shouldValidate: true, shouldDirty: true });
+          const { firstName, lastName, grandfatherName } = parseFullName(result.fullName);
+          form.setValue("firstName", firstName);
+          form.setValue("lastName", lastName);
+          form.setValue("grandfatherName", grandfatherName);
         }
         if (result.dateOfBirth) {
           const formattedDob = result.dateOfBirth.replace(/\//g, "-").split("T")[0];
@@ -456,12 +471,17 @@ export function BeneficiaryFormBody({
 
   const buildPayload = (values: FormValues, confirmLink = false) => {
     const v = values as any;
+    const parsedName = parseFullName(v.fullName);
+    const resolvedFirstName = v.firstName?.trim() || parsedName.firstName;
+    const resolvedLastName = v.lastName?.trim() || parsedName.lastName;
+    const resolvedGrandfather = cleanString(v.grandfatherName) || cleanString(parsedName.grandfatherName);
+
     return {
       ...values,
       faydaId: v.faydaId?.trim(),
-      firstName: v.firstName?.trim(),
-      lastName: v.lastName?.trim(),
-      grandfatherName: cleanString(v.grandfatherName),
+      firstName: resolvedFirstName,
+      lastName: resolvedLastName,
+      grandfatherName: resolvedGrandfather,
       phoneNumber: cleanString(v.phoneNumber),
       dateOfBirth: cleanString(v.dateOfBirth),
       age: cleanNumber(v.age),
@@ -762,53 +782,32 @@ export function BeneficiaryFormBody({
             />
             <FormField
               control={form.control}
-              name="firstName"
+              name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("fields.firstName")} *</FormLabel>
+                  <FormLabel>{t("fields.fullName")} *</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("placeholders.firstName")}
+                      placeholder={t("placeholders.fullName")}
                       {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.lastName")} *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("placeholders.lastName")}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="grandfatherName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {locale === "am" ? "የአያት ስም" : "Grandfather Name"}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={
-                        locale === "am"
-                          ? "የአያት ስም ያስገቡ"
-                          : "Grandfather's name"
+                      value={
+                        field.value ||
+                        [
+                          form.watch("firstName"),
+                          form.watch("lastName"),
+                          form.watch("grandfatherName"),
+                        ]
+                          .filter(Boolean)
+                          .join(" ")
                       }
-                      {...field}
-                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        field.onChange(val);
+                        const { firstName, lastName, grandfatherName } = parseFullName(val);
+                        form.setValue("firstName", firstName);
+                        form.setValue("lastName", lastName);
+                        form.setValue("grandfatherName", grandfatherName);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -845,9 +844,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectGender")}>
-                            {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectGender")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1025,9 +1022,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")}>
-                            {field.value ? tOpt(`employment.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectEmployment")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1054,9 +1049,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectMarital")}>
-                            {field.value ? tOpt(`marital.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectMarital")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1078,13 +1071,23 @@ export function BeneficiaryFormBody({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.education")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("placeholders.education")}
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("placeholders.selectEducation")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {EDUCATION_LEVEL_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {locale === "am" ? opt.labelAm : opt.labelEn}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1165,13 +1168,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={t("placeholders.selectCategory")}>
-                            {field.value
-                              ? (tOpt.has(`disabilityCategories.${field.value}`)
-                                  ? tOpt(`disabilityCategories.${field.value}`)
-                                  : getDisabilityDisplayLabel(field.value, locale))
-                              : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={t("placeholders.selectCategory")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1214,13 +1211,7 @@ export function BeneficiaryFormBody({
                                   ? t("placeholders.selectCategory")
                                   : t("placeholders.selectSubType")
                               }
-                            >
-                              {field.value
-                                ? (tOpt.has(`disabilityTypes.${field.value}`)
-                                    ? tOpt(`disabilityTypes.${field.value}`)
-                                    : getDisabilityDisplayLabel(field.value, locale))
-                                : undefined}
-                            </SelectValue>
+                            />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -1254,9 +1245,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.selectSeverity")}>
-                            {field.value ? tOpt(`severity.${field.value}` as any) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.selectSeverity")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1326,15 +1315,12 @@ export function BeneficiaryFormBody({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={tOpt("placeholders.selectGender")}>
-                                {field.value ? tOpt(`sex.${field.value}` as any) : undefined}
-                              </SelectValue>
+                              <SelectValue placeholder={tOpt("placeholders.selectGender")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="MALE">{tOpt("sex.MALE")}</SelectItem>
                             <SelectItem value="FEMALE">{tOpt("sex.FEMALE")}</SelectItem>
-                            <SelectItem value="OTHER">{tOpt("sex.OTHER")}</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -1372,9 +1358,7 @@ export function BeneficiaryFormBody({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={t("placeholders.caregiverSupportType")}>
-                                {field.value ? tOpt(`caregiverSupportTypes.${field.value}` as any) : undefined}
-                              </SelectValue>
+                              <SelectValue placeholder={t("placeholders.caregiverSupportType")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -1572,9 +1556,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.firstChoice")}>
-                            {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.firstChoice")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1610,9 +1592,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.secondChoice")}>
-                            {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.secondChoice")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1648,9 +1628,7 @@ export function BeneficiaryFormBody({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={tOpt("placeholders.thirdChoice")}>
-                            {field.value ? (tOpt(`training.${field.value}` as any) || getWorkSectorDisplayLabel(field.value, locale)) : undefined}
-                          </SelectValue>
+                          <SelectValue placeholder={tOpt("placeholders.thirdChoice")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1680,9 +1658,7 @@ export function BeneficiaryFormBody({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={tOpt("placeholders.selectWorkplace")}>
-                          {field.value ? tOpt(`workplace.${field.value}` as any) : undefined}
-                        </SelectValue>
+                        <SelectValue placeholder={tOpt("placeholders.selectWorkplace")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
