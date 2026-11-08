@@ -2,15 +2,16 @@ import { z } from "zod";
 
 export const supportServiceSchema = z
   .object({
-    serviceTypeId: z.number().min(1, "Service type is required"),
+    serviceTypeId: z.coerce.number().min(1, "Service type is required"),
     clientId: z.number().optional(),
     womenAssociationId: z.number().optional(),
+    technologyType: z.string().optional(),
     provider: z.string().min(1, "Provider is required"),
     amountOrQuantity: z.string().min(1, "Amount or quantity is required"),
     dateProvided: z.string().refine((date) => !isNaN(Date.parse(date)), {
       message: "Invalid date",
     }),
-    facilitatorCityId: z.string().min(1, "Facilitator City ID is required"),
+    facilitatorCityId: z.string().optional(),
     subCity: z.string().min(1, "Sub-city is required"),
     woreda: z.string().min(1, "Woreda is required"),
     remark: z.string().optional(),

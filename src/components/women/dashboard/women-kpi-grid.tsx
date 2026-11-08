@@ -91,7 +91,7 @@ export function WomenKpiGrid({
       badgeText: t("techRecipients.badge"),
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       iconBg: "bg-emerald-50 text-emerald-700",
-      link: "/women/technology",
+      link: "/women/services",
       isAlert: false,
       actionText: t("techRecipients.action"),
     },

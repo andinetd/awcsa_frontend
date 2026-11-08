@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -10,68 +11,152 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { useState } from "react";
-import { useRegisterWomenProfileMutation } from "@/hooks/womens";
+import {
+  useRegisterWomenProfileMutation,
+  useGetWomenAssociationsQuery,
+} from "@/hooks/womens";
 import {
   womenProfileSchema,
   WomenProfileSchemaType,
+  parseFullName,
 } from "@/schemas/women-profile";
-import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-
-import { CrossModuleConflictDialog, CrossModuleClientData } from "@/components/shared/cross-module-conflict-dialog";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import {
+  CrossModuleConflictDialog,
+  CrossModuleClientData,
+} from "@/components/shared/cross-module-conflict-dialog";
+import {
+  PersonalDemographicsSection,
+  LocationAddressSection,
+  SocioEconomicSection,
+  HealthAssessmentSection,
+  TrainingNeedsSection,
+  SupportNeedsSection,
+} from "@/components/women/forms";
 
 export default function NewWomenProfileForm() {
   const [open, setOpen] = useState(false);
-  const [conflictClient, setConflictClient] = useState<CrossModuleClientData | null>(null);
+  const [conflictClient, setConflictClient] =
+    useState<CrossModuleClientData | null>(null);
   const [conflictOpen, setConflictOpen] = useState(false);
-  const [pendingValues, setPendingValues] = useState<WomenProfileSchemaType | null>(null);
+  const [pendingValues, setPendingValues] =
+    useState<WomenProfileSchemaType | null>(null);
+
+  // Dynamic section display triggers
+  const [includeTraining, setIncludeTraining] = useState(false);
+  const [includeSupport, setIncludeSupport] = useState(false);
 
   const registerMutation = useRegisterWomenProfileMutation();
+  const { data: associationsResponse } = useGetWomenAssociationsQuery();
+  const associations = associationsResponse?.data || [];
   const t = useTranslations("women");
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const form = useForm<WomenProfileSchemaType>({
     resolver: zodResolver(womenProfileSchema) as any,
     defaultValues: {
       faydaId: "",
       cityIdNumber: "",
+      fullName: "",
       firstName: "",
       lastName: "",
+      grandfatherName: "",
       phoneNumber: "",
       age: "" as any,
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
+      zone: "",
+      block: "",
       address: "",
       educationLevel: "",
-      careerStatus: "",
+      careerStatus: "UNEMPLOYED",
       photoUrl: "",
+
+      // ── Training Intake ──
+      wantsTraining: false,
+      requestedTrainingTopic: "",
+      postTrainingParticipation: "",
+      desiredSector: "",
+      traineeCategory: "NONE",
+      traineeStatus: [],
+
+      // ── Support / Referral Intake ──
+      wantsSupport: false,
+      associationId: null,
+      cooperativeName: "",
+      requestedTechnologyType: "",
+      supportStatus: "",
+      supportMode: "",
+      disabilityType: "NONE",
+      disabilities: [],
+
+      // ── Health ──
+      healthStatus: "NONE",
+      healthConsent: true,
+      healthConditions: [],
+
+      // ── Family & Income ──
+      familyStatus: "",
+      incomeStatus: "",
+      monthlyIncome: "" as any,
     },
   });
 
-  const subCity = form.watch("subCity");
+  useEffect(() => {
+    if (open) {
+      if (userSubCity && !form.getValues("subCity")) {
+        form.setValue("subCity", userSubCity);
+      }
+      if (userWoreda && !form.getValues("woreda")) {
+        form.setValue("woreda", userWoreda);
+      }
+    }
+  }, [open, userSubCity, userWoreda, form]);
 
   function submitPayload(values: WomenProfileSchemaType, confirmLink = false) {
+    const { firstName, lastName, grandfatherName } = parseFullName(
+      values.fullName,
+    );
+    const resolvedDisabilities =
+      values.disabilityType && values.disabilityType !== "NONE"
+        ? [values.disabilityType]
+        : values.disabilities || [];
+
+    const resolvedTraineeStatus =
+      values.traineeCategory && values.traineeCategory !== "NONE"
+        ? [values.traineeCategory]
+        : values.traineeStatus || [];
+
+    const resolvedHealthConditions =
+      values.healthStatus && values.healthStatus !== "NONE"
+        ? [values.healthStatus]
+        : values.healthConditions || [];
+
+    const cleanFaydaId = values.faydaId
+      ? values.faydaId.replace(/[\s-]/g, "").trim()
+      : "";
+    const cleanCityId = values.cityIdNumber?.trim() || undefined;
+
+    const { cityIdNumber, ...restValues } = values;
+
     const payload = {
-      ...values,
+      ...restValues,
+      faydaId: cleanFaydaId,
+      cityIdNumber: cleanCityId,
+      firstName: firstName || values.firstName,
+      lastName: lastName || values.lastName,
+      grandfatherName: grandfatherName || values.grandfatherName,
+      disabilities: resolvedDisabilities,
+      traineeStatus: resolvedTraineeStatus,
+      wantsTraining: includeTraining,
+      wantsSupport: includeSupport,
+      healthConsent: resolvedHealthConditions.length > 0,
+      healthConditions: resolvedHealthConditions,
       occupation: values.careerStatus,
       confirmLink,
     };
@@ -81,25 +166,53 @@ export default function NewWomenProfileForm() {
         setConflictOpen(false);
         setConflictClient(null);
         setPendingValues(null);
+        setIncludeTraining(false);
+        setIncludeSupport(false);
         form.reset();
         toast.success(t("form.messages.successRegister"));
       },
       onError: (error: any) => {
         const errResponse = error?.response?.data;
-        if (errResponse?.error === "CrossModuleConflict" && errResponse?.existingClient) {
+        if (
+          errResponse?.error === "CrossModuleConflict" &&
+          errResponse?.existingClient
+        ) {
           setConflictClient(errResponse.existingClient);
           setPendingValues(values);
           setConflictOpen(true);
           return;
         }
         let message = t("form.messages.errorRegister");
-        if (typeof errResponse?.message === "string") {
+
+        if (Array.isArray(errResponse?.errors) && errResponse.errors.length > 0) {
+          const detailedMessages = errResponse.errors.map((err: any) => {
+            const field = err.path?.join(".") || "";
+            return field ? `${field}: ${err.message}` : err.message;
+          });
+          message = detailedMessages.join("; ");
+
+          errResponse.errors.forEach((err: any) => {
+            const field = err.path?.[0];
+            if (field) {
+              if (
+                field === "firstName" ||
+                field === "lastName" ||
+                field === "grandfatherName"
+              ) {
+                form.setError("fullName", { message: err.message });
+              } else {
+                form.setError(field as any, { message: err.message });
+              }
+            }
+          });
+        } else if (typeof errResponse?.message === "string") {
           message = errResponse.message;
         } else if (Array.isArray(errResponse?.message)) {
           message = errResponse.message.join(", ");
         } else if (error?.message) {
           message = error.message;
         }
+
         const lower = message.toLowerCase();
         if (
           lower.includes("fayda") ||
@@ -131,293 +244,64 @@ export default function NewWomenProfileForm() {
           {t("womenList.registerButton")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white shadow-lg p-6">
+      <DialogContent className="sm:max-w-[840px] max-h-[92vh] overflow-y-auto rounded-xs border border-[#E3E7EB] bg-white shadow-xl p-6">
         <DialogHeader className="border-b border-[#E3E7EB] pb-3">
-          <DialogTitle className="text-sm font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
+          <DialogTitle className="text-base font-bold text-[#0B1F3A] uppercase tracking-wider font-mono">
             {t("form.registerTitle")}
           </DialogTitle>
-          <DialogDescription className="text-xs text-slate-500">
+          <DialogDescription className="text-xs text-slate-500 font-mono">
             {t("form.description")}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 pt-2">
-            {/* Personal Information */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.personalInfo")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="faydaId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.faydaId")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.faydaIdPlaceholder")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.age")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder={t("form.agePlaceholder")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                          value={field.value ?? ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value === ""
-                                ? ""
-                                : Number(e.target.value)
-                            )
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.firstName")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.firstName")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.lastName")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.lastName")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phoneNumber"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.phoneNumber")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.phoneNumber")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 pt-3"
+          >
+            <PersonalDemographicsSection
+              form={form}
+              sectionNumber="1."
+              columns={4}
+              includeCityId={false}
+            />
 
-            {/* Address */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.addressTitle")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="subCity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.subCity")}</FormLabel>
-                      <FormControl>
-                        <SubCitySelect
-                          value={field.value}
-                          onValueChange={(val) => {
-                            field.onChange(val);
-                            form.setValue("woreda", "");
-                          }}
-                          placeholder={t("form.subCityPlaceholder")}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="woreda"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.woreda")}</FormLabel>
-                      <FormControl>
-                        <WoredaSelect
-                          subCity={subCity || ""}
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          placeholder={t("form.woredaPlaceholder")}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fullAddress")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.fullAddress")}
-                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <LocationAddressSection
+              form={form}
+              sectionNumber="2."
+              columns={4}
+              includeZoneBlock={true}
+              includeAddress={false}
+            />
 
-            {/* Education & Career */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.educationEmployment")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="educationLevel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.educationLevel")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                            <SelectValue
-                              placeholder={t("form.educationLevelPlaceholder")}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          <SelectItem value="NONE" className="text-xs">
-                            {t("form.educationOptions.NONE")}
-                          </SelectItem>
-                          <SelectItem value="PRIMARY" className="text-xs">
-                            {t("form.educationOptions.PRIMARY")}
-                          </SelectItem>
-                          <SelectItem value="SECONDARY" className="text-xs">
-                            {t("form.educationOptions.SECONDARY")}
-                          </SelectItem>
-                          <SelectItem value="DIPLOMA" className="text-xs">
-                            {t("form.educationOptions.DIPLOMA")}
-                          </SelectItem>
-                          <SelectItem value="BACHELOR" className="text-xs">
-                            {t("form.educationOptions.BACHELOR")}
-                          </SelectItem>
-                          <SelectItem value="MASTERS" className="text-xs">
-                            {t("form.educationOptions.MASTERS")}
-                          </SelectItem>
-                          <SelectItem value="DOCTORATE" className="text-xs">
-                            {t("form.educationOptions.DOCTORATE")}
-                          </SelectItem>
-                          <SelectItem value="OTHER" className="text-xs">
-                            {t("form.educationOptions.OTHER")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="careerStatus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.careerStatus")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                            <SelectValue
-                              placeholder={t("form.careerStatusPlaceholder")}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          <SelectItem value="EMPLOYED" className="text-xs">
-                            {t("form.careerOptions.EMPLOYED")}
-                          </SelectItem>
-                          <SelectItem value="SELF_EMPLOYED" className="text-xs">
-                            {t("form.careerOptions.SELF_EMPLOYED")}
-                          </SelectItem>
-                          <SelectItem value="UNEMPLOYED" className="text-xs">
-                            {t("form.careerOptions.UNEMPLOYED")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="photoUrl"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.photoUrl")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://..."
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+            <SocioEconomicSection
+              form={form}
+              sectionNumber="3."
+              columns={3}
+            />
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
+            <HealthAssessmentSection
+              form={form}
+              sectionNumber="4."
+            />
+
+            <TrainingNeedsSection
+              form={form}
+              includeTraining={includeTraining}
+              onIncludeTrainingChange={setIncludeTraining}
+              sectionNumber="5."
+            />
+
+            <SupportNeedsSection
+              form={form}
+              includeSupport={includeSupport}
+              onIncludeSupportChange={setIncludeSupport}
+              associations={associations}
+              sectionNumber="6."
+            />
+
+            {/* ── FOOTER ACTIONS ── */}
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"

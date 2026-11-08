@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +29,8 @@ import {
   WomenReportCategory,
 } from "@/api/womens/generateWomenReport";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 
 const COLUMNS_BY_CATEGORY: Record<WomenReportCategory, string[]> = {
   SUPPORT_SERVICE: [
@@ -122,11 +124,17 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
 
   const { data: serviceTypes, isLoading: isLoadingTypes } =
     useGetServiceTypesQuery();
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [subCity, setSubCity] = useState("");
-  const [woreda, setWoreda] = useState("");
+  const [subCity, setSubCity] = useState(userSubCity || "");
+  const [woreda, setWoreda] = useState(userWoreda || "");
+
+  useEffect(() => {
+    if (userSubCity && !subCity) setSubCity(userSubCity);
+    if (userWoreda && !woreda) setWoreda(userWoreda);
+  }, [userSubCity, userWoreda, subCity, woreda]);
   const [serviceTypeId, setServiceTypeId] = useState("");
   const [beneficiaryLevel, setBeneficiaryLevel] = useState<
     "INDIVIDUAL" | "ASSOCIATION" | "ALL"
@@ -276,20 +284,22 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">{t("report.subCity")}</Label>
-                  <Input
-                    className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                    placeholder={t("report.subCity")}
+                  <SubCitySelect
                     value={subCity}
-                    onChange={(e) => setSubCity(e.target.value)}
+                    onValueChange={(val) => {
+                      setSubCity(val);
+                      setWoreda("");
+                    }}
+                    placeholder={t("report.subCity")}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-semibold text-slate-700">{t("report.woreda")}</Label>
-                  <Input
-                    className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                    placeholder={t("report.woreda")}
+                  <WoredaSelect
+                    subCity={subCity}
                     value={woreda}
-                    onChange={(e) => setWoreda(e.target.value)}
+                    onValueChange={setWoreda}
+                    placeholder={t("report.woreda")}
                   />
                 </div>
               </div>
@@ -348,20 +358,22 @@ export default function WomenReportDialog({ category }: WomenReportDialogProps) 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-xs font-semibold text-slate-700">{t("report.subCity")}</Label>
-                <Input
-                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                  placeholder={t("report.subCity")}
+                <SubCitySelect
                   value={subCity}
-                  onChange={(e) => setSubCity(e.target.value)}
+                  onValueChange={(val) => {
+                    setSubCity(val);
+                    setWoreda("");
+                  }}
+                  placeholder={t("report.subCity")}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-xs font-semibold text-slate-700">{t("report.woreda")}</Label>
-                <Input
-                  className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                  placeholder={t("report.woreda")}
+                <WoredaSelect
+                  subCity={subCity}
                   value={woreda}
-                  onChange={(e) => setWoreda(e.target.value)}
+                  onValueChange={setWoreda}
+                  placeholder={t("report.woreda")}
                 />
               </div>
               <div className="space-y-1.5">

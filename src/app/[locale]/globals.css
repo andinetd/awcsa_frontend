@@ -131,3 +131,13 @@
     line-height: 1.5;
   }
 }
+
+/* ── Radix UI Pointer-Events Safeguard ──────────────────────────────
+ * Prevents Radix UI dialogs, popovers, and selects from permanently
+ * leaving pointer-events: none on body after closing in production.
+ */
+body,
+body[data-scroll-locked] {
+  pointer-events: auto !important;
+}
+

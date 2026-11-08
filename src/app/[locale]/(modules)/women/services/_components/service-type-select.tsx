@@ -33,14 +33,14 @@ export default function ServiceTypeSelect({
   }
 
   return (
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={t("report.selectServiceType")} />
+    <Select value={value || ""} onValueChange={onValueChange}>
+      <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+        <SelectValue placeholder={t("report.selectServiceType") || "Select Service Type"} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="rounded-xs border-[#E3E7EB]">
         {serviceTypes?.map((type) => (
-          <SelectItem key={type.id} value={type.id.toString()}>
-            {t(`serviceTypes.${type.name}`)}
+          <SelectItem key={type.id} value={type.id.toString()} className="text-xs">
+            {t.has(`serviceTypes.${type.name}`) ? t(`serviceTypes.${type.name}`) : type.name}
           </SelectItem>
         ))}
       </SelectContent>

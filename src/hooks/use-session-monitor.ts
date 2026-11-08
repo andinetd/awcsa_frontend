@@ -100,8 +100,8 @@ export function useSessionMonitor({ onWarning }: UseSessionMonitorOpts): void {
             onWarning("token", Math.min(secondsUntilExpiry, WARNING_SECONDS));
           }
         }
-      } catch {
-        onWarning("token", WARNING_SECONDS);
+      } catch (err) {
+        console.warn("Session monitor token parse error:", err);
       }
     }, WATCHDOG_INTERVAL_MS);
 

@@ -7,7 +7,6 @@ import {
   Users,
   Landmark,
   HandHeart,
-  Zap,
   GraduationCap,
   Briefcase,
   Layers,
@@ -45,13 +44,6 @@ export function WomenQuickActions() {
       href: "/women/services",
       icon: HandHeart,
       badge: t("actions.services.badge"),
-    },
-    {
-      title: t("actions.technology.title"),
-      description: t("actions.technology.description"),
-      href: "/women/technology",
-      icon: Zap,
-      badge: t("actions.technology.badge"),
     },
     {
       title: t("actions.training.title"),

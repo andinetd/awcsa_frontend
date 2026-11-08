@@ -273,16 +273,24 @@
       "approved": "Approved",
       "rejected": "Rejected",
       "button": "Filters",
+      "toggle": "Filters",
       "resetAll": "Reset All Filters",
       "clearAll": "Clear All",
       "resultsCount": "Results ({count} of {total}):"
+    },
+    "approvalOptions": {
+      "APPROVED": "Approved",
+      "PENDING": "Pending",
+      "REJECTED": "Rejected"
     },
     "tabs": {
       "all": "All Profiles",
       "unemployed": "Seeking Employment",
       "employed": "Employed / Self-Employed",
       "pending": "Pending Approval",
-      "active": "Active Beneficiaries"
+      "active": "Active Beneficiaries",
+      "supported": "Supported Women",
+      "trained": "Trained Women"
     },
     "chips": {
       "preset": "Preset: {tab}",
@@ -302,7 +310,11 @@
     "personalInfo": "Personal Information",
     "faydaId": "Fayda ID",
     "faydaIdPlaceholder": "Enter Fayda ID (e.g. 123456789012)",
+    "cityId": "City ID / Fayda ID",
+    "cityIdPlaceholder": "Enter City ID or Fayda ID",
     "cityIdNumber": "Fayda ID",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter full name (e.g. Almaz Tesfaye Bekele)",
     "dateOfBirth": "Date of Birth",
     "age": "Age",
     "agePlaceholder": "e.g. 28",
@@ -314,19 +326,126 @@
     "subCityPlaceholder": "Select sub-city...",
     "woreda": "Woreda",
     "woredaPlaceholder": "Select woreda...",
+    "zone": "Ketena",
+    "zonePlaceholder": "e.g. Ketena 04",
+    "block": "Block",
+    "blockPlaceholder": "e.g. Block 10",
+    "address": "Specific Address",
+    "addressPlaceholder": "Enter house number or specific address...",
     "fullAddress": "Full Address",
+    "familyStatus": "Family Status",
+    "familyStatusPlaceholder": "Select family status...",
+    "familyOptions": {
+      "HAS_CHILDREN": "Has children",
+      "NO_CHILDREN": "No children",
+      "SINGLE_MOTHER": "Single mother raising children alone"
+    },
+    "incomeStatus": "Income Status",
+    "incomeStatusPlaceholder": "Select income status...",
+    "incomeOptions": {
+      "REGULAR": "Has regular income",
+      "NO_REGULAR": "No regular income"
+    },
+    "healthTitle": "Health Status",
+    "healthDescription": "Health information is optional and collected with consent.",
+    "healthStatusPlaceholder": "Select health status (Optional)...",
+    "healthConsent": "She agrees to record health information",
+    "healthConditions": {
+      "NONE": "Healthy / No chronic condition",
+      "BREAST_CANCER": "Breast cancer patient",
+      "CERVICAL_CANCER": "Cervical cancer patient",
+      "HIV": "Living with HIV",
+      "OTHER": "Other chronic health condition"
+    },
+    "trainingNeedsTitle": "Training Needs",
+    "includeTraining": "Include Training Section",
+    "requestedTrainingTopic": "Training Topic",
+    "requestedTrainingTopicPlaceholder": "e.g. Tailoring, Entrepreneurship",
+    "postTrainingParticipation": "Participation After Training",
+    "postTrainingParticipationPlaceholder": "e.g. Join cooperative, Open shop",
+    "desiredSector": "Desired Sector (Select One)",
+    "desiredSectorPlaceholder": "Select sector type...",
+    "desiredSectorOptions": {
+      "TEXTILE": "Textile & Garment",
+      "FOOD": "Food Preparation & Catering",
+      "URBAN_AGRI": "Urban Agriculture",
+      "LEATHER": "Leather Goods & Footwear",
+      "BEAUTY": "Beauty & Hairdressing",
+      "COMMERCE": "Commerce & Retail Trade",
+      "WOOD_METAL": "Woodwork & Metalwork",
+      "HANDICRAFT": "Handicrafts",
+      "OTHER": "Other"
+    },
+    "sectorOptions": {
+      "LEATHER": "Leather Goods & Footwear",
+      "TEXTILE": "Textile & Garment",
+      "FOOD_PROCESSING": "Food Preparation & Processing",
+      "HANDICRAFT": "Handicrafts",
+      "AGRICULTURE": "Urban Agriculture",
+      "OTHER": "Other"
+    },
+    "traineeCategory": "Trainee Category",
+    "traineeCategoryPlaceholder": "Select trainee category (Optional)",
+    "traineeCategoryOptions": {
+      "NONE": "Regular / None",
+      "DISABILITY": "Person with a disability",
+      "NO_JOB_OPPORTUNITY": "Not provided with job opportunity",
+      "RETURN_FROM_MIGRATION": "Returnee from migration",
+      "OTHER": "Other"
+    },
+    "traineeStatusTitle": "Trainee Category",
+    "traineeStatusOptions": {
+      "DISABILITY": "Person with a disability",
+      "NO_JOB_OPPORTUNITY": "Not provided with job opportunity",
+      "RETURN_FROM_MIGRATION": "Returnee from migration"
+    },
+    "supportNeedsTitle": "Support & Technology Needs",
+    "includeSupport": "Include Support / Referral Section",
+    "womenAssociation": "Women Association",
+    "womenAssociationPlaceholder": "Select women association (Optional)",
+    "noAssociation": "None / Not in association",
+    "cooperativeName": "Women Association",
+    "cooperativeNamePlaceholder": "Select women association",
+    "requestedTechnologyType": "Technology Type Chosen",
+    "requestedTechnologyTypePlaceholder": "e.g. Sewing Machine, Solar Oven",
+    "supportStatus": "Status of Woman",
+    "supportStatusPlaceholder": "Select status...",
+    "supportStatusOptions": {
+      "POOREST": "Poorest of the poor",
+      "SEX_WORK": "Engaged in sex work",
+      "RETURN_MIGRANT": "Returnee from migration"
+    },
+    "supportMode": "What she wants to do with the support",
+    "supportModePlaceholder": "Select mode...",
+    "supportModeOptions": {
+      "INDIVIDUAL": "Individually",
+      "GROUP": "In a group or association"
+    },
+    "disabilitiesTitle": "Disability",
+    "disabilitiesDescription": "Tick all disability types that apply (Optional)",
+    "disabilitiesOptions": {
+      "LIMB_IMPAIRMENT": "Leg / hand impairment",
+      "BLIND": "Blind",
+      "HARD_OF_HEARING": "Hard of hearing or deaf"
+    },
+    "disabilityType": "Disability Type",
+    "disabilityTypePlaceholder": "Select disability type (Optional)",
+    "disabilityTypeOptions": {
+      "NONE": "None / No Disability",
+      "LIMB_IMPAIRMENT": "Leg / hand impairment",
+      "BLIND": "Blind",
+      "HARD_OF_HEARING": "Hard of hearing or deaf",
+      "OTHER": "Other"
+    },
     "educationEmployment": "Education & Career",
     "educationLevel": "Education Level",
     "educationLevelPlaceholder": "Select education level",
     "educationOptions": {
-      "NONE": "None / Illiterate",
-      "PRIMARY": "Primary (Grade 1-8)",
-      "SECONDARY": "Secondary (Grade 9-12)",
-      "DIPLOMA": "TVET / Diploma",
-      "BACHELOR": "Bachelor's Degree",
-      "MASTERS": "Master's Degree",
-      "DOCTORATE": "Doctorate (PhD)",
-      "OTHER": "Other"
+      "DEGREE_AND_ABOVE": "Degree and above",
+      "DIPLOMA": "Diploma (Level 1-4)",
+      "GRADE_9_12": "Grade 9-12",
+      "GRADE_5_8": "Grade 5-8",
+      "READ_AND_WRITE": "Can read and write"
     },
     "occupation": "Occupation",
     "careerStatus": "Career Status",
@@ -343,6 +462,7 @@
       "register": "Register",
       "registering": "Registering...",
       "save": "Save Changes",
+      "saveChanges": "Save Changes",
       "saving": "Saving..."
     },
     "messages": {
@@ -369,7 +489,8 @@
     "title": "Support Services",
     "subtitle": "Manage support services for clients and associations",
     "tabs": {
-      "management": "Service Management",
+      "supportedWomen": "Supported Women",
+      "management": "Register Support",
       "quickRegistration": "Quick Registration"
     },
     "register": {
@@ -381,6 +502,17 @@
       "beneficiaryNote": "* Please provide either a Woman Client ID or a Women Association ID.",
       "serviceInfo": "Service & Provider Information",
       "serviceType": "Service Type",
+      "technologyType": "Technology Type (Optional)",
+      "selectTechnology": "Select technology type (if applicable)...",
+      "noneTechnology": "None / Not Applicable",
+      "technologyTypes": {
+        "SOLAR": "Solar",
+        "WATER_PUMP": "Water Pump",
+        "IMPROVED_STOVE": "Improved Stove",
+        "BIODIGESTER": "Biodigester",
+        "ELECTRIC_MILL": "Electric Mill",
+        "OTHER": "Other"
+      },
       "dateProvided": "Date Provided",
       "providerName": "Provider Name",
       "amountOrQuantity": "Amount or Quantity",
@@ -415,6 +547,7 @@
       "noSelection": "Please search and select a woman above to display her support records.",
       "searchBeneficiary": "Search Beneficiary",
       "table": {
+        "beneficiary": "Beneficiary",
         "serviceType": "Service Type",
         "provider": "Provider",
         "amount": "Amount/Quantity",
@@ -431,6 +564,15 @@
       "noResults": "No beneficiaries found",
       "noMatch": "No match for \"{search}\"",
       "count": "{filtered} of {total} beneficiaries",
+      "clear": "Clear"
+    },
+    "associationSelect": {
+      "placeholder": "Search association by name or ID...",
+      "clearSelection": "Clear selection",
+      "searchPlaceholder": "Search by name, leader, location...",
+      "noResults": "No associations found",
+      "noMatch": "No match for \"{search}\"",
+      "count": "{filtered} of {total} associations",
       "clear": "Clear"
     },
     "quick": {
@@ -556,6 +698,11 @@
     "lastUpdated": "Last Updated"
   },
   "associations": {
+    "institutionalBanner": {
+      "cityAdmin": "Addis Ababa City Administration",
+      "bureau": "Women & Social Affairs Bureau",
+      "sector": "Women Development & Support"
+    },
     "title": "Women Development Associations",
     "subtitle": "Manage women's development association records across sub-cities",
     "searchPlaceholder": "Search by name, leader, or location...",
@@ -595,6 +742,7 @@
       "name": "Association Name",
       "type": "Type",
       "location": "Location",
+      "woreda": "Woreda",
       "leader": "Leader",
       "block": "Block",
       "totalMembers": "Total Members",
@@ -622,11 +770,11 @@
       "committeeHint": "The first three positions are required. The remaining two are optional.",
       "optional": "optional",
       "leaderPositions": {
-        "CHAIRPERSON": "Chairperson (የመልካም አስተዳደርና የሴት አደረጃጀት ተጠሪ)",
-        "VICE_CHAIRPERSON": "Vice Chairperson (የሴቶች ጉዳይ ተጠሪ)",
-        "SECRETARY": "Secretary (የጤና ተጠሪ)",
-        "WORK_SKILLS_RESPONSIBLE": "Member (የስራና ክህሎት ተጠሪ)",
-        "EDUCATION_RESPONSIBLE": "Member (የትምህርት ተጠሪ)"
+        "CHAIRPERSON": "Chairperson (Good Governance & Women Organization)",
+        "VICE_CHAIRPERSON": "Vice Chairperson (Women's Affairs)",
+        "SECRETARY": "Secretary (Health Affairs)",
+        "WORK_SKILLS_RESPONSIBLE": "Committee Member (Work & Skills)",
+        "EDUCATION_RESPONSIBLE": "Committee Member (Education)"
       },
       "fields": {
         "name": "Association Name",
@@ -985,7 +1133,12 @@
   },
   "training": {
     "title": "Women Training",
-    "subtitle": "Manage training sessions and attendance for women",
+    "subtitle": "Manage training sessions, attendance, and candidate queues for women",
+    "tabs": {
+      "trainedWomen": "Trained Women",
+      "allRecords": "All Training Records",
+      "candidates": "Training Candidates"
+    },
     "searchPlaceholder": "Search by name, ID, or training topic...",
     "cardTitle": "Training Records",
     "attendedYes": "Attended",
@@ -1013,6 +1166,19 @@
       "loading": "Loading...",
       "noRecords": "No training records found."
     },
+    "candidatesTable": {
+      "title": "Training Candidates Queue",
+      "candidate": "Candidate",
+      "demographics": "Demographics",
+      "requestedTopic": "Requested Topic",
+      "desiredSector": "Target Sector",
+      "postParticipation": "Post-Training Plan",
+      "location": "Location",
+      "actions": "Actions",
+      "enroll": "Enroll in Training",
+      "noCandidates": "No registered women currently in training candidate queue.",
+      "loading": "Loading candidate queue..."
+    },
     "filter": {
       "dateFrom": "From",
       "dateTo": "To"
@@ -1022,6 +1188,10 @@
       "title": "Register Women Training",
       "editTitle": "Edit Training",
       "fields": {
+        "fullName": "Full Name",
+        "faydaId": "Fayda ID / City ID",
+        "linkBeneficiary": "Link Registered Beneficiary (Optional)",
+        "linkAssociation": "Link Association (Optional)",
         "firstName": "First Name",
         "lastName": "Last Name",
         "woman": "Woman",
@@ -1032,9 +1202,12 @@
         "remark": "Remark"
       },
       "placeholders": {
+        "fullName": "Enter full name...",
+        "faydaId": "Enter Fayda ID or City ID...",
         "firstName": "Enter first name...",
         "lastName": "Enter last name...",
-        "selectWoman": "Select a woman...",
+        "selectWoman": "Search and link a registered woman...",
+        "selectAssociation": "Search and link an association...",
         "selectTrainingTopic": "Select training topic...",
         "remark": "Additional notes..."
       },
@@ -1068,6 +1241,10 @@
     "cardTitle": "Employment Records",
     "individual": "Individual",
     "group": "Group Based",
+    "employmentTypes": {
+      "INDIVIDUAL": "Individually Organized",
+      "GROUP": "Group Based Organized"
+    },
     "showing": "Showing {from}-{to} of {total}",
     "pagination": {
       "prev": "Prev",
@@ -1088,10 +1265,14 @@
       "sector": "Sector",
       "year": "Year",
       "remark": "Remark",
+      "actions": "Actions",
       "loading": "Loading...",
       "noRecords": "No employment records found."
     },
     "filter": {
+      "title": "Filters",
+      "allTypes": "All Types",
+      "clearFilters": "Clear filters",
       "dateFrom": "From",
       "dateTo": "To"
     },
@@ -1099,6 +1280,10 @@
       "addButton": "Register Employment",
       "title": "Register Employment Opportunity",
       "fields": {
+        "fullName": "Full Name",
+        "faydaId": "Fayda ID / City ID",
+        "linkBeneficiary": "Link Registered Beneficiary (Optional)",
+        "linkAssociation": "Link Association (Optional)",
         "firstName": "First Name",
         "lastName": "Last Name",
         "woman": "Woman",
@@ -1108,9 +1293,12 @@
         "remark": "Remark"
       },
       "placeholders": {
+        "fullName": "Enter full name...",
+        "faydaId": "Enter Fayda ID or City ID...",
         "firstName": "Enter first name...",
         "lastName": "Enter last name...",
-        "selectWoman": "Select a woman...",
+        "selectWoman": "Search and link a registered woman...",
+        "selectAssociation": "Search and link an association...",
         "selectSector": "Select sector...",
         "remark": "Additional notes..."
       },
@@ -1193,7 +1381,14 @@
     "Skill Development Training": "Skill Development Training",
     "Startup Capital Support": "Startup Capital Support",
     "Temporary Shelter": "Temporary Shelter",
-    "Elderly Financial Support": "Elderly Financial Support"
+    "Elderly Financial Support": "Elderly Financial Support",
+    "Solar": "Solar Energy Support",
+    "Water Pump": "Water Pump Support",
+    "Improved Stove": "Improved Cookstove Support",
+    "Biodigester": "Biodigester Support",
+    "Electric Mill": "Electric Mill Support",
+    "Other": "Other Technology Support",
+    "Technology Support": "Technology Support"
   },
   "subCities": {
     "names": {

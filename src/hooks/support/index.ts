@@ -9,12 +9,21 @@ import {
   AddMonitoringPayload,
 } from "@/api/support/addMonitoring";
 import { getClientHistory } from "@/api/support/getClientHistory";
+import { getSupportRecords } from "@/api/support/getSupportRecords";
 import { getAssociationHistory } from "@/api/support/getAssociationHistory";
 import { getSupportById } from "@/api/support/getSupportById";
 import {
   registerCombined,
   RegisterCombinedPayload,
 } from "@/api/support/registerCombined";
+
+// Query: Get all support records
+export const useGetSupportRecordsQuery = () => {
+  return useQuery({
+    queryKey: ["support-records"],
+    queryFn: getSupportRecords,
+  });
+};
 
 // Query: Get service types
 export const useGetServiceTypesQuery = () => {

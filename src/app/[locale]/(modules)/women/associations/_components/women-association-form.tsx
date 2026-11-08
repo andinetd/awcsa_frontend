@@ -41,6 +41,7 @@ import {
   useUpdateWomenAssociationMutation,
 } from "@/hooks/womens";
 import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
 import {
   WomenAssociationRecord,
   WomenAssociationType,
@@ -71,6 +72,7 @@ export default function WomenAssociationForm({
   onOpenChange,
 }: WomenAssociationFormProps) {
   const t = useTranslations("women.associations");
+  const { userSubCity, userWoreda } = useJurisdictionScope();
   const [internalOpen, setInternalOpen] = useState(false);
   const isEditing = !!record;
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -86,8 +88,8 @@ export default function WomenAssociationForm({
       type: "ASSOCIATION",
       establishmentDate: "",
       objective: "",
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       houseNumber: "",
       block: "",
       totalMembers: undefined as any,
@@ -107,8 +109,8 @@ export default function WomenAssociationForm({
           ? record.establishmentDate.split("T")[0]
           : "",
         objective: record.objective || "",
-        subCity: record.subCity,
-        woreda: record.woreda,
+        subCity: record.subCity || userSubCity || "",
+        woreda: record.woreda || userWoreda || "",
         houseNumber: record.houseNumber || "",
         block: record.block || "",
         totalMembers: (record.totalMembers ?? undefined) as any,
@@ -125,15 +127,22 @@ export default function WomenAssociationForm({
         type: "ASSOCIATION",
         establishmentDate: "",
         objective: "",
-        subCity: "",
-        woreda: "",
+        subCity: userSubCity || "",
+        woreda: userWoreda || "",
         houseNumber: "",
         block: "",
         totalMembers: undefined as any,
         leaders: emptyLeaders(),
       });
+    } else {
+      if (userSubCity && !form.getValues("subCity")) {
+        form.setValue("subCity", userSubCity);
+      }
+      if (userWoreda && !form.getValues("woreda")) {
+        form.setValue("woreda", userWoreda);
+      }
     }
-  }, [record, open, form]);
+  }, [record, open, form, userSubCity, userWoreda]);
 
   const buildPayload = (values: WomenAssociationSchemaType) => {
     const filledLeaders = values.leaders

@@ -79,7 +79,11 @@ export default function SupportDetailPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {support.serviceType?.name ? t(`serviceTypes.${support.serviceType.name}`) : t("supportDetail.supportIntervention")}
+                {support.serviceType?.name
+                  ? t.has(`serviceTypes.${support.serviceType.name}`)
+                    ? t(`serviceTypes.${support.serviceType.name}`)
+                    : support.serviceType.name
+                  : t("supportDetail.supportIntervention")}
               </p>
             </div>
           </div>
@@ -102,7 +106,9 @@ export default function SupportDetailPage() {
               </p>
               <p className="font-semibold text-slate-800">
                 {support.serviceType?.name
-                  ? t(`serviceTypes.${support.serviceType.name}`)
+                  ? t.has(`serviceTypes.${support.serviceType.name}`)
+                    ? t(`serviceTypes.${support.serviceType.name}`)
+                    : support.serviceType.name
                   : "N/A"}
               </p>
               {support.serviceType?.category && (

@@ -17,6 +17,7 @@ import {
   Settings2,
   ShieldCheck,
   UserRoundCog,
+  UserPlus,
   Users,
   Zap,
 } from "lucide-react";
@@ -172,14 +173,28 @@ export const sidebarConfig: Record<
 
   WOMEN: [
     {
-      title: "Women Services",
+      title: "Overview",
       items: [
         { title: "Dashboard", url: "/women/dashboard", icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: "Beneficiaries",
+      items: [
         { title: "Profiles", url: "/women/profiles", icon: Users },
+      ],
+    },
+    {
+      title: "Empowerment Programs",
+      items: [
         { title: "Support Services", url: "/women/services", icon: HandHeart },
-        { title: "Association Support", url: "/women/technology", icon: Zap },
         { title: "Training", url: "/women/training", icon: GraduationCap },
         { title: "Employment", url: "/women/employment", icon: Briefcase },
+      ],
+    },
+    {
+      title: "Associations",
+      items: [
         { title: "Associations", url: "/women/associations", icon: Users },
         { title: "1-to-10 Members", url: "/women/members", icon: Users },
       ],
@@ -320,7 +335,6 @@ export const sidebarConfig: Record<
             { title: "Dashboard", url: "/women/dashboard", icon: LayoutDashboard },
             { title: "Profiles", url: "/women/profiles", icon: Users },
             { title: "Support Services", url: "/women/services", icon: HandHeart },
-            { title: "Association Support", url: "/women/technology", icon: Zap },
             { title: "Training", url: "/women/training", icon: GraduationCap },
             { title: "Employment", url: "/women/employment", icon: Briefcase },
             { title: "Associations", url: "/women/associations", icon: Users },

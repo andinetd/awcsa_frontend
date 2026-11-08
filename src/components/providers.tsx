@@ -23,6 +23,23 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setupAuthInterceptor();
+
+    // Radix UI Pointer-Events recovery: reset body pointer-events if stuck when no modal is open
+    const observer = new MutationObserver(() => {
+      const hasOpenDialog = !!document.querySelector(
+        '[data-state="open"][role="dialog"], [data-state="open"][role="alertdialog"], [data-slot="dialog-content"], [data-slot="alert-dialog-content"]',
+      );
+      if (!hasOpenDialog && document.body.style.pointerEvents === "none") {
+        document.body.style.pointerEvents = "";
+      }
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["style", "data-scroll-locked"],
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   useSessionMonitor({ onWarning: handleWarning });

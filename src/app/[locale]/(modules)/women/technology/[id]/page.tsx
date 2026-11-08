@@ -92,7 +92,11 @@ export default function TechnologyDetailPage() {
             <div>
               <div className="flex items-center gap-2.5">
                 <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
-                  {record.technologyType ? t(`technologySupport.form.technologyTypes.${record.technologyType}`, { defaultValue: record.technologyType }) : "Association Support"}
+                  {record.technologyType
+                    ? t.has(`technologySupport.form.technologyTypes.${record.technologyType}`)
+                      ? t(`technologySupport.form.technologyTypes.${record.technologyType}`)
+                      : record.technologyType
+                    : "Association Support"}
                 </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
                   ID: #{record.id}
@@ -119,7 +123,11 @@ export default function TechnologyDetailPage() {
             <div className="space-y-1">
               <p className="text-[11px] font-medium text-slate-500">{t("technologySupport.detail.technologyType")}</p>
               <p className="text-sm font-semibold text-[#0B1F3A]">
-                {record.technologyType ? t(`technologySupport.form.technologyTypes.${record.technologyType}`, { defaultValue: record.technologyType }) : record.technologyType}
+                {record.technologyType
+                  ? t.has(`technologySupport.form.technologyTypes.${record.technologyType}`)
+                    ? t(`technologySupport.form.technologyTypes.${record.technologyType}`)
+                    : record.technologyType
+                  : "—"}
               </p>
             </div>
             <div className="space-y-1">

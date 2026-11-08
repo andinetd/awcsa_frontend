@@ -7,7 +7,6 @@ import {
   Users,
   Landmark,
   HandHeart,
-  Zap,
   GraduationCap,
   Briefcase,
   RefreshCw,
@@ -141,13 +140,6 @@ export function WomenDashboardHeader({
               <Briefcase className="size-3.5 text-slate-400" />
               {t("nav.employment")}
               <span className="font-mono text-[11px] text-slate-500 font-semibold">({totalEmployments})</span>
-            </span>
-          </Link>
-          <Link href="/women/technology">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs text-xs font-medium bg-white border border-[#E3E7EB] text-slate-700 hover:border-[#1769AA] hover:text-[#1769AA] transition-colors cursor-pointer">
-              <Zap className="size-3.5 text-slate-400" />
-              {t("nav.technology")}
-              <span className="font-mono text-[11px] text-slate-500 font-semibold">({totalTechSupport})</span>
             </span>
           </Link>
           <Link href="/women/training">

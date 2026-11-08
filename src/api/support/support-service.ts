@@ -41,6 +41,24 @@ export interface SupportService {
   createdAt: string;
   updatedAt: string;
   serviceType?: ServiceType;
+  client?: {
+    id: number;
+    faydaId?: string | null;
+    cityIdNumber?: string | null;
+    firstName: string;
+    lastName: string;
+    phoneNumber?: string | null;
+    subCity?: string | null;
+    woreda?: string | null;
+    address?: string | null;
+  };
+  womenAssociation?: {
+    id: number;
+    name: string;
+    type?: string;
+    subCity?: string;
+    woreda?: string;
+  };
   monitoringLogs?: MonitoringLog[];
 }
 

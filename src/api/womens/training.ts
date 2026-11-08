@@ -6,6 +6,7 @@ import { MonitoringPayload } from "./technologySupport";
 export interface WomenTrainingRecord {
   id: number;
   womenProfileId: number | null;
+  womenAssociationId?: number | null;
   firstName?: string | null;
   lastName?: string | null;
   trainingTopic: string;
@@ -24,6 +25,13 @@ export interface WomenTrainingRecord {
       address: string;
     };
   };
+  womenAssociation?: {
+    id: number;
+    name: string;
+    subCity: string;
+    woreda: string;
+    leaderName?: string;
+  } | null;
   monitoringLogs?: MonitoringLog[];
   createdAt: string;
   updatedAt: string;
@@ -31,6 +39,7 @@ export interface WomenTrainingRecord {
 
 export interface TrainingPayload {
   womanId?: number;
+  womenAssociationId?: number;
   firstName?: string;
   lastName?: string;
   trainingTopic: string;
@@ -61,6 +70,14 @@ export interface MonitoringLog {
 export const getWomenTrainings = async () => {
   const { token } = useAuthStore.getState();
   const { data } = await axios.get(`${BASE_URL}/women/training`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+};
+
+export const getTrainingCandidates = async () => {
+  const { token } = useAuthStore.getState();
+  const { data } = await axios.get(`${BASE_URL}/women/training/candidates`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return data;

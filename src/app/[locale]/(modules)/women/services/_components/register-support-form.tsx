@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -38,7 +38,10 @@ import {
 import { useRegisterSupportMutation } from "@/hooks/support";
 import ServiceTypeSelect from "./service-type-select";
 import WomanSelect from "./woman-select";
+import AssociationSelect from "./association-select";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 
 import {
   DoubleSupportWarningDialog,
@@ -59,25 +62,49 @@ export default function RegisterSupportForm({
   const [warningOpen, setWarningOpen] = useState(false);
   const registerMutation = useRegisterSupportMutation();
   const t = useTranslations("women");
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const form = useForm<SupportServiceSchemaType>({
     resolver: zodResolver(supportServiceSchema) as any,
     defaultValues: {
-      serviceTypeId: 9007199254740991,
+      serviceTypeId: undefined as any,
       clientId: defaultClientId,
       womenAssociationId: defaultAssociationId,
+      technologyType: "",
       provider: "",
       amountOrQuantity: "",
       dateProvided: new Date().toISOString().split("T")[0],
       facilitatorCityId: "",
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       remark: "",
     },
   });
 
+  useEffect(() => {
+    if (open) {
+      if (userSubCity && !form.getValues("subCity")) {
+        form.setValue("subCity", userSubCity);
+      }
+      if (userWoreda && !form.getValues("woreda")) {
+        form.setValue("woreda", userWoreda);
+      }
+    }
+  }, [open, userSubCity, userWoreda, form]);
+
   function onSubmit(values: SupportServiceSchemaType) {
-    registerMutation.mutate(values as any, {
+    const payload: any = { ...values };
+    if (values.technologyType && values.technologyType !== "NONE") {
+      payload.technologyType = values.technologyType;
+      const techPrefix = `[Technology: ${values.technologyType}]`;
+      if (!payload.remark?.includes(techPrefix)) {
+        payload.remark = `${techPrefix} ${payload.remark || ""}`.trim();
+      }
+    } else {
+      delete payload.technologyType;
+    }
+
+    registerMutation.mutate(payload, {
       onSuccess: () => {
         setOpen(false);
         setWarningOpen(false);
@@ -153,20 +180,12 @@ export default function RegisterSupportForm({
                         {t("support.register.associationId")}
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
-                          type="number"
-                          placeholder={t(
-                            "support.register.placeholder.associationId",
-                          )}
-                          value={field.value || ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value
-                                ? parseInt(e.target.value)
-                                : undefined,
-                            )
+                        <AssociationSelect
+                          value={field.value?.toString()}
+                          onValueChange={(val) =>
+                            field.onChange(val ? parseInt(val) : undefined)
                           }
+                          placeholder={t("support.associationSelect.placeholder") || t("support.register.placeholder.associationId")}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -199,6 +218,54 @@ export default function RegisterSupportForm({
                           }
                         />
                       </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="technologyType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-semibold text-slate-700">
+                        {t("support.register.technologyType")}
+                      </FormLabel>
+                      <Select
+                        value={field.value || "NONE"}
+                        onValueChange={(val) =>
+                          field.onChange(val === "NONE" ? "" : val)
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white">
+                            <SelectValue placeholder={t("support.register.selectTechnology")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-xs border-[#E3E7EB]">
+                          <SelectItem value="NONE" className="text-xs">
+                            {t("support.register.noneTechnology")}
+                          </SelectItem>
+                          <SelectItem value="SOLAR" className="text-xs">
+                            {t("support.register.technologyTypes.SOLAR")}
+                          </SelectItem>
+                          <SelectItem value="WATER_PUMP" className="text-xs">
+                            {t("support.register.technologyTypes.WATER_PUMP")}
+                          </SelectItem>
+                          <SelectItem value="IMPROVED_STOVE" className="text-xs">
+                            {t("support.register.technologyTypes.IMPROVED_STOVE")}
+                          </SelectItem>
+                          <SelectItem value="BIODIGESTER" className="text-xs">
+                            {t("support.register.technologyTypes.BIODIGESTER")}
+                          </SelectItem>
+                          <SelectItem value="ELECTRIC_MILL" className="text-xs">
+                            {t("support.register.technologyTypes.ELECTRIC_MILL")}
+                          </SelectItem>
+                          <SelectItem value="OTHER" className="text-xs">
+                            {t("support.register.technologyTypes.OTHER")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage className="text-xs" />
                     </FormItem>
                   )}
@@ -297,12 +364,15 @@ export default function RegisterSupportForm({
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.subCity")}</FormLabel>
                       <FormControl>
-                        <Input
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                        <SubCitySelect
+                          value={field.value}
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                            form.setValue("woreda", "");
+                          }}
                           placeholder={t(
                             "support.register.placeholder.subCity",
                           )}
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -317,10 +387,11 @@ export default function RegisterSupportForm({
                     <FormItem>
                       <FormLabel className="text-xs font-semibold text-slate-700">{t("support.register.woreda")}</FormLabel>
                       <FormControl>
-                        <Input
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white"
+                        <WoredaSelect
+                          subCity={form.watch("subCity") || ""}
+                          value={field.value}
+                          onValueChange={field.onChange}
                           placeholder={t("support.register.placeholder.woreda")}
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />

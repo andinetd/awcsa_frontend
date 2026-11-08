@@ -6,13 +6,14 @@ export interface RegisterSupportPayload {
   serviceTypeId: number;
   clientId?: number;
   womenAssociationId?: number;
+  technologyType?: string;
   provider: string;
   amountOrQuantity: string;
   dateProvided: string;
   facilitatorCityId: string;
   subCity: string;
   woreda: string;
-  remark: string;
+  remark?: string;
 }
 
 export const registerSupport = async (data: RegisterSupportPayload) => {

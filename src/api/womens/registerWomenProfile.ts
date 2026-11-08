@@ -6,23 +6,51 @@ export interface RegisterWomenProfilePayload {
   faydaId?: string;
   cityIdNumber?: string;
   confirmLink?: boolean;
+  fullName?: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
+  grandfatherName?: string;
+  phoneNumber?: string;
   age?: number;
   dateOfBirth?: string;
-  address: string;
+  address?: string;
   subCity?: string;
   woreda?: string;
+  zone?: string;
+  block?: string;
   educationLevel: string;
   careerStatus?: string;
   occupation?: string;
   monthlyIncome?: number;
   photoUrl?: string;
+
+  // ── Training Intake Needs ────────────────────────────────────────────────
+  wantsTraining?: boolean;
+  requestedTrainingTopic?: string;
+  postTrainingParticipation?: string;
+  desiredSector?: string;
+  traineeStatus?: string[];
+
+  // ── Referral for Support Intake Needs ────────────────────────────────────
+  wantsSupport?: boolean;
+  cooperativeName?: string;
+  requestedTechnologyType?: string;
+  supportStatus?: string;
+  supportMode?: string;
+  disabilities?: string[];
+
+  // ── Sensitive Health Assessment ──────────────────────────────────────────
+  healthConsent?: boolean;
+  healthConditions?: string[];
+
+  // ── Family and Income Status ─────────────────────────────────────────────
+  familyStatus?: string;
+  incomeStatus?: string;
 }
 
 export const registerWomenProfile = async (
   data: RegisterWomenProfilePayload
+
 ) => {
   const { token } = useAuthStore.getState();
 

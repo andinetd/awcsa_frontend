@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,10 +22,13 @@ import {
 import { useRegisterCombinedMutation } from "@/hooks/support";
 import ServiceTypeSelect from "./service-type-select";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 
 export default function QuickRegistrationForm() {
   const registerCombinedMutation = useRegisterCombinedMutation();
   const t = useTranslations("women");
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const form = useForm<CombinedRegistrationSchemaType>({
     resolver: zodResolver(combinedRegistrationSchema) as any,
@@ -40,12 +43,21 @@ export default function QuickRegistrationForm() {
       provider: "",
       amountOrQuantity: "",
       dateProvided: new Date().toISOString().split("T")[0],
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       facilitatorCityId: "",
       remark: "",
     },
   });
+
+  useEffect(() => {
+    if (userSubCity && !form.getValues("subCity")) {
+      form.setValue("subCity", userSubCity);
+    }
+    if (userWoreda && !form.getValues("woreda")) {
+      form.setValue("woreda", userWoreda);
+    }
+  }, [userSubCity, userWoreda, form]);
 
   function onSubmit(values: CombinedRegistrationSchemaType) {
     const payload = {
@@ -246,7 +258,14 @@ export default function QuickRegistrationForm() {
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-slate-700">{t("report.subCity")}</FormLabel>
                     <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("report.subCity")} {...field} />
+                      <SubCitySelect
+                        value={field.value}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          form.setValue("woreda", "");
+                        }}
+                        placeholder={t("report.subCity")}
+                      />
                     </FormControl>
                     <FormMessage className="text-xs" />
                   </FormItem>
@@ -259,7 +278,12 @@ export default function QuickRegistrationForm() {
                   <FormItem>
                     <FormLabel className="text-xs font-semibold text-slate-700">{t("report.woreda")}</FormLabel>
                     <FormControl>
-                      <Input className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50 focus:bg-white" placeholder={t("report.woreda")} {...field} />
+                      <WoredaSelect
+                        subCity={form.watch("subCity") || ""}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder={t("report.woreda")}
+                      />
                     </FormControl>
                     <FormMessage className="text-xs" />
                   </FormItem>

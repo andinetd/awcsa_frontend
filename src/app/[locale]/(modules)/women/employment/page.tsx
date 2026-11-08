@@ -89,7 +89,13 @@ export default function WomenEmploymentPage() {
     let data = employments || [];
     const q = search.toLowerCase();
     data = data.filter((rec: WomenEmploymentRecord) =>
-      [rec.womenProfile?.client?.firstName || rec.firstName, rec.womenProfile?.client?.lastName || rec.lastName, rec.womenProfile?.client?.cityIdNumber, rec.sector]
+      [
+        rec.womenProfile?.client?.firstName || rec.firstName,
+        rec.womenProfile?.client?.lastName || rec.lastName,
+        rec.womenProfile?.client?.cityIdNumber,
+        rec.womenAssociation?.name,
+        rec.sector,
+      ]
         .filter(Boolean)
         .some((val) => val?.toLowerCase().includes(q)),
     );
@@ -119,6 +125,7 @@ export default function WomenEmploymentPage() {
   const getClientName = (rec: WomenEmploymentRecord) => {
     const c = rec.womenProfile?.client;
     if (c) return `${c.firstName} ${c.lastName}`;
+    if (rec.womenAssociation?.name) return rec.womenAssociation.name;
     return [rec.firstName, rec.lastName].filter(Boolean).join(" ") || "N/A";
   };
   const getClientId = (rec: WomenEmploymentRecord) => rec.womenProfile?.client?.cityIdNumber || "";
@@ -167,13 +174,13 @@ export default function WomenEmploymentPage() {
               </PopoverTrigger>
               <PopoverContent className="w-72 rounded-xs border-[#E3E7EB]" align="end">
                 <div className="space-y-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("filter.title", { defaultValue: "Filters" })}</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">{t("filter.title")}</h4>
                   <div className="space-y-1.5">
                     <Label className="text-xs text-slate-600">{t("form.fields.employmentType")}</Label>
                     <Select value={filterType} onValueChange={(v) => { setFilterType(v); setPage(1); }}>
                       <SelectTrigger className="h-8 text-xs border-[#E3E7EB] rounded-xs"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{t("filter.allTypes", { defaultValue: "All Types" })}</SelectItem>
+                        <SelectItem value="all">{t("filter.allTypes")}</SelectItem>
                         <SelectItem value="INDIVIDUAL">{t("employmentTypes.INDIVIDUAL")}</SelectItem>
                         <SelectItem value="GROUP">{t("employmentTypes.GROUP")}</SelectItem>
                       </SelectContent>
@@ -205,7 +212,7 @@ export default function WomenEmploymentPage() {
                     className="h-7 text-xs text-[#1769AA] hover:bg-[#E8F2FA] rounded-xs w-full cursor-pointer"
                     onClick={() => { setFilterType("all"); setFilterSector("all"); setFilterStartDate(""); setFilterEndDate(""); setPage(1); }}
                   >
-                    {t("filter.clearFilters", { defaultValue: "Clear filters" })}
+                    {t("filter.clearFilters")}
                   </Button>
                 </div>
               </PopoverContent>
@@ -222,7 +229,7 @@ export default function WomenEmploymentPage() {
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.sector")}</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.year")}</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 py-3">{t("table.remark")}</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">{t("table.actions", { defaultValue: "Actions" })}</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right py-3 pr-5">{t("table.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -232,7 +239,16 @@ export default function WomenEmploymentPage() {
                   currentData.map((emp: WomenEmploymentRecord) => (
                     <TableRow key={emp.id} className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0">
                       <TableCell className="py-3 pl-5">
-                        <div className="font-semibold text-xs text-[#0B1F3A]">{getClientName(emp)}</div>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-semibold text-xs text-[#0B1F3A]">
+                            {getClientName(emp)}
+                          </span>
+                          {emp.womenAssociation && (
+                            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-xs bg-[#E8F2FA] text-[#1769AA] font-semibold border border-[#BCD5EA]">
+                              Association
+                            </span>
+                          )}
+                        </div>
                         {getClientId(emp) && (
                           <span className="font-mono text-[11px] text-slate-500">{getClientId(emp)}</span>
                         )}

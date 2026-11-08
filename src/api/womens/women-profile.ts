@@ -25,6 +25,7 @@ export interface Client {
   };
   activeStatus: boolean;
   isDeleted: boolean;
+  SupportRecord?: any[];
   createdAt: string;
   updatedAt: string;
 }
@@ -42,4 +43,6 @@ export interface WomenProfile {
   createdAt: string;
   updatedAt: string;
   client: Client;
+  technologySupport?: any[];
+  trainings?: any[];
 }

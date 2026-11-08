@@ -6,6 +6,7 @@ import { MonitoringPayload } from "./technologySupport";
 export interface WomenEmploymentRecord {
   id: number;
   womenProfileId: number | null;
+  womenAssociationId?: number | null;
   firstName?: string | null;
   lastName?: string | null;
   employmentType: "INDIVIDUAL" | "GROUP";
@@ -23,6 +24,13 @@ export interface WomenEmploymentRecord {
       address: string;
     };
   };
+  womenAssociation?: {
+    id: number;
+    name: string;
+    subCity: string;
+    woreda: string;
+    leaderName?: string;
+  } | null;
   monitoringLogs?: MonitoringLog[];
   createdAt: string;
   updatedAt: string;
@@ -30,6 +38,7 @@ export interface WomenEmploymentRecord {
 
 export interface EmploymentPayload {
   womanId?: number;
+  womenAssociationId?: number;
   firstName?: string;
   lastName?: string;
   employmentType: "INDIVIDUAL" | "GROUP";

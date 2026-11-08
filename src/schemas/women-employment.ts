@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 export const womenEmploymentSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  womanId: z.number().optional(),
+  womenAssociationId: z.number().optional(),
+  fullName: z.string().min(1, "Full name is required"),
+  faydaId: z.string().optional(),
   employmentType: z.enum(["INDIVIDUAL", "GROUP"]),
   sector: z.string().min(1, "Sector is required"),
   year: z.string().min(4, "Year is required"),

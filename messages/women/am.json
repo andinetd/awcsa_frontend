@@ -273,16 +273,24 @@
       "approved": "የጸደቀ",
       "rejected": "ውድቅ የተደረገ",
       "button": "ማጣሪያዎች",
+      "toggle": "ማጣሪያዎች",
       "resetAll": "ሁሉንም ማጣሪያዎች አጽዳ",
       "clearAll": "ሁሉንም አጽዳ",
       "resultsCount": "ውጤቶች ({total} ውስጥ {count}):"
+    },
+    "approvalOptions": {
+      "APPROVED": "የጸደቀ",
+      "PENDING": "በመጠባበቅ ላይ",
+      "REJECTED": "ውድቅ የተደረገ"
     },
     "tabs": {
       "all": "ሁሉም መገለጫዎች",
       "unemployed": "ሥራ ፈላጊዎች",
       "employed": "ተቀጣሪ / የግል ሥራ",
       "pending": "ማረጋገጫ በመጠባበቅ ላይ",
-      "active": "ንቁ ተጠቃሚዎች"
+      "active": "ንቁ ተጠቃሚዎች",
+      "supported": "ድጋፍ የተደረገላቸው",
+      "trained": "ስልጠና የወሰዱ"
     },
     "chips": {
       "preset": "ምድብ: {tab}",
@@ -302,7 +310,11 @@
     "personalInfo": "የግል መረጃ",
     "faydaId": "የፋይዳ መለያ",
     "faydaIdPlaceholder": "የፋይዳ መለያ ቁጥር ያስገቡ",
+    "cityId": "የከተማ መታወቂያ / ፋይዳ ቁጥር",
+    "cityIdPlaceholder": "የከተማ መታወቂያ ወይም የፋይዳ ቁጥር ያስገቡ",
     "cityIdNumber": "የፋይዳ መለያ",
+    "fullName": "ሙሉ ስም",
+    "fullNamePlaceholder": "ሙሉ ስም ያስገቡ (ምሳሌ፡ አልማዝ ተስፋዬ በቀለ)",
     "dateOfBirth": "የትውልድ ቀን",
     "age": "ዕድሜ",
     "agePlaceholder": "ምሳሌ 28",
@@ -314,19 +326,126 @@
     "subCityPlaceholder": "ክፍለ ከተማ ይምረጡ...",
     "woreda": "ወረዳ",
     "woredaPlaceholder": "ወረዳ ይምረጡ...",
+    "zone": "ቀጠና",
+    "zonePlaceholder": "ምሳሌ፡ ቀጠና 04",
+    "block": "ብሎክ",
+    "blockPlaceholder": "ምሳሌ፡ ብሎክ 10",
+    "address": "የተለየ አድራሻ / የቤት ቁጥር",
+    "addressPlaceholder": "የቤት ቁጥር ወይም የተለየ አድራሻ ያስገቡ...",
     "fullAddress": "ሙሉ አድራሻ",
+    "familyStatus": "የቤተሰብ ሁኔታ",
+    "familyStatusPlaceholder": "የቤተሰብ ሁኔታ ይምረጡ...",
+    "familyOptions": {
+      "HAS_CHILDREN": "ልጆች አሏት",
+      "NO_CHILDREN": "ልጆች የሏትም",
+      "SINGLE_MOTHER": "ብቻዋን የምታሳድግ እናት"
+    },
+    "incomeStatus": "የገቢ ሁኔታ",
+    "incomeStatusPlaceholder": "የገቢ ሁኔታ ይምረጡ...",
+    "incomeOptions": {
+      "REGULAR": "ቋሚ ገቢ አላት",
+      "NO_REGULAR": "ቋሚ ገቢ የላትም"
+    },
+    "healthTitle": "የጤና ሁኔታ",
+    "healthDescription": "የጤና መረጃ አማራጭ ሲሆን የሚሰበሰበው በፍቃደኝነት ላይ ተመስርቶ ነው።",
+    "healthStatusPlaceholder": "የጤና ሁኔታ ይምረጡ (አማራጭ)...",
+    "healthConsent": "የጤና መረጃ እንዲመዘገብ ፈቃደኛ ናት",
+    "healthConditions": {
+      "NONE": "ጤነኛ / ምንም የጤና እክል የሌለባት",
+      "BREAST_CANCER": "የጡት ካንሰር ታማሚ",
+      "CERVICAL_CANCER": "የማህፀን በር ካንሰር ታማሚ",
+      "HIV": "ኤችአይቪ በደሟ ውስጥ ያለ",
+      "OTHER": "ሌላ የጤና እክል"
+    },
+    "trainingNeedsTitle": "የስልጠና ፍላጎት",
+    "includeTraining": "የስልጠና ፍላጎት ቅፅ ጨምር",
+    "requestedTrainingTopic": "የስልጠና ርዕስ",
+    "requestedTrainingTopicPlaceholder": "ምሳሌ፡ ስፌት፣ ስራ ፈጠራ",
+    "postTrainingParticipation": "ከስልጠና በኋላ ተሳታፊነት",
+    "postTrainingParticipationPlaceholder": "ምሳሌ፡ ህብረት ስራ ማህበር መግባት",
+    "desiredSector": "የሚፈለገው የስራ ዘርፍ (አንዱን ይምረጡ)",
+    "desiredSectorPlaceholder": "የስራ ዘርፍ ይምረጡ...",
+    "desiredSectorOptions": {
+      "TEXTILE": "ጨርቃጨርቅ እና ስፌት",
+      "FOOD": "ምግብ ዝግጅት እና እንጀራ መጋገር",
+      "URBAN_AGRI": "የከተማ ግብርና",
+      "LEATHER": "ቆዳ እና ጫማ ስራ",
+      "BEAUTY": "ውበት ሳሎን እና ፀጉር ስራ",
+      "COMMERCE": "ንግድ እና ችርቻሮ",
+      "WOOD_METAL": "እንጨት እና ብረታብረት",
+      "HANDICRAFT": "የእጅ ሙያ ስራዎች",
+      "OTHER": "ሌላ"
+    },
+    "sectorOptions": {
+      "LEATHER": "ቆዳ እና ጫማ ስራ",
+      "TEXTILE": "ጨርቃጨርቅ እና ስፌት",
+      "FOOD_PROCESSING": "ምግብ ዝግጅት እና ማቀነባበር",
+      "HANDICRAFT": "የእጅ ሙያ ስራዎች",
+      "AGRICULTURE": "የከተማ ግብርና",
+      "OTHER": "ሌላ"
+    },
+    "traineeCategory": "የሰልጣኝ ምድብ",
+    "traineeCategoryPlaceholder": "የሰልጣኝ ምድብ ይምረጡ (አማራጭ)",
+    "traineeCategoryOptions": {
+      "NONE": "መደበኛ / ምንም",
+      "DISABILITY": "የአካል ጉዳተኛ",
+      "NO_JOB_OPPORTUNITY": "የስራ እድል ያልተመቻቸላት",
+      "RETURN_FROM_MIGRATION": "ከስደት ተመላሽ",
+      "OTHER": "ሌላ"
+    },
+    "traineeStatusTitle": "የሰልጣኞች ሁኔታ",
+    "traineeStatusOptions": {
+      "DISABILITY": "አካል ጉዳተኛ",
+      "NO_JOB_OPPORTUNITY": "የስራ እድል ያልተመቻቸላት",
+      "RETURN_FROM_MIGRATION": "ከስደት ተመላሽ"
+    },
+    "supportNeedsTitle": "የቴክኖሎጂ እና የድጋፍ ፍላጎት",
+    "includeSupport": "የድጋፍ ፍላጎት ቅፅ ጨምር",
+    "womenAssociation": "የሴቶች ማህበር",
+    "womenAssociationPlaceholder": "የሴቶች ማህበር ይምረጡ (አማራጭ)",
+    "noAssociation": "ምንም / በማህበር ያልተደራጀች",
+    "cooperativeName": "የሴቶች ማህበር",
+    "cooperativeNamePlaceholder": "የሴቶች ማህበር ይምረጡ",
+    "requestedTechnologyType": "የተመረጠው የቴክኖሎጂ አይነት",
+    "requestedTechnologyTypePlaceholder": "ምሳሌ፡ የልብስ ስፌት ማሽን፣ ምድጃ",
+    "supportStatus": "የሴቶች ሁኔታ",
+    "supportStatusPlaceholder": "ሁኔታውን ይምረጡ...",
+    "supportStatusOptions": {
+      "POOREST": "ዝቅተኛ ገቢ ያላት (እጅግ ደሃ)",
+      "SEX_WORK": "በንግድ ወሲብ የተሰማራች",
+      "RETURN_MIGRANT": "ከስደት ተመላሽ"
+    },
+    "supportMode": "ድጋፉን ምን ማድረግ ትፈልጋለች",
+    "supportModePlaceholder": "አሰራር ይምረጡ...",
+    "supportModeOptions": {
+      "INDIVIDUAL": "በግል",
+      "GROUP": "በቡድን ወይም በማህበር"
+    },
+    "disabilitiesTitle": "የአካል ጉዳት",
+    "disabilitiesDescription": "የአካል ጉዳት አይነት ካለ ይምረጡ (አማራጭ)",
+    "disabilitiesOptions": {
+      "LIMB_IMPAIRMENT": "የእግር / የእጅ ጉዳት",
+      "BLIND": "አይነ ስውር",
+      "HARD_OF_HEARING": "መስማት የተሳናት ወይም ደንቆሮ"
+    },
+    "disabilityType": "የአካል ጉዳት ዓይነት",
+    "disabilityTypePlaceholder": "የአካል ጉዳት ዓይነት ይምረጡ (አማራጭ)",
+    "disabilityTypeOptions": {
+      "NONE": "ምንም (አካል ጉዳት የሌለባት)",
+      "LIMB_IMPAIRMENT": "የእጅ / የእግር ጉዳት",
+      "BLIND": "ዓይነ ስውር",
+      "HARD_OF_HEARING": "የመስማት ችግር / ደንቆሮ",
+      "OTHER": "ሌላ"
+    },
     "educationEmployment": "ትምህርት እና ሥራ",
     "educationLevel": "የትምህርት ደረጃ",
     "educationLevelPlaceholder": "የትምህርት ደረጃ ይምረጡ",
     "educationOptions": {
-      "NONE": "ያልተማረች / ምንም",
-      "PRIMARY": "የመጀመሪያ ደረጃ (1-8)",
-      "SECONDARY": "ሁለተኛ ደረጃ (9-12)",
-      "DIPLOMA": "ቴክኒክና ሙያ / ዲፕሎማ",
-      "BACHELOR": "የመጀመሪያ ዲግሪ",
-      "MASTERS": "ሁለተኛ ዲግሪ (ማስተርስ)",
-      "DOCTORATE": "ዶክትሬት (ፒኤችዲ)",
-      "OTHER": "ሌላ"
+      "DEGREE_AND_ABOVE": "ዲግሪ እና ከዚያ በላይ",
+      "DIPLOMA": "ዲፕሎማ (ደረጃ 1-4)",
+      "GRADE_9_12": "ከ9-12ኛ ክፍል",
+      "GRADE_5_8": "ከ5-8ኛ ክፍል",
+      "READ_AND_WRITE": "ማንበብና መጻፍ የምትችል"
     },
     "occupation": "ስራ",
     "careerStatus": "የሥራ ሁኔታ",
@@ -343,6 +462,7 @@
       "register": "ይመዝገቡ",
       "registering": "በመመዝገብ ላይ...",
       "save": "ለውጦችን ያስቀምጡ",
+      "saveChanges": "ለውጦችን ያስቀምጡ",
       "saving": "በማስቀመጥ ላይ..."
     },
     "messages": {
@@ -369,7 +489,8 @@
     "title": "የድጋፍ አገልግሎቶች",
     "subtitle": "ለደንበኞች እና ለማህበራት የድጋፍ አገልግሎቶችን ያስዳድሩ",
     "tabs": {
-      "management": "የአገልግሎት አስተዳደር",
+      "supportedWomen": "ድጋፍ የተደረገላቸው ሴቶች",
+      "management": "ድጋፍ መመዝገቢያ",
       "quickRegistration": "ፈጣን ምዝገባ"
     },
     "register": {
@@ -381,6 +502,17 @@
       "beneficiaryNote": "* እባክዎን የሴት ደንበኛ መለያ ወይም የሴቶች ማህበር መለያ ያቅርቡ።",
       "serviceInfo": "የአገልግሎት እና የአቅራቢ መረጃ",
       "serviceType": "የአገልግሎት ዓይነት",
+      "technologyType": "የቴክኖሎጂ ዓይነት (አማራጭ)",
+      "selectTechnology": "የቴክኖሎጂ ዓይነት ይምረጡ...",
+      "noneTechnology": "ምንም / አይመለከትም",
+      "technologyTypes": {
+        "SOLAR": "የፀሐይ ኃይል (ሶላር)",
+        "WATER_PUMP": "የውሃ ፓምፕ",
+        "IMPROVED_STOVE": "የተሻሻለ ምድጃ",
+        "BIODIGESTER": "ባዮዲጀስተር",
+        "ELECTRIC_MILL": "የኤሌክትሪክ ወፍጮ",
+        "OTHER": "ሌላ"
+      },
       "dateProvided": "የተሰጠበት ቀን",
       "providerName": "የአቅራቢው ስም",
       "amountOrQuantity": "መጠን ወይም ብዛት",
@@ -415,6 +547,7 @@
       "noSelection": "እባክዎን የድጋፍ መዝገቦችን ለማሳየት ከላይ ሴት ፈልገው ይምረጡ።",
       "searchBeneficiary": "ተጠቃሚ ይፈልጉ",
       "table": {
+        "beneficiary": "ተጠቃሚ",
         "serviceType": "የአገልግሎት ዓይነት",
         "provider": "አቅራቢ",
         "amount": "መጠን/ብዛት",
@@ -431,6 +564,15 @@
       "noResults": "ምንም ተጠቃሚ አልተገኘም",
       "noMatch": "ለ\"{search}\" ምንም አልተገኘም",
       "count": "ከ {total} ተጠቃሚዎች {filtered}",
+      "clear": "አጽዳ"
+    },
+    "associationSelect": {
+      "placeholder": "ማህበር በስም ወይም በመለያ ይፈልጉ...",
+      "clearSelection": "ምርጫን አጽዳ",
+      "searchPlaceholder": "በስም፣ በአመራር፣ በቦታ ይፈልጉ...",
+      "noResults": "ምንም ማህበር አልተገኘም",
+      "noMatch": "ለ\"{search}\" ምንም አልተገኘም",
+      "count": "ከ {total} ማህበራት {filtered}",
       "clear": "አጽዳ"
     },
     "quick": {
@@ -556,6 +698,11 @@
     "lastUpdated": "ለመጨረሻ ጊዜ የታደሰበት"
   },
   "associations": {
+    "institutionalBanner": {
+      "cityAdmin": "አዲስ አበባ ከተማ አስተዳደር",
+      "bureau": "የሴቶችና ማህበራዊ ጉዳይ ቢሮ",
+      "sector": "የሴቶች ልማትና ድጋፍ"
+    },
     "title": "የሴቶች ልማት ህብረት ማህበራት",
     "subtitle": "የሴቶች ልማት ህብረት ማህበራትን በክፍለ ከተማ ያስተዳድሩ",
     "searchPlaceholder": "በስም፣ በመሪ ወይም በአድራሻ ይፈልጉ...",
@@ -595,6 +742,7 @@
       "name": "የማህበሩ ስም",
       "type": "አይነት",
       "location": "አድራሻ",
+      "woreda": "ወረዳ",
       "leader": "መሪ",
       "block": "ብሎክ",
       "totalMembers": "የአባላት ብዛት",
@@ -985,7 +1133,12 @@
   },
   "training": {
     "title": "የሴቶች ስልጠና",
-    "subtitle": "የስልጠና ክፍለ ጊዜዎችን እና ተሳትፎን ያስተዳድሩ",
+    "subtitle": "የስልጠና ክፍለ ጊዜዎችን፣ ተሳትፎን እና የእጩዎች ዝርዝርን ያስተዳድሩ",
+    "tabs": {
+      "trainedWomen": "ስልጠና የወሰዱ ሴቶች",
+      "allRecords": "ሁሉም የስልጠና መረጃዎች",
+      "candidates": "የስልጠና እጩዎች"
+    },
     "searchPlaceholder": "በስም፣ መለያ ወይም የስልጠና ርዕስ ይፈልጉ...",
     "cardTitle": "የስልጠና መዝገቦች",
     "attendedYes": "ተሳትፋለች",
@@ -1013,6 +1166,19 @@
       "loading": "በመጫን ላይ...",
       "noRecords": "ምንም የስልጠና መዝገብ አልተገኘም።"
     },
+    "candidatesTable": {
+      "title": "የስልጠና እጩዎች ዝርዝር",
+      "candidate": "እጩ ሴት",
+      "demographics": "ስነ-ሕዝብ",
+      "requestedTopic": "የተጠየቀው የስልጠና ርዕስ",
+      "desiredSector": "የተፈለገው ዘርፍ",
+      "postParticipation": "ከስልጠና በኋላ ዕቅድ",
+      "location": "አድራሻ",
+      "actions": "እርምጃዎች",
+      "enroll": "ስልጠና ይመዝገቡ",
+      "noCandidates": "በስልጠና እጩዎች ዝርዝር ውስጥ የተመዘገበች ሴት የለም።",
+      "loading": "እጩዎችን በመጫን ላይ..."
+    },
     "filter": {
       "dateFrom": "ከ",
       "dateTo": "እስከ"
@@ -1022,6 +1188,10 @@
       "title": "የሴቶች ስልጠና ይመዝገቡ",
       "editTitle": "የስልጠና መረጃን ያርትዑ",
       "fields": {
+        "fullName": "ሙሉ ስም",
+        "faydaId": "የፋይዳ / የከተማ መለያ ቁጥር",
+        "linkBeneficiary": "የተመዘገበች ሴት መርጠው ያገናኙ (አማራጭ)",
+        "linkAssociation": "ማህበር መርጠው ያገናኙ (አማራጭ)",
         "firstName": "የመጀመሪያ ስም",
         "lastName": "የአባት ስም",
         "woman": "ሴት",
@@ -1032,9 +1202,12 @@
         "remark": "ማስታወሻ"
       },
       "placeholders": {
+        "fullName": "ሙሉ ስም ያስገቡ...",
+        "faydaId": "የፋይዳ ወይም የከተማ መለያ ያስገቡ...",
         "firstName": "የመጀመሪያ ስም ያስገቡ...",
         "lastName": "የአባት ስም ያስገቡ...",
-        "selectWoman": "ሴት ይምረጡ...",
+        "selectWoman": "የተመዘገበች ሴት ፈልገው ያገናኙ...",
+        "selectAssociation": "ማህበር ፈልገው ያገናኙ...",
         "selectTrainingTopic": "የስልጠና ርዕስ ይምረጡ...",
         "remark": "ተጨማሪ ማስታወሻዎች..."
       },
@@ -1068,6 +1241,10 @@
     "cardTitle": "የስራ መዝገቦች",
     "individual": "ግለሰብ",
     "group": "በቡድን የተደራጀ",
+    "employmentTypes": {
+      "INDIVIDUAL": "በግል የተደራጀ",
+      "GROUP": "በቡድን የተደራጀ"
+    },
     "showing": "ከ {total} ውስጥ {from}-{to} በማሳየት ላይ",
     "pagination": {
       "prev": "ቀዳሚ",
@@ -1088,10 +1265,14 @@
       "sector": "ዘርፍ",
       "year": "ዓመት",
       "remark": "ማስታወሻ",
+      "actions": "እርምጃዎች",
       "loading": "በመጫን ላይ...",
       "noRecords": "ምንም የስራ መዝገብ አልተገኘም።"
     },
     "filter": {
+      "title": "ማጣሪያዎች",
+      "allTypes": "ሁሉም ዓይነቶች",
+      "clearFilters": "ማጣሪያዎችን አጽዳ",
       "dateFrom": "ከ",
       "dateTo": "እስከ"
     },
@@ -1099,6 +1280,10 @@
       "addButton": "ስራ ይመዝገቡ",
       "title": "የስራ እድል ይመዝገቡ",
       "fields": {
+        "fullName": "ሙሉ ስም",
+        "faydaId": "የፋይዳ / የከተማ መለያ ቁጥር",
+        "linkBeneficiary": "የተመዘገበች ሴት መርጠው ያገናኙ (አማራጭ)",
+        "linkAssociation": "ማህበር መርጠው ያገናኙ (አማራጭ)",
         "firstName": "የመጀመሪያ ስም",
         "lastName": "የአባት ስም",
         "woman": "ሴት",
@@ -1108,9 +1293,12 @@
         "remark": "ማስታወሻ"
       },
       "placeholders": {
+        "fullName": "ሙሉ ስም ያስገቡ...",
+        "faydaId": "የፋይዳ ወይም የከተማ መለያ ያስገቡ...",
         "firstName": "የመጀመሪያ ስም ያስገቡ...",
         "lastName": "የአባት ስም ያስገቡ...",
-        "selectWoman": "ሴት ይምረጡ...",
+        "selectWoman": "የተመዘገበች ሴት ፈልገው ያገናኙ...",
+        "selectAssociation": "ማህበር ፈልገው ያገናኙ...",
         "selectSector": "ዘርፍ ይምረጡ...",
         "remark": "ተጨማሪ ማስታወሻዎች..."
       },
@@ -1193,7 +1381,14 @@
     "Skill Development Training": "የክህሎት ማጎልበቻ ስልጠና",
     "Startup Capital Support": "የመነሻ ካፒታል ድጋፍ",
     "Temporary Shelter": "ጊዜያዊ መጠለያ",
-    "Elderly Financial Support": "የአረጋውያን የገንዘብ ድጋፍ"
+    "Elderly Financial Support": "የአረጋውያን የገንዘብ ድጋፍ",
+    "Solar": "የፀሐይ ኃይል ቴክኖሎጂ ድጋፍ",
+    "Water Pump": "የውሃ ፓምፕ ቴክኖሎጂ ድጋፍ",
+    "Improved Stove": "የተሻሻለ ምድጃ ቴክኖሎጂ ድጋፍ",
+    "Biodigester": "የባዮዲጀስተር ቴክኖሎጂ ድጋፍ",
+    "Electric Mill": "የኤሌክትሪክ ወፍጮ ቴክኖሎጂ ድጋፍ",
+    "Other": "ሌሎች የቴክኖሎጂ ድጋፎች",
+    "Technology Support": "የቴክኖሎጂ ድጋፍ"
   },
   "subCities": {
     "names": {

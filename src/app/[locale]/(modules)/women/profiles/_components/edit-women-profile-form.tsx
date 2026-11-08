@@ -9,33 +9,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useUpdateWomenProfileMutation } from "@/hooks/womens";
 import {
   womenProfileSchema,
   WomenProfileSchemaType,
+  parseFullName,
 } from "@/schemas/women-profile";
 import { toast } from "sonner";
 import { WomenProfile } from "@/api/womens/women-profile";
-import { SubCitySelect, WoredaSelect } from "@/components/shared/location-selects";
 import { useTranslations } from "next-intl";
+import { useJurisdictionScope } from "@/hooks/use-jurisdiction-scope";
+import {
+  PersonalDemographicsSection,
+  LocationAddressSection,
+} from "@/components/women/forms";
 
 interface EditWomenProfileFormProps {
   profile: WomenProfile | null;
@@ -50,18 +40,20 @@ export default function EditWomenProfileForm({
 }: EditWomenProfileFormProps) {
   const updateMutation = useUpdateWomenProfileMutation();
   const t = useTranslations("women");
+  const { userSubCity, userWoreda } = useJurisdictionScope();
 
   const form = useForm<WomenProfileSchemaType>({
     resolver: zodResolver(womenProfileSchema) as any,
     defaultValues: {
       faydaId: "",
       cityIdNumber: "",
+      fullName: "",
       firstName: "",
       lastName: "",
       phoneNumber: "",
       age: "" as any,
-      subCity: "",
-      woreda: "",
+      subCity: userSubCity || "",
+      woreda: userWoreda || "",
       address: "",
       educationLevel: "",
       careerStatus: "",
@@ -69,19 +61,21 @@ export default function EditWomenProfileForm({
     },
   });
 
-  const subCity = form.watch("subCity");
-
   useEffect(() => {
     if (profile) {
       let calculatedAge = profile.client.age;
       if (!calculatedAge && profile.client.dateOfBirth) {
-        const diff = Date.now() - new Date(profile.client.dateOfBirth).getTime();
+        const diff =
+          Date.now() - new Date(profile.client.dateOfBirth).getTime();
         calculatedAge = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
       }
 
       form.reset({
         faydaId: profile.client.faydaId || profile.client.cityIdNumber || "",
         cityIdNumber: profile.client.cityIdNumber || "",
+        fullName: [profile.client.firstName, profile.client.lastName]
+          .filter(Boolean)
+          .join(" "),
         firstName: profile.client.firstName,
         lastName: profile.client.lastName,
         phoneNumber: profile.client.phoneNumber,
@@ -91,6 +85,7 @@ export default function EditWomenProfileForm({
         woreda: profile.client.woreda || "",
         educationLevel: profile.educationLevel || "",
         careerStatus: profile.careerStatus || profile.occupation || "",
+        disabilityType: (profile as any).disabilities?.[0] || "NONE",
         photoUrl: profile.photoUrl || "",
       });
     }
@@ -99,8 +94,20 @@ export default function EditWomenProfileForm({
   function onSubmit(values: WomenProfileSchemaType) {
     if (!profile?.id) return;
 
+    const { firstName, lastName, grandfatherName } = parseFullName(
+      values.fullName,
+    );
+    const resolvedDisabilities =
+      values.disabilityType && values.disabilityType !== "NONE"
+        ? [values.disabilityType]
+        : values.disabilities || [];
+
     const payload = {
       ...values,
+      firstName: firstName || values.firstName,
+      lastName: lastName || values.lastName,
+      grandfatherName: grandfatherName || values.grandfatherName,
+      disabilities: resolvedDisabilities,
       occupation: values.careerStatus,
     };
 
@@ -131,283 +138,31 @@ export default function EditWomenProfileForm({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 pt-2">
-            {/* Personal Information */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.personalInfo")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="faydaId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.faydaId")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.faydaIdPlaceholder")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.age")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder={t("form.agePlaceholder")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                          value={field.value ?? ""}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.value === ""
-                                ? ""
-                                : Number(e.target.value)
-                            )
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.firstName")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.firstName")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.lastName")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.lastName")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phoneNumber"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.phoneNumber")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t("form.phoneNumber")}
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-5 pt-2"
+          >
+            <PersonalDemographicsSection
+              form={form}
+              sectionNumber="1."
+              columns={2}
+              includeCityId={false}
+              includeCareerStatus={true}
+            />
 
-            {/* Address */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.addressTitle")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="subCity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.subCity")}</FormLabel>
-                      <FormControl>
-                        <SubCitySelect
-                          value={field.value}
-                          onValueChange={(val) => {
-                            field.onChange(val);
-                            form.setValue("woreda", "");
-                          }}
-                          placeholder={t("form.subCityPlaceholder")}
-                          extraOptions={profile?.client?.subCity ? [profile.client.subCity] : []}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="woreda"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.woreda")}</FormLabel>
-                      <FormControl>
-                        <WoredaSelect
-                          subCity={subCity || ""}
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          placeholder={t("form.woredaPlaceholder")}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-slate-700">{t("form.fullAddress")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={t("form.fullAddress")}
-                        className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <LocationAddressSection
+              form={form}
+              sectionNumber="2."
+              columns={2}
+              includeZoneBlock={false}
+              includeAddress={true}
+              extraSubCityOptions={
+                profile?.client?.subCity ? [profile.client.subCity] : []
+              }
+            />
 
-            {/* Education & Career */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A] border-b border-[#E3E7EB] pb-1.5">
-                {t("form.educationEmployment")}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="educationLevel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.educationLevel")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                            <SelectValue
-                              placeholder={t("form.educationLevelPlaceholder")}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          <SelectItem value="NONE" className="text-xs">
-                            {t("form.educationOptions.NONE")}
-                          </SelectItem>
-                          <SelectItem value="PRIMARY" className="text-xs">
-                            {t("form.educationOptions.PRIMARY")}
-                          </SelectItem>
-                          <SelectItem value="SECONDARY" className="text-xs">
-                            {t("form.educationOptions.SECONDARY")}
-                          </SelectItem>
-                          <SelectItem value="DIPLOMA" className="text-xs">
-                            {t("form.educationOptions.DIPLOMA")}
-                          </SelectItem>
-                          <SelectItem value="BACHELOR" className="text-xs">
-                            {t("form.educationOptions.BACHELOR")}
-                          </SelectItem>
-                          <SelectItem value="MASTERS" className="text-xs">
-                            {t("form.educationOptions.MASTERS")}
-                          </SelectItem>
-                          <SelectItem value="DOCTORATE" className="text-xs">
-                            {t("form.educationOptions.DOCTORATE")}
-                          </SelectItem>
-                          <SelectItem value="OTHER" className="text-xs">
-                            {t("form.educationOptions.OTHER")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="careerStatus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.careerStatus")}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50">
-                            <SelectValue
-                              placeholder={t("form.careerStatusPlaceholder")}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="rounded-xs border-[#E3E7EB]">
-                          <SelectItem value="EMPLOYED" className="text-xs">
-                            {t("form.careerOptions.EMPLOYED")}
-                          </SelectItem>
-                          <SelectItem value="SELF_EMPLOYED" className="text-xs">
-                            {t("form.careerOptions.SELF_EMPLOYED")}
-                          </SelectItem>
-                          <SelectItem value="UNEMPLOYED" className="text-xs">
-                            {t("form.careerOptions.UNEMPLOYED")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="photoUrl"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel className="text-xs font-semibold text-slate-700">{t("form.photoUrl")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://..."
-                          className="h-8 text-xs rounded-xs border-[#E3E7EB] bg-slate-50/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-3 border-t border-[#E3E7EB]">
+            {/* ── FOOTER ACTIONS ── */}
+            <div className="flex justify-end gap-2 pt-4 border-t border-[#E3E7EB]">
               <Button
                 type="button"
                 variant="outline"
@@ -423,7 +178,7 @@ export default function EditWomenProfileForm({
               >
                 {updateMutation.isPending
                   ? t("form.buttons.saving")
-                  : t("form.buttons.save")}
+                  : t("form.buttons.saveChanges")}
               </Button>
             </div>
           </form>
