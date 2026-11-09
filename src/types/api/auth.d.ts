@@ -79,6 +79,7 @@ type ClientSignup = {
   lastName: string;
   phoneNumber: string;
   cityIdNumber: string;
+  faydaId?: string;
   email: string;
   password: string;
 };

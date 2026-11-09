@@ -21,6 +21,7 @@
       "passwordMin": "Password must be at least 8 characters",
       "recaptchaNotAvailable": "Recaptcha not yet available, try again in a second",
       "recaptchaFailed": "Recaptcha failed, please try again",
+      "tooManyAttempts": "Too many login attempts. Please wait a minute before trying again.",
       "signInFailed": "Sign-in failed: {message}"
     },
     "rememberMe": "Remember me"
@@ -32,7 +33,7 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "phoneNumber": "Phone Number",
-      "cityIdNumber": "City ID Number",
+      "cityIdNumber": "Fayda ID",
       "email": "Email",
       "password": "Password"
     },
@@ -40,7 +41,7 @@
       "firstName": "Enter your first name",
       "lastName": "Enter your last name",
       "phoneNumber": "Enter your phone number",
-      "cityIdNumber": "Enter your city ID number",
+      "cityIdNumber": "Enter your Fayda ID number",
       "email": "Enter your email",
       "password": "Enter your password"
     },
@@ -60,7 +61,7 @@
       "invalidEmail": "Invalid email address",
       "phoneMin": "Phone number must be at least 7 digits",
       "passwordMin": "Password must be at least 8 characters long",
-      "cityIdMin": "City ID must be at least 2 characters long"
+      "cityIdMin": "Fayda ID must be at least 4 characters long"
     }
   },
   "resetPassword": {

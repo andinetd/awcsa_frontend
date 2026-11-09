@@ -21,6 +21,7 @@
       "passwordMin": "ፓስወርድ ቢያንስ 8 ቁምፊዎች መሆን አለበት",
       "recaptchaNotAvailable": "Recaptcha ገና አልተገኘም፣ እባክዎ እንደገና ይሞክሩ",
       "recaptchaFailed": "Recaptcha አልተሳካም፣ እባክዎ እንደገና ይሞክሩ",
+      "tooManyAttempts": "በጣም ብዙ የመግባት ሙከራዎች ተደርገዋል:: እባክዎ ጥቂት ደቂቃ ቆይተው እንደገና ይሞክሩ::",
       "signInFailed": "መግባት አልተሳካም: {message}"
     },
     "rememberMe": "አስታውሰኝ"
@@ -32,7 +33,7 @@
       "firstName": "ስም",
       "lastName": "የአያት ስም",
       "phoneNumber": "ስልክ ቁጥር",
-      "cityIdNumber": "የከተማ መታወቂያ ቁጥር",
+      "cityIdNumber": "የፋይዳ ቁጥር",
       "email": "ኢሜይል",
       "password": "የይለፍ ቃል"
     },
@@ -40,7 +41,7 @@
       "firstName": "ስምዎን ያስገቡ",
       "lastName": "የአያት ስምዎን ያስገቡ",
       "phoneNumber": "ስልክ ቁጥርዎን ያስገቡ",
-      "cityIdNumber": "የከተማ መታወቂያ ቁጥርዎን ያስገቡ",
+      "cityIdNumber": "የፋይዳ ቁጥርዎን ያስገቡ",
       "email": "ኢሜይልዎን ያስገቡ",
       "password": "የይለፍ ቃልዎን ያስገቡ"
     },
@@ -60,7 +61,7 @@
       "invalidEmail": "ልክ ያልሆነ ኢሜይል አድራሻ",
       "phoneMin": "ስልክ ቁጥር ቢያንስ 7 አሃዞች መሆን አለበት",
       "passwordMin": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት",
-      "cityIdMin": "የከተማ መታወቂያ ቢያንስ 2 ቁምፊዎች መሆን አለበት"
+      "cityIdMin": "የፋይዳ ቁጥር ቢያንስ 4 ቁምፊዎች መሆን አለበት"
     }
   },
   "resetPassword": {

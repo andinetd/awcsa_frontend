@@ -39,6 +39,18 @@ export const signIn = async (data: ClientSignIn): Promise<ClientSignInResponse> 
     return reqRes;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
+      const isRateLimited =
+        error.response?.status === 429 ||
+        error.response?.data?.statusCode === 429 ||
+        String(error.response?.data?.message).toLowerCase().includes("throttler") ||
+        String(error.response?.data?.message).toLowerCase().includes("too many requests");
+
+      if (isRateLimited) {
+        const rateLimitErr = new Error("TOO_MANY_REQUESTS");
+        (rateLimitErr as any).status = 429;
+        throw rateLimitErr;
+      }
+
       const serverMessage =
         error.response?.data?.message ||
         (Array.isArray(error.response?.data?.errors)

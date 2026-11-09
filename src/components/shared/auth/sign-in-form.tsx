@@ -93,10 +93,19 @@ export default function SignInForm() {
       onSuccess: () => {
         toast.success("Signed in successfully!");
       },
-      onError: (err) => {
-        toast.error(
-          t("errors.signInFailed", { message: err?.message || "Sign-in failed" }),
-        );
+      onError: (err: any) => {
+        if (
+          err?.message === "TOO_MANY_REQUESTS" ||
+          err?.status === 429 ||
+          err?.message?.toLowerCase().includes("throttler") ||
+          err?.message?.toLowerCase().includes("too many requests")
+        ) {
+          toast.error(t("errors.tooManyAttempts"));
+        } else {
+          toast.error(
+            t("errors.signInFailed", { message: err?.message || "Sign-in failed" }),
+          );
+        }
       },
     });
   }
@@ -165,13 +174,7 @@ export default function SignInForm() {
 
     return () => clearTimeout(navTimer);
   }, [user, orgUnit, router]);
-  useEffect(() => {
-    if (isError) {
-      toast.error(
-        t("errors.signInFailed", { message: (error as any)?.message }),
-      );
-    }
-  }, [isError, error, t]);
+
 
   return (
     <div className="mx-auto w-full mt-5 max-w-md">

@@ -45,7 +45,7 @@ export default function AdoptionRegisterPage() {
           .min(8, t("validation.passwordMin")),
         cityIdNumber: z
           .string()
-          .min(2, { message: t("validation.cityIdMin") }),
+          .min(4, { message: t("validation.cityIdMin") }),
       }),
     [t]
   );
@@ -73,6 +73,7 @@ export default function AdoptionRegisterPage() {
       lastName: formData.lastName,
       phoneNumber: formData.phoneNumber,
       cityIdNumber: formData.cityIdNumber,
+      faydaId: formData.cityIdNumber,
       email: formData.email,
       password: formData.password,
     };
