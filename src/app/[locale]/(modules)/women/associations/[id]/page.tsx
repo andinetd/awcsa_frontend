@@ -90,7 +90,7 @@ export default function AssociationDetailPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {t(`types.${record.type}`)} · <span className="font-mono">ID: #{record.id}</span>
+                {t(`types.${record.type}`)} · <span className="font-mono">{t("detail.idLabel", { id: record.id })}</span>
               </p>
             </div>
           </div>

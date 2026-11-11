@@ -440,8 +440,8 @@ function AddGroupDialog({
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (open) setName(`Group ${nextGroupNumber}`);
-  }, [open, nextGroupNumber]);
+    if (open) setName(t("members.groupTab", { group: nextGroupNumber }));
+  }, [open, nextGroupNumber, t]);
 
   const handleSubmit = () => {
     mutation.mutate(
@@ -514,8 +514,8 @@ function RenameGroupDialog({
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (group) setName(group.name ?? `Group ${group.groupNumber}`);
-  }, [group]);
+    if (group) setName(group.name ?? t("members.groupTab", { group: group.groupNumber }));
+  }, [group, t]);
 
   if (!group) return null;
 

@@ -96,14 +96,14 @@ export default function TechnologyDetailPage() {
                     ? t.has(`technologySupport.form.technologyTypes.${record.technologyType}`)
                       ? t(`technologySupport.form.technologyTypes.${record.technologyType}`)
                       : record.technologyType
-                    : "Association Support"}
+                    : t("technologySupport.detail.defaultSupport")}
                 </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
                   ID: #{record.id}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {t("technologySupport.detail.title")} · Beneficiary: {displayName}
+                {t("technologySupport.detail.title")} · {t("technologySupport.detail.beneficiaryLabel", { name: displayName })}
               </p>
             </div>
           </div>
@@ -193,13 +193,13 @@ export default function TechnologyDetailPage() {
             </div>
             {client?.phoneNumber && (
               <div className="text-xs text-slate-600 flex justify-between pt-1">
-                <span className="text-slate-500">{t("technologySupport.detail.phone")}:</span>
+                <span className="text-slate-500">{t("technologySupport.detail.phone")}</span>
                 <span className="font-mono font-medium text-slate-800">{client.phoneNumber}</span>
               </div>
             )}
             {client?.address && (
               <div className="text-xs text-slate-600 flex justify-between pt-1">
-                <span className="text-slate-500">{t("technologySupport.detail.address")}:</span>
+                <span className="text-slate-500">{t("technologySupport.detail.address")}</span>
                 <span className="font-medium text-slate-800">{client.address}</span>
               </div>
             )}

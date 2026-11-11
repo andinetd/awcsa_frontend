@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,7 @@ export default function TrainingCandidatesTable({
   candidates = [],
   isLoading,
 }: TrainingCandidatesTableProps) {
+  const router = useRouter();
   const t = useTranslations("women.training");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -168,7 +170,8 @@ export default function TrainingCandidatesTable({
                     return (
                       <TableRow
                         key={cand.id}
-                        className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
+                        className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                        onClick={() => router.push(`/women/profiles/${cand.id}`)}
                       >
                         <TableCell className="py-3 pl-5">
                           <div className="font-semibold text-xs text-[#0B1F3A]">{fullName || "N/A"}</div>
@@ -217,7 +220,7 @@ export default function TrainingCandidatesTable({
                             </span>
                           )}
                         </TableCell>
-                        <TableCell className="text-right py-3 pr-5">
+                        <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               variant="default"

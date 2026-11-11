@@ -183,7 +183,8 @@ export function ProfilesTable({
                 currentProfiles.map((profile: WomenProfile) => (
                   <TableRow
                     key={profile.id}
-                    className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
+                    className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                    onClick={() => router.push(`/women/profiles/${profile.id}`)}
                   >
                     <TableCell className="font-medium py-3 pl-5">
                       <span className="text-xs font-semibold text-[#0B1F3A]">
@@ -231,7 +232,7 @@ export function ProfilesTable({
                     <TableCell className="py-3">
                       {getCareerStatusLabel(profile)}
                     </TableCell>
-                    <TableCell className="text-right py-3 pr-5">
+                    <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                       <div className="flex justify-end gap-1">
                         <PersonHistoryDialog
                           clientId={profile.client.id}

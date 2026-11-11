@@ -277,7 +277,8 @@ export default function WomenTrainingPage() {
                   currentData.map((rec: WomenTrainingRecord) => (
                     <TableRow
                       key={rec.id}
-                      className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
+                      className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                      onClick={() => router.push(`/women/training/${rec.id}`)}
                     >
                       <TableCell className="py-3 pl-5">
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -316,7 +317,7 @@ export default function WomenTrainingPage() {
                       <TableCell className="text-xs text-slate-600 py-3 max-w-[200px] truncate">
                         {rec.remark || "—"}
                       </TableCell>
-                      <TableCell className="text-right py-3 pr-5">
+                      <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-1">
                           <Button
                             variant="ghost"

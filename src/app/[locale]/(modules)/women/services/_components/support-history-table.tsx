@@ -71,7 +71,11 @@ export default function SupportHistoryTable({
             const clientIdStr = service.client?.faydaId || service.client?.cityIdNumber || (service.client?.id ? `#${service.client.id}` : "");
 
             return (
-              <TableRow key={service.id} className="hover:bg-slate-50/70 border-b border-[#E3E7EB] last:border-0 transition-colors">
+              <TableRow
+                key={service.id}
+                className="hover:bg-slate-50/70 cursor-pointer border-b border-[#E3E7EB] last:border-0 transition-colors"
+                onClick={() => router.push(`/women/services/${service.id}`)}
+              >
                 <TableCell className="py-2.5 pl-4">
                   <div className="font-semibold text-xs text-[#0B1F3A]">{clientName}</div>
                   {clientIdStr && (
@@ -100,7 +104,7 @@ export default function SupportHistoryTable({
                 <TableCell className="text-xs text-slate-600 py-2.5">
                   {service.subCity ? `${service.subCity}${service.woreda ? `, ${service.woreda}` : ""}` : "—"}
                 </TableCell>
-                <TableCell className="text-right py-2.5 pr-4">
+                <TableCell className="text-right py-2.5 pr-4" onClick={(e) => e.stopPropagation()}>
                   <div className="flex justify-end gap-1">
                     <Button
                       variant="ghost"

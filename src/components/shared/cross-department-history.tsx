@@ -18,6 +18,7 @@
  */
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { usePersonHistory, usePersonSearch } from "@/hooks/persons/persons-hooks";
 import { useAuthStore } from "@/stores/auth-store";
 import {
@@ -214,10 +215,12 @@ function StatBadge({
   );
 }
 
-function TimelineRow({ entry }: { entry: TimelineEntry }) {
+function TimelineRow({ entry, t }: { entry: TimelineEntry; t: any }) {
   const meta = KIND_META[entry.kind] ?? KIND_META.AUDIT_LOG;
   const { Icon, dot, text, bg, label, department, departmentColor } = meta;
   const detail = entryLabel(entry);
+  const translatedLabel = t.has(`kinds.${label}`) ? t(`kinds.${label}`) : label;
+  const translatedDept = t.has(`deptNames.${department}`) ? t(`deptNames.${department}`) : department;
 
   return (
     <div className="flex gap-3 items-start group">
@@ -237,18 +240,18 @@ function TimelineRow({ entry }: { entry: TimelineEntry }) {
               className={`inline-flex items-center gap-1 text-xs font-semibold ${text} ${bg} px-2 py-0.5 rounded border border-current/20`}
             >
               <Icon className="w-3.5 h-3.5" />
-              {label}
+              {translatedLabel}
             </span>
             <span
               className={`inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full border ${departmentColor}`}
             >
-              {department}
+              {translatedDept}
             </span>
           </div>
 
           <span className="text-[11px] text-slate-400 flex items-center gap-1 flex-shrink-0">
             <Clock className="w-3 h-3" />
-            {new Date(entry.date).toLocaleString("en-ET", {
+            {new Date(entry.date).toLocaleString(undefined, {
               year: "numeric",
               month: "short",
               day: "numeric",
@@ -296,6 +299,7 @@ export default function CrossDepartmentHistory({
   initialVisible = 10,
   embedded = false,
 }: CrossDepartmentHistoryProps) {
+  const t = useTranslations("components.personHistory");
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [showAll, setShowAll] = useState(false);
 
@@ -355,7 +359,7 @@ export default function CrossDepartmentHistory({
       {needsSearch && searchLoading && (
         <div className="flex items-center gap-2 text-slate-500 text-sm py-4">
           <Loader2 className="w-4 h-4 animate-spin text-primary" />
-          Looking up citizen record in central database…
+          {t("searching")}
         </div>
       )}
 
@@ -365,12 +369,18 @@ export default function CrossDepartmentHistory({
           <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-slate-800">
-              No central client registration found
+              {t("noRegistration")}
             </p>
             <p className="text-xs text-slate-500 mt-0.5">
-              {cityIdNumber ? `City ID: ${cityIdNumber}` : ""}
-              {faydaId ? ` • Fayda ID: ${faydaId}` : ""}
-              {personName ? ` (${personName})` : ""} has not been registered as a social service beneficiary yet.
+              {t("noRegistrationDesc", {
+                identifier: [
+                  cityIdNumber ? `City ID: ${cityIdNumber}` : "",
+                  faydaId ? `Fayda ID: ${faydaId}` : "",
+                ]
+                  .filter(Boolean)
+                  .join(" • "),
+                name: personName || "",
+              })}
             </p>
           </div>
         </div>
@@ -379,14 +389,14 @@ export default function CrossDepartmentHistory({
       {/* Error state */}
       {isError && (
         <p className="text-sm text-red-500 py-2">
-          Unable to load history. You may need additional permissions or the server is unavailable.
+          {t("error")}
         </p>
       )}
 
       {/* Loading history */}
       {historyLoading && (
         <div className="flex items-center gap-2 text-slate-500 text-sm py-4">
-          <Loader2 className="w-4 h-4 animate-spin text-primary" /> Loading full history across all departments…
+          <Loader2 className="w-4 h-4 animate-spin text-primary" /> {t("loading")}
         </div>
       )}
 
@@ -396,13 +406,17 @@ export default function CrossDepartmentHistory({
           <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div className="text-xs">
             <span className="font-semibold text-amber-950">
-              Multi-Program Beneficiary:
+              {t("multiProgramTitle")}
             </span>{" "}
-            This individual is enrolled across multiple bureau programs (
-            {client?.WomenProfile && "Women's Affairs, "}
-            {client?.DisabilityProfile && "Disability Support, "}
-            {client?.ElderlyProfile && "Elderly Welfare"}
-            ). Check existing benefits below before issuing new assistance.
+            {t("multiProgramDesc", {
+              programs: [
+                client?.WomenProfile && t("programs.women"),
+                client?.DisabilityProfile && t("programs.disability"),
+                client?.ElderlyProfile && t("programs.elderly"),
+              ]
+                .filter(Boolean)
+                .join(", "),
+            })}
           </div>
         </div>
       )}
@@ -410,13 +424,13 @@ export default function CrossDepartmentHistory({
       {/* Stat Badges */}
       {summary && (
         <div className="flex flex-wrap gap-1.5 pt-1">
-          <StatBadge label="support records" value={summary.supportRecords} />
-          <StatBadge label="service requests" value={summary.serviceRequests} />
-          <StatBadge label="trainings" value={summary.trainings} />
-          <StatBadge label="job placements" value={summary.jobPlacements} />
-          <StatBadge label="tech support" value={summary.womenTechSupports} />
-          <StatBadge label="employment" value={summary.womenEmployments} />
-          <StatBadge label="associations" value={summary.associationMemberships} />
+          <StatBadge label={t("stats.supportRecords")} value={summary.supportRecords} />
+          <StatBadge label={t("stats.serviceRequests")} value={summary.serviceRequests} />
+          <StatBadge label={t("stats.trainings")} value={summary.trainings} />
+          <StatBadge label={t("stats.jobPlacements")} value={summary.jobPlacements} />
+          <StatBadge label={t("stats.techSupport")} value={summary.womenTechSupports} />
+          <StatBadge label={t("stats.employment")} value={summary.womenEmployments} />
+          <StatBadge label={t("stats.associations")} value={summary.associationMemberships} />
         </div>
       )}
 
@@ -424,7 +438,7 @@ export default function CrossDepartmentHistory({
       {!isLoading && !isError && resolvedClientId && filtered.length === 0 && (
         <div className="py-8 text-center text-slate-400 text-sm border border-dashed rounded-lg bg-slate-50/50">
           <Activity className="w-6 h-6 mx-auto mb-1 opacity-30 text-slate-500" />
-          No past support services or requests recorded for this individual.
+          {t("empty")}
         </div>
       )}
 
@@ -432,7 +446,7 @@ export default function CrossDepartmentHistory({
       {visible.length > 0 && (
         <div className="pt-2">
           {visible.map((entry, idx) => (
-            <TimelineRow key={idx} entry={entry} />
+            <TimelineRow key={idx} entry={entry} t={t} />
           ))}
 
           {hasMore && (
@@ -441,7 +455,7 @@ export default function CrossDepartmentHistory({
               className="text-xs font-semibold text-primary hover:underline mt-2 ml-6 block"
               onClick={() => setShowAll(true)}
             >
-              Show {filtered.length - initialVisible} more events…
+              {t("showMore", { count: filtered.length - initialVisible })}
             </button>
           )}
         </div>
@@ -465,7 +479,7 @@ export default function CrossDepartmentHistory({
             <div className="p-1.5 rounded-md bg-primary/10 text-primary">
               <History className="w-4 h-4" />
             </div>
-            <span>Cross-Department Support History</span>
+            <span>{t("title")}</span>
             {personName && (
               <span className="text-xs font-normal text-slate-500 hidden sm:inline">
                 ({personName})
@@ -476,22 +490,22 @@ export default function CrossDepartmentHistory({
           <div className="flex items-center gap-2">
             {summary && (
               <Badge variant="secondary" className="text-xs font-medium">
-                {filtered.length} event{filtered.length !== 1 ? "s" : ""}
+                {t("events", { count: filtered.length })}
               </Badge>
             )}
             {client?.WomenProfile && (
               <Badge variant="outline" className="text-[10px] text-rose-600 border-rose-200 hidden md:inline">
-                Women
+                {t("programs.women")}
               </Badge>
             )}
             {client?.DisabilityProfile && (
               <Badge variant="outline" className="text-[10px] text-blue-600 border-blue-200 hidden md:inline">
-                Disability
+                {t("programs.disability")}
               </Badge>
             )}
             {client?.ElderlyProfile && (
               <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-200 hidden md:inline">
-                Elderly
+                {t("programs.elderly")}
               </Badge>
             )}
             <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" type="button">

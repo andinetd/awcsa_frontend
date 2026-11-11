@@ -109,7 +109,7 @@ export default function SupportDetailPage() {
                   ? t.has(`serviceTypes.${support.serviceType.name}`)
                     ? t(`serviceTypes.${support.serviceType.name}`)
                     : support.serviceType.name
-                  : "N/A"}
+                  : t("supportDetail.na")}
               </p>
               {support.serviceType?.category && (
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-medium border border-[#E3E7EB] bg-slate-50 text-slate-600 mt-1">
@@ -140,7 +140,7 @@ export default function SupportDetailPage() {
                 <span>
                   {support.dateProvided
                     ? format(new Date(support.dateProvided), "PPP")
-                    : "N/A"}
+                    : t("supportDetail.na")}
                 </span>
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function SupportDetailPage() {
                   : t("supportDetail.womenAssociation")}
               </p>
               <p className="text-[11px] font-mono text-slate-600">
-                ID: #{support.clientId || support.womenAssociationId}
+                {t("supportDetail.referenceId")}: #{support.clientId || support.womenAssociationId}
               </p>
             </div>
 

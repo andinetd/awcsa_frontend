@@ -912,7 +912,8 @@
       "membership": "አባልነትና ድጋፍ",
       "registeredMembers": "የተመዘገቡ አባላት",
       "totalMembersDeclared": "የተገለጸ ጠቅላላ",
-      "supportRecords": "የድጋፍ መዝገቦች"
+      "supportRecords": "የድጋፍ መዝገቦች",
+      "idLabel": "መለያ፦ #{id}"
     },
     "filteredBySubCity": "በክፍለ ከተማ ተመርቷል: {subCity}",
     "clearFilter": "ማጣሪያ አጽዳ",
@@ -1123,12 +1124,14 @@
       "status": "ሁኔታ",
       "healthConditions": "የጤና ሁኔታዎች",
       "beneficiary": "ተጠቃሚ",
-      "phone": "ስልክ:",
-      "address": "አድራሻ:",
+      "phone": "ስልክ",
+      "address": "አድራሻ",
       "goBack": "ተመለስ",
       "error": "መዝገብ አልተገኘም",
       "monitoringHistory": "የክትትል ታሪክ",
-      "monitoringHistoryDesc": "ክትትሎችን እና ውጤቶችን ይከታተሉ"
+      "monitoringHistoryDesc": "ክትትሎችን እና ውጤቶችን ይከታተሉ",
+      "defaultSupport": "የማህበር ድጋፍ",
+      "beneficiaryLabel": "ተጠቃሚ: {name}"
     }
   },
   "training": {
@@ -1232,6 +1235,21 @@
         "success": "ስልጠና በተሳካ ሁኔታ ተመዝግቧል",
         "error": "ስልጠና መመዝገብ አልተቻለም"
       }
+    },
+    "detail": {
+      "title": "የስልጠና ዝርዝሮች",
+      "trainingDetails": "የስልጠና ዝርዝሮች",
+      "trainingTopic": "የስልጠና ርዕስ",
+      "attended": "ተሳትፎ",
+      "yes": "አዎ",
+      "no": "አይ",
+      "startDate": "የመጀመሪያ ቀን",
+      "completionDate": "የማጠናቀቂያ ቀን",
+      "remark": "ማስታወሻ",
+      "beneficiary": "ተጠቃሚ",
+      "phone": "ስልክ",
+      "recordNotFound": "የስልጠና መዝገብ አልተገኘም",
+      "beneficiaryLabel": "ተጠቃሚ: {name}"
     }
   },
   "employment": {
@@ -1326,6 +1344,21 @@
         "success": "ስራ በተሳካ ሁኔታ ተመዝግቧል",
         "error": "ስራ መመዝገብ አልተቻለም"
       }
+    },
+    "detail": {
+      "title": "የስራ እድል ዝርዝር",
+      "individualTitle": "የግል የስራ እድል",
+      "groupTitle": "የቡድን የስራ እድል",
+      "employmentDetails": "የስራ እድል ዝርዝሮች",
+      "employmentType": "የስራ አይነት",
+      "individual": "በግል የተደራጀ",
+      "group": "በቡድን የተደራጀ",
+      "sector": "ዘርፍ",
+      "year": "ዓመት",
+      "remark": "ማስታወሻ",
+      "beneficiary": "ተጠቃሚ",
+      "phone": "ስልክ",
+      "beneficiaryLabel": "ተጠቃሚ: {name}"
     }
   },
   "supportDetail": {
@@ -1334,6 +1367,7 @@
     "serviceInfo": "የአገልግሎት መረጃ",
     "serviceInfoDesc": "የተሰጠው ድጋፍ ዝርዝር",
     "noRemarks": "ምንም አስተያየት አልተሰጠም።",
+    "beneficiary": "ተጠቃሚ",
     "beneficiaryLocation": "ተጠቃሚ እና ቦታ",
     "beneficiaryType": "የተጠቃሚ ዓይነት",
     "individualWoman": "ግለሰብ ሴት",
@@ -1345,7 +1379,9 @@
     "addFollowUp": "ከላይ ያለውን ቁልፍ በመጠቀም አዲስ ክትትል ያክሉ።",
     "assessedBy": "በ: {name}",
     "score": "ውጤት: {score}%",
-    "supportIntervention": "የድጋፍ ጣልቃገብነት"
+    "supportIntervention": "የድጋፍ ጣልቃገብነት",
+    "beneficiaryLabel": "ተጠቃሚ: {name}",
+    "na": "አይመለከትም"
   },
   "monitoring": {
     "addFollowUp": "ክትትል ያክሉ",
@@ -1404,5 +1440,12 @@
       "Yeka": "የካ",
       "Lemi Kura": "ለሚ ኩራ"
     }
+  },
+  "clientCategories": {
+    "WOMEN": "ሴቶች",
+    "DISABILITY": "አካል ጉዳተኞች",
+    "ELDERLY": "አረጋውያን",
+    "CHILD": "ህጻናት",
+    "GENERAL": "አጠቃላይ"
   }
 }

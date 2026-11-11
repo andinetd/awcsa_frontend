@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -32,14 +33,15 @@ export default function PersonHistoryDialog({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
 }: PersonHistoryDialogProps) {
+  const t = useTranslations("components.personHistory");
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const setOpen = isControlled ? controlledOnOpenChange : setInternalOpen;
 
   const titleText = personName
-    ? `Cross-Department Support History: ${personName}`
-    : "Cross-Department Support History";
+    ? t("dialogTitle", { name: personName })
+    : t("title");
 
   const identifier = cityIdNumber
     ? `City ID: ${cityIdNumber}`
@@ -75,7 +77,7 @@ export default function PersonHistoryDialog({
             <span>{titleText}</span>
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500">
-            Unified record of all services, requests, trainings, and benefits across Women&apos;s Affairs, Disability, Elderly, and Social Support.
+            {t("subtitle")}
             {identifier && <span className="ml-2 font-medium text-slate-700">({identifier})</span>}
           </DialogDescription>
         </DialogHeader>

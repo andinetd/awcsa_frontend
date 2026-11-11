@@ -295,7 +295,13 @@ const WomenProfileDetail = () => {
                 <p className="text-slate-500 font-medium">
                   {t("profileDetail.clientCategory")}
                 </p>
-                <p className="font-semibold text-slate-800 mt-0.5">{profile.client.clientCategory || "—"}</p>
+                <p className="font-semibold text-slate-800 mt-0.5">
+                  {profile.client.clientCategory
+                    ? t.has(`clientCategories.${profile.client.clientCategory}`)
+                      ? t(`clientCategories.${profile.client.clientCategory}`)
+                      : profile.client.clientCategory
+                    : "—"}
+                </p>
               </div>
               {profile.createdAt && (
                 <div>

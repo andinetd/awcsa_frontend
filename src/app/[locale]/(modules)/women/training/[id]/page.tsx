@@ -49,7 +49,7 @@ export default function TrainingDetailPage() {
     return (
       <div className="flex h-[400px] flex-col items-center justify-center space-y-4">
         <p className="text-destructive font-medium text-sm">
-          {error instanceof Error ? error.message : "Record not found"}
+          {error instanceof Error ? error.message : t("training.detail.recordNotFound")}
         </p>
         <Button
           onClick={() => router.push("/women/training")}
@@ -93,13 +93,19 @@ export default function TrainingDetailPage() {
             </Button>
             <div>
               <div className="flex items-center gap-2.5">
-                <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">{record.trainingTopic}</h1>
+                <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
+                  {record.trainingTopic
+                    ? t.has(`training.form.trainingTopics.${record.trainingTopic}`)
+                      ? t(`training.form.trainingTopics.${record.trainingTopic}`)
+                      : record.trainingTopic
+                    : "—"}
+                </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
                   {t("supportDetail.referenceId")}: #{record.id}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {t("training.title")} · Beneficiary: {displayName}
+                {t("training.title")} · {t("training.detail.beneficiary")}: {displayName}
               </p>
             </div>
           </div>
@@ -112,26 +118,32 @@ export default function TrainingDetailPage() {
           <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
             <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               <GraduationCap className="h-4 w-4 text-[#1769AA]" />
-              Training Details
+              {t("training.detail.trainingDetails")}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Training Topic</p>
-              <p className="text-sm font-semibold text-[#0B1F3A]">{record.trainingTopic}</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("training.detail.trainingTopic")}</p>
+              <p className="text-sm font-semibold text-[#0B1F3A]">
+                {record.trainingTopic
+                  ? t.has(`training.form.trainingTopics.${record.trainingTopic}`)
+                    ? t(`training.form.trainingTopics.${record.trainingTopic}`)
+                    : record.trainingTopic
+                  : "—"}
+              </p>
             </div>
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Attended</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("training.detail.attended")}</p>
               <div>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${
                   record.attended ? uiTokens.statusTag.primary : uiTokens.statusTag.neutral
                 }`}>
-                  {record.attended ? "Yes" : "No"}
+                  {record.attended ? t("training.detail.yes") : t("training.detail.no")}
                 </span>
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Start Date</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("training.detail.startDate")}</p>
               <div className="flex items-center gap-1.5 text-xs text-slate-700">
                 <Calendar className="h-3.5 w-3.5 text-slate-400" />
                 <span className="font-mono">{format(new Date(record.startDate), "PPP")}</span>
@@ -139,7 +151,7 @@ export default function TrainingDetailPage() {
             </div>
             {record.completionDate && (
               <div className="space-y-1">
-                <p className="text-[11px] font-medium text-slate-500">Completion Date</p>
+                <p className="text-[11px] font-medium text-slate-500">{t("training.detail.completionDate")}</p>
                 <div className="flex items-center gap-1.5 text-xs text-slate-700">
                   <Calendar className="h-3.5 w-3.5 text-slate-400" />
                   <span className="font-mono">{format(new Date(record.completionDate), "PPP")}</span>
@@ -148,7 +160,7 @@ export default function TrainingDetailPage() {
             )}
             {record.remark && (
               <div className="md:col-span-2 space-y-1">
-                <p className="text-[11px] font-medium text-slate-500">Remark</p>
+                <p className="text-[11px] font-medium text-slate-500">{t("training.detail.remark")}</p>
                 <p className="p-3 bg-slate-50 border border-[#E3E7EB] rounded-xs text-xs text-slate-700">{record.remark}</p>
               </div>
             )}
@@ -160,7 +172,7 @@ export default function TrainingDetailPage() {
           <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
             <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               <User className="h-4 w-4 text-[#1769AA]" />
-              Beneficiary
+              {t("training.detail.beneficiary")}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 space-y-3">
@@ -174,7 +186,7 @@ export default function TrainingDetailPage() {
             </div>
             {client?.phoneNumber && (
               <div className="text-xs text-slate-600 flex justify-between pt-1">
-                <span className="text-slate-500">Phone:</span>
+                <span className="text-slate-500">{t("training.detail.phone")}</span>
                 <span className="font-mono font-medium text-slate-800">{client.phoneNumber}</span>
               </div>
             )}

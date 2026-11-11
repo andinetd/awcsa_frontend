@@ -222,7 +222,15 @@ export default function WomenMembersPage() {
                   </TableRow>
                 ) : currentData.length > 0 ? (
                   currentData.map((row) => (
-                    <TableRow key={row.id} className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0">
+                    <TableRow
+                      key={row.id}
+                      className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                      onClick={() => {
+                        if (row.associationId) {
+                          router.push(`/women/associations/${row.associationId}`);
+                        }
+                      }}
+                    >
                       <TableCell className="py-3 pl-5">
                         <div className="font-semibold text-xs text-[#0B1F3A]">{row.fullName}</div>
                       </TableCell>
@@ -251,7 +259,7 @@ export default function WomenMembersPage() {
                           })}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right py-3 pr-5">
+                      <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-1">
                           <PersonHistoryDialog
                             personName={row.fullName}

@@ -237,7 +237,11 @@ export default function WomenEmploymentPage() {
                   <TableRow><TableCell colSpan={6} className="text-center py-10 text-xs text-slate-500">{t("table.loading")}</TableCell></TableRow>
                 ) : currentData.length > 0 ? (
                   currentData.map((emp: WomenEmploymentRecord) => (
-                    <TableRow key={emp.id} className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0">
+                    <TableRow
+                      key={emp.id}
+                      className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                      onClick={() => router.push(`/women/employment/${emp.id}`)}
+                    >
                       <TableCell className="py-3 pl-5">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="font-semibold text-xs text-[#0B1F3A]">
@@ -263,7 +267,7 @@ export default function WomenEmploymentPage() {
                       <TableCell className="text-xs text-slate-700 py-3">{emp.sector}</TableCell>
                       <TableCell className="font-mono text-xs text-slate-700 py-3">{emp.year}</TableCell>
                       <TableCell className="text-xs text-slate-500 max-w-[200px] truncate py-3">{emp.remark || "—"}</TableCell>
-                      <TableCell className="text-right py-3 pr-5">
+                      <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-1">
                           <Button
                             variant="ghost"

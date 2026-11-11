@@ -912,7 +912,8 @@
       "membership": "Membership & Support",
       "registeredMembers": "Registered Members",
       "totalMembersDeclared": "Declared Total",
-      "supportRecords": "Support Records"
+      "supportRecords": "Support Records",
+      "idLabel": "ID: #{id}"
     },
     "filteredBySubCity": "Filtered by sub-city: {subCity}",
     "clearFilter": "Clear filter",
@@ -1123,12 +1124,14 @@
       "status": "Status",
       "healthConditions": "Health Conditions",
       "beneficiary": "Beneficiary",
-      "phone": "Phone:",
-      "address": "Address:",
+      "phone": "Phone",
+      "address": "Address",
       "goBack": "Go Back",
       "error": "Record not found",
       "monitoringHistory": "Monitoring History",
-      "monitoringHistoryDesc": "Track follow-ups and outcomes"
+      "monitoringHistoryDesc": "Track follow-ups and outcomes",
+      "defaultSupport": "Association Support",
+      "beneficiaryLabel": "Beneficiary: {name}"
     }
   },
   "training": {
@@ -1232,6 +1235,21 @@
         "success": "Training registered successfully",
         "error": "Failed to register training"
       }
+    },
+    "detail": {
+      "title": "Training Details",
+      "trainingDetails": "Training Details",
+      "trainingTopic": "Training Topic",
+      "attended": "Attended",
+      "yes": "Yes",
+      "no": "No",
+      "startDate": "Start Date",
+      "completionDate": "Completion Date",
+      "remark": "Remark",
+      "beneficiary": "Beneficiary",
+      "phone": "Phone",
+      "recordNotFound": "Record not found",
+      "beneficiaryLabel": "Beneficiary: {name}"
     }
   },
   "employment": {
@@ -1326,6 +1344,21 @@
         "success": "Employment registered successfully",
         "error": "Failed to register employment"
       }
+    },
+    "detail": {
+      "title": "Employment Details",
+      "individualTitle": "Individual Employment",
+      "groupTitle": "Group Employment",
+      "employmentDetails": "Employment Details",
+      "employmentType": "Employment Type",
+      "individual": "Individual",
+      "group": "Group",
+      "sector": "Sector",
+      "year": "Year",
+      "remark": "Remark",
+      "beneficiary": "Beneficiary",
+      "phone": "Phone",
+      "beneficiaryLabel": "Beneficiary: {name}"
     }
   },
   "supportDetail": {
@@ -1334,6 +1367,7 @@
     "serviceInfo": "Service Information",
     "serviceInfoDesc": "Details of the support provided",
     "noRemarks": "No remarks provided.",
+    "beneficiary": "Beneficiary",
     "beneficiaryLocation": "Beneficiary & Location",
     "beneficiaryType": "Beneficiary Type",
     "individualWoman": "Individual Woman",
@@ -1342,10 +1376,12 @@
     "monitoringHistory": "Monitoring History",
     "monitoringHistoryDesc": "Track follow-ups and outcomes",
     "noLogs": "No monitoring logs recorded yet.",
-    "addFollowUp": "Add a new follow-up using the button above.",
+    "addFollowUp": "Add a new follow-up assessment using the button above.",
     "assessedBy": "By: {name}",
     "score": "Score: {score}%",
-    "supportIntervention": "Support Intervention"
+    "supportIntervention": "Support Intervention",
+    "beneficiaryLabel": "Beneficiary: {name}",
+    "na": "N/A"
   },
   "monitoring": {
     "addFollowUp": "Add Follow-up",
@@ -1404,5 +1440,12 @@
       "Yeka": "Yeka",
       "Lemi Kura": "Lemi Kura"
     }
+  },
+  "clientCategories": {
+    "WOMEN": "Women",
+    "DISABILITY": "Persons with Disabilities",
+    "ELDERLY": "Elderly",
+    "CHILD": "Children",
+    "GENERAL": "General"
   }
 }

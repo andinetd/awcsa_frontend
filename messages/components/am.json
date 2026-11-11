@@ -53,5 +53,55 @@
     "inactivityWarningDescription": "በእንቅስቃሴ እጦት ምክንያት በ {seconds} ሰከንዶች ውስጥ ይʚመለሳሉ።",
     "staySignedIn": "እንደገና ይግቡ",
     "signOut": "ውጣ"
+  },
+  "personHistory": {
+    "title": "የተቀናጀ የድጋፍ እና የአገልግሎት ታሪክ",
+    "subtitle": "በሁሉም የቢሮው ክፍሎች የተሰጡ ድጋፎች፣ አገልግሎቶችና ጥቅማጥቅሞች የተቀናጀ ታሪክ",
+    "dialogTitle": "የተቀናጀ የድጋፍ እና የአገልግሎት ታሪክ: {name}",
+    "events": "{count} ሁነቶች",
+    "programs": {
+      "women": "ሴቶች",
+      "disability": "አካል ጉዳት",
+      "elderly": "አረጋውያን"
+    },
+    "multiProgramTitle": "የበርካታ ፕሮግራሞች ተጠቃሚ፦",
+    "multiProgramDesc": "ይህ/ች ግለሰብ በበርካታ የቢሮው ፕሮግራሞች ({programs}) ተመዝግቧል። አዲስ ድጋፍ ከመስጠትዎ በፊት ከዚህ በታች ያሉትን ነባር ጥቅማጥቅሞች ያረጋግጡ።",
+    "deptNames": {
+      "Social Support": "ማህበራዊ ድጋፍ",
+      "Disability & Elderly": "አካል ጉዳትና አረጋውያን",
+      "Social Affairs": "ማህበራዊ ጉዳይ",
+      "Women's Affairs": "የሴቶች ጉዳይ",
+      "Case Management": "የጉዳይ አስተዳደር",
+      "System Audit": "የስርዓት ኦዲት"
+    },
+    "kinds": {
+      "Support Record": "የድጋፍ መዝገብ",
+      "Service Request": "የአገልግሎት ጥያቄ",
+      "Training": "ስልጠና",
+      "Job Placement": "የስራ ስምሪት",
+      "Eligibility": "ብቁነት",
+      "Tech Support": "የቴክኖሎጂ ድጋፍ",
+      "Women Training": "የሴቶች ስልጠና",
+      "Employment": "የስራ ፈጠራ",
+      "Association": "የማህበር አባልነት",
+      "Case Note": "የጉዳይ ማስታወሻ",
+      "Audit": "ኦዲት"
+    },
+    "stats": {
+      "supportRecords": "የድጋፍ መዝገቦች",
+      "serviceRequests": "የአገልግሎት ጥያቄዎች",
+      "trainings": "ስልጠናዎች",
+      "jobPlacements": "የስራ ስምሪቶች",
+      "techSupport": "የቴክኖሎጂ ድጋፍ",
+      "employment": "የስራ እድሎች",
+      "associations": "የማህበር አባልነቶች"
+    },
+    "searching": "የዜጋውን መዝገብ በማዕከላዊ መረጃ ቋት ውስጥ በመፈለግ ላይ…",
+    "noRegistration": "ምንም ማዕከላዊ የደንበኛ ምዝገባ አልተገኘም",
+    "noRegistrationDesc": "{identifier} ({name}) እስካሁን የማህበራዊ አገልግሎት ተጠቃሚ ሆነው አልተመዘገቡም።",
+    "error": "ታሪኩን መጫን አልተቻለም። ተጨማሪ ፈቃድ ሊያስፈልግዎ ይችላል ወይም አገልጋዩ አይገኝም።",
+    "loading": "የሁሉንም ክፍሎች የተሟላ ታሪክ በመጫን ላይ…",
+    "empty": "ለዚህ/ች ግለሰብ እስካሁን የተመዘገበ የድጋፍ አገልግሎት ወይም ጥያቄ የለም።",
+    "showMore": "ተጨማሪ {count} ሁነቶችን አሳይ…"
   }
 }

@@ -53,5 +53,55 @@
     "inactivityWarningDescription": "You will be signed out in {seconds} seconds due to inactivity.",
     "staySignedIn": "Stay signed in",
     "signOut": "Sign out"
+  },
+  "personHistory": {
+    "title": "Cross-Department Support History",
+    "subtitle": "Unified timeline of all assistance, services, and benefits provided across the bureau",
+    "dialogTitle": "Cross-Department Support History: {name}",
+    "events": "{count, plural, one {# event} other {# events}}",
+    "programs": {
+      "women": "Women",
+      "disability": "Disability",
+      "elderly": "Elderly"
+    },
+    "multiProgramTitle": "Multi-Program Beneficiary:",
+    "multiProgramDesc": "This individual is enrolled across multiple bureau programs ({programs}). Check existing benefits below before issuing new assistance.",
+    "deptNames": {
+      "Social Support": "Social Support",
+      "Disability & Elderly": "Disability & Elderly",
+      "Social Affairs": "Social Affairs",
+      "Women's Affairs": "Women's Affairs",
+      "Case Management": "Case Management",
+      "System Audit": "System Audit"
+    },
+    "kinds": {
+      "Support Record": "Support Record",
+      "Service Request": "Service Request",
+      "Training": "Training",
+      "Job Placement": "Job Placement",
+      "Eligibility": "Eligibility",
+      "Tech Support": "Tech Support",
+      "Women Training": "Women Training",
+      "Employment": "Employment",
+      "Association": "Association",
+      "Case Note": "Case Note",
+      "Audit": "Audit"
+    },
+    "stats": {
+      "supportRecords": "support records",
+      "serviceRequests": "service requests",
+      "trainings": "trainings",
+      "jobPlacements": "job placements",
+      "techSupport": "tech support",
+      "employment": "employment",
+      "associations": "associations"
+    },
+    "searching": "Looking up citizen record in central database…",
+    "noRegistration": "No central client registration found",
+    "noRegistrationDesc": "{identifier} ({name}) has not been registered as a social service beneficiary yet.",
+    "error": "Unable to load history. You may need additional permissions or the server is unavailable.",
+    "loading": "Loading full history across all departments…",
+    "empty": "No past support services or requests recorded for this individual.",
+    "showMore": "Show {count} more events…"
   }
 }

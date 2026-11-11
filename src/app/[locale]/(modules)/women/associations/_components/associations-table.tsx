@@ -120,7 +120,8 @@ export function AssociationsTable({
                 currentData.map((rec) => (
                   <TableRow
                     key={rec.id}
-                    className="hover:bg-[#F7F8FA] transition-colors border-b border-[#E3E7EB] last:border-0"
+                    className="hover:bg-[#F7F8FA] cursor-pointer transition-colors border-b border-[#E3E7EB] last:border-0"
+                    onClick={() => router.push(`/women/associations/${rec.id}`)}
                   >
                     <TableCell className="font-semibold text-xs text-[#0B1F3A] py-3 pl-5">
                       {rec.name}
@@ -155,7 +156,7 @@ export function AssociationsTable({
                         {t(`status.${rec.approvalStatus}`)}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right py-3 pr-5">
+                    <TableCell className="text-right py-3 pr-5" onClick={(e) => e.stopPropagation()}>
                       <div className="flex justify-end gap-1">
                         <Button
                           variant="ghost"

@@ -92,14 +92,19 @@ export default function EmploymentDetailPage() {
             <div>
               <div className="flex items-center gap-2.5">
                 <h1 className="text-xl font-bold tracking-tight text-[#0B1F3A]">
-                  {record.employmentType === "INDIVIDUAL" ? "Individual" : "Group"} Employment
+                  {record.employmentType === "INDIVIDUAL"
+                    ? t("employment.detail.individualTitle")
+                    : t("employment.detail.groupTitle")}
                 </h1>
                 <span className="font-mono text-xs font-semibold px-2 py-0.5 bg-[#E8F2FA] text-[#1769AA] border border-[#BCD5EA] rounded-xs">
                   {t("supportDetail.referenceId")}: #{record.id}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {record.sector} · Beneficiary: {displayName}
+                {(record.sector && t.has(`employment.form.sectors.${record.sector}`))
+                  ? t(`employment.form.sectors.${record.sector}`)
+                  : record.sector || "—"}{" "}
+                · {t("employment.detail.beneficiaryLabel", { name: displayName })}
               </p>
             </div>
           </div>
@@ -112,31 +117,37 @@ export default function EmploymentDetailPage() {
           <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
             <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               <Briefcase className="h-4 w-4 text-[#1769AA]" />
-              Employment Details
+              {t("employment.detail.employmentDetails")}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Employment Type</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("employment.detail.employmentType")}</p>
               <div>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded-xs text-[11px] font-semibold border ${
                   record.employmentType === "INDIVIDUAL" ? uiTokens.statusTag.primary : uiTokens.statusTag.neutral
                 }`}>
-                  {record.employmentType === "INDIVIDUAL" ? "Individual" : "Group"}
+                  {record.employmentType === "INDIVIDUAL"
+                    ? t("employment.detail.individual")
+                    : t("employment.detail.group")}
                 </span>
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Sector</p>
-              <p className="text-sm font-semibold text-[#0B1F3A]">{record.sector}</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("employment.detail.sector")}</p>
+              <p className="text-sm font-semibold text-[#0B1F3A]">
+                {(record.sector && t.has(`employment.form.sectors.${record.sector}`))
+                  ? t(`employment.form.sectors.${record.sector}`)
+                  : record.sector || "—"}
+              </p>
             </div>
             <div className="space-y-1">
-              <p className="text-[11px] font-medium text-slate-500">Year</p>
+              <p className="text-[11px] font-medium text-slate-500">{t("employment.detail.year")}</p>
               <p className="text-sm font-mono font-semibold text-slate-800">{record.year}</p>
             </div>
             {record.remark && (
               <div className="md:col-span-2 space-y-1">
-                <p className="text-[11px] font-medium text-slate-500">Remark</p>
+                <p className="text-[11px] font-medium text-slate-500">{t("employment.detail.remark")}</p>
                 <p className="p-3 bg-slate-50 border border-[#E3E7EB] rounded-xs text-xs text-slate-700">{record.remark}</p>
               </div>
             )}
@@ -148,7 +159,7 @@ export default function EmploymentDetailPage() {
           <CardHeader className="py-3 px-4 border-b border-[#E3E7EB]">
             <CardTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider font-mono text-[#0B1F3A]">
               <User className="h-4 w-4 text-[#1769AA]" />
-              Beneficiary
+              {t("employment.detail.beneficiary")}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 space-y-3">
@@ -162,7 +173,7 @@ export default function EmploymentDetailPage() {
             </div>
             {client?.phoneNumber && (
               <div className="text-xs text-slate-600 flex justify-between pt-1">
-                <span className="text-slate-500">Phone:</span>
+                <span className="text-slate-500">{t("employment.detail.phone")}</span>
                 <span className="font-mono font-medium text-slate-800">{client.phoneNumber}</span>
               </div>
             )}
