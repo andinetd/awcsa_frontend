@@ -19,8 +19,22 @@ export const clientSignup = async (data: ClientSignup) => {
     );
     const reqRes = await sendReq.data;
     return reqRes;
-  } catch (error) {
-    throw new Error(error as any);
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const serverMessage =
+        error.response?.data?.message ||
+        (Array.isArray(error.response?.data?.errors)
+          ? error.response?.data?.errors.join(", ")
+          : null);
+      const fallbackMessage =
+        serverMessage ||
+        (error.response?.status
+          ? `Registration failed with status ${error.response.status}`
+          : error.message) ||
+        "Registration failed";
+      throw new Error(fallbackMessage);
+    }
+    throw new Error(error?.message || "Registration failed");
   }
 };
 

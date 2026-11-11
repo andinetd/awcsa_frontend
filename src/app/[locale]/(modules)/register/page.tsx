@@ -68,13 +68,16 @@ export default function AdoptionRegisterPage() {
   });
 
   function onSubmit(formData: ClientSignUpSchemaType) {
+    const trimmedId = formData.cityIdNumber?.trim() || "";
+    const isDigitsOnly = /^[0-9]{4,32}$/.test(trimmedId);
+
     const newData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phoneNumber: formData.phoneNumber,
-      cityIdNumber: formData.cityIdNumber,
-      faydaId: formData.cityIdNumber,
-      email: formData.email,
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      phoneNumber: formData.phoneNumber.trim(),
+      cityIdNumber: trimmedId,
+      ...(isDigitsOnly ? { faydaId: trimmedId } : {}),
+      email: formData.email.trim().toLowerCase(),
       password: formData.password,
     };
     mutate(newData);
